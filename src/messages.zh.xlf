@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="ClickToLoadMore" datatype="html">
+        <source>Click to load more</source>
+        <target>点击加载更多</target>
+      </trans-unit>
+      <trans-unit id="Loading" datatype="html">
+        <source>Loading...</source>
+        <target>正在加载</target>
+      </trans-unit>
+      <trans-unit id="Sending" datatype="html">
+        <source>Sending...</source>
+        <target>正在发送...</target>
+      </trans-unit>
+      <trans-unit id="Send" datatype="html">
+        <source>Send</source>
+        <target>发送</target>
+      </trans-unit>
+      <trans-unit id="AddFriend" datatype="html">
+        <source>Add Friend</source>
+        <target>添加好友</target>
+      </trans-unit>
+      <trans-unit id="FriendRequests" datatype="html">
+        <source>Friend Requests</source>
+        <target>好友请求</target>
+      </trans-unit>
+      <trans-unit id="Kahla" datatype="html">
+        <source>Kahla</source>
+        <target>卡拉</target>
+      </trans-unit>
+      <trans-unit id="Friends" datatype="html">
+        <source>Friends</source>
+        <target>好友</target>
+      </trans-unit>
+      <trans-unit id="Discover" datatype="html">
+        <source>Discover</source>
+        <target>发现</target>
+      </trans-unit>
+      <trans-unit id="Me" datatype="html">
+        <source>Me</source>
+        <target>设置</target>
+      </trans-unit>
+      <trans-unit id="Disconnectedfromserver" datatype="html">
+        <source>Disconnected from server</source>
+        <target>与服务器连接中断</target>
+      </trans-unit>
+      <trans-unit id="Reconnect" datatype="html">
+        <source>Reconnect</source>
+        <target>重新连接</target>
+      </trans-unit>
+      <trans-unit id="ProfileSettings" datatype="html">
+        <source>Profile Settings</source>
+        <target>资料</target>
+      </trans-unit>
+      <trans-unit id="Security" datatype="html">
+        <source>Security</source>
+        <target>安全性</target>
+      </trans-unit>
+      <trans-unit id="Notification" datatype="html">
+        <source>Notification</source>
+        <target>通知</target>
+      </trans-unit>
+      <trans-unit id="Privacy" datatype="html">
+        <source>Privacy</source>
+        <target>隐私</target>
+      </trans-unit>
+      <trans-unit id="Language" datatype="html">
+        <source>Language</source>
+        <target>语言</target>
+      </trans-unit>
+      <trans-unit id="MoreSettings" datatype="html">
+        <source>More Settings</source>
+        <target>更多设置</target>
+      </trans-unit>
+      <trans-unit id="AboutKahla" datatype="html">
+        <source>About Kahla</source>
+        <target>关于卡拉</target>
+      </trans-unit>
+      <trans-unit id="Signout" datatype="html">
+        <source>Sign out</source>
+        <target>登出</target>
+      </trans-unit>
+      <trans-unit id="FriendSuggestion" datatype="html">
+        <source>Friend Suggestion</source>
+        <target>好友推荐</target>
+      </trans-unit>
+      <trans-unit id="PeopleNearby" datatype="html">
+        <source>People Nearby</source>
+        <target>附近的人</target>
+      </trans-unit>
+      <trans-unit id="CityGroup" datatype="html">
+        <source>City Group</source>
+        <target>同城群</target>
+      </trans-unit>
+      <trans-unit id="Community" datatype="html">
+        <source>Community</source>
+        <target>社区</target>
+      </trans-unit>
+      <trans-unit id="OpenGroup" datatype="html">
+        <source>Open Group</source>
+        <target>开放群</target>
+      </trans-unit>
+      <trans-unit id="KahlaUniversity" datatype="html">
+        <source>Kahla University</source>
+        <target>卡拉大学</target>
+      </trans-unit>
+      <trans-unit id="Feedback" datatype="html">
+        <source>Feedback</source>
+        <target>反馈</target>
+      </trans-unit>
+      <trans-unit id="LogIn" datatype="html">
+        <source>Log in</source>
+        <target>登录</target>
+      </trans-unit>
+      <trans-unit id="Register" datatype="html">
+        <source>Register</source>
+        <target>注册</target>
+      </trans-unit>
+      <trans-unit id="Email" datatype="html">
+        <source>Email</source>
+        <target>邮箱地址</target>
+      </trans-unit>
+      <trans-unit id="Password" datatype="html">
+        <source>Password</source>
+        <target>密码</target>
+      </trans-unit>
+      <trans-unit id="Connecting" datatype="html">
+        <source>Connecting...</source>
+        <target>正在连接...</target>
+      </trans-unit>
+      <trans-unit id="ConfirmPassword" datatype="html">
+        <source>Confirm password</source>
+        <target>确认密码</target>
+      </trans-unit>
+      <trans-unit id="Delete" datatype="html">
+        <source>Delete</source>
+        <target>删除</target>
+      </trans-unit>
+      <trans-unit id="SendFriendRequest" datatype="html">
+        <source>Send Friend Request</source>
+        <target>发送好友请求</target>
+      </trans-unit>
+      <trans-unit id="Message" datatype="html">
+        <source>Message</source>
+        <target>发送消息</target>
+      </trans-unit>
+      <trans-unit id="Profile" datatype="html">
+        <source>Profile</source>
+        <target>个人资料</target>
+      </trans-unit>
+      <trans-unit id="RegisterTime" datatype="html">
+        <source>
+            Register Time: 
+        </source>
+        <target>注册时间</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

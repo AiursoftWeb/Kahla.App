@@ -1,0 +1,33 @@
+.big-logo {
+    text-align: center;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
+}
+
+.big-logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.version {
+    text-align: center;
+    margin: auto;
+    font-size: 25px;
+    color: #AAA;
+    margin-top: 10px;
+}
+
+.foot-text {
+    position: fixed;
+    width: 100%;
+    margin: auto;
+    bottom: 30px;
+    text-align: center;
+}
+
+.foot-text p{
+    margin-bottom: 5px;
+    margin-top: 0;
+}

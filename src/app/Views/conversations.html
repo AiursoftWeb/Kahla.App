@@ -1,0 +1,20 @@
+<app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/kahla/addfriend"></app-header>
+<div>
+    <div class="conversation" *ngFor="let inf of info" (click)="talk(inf.conversationId)">
+        <img class="user-img" src="{{inf.displayImage}}" (click)="detail(inf)"/>
+        <div *ngIf="inf.unReadAmount > 0" class="reddot">
+            {{inf.unReadAmount}}
+        </div>
+        <div class="sender">
+            {{inf.displayName}}
+        </div>
+        <div class="last-time">
+            {{inf.latestMessageTime | date:'shortTime' }}
+        </div>
+        <div class="last-message">
+            {{inf.latestMessage}}
+        </div>
+    </div>
+</div>
+<div class="holder"></div>
+<app-nav></app-nav>

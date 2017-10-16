@@ -1,0 +1,30 @@
+﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/"></app-header>
+
+<div class="friends-header">
+    <a class="friends-button" routerLink="/kahla/addfriend">
+        <div class="icon">
+            <i class="fa fa-user-plus"></i>
+        </div>
+        <div class="words" i18n="@@SearchFriend">
+            Search Friend
+        </div>
+    </a>
+    <a class="friends-button" routerLink="/kahla/friendrequests">
+        <div class="icon">
+            <i class="fa fa-check-square-o"></i>
+            <div class="red-dot" *ngIf="requests && requests.length > 0">
+                    {{requests.length}}
+                </div>
+        </div>
+        <div class="words" i18n="@@Requests">
+            Requests
+        </div>
+    </a>
+</div>
+<div *ngFor="let info of infos" class="friend" (click)="detail(info)">
+    <img class="user-img" src="{{info.displayImage}}">
+    <div class="name">
+        {{info.displayName}}
+    </div>
+</div>
+<app-nav></app-nav>

@@ -1,0 +1,13 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - '8.4.0'
+
+before_script:
+- npm install -g @angular/cli@latest typescript
+- npm install
+
+script: 
+- ng lint --type-check
+- ng build --prod --aot

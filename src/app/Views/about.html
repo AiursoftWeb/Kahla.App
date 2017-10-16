@@ -1,0 +1,37 @@
+<app-header title="About" i18n-title="@@About" returnButton="true" RouterLink="/"></app-header>
+
+<div class="big-logo">
+    <img src="assets/144x144.png">
+</div>
+
+<p class="version">
+    Kahla 0.0.1 Alpha
+</p>
+
+<div class="menu-holder"></div>
+<div class="menu-holder"></div>
+<div class="menu-holder"></div>
+<div class="menu-button" *ngIf="!checking" (click)="checking=true">
+    <div class="img">
+        <i  class="fa fa-refresh"></i>
+    </div>
+    <div class="text" i18n="@@CheckForUpdates">Check for updates</div>
+</div>
+<div class="menu-button" *ngIf="checking">
+    <div class="img">
+        <i  class="fa fa-refresh fa-spin"></i>
+    </div>
+    <div class="text" i18n="@@CheckingForUpdates">Checking for updates...</div>
+</div>
+<div class="menu-button">
+    <div class="img">
+        <i class="fa fa-book"></i>
+    </div>
+    <div class="text" i18n="@@UpdateHistory">Update history</div>
+</div>
+
+<div class="foot-text">
+    <a href="#" target="_blank">Terms</a>    
+    <a href="#" target="_blank">Privacy Policy</a>    
+    <p>Copyright &copy; 2017 Aiursoft.com</p>    
+</div>

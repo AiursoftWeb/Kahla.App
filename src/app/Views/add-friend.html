@@ -1,0 +1,12 @@
+﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
+<div class="search-part">
+    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="search(friendSearch.value)" />
+</div>
+<div class="search-holder"></div>
+
+<div class="result" *ngFor="let user of users | async" (click)="detail(user.id)">
+    <img class="user-img" src="{{user.headImgUrl}}" />
+    <div class="sender">
+        {{user.nickName}}
+    </div>
+</div>

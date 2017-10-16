@@ -1,0 +1,36 @@
+{
+    "short_name": "Kahla",
+    "name": "Kahla",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/assets/48x48.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/240x240.png",
+            "sizes": "240x240",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "background_color": "#2391D3",
+    "theme_color": "#2391D3",
+    "display": "standalone",
+    "orientation": "portrait"
+}

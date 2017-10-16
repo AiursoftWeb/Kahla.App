@@ -1,0 +1,11 @@
+<div class="header">
+    <div class="returnButton" *ngIf="returnButton" (click)="goBack()">
+        <i class="fa fa-caret-left"></i>
+    </div>
+    <div class="text">{{title}}</div>
+    <div *ngIf="Button" class="user-button" routerLink="{{RouterLink}}">
+        <i class="fa fa-{{ButtonIcon}}"></i>
+    </div>
+</div>
+
+<div class="header-holder"></div>

@@ -1,0 +1,57 @@
+﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
+<ul class="message-list" #mainList [ngClass]="{'active': showPanel}">
+    <button *ngIf="!loadingMore" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
+    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
+        <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
+            <img src="{{message.sender.headImgUrl}}">
+        </div>
+        <div class="chat-text">
+            <div class="chat-content">
+                <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
+                    <img src="{{message.content.substring(5)}}">
+                </a>
+                <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(6)}}?sd=true">
+                    Click to download
+                </a>
+                <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}">{{message.content}}</p>
+            </div>
+            <p>
+                <span *ngIf="message.local" i18n="@@Sending">
+                    Sending...
+                </span>
+                <span>
+                    {{message.sendTime | date:'shortDate'}} {{message.sendTime | date:'shortTime'}}
+                </span>
+            </p>
+        </div>
+    </li>
+</ul>
+
+<div class="chat-action">
+    <div class="chat-part">
+        <textarea [(ngModel)]="content" type="text" (click)="startInput()" (keyup)="startInput()" (keyup.enter)="send()"></textarea>
+        <button [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
+    </div>
+    <div class="button-part" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0">
+        <i class="icon fa fa-plus-circle"></i>
+    </div>
+    <div *ngIf="showPanel" class="more-panel">
+        <div class="of4">
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadImage()" accept="image/*" />
+            <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
+                <div class="text">
+                Send Image
+            </div>
+            </label>
+        </div>
+        <div class="of4">
+            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadFile()" />
+            <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
+                <div class="text">
+                    Send File
+                </div>
+            </label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="signin-back">
+    <div class="auth-page">
+        <div class="auth-header">
+            <img src="assets/KahlaWhite.png">
+            <h1 i18n="@@Kahla">Kahla</h1>
+        </div>
+        <div class="auth-content">
+            <div class="selector mode register">
+                <div class="column">
+                    <button class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</button>
+                </div>
+                <div class="column">
+                    <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
+                </div>
+            </div>
+            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email">
+            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password">
+            <input [(ngModel)]="confirmPassword" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password">
+            <button class="whitebutton" (click)="register()" i18n="@@Register">Register</button>
+        </div>
+    </div>
+</div>
