@@ -4,7 +4,7 @@
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
-            <img src="{{message.sender.headImgUrl}}">
+            <img src="{{message.sender.headImgUrl}}?w=100&h=100">
         </div>
         <div class="chat-text">
             <div class="chat-content">

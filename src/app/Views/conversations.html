@@ -1,7 +1,7 @@
 <app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/kahla/addfriend"></app-header>
 <div>
     <div class="conversation" *ngFor="let inf of info" (click)="talk(inf.conversationId)">
-        <img class="user-img" src="{{inf.displayImage}}" (click)="detail(inf)"/>
+        <img class="user-img" src="{{inf.displayImage}}?w=100&h=100" (click)="detail(inf)"/>
         <div *ngIf="inf.unReadAmount > 0" class="reddot">
             {{inf.unReadAmount}}
         </div>
