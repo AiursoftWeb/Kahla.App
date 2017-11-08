@@ -46,7 +46,11 @@ export class UserComponent implements OnInit {
     public request(id: string): void {
         this.apiService.CreateRequest(id)
             .subscribe(response => {
-                swal('Success', response.message, "success");
+                if (response.code == 0) {
+                    swal('Success', response.message, "success");
+                } else {
+                    swal('Error', response.message, "error");
+                }
                 this.location.back();
             });
     }
