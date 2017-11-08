@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { GlobalValue } from '../Services/GlobalValue';
+import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -42,7 +43,7 @@ export class SignInComponent implements OnInit {
                     AppComponent.CurrentApp.ngOnInit();
                 } else {
                     this.connecting = false;
-                    alert('Wrong password!');
+                    swal('Sign in', 'Wrong password!', 'error');
                 }
             });
     }

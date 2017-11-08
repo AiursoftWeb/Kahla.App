@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { GlobalValue } from '../Services/GlobalValue';
+import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/register.html',
@@ -31,11 +32,11 @@ export class RegisterComponent {
                                 this.router.navigate(['/kahla/conversations']);
                                 AppComponent.CurrentApp.ngOnInit();
                             } else {
-                                alert('Wrong password!');
+                                swal('Sign in failed', 'An error occured while signing in.','error');
                             }
                         });
                 } else {
-                    alert(t.message);
+                    swal('Sign in failed', 'An error occured while registering!','error');
                 }
             });
     }

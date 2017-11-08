@@ -22,6 +22,7 @@ import { CacheModel } from '../Models/CacheModel';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
 import { GlobalValue } from '../Services/GlobalValue';
+import 'sweetalert';
 
 @Component({
     selector: 'app-kahla',
@@ -105,7 +106,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 break;
             case EventType.NewFriendRequest:
                 const nvt = ev as NewFriendRequest;
-                alert(`You've got a new friend request from user with id:${nvt.requesterId}`);
+                swal('Friend request', 'You have got a new friend request!','info');
                 if (AppComponent.CurrentFriendRequests) {
                     AppComponent.CurrentFriendRequests.ngOnInit();
                 } else {
@@ -113,7 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.WereDeletedEvent:
-                alert(`You were deleted by one of your friends from his friend list.`);
+                swal('Were deleted', 'You were deleted by one of your friends from his friend list.','info');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {
@@ -123,7 +124,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.FriendAcceptedEvent:
-                alert(`Your friend request was accepted!.`);
+                swal('Friend request', 'Your friend request was accepted!','success');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {

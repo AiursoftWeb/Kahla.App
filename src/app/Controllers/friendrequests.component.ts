@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { Request } from '../Models/Request';
 import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
+import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/friendrequests.html'
@@ -32,7 +33,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public accept(id: number): void {
         this.apiService.CompleteRequest(id, true)
             .subscribe(r => {
-                alert(r.message);
+                swal('Success', r.message, "success");
                 this.ngOnInit();
             });
     }
@@ -40,7 +41,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public decline(id: number): void {
         this.apiService.CompleteRequest(id, false)
             .subscribe(r => {
-                alert(r.message);
+                swal('Success', r.message, "success");
                 this.ngOnInit();
             });
     }
