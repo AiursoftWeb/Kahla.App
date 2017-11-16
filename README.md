@@ -64,3 +64,19 @@ Please view [here](https://electron.atom.io/docs/tutorial/application-distributi
 ### How to publish as Cordova production version
 
 Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
+
+## What is the relationship with other Aiursoft apps
+
+For all apps' information is stored in the developer project, it requires the developer project is well configured.
+
+To grant an app to access Aiursoft APIs, API needs to check its app id and app secret. API will submit those information to developer site to check and grant.
+
+All other Aiursoft apps which require access token will check the app detail with API app, for here stores all access tokens.
+
+## How to contribute
+
+There are many ways to contribute to the project: logging bugs, submitting pull requests, reporting issues, and creating suggestions.
+
+Even if you have push rights on the repository, you should create a personal fork and create feature branches there when you need them. This keeps the main repository clean and your personal workflow cruft out of sight.
+
+We're also interested in your feedback for the future of this project. You can submit a suggestion or feature request through the issue tracker. To make this process more effective, we're asking that these include more information to help define them more clearly.
