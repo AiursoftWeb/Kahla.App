@@ -32,11 +32,11 @@ export class RegisterComponent {
                                 this.router.navigate(['/kahla/conversations']);
                                 AppComponent.CurrentApp.ngOnInit();
                             } else {
-                                swal('Sign in failed', 'An error occured while signing in.','error');
+                                swal('Sign in failed', 'An error occured while signing in.', 'error');
                             }
                         });
                 } else {
-                    swal('Sign in failed', 'An error occured while registering!','error');
+                    swal('Sign in failed', 'An error occured while registering!', 'error');
                 }
             });
     }

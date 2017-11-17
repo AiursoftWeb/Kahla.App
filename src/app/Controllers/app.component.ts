@@ -106,7 +106,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 break;
             case EventType.NewFriendRequest:
                 const nvt = ev as NewFriendRequest;
-                swal('Friend request', 'You have got a new friend request!','info');
+                swal('Friend request', 'You have got a new friend request!', 'info');
                 if (AppComponent.CurrentFriendRequests) {
                     AppComponent.CurrentFriendRequests.ngOnInit();
                 } else {
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.WereDeletedEvent:
-                swal('Were deleted', 'You were deleted by one of your friends from his friend list.','info');
+                swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {
@@ -124,7 +124,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.FriendAcceptedEvent:
-                swal('Friend request', 'Your friend request was accepted!','success');
+                swal('Friend request', 'Your friend request was accepted!', 'success');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {

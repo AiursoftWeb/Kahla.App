@@ -37,7 +37,7 @@ export class UserComponent implements OnInit {
     public delete(id: string): void {
         this.apiService.DeleteFriend(id)
             .subscribe(response => {
-                swal('Success', response.message, "success");
+                swal('Success', response.message, 'success');
                 this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
                 this.router.navigate(['/kahla/friends']);
             });
@@ -46,10 +46,10 @@ export class UserComponent implements OnInit {
     public request(id: string): void {
         this.apiService.CreateRequest(id)
             .subscribe(response => {
-                if (response.code == 0) {
-                    swal('Success', response.message, "success");
+                if (response.code === 0) {
+                    swal('Success', response.message, 'success');
                 } else {
-                    swal('Error', response.message, "error");
+                    swal('Error', response.message, 'error');
                 }
                 this.location.back();
             });
