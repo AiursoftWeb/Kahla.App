@@ -65,14 +65,6 @@ Please view [here](https://electron.atom.io/docs/tutorial/application-distributi
 
 Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
 
-## What is the relationship with other Aiursoft apps
-
-For all apps' information is stored in the developer project, it requires the developer project is well configured.
-
-To grant an app to access Aiursoft APIs, API needs to check its app id and app secret. API will submit those information to developer site to check and grant.
-
-All other Aiursoft apps which require access token will check the app detail with API app, for here stores all access tokens.
-
 ## How to contribute
 
 There are many ways to contribute to the project: logging bugs, submitting pull requests, reporting issues, and creating suggestions.
