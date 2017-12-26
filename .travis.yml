@@ -11,3 +11,5 @@ before_script:
 script: 
 - ng lint --type-check
 - ng build --prod --aot
+after_success:
+  - curl -d "" "http://deploy.aiursoft.com:62650/api/deployall"
