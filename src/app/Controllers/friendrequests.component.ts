@@ -29,7 +29,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
                 this.cache.UpdateFriendRequests(response.items);
             });
     }
-
+/*这些都是C#，但是我不会语法，OMG*/
     public accept(id: number): void {
         this.apiService.CompleteRequest(id, true)
             .subscribe(r => {
