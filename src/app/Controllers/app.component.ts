@@ -145,6 +145,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public OnError(): void {
+      System.out.println="Error!";
 
     }
 
