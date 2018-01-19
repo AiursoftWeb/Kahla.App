@@ -53,9 +53,7 @@ export class ApiService {
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
-        return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData)
-            .map(response => response.json() as AiurValue<string>)
-            .catch(this.handleError);
+        return this.Post(`${ApiService.serverAddress}/UploadFile`, formData);
     }
 
     public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {

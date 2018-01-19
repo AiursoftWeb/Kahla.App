@@ -1,0 +1,34 @@
+{
+    "index": "/index.html",
+    "assetGroups": [
+        {
+            "name": "kahla",
+            "installMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/favicon.ico",
+                    "/index.html"
+                ],
+                "versionedFiles": [
+                    "/*.bundle.css",
+                    "/*.bundle.js",
+                    "/*.chunk.js",
+                    "/*.eot",
+                    "/*.svg",
+                    "/*.ttf",
+                    "/*.woff"
+                ]
+            }
+        },
+        {
+            "name": "assets",
+            "installMode": "lazy",
+            "updateMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/assets/**"
+                ]
+            }
+        }
+    ]
+}

@@ -1,3 +1,6 @@
+// Modules
+import { AppRoutingModule } from './Modules/AppRoutingModule';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -19,8 +22,6 @@ import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
-// Modules
-import { AppRoutingModule } from './Modules/AppRoutingModule';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -34,7 +35,8 @@ import { CacheService } from './Services/CacheService';
         FormsModule,
         HttpModule,
         AppRoutingModule,
-        JsonpModule
+        JsonpModule,
+        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: true})
     ],
     declarations: [
         AboutComponent,
