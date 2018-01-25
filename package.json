@@ -45,7 +45,7 @@
     "asar": "^0.14.0",
     "codelyzer": "^4.1.0",
     "cordova": "^8.0.0",
-    "electron": "^1.8.1",
+    "electron": "^1.7.11",
     "jasmine-core": "^2.9.1",
     "jasmine-spec-reporter": "~4.2.1",
     "ts-node": "~4.1.0",
