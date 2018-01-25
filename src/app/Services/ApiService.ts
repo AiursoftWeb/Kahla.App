@@ -7,6 +7,7 @@ import { Request } from '../Models/Request';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
+import { of } from 'rxjs/observable/of';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { Message } from '../Models/Message';
 import { URLSearchParams, RequestOptions } from '@angular/http';
@@ -82,7 +83,13 @@ export class ApiService {
     }
 
     public ExchangeServerAddress(): Observable<AiurValue<string>> {
-        return this.Get('/ExchangeServerAddress');
+        if (GlobalValue.Credential !== null) {
+            return this.Get('/ExchangeServerAddress');
+        }
+        const response = new AiurValue<string>();
+        response.code = 0;
+        response.message = 'Response by front-end code.';
+        return of(response);
     }
 
     public Me(): Observable<AiurValue<KahlaUser>> {
