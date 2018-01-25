@@ -28,6 +28,9 @@ export class ApiService {
     // });
 
     private _headers(): Headers {
+        if (GlobalValue.Credential == null) {
+            this.handleError('You are calling an api even when credential is null!');
+        }
         return new Headers({
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Bearer ' + GlobalValue.Credential
