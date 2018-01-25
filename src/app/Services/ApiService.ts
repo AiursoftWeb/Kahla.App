@@ -22,7 +22,10 @@ import { GlobalValue } from './GlobalValue';
 @Injectable()
 export class ApiService {
     public static serverAddress;
-    private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    private headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer 3RjR57im'
+    });
 
     constructor(
         private http: Http,
