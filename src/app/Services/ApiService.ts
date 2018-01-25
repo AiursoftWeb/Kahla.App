@@ -22,10 +22,17 @@ import { GlobalValue } from './GlobalValue';
 @Injectable()
 export class ApiService {
     public static serverAddress;
-    private headers = new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer 3RjR57im'
-    });
+    // private headers = new Headers({
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //     'Authorization': 'Bearer 3RjR57im'
+    // });
+
+    private _headers(): Headers {
+        return new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer ' + GlobalValue.Credential
+        });
+    }
 
     constructor(
         private http: Http,
@@ -34,7 +41,7 @@ export class ApiService {
 
     private Get<T>(address: string): Observable<T> {
         return this.http.get(`${ApiService.serverAddress}${address}`, {
-            headers: this.headers
+            headers: this._headers()
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -42,7 +49,7 @@ export class ApiService {
 
     private Post<T>(address: string, data: any): Observable<T> {
         return this.http.post(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
-            headers: this.headers
+            headers: this._headers()
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -68,7 +75,7 @@ export class ApiService {
     }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
-        return this.Get(`/SignInStatus?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/SignInStatus`);
     }
 
     public ExchangeServerAddress(): Observable<AiurValue<string>> {
@@ -76,29 +83,29 @@ export class ApiService {
     }
 
     public Me(): Observable<AiurValue<KahlaUser>> {
-        return this.Get(`/Me?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/Me`);
     }
 
     public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
-        return this.Get(`/MyFriends?orderByName=${orderByName}&Credential=${GlobalValue.Credential}`);
+        return this.Get(`/MyFriends?orderByName=${orderByName}`);
     }
 
     public DeleteFriend(id: string): Observable<AiurProtocal> {
-        return this.Post(`/DeleteFriend/${id}?Credential=${GlobalValue.Credential}`, {});
+        return this.Post(`/DeleteFriend/${id}`, {});
     }
 
     public CreateRequest(id: string): Observable<AiurValue<number>> {
-        return this.Post(`/CreateRequest/${id}?Credential=${GlobalValue.Credential}`, {});
+        return this.Post(`/CreateRequest/${id}`, {});
     }
 
     public CompleteRequest(id: number, accept: boolean): Observable<AiurProtocal> {
-        return this.Post(`/CompleteRequest/${id}?Credential=${GlobalValue.Credential}`, {
+        return this.Post(`/CompleteRequest/${id}`, {
             accept: accept
         });
     }
 
     public MyRequests(): Observable<AiurCollection<Request>> {
-        return this.Get(`/MyRequests?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/MyRequests`);
     }
 
     public SearchFriends(nickName: string): Observable<AiurCollection<KahlaUser>> {
@@ -110,19 +117,19 @@ export class ApiService {
     }
 
     public SendMessage(id: number, content: string): Observable<AiurProtocal> {
-        return this.Post(`/SendMessage/${id}?Credential=${GlobalValue.Credential}`, { content: content });
+        return this.Post(`/SendMessage/${id}`, { content: content });
     }
 
     public UserDetail(id: string): Observable<UserDetailViewModel> {
-        return this.Get(`/UserDetail/${id}?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/UserDetail/${id}`);
     }
 
     public ConversationDetail(id: number): Observable<AiurValue<Conversation>> {
-        return this.Get(`/ConversationDetail/${id}?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/ConversationDetail/${id}`);
     }
 
     public InitPusher(): Observable<InitPusherViewModel> {
-        return this.Get(`/InitPusher?Credential=${GlobalValue.Credential}`);
+        return this.Get(`/InitPusher`);
     }
 
     public LogOff(): void {
