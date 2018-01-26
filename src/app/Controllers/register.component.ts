@@ -5,15 +5,17 @@ import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { GlobalValue } from '../Services/GlobalValue';
 import 'sweetalert';
+import { AiurCollection } from '../Models/AiurCollection';
 
 @Component({
     templateUrl: '../Views/register.html',
     styleUrls: ['../Styles/signin.css']
 })
 export class RegisterComponent {
-    public email: string;
-    public password: string;
-    public confirmPassword: string;
+    public email = '';
+    public password = '';
+    public confirmPassword = '';
+    public connecting = false;
 
     constructor(
         private apiService: ApiService,
@@ -21,6 +23,10 @@ export class RegisterComponent {
         private location: Location) { }
 
     public register(): void {
+        if (this.connecting) {
+            return;
+        }
+        this.connecting = true;
         this.apiService.RegisterKahla(this.email, this.password, this.confirmPassword)
             .subscribe(t => {
                 if (t.code === 0) {
@@ -35,9 +41,12 @@ export class RegisterComponent {
                                 swal('Sign in failed', 'An error occured while signing in.', 'error');
                             }
                         });
+                } else if (t.code === -10) {
+                    swal('Sign in failed', (t as AiurCollection<string>).items[0], 'error');
                 } else {
-                    swal('Sign in failed', 'An error occured while registering!', 'error');
+                    swal('Sign in failed', t.message, 'error');
                 }
+                this.connecting = false;
             });
     }
 }

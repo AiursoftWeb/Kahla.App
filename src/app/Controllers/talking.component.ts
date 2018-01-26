@@ -87,7 +87,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
-                        alert(response.message);
                         this.apiService.SendMessage(this.conversation.id, `[img]${response.value}`)
                             .subscribe(t => {
                                 this.showPanel = !this.showPanel;

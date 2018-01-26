@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { GlobalValue } from '../Services/GlobalValue';
 import 'sweetalert';
+import { AiurCollection } from '../Models/AiurCollection';
+import { AiurProtocal } from '../Models/AiurProtocal';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -41,10 +43,12 @@ export class SignInComponent implements OnInit {
                     localStorage.setItem('cred', t.value);
                     this.router.navigate(['/kahla/conversations']);
                     AppComponent.CurrentApp.ngOnInit();
+                } else if (t.code === -10) {
+                    swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
                 } else {
-                    this.connecting = false;
-                    swal('Sign in', 'Wrong password!', 'error');
+                    swal('Sign in failed', t.message, 'error');
                 }
+                this.connecting = false;
             });
     }
 }
