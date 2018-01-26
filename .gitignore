@@ -12,6 +12,7 @@
 /src/app/**/*.js.map
 /bin
 /bld
+/package-lock.json
 
 
 # dependencies
