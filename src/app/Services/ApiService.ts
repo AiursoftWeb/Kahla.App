@@ -79,17 +79,18 @@ export class ApiService {
     }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
-        return this.Get(`/SignInStatus`);
+        if (GlobalValue.Credential != null) {
+                return this.Get(`/SignInStatus`);
+        }
+        const response = new AiurValue<boolean>();
+        response.code = 0;
+        response.message = 'Response by front-end code.';
+        response.value = false;
+        return of(response);
     }
 
     public ExchangeServerAddress(): Observable<AiurValue<string>> {
-        if (GlobalValue.Credential !== null) {
-            return this.Get('/ExchangeServerAddress');
-        }
-        const response = new AiurValue<string>();
-        response.code = 0;
-        response.message = 'Response by front-end code.';
-        return of(response);
+        return this.Get('/ExchangeServerAddress');
     }
 
     public Me(): Observable<AiurValue<KahlaUser>> {
