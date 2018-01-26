@@ -28,14 +28,20 @@ export class ApiService {
     //     'Authorization': 'Bearer 3RjR57im'
     // });
 
-    private _headers(): Headers {
-        if (GlobalValue.Credential == null) {
-            this.handleError('You are calling an api even when credential is null!');
+    private _headers(withHeader: boolean): Headers {
+        if (withHeader) {
+            if (GlobalValue.Credential == null) {
+                this.handleError('You are calling an api even when credential is null!');
+            }
+            return new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Bearer ' + GlobalValue.Credential
+            });
+        } else {
+            return new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            });
         }
-        return new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer ' + GlobalValue.Credential
-        });
     }
 
     constructor(
@@ -43,17 +49,18 @@ export class ApiService {
         private paramTool: ParamService) {
     }
 
-    private Get<T>(address: string): Observable<T> {
+    private Get<T>(address: string, withHeader = true): Observable<T> {
+
         return this.http.get(`${ApiService.serverAddress}${address}`, {
-            headers: this._headers()
+            headers: this._headers(withHeader)
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
     }
 
-    private Post<T>(address: string, data: any): Observable<T> {
+    private Post<T>(address: string, data: any, withHeader = true): Observable<T> {
         return this.http.post(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
-            headers: this._headers()
+            headers: this._headers(withHeader)
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -63,7 +70,7 @@ export class ApiService {
         return this.Post('/AuthByPassword', {
             email: email,
             password: password
-        });
+        }, false);
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
@@ -75,12 +82,12 @@ export class ApiService {
             email: email,
             password: password,
             confirmPassword: confirmPassword
-        });
+        }, false);
     }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
         if (GlobalValue.Credential != null) {
-                return this.Get(`/SignInStatus`);
+            return this.Get(`/SignInStatus`);
         }
         const response = new AiurValue<boolean>();
         response.code = 0;
@@ -90,7 +97,7 @@ export class ApiService {
     }
 
     public ExchangeServerAddress(): Observable<AiurValue<string>> {
-        return this.Get('/ExchangeServerAddress');
+        return this.Get('/ExchangeServerAddress', false);
     }
 
     public Me(): Observable<AiurValue<KahlaUser>> {
@@ -120,11 +127,11 @@ export class ApiService {
     }
 
     public SearchFriends(nickName: string): Observable<AiurCollection<KahlaUser>> {
-        return this.Get(`/SearchFriends/?nickname=${nickName}&Credential=${GlobalValue.Credential}`);
+        return this.Get(`/SearchFriends/?nickname=${nickName}`);
     }
 
     public GetMessage(id: number, take: number): Observable<AiurCollection<Message>> {
-        return this.Get(`/GetMessage/${id}?take=${take}&Credential=${GlobalValue.Credential}`);
+        return this.Get(`/GetMessage/${id}?take=${take}`);
     }
 
     public SendMessage(id: number, content: string): Observable<AiurProtocal> {
