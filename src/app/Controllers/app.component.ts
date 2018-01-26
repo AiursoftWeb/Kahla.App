@@ -22,6 +22,7 @@ import { CacheModel } from '../Models/CacheModel';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
 import { GlobalValue } from '../Services/GlobalValue';
+import { environment } from '../../environments/environment';
 import 'sweetalert';
 
 @Component({
@@ -50,6 +51,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        if (environment.production && location.protocol !== 'https:') {
+            location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        }
         GlobalValue.Credential = localStorage.getItem('cred');
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
