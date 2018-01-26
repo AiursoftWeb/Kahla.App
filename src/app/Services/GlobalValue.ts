@@ -1,3 +1,3 @@
 export class GlobalValue {
-    public static Credential = 'aaaaaaaaaa';
+    public static Credential = '';
 }

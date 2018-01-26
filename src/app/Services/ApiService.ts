@@ -74,7 +74,11 @@ export class ApiService {
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
-        return this.Post(`/UploadFile`, formData);
+        return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData, {
+            headers: new Headers({ 'Authorization': 'Bearer ' + GlobalValue.Credential })
+        })
+            .map(response => response.json() as AiurValue<string>)
+            .catch(this.handleError);
     }
 
     public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {

@@ -6,7 +6,7 @@
     "electron": "npm run build && electron www/electron.js",
     "cordova": "npm run build && cordova run browser",
     "android": "npm run prod && cordova run android",
-    "start": "ng serve --open",
+    "start": "ng serve",
     "build": "ng build --base-href .",
     "lint": "ng lint",
     "pack": "asar pack ./www ./www/app.asar",
