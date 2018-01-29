@@ -1,15 +1,18 @@
 {
   "name": "kahla",
   "version": "0.5.0",
+  "description": "Kahla is a cross platform business messaging app.",
+  "author": "Anduin@aiursoft.com",
   "license": "MIT",
   "scripts": {
     "electron": "npm run build && electron www/electron.js",
+    "desktop": "npm run prod && build",
     "cordova": "npm run build && cordova run browser",
     "android": "npm run prod && cordova run android",
     "start": "ng serve",
     "build": "ng build --base-href .",
     "lint": "ng lint",
-    "pack": "asar pack ./www ./www/app.asar",
+    "pack": "asar pack ./www ./www/app.asar && asar pack ./www ./dist/linux-unpacked/resources/app.asar",
     "prod": "ng build --base-href . --prod --aot && npm run pack",
     "prod-zh": "ng build --base-href . --prod --aot --local zh --i18n-file ./src/messages.zh.xlf && npm run pack"
   },
@@ -46,6 +49,7 @@
     "codelyzer": "^4.1.0",
     "cordova": "^8.0.0",
     "electron": "^1.7.11",
+    "electron-builder": "^19.55.2",
     "jasmine-core": "^2.9.1",
     "jasmine-spec-reporter": "~4.2.1",
     "ts-node": "~4.1.0",
