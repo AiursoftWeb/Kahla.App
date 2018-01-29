@@ -139,7 +139,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public destory(): void {
-        if (this.ws != null) {
+        if (this.ws !== null) {
             this.ws.onclose = function() { };
             this.ws.onmessage = function() { };
             this.ws.close();

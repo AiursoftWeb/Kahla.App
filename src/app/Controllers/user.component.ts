@@ -7,6 +7,7 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { Conversation } from '../Models/Conversation';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
+import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -35,11 +36,22 @@ export class UserComponent implements OnInit {
             });
     }
     public delete(id: string): void {
-        this.apiService.DeleteFriend(id)
-            .subscribe(response => {
-                swal('Success', response.message, 'success');
-                this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                this.router.navigate(['/kahla/friends']);
+        swal({
+            title: 'Are you sure to delete a friend?',
+            icon: 'warning',
+             buttons: ['Cancel', true],
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    this.apiService.DeleteFriend(id)
+                        .subscribe(response => {
+                            swal('Success', response.message, 'success');
+                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                            this.router.navigate(['/kahla/friends']);
+                        });
+                } else {
+                }
             });
     }
 
