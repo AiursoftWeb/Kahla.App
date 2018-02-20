@@ -24,10 +24,16 @@ export class Notify {
         if ('Notification' in window) {
             Notification.requestPermission((result) => {
                 if (result === 'granted') {
-                    const notify = new Notification(title, {
-                        body: content,
-                        icon: icon,
+                    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+                        serviceWorkerRegistration.showNotification(title, {
+                            body: content,
+                            icon: icon,
+                        });
                     });
+                    // const notify = new Notification(title, {
+                    //     body: content,
+                    //     icon: icon,
+                    // });
                 }
             });
         }
