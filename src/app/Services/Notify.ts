@@ -24,16 +24,21 @@ export class Notify {
         if ('Notification' in window) {
             Notification.requestPermission((result) => {
                 if (result === 'granted') {
-                    navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
-                        serviceWorkerRegistration.showNotification(title, {
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
+                            serviceWorkerRegistration.showNotification(title, {
+                                body: content,
+                                icon: icon,
+                                tag: 'Kahla'
+                            });
+                        });
+                    } else {
+                        console.warn('Service workers aren\'t supported in this browser.');
+                        const notify = new Notification(title, {
                             body: content,
                             icon: icon,
                         });
-                    });
-                    // const notify = new Notification(title, {
-                    //     body: content,
-                    //     icon: icon,
-                    // });
+                    }
                 }
             });
         }
