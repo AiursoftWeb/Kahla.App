@@ -3,13 +3,15 @@
 <div class="user">
     <img class="user-img" src="{{GetMe() ? GetMe().headImgUrl : 'https://developer.aiursoft.com/images/appdefaulticon.png'}}?w=100&h=100">
     <div class="name">
-            {{GetMe() ? GetMe().nickName : "Loading..."}}
+        {{GetMe() ? GetMe().nickName : "Loading..."}}
     </div>
     <div class="create-time">
         <ng-container i18n="@@RegisterTime">
-            Register Time: 
+            Register Time:
         </ng-container>
-        {{GetMe().accountCreateTime | date:'shortDate'}} {{GetMe().accountCreateTime | date:'shortTime'}}
+        <ng-container *ngIf="GetMe()">
+            {{GetMe().accountCreateTime | date:'shortDate'}} {{GetMe().accountCreateTime | date:'shortTime'}}
+        </ng-container>
     </div>
 </div>
 
