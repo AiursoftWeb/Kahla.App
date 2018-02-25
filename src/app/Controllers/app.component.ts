@@ -51,9 +51,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        if (environment.production && location.protocol !== 'https:') {
-            location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-        }
+        // if (environment.production && location.protocol !== 'https:') {
+        //     location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        // }
         GlobalValue.Credential = localStorage.getItem('cred');
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
