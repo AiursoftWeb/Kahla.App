@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/kahla/signin']);
-            } else {
+            } elfse {
                 this.apiService.Me().subscribe(p => {
                     AppComponent.me = p.value;
                 });
