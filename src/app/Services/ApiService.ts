@@ -100,10 +100,6 @@ export class ApiService {
         return of(response);
     }
 
-    public ExchangeServerAddress(): Observable<AiurValue<string>> {
-        return this.Get('/ExchangeServerAddress', false);
-    }
-
     public Me(): Observable<AiurValue<KahlaUser>> {
         return this.Get(`/Me`);
     }

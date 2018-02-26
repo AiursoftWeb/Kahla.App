@@ -10,7 +10,6 @@ import { KahlaUser } from '../Models/KahlaUser';
     styleUrls: ['../Styles/menu.css']
 })
 export class SettingsComponent implements OnInit {
-    public accountServer: string;
 
     constructor(
         private apiService: ApiService,
@@ -19,8 +18,6 @@ export class SettingsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.apiService.ExchangeServerAddress()
-            .subscribe(server => this.accountServer = server.value);
     }
 
     public GetMe(): KahlaUser {
