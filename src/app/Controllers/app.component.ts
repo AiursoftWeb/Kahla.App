@@ -149,7 +149,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public OnError(): void {
-
+        setTimeout(function () {
+            AppComponent.CurrentApp.Reconnect();
+        }, 10000);
     }
 
     public ngOnDestroy(): void {
