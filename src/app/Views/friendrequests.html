@@ -1,9 +1,22 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
+<div class = "friendrequests-header">
 
-<button (click)="goBack()">Go Back</button>
-<button (click)="ngOnInit()">Refresh</button>
+<div class = "Back">
+   <button (click)="goBack()">
+     <div class="words">Go Back</div>
+   </button>
+</div>
+
+<div class = "Refresh">
+   <button (click)="ngOnInit()">
+      <div class="words">Refresh</div>
+   </button>
+</div>
+
+</div>
+
 <h4>Friend Requests</h4>
-<div *ngFor="let request of requests">
+<div *ngFor="let request of requests" class = "friendrequests">
     {{request.creator.nickName}}
     <img style="width:50px;height:50px;" src="{{request.creator.headImgUrl}}?w=100&h=100">
     {{request.createTime}}
