@@ -45,29 +45,31 @@
     width: 65%;
 }
 
-.friendrequests.buttons {
-  margin-right: 15px;
+.friendrequests .buttons {
+  right: 15px;
   margin-top: 10px;
   padding: 10px;
   z-index: 99;
   bottom: 0;
   height: 55px;
+  width: 200px;
   float: right;
   position: absolute;
 }
-.friendrequests.buttons button{
+.friendrequests .buttons button{
   border: none;
   outline: none;
   border-radius: 8px;
   color: #FFF;
   transition: all 0.2s ease;
   width: 40px;
-  height: 20px;
+  height: 30px;
   padding: 6px 12px;
   margin-bottom: 10px;
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
+  width: 120px;
 }
 
  .buttons .Accept {
