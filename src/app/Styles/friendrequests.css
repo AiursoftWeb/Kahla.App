@@ -65,6 +65,10 @@
       background-color: #3c983c;
 
   }
+  .friendrequests .buttons .Accept:active{
+    background-color: #327e32;
+
+}
 
   .friendrequests .buttons .Completed {
     float: right;
@@ -96,7 +100,7 @@
   color: #FFF;
   transition: all 0.2s ease;
   height: 30px;
-  bottom: 20x;
+  bottom: 20px;
   font-size: 14px;
   font-weight: 400;
   padding:8px;
