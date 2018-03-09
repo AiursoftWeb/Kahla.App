@@ -2,7 +2,7 @@
     friendrequests
 ************************/
 .friendrequests {
-  height: 70px;
+  height: 80px;
   border-width: 1px;
   border-bottom-style: solid;
   border-color: #E8E8E8;
@@ -11,9 +11,6 @@
   position: relative;
 }
 
-.friendrequests:hover {
-  background-color: #F8F8F8;
-}
 
   .friendrequests .user-img {
     margin-left: 15px;
@@ -45,51 +42,71 @@
     width: 65%;
 }
 
-.friendrequests .buttons {
-  right: 15px;
-  margin-top: 10px;
-  padding: 10px;
-  z-index: 99;
-  bottom: 0;
-  height: 55px;
-  width: 200px;
+ .friendrequests .buttons .Accept {
   float: right;
   position: absolute;
-}
-.friendrequests .buttons button{
+  right:140px;
   border: none;
   outline: none;
   border-radius: 8px;
   color: #FFF;
   transition: all 0.2s ease;
-  width: 40px;
   height: 30px;
-  padding: 6px 12px;
-  margin-bottom: 10px;
+  bottom: 25px;
   font-size: 14px;
   font-weight: 400;
+  padding:8px;
   cursor: pointer;
   width: 120px;
-}
-
- .buttons .Accept {
-      background-color: #5cb85c;
+      background-color: #63c063;
 
   }
-  .friendrequests .buttons .Accept:focus {
+  .friendrequests .buttons .Accept:hover {
       background-color: #3c983c;
 
   }
+
   .friendrequests .buttons .Completed {
+    float: right;
+    position: absolute;
+    right:75px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    color: #FFF;
+    transition: all 0.2s ease;
+    height: 30px;
+    bottom: 25px;
+    font-size: 14px;
+    font-weight: 400;
+    padding:8px;
+    cursor: pointer;
+    width: 120px;
     background-color: #5cb85c;
 
 }
 
   .friendrequests .buttons .Decline {
+  float: right;
+  position: absolute;
+  right:10px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  color: #FFF;
+  transition: all 0.2s ease;
+  height: 30px;
+  bottom: 25px;
+  font-size: 14px;
+  font-weight: 400;
+  padding:8px;
+  cursor: pointer;
+  width: 120px;
       background-color: #d9534f;
   }
 
   .friendrequests .buttons .Decline:hover{
+
       background-color: #c9433f;
   }
 
