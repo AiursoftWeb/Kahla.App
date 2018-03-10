@@ -85,17 +85,9 @@
 
 .friendrequests .decision .Completed {
     float: right;
-    position: absolute;
-    right: 0px;
-    border: none;
-    outline: none;
-    border-radius: 8px;
     color: #E8E8E8;
-    height: 30px;
-    bottom: 8px;
     font-size: 14px;
     font-weight: 400;
-    padding: 8px;
-    width: 120px;
-    background-color: #FFF;
+    margin-right: 50px;
+    margin-top: 25px;
 }
