@@ -1,17 +1,25 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
+<div *ngFor="let request of requests" class="friendrequests">
 
-<button (click)="goBack()">Go Back</button>
-<button (click)="ngOnInit()">Refresh</button>
-<h4>Friend Requests</h4>
-<div *ngFor="let request of requests">
-    {{request.creator.nickName}}
-    <img style="width:50px;height:50px;" src="{{request.creator.headImgUrl}}?w=100&h=100">
-    {{request.createTime}}
-    <div *ngIf="request.completed; else elseblock">
-        <button disabled="disabled">Compeleted!</button>
+    <div class="name">
+        {{request.creator.nickName}}
     </div>
-    <ng-template #elseblock>
-        <button (click)="accept(request.id)">Accept</button>
-        <button (click)="decline(request.id)">Decline</button>
-    </ng-template>
+
+    <img class="user-img" style="width:50px;height:50px;" src="{{request.creator.headImgUrl}}?w=100&h=100">
+
+    <div class="time">
+        {{request.createTime | date:'shortDate'}} {{request.createTime | date:'shortTime'}}
+    </div>
+
+    <div class="decision">
+        <div *ngIf="request.completed; else elseblock">
+            <label class="Completed" disabled="disabled">Compeleted!</label>
+        </div>
+
+        <ng-template #elseblock>
+            <button class="Accept" (click)="accept(request.id)">Accept</button>
+            <button class="Decline" (click)="decline(request.id)">Decline</button>
+        </ng-template>
+
+    </div>
 </div>

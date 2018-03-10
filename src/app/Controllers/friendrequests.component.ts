@@ -7,7 +7,8 @@ import { CacheService } from '../Services/CacheService';
 import 'sweetalert';
 
 @Component({
-    templateUrl: '../Views/friendrequests.html'
+    templateUrl: '../Views/friendrequests.html',
+    styleUrls: ['../Styles/friendrequests.css']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
 
