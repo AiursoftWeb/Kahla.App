@@ -11,9 +11,9 @@
         {{request.createTime | date:'shortDate'}} {{request.createTime | date:'shortTime'}}
     </div>
 
-    <div class="buttons">
+    <div class="decision">
         <div *ngIf="request.completed; else elseblock">
-            <button class="Completed" disabled="disabled">Compeleted!</button>
+            <label class="Completed" disabled="disabled">Compeleted!</label>
         </div>
 
         <ng-template #elseblock>

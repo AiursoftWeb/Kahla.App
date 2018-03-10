@@ -41,79 +41,77 @@
     width: 65%;
 }
 
- .friendrequests .buttons .Accept {
+ .friendrequests .decision .Accept {
   float: right;
   position: absolute;
-  right:140px;
+  right:88px;
   border: none;
   outline: none;
   border-radius: 8px;
   color: #FFF;
   transition: all 0.2s ease;
-  height: 30px;
-  bottom: 20px;
+  height: 40px;
+  bottom: 15px;
   font-size: 14px;
   font-weight: 400;
   padding:8px;
   cursor: pointer;
-  width: 120px;
+  width: 75px;
       background-color: #63c063;
 
   }
-  .friendrequests .buttons .Accept:hover {
+  .friendrequests .decision .Accept:hover {
       background-color: #3c983c;
 
   }
-  .friendrequests .buttons .Accept:active{
+  .friendrequests .decision .Accept:active{
     background-color: #327e32;
 
 }
 
-  .friendrequests .buttons .Completed {
+  .friendrequests .decision .Completed {
     float: right;
     position: absolute;
-    right:75px;
+    right:0px;
     border: none;
     outline: none;
     border-radius: 8px;
-    color: #FFF;
-    transition: all 0.2s ease;
+    color: #E8E8E8;
     height: 30px;
-    bottom: 20px;
+    bottom: 8px;
     font-size: 14px;
     font-weight: 400;
     padding:8px;
-    cursor: pointer;
     width: 120px;
-    background-color: #5cb85c;
+    background-color: #FFF;
 
 }
 
-  .friendrequests .buttons .Decline {
+  .friendrequests .decision .Decline {
   float: right;
   position: absolute;
-  right:10px;
+  right:8px;
   border: none;
   outline: none;
   border-radius: 8px;
   color: #FFF;
   transition: all 0.2s ease;
-  height: 30px;
-  bottom: 20px;
+  height: 40px;
+  bottom: 15px;
   font-size: 14px;
   font-weight: 400;
   padding:8px;
   cursor: pointer;
-  width: 120px;
+  width: 75px;
       background-color: #d9534f;
   }
 
-  .friendrequests .buttons .Decline:hover{
+  .friendrequests .decision .Decline:hover{
 
       background-color: #c9433f;
   }
 
-  .friendrequests .buttons .Decline:active{
+  .friendrequests .decision .Decline:active{
       background-color: #B12824;
   }
 
