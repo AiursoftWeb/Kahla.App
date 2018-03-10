@@ -1,34 +1,34 @@
 /**********************
     friendrequests
 ************************/
+
 .friendrequests {
-  height: 70px;
-  border-width: 1px;
-  border-bottom-style: solid;
-  border-color: #E8E8E8;
-  background-color: #FFF;
-  position: relative;
+    height: 70px;
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-color: #E8E8E8;
+    background-color: #FFF;
+    position: relative;
 }
 
-
-  .friendrequests .user-img {
+.friendrequests .user-img {
     margin-left: 15px;
     margin-top: 10px;
     width: 50px;
     height: 50px;
     float: left;
     border-radius: 10px;
-  }
+}
 
-  .friendrequests .name {
+.friendrequests .name {
     position: absolute;
     margin-left: 85px;
     margin-top: 15px;
     font-size: 15px;
     font-weight: 400;
-  }
+}
 
-  .friendrequests .time {
+.friendrequests .time {
     position: absolute;
     margin-left: 85px;
     margin-top: 40px;
@@ -41,38 +41,52 @@
     width: 65%;
 }
 
- .friendrequests .decision .Accept {
-  float: right;
-  position: absolute;
-  right:88px;
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  color: #FFF;
-  transition: all 0.2s ease;
-  height: 40px;
-  bottom: 15px;
-  font-size: 14px;
-  font-weight: 400;
-  padding:8px;
-  cursor: pointer;
-  width: 75px;
-      background-color: #63c063;
-
-  }
-  .friendrequests .decision .Accept:hover {
-      background-color: #3c983c;
-
-  }
-  .friendrequests .decision .Accept:active{
-    background-color: #327e32;
-
-}
-
-  .friendrequests .decision .Completed {
+.friendrequests .decision button {
     float: right;
     position: absolute;
-    right:0px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    color: #FFF;
+    transition: all 0.2s ease;
+    height: 40px;
+    bottom: 15px;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 8px;
+    cursor: pointer;
+    width: 75px;
+}
+.friendrequests .decision .Decline {
+    right: 8px;
+    background-color: #d9534f;
+}
+.friendrequests .decision .Accept {
+    right: 88px;
+    background-color: #63c063;
+}
+
+.friendrequests .decision .Accept:hover {
+    background-color: #3c983c;
+}
+
+.friendrequests .decision .Accept:active {
+    background-color: #327e32;
+}
+
+
+.friendrequests .decision .Decline:hover {
+    background-color: #c9433f;
+}
+
+.friendrequests .decision .Decline:active {
+    background-color: #B12824;
+}
+
+.friendrequests .decision .Completed {
+    float: right;
+    position: absolute;
+    right: 0px;
     border: none;
     outline: none;
     border-radius: 8px;
@@ -81,37 +95,7 @@
     bottom: 8px;
     font-size: 14px;
     font-weight: 400;
-    padding:8px;
+    padding: 8px;
     width: 120px;
     background-color: #FFF;
-
 }
-
-  .friendrequests .decision .Decline {
-  float: right;
-  position: absolute;
-  right:8px;
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  color: #FFF;
-  transition: all 0.2s ease;
-  height: 40px;
-  bottom: 15px;
-  font-size: 14px;
-  font-weight: 400;
-  padding:8px;
-  cursor: pointer;
-  width: 75px;
-      background-color: #d9534f;
-  }
-
-  .friendrequests .decision .Decline:hover{
-
-      background-color: #c9433f;
-  }
-
-  .friendrequests .decision .Decline:active{
-      background-color: #B12824;
-  }
-
