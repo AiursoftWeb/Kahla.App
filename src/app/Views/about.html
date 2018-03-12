@@ -5,13 +5,14 @@
 </div>
 
 <p class="version">
-    Kahla 0.7.0 Alpha
+    Kahla {{version}} Alpha
 </p>
 
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="!checking" (click)="checking=true">
+<div class="menu-button" *ngIf="!checking" (click)="check()">
+<!-- <div class="menu-button" *ngIf="!checking" (click)="checking=true"> -->
     <div class="img">
         <i  class="fa fa-refresh"></i>
     </div>

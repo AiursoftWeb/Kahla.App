@@ -19,6 +19,7 @@ import { AppComponent } from '../Controllers/app.component';
 import { Values } from '../values';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { GlobalValue } from './GlobalValue';
+import { VersionViewModel } from '../Models/VersionViewModel';
 
 @Injectable()
 export class ApiService {
@@ -64,6 +65,10 @@ export class ApiService {
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
+    }
+
+    public Version(): Observable<VersionViewModel> {
+        return this.Get('/Version');
     }
 
     public AuthByPassword(email: string, password: string): Observable<AiurValue<string>> {
