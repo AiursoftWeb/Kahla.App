@@ -20,7 +20,7 @@ import { NewMessageEvent } from '../Models/NewMessageEvent';
 
 @Injectable()
 export class Notify {
-    public Show(title: string, content: string, icon: string): void {
+    public Show(title: string, content: string, icon: string, openPath: string): void {
         if ('Notification' in window) {
             Notification.requestPermission((result) => {
                 if (result === 'granted') {
@@ -38,19 +38,21 @@ export class Notify {
                             body: content,
                             icon: icon,
                         });
+                        notify.onclick = function (event) {
+                            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+                            location.href = openPath;
+                            window.focus();
+                        };
                     }
                 }
             });
-            Notification.onclick = function(event) {
-          event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          window.open('/kahla/talking');
-        };
-      }
-   }
+        }
+    }
 
     public ShowNewMessage(evt: NewMessageEvent, myId: string): void {
+        const openUrl = `/#/kahla/talking/${evt.conversationId}`;
         if (evt.sender.id !== myId) {
-            this.Show(evt.sender.nickName, evt.content, evt.sender.headImgUrl);
+            this.Show(evt.sender.nickName, evt.content, evt.sender.headImgUrl, openUrl);
         }
     }
 
