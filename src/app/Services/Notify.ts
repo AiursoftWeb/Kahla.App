@@ -41,14 +41,19 @@ export class Notify {
                     }
                 }
             });
-        }
-    }
+            Notification.onclick = function(event) {
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          window.open('/kahla/talking');
+        };
+      }
+   }
 
     public ShowNewMessage(evt: NewMessageEvent, myId: string): void {
         if (evt.sender.id !== myId) {
             this.Show(evt.sender.nickName, evt.content, evt.sender.headImgUrl);
         }
     }
+
 
     public ShowFriendRequest(): void {
 
