@@ -22,7 +22,7 @@ import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
-import { UserInformationDetailComponent } from './Controllers/userInformationDetail.component';
+import { UserDetailComponent } from './Controllers/userDetail.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -55,7 +55,7 @@ import { CacheService } from './Services/CacheService';
         NavComponent,
         HeaderComponent,
         UserComponent,
-        UserInformationDetailComponent,
+        UserDetailComponent
     ],
     providers: [
         ApiService,

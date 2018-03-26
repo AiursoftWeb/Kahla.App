@@ -10,13 +10,11 @@ import { Location } from '@angular/common';
 import { Values } from '../values';
 
 @Component({
-  templateUrl: '../Views/userInformationDetail.html',
-  styleUrls: [
-    '../styles/userInformationDetail.css'
-  ]
+  templateUrl: '../Views/userDetail.html',
+  styleUrls: ['../styles/userDetail.css']
 })
 
-export class UserInformationDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit {
   constructor(
     private apiService: ApiService,
   ) { }
