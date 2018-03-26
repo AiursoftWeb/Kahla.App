@@ -10,9 +10,9 @@ import { Location } from '@angular/common';
 import { Values } from '../values';
 
 @Component({
-  templateUrl: '../View/userInformationDetail',
+  templateUrl: '../Views/userInformationDetail.html',
   styleUrls: [
-    '../styles/userInformationDetail'
+    '../styles/userInformationDetail.css'
   ]
 })
 
