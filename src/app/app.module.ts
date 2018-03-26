@@ -22,12 +22,14 @@ import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
+import { UserInformationDetailComponent } from './Controllers/userInformationDetail.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
 import { JsonpModule } from '@angular/http';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
+
 
 @NgModule({
     imports: [
@@ -52,7 +54,8 @@ import { CacheService } from './Services/CacheService';
         RegisterComponent,
         NavComponent,
         HeaderComponent,
-        UserComponent
+        UserComponent,
+        UserInformationDetailComponent,
     ],
     providers: [
         ApiService,
