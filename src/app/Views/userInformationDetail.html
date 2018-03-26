@@ -1,15 +1,12 @@
-<app-header title="UserInformationDetail" i18n-title="@@About" returnButton="true" RouterLink="/"></app-header>
-<div *ngIf="showPanel" class="more-panel">
-  <div class="changeAvatar">
-      <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadImage()" accept="image/*" />
-      <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
-          <div class="text">
-          Change your Avatar
-      </div>
+<app-header title="UserInformationDetail" i18n-title="@@UserInformationDetail" returnButton="true" RouterLink="/"></app-header>
 <div>
-  <form name="input" action="userInformationDetail.Component.ts" method="get">
-    Username: <input type="text" name="user">
-    <input type="submit" value="Submit">
-    </form>
+  <form>
+    nickname:<br>
+  <input type="text" name="nickname" value="">
+  <br>
+  Signature:<br>
+  <input type="text" name="signature" value="">
+  <br><br>
+  <input type="submit" value="Sbumit">
+  </form>
 </div>
-
