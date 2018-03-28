@@ -1,12 +1,19 @@
-<app-header title="UserInformationDetail" i18n-title="@@UserInformationDetail" returnButton="true" RouterLink="/"></app-header>
+<app-header title="UserDetail" i18n-title="@@UserDetail" returnButton="true" RouterLink="/"></app-header>
 <div>
-  <form>
-    nickname:<br>
-  <input type="text" name="nickname" value="">
-  <br>
-  Signature:<br>
-  <input type="text" name="signature" value="">
-  <br><br>
-  <input type="submit" value="Sbumit">
-  </form>
+  <div *ngIf="nickName">
+
+    <h2>{{ nickName | uppercase }} Details</h2>
+    <div><span>id: </span>{{user.id}}</div>
+    <div>
+      <label>nickname:
+        <input [(ngModel)]="nickName" placeholder="nickname"/>
+      </label>
+    </div>
+    <div>
+      <form>Signature:
+        <input [(ngModel)]="bio" placeholder="signature"/>
+     </form>
+    </div>
+    <button (click)="save()">save</button>
+  </div>
 </div>

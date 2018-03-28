@@ -104,10 +104,18 @@ export class ApiService {
         response.value = false;
         return of(response);
     }
-
+    /*get user from serve */
     public Me(): Observable<AiurValue<KahlaUser>> {
         return this.Get(`/Me`);
     }
+
+    public UpdateMe(user: KahlaUser): Observable<any> {
+      return this.http.put(this.user.nickName, user, httpOptions).pipe(
+        tap(_ => this.log(`updated user nickname=${user.nickName}`)),
+        catchError(this.handleError<any>('updateMe'))
+      );
+    }
+
 
     public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
         return this.Get(`/MyFriends?orderByName=${orderByName}`);

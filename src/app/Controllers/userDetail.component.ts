@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
 import { KahlaUser } from '../Models/KahlaUser';
@@ -13,15 +13,20 @@ import { Values } from '../values';
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
     '../styles/userDetail.css',
-    '../styles/menu.css'
-  ]
+    '../styles/menu.css']
 })
 
 export class UserDetailComponent implements OnInit {
+  public user: KahlaUser;
   constructor(
     private apiService: ApiService,
   ) { }
 
-public ngOnInit(): void {
-}
+  public ngOnInit(): void {
+  }
+  public save() {
+    this.apiService.Me().subscribe((t) => {
+      this.user = t.value;
+    })
+  }
 }
