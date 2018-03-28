@@ -12,8 +12,9 @@ import { Values } from '../values';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
-    '../styles/userDetail.css',
-    '../styles/menu.css']
+    '../Styles/userDetail.css',
+    '../Styles/menu.css'
+  ]
 })
 
 export class UserDetailComponent implements OnInit {

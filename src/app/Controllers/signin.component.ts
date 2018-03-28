@@ -3,7 +3,6 @@ import { ApiService } from '../Services/ApiService';
 import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
-import { GlobalValue } from '../Services/GlobalValue';
 import 'sweetalert';
 import { AiurCollection } from '../Models/AiurCollection';
 import { AiurProtocal } from '../Models/AiurProtocal';
@@ -39,8 +38,6 @@ export class SignInComponent implements OnInit {
         this.apiService.AuthByPassword(this.email, this.password)
             .subscribe(t => {
                 if (t.code === 0) {
-                    GlobalValue.Credential = t.value;
-                    localStorage.setItem('cred', t.value);
                     this.router.navigate(['/kahla/conversations']);
                     AppComponent.CurrentApp.ngOnInit();
                 } else if (t.code === -10) {

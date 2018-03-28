@@ -3,7 +3,6 @@ import { ApiService } from '../Services/ApiService';
 import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
-import { GlobalValue } from '../Services/GlobalValue';
 import 'sweetalert';
 import { AiurCollection } from '../Models/AiurCollection';
 
@@ -33,8 +32,6 @@ export class RegisterComponent {
                     this.apiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                GlobalValue.Credential = p.value;
-                                localStorage.setItem('cred', p.value);
                                 this.router.navigate(['/kahla/conversations']);
                                 AppComponent.CurrentApp.ngOnInit();
                             } else {
