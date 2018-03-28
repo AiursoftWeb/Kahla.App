@@ -24,11 +24,10 @@ import { VersionViewModel } from '../Models/VersionViewModel';
 export class ApiService {
     public static serverAddress;
 
-    private _headers(): Headers {
-        return new Headers({
+    private _headers: Headers =
+        new Headers({
             'Content-Type': 'application/x-www-form-urlencoded'
         });
-    }
 
     constructor(
         private http: Http,
@@ -37,7 +36,8 @@ export class ApiService {
 
     private Get<T>(address: string): Observable<T> {
         return this.http.get(`${ApiService.serverAddress}${address}`, {
-            headers: this._headers()
+            headers: this._headers,
+            withCredentials: true
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -45,7 +45,8 @@ export class ApiService {
 
     private Post<T>(address: string, data: any): Observable<T> {
         return this.http.post(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
-            headers: this._headers()
+            headers: this._headers,
+            withCredentials: true
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -63,7 +64,9 @@ export class ApiService {
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
-        return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData)
+        return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData, {
+            withCredentials: true
+        })
             .map(response => response.json() as AiurValue<string>)
             .catch(this.handleError);
     }
