@@ -24,10 +24,11 @@ export class UserDetailComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-  }
-  public save() {
     this.apiService.Me().subscribe((t) => {
       this.user = t.value;
-    })
+    });
+  }
+  public save() {
+
   }
 }
