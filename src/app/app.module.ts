@@ -29,6 +29,7 @@ import { ParamService } from './Services/ParamService';
 import { JsonpModule } from '@angular/http';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { CacheService } from './Services/CacheService';
         HttpModule,
         AppRoutingModule,
         JsonpModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: true})
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [
         AboutComponent,
