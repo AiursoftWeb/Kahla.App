@@ -18,50 +18,35 @@ import { Conversation } from '../Models/Conversation';
 import { AppComponent } from '../Controllers/app.component';
 import { Values } from '../values';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
-import { GlobalValue } from './GlobalValue';
 import { VersionViewModel } from '../Models/VersionViewModel';
 
 @Injectable()
 export class ApiService {
     public static serverAddress;
-    // private headers = new Headers({
-    //     'Content-Type': 'application/x-www-form-urlencoded',
-    //     'Authorization': 'Bearer 3RjR57im'
-    // });
 
-    private _headers(withHeader: boolean): Headers {
-        if (withHeader) {
-            if (GlobalValue.Credential == null) {
-                this.handleError('You are calling an api even when credential is null!');
-            }
-            return new Headers({
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Bearer ' + GlobalValue.Credential
-            });
-        } else {
-            return new Headers({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            });
-        }
-    }
+    private _headers: Headers =
+        new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
 
     constructor(
         private http: Http,
         private paramTool: ParamService) {
     }
 
-    private Get<T>(address: string, withHeader = true): Observable<T> {
-
+    private Get<T>(address: string): Observable<T> {
         return this.http.get(`${ApiService.serverAddress}${address}`, {
-            headers: this._headers(withHeader)
+            headers: this._headers,
+            withCredentials: true
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
     }
 
-    private Post<T>(address: string, data: any, withHeader = true): Observable<T> {
+    private Post<T>(address: string, data: any): Observable<T> {
         return this.http.post(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
-            headers: this._headers(withHeader)
+            headers: this._headers,
+            withCredentials: true
         })
             .map(response => response.json() as T)
             .catch(this.handleError);
@@ -71,16 +56,16 @@ export class ApiService {
         return this.Get('/Version');
     }
 
-    public AuthByPassword(email: string, password: string): Observable<AiurValue<string>> {
+    public AuthByPassword(email: string, password: string): Observable<AiurProtocal> {
         return this.Post('/AuthByPassword', {
             email: email,
             password: password
-        }, false);
+        });
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
         return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData, {
-            headers: new Headers({ 'Authorization': 'Bearer ' + GlobalValue.Credential })
+            withCredentials: true
         })
             .map(response => response.json() as AiurValue<string>)
             .catch(this.handleError);
@@ -91,23 +76,24 @@ export class ApiService {
             email: email,
             password: password,
             confirmPassword: confirmPassword
-        }, false);
+        });
     }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
-        if (GlobalValue.Credential != null) {
-            return this.Get(`/SignInStatus`);
-        }
-        const response = new AiurValue<boolean>();
-        response.code = 0;
-        response.message = 'Response by front-end code.';
-        response.value = false;
-        return of(response);
+        return this.Get(`/SignInStatus`);
     }
-
+    /*get user from serve */
     public Me(): Observable<AiurValue<KahlaUser>> {
         return this.Get(`/Me`);
     }
+
+    // public UpdateMe(user: KahlaUser): Observable<any> {
+    //   return this.http.put(this.user.nickName, user, httpOptions).pipe(
+    //     tap(_ => this.log(`updated user nickname=${user.nickName}`)),
+    //     catchError(this.handleError<any>('updateMe'))
+    //   );
+    // }
+
 
     public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
         return this.Get(`/MyFriends?orderByName=${orderByName}`);
@@ -155,12 +141,12 @@ export class ApiService {
         return this.Get(`/InitPusher`);
     }
 
-    public LogOff(): void {
-        GlobalValue.Credential = null;
+    public LogOff(): Observable<AiurProtocal> {
+        return this.Get(`/LogOff`);
     }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
-    }
+    private handleError(error: any): Promise < any > {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+}
 }

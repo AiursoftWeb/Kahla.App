@@ -22,12 +22,15 @@ import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
+import { UserDetailComponent } from './Controllers/userDetail.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
 import { JsonpModule } from '@angular/http';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
+import { environment } from '../environments/environment';
+
 
 @NgModule({
     imports: [
@@ -36,7 +39,7 @@ import { CacheService } from './Services/CacheService';
         HttpModule,
         AppRoutingModule,
         JsonpModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', {enabled: true})
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [
         AboutComponent,
@@ -52,7 +55,8 @@ import { CacheService } from './Services/CacheService';
         RegisterComponent,
         NavComponent,
         HeaderComponent,
-        UserComponent
+        UserComponent,
+        UserDetailComponent
     ],
     providers: [
         ApiService,

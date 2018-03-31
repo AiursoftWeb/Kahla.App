@@ -11,6 +11,7 @@ import { SignInComponent } from '../Controllers/signin.component';
 import { RegisterComponent } from '../Controllers/register.component';
 import { UserComponent } from '../Controllers/user.component';
 import { AboutComponent } from '../Controllers/about.component';
+import { UserDetailComponent } from '../Controllers/userDetail.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/kahla/signin', pathMatch: 'full' },
@@ -24,7 +25,8 @@ const routes: Routes = [
     { path: 'kahla/user/:id', component: UserComponent },
     { path: 'kahla/signin', component: SignInComponent },
     { path: 'kahla/register', component: RegisterComponent },
-    { path: 'kahla/about', component: AboutComponent }
+    { path: 'kahla/about', component: AboutComponent },
+    { path: 'kahla/userInforDet', component: UserDetailComponent },
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
