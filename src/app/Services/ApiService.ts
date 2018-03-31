@@ -141,11 +141,12 @@ export class ApiService {
         return this.Get(`/InitPusher`);
     }
 
-    public LogOff(): void {
+    public LogOff(): Observable<AiurProtocal> {
+        return this.Get(`/LogOff`);
     }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
-    }
+    private handleError(error: any): Promise < any > {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+}
 }

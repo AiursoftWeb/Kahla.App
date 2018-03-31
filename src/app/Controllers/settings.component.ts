@@ -25,8 +25,9 @@ export class SettingsComponent implements OnInit {
     }
 
     public SignOut(): void {
-        this.apiService.LogOff();
-        AppComponent.CurrentApp.destory();
-        this.router.navigate(['/kahla/signin']);
+        this.apiService.LogOff().subscribe(p => {
+            AppComponent.CurrentApp.destory();
+            this.router.navigate(['/kahla/signin']);
+        });
     }
 }
