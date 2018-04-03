@@ -62,8 +62,7 @@ import { environment } from '../environments/environment';
         ApiService,
         Notify,
         ParamService,
-        CacheService,
-        { provide: LocationStrategy, useClass: HashLocationStrategy }
+        CacheService
     ],
     bootstrap: [AppComponent]
 })
