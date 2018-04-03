@@ -13,8 +13,8 @@
     "build": "ng build --base-href .",
     "lint": "ng lint",
     "pack": "asar pack ./www ./www/app.asar && asar pack ./www ./dist/linux-unpacked/resources/app.asar",
-    "prod": "ng build --base-href / --prod --aot && npm run pack",
-    "prod-zh": "ng build --base-href / --prod --aot --local zh --i18n-file ./src/messages.zh.xlf && npm run pack"
+    "prod": "ng build --base-href / --prod && npm run pack",
+    "prod-zh": "ng build --base-href / --prod --local zh --i18n-file ./src/messages.zh.xlf && npm run pack"
   },
   "dependencies": {
     "@angular/animations": "^5.2.1",
