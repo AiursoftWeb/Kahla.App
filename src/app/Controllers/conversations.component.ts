@@ -24,7 +24,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
     public ngOnInit(): void {
         PullToRefresh.init({
-            mainElement: '#main', // above which element?
+            mainElement: 'body', // above which element?
             onRefresh: function (done) {
                 const that = AppComponent.CurrentConversation;
                 that.apiService.MyFriends(false)
