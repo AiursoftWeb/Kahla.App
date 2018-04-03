@@ -17,6 +17,7 @@ import { Conversation } from '../Models/Conversation';
 import { Jsonp } from '@angular/http';
 import { Values } from '../values';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class Notify {
@@ -24,7 +25,8 @@ export class Notify {
         if ('Notification' in window) {
             Notification.requestPermission((result) => {
                 if (result === 'granted') {
-                    if ('serviceWorker' in navigator) {
+                    if ('serviceWorker' in navigator && environment.production) {
+                        console.warn('Sending notification using service worker...');
                         navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
                             serviceWorkerRegistration.showNotification(title, {
                                 body: content,
@@ -50,7 +52,7 @@ export class Notify {
     }
 
     public ShowNewMessage(evt: NewMessageEvent, myId: string): void {
-        const openUrl = `/#/kahla/talking/${evt.conversationId}`;
+        const openUrl = `/kahla/talking/${evt.conversationId}`;
         if (evt.sender.id !== myId) {
             this.Show(evt.sender.nickName, evt.content, evt.sender.headImgUrl, openUrl);
         }
