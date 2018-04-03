@@ -16,7 +16,6 @@
     "prod": "ng build --base-href / --prod --aot && npm run pack",
     "prod-zh": "ng build --base-href / --prod --aot --local zh --i18n-file ./src/messages.zh.xlf && npm run pack"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.1",
     "@angular/common": "^5.2.1",
