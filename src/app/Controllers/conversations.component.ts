@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
+import * as PullToRefresh from 'pulltorefreshjs';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -13,15 +14,29 @@ import { CacheService } from '../Services/CacheService';
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
     constructor(
-        private apiService: ApiService,
-        private router: Router,
-        private cache: CacheService) {
+        public apiService: ApiService,
+        public router: Router,
+        public cache: CacheService) {
         AppComponent.CurrentConversation = this;
         if (this.cache.GetConversations()) {
             this.info = this.cache.GetConversations();
         }
     }
     public ngOnInit(): void {
+        PullToRefresh.init({
+            mainElement: '#main', // above which element?
+            onRefresh: function (done) {
+                const that = AppComponent.CurrentConversation;
+                that.apiService.MyFriends(false)
+                .map(t => t.items)
+                .subscribe(info => {
+                    that.info = info;
+                    that.cache.UpdateConversations(info);
+                    AppComponent.CurrentNav.ngOnInit();
+                    done(); // end pull to refresh
+                });
+            }
+        });
         this.apiService.MyFriends(false)
             .map(t => t.items)
             .subscribe(info => {
