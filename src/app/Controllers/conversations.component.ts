@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
-import { Action } from 'rxjs/scheduler/Action';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -23,6 +22,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.info = this.cache.GetConversations();
         }
     }
+
     public ngOnInit(): void {
         PullToRefresh.destroyAll();
         PullToRefresh.init({

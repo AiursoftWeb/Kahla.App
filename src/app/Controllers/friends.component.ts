@@ -5,6 +5,7 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { AppComponent } from './app.component';
 import { Request } from '../Models/Request';
 import { CacheService } from '../Services/CacheService';
+import * as PullToRefresh from 'pulltorefreshjs';
 
 @Component({
     templateUrl: '../Views/friends.html',
@@ -19,19 +20,37 @@ export class FriendsComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private router: Router,
         private cache: CacheService) {
+        AppComponent.CurrentFriend = this;
         if (this.cache.GetFriendList()) {
             this.infos = this.cache.GetFriendList();
             this.requests = this.cache.GetFriendRequests().filter(t => !t.completed);
         }
     }
-
     public ngOnInit(): void {
-        AppComponent.CurrentFriend = this;
+        PullToRefresh.destroyAll();
+        PullToRefresh.init({
+            distMax: 120,
+            mainElement: '#main',
+            passive: true,
+            refreshTimeout: 200,
+            onRefresh: function (done) {
+                AppComponent.CurrentFriend.init(AppComponent.CurrentFriend, function () {
+                    done();
+                });
+            }
+        });
+        this.init(this, null);
+    }
+
+    public init(component: FriendsComponent, callback: () => void) {
         this.apiService.MyFriends(true)
             .subscribe(response => {
                 this.infos = response.items;
                 this.cache.UpdateFriendList(response.items);
                 AppComponent.CurrentNav.ngOnInit();
+                if (callback != null) {
+                    callback();
+                }
             });
         this.apiService.MyRequests()
             .subscribe(response => {
@@ -40,6 +59,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                 AppComponent.CurrentNav.ngOnInit();
             });
     }
+
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
@@ -50,6 +70,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        PullToRefresh.destroyAll();
         AppComponent.CurrentFriend = null;
     }
 }
