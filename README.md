@@ -8,26 +8,32 @@ Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
 
 ## How to develope
 
-### Visual Studio Code
+### Before starting
+
+To develope Kahla, you need to install the following components:
+
+* Git
+* Nodejs and npm
 
 We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com/) to develope this project.
 
-Using `Visual Studio Code` to open the directory directly.
-
-### Visual Studio
-
-Instead, you could open the project using [Visual Studio](https://www.visualstudio.com/). Before opening the project, please install `Mobile Development tool with JavaScript` for Visual Studio.
-
-Double click `kahla.jsproj` to open it.
+Use `Visual Studio Code` to open the directory directly.
 
 ## How to run
 
 ### How to run in browser
 
-Excute following command in the root directory of this repository.
+Excute following command in the root directory of this repository to restore all dependencies.
 
-* [npm install](https://yarnpkg.com/en/)
-* [npm start](https://cli.angular.io/)
+```bash
+$ npm install
+```
+
+Excute following command to run and start a debug server at `localhost:8001`.
+
+```bash
+$ npm start
+```
 
 ### How to run as desktop app
 
@@ -35,7 +41,9 @@ Currently we are using [Electron](https://electron.atom.io/) to target Windows, 
 
 Supports Windows 7+, Linux and macOS 10.9+.
 
-* npm run electron
+```bash
+$ npm run electron
+```
 
 ### How to run as mobile app
 
@@ -43,19 +51,32 @@ Currently we are using [Apache Cordova](https://cordova.apache.org/) to target A
 
 Before running, please [prepare](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) your Android development environment and an Android device.
 
-Run the following command.
+Run the following command to install Apache Cordova.
 
-* npm run android
+```bash
+$ npm i -g cordova
+$ cordova platform add android
+```
+
+Run the following command to run on a Android device.
+
+```bash
+$ npm run android
+```
 
 ## How to publish
 
 ### How to publish to a web server
 
-* ng build --prod
+```bash
+$ ng build --prod
+```
 
 If you want to create Chinese version, please use the following command instead.
 
-* ng build --prod --local zh --i18n-file ./src/message.zh.xlf
+```bash
+$ ng build --prod --local zh --i18n-file ./src/message.zh.xlf
+```
 
 ### How to publish as Electron production version
 
@@ -64,6 +85,10 @@ Please view [here](https://electron.atom.io/docs/tutorial/application-distributi
 ### How to publish as Cordova production version
 
 Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
+
+## Document
+
+For more info please view [Kahla Wiki](https://wiki.aiursoft.com/ReadDoc/Kahla/What%20is%20Kahla.md)
 
 ## How to contribute
 
