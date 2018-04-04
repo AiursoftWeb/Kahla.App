@@ -24,17 +24,19 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
     public ngOnInit(): void {
         PullToRefresh.init({
-            mainElement: 'body', // above which element?
+            distMax: 160,
+            mainElement: '#main',
+            passive: true,
             onRefresh: function (done) {
                 const that = AppComponent.CurrentConversation;
                 that.apiService.MyFriends(false)
-                .map(t => t.items)
-                .subscribe(info => {
-                    that.info = info;
-                    that.cache.UpdateConversations(info);
-                    AppComponent.CurrentNav.ngOnInit();
-                    done(); // end pull to refresh
-                });
+                    .map(t => t.items)
+                    .subscribe(info => {
+                        that.info = info;
+                        that.cache.UpdateConversations(info);
+                        AppComponent.CurrentNav.ngOnInit();
+                        done();
+                    });
             }
         });
         this.apiService.MyFriends(false)
@@ -59,6 +61,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        PullToRefresh.destroyAll();
         AppComponent.CurrentConversation = null;
     }
 }
