@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
+import { Action } from 'rxjs/scheduler/Action';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -28,21 +29,26 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             distMax: 120,
             mainElement: '#main',
             passive: true,
+            refreshTimeout: 200,
             onRefresh: function (done) {
-                AppComponent.CurrentConversation.init(AppComponent.CurrentConversation);
-                done();
+                AppComponent.CurrentConversation.init(AppComponent.CurrentConversation, function () {
+                    done();
+                });
             }
         });
-        this.init(this);
+        this.init(this, null);
     }
 
-    public init(component: ConversationsComponent) {
+    public init(component: ConversationsComponent, callback: () => void) {
         component.apiService.MyFriends(false)
             .map(t => t.items)
             .subscribe(info => {
                 component.info = info;
                 component.cache.UpdateConversations(info);
                 AppComponent.CurrentNav.ngOnInit();
+                if (callback != null) {
+                    callback();
+                }
             });
     }
 
@@ -55,6 +61,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public talk(id: number): void {
+        PullToRefresh.destroyAll();
         this.router.navigate(['/kahla/talking', id]);
     }
 
