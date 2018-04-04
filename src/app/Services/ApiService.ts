@@ -87,12 +87,9 @@ export class ApiService {
         return this.Get(`/Me`);
     }
 
-    // public UpdateMe(user: KahlaUser): Observable<any> {
-    //   return this.http.put(this.user.nickName, user, httpOptions).pipe(
-    //     tap(_ => this.log(`updated user nickname=${user.nickName}`)),
-    //     catchError(this.handleError<any>('updateMe'))
-    //   );
-    // }
+     public UpdateInfo(user: KahlaUser): Observable<any> {
+       return this.http.post('/UpdateInfo', user.nickName, user.bio);
+     }
 
 
     public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
