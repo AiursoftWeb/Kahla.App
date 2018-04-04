@@ -30,7 +30,7 @@ export class UserDetailComponent implements OnInit {
   }
   public save() {
     this.apiService.UpdateInfo(this.user).subscribe((t) => {
-      t.value = this.user;
+     this.user = t.value;
     });
   }
 }
