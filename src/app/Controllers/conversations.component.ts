@@ -23,27 +23,25 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
     }
     public ngOnInit(): void {
+        PullToRefresh.destroyAll();
         PullToRefresh.init({
-            distMax: 160,
+            distMax: 120,
             mainElement: '#main',
             passive: true,
             onRefresh: function (done) {
-                const that = AppComponent.CurrentConversation;
-                that.apiService.MyFriends(false)
-                    .map(t => t.items)
-                    .subscribe(info => {
-                        that.info = info;
-                        that.cache.UpdateConversations(info);
-                        AppComponent.CurrentNav.ngOnInit();
-                        done();
-                    });
+                AppComponent.CurrentConversation.init(AppComponent.CurrentConversation);
+                done();
             }
         });
-        this.apiService.MyFriends(false)
+        this.init(this);
+    }
+
+    public init(component: ConversationsComponent) {
+        component.apiService.MyFriends(false)
             .map(t => t.items)
             .subscribe(info => {
-                this.info = info;
-                this.cache.UpdateConversations(info);
+                component.info = info;
+                component.cache.UpdateConversations(info);
                 AppComponent.CurrentNav.ngOnInit();
             });
     }
