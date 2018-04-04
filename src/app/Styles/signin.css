@@ -20,10 +20,9 @@ h1 {
     display: block;
     height: 576px;
     max-height: 100%;
-    max-width: 100%;
-    padding: 20px 40px 56px;
-    width: 400px;
+    padding: 20px 10px;
     box-sizing: border-box;
+    max-width: 400px;
 }
 
 .auth-header img {
