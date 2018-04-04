@@ -29,8 +29,8 @@ export class UserDetailComponent implements OnInit {
     });
   }
   public save() {
-    this.apiService.UpdateInfo(this.user).subscribe((t) => {
-     this.user = t.value;
+    this.apiService.UpdateInfo(this.user.nickName, this.user.bio).subscribe((t) => {
+      alert(t.message);
     });
   }
 }
