@@ -3,17 +3,19 @@
   <div *ngIf="user">
 
     <h2>{{ user.nickName | uppercase }} Details</h2>
-    <div><span>id: </span>{{user.id}}</div>
-    <div>
+    <!--<div><span>id: </span>{{user.id}}</div>-->
+    <div class = "nickname">
       <label>nickname:
         <input [(ngModel)]="user.nickName" placeholder="nickname"/>
       </label>
     </div>
-    <div>
+    <div class = "bio">
         <label>Bio:
         <input [(ngModel)]="user.bio" placeholder="signature"/>
         </label>
     </div>
-    <button (click)="save()">save</button>
+    <div class="menu-holder"></div>
+    <div class="menu-holder"></div>
+    <button class="button" (click)="save()">save</button>
   </div>
 </div>

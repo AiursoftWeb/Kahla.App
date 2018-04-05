@@ -30,7 +30,7 @@
 .nav-bar .nav-item:hover {
     color: rgb(131, 182, 211);
     background-color: #F8F8F8;
-    
+
 }
 
     .nav-bar .nav-item.current {
@@ -47,7 +47,7 @@
         font-size: 1.7em;
     }
 
-        
+
     .nav-bar .nav-item .words {
         text-align: center;
         margin: auto;
