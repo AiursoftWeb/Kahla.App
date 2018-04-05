@@ -1,9 +1,7 @@
-﻿
-<div class="header-alert" *ngIf="!wsconnected || ws.readyState!=1">
-    <div class="icon">
-        <i class="fa fa-exclamation-circle"></i>
+﻿<div class="header-alert" *ngIf="!wsconnected || ws.readyState!=1">
+    <div class="words" i18n="@@Disconnectedfromserver">
+        <i class="fa fa-refresh fa-spin"></i>
+        Connecting...
     </div>
-    <div class="words" i18n="@@Disconnectedfromserver">Disconnected from server</div>
-    <button (click)="Reconnect()" class="reconnect" i18n="@@Reconnect">Reconnect</button>
 </div>
 <router-outlet></router-outlet>

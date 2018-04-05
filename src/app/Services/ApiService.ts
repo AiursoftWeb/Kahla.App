@@ -82,17 +82,17 @@ export class ApiService {
     public SignInStatus(): Observable<AiurValue<boolean>> {
         return this.Get(`/SignInStatus`);
     }
-    /*get user from serve */
+
     public Me(): Observable<AiurValue<KahlaUser>> {
         return this.Get(`/Me`);
     }
 
-    // public UpdateMe(user: KahlaUser): Observable<any> {
-    //   return this.http.put(this.user.nickName, user, httpOptions).pipe(
-    //     tap(_ => this.log(`updated user nickname=${user.nickName}`)),
-    //     catchError(this.handleError<any>('updateMe'))
-    //   );
-    // }
+    public UpdateInfo(nickName: string, bio: string): Observable<AiurProtocal> {
+        return this.Post('/UpdateInfo', {
+            nickName: nickName,
+            bio: bio
+        });
+    }
 
 
     public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
@@ -145,8 +145,8 @@ export class ApiService {
         return this.Get(`/LogOff`);
     }
 
-    private handleError(error: any): Promise < any > {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-}
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
 }
