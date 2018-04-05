@@ -1,38 +1,18 @@
-﻿
-.header-alert {
+﻿.header-alert {
     display: inline-block;
     background-color: #fbe876;
     width: 100%;
-    top: 0;
+    margin-top: 50px;
     overflow: auto;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     color: red;
-    font-size: 20px;
     z-index: 1000;
     position: fixed;
 }
 
-    .header-alert .icon {
-        margin-left: 20px;
-        float: left;
-    }
-
-    .header-alert .words {
-        float: left;
-        margin-left: 15px;
-        margin-right: 20px;
-    }
-
-    .header-alert .reconnect {
-        float: right;
-        background-color: transparent;
-        border: 1px;
-        border-style: solid;
-        color: deeppink;
-        border-radius: 2px;
-        margin-right: 25px;
-        width: 90px;
-        height: 30px;
-        cursor: pointer;
-    }
+.header-alert .words {
+    text-align: center;
+    margin: 0;
+    font-size: 12px;
+}
