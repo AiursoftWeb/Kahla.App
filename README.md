@@ -30,13 +30,13 @@ Use `Visual Studio Code` to open the directory directly.
 Excute following command in the root directory of this repository to restore all dependencies.
 
 ```bash
-$ npm install
+npm install
 ```
 
 Excute following command to run and start a debug server at `localhost:8001`.
 
 ```bash
-$ npm start
+npm start
 ```
 
 ### How to run as desktop app
@@ -46,7 +46,7 @@ Currently we are using [Electron](https://electron.atom.io/) to target Windows, 
 Supports Windows 7+, Linux and macOS 10.9+.
 
 ```bash
-$ npm run electron
+npm run electron
 ```
 
 ### How to run as mobile app
@@ -58,14 +58,14 @@ Before running, please [prepare](https://cordova.apache.org/docs/en/latest/guide
 Run the following command to install Apache Cordova.
 
 ```bash
-$ npm i -g cordova
-$ cordova platform add android
+npm i -g cordova
+cordova platform add android
 ```
 
 Run the following command to run on a Android device.
 
 ```bash
-$ npm run android
+npm run android
 ```
 
 ## How to publish
@@ -73,13 +73,13 @@ $ npm run android
 ### How to publish to a web server
 
 ```bash
-$ ng build --prod
+ng build --prod
 ```
 
 If you want to create Chinese version, please use the following command instead.
 
 ```bash
-$ ng build --prod --local zh --i18n-file ./src/message.zh.xlf
+ng build --prod --local zh --i18n-file ./src/message.zh.xlf
 ```
 
 ### How to publish as Electron production version
