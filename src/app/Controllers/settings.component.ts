@@ -18,6 +18,9 @@ export class SettingsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        this.apiService.Me().subscribe(p => {
+        AppComponent.me = p.value;
+    });
     }
 
     public GetMe(): KahlaUser {

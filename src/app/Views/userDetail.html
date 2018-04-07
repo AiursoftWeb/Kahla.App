@@ -1,21 +1,14 @@
-<app-header title="UserDetail" i18n-title="@@UserDetail" returnButton="true" RouterLink="/"></app-header>
-<div>
-  <div *ngIf="user">
-
-    <h2>{{ user.nickName | uppercase }} Details</h2>
-    <!--<div><span>id: </span>{{user.id}}</div>-->
-    <div class = "nickname">
-      <label>nickname:
-        <input [(ngModel)]="user.nickName" placeholder="nickname"/>
-      </label>
-    </div>
-    <div class = "bio">
-        <label>Bio:
-        <input [(ngModel)]="user.bio" placeholder="signature"/>
-        </label>
-    </div>
-    <div class="menu-holder"></div>
-    <div class="menu-holder"></div>
-    <button class="button" (click)="save()">save</button>
+<app-header title="Edit profile" returnButton="true" RouterLink="/"></app-header>
+<div *ngIf="user">
+  <div class="profile">
+    <label>nickName</label>
+    <input [(ngModel)]="user.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
+  </div>
+  <div class="profile">
+    <label>bio</label>
+    <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
+  </div>
+  <div class="buttons">
+    <button class="primary" (click)="save()" i18n="@@save">Save</button>
   </div>
 </div>
