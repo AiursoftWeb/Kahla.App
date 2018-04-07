@@ -71,6 +71,14 @@
     background-color: #3c983c;
 }
 
+.buttons .primary {
+    background-color: #4075d5
+}
+
+.buttons .primary:focus {
+    background-color: #48A3DD;
+}
+
 .buttons .warning {
     background-color: #d9534f;
 }

@@ -26,16 +26,14 @@ export class UserDetailComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.apiService.Me().subscribe((t) => {
-      this.user = t.value;
-    });
+    this.user = AppComponent.me;
   }
   public save() {
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio).subscribe((t) => {
       if (t.code === 0) {
         this.router.navigate(['/kahla/settings']);
-      } else if ( t.code === -10 ) {
-        swal( t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error' );
+      } else if (t.code === -10) {
+        swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
       } else {
         swal('input in failed', t.message, 'error');
       }
