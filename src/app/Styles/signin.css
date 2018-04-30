@@ -145,6 +145,7 @@ input {
     color: #000;
     outline: none;
     cursor: pointer;
+    margin-right:25px;
     height: 40px;
     line-height: 38px;
     text-transform: uppercase;
@@ -170,4 +171,18 @@ input {
 
 .whitebutton:disabled {
     cursor: not-allowed;
+}
+a {
+    display:inline-block;
+    height:20px;
+    width:100px;
+    padding-left:23px;
+    padding-top:20px;
+    color:#d6d6d6;
+}
+a:hover{
+    color:#BBB;
+}
+a:active{
+    color:#265f82;
 }

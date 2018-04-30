@@ -48,4 +48,7 @@ export class SignInComponent implements OnInit {
                 this.connecting = false;
             });
     }
+    public seekpsd(): void{
+       window.location.href=" https://api.aiursoft.com/User/ForgotPasswordfor";
+    }
 }

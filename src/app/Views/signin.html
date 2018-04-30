@@ -15,12 +15,18 @@
             </div>
             <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" (keyup.enter)="signin()">
             <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" (keyup.enter)="signin()">
+            <!-- <div> -->
             <button *ngIf="!connecting" [disabled]="email==undefined || password===undefined || connecting" class="whitebutton" (click)="signin()" i18n="@@LogIn">
                     Log in
             </button>
             <button *ngIf="connecting" disabled="disabled" class="whitebutton" i18n="@@Connecting">
                     Connecting...
             </button>
+        <!-- </div> -->
+        <!-- <div class="seekpsd"> -->
+            <!-- <button class="whitebutton2" (click)="seekpsd" i18n="@@seekpsd">Forget</button> -->
+        <!-- </div> -->
+        <a (click)="seekpsd()">Forget Password </a>
         </div>
     </div>
 </div>
