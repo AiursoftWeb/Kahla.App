@@ -1,188 +1,190 @@
 h1 {
-    color: #fff;
-    text-transform: uppercase;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, sans-serif;
-    font-size: 2em;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, .2);
-    margin: 0;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, sans-serif;
+  font-size: 2em;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, .2);
+  margin: 0;
 }
 
 .signin-back {
-    width: 100%;
-    height: 100%;
-    background-color: #2391D3;
-    z-index: 1001;
-    position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #2391D3;
+  z-index: 1001;
+  position: fixed;
 }
 
 .auth-page {
-    margin: auto;
-    display: block;
-    height: 576px;
-    max-height: 100%;
-    padding: 20px 10px;
-    box-sizing: border-box;
-    max-width: 400px;
+  margin: auto;
+  display: block;
+  height: 576px;
+  max-height: 100%;
+  padding: 20px 10px;
+  box-sizing: border-box;
+  max-width: 400px;
 }
 
 .auth-header img {
-    width: 90px;
-    overflow: hidden;
+  width: 90px;
+  overflow: hidden;
 }
 
 .auth-header h1 {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .mode:after {
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid rgba(255, 255, 255, 0.88);
-    content: '';
-    margin-left: 72px;
-    height: 0;
-    width: 0;
-    display: table;
-    clear: both;
-    font-size: 16px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(255, 255, 255, 0.88);
+  content: '';
+  margin-left: 72px;
+  height: 0;
+  width: 0;
+  display: table;
+  clear: both;
+  font-size: 16px;
 }
 
 .mode.register:after {
-    margin-left: 232px
+  margin-left: 232px
 }
 
 .selector {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.88);
-    margin-bottom: 24px;
-    box-sizing: border-box;
-    color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.88);
+  margin-bottom: 24px;
+  box-sizing: border-box;
+  color: #fff;
 }
 
 .selector .column {
-    float: left;
-    width: 50%;
-    outline: none;
-    box-sizing: border-box;
-    color: #fff;
+  float: left;
+  width: 50%;
+  outline: none;
+  box-sizing: border-box;
+  color: #fff;
 }
 
 .selector .column .btn {
-    background-color: transparent;
-    font-weight: 600;
-    padding: 0 8px;
-    width: 100%;
-    height: 40px;
-    line-height: 38px;
-    text-transform: uppercase;
-    font-size: 11px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-    outline: none;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    overflow: visible;
-    margin: 0;
-    box-sizing: border-box;
-    text-rendering: optimizeLegibility;
+  background-color: transparent;
+  font-weight: 600;
+  padding: 0 8px;
+  width: 100%;
+  height: 40px;
+  line-height: 38px;
+  text-transform: uppercase;
+  font-size: 11px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  overflow: visible;
+  margin: 0;
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
 }
 
 .auth-content {
-    width: 290px;
-    bottom: 80px;
-    position: fixed;
+  width: 290px;
+  bottom: 80px;
+  position: fixed;
 }
 
 input {
-    border: 2px solid transparent;
-    box-shadow: 0 0 0 1000px #265f82 inset;
-    border-radius: 4px;
-    color: #FFF;
-    display: block;
-    height: 40px;
-    line-height: 40px;
-    margin-bottom: 8px;
-    outline: none;
-    padding: 0 16px 0 16px;
-    width: 90%;
-    background-color: rgba(0, 0, 0, 0.4);
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1000px #265f82 inset;
+  border-radius: 4px;
+  color: #FFF;
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 8px;
+  outline: none;
+  padding: 0 16px 0 16px;
+  width: 90%;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 ::-webkit-input-placeholder {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.56);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.56);
 }
 
 :-moz-placeholder {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.56);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.56);
 }
 
 ::-moz-placeholder {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.56);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.56);
 }
 
 :-ms-input-placeholder {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.56);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.56);
 }
 
 .whitebutton {
-    width: 120px;
-    background-color: #F5F5F5;
-    border-color: #d6d6d6;
-    color: #000;
-    outline: none;
-    cursor: pointer;
-    margin-right:25px;
-    height: 40px;
-    line-height: 38px;
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 600;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    display: inline-block;
-    padding: 0 16px;
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
-    transition: all 0.5s ease;
+  width: 120px;
+  background-color: #F5F5F5;
+  border-color: #d6d6d6;
+  color: #000;
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  line-height: 38px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 0 16px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  transition: all 0.5s ease;
 }
 
 .whitebutton:hover {
-    background-color: white;
+  background-color: white;
 }
 
 .whitebutton:focus {
-    background-color: #BBB;
+  background-color: #BBB;
 }
 
 .whitebutton:disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
+
 a {
-    display:inline-block;
-    height:20px;
-    width:100px;
-    padding-left:23px;
-    padding-top:20px;
-    color:#d6d6d6;
+  display: inline-block;
+  height: 20px;
+  width: 100px;
+  padding-left: 23px;
+  padding-top: 20px;
+  color: #d6d6d6;
 }
-a:hover{
-    color:#BBB;
+
+a:hover {
+  color: #BBB;
 }
-a:active{
-    color:#265f82;
+
+a:active {
+  color: #265f82;
 }
