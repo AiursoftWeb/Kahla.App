@@ -1,12 +1,14 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve Kahla App
 
 ---
 
 <!--
 We will close this issue if you don't provide the needed information.
 For feature requests, delete the form below and describe the requirements and use case.
+
+Any bugs for Kahla server side, please go to [Server side code](https://github.com/AiursoftWeb/AiursoftOnContainers/) to submit any issue.
 -->
 
 ### Versions
