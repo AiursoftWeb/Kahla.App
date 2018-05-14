@@ -34,15 +34,15 @@ export class FriendsComponent implements OnInit, OnDestroy {
             passive: true,
             refreshTimeout: 200,
             onRefresh: function (done) {
-                AppComponent.CurrentFriend.init(AppComponent.CurrentFriend, function () {
+                AppComponent.CurrentFriend.init(function () {
                     done();
                 });
             }
         });
-        this.init(this, null);
+        this.init(null);
     }
 
-    public init(component: FriendsComponent, callback: () => void) {
+    public init(callback: () => void) {
         this.apiService.MyFriends(true)
             .subscribe(response => {
                 this.infos = response.items;

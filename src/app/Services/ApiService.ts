@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 import { AiurValue } from '../Models/AiurValue';
 import { AiurCollection } from '../Models/AiurCollection';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Request } from '../Models/Request';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs/';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { Message } from '../Models/Message';
-import { URLSearchParams, RequestOptions } from '@angular/http';
 import { ParamService } from './ParamService';
 import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Conversation } from '../Models/Conversation';
-import { AppComponent } from '../Controllers/app.component';
-import { Values } from '../values';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, } from 'rxjs/operators';
 
 
 @Injectable()

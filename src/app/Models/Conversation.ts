@@ -1,6 +1,4 @@
-﻿import { KahlaUser } from './KahlaUser';
-import { Message } from './Message';
-
+﻿
 export class Conversation {
     public id: number;
     public discriminator: string;

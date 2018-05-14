@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
-import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
@@ -13,14 +12,13 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private apiService: ApiService,
-        private router: Router,
-        private location: Location) {
+        private router: Router) {
     }
 
     public ngOnInit(): void {
         this.apiService.Me().subscribe(p => {
-        AppComponent.me = p.value;
-    });
+            AppComponent.me = p.value;
+        });
     }
 
     public GetMe(): KahlaUser {
@@ -28,7 +26,7 @@ export class SettingsComponent implements OnInit {
     }
 
     public SignOut(): void {
-        this.apiService.LogOff().subscribe(p => {
+        this.apiService.LogOff().subscribe(() => {
             AppComponent.CurrentApp.destory();
             this.router.navigate(['/kahla/signin']);
         });

@@ -1,5 +1,4 @@
-﻿import { KahlaUser } from './KahlaUser';
-
+﻿
 export class ContactInfo {
     public displayName: string;
     public displayImage: string;

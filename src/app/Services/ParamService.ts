@@ -1,15 +1,16 @@
-﻿import { URLSearchParams } from '@angular/http';
+﻿import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ParamService {
     public param(obj: any): string {
-        const urlSearchParams = new URLSearchParams();
+        let urlparam = new HttpParams();
         for (const prop in obj) {
             if (true) {
-                urlSearchParams.append(prop, obj[prop].toString());
+                urlparam = urlparam.set(prop, obj[prop].toString());
             }
         }
-        return urlSearchParams.toString();
+        console.log(urlparam.toString());
+        return urlparam.toString();
     }
 }

@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
-import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import 'sweetalert';
@@ -18,8 +17,7 @@ export class RegisterComponent {
 
     constructor(
         private apiService: ApiService,
-        private router: Router,
-        private location: Location) { }
+        private router: Router) { }
 
     public register(): void {
         if (this.connecting) {

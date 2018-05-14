@@ -1,13 +1,10 @@
 ﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
-import { Location } from '@angular/common';
-import { KahlaUser } from '../Models/KahlaUser';
 import { Message } from '../Models/Message';
 import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header.component';
-import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -28,7 +25,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
-        private router: Router,
         private apiService: ApiService
     ) {
         AppComponent.CurrentTalking = this;
@@ -93,9 +89,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
                         this.apiService.SendMessage(this.conversation.id, `[img]${response.value}`)
-                            .subscribe(t => {
-                                this.showPanel = !this.showPanel;
-                            });
+                            .subscribe(() => {
+                                    this.showPanel = !this.showPanel;
+                                });
                 });
             }
         }
@@ -109,9 +105,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
                         this.apiService.SendMessage(this.conversation.id, `[file]${response.value}`)
-                            .subscribe(t => {
-                                this.showPanel = !this.showPanel;
-                            });
+                            .subscribe(() => {
+                                    this.showPanel = !this.showPanel;
+                                });
                 });
             }
         }
@@ -130,7 +126,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messages.push(tempMessage);
         this.messageAmount++;
         this.apiService.SendMessage(this.conversation.id, this.content)
-            .subscribe(t => { });
+            .subscribe(() => { });
         this.content = '';
         setTimeout(() => {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;

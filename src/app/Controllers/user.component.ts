@@ -3,11 +3,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AppComponent } from './app.component';
-import { ContactInfo } from '../Models/ContactInfo';
-import { Conversation } from '../Models/Conversation';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
-import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
+import { switchMap,  } from 'rxjs/operators';
 import 'sweetalert';
 
 @Component({

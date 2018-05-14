@@ -3,9 +3,8 @@ import { ApiService } from '../Services/ApiService';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
-import { DatePipe } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
-import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
 
 @Component({

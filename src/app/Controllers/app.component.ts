@@ -3,24 +3,17 @@ import { OnInit } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
-import { Location } from '@angular/common';
-import { AiurValue } from '../Models/AiurValue';
-import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
 import { AiurEvent } from '../Models/AiurEvent';
 import { EventType } from '../Models/EventType';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
-import { NewFriendRequest } from '../Models/NewFriendRequest';
 import { ConversationsComponent } from './conversations.component';
 import { TalkingComponent } from './talking.component';
 import { FriendsComponent } from './friends.component';
-import { Subject } from 'rxjs';
 import { NavComponent } from './nav.component';
 import { HeaderComponent } from './header.component';
 import { FriendRequestsComponent } from './friendrequests.component';
-import { CacheModel } from '../Models/CacheModel';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
-import { environment } from '../../environments/environment';
 import 'sweetalert';
 
 @Component({
@@ -43,7 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
         private apiService: ApiService,
         private router: Router,
         private notify: Notify,
-        private location: Location,
         private cache: CacheService) {
         AppComponent.CurrentApp = this;
     }
@@ -103,7 +95,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.NewFriendRequest:
-                const nvt = ev as NewFriendRequest;
                 swal('Friend request', 'You have got a new friend request!', 'info');
                 if (AppComponent.CurrentFriendRequests) {
                     AppComponent.CurrentFriendRequests.ngOnInit();

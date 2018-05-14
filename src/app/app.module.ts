@@ -1,9 +1,7 @@
 // Modules
 import { AppRoutingModule } from './Modules/AppRoutingModule';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModule } from '@angular/core';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,7 +24,6 @@ import { UserDetailComponent } from './Controllers/userDetail.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
-import { JsonpModule } from '@angular/http';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
 import { environment } from '../environments/environment';
@@ -38,7 +35,6 @@ import { environment } from '../environments/environment';
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        JsonpModule,
         ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [

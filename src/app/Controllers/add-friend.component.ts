@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { Observable ,  Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs/';
 
 
 import { ApiService } from '../Services/ApiService';
 
 import { KahlaUser } from '../Models/KahlaUser';
-import { AppComponent } from './app.component';
 
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 
@@ -22,7 +20,6 @@ export class AddFriendComponent implements OnInit {
 
     constructor(
         private apiService: ApiService,
-        private location: Location,
         private router: Router) {
     }
 

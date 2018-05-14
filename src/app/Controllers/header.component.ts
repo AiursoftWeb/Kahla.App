@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
 import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
 
@@ -16,7 +15,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Input() public RouterLink: string;
     @Input() public ButtonIcon: string;
     constructor(
-        private apiService: ApiService,
         private location: Location) {
     }
 

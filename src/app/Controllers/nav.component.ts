@@ -1,10 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
-import { Location } from '@angular/common';
 import { AppComponent } from './app.component';
-import { ContactInfo } from '../Models/ContactInfo';
-import { AiurCollection } from '../Models/AiurCollection';
-import { CacheModel } from '../Models/CacheModel';
 import { CacheService } from '../Services/CacheService';
 
 @Component({
@@ -16,8 +11,6 @@ export class NavComponent implements OnInit, OnDestroy {
     public totalUnread = 0;
     public totalRequests = 0;
     constructor(
-        private apiService: ApiService,
-        private location: Location,
         private cache: CacheService) {
         AppComponent.CurrentNav = this;
     }

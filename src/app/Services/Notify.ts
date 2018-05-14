@@ -1,21 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
-import { AiurValue } from '../Models/AiurValue';
-import { AiurCollection } from '../Models/AiurCollection';
-import { KahlaUser } from '../Models/KahlaUser';
-import { Request } from '../Models/Request';
-import { Observable } from 'rxjs';
-
-
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { Message } from '../Models/Message';
-import { URLSearchParams } from '@angular/http';
-import { ParamService } from './ParamService';
-import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
-import { ContactInfo } from '../Models/ContactInfo';
-import { Conversation } from '../Models/Conversation';
-import { Jsonp } from '@angular/http';
-import { Values } from '../values';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
 import { environment } from '../../environments/environment';
 
