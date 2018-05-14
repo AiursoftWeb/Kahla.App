@@ -10,8 +10,8 @@
     "cordova": "npm run build && cordova run browser",
     "android": "npm run prod && cordova run android",
     "start": "ng serve",
-    "build": "ng build --base-href .",
-    "lint": "ng lint && tsc",
+    "build": "ng build --base-href /",
+    "lint": "ng lint --type-check && tsc",
     "pack": "asar pack ./www ./www/app.asar && asar pack ./www ./dist/linux-unpacked/resources/app.asar",
     "prod": "ng build --base-href / --prod && npm run pack",
     "prod-zh": "ng build --base-href / --prod --local zh --i18n-file ./src/messages.zh.xlf && npm run pack"

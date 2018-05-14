@@ -2,14 +2,11 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - '8.4.0'
+  - '10.1.0'
 
 before_script:
-- npm install -g @angular/cli@latest typescript
 - npm install
 
 script: 
-- ng lint --type-check
-- ng build --prod --aot
-after_success:
-  - curl -d "" "http://deploy.aiursoft.com:62650/api/deployall"
+- npm run lint
+- npm run prod
