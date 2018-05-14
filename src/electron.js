@@ -17,7 +17,7 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   }))
-
+  //mainWindow.webContents.openDevTools();
   mainWindow.on('close', function (event) {
     if (!app.isQuiting) {
       event.preventDefault()
@@ -58,6 +58,7 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
+  mainWindow.webContents.openDevTools();
 })
 
 let tray = null
