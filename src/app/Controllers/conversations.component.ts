@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DatePipe } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
+import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
 
 @Component({
@@ -41,7 +42,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     public init(component: ConversationsComponent, callback: () => void) {
         component.apiService.MyFriends(false)
-            .map(t => t.items)
+            .pipe(map(t => t.items))
             .subscribe(info => {
                 component.info = info;
                 component.cache.UpdateConversations(info);

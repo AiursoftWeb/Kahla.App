@@ -1,13 +1,10 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { AiurValue } from '../Models/AiurValue';
 import { AiurCollection } from '../Models/AiurCollection';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Request } from '../Models/Request';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { Message } from '../Models/Message';
 import { URLSearchParams, RequestOptions } from '@angular/http';
@@ -19,37 +16,38 @@ import { AppComponent } from '../Controllers/app.component';
 import { Values } from '../values';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { catchError, map, tap } from 'rxjs/operators';
+
 
 @Injectable()
 export class ApiService {
     public static serverAddress;
 
-    private _headers: Headers =
-        new Headers({
+    private _headers: HttpHeaders =
+        new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded'
         });
 
+
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private paramTool: ParamService) {
     }
 
     private Get<T>(address: string): Observable<T> {
-        return this.http.get(`${ApiService.serverAddress}${address}`, {
+        return this.http.get<T>(`${ApiService.serverAddress}${address}`, {
             headers: this._headers,
             withCredentials: true
-        })
-            .map(response => response.json() as T)
-            .catch(this.handleError);
+        }).pipe(catchError(this.handleError));
     }
 
     private Post<T>(address: string, data: any): Observable<T> {
-        return this.http.post(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
+        return this.http.post<T>(`${ApiService.serverAddress}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true
-        })
-            .map(response => response.json() as T)
-            .catch(this.handleError);
+        }).pipe(catchError(this.handleError));
     }
 
     public Version(): Observable<VersionViewModel> {
@@ -64,11 +62,9 @@ export class ApiService {
     }
 
     public UploadFile(formData: FormData): Observable<AiurValue<string>> {
-        return this.http.post(`${ApiService.serverAddress}/UploadFile`, formData, {
+        return this.http.post<AiurValue<string>>(`${ApiService.serverAddress}/UploadFile`, formData, {
             withCredentials: true
-        })
-            .map(response => response.json() as AiurValue<string>)
-            .catch(this.handleError);
+        }).pipe(catchError(this.handleError));
     }
 
     public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {

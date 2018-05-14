@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 // Component
 import { AppComponent } from './Controllers/app.component';
 import { ConversationsComponent } from './Controllers/conversations.component';
@@ -36,7 +36,7 @@ import { environment } from '../environments/environment';
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         AppRoutingModule,
         JsonpModule,
         ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })

@@ -4,9 +4,9 @@ import { AiurValue } from '../Models/AiurValue';
 import { AiurCollection } from '../Models/AiurCollection';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Request } from '../Models/Request';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+
+
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { Message } from '../Models/Message';
 import { URLSearchParams } from '@angular/http';

@@ -7,6 +7,7 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { Conversation } from '../Models/Conversation';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
+import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import 'sweetalert';
 
 @Component({
@@ -28,7 +29,7 @@ export class UserComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params
-            .switchMap((params: Params) => this.apiService.UserDetail(params['id']))
+            .pipe(switchMap((params: Params) => this.apiService.UserDetail(params['id'])))
             .subscribe(response => {
                 this.info = response.user;
                 this.conversationId = response.conversationId;

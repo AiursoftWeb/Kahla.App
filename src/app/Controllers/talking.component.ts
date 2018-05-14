@@ -7,6 +7,7 @@ import { Message } from '../Models/Message';
 import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header.component';
+import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -35,8 +36,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.route.params
-            .switchMap((params: Params) => this.apiService.ConversationDetail(+params['id']))
-            .map(t => t.value)
+            .pipe(
+                switchMap((params: Params) => this.apiService.ConversationDetail(+params['id'])),
+                map(t => t.value)
+            )
             .subscribe(conversation => {
                 this.conversation = conversation;
                 AppComponent.CurrentHeader.title = conversation.displayName;
@@ -62,7 +65,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public getMessages(getDown: boolean, id: number): void {
         this.apiService.GetMessage(id, this.messageAmount)
-            .map(t => t.items)
+            .pipe(
+                map(t => t.items)
+            )
             .subscribe(messages => {
                 this.messages = messages;
                 if (getDown) {
