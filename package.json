@@ -28,10 +28,11 @@
     "@angular/pwa": "^0.6.1",
     "@angular/router": "6.0.1",
     "@angular/service-worker": "6.0.1",
-    "cordova-android": "^7.0.0",
+    "cordova-android": "^7.1.0",
     "cordova-browser": "^5.0.3",
     "cordova-ios": "^4.5.4",
     "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-windows": "4.4.2",
     "core-js": "^2.5.3",
     "font-awesome": "^4.7.0",
     "pulltorefreshjs": "^0.1.14",
@@ -65,7 +66,8 @@
     "platforms": [
       "android",
       "browser",
-      "ios"
+      "ios",
+      "windows"
     ],
     "plugins": {
       "cordova-plugin-whitelist": {}
