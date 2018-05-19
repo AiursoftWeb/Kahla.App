@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/AiursoftWeb/Kahla.App.svg?branch=master)](https://travis-ci.org/AiursoftWeb/Kahla.App)
 
-Welcome to Kahla. Kahla is a cross platform bussiness messaging app.
+Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
 Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
 
