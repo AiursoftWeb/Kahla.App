@@ -93,6 +93,51 @@ ng build --prod --local zh --i18n-file ./src/message.zh.xlf
 
 Please view [here](https://electron.atom.io/docs/tutorial/application-distribution/) for Electron distribution document.
 
+Download the prebuilt electron [here](https://github.com/electron/electron/releases).
+
+### On Linux
+
+Run:
+
+```bash
+ng build --base-href ./ --prod
+```
+
+And get the built production Kahla app.
+
+Run:
+
+```bash
+mv ./www/electron.js ./www/index.js
+```
+
+To rename `electron.js` to `index.js`.
+
+Run:
+
+```bash
+cp ./package.json ./www/
+```
+
+To copy that package.json to `www`.
+
+Run:
+
+```
+asar pack ./www ./www/app.asar
+```
+
+To pack the app.
+
+Next, the folder containing your app should be named app and placed in Electron's resources directory as shown in the following examples. Note that the location of Electron's prebuilt binaries is indicated with electron/ in the examples below.
+
+    electron/resources/app
+    ├── package.json
+    ├── main.js
+    └── index.html
+
+Then run `./electron`.
+
 ### How to publish as Cordova production version
 
 Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
