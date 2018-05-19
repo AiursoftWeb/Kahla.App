@@ -95,8 +95,6 @@ Please view [here](https://electron.atom.io/docs/tutorial/application-distributi
 
 Download the prebuilt electron [here](https://github.com/electron/electron/releases).
 
-### On Linux
-
 Run:
 
 ```bash
@@ -124,7 +122,7 @@ To copy that package.json to `www`.
 Run:
 
 ```
-asar pack ./www ./www/app.asar
+npm run pack
 ```
 
 To pack the app.
@@ -136,7 +134,7 @@ Next, the folder containing your app should be named app and placed in Electron'
     ├── main.js
     └── index.html
 
-Then run `./electron`.
+Then run `electron` (`electron.exe` on Windows).
 
 ### How to publish as Cordova production version
 
