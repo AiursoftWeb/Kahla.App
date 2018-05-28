@@ -4,6 +4,8 @@
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
+![KahlaLogo](./src/assets/144x144.png)
+
 Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
 
 Kahla is built with Angular 5 and typescript. And Kahla Server is built with ASP.Net Core.
