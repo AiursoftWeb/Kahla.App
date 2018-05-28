@@ -13,8 +13,7 @@ import { Conversation } from '../Models/Conversation';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import { catchError, } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 
 @Injectable()

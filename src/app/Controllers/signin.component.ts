@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import 'sweetalert';
 import { AiurCollection } from '../Models/AiurCollection';
 import { AiurProtocal } from '../Models/AiurProtocal';
+import { catchError } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -14,7 +15,7 @@ export class SignInComponent implements OnInit {
     public email: string;
     public password: string;
     public connecting = false;
-
+    
     constructor(
         private apiService: ApiService,
         private router: Router) { }
@@ -34,6 +35,11 @@ export class SignInComponent implements OnInit {
         }
         this.connecting = true;
         this.apiService.AuthByPassword(this.email, this.password)
+            .pipe(catchError(error=>{
+                this.connecting = false;
+                swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                return Promise.reject(error.message || error);
+            }))
             .subscribe(t => {
                 if (t.code === 0) {
                     this.router.navigate(['/kahla/conversations']);

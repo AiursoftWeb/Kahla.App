@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import 'sweetalert';
 import { AiurCollection } from '../Models/AiurCollection';
+import { catchError } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/register.html',
@@ -25,6 +26,11 @@ export class RegisterComponent {
         }
         this.connecting = true;
         this.apiService.RegisterKahla(this.email, this.password, this.confirmPassword)
+            .pipe(catchError(error=>{
+                this.connecting = false;
+                swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                return Promise.reject(error.message || error);
+            }))
             .subscribe(t => {
                 if (t.code === 0) {
                     this.apiService.AuthByPassword(this.email, this.password)
