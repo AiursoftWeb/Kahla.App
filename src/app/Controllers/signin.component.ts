@@ -21,12 +21,7 @@ export class SignInComponent implements OnInit {
         private router: Router) { }
 
     public ngOnInit(): void {
-        this.apiService.SignInStatus().subscribe(response => {
-            if (response.value === true) {
-                this.router.navigate(['/kahla/conversations']);
-                AppComponent.CurrentApp.ngOnInit();
-            }
-        });
+        AppComponent.CurrentApp.destory();
     }
 
     public signin(): void {

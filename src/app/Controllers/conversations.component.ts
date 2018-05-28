@@ -28,7 +28,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         PullToRefresh.init({
             distMax: 120,
             mainElement: '#main',
-            passive: true,
+            // passive: true,
             refreshTimeout: 200,
             onRefresh: function (done) {
                 AppComponent.CurrentConversation.init(AppComponent.CurrentConversation, function () {
