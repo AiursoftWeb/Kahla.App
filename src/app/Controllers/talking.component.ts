@@ -5,6 +5,7 @@ import { Message } from '../Models/Message';
 import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
+import { CryptoJS, AES } from 'crypto-js';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -39,6 +40,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(conversation => {
                 this.conversation = conversation;
                 AppComponent.CurrentHeader.title = conversation.displayName;
+                this.route.params.subscribe((params: Params) => {
+                    this.getMessages(true, +params['id']);
+                });
                 if (conversation.anotherUserId) {
                     AppComponent.CurrentHeader.RouterLink = `/kahla/user/${this.conversation.anotherUserId}`;
                 } else {
@@ -46,9 +50,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     AppComponent.CurrentHeader.RouterLink = `/kahla/group/${this.conversation.id}`;
                 }
             });
-        this.route.params.subscribe((params: Params) => {
-            this.getMessages(true, +params['id']);
-        });
     }
 
     public myId(): string {
@@ -65,7 +66,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.items)
             )
             .subscribe(messages => {
-                this.conversation.aesKey;
+                messages.forEach(t => {
+                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(CryptoJS.enc.Utf8);
+                });
                 this.messages = messages;
                 if (getDown) {
                     setTimeout(() => {
@@ -89,10 +92,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
-                        this.apiService.SendMessage(this.conversation.id, `[img]${response.value}`)
-                            .subscribe(() => {
-                                    this.showPanel = !this.showPanel;
-                                });
+                    this.apiService.SendMessage(this.conversation.id, `[img]${response.value}`)
+                        .subscribe(() => {
+                            this.showPanel = !this.showPanel;
+                        });
                 });
             }
         }
@@ -105,10 +108,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
-                        this.apiService.SendMessage(this.conversation.id, `[file]${response.value}`)
-                            .subscribe(() => {
-                                    this.showPanel = !this.showPanel;
-                                });
+                    this.apiService.SendMessage(this.conversation.id, `[file]${response.value}`)
+                        .subscribe(() => {
+                            this.showPanel = !this.showPanel;
+                        });
                 });
             }
         }
@@ -119,7 +122,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
-        tempMessage.content = this.content;
+        tempMessage.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         tempMessage.sender = AppComponent.me;
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.sendTime = Date.now();
