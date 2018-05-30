@@ -92,7 +92,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
-                    this.apiService.SendMessage(this.conversation.id, `[img]${response.value}`)
+                    const encedMessages = AES.encrypt(`[img]${response.value}`, this.conversation.aesKey).toString();
+                    this.apiService.SendMessage(this.conversation.id, encedMessages)
                         .subscribe(() => {
                             this.showPanel = !this.showPanel;
                         });
@@ -108,7 +109,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
                 this.apiService.UploadFile(formData).subscribe(response => {
-                    this.apiService.SendMessage(this.conversation.id, `[file]${response.value}`)
+                    const encedMessages = AES.encrypt(`[file]${response.value}`, this.conversation.aesKey).toString();
+                    this.apiService.SendMessage(this.conversation.id, encedMessages)
                         .subscribe(() => {
                             this.showPanel = !this.showPanel;
                         });
