@@ -65,6 +65,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.items)
             )
             .subscribe(messages => {
+                this.conversation.aesKey;
                 this.messages = messages;
                 if (getDown) {
                     setTimeout(() => {
