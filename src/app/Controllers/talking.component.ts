@@ -5,7 +5,7 @@ import { Message } from '../Models/Message';
 import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
-import { CryptoJS, AES } from 'crypto-js';
+import { AES, enc } from 'crypto-js';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -67,7 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(messages => {
                 messages.forEach(t => {
-                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(CryptoJS.enc.Utf8);
+                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                 });
                 this.messages = messages;
                 if (getDown) {
@@ -122,14 +122,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
-        tempMessage.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
+        tempMessage.content = this.content;
         tempMessage.sender = AppComponent.me;
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.sendTime = Date.now();
         tempMessage.local = true;
         this.messages.push(tempMessage);
         this.messageAmount++;
-        this.apiService.SendMessage(this.conversation.id, this.content)
+        this.apiService.SendMessage(this.conversation.id, AES.encrypt(this.content, this.conversation.aesKey).toString())
             .subscribe(() => { });
         this.content = '';
         setTimeout(() => {
