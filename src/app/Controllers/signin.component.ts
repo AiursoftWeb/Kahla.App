@@ -15,7 +15,7 @@ export class SignInComponent implements OnInit {
     public email: string;
     public password: string;
     public connecting = false;
-    
+
     constructor(
         private apiService: ApiService,
         private router: Router) { }
