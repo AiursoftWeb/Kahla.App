@@ -30,7 +30,7 @@ export class SignInComponent implements OnInit {
         }
         this.connecting = true;
         this.apiService.AuthByPassword(this.email, this.password)
-            .pipe(catchError(error=>{
+            .pipe(catchError(error => {
                 this.connecting = false;
                 swal('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);

@@ -26,7 +26,7 @@ export class RegisterComponent {
         }
         this.connecting = true;
         this.apiService.RegisterKahla(this.email, this.password, this.confirmPassword)
-            .pipe(catchError(error=>{
+            .pipe(catchError(error => {
                 this.connecting = false;
                 swal('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
