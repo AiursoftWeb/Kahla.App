@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
+import { AES, enc } from 'crypto-js';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -28,7 +29,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         PullToRefresh.init({
             distMax: 120,
             mainElement: '#main',
-            passive: true,
+            // passive: true,
             refreshTimeout: 200,
             onRefresh: function (done) {
                 AppComponent.CurrentConversation.init(AppComponent.CurrentConversation, function () {
@@ -43,6 +44,19 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         component.apiService.MyFriends(false)
             .pipe(map(t => t.items))
             .subscribe(info => {
+                info.forEach(e => {
+                    component.apiService.ConversationDetail(e.conversationId)
+                        .pipe(map(t => t.value))
+                        .subscribe(conversation => {
+                            e.latestMessage = AES.decrypt(e.latestMessage, conversation.aesKey).toString(enc.Utf8);
+                            if (e.latestMessage.startsWith('[img]')) {
+                                e.latestMessage = 'Photo';
+                            }
+                            if (e.latestMessage.startsWith('[file]')) {
+                                e.latestMessage = 'File';
+                            }
+                        });
+                });
                 component.info = info;
                 component.cache.UpdateConversations(info);
                 AppComponent.CurrentNav.ngOnInit();

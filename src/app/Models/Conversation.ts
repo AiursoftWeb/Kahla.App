@@ -6,4 +6,5 @@ export class Conversation {
     public displayName: string;
     public displayImage: string;
     public anotherUserId: string;
+    public aesKey: string;
 }

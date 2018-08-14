@@ -14,6 +14,7 @@ import { HeaderComponent } from './header.component';
 import { FriendRequestsComponent } from './friendrequests.component';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
+import { Values } from '../values';
 import 'sweetalert';
 
 @Component({
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.check();
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/kahla/signin']);
@@ -52,6 +54,26 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.LoadPusher();
             }
         });
+    }
+
+    public check(): void {
+        this.apiService.Version()
+            .subscribe(t => {
+                if (t.latestVersion === Values.currentVersion) {
+                } else {
+                    swal({
+                        title: 'There is a new version of Kahla!',
+                        text: 'Do you want to download the latest version of Kahla now?',
+                        icon: 'info',
+                        buttons: [true, 'Download now'],
+                        dangerMode: false,
+                    }).then(ToDownload => {
+                        if (ToDownload) {
+                            location.href = t.downloadAddress;
+                        }
+                    });
+                }
+            });
     }
 
     public LoadPusher(): void {

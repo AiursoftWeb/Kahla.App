@@ -14,7 +14,7 @@ import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/kahla/signin', pathMatch: 'full' },
+    { path: '', redirectTo: '/kahla/conversations', pathMatch: 'full' },
     { path: 'kahla/conversations', component: ConversationsComponent },
     { path: 'kahla/friends', component: FriendsComponent },
     { path: 'kahla/addfriend', component: AddFriendComponent },
