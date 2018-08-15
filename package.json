@@ -2,7 +2,12 @@
   "name": "kahla",
   "version": "1.2.0",
   "description": "Kahla is a cross-platform business messaging app.",
-  "author": "Anduin@aiursoft.com",
+  "contributors": [
+    "Anduin@aiursoft.com",
+    "xxyzz@aiursoft.com",
+    "2539820590@qq.com",
+    "l2dy@macports.org"
+  ]
   "license": "MIT",
   "scripts": {
     "electron": "ng build --base-href ./ && electron ./www/electron.js",
