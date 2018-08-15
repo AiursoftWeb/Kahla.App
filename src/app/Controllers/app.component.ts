@@ -59,21 +59,31 @@ export class AppComponent implements OnInit, OnDestroy {
     public check(): void {
         this.apiService.Version()
             .subscribe(t => {
-                if (t.latestVersion === Values.currentVersion) {
-                } else {
-                    swal({
-                        title: 'There is a new version of Kahla!',
-                        text: 'Do you want to download the latest version of Kahla now?',
-                        icon: 'info',
-                        buttons: [true, 'Download now'],
-                        dangerMode: false,
-                    }).then(ToDownload => {
-                        if (ToDownload) {
-                            location.href = t.downloadAddress;
-                        }
-                    });
+                const latestVersion: Array<string> = t.latestVersion.split('.');
+                const currentVersion: Array<string> = Values.currentVersion.split('.');
+                const downloadAddress: string = t.downloadAddress;
+                if (latestVersion[0] > currentVersion[0]) {
+                    this.redirectToDownload(downloadAddress);
+                } else if (latestVersion[1] > currentVersion[1]) {
+                    this.redirectToDownload(downloadAddress);
+                } else if (latestVersion[2] > currentVersion[2]) {
+                    this.redirectToDownload(downloadAddress);
                 }
             });
+    }
+
+    private redirectToDownload(downloadAddress: string): void {
+        swal({
+            title: 'There is a new version of Kahla!',
+            text: 'Do you want to download the latest version of Kahla now?',
+            icon: 'info',
+            buttons: [true, 'Download now'],
+            dangerMode: false,
+        }).then(ToDownload => {
+            if (ToDownload) {
+                location.href = downloadAddress;
+            }
+        });
     }
 
     public LoadPusher(): void {
