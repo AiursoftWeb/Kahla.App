@@ -8,4 +8,5 @@ export class ContactInfo {
     public conversationId: number;
     public discriminator: string;
     public userId: string;
+    public aesKey: string;
 }
