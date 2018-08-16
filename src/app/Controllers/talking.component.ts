@@ -6,6 +6,7 @@ import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
+import * as Autolinker from 'autolinker';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -68,6 +69,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(messages => {
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+                    if (!t.content.startsWith('[')) {
+                        // replace URLs to links
+                        t.content = Autolinker.link(t.content, { newWindow: true });
+                    }
                 });
                 this.messages = messages;
                 if (getDown) {
