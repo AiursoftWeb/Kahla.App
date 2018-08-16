@@ -13,6 +13,7 @@ h1 {
     background-color: #2391D3;
     z-index: 1001;
     position: fixed;
+    text-align: center;
 }
 
 .auth-page {
@@ -91,14 +92,18 @@ h1 {
 
 .auth-content {
     width: 290px;
+    max-width: 80%;
     bottom: 80px;
     position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 input {
     border: 2px solid transparent;
     box-shadow: 0 0 0 1000px #265f82 inset;
     border-radius: 4px;
+    box-sizing: border-box;
     color: #FFF;
     display: block;
     height: 40px;
@@ -106,7 +111,7 @@ input {
     margin-bottom: 8px;
     outline: none;
     padding: 0 16px 0 16px;
-    width: 90%;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
 }
 
