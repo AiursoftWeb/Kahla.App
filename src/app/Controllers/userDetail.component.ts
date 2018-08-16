@@ -21,8 +21,15 @@ export class UserDetailComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.user = AppComponent.me;
+    if (!AppComponent.me) {
+      this.apiService.Me().subscribe(p => {
+        this.user = p.value;
+      });
+    } else {
+      this.user = AppComponent.me;
+    }
   }
+
   public save() {
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``).subscribe((t) => {
       if (t.code === 0) {
