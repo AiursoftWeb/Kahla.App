@@ -72,7 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
             });
     }
 
-    private redirectToDownload(downloadAddress: string): void {
+    public redirectToDownload(downloadAddress: string): void {
         swal({
             title: 'There is a new version of Kahla!',
             text: 'Do you want to download the latest version of Kahla now?',

@@ -14,7 +14,7 @@
                 <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(6)}}?sd=true">
                     Click to download
                 </a>
-                <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}">{{message.content}}</p>
+                <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
             <p>
                 <span *ngIf="message.local" i18n="@@Sending">
