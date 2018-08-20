@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgProgressModule } from '@ngx-progressbar/core';
 // Component
 import { AppComponent } from './Controllers/app.component';
 import { ConversationsComponent } from './Controllers/conversations.component';
@@ -35,7 +36,8 @@ import { environment } from '../environments/environment';
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+        NgProgressModule.forRoot()
     ],
     declarations: [
         AboutComponent,
