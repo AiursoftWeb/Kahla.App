@@ -13,9 +13,9 @@
                     <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
                 </div>
             </div>
-            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" (keyup.enter)="register()">
-            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" (keyup.enter)="register()">
-            <input [(ngModel)]="confirmPassword" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" (keyup.enter)="register()">
+            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" (keyup.enter)="register()">
+            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" autocomplete="new-password" (keyup.enter)="register()">
+            <input [(ngModel)]="confirmPassword" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()">
             <button *ngIf="!connecting" class="whitebutton" (click)="register()" i18n="@@Register">Register</button>
             <button *ngIf="connecting" class="whitebutton" i18n="@@Registering">Registering...</button>
         </div>
