@@ -5,4 +5,5 @@ export class NewMessageEvent extends AiurEvent {
     public conversationId: number;
     public sender: KahlaUser;
     public content: string;
+    public aesKey: string;
 }
