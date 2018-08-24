@@ -270,3 +270,11 @@ i {
     margin-top: 15px;
     color: #727272;
 }
+
+progress {
+    position: fixed;
+    width: 100%;
+    height: 5px;
+    top: 50px;
+    z-index: 100;
+}

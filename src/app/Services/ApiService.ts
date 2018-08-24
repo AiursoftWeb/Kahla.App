@@ -4,6 +4,7 @@ import { AiurCollection } from '../Models/AiurCollection';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Request } from '../Models/Request';
 import { Observable } from 'rxjs/';
+import { map } from 'rxjs/operators';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { Message } from '../Models/Message';
 import { ParamService } from './ParamService';
@@ -12,7 +13,7 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { Conversation } from '../Models/Conversation';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
 
@@ -56,11 +57,28 @@ export class ApiService {
         });
     }
 
-    public UploadFile(formData: FormData): Observable<AiurValue<string>> {
-        return this.http.post<AiurValue<string>>(`${ApiService.serverAddress}/UploadFile`, formData, {
+    public UploadFile(formData: FormData) {
+        const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile`, formData, {
+            reportProgress: true,
             withCredentials: true
-        }).pipe(catchError(this.handleError));
+        });
+
+        return this.http.request(req).pipe(
+            map(event => this.getProgress(event)),
+            catchError(this.handleError)
+        );
     }
+
+    private getProgress(event: HttpEvent<any>) {
+        switch (event.type) {
+            case HttpEventType.UploadProgress:
+                return Math.round(100 * event.loaded / event.total);
+            case HttpEventType.Response:
+                return event.body.value;
+            default:
+                return null;
+        }
+      }
 
     public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {
         return this.Post('/RegisterKahla', {
