@@ -55,4 +55,4 @@
         </div>
     </div>
 </div>
-<ng-progress [spinner]="false" [color]="'red'" [thick]="true"></ng-progress>
+<progress *ngIf="uploading" max="100" value={{progress}}></progress>

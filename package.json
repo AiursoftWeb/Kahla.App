@@ -30,7 +30,6 @@
     "@angular/pwa": "^0.6.3",
     "@angular/router": "6.0.9",
     "@angular/service-worker": "6.0.9",
-    "@ngx-progressbar/core": "^5.0.1",
     "autolinker": "^1.7.1",
     "core-js": "^2.5.3",
     "crypto-js": "^3.1.9-1",

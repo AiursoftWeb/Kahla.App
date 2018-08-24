@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import * as Autolinker from 'autolinker';
-import { NgProgress } from '@ngx-progressbar/core';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -25,11 +24,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public currentHeight: number;
     public loadingMore = false;
+    public progress = 0;
+    public uploading = false;
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
-        public progress: NgProgress
+        private apiService: ApiService
     ) {
         AppComponent.CurrentTalking = this;
     }
@@ -98,14 +98,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
-                this.progress.start();
+                this.uploading = true;
                 this.apiService.UploadFile(formData).subscribe(response => {
-                    const encedMessages = AES.encrypt(`[img]${response.value}`, this.conversation.aesKey).toString();
-                    this.apiService.SendMessage(this.conversation.id, encedMessages)
-                        .subscribe(() => {
-                            this.showPanel = !this.showPanel;
-                            this.progress.complete();
-                        });
+                    if (Number(response)) {
+                        this.progress = response;
+                    } else if (response != null) {
+                        const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                        this.apiService.SendMessage(this.conversation.id, encedMessages)
+                            .subscribe(() => {
+                                this.finishUpload();
+                            });
+                    }
                 });
             }
         }
@@ -117,17 +120,26 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
-                this.progress.start();
+                this.uploading = true;
                 this.apiService.UploadFile(formData).subscribe(response => {
-                    const encedMessages = AES.encrypt(`[file]${response.value}`, this.conversation.aesKey).toString();
-                    this.apiService.SendMessage(this.conversation.id, encedMessages)
-                        .subscribe(() => {
-                            this.showPanel = !this.showPanel;
-                            this.progress.complete();
-                        });
+                    if (Number(response)) {
+                        this.progress = response;
+                    } else if (response != null) {
+                        const encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
+                        this.apiService.SendMessage(this.conversation.id, encedMessages)
+                            .subscribe(() => {
+                                this.finishUpload();
+                            });
+                    }
                 });
             }
         }
+    }
+
+    private finishUpload() {
+        this.uploading = false;
+        this.progress = 0;
+        this.showPanel = !this.showPanel;
     }
 
     public send(): void {
