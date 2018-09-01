@@ -69,7 +69,7 @@ cordova platform add android
 Run the following command to run on a Android device.
 
 ```bash
-npm run android
+cordova run android
 ```
 
 ## How to publish

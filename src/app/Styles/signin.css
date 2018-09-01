@@ -40,7 +40,7 @@ h1 {
     border-right: 8px solid transparent;
     border-bottom: 8px solid rgba(255, 255, 255, 0.88);
     content: '';
-    margin-left: 72px;
+    margin-left: 23%;
     height: 0;
     width: 0;
     display: table;
@@ -49,7 +49,7 @@ h1 {
 }
 
 .mode.register:after {
-    margin-left: 232px
+    margin-left: 73%
 }
 
 .selector {
@@ -93,10 +93,7 @@ h1 {
 .auth-content {
     width: 290px;
     max-width: 80%;
-    bottom: 80px;
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 50% auto 0 auto;
 }
 
 input {
@@ -112,6 +109,10 @@ input {
     padding: 0 16px 0 16px;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
+}
+
+input:last-of-type {
+    margin-bottom: 8%;
 }
 
 ::-webkit-input-placeholder {
