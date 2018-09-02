@@ -12,7 +12,8 @@ h1 {
     height: 100%;
     background-color: #2391D3;
     z-index: 1001;
-    position: fixed;
+    position: absolute;
+    overflow-y: auto;
     text-align: center;
 }
 
@@ -93,7 +94,7 @@ h1 {
 .auth-content {
     width: 290px;
     max-width: 80%;
-    margin: 50% auto 0 auto;
+    margin: 40% auto 5% auto;
 }
 
 input {
