@@ -51,3 +51,7 @@ testem.log
 Thumbs.db
 
 yarn.lock
+
+# generated file
+
+/src/environments/versions.ts
