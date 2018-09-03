@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
-import { Values } from '../values';
+import { versions } from '../../environments/versions';
 import 'sweetalert';
 import { AppComponent } from './app.component';
 @Component({
@@ -12,7 +12,9 @@ import { AppComponent } from './app.component';
 
 export class AboutComponent implements OnInit {
     public checking = false;
-    public version = Values.currentVersion;
+    public version = versions.version;
+    public revision = versions.revision;
+    public branch = versions.branch;
     constructor(
         private apiService: ApiService,
         private appComponent: AppComponent
@@ -25,7 +27,7 @@ export class AboutComponent implements OnInit {
         this.apiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
-                const currentVersion: Array<string> = Values.currentVersion.split('.');
+                const currentVersion: Array<string> = this.version.split('.');
                 const downloadAddress: string = t.downloadAddress;
                 if (latestVersion[0] > currentVersion[0]) {
                     this.appComponent.redirectToDownload(downloadAddress);

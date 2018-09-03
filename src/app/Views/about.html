@@ -4,22 +4,23 @@
     <img src="assets/144x144.png">
 </div>
 
-<p class="version">
-    Kahla {{version}} Beta
-</p>
+<div class="version">
+    Kahla {{version}} Beta - {{branch}} build
+    <p style="font-size:15px;">Last git commit: {{revision}}</p>
+</div>
 
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
 <div class="menu-button" *ngIf="!checking" (click)="check()">
     <div class="img">
-        <i  class="fa fa-refresh"></i>
+        <i class="fa fa-refresh"></i>
     </div>
     <div class="text" i18n="@@CheckForUpdates">Check for updates</div>
 </div>
 <div class="menu-button" *ngIf="checking">
     <div class="img">
-        <i  class="fa fa-refresh fa-spin"></i>
+        <i class="fa fa-refresh fa-spin"></i>
     </div>
     <div class="text" i18n="@@CheckingForUpdates">Checking for updates...</div>
 </div>
@@ -33,6 +34,6 @@
 <div class="foot-text">
     <a href="https://www.aiursoft.com/docs/terms" target="_blank">Terms</a>
     |
-    <a href="https://www.aiursoft.com/docs/terms" target="_blank">Privacy Policy</a>    
-    <p>Copyright &copy; 2018 Aiursoft Corporation</p>    
+    <a href="https://www.aiursoft.com/docs/terms" target="_blank">Privacy Policy</a>
+    <p>Copyright &copy; 2018 Aiursoft Corporation</p>
 </div>

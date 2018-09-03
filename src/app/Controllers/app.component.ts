@@ -14,7 +14,7 @@ import { HeaderComponent } from './header.component';
 import { FriendRequestsComponent } from './friendrequests.component';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
-import { Values } from '../values';
+import { versions } from '../../environments/versions';
 import 'sweetalert';
 
 @Component({
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
-                const currentVersion: Array<string> = Values.currentVersion.split('.');
+                const currentVersion: Array<string> = versions.version.split('.');
                 const downloadAddress: string = t.downloadAddress;
                 if (latestVersion[0] > currentVersion[0]) {
                     this.redirectToDownload(downloadAddress);
