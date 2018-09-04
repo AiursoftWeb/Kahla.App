@@ -154,6 +154,10 @@ export class ApiService {
         return this.Get(`/LogOff`);
     }
 
+    public CreateGroup(groupName: string): Observable<AiurValue<number>> {
+        return this.Post(`/CreateGroupConversation`, { GroupName: groupName });
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

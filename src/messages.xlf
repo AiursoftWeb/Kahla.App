@@ -45,7 +45,7 @@
                 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/talking.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Send" datatype="html">
@@ -66,30 +66,31 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="AddFriend" datatype="html">
+      <trans-unit id="SearchFriend" datatype="html">
         <source>
-            Add Friend
+            Search Friend
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/friends.component.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/Controllers/add-friend.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
       </trans-unit>
-      <trans-unit id="FriendRequests" datatype="html">
+      <trans-unit id="Requests" datatype="html">
         <source>
-            Friend Requests
+            Requests
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/friends.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="Groups" datatype="html">
+        <source>
+            Groups
+        </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/Controllers/friendrequests.component.ts</context>
-          <context context-type="linenumber">1</context>
+          <context context-type="sourcefile">app/Controllers/nav.component.ts</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Discover" datatype="html">
@@ -98,7 +99,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/nav.component.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/discover.component.ts</context>
@@ -111,30 +112,68 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/nav.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Disconnectedfromserver" datatype="html">
-        <source>Disconnected from server</source>
+      <trans-unit id="FriendRequests" datatype="html">
+        <source>Friend Requests</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/Controllers/app.component.ts</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="sourcefile">app/Controllers/friendrequests.component.ts</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Reconnect" datatype="html">
-        <source>Reconnect</source>
+      <trans-unit id="Disconnectedfromserver" datatype="html">
+        <source>
+        <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>
+        Connecting...
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/app.component.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="About" datatype="html">
+        <source>About</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/about.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CheckForUpdates" datatype="html">
+        <source>Check for updates</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/about.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CheckingForUpdates" datatype="html">
+        <source>Checking for updates...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/about.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="UpdateHistory" datatype="html">
+        <source>Update history</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/about.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="AddFriend" datatype="html">
+        <source>Add Friend</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/add-friend.component.ts</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="RegisterTime" datatype="html">
         <source>
-            Register Time: 
+            Register Time:
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
@@ -145,56 +184,56 @@
         <source>Profile Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Security" datatype="html">
         <source>Security</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Notification" datatype="html">
         <source>Notification</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Privacy" datatype="html">
         <source>Privacy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Language" datatype="html">
         <source>Language</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="MoreSettings" datatype="html">
         <source>More Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="AboutKahla" datatype="html">
         <source>About Kahla</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Signout" datatype="html">
         <source>Sign out</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/settings.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="FriendSuggestion" datatype="html">
@@ -254,7 +293,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/signin.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/register.component.ts</context>
@@ -304,7 +343,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/signin.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ConfirmPassword" datatype="html">
@@ -314,6 +353,13 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="Registering" datatype="html">
+        <source>Registering...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/register.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Profile" datatype="html">
         <source>Profile</source>
         <context-group purpose="location">
@@ -321,25 +367,50 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="FileHistory" datatype="html">
+        <source>File History</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/user.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Report" datatype="html">
+        <source>Report</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/user.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/user.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/user.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="SendFriendRequest" datatype="html">
         <source>Send Friend Request</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/user.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Message" datatype="html">
         <source>Message</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/Controllers/user.component.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="save" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/Controllers/userDetail.component.ts</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
     </body>
