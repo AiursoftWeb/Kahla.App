@@ -1,0 +1,9 @@
+<app-header title="Join Group" i18n-title="@@JoinGroup" returnButton="true"></app-header>
+
+<div class="search-part">
+    <input placeholder="Enter group name" type="text" #groupName/>
+</div>
+<div class="search-holder"></div>
+<div class="buttons">
+    <button class="primary" (click)="joinGroup(groupName.value)" i18n="@@OK">OK</button>
+</div>

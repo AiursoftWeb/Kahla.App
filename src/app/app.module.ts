@@ -21,8 +21,8 @@ import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
 import { UserDetailComponent } from './Controllers/userDetail.component';
-import { GroupsComponent } from './Controllers/groups.component';
 import { CreateGroupComponent } from './Controllers/create-group.component';
+import { JoinGroupComponent } from './Controllers/join-group.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -55,8 +55,8 @@ import { environment } from '../environments/environment';
         HeaderComponent,
         UserComponent,
         UserDetailComponent,
-        GroupsComponent,
-        CreateGroupComponent
+        CreateGroupComponent,
+        JoinGroupComponent
     ],
     providers: [
         ApiService,

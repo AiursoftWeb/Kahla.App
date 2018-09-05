@@ -38,7 +38,9 @@ export class Notify {
     public ShowNewMessage(evt: NewMessageEvent, myId: string): void {
         const openUrl = `/kahla/talking/${evt.conversationId}`;
         if (evt.sender.id !== myId) {
-            evt.content = AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8);
+            if (evt.aesKey) {
+                evt.content = AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8);
+            }
             if (evt.content.startsWith('[img]')) {
                 evt.content = 'Photo';
             }

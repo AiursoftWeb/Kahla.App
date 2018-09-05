@@ -45,7 +45,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             .pipe(map(t => t.items))
             .subscribe(info => {
                 info.forEach(e => {
-                    e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                    if (e.discriminator === 'PrivateConversation') {
+                        e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                    }
                     if (e.latestMessage.startsWith('[img]')) {
                         e.latestMessage = 'Photo';
                     }
