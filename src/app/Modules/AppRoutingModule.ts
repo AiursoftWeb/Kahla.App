@@ -14,6 +14,7 @@ import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
 import { CreateGroupComponent } from '../Controllers/create-group.component';
 import { JoinGroupComponent } from '../Controllers/join-group.component';
+import { GroupComponent } from '../Controllers/group.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/kahla/conversations', pathMatch: 'full' },
@@ -31,6 +32,7 @@ const routes: Routes = [
     { path: 'kahla/userInforDet', component: UserDetailComponent },
     { path: 'kahla/create-group', component: CreateGroupComponent },
     { path: 'kahla/join-group', component: JoinGroupComponent },
+    { path: 'kahla/group/:id', component: GroupComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

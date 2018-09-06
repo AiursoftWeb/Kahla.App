@@ -23,6 +23,7 @@ import { AboutComponent } from './Controllers/about.component';
 import { UserDetailComponent } from './Controllers/userDetail.component';
 import { CreateGroupComponent } from './Controllers/create-group.component';
 import { JoinGroupComponent } from './Controllers/join-group.component';
+import { GroupComponent } from './Controllers/group.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -56,7 +57,8 @@ import { environment } from '../environments/environment';
         UserComponent,
         UserDetailComponent,
         CreateGroupComponent,
-        JoinGroupComponent
+        JoinGroupComponent,
+        GroupComponent
     ],
     providers: [
         ApiService,
