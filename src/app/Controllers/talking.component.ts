@@ -70,9 +70,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(messages => {
                 messages.forEach(t => {
-                    if (this.conversation.discriminator === 'PrivateConversation') {
-                        t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    }
+                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                     if (!t.content.startsWith('[')) {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
@@ -105,10 +103,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (Number(response)) {
                         this.progress = response;
                     } else if (response != null) {
-                        let encedMessages = `[img]${response}`;
-                        if (this.conversation.discriminator === 'PrivateConversation') {
-                            encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
-                        }
+                        const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
                         this.apiService.SendMessage(this.conversation.id, encedMessages)
                             .subscribe(() => {
                                 this.finishUpload();
@@ -130,10 +125,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (Number(response)) {
                         this.progress = response;
                     } else if (response != null) {
-                        let encedMessages = `[file]${response}`;
-                        if (this.conversation.discriminator === 'PrivateConversation') {
-                            encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
-                        }
+                        const encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
                         this.apiService.SendMessage(this.conversation.id, encedMessages)
                             .subscribe(() => {
                                 this.finishUpload();
@@ -162,9 +154,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.local = true;
         this.messages.push(tempMessage);
         this.messageAmount++;
-        if (this.conversation.discriminator === 'PrivateConversation') {
-            this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
-        }
+        this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
         this.content = '';
