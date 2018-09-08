@@ -68,6 +68,7 @@
         display: block;
         font-size: 12px;
         width: 70%;
+        margin-bottom: 1.5%;
     }
 
     .message-list .left .chat-text {
@@ -83,7 +84,6 @@
     }
 
     .message-list .chat-content {
-        border: 1px solid #18A4F9;
         border-radius: 8px;
         color: white;
         padding: 10px;
@@ -119,8 +119,7 @@
     .message-list .left .chat-content:after {
         right: 100%;
         top: 20px;;
-        border-color: rgba(213,242,239,0);
-        border-right-color: #ddd;
+        border-right-color: white;
     }
 
     .message-list .right .chat-content:after {
@@ -150,6 +149,19 @@
 
     .message-list .chat-text span {
         color: #AAA;
+    }
+
+    .message-list .left .sendTime {
+        margin: 0.5% 0 0 1%;
+    }
+
+    .message-list .right .sendTime {
+        margin: 0.5% 1% 0 0;
+    }
+
+    .message-list .chat-content span {
+        font-weight: bold;
+        color: cornflowerblue;
     }
 
 .chat-action {
