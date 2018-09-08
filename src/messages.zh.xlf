@@ -156,6 +156,12 @@
         </source>
         <target>注册时间</target>
       </trans-unit>
+      <trans-unit id="Groups" datatype="html">
+        <source>
+          Groups
+        </source>
+        <target>群</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

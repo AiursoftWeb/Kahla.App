@@ -154,7 +154,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.local = true;
         this.messages.push(tempMessage);
         this.messageAmount++;
-        this.apiService.SendMessage(this.conversation.id, AES.encrypt(this.content, this.conversation.aesKey).toString())
+        this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
+        this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
         this.content = '';
         setTimeout(() => {

@@ -154,6 +154,18 @@ export class ApiService {
         return this.Get(`/LogOff`);
     }
 
+    public CreateGroup(groupName: string): Observable<AiurValue<number>> {
+        return this.Post(`/CreateGroupConversation`, { GroupName: groupName });
+    }
+
+    public JoinGroup(groupName: string): Observable<AiurProtocal> {
+        return this.Post(`/JoinGroup`, {GroupName: groupName});
+    }
+
+    public LeaveGroup(groupName: string): Observable<AiurProtocal> {
+        return this.Post(`/LeaveGroup`, {GroupName: groupName});
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

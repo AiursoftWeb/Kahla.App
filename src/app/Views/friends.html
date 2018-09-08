@@ -1,4 +1,4 @@
-﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/"></app-header>
+﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/kahla/addfriend"></app-header>
 
 <div class="friends-header" id="main">
     <a class="friends-button" routerLink="/kahla/addfriend">
@@ -18,6 +18,22 @@
         </div>
         <div class="words" i18n="@@Requests">
             Requests
+        </div>
+    </a>
+    <a class="friends-button" routerLink="/kahla/join-group">
+        <div class="icon">
+            <i class="fa fa-user-plus"></i>
+        </div>
+        <div class="words" i18n="@@JoinGroup">
+            Join Group
+        </div>
+    </a>
+    <a class="friends-button" routerLink="/kahla/create-group">
+        <div class="icon">
+            <i class="fa fa-users"></i>
+        </div>
+        <div class="words" i18n="@@CreateGroup">
+            Create Group
         </div>
     </a>
 </div>
