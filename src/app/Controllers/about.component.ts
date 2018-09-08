@@ -15,6 +15,7 @@ export class AboutComponent implements OnInit {
     public version = versions.version;
     public revision = versions.revision;
     public branch = versions.branch;
+    public buildTime = versions.buildTime;
     constructor(
         private apiService: ApiService,
         private appComponent: AppComponent
