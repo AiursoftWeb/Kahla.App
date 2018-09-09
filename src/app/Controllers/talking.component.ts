@@ -26,6 +26,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public loadingMore = false;
     public progress = 0;
     public uploading = false;
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
+    public userNameColors = new Map();
 
     constructor(
         private route: ActivatedRoute,
@@ -74,6 +77,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (!t.content.startsWith('[')) {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
+                    }
+                    if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
+                        this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
                 });
                 this.messages = messages;
