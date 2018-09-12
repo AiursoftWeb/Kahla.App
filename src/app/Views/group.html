@@ -10,6 +10,12 @@
 </div>
 
 <div class="menu-holder"></div>
+<div class="menu-button" (click)="talk(conversation.id)">
+    <div class="img">
+        <i class="fa fa-comments"></i>
+    </div>
+    <div class="text" i18n="@@Message">Message</div>
+</div>
 <div class="menu-button">
     <div class="img">
         <i class="fa fa-history"></i>
@@ -22,7 +28,9 @@
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
-
-<div class="buttons">
-    <button class="warning" (click)="leaveGroup(conversation.displayName)" i18n="@@LeaveGroup">Leave Group</button>
+<div class="menu-button" (click)="leaveGroup(conversation.displayName)">
+    <div class="img">
+        <i class="fa fa-sign-out warning"></i>
+    </div>
+    <div class="text warning" i18n="@@LeaveGroup">Leave Group</div>
 </div>
