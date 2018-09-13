@@ -54,4 +54,8 @@ export class GroupComponent implements OnInit {
                 }
             });
     }
+
+    public talk(id: number): void {
+        this.router.navigate(['/kahla/talking', id]);
+    }
 }
