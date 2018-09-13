@@ -39,3 +39,7 @@ kbd {
     background-color: #212529;
     border-radius: .2rem;
 }
+
+a {
+    text-decoration: none;
+}
