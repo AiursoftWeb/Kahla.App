@@ -29,6 +29,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
+    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
 
     constructor(
         private route: ActivatedRoute,

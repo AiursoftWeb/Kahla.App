@@ -22,7 +22,7 @@
                     Sending...
                 </span>
                 <span>
-                    {{message.sendTime | date:'M/d/yy h:mm a':'new Date().getTimezoneOffset()'}}
+                    {{message.sendTime | date:'M/d/yy h:mm a':timezoneOffset}}
                 </span>
             </p>
         </div>

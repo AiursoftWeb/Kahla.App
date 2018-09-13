@@ -14,6 +14,7 @@ import { AES, enc } from 'crypto-js';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
+    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
     constructor(
         public apiService: ApiService,
         public router: Router,

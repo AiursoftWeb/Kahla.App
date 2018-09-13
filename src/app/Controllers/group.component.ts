@@ -14,6 +14,7 @@ import 'sweetalert';
 
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
+    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,

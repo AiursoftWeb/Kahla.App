@@ -13,6 +13,7 @@ import 'sweetalert';
 export class FriendRequestsComponent implements OnInit, OnDestroy {
 
     public requests: Request[];
+    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
 
     constructor(
         private apiService: ApiService,

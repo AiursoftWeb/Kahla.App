@@ -5,7 +5,7 @@
         {{conversation.displayName}}
     </div>
     <div class="create-time">
-        Create Time: {{conversation.conversationCreateTime | date:'mediumDate':'new Date().getTimezoneOffset()'}}
+        Create Time: {{conversation.conversationCreateTime | date:'mediumDate':timezoneOffset}}
     </div>
 </div>
 

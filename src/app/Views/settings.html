@@ -10,7 +10,7 @@
             Register Time:
         </ng-container>
         <ng-container *ngIf="GetMe()">
-            {{GetMe().accountCreateTime | date:'shortDate':'new Date().getTimezoneOffset()'}} {{GetMe().accountCreateTime | date:'shortTime':'new Date().getTimezoneOffset()'}}
+            {{GetMe().accountCreateTime | date:'shortDate':timezoneOffset}} {{GetMe().accountCreateTime | date:'shortTime':timezoneOffset}}
         </ng-container>
     </div>
 </div>
