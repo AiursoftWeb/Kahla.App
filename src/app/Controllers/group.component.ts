@@ -9,7 +9,8 @@ import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/group.html',
-    styleUrls: ['../Styles/menu.css']
+    styleUrls: ['../Styles/menu.css',
+                '../Styles/friends.css']
 })
 
 export class GroupComponent implements OnInit {
@@ -57,5 +58,9 @@ export class GroupComponent implements OnInit {
 
     public talk(id: number): void {
         this.router.navigate(['/kahla/talking', id]);
+    }
+
+    public user(id: string): void {
+        this.router.navigate(['kahla/user', id]);
     }
 }
