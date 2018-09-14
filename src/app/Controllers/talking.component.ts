@@ -195,6 +195,36 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.getMessages(false, this.conversation.id);
     }
 
+    public paste(event): void {
+        const items = event.clipboardData.items;
+        for (const item of items) {
+            if (item.kind === 'file') {
+                const blob = item.getAsFile();
+                if (blob != null) {
+                    const formData = new FormData();
+                    formData.append('image', blob);
+                    this.uploadFromClipboard(formData);
+                }
+            }
+        }
+    }
+
+    private uploadFromClipboard(file: FormData): void {
+        this.uploading = true;
+        this.apiService.UploadFile(file).subscribe(response => {
+            if (Number(response)) {
+                this.progress = response;
+            } else if (response != null) {
+                const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                this.apiService.SendMessage(this.conversation.id, encedMessages)
+                    .subscribe(() => {
+                        this.uploading = false;
+                        this.progress = 0;
+                    });
+            }
+        });
+    }
+
     public ngOnDestroy(): void {
         AppComponent.CurrentTalking = null;
         window.onscroll = null;

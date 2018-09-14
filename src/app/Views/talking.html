@@ -1,5 +1,5 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
-<ul class="message-list" #mainList [ngClass]="{'active': showPanel}">
+<ul class="message-list" #mainList [ngClass]="{'active': showPanel}" (paste)="paste($event)">
     <button *ngIf="!loadingMore" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
