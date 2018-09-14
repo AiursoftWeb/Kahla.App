@@ -1,4 +1,5 @@
-﻿
+﻿import { KahlaUsers } from './KahlaUsers';
+
 export class Conversation {
     public id: number;
     public discriminator: string;
@@ -7,4 +8,5 @@ export class Conversation {
     public displayImage: string;
     public anotherUserId: string;
     public aesKey: string;
+    public users: KahlaUsers[];
 }
