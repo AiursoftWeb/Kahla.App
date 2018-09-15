@@ -15,7 +15,7 @@
             </div>
             <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" (keyup.enter)="signin()">
             <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()">
-            <a href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank">Forgot password?</a>
+            <a href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
             <br><br>
             <button *ngIf="!connecting" [disabled]="email==undefined || password===undefined || connecting" class="whitebutton" (click)="signin()" i18n="@@LogIn">
                     Log in

@@ -196,6 +196,61 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.getMessages(false, this.conversation.id);
     }
 
+    public paste(event): void {
+        const items = event.clipboardData.items;
+        for (const item of items) {
+            if (item.kind === 'file') {
+                const blob = item.getAsFile();
+                if (blob != null) {
+                    const formData = new FormData();
+                    formData.append('image', blob);
+                    this.uploadByPasteOrDrag(true, formData);
+                }
+            }
+        }
+    }
+
+    private uploadByPasteOrDrag(image: boolean, file: FormData): void {
+        this.uploading = true;
+        this.apiService.UploadFile(file).subscribe(response => {
+            if (Number(response)) {
+                this.progress = response;
+            } else if (response != null) {
+                let encedMessages;
+                if (image) {
+                    encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                } else {
+                    encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
+                }
+                this.apiService.SendMessage(this.conversation.id, encedMessages)
+                    .subscribe(() => {
+                        this.uploading = false;
+                        this.progress = 0;
+                    });
+            }
+        });
+    }
+
+    public drop(event): void {
+        this.preventDefault(event);
+        for (const item of event.dataTransfer.items) {
+            const blob = item.getAsFile();
+            const formData = new FormData();
+            if (item.type.match('^image') && blob != null) {
+                formData.append('image', blob);
+                this.uploadByPasteOrDrag(true, formData);
+            } else if (blob != null) {
+                formData.append('file', blob);
+                this.uploadByPasteOrDrag(false, formData);
+            }
+        }
+    }
+
+    public preventDefault(event): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     public ngOnDestroy(): void {
         AppComponent.CurrentTalking = null;
         window.onscroll = null;
