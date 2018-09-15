@@ -11,8 +11,11 @@
         <div class="last-time">
             {{inf.latestMessageTime | date:'shortTime' }}
         </div>
-        <div class="last-message">
+        <div class="last-message" *ngIf="inf.latestMessage != null">
             {{inf.latestMessage}}
+        </div>
+        <div class="last-message" *ngIf="inf.latestMessage == null" i18n="@@NoMessage">
+            No message. Start talking now!
         </div>
     </div>
 </div>

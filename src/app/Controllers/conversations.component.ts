@@ -45,12 +45,14 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             .pipe(map(t => t.items))
             .subscribe(info => {
                 info.forEach(e => {
-                    e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
-                    if (e.latestMessage.startsWith('[img]')) {
-                        e.latestMessage = 'Photo';
-                    }
-                    if (e.latestMessage.startsWith('[file]')) {
-                        e.latestMessage = 'File';
+                    if (e.latestMessage != null) {
+                        e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                        if (e.latestMessage.startsWith('[img]')) {
+                            e.latestMessage = 'Photo';
+                        }
+                        if (e.latestMessage.startsWith('[file]')) {
+                            e.latestMessage = 'File';
+                        }
                     }
                 });
                 component.info = info;
