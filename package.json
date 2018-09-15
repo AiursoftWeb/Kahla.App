@@ -17,7 +17,7 @@
     "lint": "ng lint --type-check && tsc",
     "pack": "asar pack ./www ./www/app.asar",
     "prod": "npm run prebuild && ng build --base-href / --prod",
-    "prod-zh": "npm run prebuild && ng build --base-href / --prod --local zh --i18n-file ./src/messages.zh.xlf",
+    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf",
     "postinstall": "npm run prebuild"
   },
   "dependencies": {
@@ -33,6 +33,11 @@
     "@angular/router": "6.1.7",
     "@angular/service-worker": "6.1.7",
     "autolinker": "^1.7.1",
+    "cordova-android": "^7.1.1",
+    "cordova-browser": "^5.0.0",
+    "cordova-ios": "^4.5.1",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-windows": "4.4.2",
     "core-js": "^2.5.7",
     "crypto-js": "^3.1.9-1",
     "font-awesome": "^4.7.0",
