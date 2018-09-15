@@ -9,7 +9,7 @@
             {{inf.displayName}}
         </div>
         <div class="last-time">
-            {{inf.latestMessageTime | date:'shortTime' }}
+            {{inf.latestMessageTime | date:'shortTime':timezoneOffset}}
         </div>
         <div class="last-message">
             {{inf.latestMessage}}

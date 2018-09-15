@@ -10,6 +10,8 @@ import { KahlaUser } from '../Models/KahlaUser';
 })
 export class SettingsComponent implements OnInit {
 
+    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
+
     constructor(
         private apiService: ApiService,
         private router: Router) {
