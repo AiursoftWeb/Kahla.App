@@ -203,19 +203,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (blob != null) {
                     const formData = new FormData();
                     formData.append('image', blob);
-                    this.uploadFromClipboard(formData);
+                    this.uploadByPasteOrDrag(true, formData);
                 }
             }
         }
     }
 
-    private uploadFromClipboard(file: FormData): void {
+    private uploadByPasteOrDrag(image: boolean, file: FormData): void {
         this.uploading = true;
         this.apiService.UploadFile(file).subscribe(response => {
             if (Number(response)) {
                 this.progress = response;
             } else if (response != null) {
-                const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                let encedMessages;
+                if (image) {
+                    encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                } else {
+                    encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
+                }
                 this.apiService.SendMessage(this.conversation.id, encedMessages)
                     .subscribe(() => {
                         this.uploading = false;
@@ -223,6 +228,26 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     });
             }
         });
+    }
+
+    public drop(event): void {
+        this.preventDefault(event);
+        for (const item of event.dataTransfer.items) {
+            const blob = item.getAsFile();
+            const formData = new FormData();
+            if (item.type.match('^image') && blob != null) {
+                formData.append('image', blob);
+                this.uploadByPasteOrDrag(true, formData);
+            } else if (blob != null) {
+                formData.append('file', blob);
+                this.uploadByPasteOrDrag(false, formData);
+            }
+        }
+    }
+
+    public preventDefault(event): void {
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     public ngOnDestroy(): void {
