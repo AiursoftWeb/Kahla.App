@@ -29,7 +29,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.requests = response.items;
                 this.requests.forEach(request => {
-                    request.createTime = new Date(request.createTime).toLocaleString([], this.option);
+                    request.createTime = new Date(request.createTime + 'Z').toLocaleString([], this.option);
                 });
                 this.cache.UpdateFriendRequests(response.items);
             });

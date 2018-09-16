@@ -20,7 +20,7 @@ export class SettingsComponent implements OnInit {
     public ngOnInit(): void {
         this.apiService.Me().subscribe(p => {
             AppComponent.me = p.value;
-            AppComponent.me.accountCreateTime = new Date(AppComponent.me.accountCreateTime).toLocaleString([], this.option);
+            AppComponent.me.accountCreateTime = new Date(AppComponent.me.accountCreateTime + 'Z').toLocaleString([], this.option);
         });
     }
 
