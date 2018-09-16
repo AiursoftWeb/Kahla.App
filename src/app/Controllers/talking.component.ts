@@ -195,11 +195,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.getMessages(false, this.conversation.id);
     }
 
-    public paste(event): void {
+    public paste(event: ClipboardEvent): void {
         const items = event.clipboardData.items;
-        for (const item of items) {
-            if (item.kind === 'file') {
-                const blob = item.getAsFile();
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].kind === 'file') {
+                const blob = items[i].getAsFile();
                 if (blob != null) {
                     const formData = new FormData();
                     formData.append('image', blob);
@@ -230,24 +230,49 @@ export class TalkingComponent implements OnInit, OnDestroy {
         });
     }
 
-    public drop(event): void {
+    public drop(event: DragEvent): void {
         this.preventDefault(event);
-        for (const item of event.dataTransfer.items) {
-            const blob = item.getAsFile();
-            const formData = new FormData();
-            if (item.type.match('^image') && blob != null) {
-                formData.append('image', blob);
-                this.uploadByPasteOrDrag(true, formData);
-            } else if (blob != null) {
-                formData.append('file', blob);
-                this.uploadByPasteOrDrag(false, formData);
+        if (event.dataTransfer.items != null) {
+            const items = event.dataTransfer.items;
+            for (let i = 0; i < items.length; i++) {
+                const blob = items[i].getAsFile();
+                const formData = new FormData();
+                if (items[i].type.match('^image') && blob != null) {
+                    formData.append('image', blob);
+                    this.uploadByPasteOrDrag(true, formData);
+                } else if (blob != null) {
+                    formData.append('file', blob);
+                    this.uploadByPasteOrDrag(false, formData);
+                }
+            }
+        } else {
+            const files = event.dataTransfer.files;
+            for (let i = 0; i < files.length; i++) {
+                const blob = files[i];
+                const formData = new FormData();
+                if (files[i].type.match('^image') && blob != null) {
+                    formData.append('image', blob);
+                    this.uploadByPasteOrDrag(true, formData);
+                } else if (blob != null) {
+                    formData.append('file', blob);
+                    this.uploadByPasteOrDrag(false, formData);
+                }
             }
         }
+        this.removeDragData(event);
     }
 
-    public preventDefault(event): void {
+    public preventDefault(event: DragEvent): void {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    private removeDragData(event: DragEvent): void {
+        if (event.dataTransfer.items) {
+            event.dataTransfer.items.clear();
+        } else {
+            event.dataTransfer.clearData();
+        }
     }
 
     public ngOnDestroy(): void {
