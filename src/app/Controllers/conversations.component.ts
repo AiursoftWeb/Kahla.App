@@ -14,7 +14,7 @@ import { AES, enc } from 'crypto-js';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
-    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
+    private option = { hour: 'numeric', minute: 'numeric' };
     constructor(
         public apiService: ApiService,
         public router: Router,
@@ -55,6 +55,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                             e.latestMessage = 'File';
                         }
                     }
+                    e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
                 });
                 component.info = info;
                 component.cache.UpdateConversations(info);

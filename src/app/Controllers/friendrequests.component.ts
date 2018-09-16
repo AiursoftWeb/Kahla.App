@@ -13,7 +13,7 @@ import 'sweetalert';
 export class FriendRequestsComponent implements OnInit, OnDestroy {
 
     public requests: Request[];
-    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private apiService: ApiService,
@@ -28,6 +28,9 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.apiService.MyRequests()
             .subscribe(response => {
                 this.requests = response.items;
+                this.requests.forEach(request => {
+                    request.createTime = new Date(request.createTime).toLocaleString([], this.option);
+                });
                 this.cache.UpdateFriendRequests(response.items);
             });
     }

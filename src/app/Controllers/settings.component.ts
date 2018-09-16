@@ -10,7 +10,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 })
 export class SettingsComponent implements OnInit {
 
-    public timezoneOffset: string = new Date().getTimezoneOffset() / 60 + '';
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private apiService: ApiService,
@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
     public ngOnInit(): void {
         this.apiService.Me().subscribe(p => {
             AppComponent.me = p.value;
+            AppComponent.me.accountCreateTime = new Date(AppComponent.me.accountCreateTime).toLocaleString([], this.option);
         });
     }
 
