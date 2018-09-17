@@ -201,6 +201,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const items = event.clipboardData.items;
         for (let i = 0; i < items.length; i++) {
             if (items[i].kind === 'file') {
+                this.preventDefault(event);
                 const blob = items[i].getAsFile();
                 if (blob != null) {
                     const formData = new FormData();
