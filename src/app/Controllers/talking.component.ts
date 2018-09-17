@@ -265,7 +265,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.removeDragData(event);
     }
 
-    public preventDefault(event: DragEvent): void {
+    public preventDefault(event: DragEvent | ClipboardEvent): void {
         event.preventDefault();
         event.stopPropagation();
     }
