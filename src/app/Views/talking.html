@@ -31,7 +31,7 @@
 
 <div class="chat-action">
     <div class="chat-part">
-        <textarea [(ngModel)]="content" type="text" (click)="startInput()" (keyup)="startInput()" (keyup.enter)="send()"></textarea>
+        <textarea [(ngModel)]="content" type="text" (click)="startInput()" (keyup)="startInput()" (keyup.enter)="send()" (paste)="paste($event)"></textarea>
         <button [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
     <div class="button-part" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0">
