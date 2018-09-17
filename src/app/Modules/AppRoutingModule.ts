@@ -6,7 +6,6 @@ import { AddFriendComponent } from '../Controllers/add-friend.component';
 import { SettingsComponent } from '../Controllers/settings.component';
 import { FriendRequestsComponent } from '../Controllers/friendrequests.component';
 import { TalkingComponent } from '../Controllers/talking.component';
-import { DiscoverComponent } from '../Controllers/discover.component';
 import { SignInComponent } from '../Controllers/signin.component';
 import { RegisterComponent } from '../Controllers/register.component';
 import { UserComponent } from '../Controllers/user.component';
@@ -21,7 +20,6 @@ const routes: Routes = [
     { path: 'kahla/conversations', component: ConversationsComponent },
     { path: 'kahla/friends', component: FriendsComponent },
     { path: 'kahla/addfriend', component: AddFriendComponent },
-    { path: 'kahla/discover', component: DiscoverComponent },
     { path: 'kahla/settings', component: SettingsComponent },
     { path: 'kahla/friendrequests', component: FriendRequestsComponent },
     { path: 'kahla/talking/:id', component: TalkingComponent },
