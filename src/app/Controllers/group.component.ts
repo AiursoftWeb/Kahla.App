@@ -15,6 +15,8 @@ import 'sweetalert';
 
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
+
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,
@@ -30,6 +32,8 @@ export class GroupComponent implements OnInit {
             )
             .subscribe(conversation => {
                 this.conversation = conversation;
+                this.conversation.conversationCreateTime =
+                    new Date(this.conversation.conversationCreateTime + 'Z').toLocaleString([], this.option);
             });
     }
 

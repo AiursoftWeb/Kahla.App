@@ -14,6 +14,7 @@ import { AES, enc } from 'crypto-js';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
+    private option = { hour: 'numeric', minute: 'numeric' };
     constructor(
         public apiService: ApiService,
         public router: Router,
@@ -54,10 +55,13 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                             e.latestMessage = 'File';
                         }
                     }
+                    e.latestMessageTime = new Date(e.latestMessageTime + 'Z').toLocaleString([], this.option);
                 });
                 component.info = info;
                 component.cache.UpdateConversations(info);
-                AppComponent.CurrentNav.ngOnInit();
+                if (AppComponent.CurrentApp !== null) {
+                    AppComponent.CurrentNav.ngOnInit();
+                }
                 if (callback != null) {
                     callback();
                 }
