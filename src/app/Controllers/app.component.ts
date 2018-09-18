@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public static CurrentFriendRequests: FriendRequestsComponent;
     public ws: WebSocket;
     public wsconnected = false;
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
     constructor(
         private apiService: ApiService,
         private router: Router,
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/kahla/signin']);
             } else {
                 this.apiService.Me().subscribe(p => {
+                    p.value.accountCreateTime = new Date(p.value.accountCreateTime + 'Z').toLocaleString([], this.option);
                     AppComponent.me = p.value;
                 });
                 this.cache.AutoUpdateConversations(AppComponent.CurrentNav);

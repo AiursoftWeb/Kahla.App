@@ -27,10 +27,10 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.apiService.MyRequests()
             .subscribe(response => {
-                this.requests = response.items;
-                this.requests.forEach(request => {
-                    request.createTime = new Date(request.createTime + 'Z').toLocaleString([], this.option);
+                response.items.forEach(item => {
+                    item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
                 });
+                this.requests = response.items;
                 this.cache.UpdateFriendRequests(response.items);
             });
     }
