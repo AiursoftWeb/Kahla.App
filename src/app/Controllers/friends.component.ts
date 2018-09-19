@@ -15,6 +15,7 @@ import * as PullToRefresh from 'pulltorefreshjs';
 export class FriendsComponent implements OnInit, OnDestroy {
     public infos: ContactInfo[];
     public requests: Request[];
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private apiService: ApiService,
@@ -55,6 +56,9 @@ export class FriendsComponent implements OnInit, OnDestroy {
         this.apiService.MyRequests()
             .subscribe(response => {
                 this.requests = response.items.filter(t => !t.completed);
+                response.items.forEach(item => {
+                    item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
+                });
                 this.cache.UpdateFriendRequests(response.items);
                 AppComponent.CurrentNav.ngOnInit();
             });

@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "electron": "ng build --base-href ./ && electron ./www/electron.js",
-    "start": "ng serve --open",
+    "start": "npm run prebuild && ng serve --open",
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",

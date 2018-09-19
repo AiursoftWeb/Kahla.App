@@ -6,12 +6,14 @@ import { Request } from '../Models/Request';
 
 @Injectable()
 export class CacheService {
+    public static cachedData: CacheModel = new CacheModel();
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
+
     constructor(
         private apiService: ApiService) {
 
     }
 
-    public static cachedData: CacheModel = new CacheModel();
 
     public GetFriendList(): ContactInfo[] {
         return CacheService.cachedData.friendList;
@@ -48,6 +50,9 @@ export class CacheService {
 
     public AutoUpdateConversations(initAble: OnInit): void {
         this.apiService.MyRequests().subscribe(model => {
+            model.items.forEach(item => {
+                item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
+            });
             CacheService.cachedData.requests = model.items;
             if (initAble) {
                 initAble.ngOnInit();
