@@ -1,11 +1,11 @@
 <app-header title="Edit profile" returnButton="true" RouterLink="/"></app-header>
 <div *ngIf="user">
   <div class="profile">
-    <label>nickName</label>
+    <label>Nick name</label>
     <input [(ngModel)]="user.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
   </div>
   <div class="profile">
-    <label>bio</label>
+    <label>Bio</label>
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
   <div class="buttons">

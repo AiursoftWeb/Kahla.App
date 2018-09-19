@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import 'sweetalert';
 
 import { ApiService } from '../Services/ApiService';
+import { AiurProtocal } from '../Models/AiurProtocal';
+import { AiurCollection } from '../Models/AiurCollection';
 
 @Component({
     templateUrl: '../Views/create-group.html',
@@ -22,6 +24,8 @@ export class CreateGroupComponent {
         this.apiService.CreateGroup(groupName).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/kahla/talking', response.value]);
+            } else if (response.code === -10) {
+                swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
             } else {
                 swal('Try again', response.message, 'error');
             }
