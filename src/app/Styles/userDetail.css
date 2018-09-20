@@ -42,15 +42,15 @@
 }
 
 .user-img {
-  margin-left: 15px;
   width: 50px;
   height: 50px;
   float: left;
   border-radius: 10px;
 }
 
-.inline-block {
-  display: inline-block;
+.grid {
+  display: grid;
+  max-width: 25%;
 }
 
 progress {
@@ -77,6 +77,7 @@ progress {
   font-weight: 400;
   cursor: pointer;
   background-color: #4075d5;
+  white-space: nowrap;
 }
 
 .inputButton:hover {

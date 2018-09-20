@@ -11,7 +11,7 @@
   <div class="profile avatar">
     <label>Avatar</label>
     <img class="user-img" src="{{user.headImgUrl}}?w=100&h=100">
-    <div class="inline-block">
+    <div class="grid">
       <label class="inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/*" />
     </div>
