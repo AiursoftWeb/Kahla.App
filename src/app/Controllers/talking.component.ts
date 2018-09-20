@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import * as Autolinker from 'autolinker';
+import 'sweetalert';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -206,7 +207,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (blob != null) {
                     const formData = new FormData();
                     formData.append('image', blob);
-                    this.uploadByPasteOrDrag(true, formData);
+                    swal({
+                        title: 'Are you sure to post this image from clipboard?',
+                        icon: 'warning',
+                        buttons: ['Cancel', true],
+                        dangerMode: true,
+                    }).then((send) => {
+                        if (send) {
+                            this.uploadByPasteOrDrag(true, formData);
+                        }
+                    });
                 }
             }
         }
