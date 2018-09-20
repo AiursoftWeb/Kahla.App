@@ -166,6 +166,10 @@ export class ApiService {
         return this.Post(`/LeaveGroup`, {GroupName: groupName});
     }
 
+    public SearchGroup(groupName: string): Observable<AiurCollection<Conversation>> {
+        return this.Get(`/SearchGroup?GroupName=${groupName}`);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
