@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
 import { KahlaUser } from '../Models/KahlaUser';
@@ -15,6 +15,9 @@ import { AiurCollection } from '../Models/AiurCollection';
 
 export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
+  public progress = 0;
+  public uploading = false;
+  @ViewChild('imageInput') public imageInput;
   constructor(
     private apiService: ApiService,
     private router: Router
@@ -30,8 +33,29 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
+  public uploadAvatar(): void {
+    if (this.imageInput) {
+      const fileBrowser = this.imageInput.nativeElement;
+      if (fileBrowser.files && fileBrowser.files[0]) {
+        const formData = new FormData();
+        formData.append('image', fileBrowser.files[0]);
+        this.uploading = true;
+        this.apiService.UploadFile(formData).subscribe(response => {
+          if (Number(response)) {
+            this.progress = response;
+          } else if (response != null) {
+            this.progress = 0;
+            this.user.headImgUrl = response;
+            this.uploading = false;
+          }
+        });
+      }
+    }
+  }
+
   public save() {
-    this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``).subscribe((t) => {
+    this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgUrl)
+      .subscribe((t) => {
       if (t.code === 0) {
         this.router.navigate(['/kahla/settings']);
       } else if (t.code === -10) {

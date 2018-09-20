@@ -96,10 +96,11 @@ export class ApiService {
         return this.Get(`/Me`);
     }
 
-    public UpdateInfo(nickName: string, bio: string): Observable<AiurProtocal> {
+    public UpdateInfo(nickName: string, bio: string, headImgUrl: string): Observable<AiurProtocal> {
         return this.Post('/UpdateInfo', {
             nickName: nickName,
-            bio: bio
+            bio: bio,
+            headImgUrl: headImgUrl
         });
     }
 

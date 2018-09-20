@@ -8,7 +8,16 @@
     <label>Bio</label>
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
+  <div class="profile avatar">
+    <label>Avatar</label>
+    <img class="user-img" src="{{user.headImgUrl}}?w=100&h=100">
+    <div class="inline-block">
+      <label class="inputButton" for="image">Upload new avatar</label>
+      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/*" />
+    </div>
+  </div>
   <div class="buttons">
     <button class="primary" (click)="save()" i18n="@@save">Save</button>
   </div>
 </div>
+<progress *ngIf="uploading" max="100" value={{progress}}></progress>
