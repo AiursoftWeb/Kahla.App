@@ -57,6 +57,9 @@ export class UserDetailComponent implements OnInit {
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgUrl)
       .subscribe((t) => {
       if (t.code === 0) {
+        AppComponent.me.nickName = this.user.nickName;
+        AppComponent.me.bio = this.user.bio;
+        AppComponent.me.headImgUrl = this.user.headImgUrl;
         this.router.navigate(['/kahla/settings']);
       } else if (t.code === -10) {
         swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
