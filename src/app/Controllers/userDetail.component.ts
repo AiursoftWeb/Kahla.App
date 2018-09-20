@@ -5,6 +5,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { AppComponent } from './app.component';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
+import 'sweetalert';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -37,20 +38,34 @@ export class UserDetailComponent implements OnInit {
     if (this.imageInput) {
       const fileBrowser = this.imageInput.nativeElement;
       if (fileBrowser.files && fileBrowser.files[0]) {
-        const formData = new FormData();
-        formData.append('image', fileBrowser.files[0]);
-        this.uploading = true;
-        this.apiService.UploadFile(formData).subscribe(response => {
-          if (Number(response)) {
-            this.progress = response;
-          } else if (response != null) {
-            this.progress = 0;
-            this.user.headImgUrl = response;
-            this.uploading = false;
-          }
-        });
+        if (this.validImageType(fileBrowser.files[0])) {
+          const formData = new FormData();
+          formData.append('image', fileBrowser.files[0]);
+          this.uploading = true;
+          this.apiService.UploadFile(formData).subscribe(response => {
+            if (Number(response)) {
+              this.progress = response;
+            } else if (response != null) {
+              this.progress = 0;
+              this.user.headImgUrl = response;
+              this.uploading = false;
+            }
+          });
+        } else {
+          swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
+        }
       }
     }
+  }
+
+  private validImageType(file: File): boolean {
+    const validImageTypes = ['png', 'jpg', 'bmp'];
+    for (const validType of validImageTypes) {
+      if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public save() {
