@@ -29,7 +29,7 @@ export class UserDetailComponent implements OnInit {
         this.user = p.value;
       });
     } else {
-      this.user = AppComponent.me;
+      this.user = Object.assign({}, AppComponent.me);
     }
   }
 
@@ -57,9 +57,7 @@ export class UserDetailComponent implements OnInit {
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgUrl)
       .subscribe((t) => {
       if (t.code === 0) {
-        AppComponent.me.nickName = this.user.nickName;
-        AppComponent.me.bio = this.user.bio;
-        AppComponent.me.headImgUrl = this.user.headImgUrl;
+        AppComponent.me = Object.assign({}, this.user);
         this.router.navigate(['/kahla/settings']);
       } else if (t.code === -10) {
         swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
