@@ -15,6 +15,7 @@ import 'sweetalert';
 
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
+    public groupMumbers: number;
     private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
@@ -34,6 +35,7 @@ export class GroupComponent implements OnInit {
                 this.conversation = conversation;
                 this.conversation.conversationCreateTime =
                     new Date(this.conversation.conversationCreateTime + 'Z').toLocaleString([], this.option);
+                this.groupMumbers = conversation.users.length;
             });
     }
 
