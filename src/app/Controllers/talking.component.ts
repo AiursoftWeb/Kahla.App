@@ -208,7 +208,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     const formData = new FormData();
                     formData.append('image', blob);
                     const urlString = URL.createObjectURL(blob);
-                    console.log(urlString);
                     Swal({
                         title: 'Are you sure to post this image?',
                         imageUrl: urlString,

@@ -44,10 +44,10 @@ export class UserDetailComponent implements OnInit {
           this.uploading = true;
           this.apiService.UploadFile(formData).subscribe(response => {
             if (Number(response)) {
-              this.progress = response;
+              this.progress = <number>response;
             } else if (response != null) {
               this.progress = 0;
-              this.user.headImgUrl = response;
+              this.user.headImgUrl = <string>response;
               this.uploading = false;
             }
           });
