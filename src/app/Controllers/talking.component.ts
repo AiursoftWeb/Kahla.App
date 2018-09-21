@@ -207,14 +207,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (blob != null) {
                     const formData = new FormData();
                     formData.append('image', blob);
+                    const urlString = URL.createObjectURL(blob);
+                    console.log(urlString);
                     Swal({
-                        title: 'Are you sure to post this image from clipboard?',
-                        type: 'warning',
+                        title: 'Are you sure to post this image?',
+                        imageUrl: urlString,
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
                             this.uploadByPasteOrDrag(true, formData);
                         }
+                        URL.revokeObjectURL(urlString);
                     });
                 }
             }
