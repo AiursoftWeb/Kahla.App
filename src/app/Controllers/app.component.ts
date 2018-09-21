@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/kahla/signin']);
             } else {
                 this.apiService.Me().subscribe(p => {
-                    p.value.accountCreateTime = new Date(p.value.accountCreateTime + 'Z').toLocaleString([], this.option);
+                    p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
                 });
                 this.cache.AutoUpdateConversations(AppComponent.CurrentNav);

@@ -83,7 +83,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
-                    t.sendTime = new Date(t.sendTime + 'Z').toLocaleString([], this.option);
+                    t.sendTime = new Date(t.sendTime).toLocaleString([], this.option);
                 });
                 this.messages = messages;
                 if (getDown) {

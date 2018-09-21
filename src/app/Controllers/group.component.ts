@@ -34,7 +34,7 @@ export class GroupComponent implements OnInit {
             .subscribe(conversation => {
                 this.conversation = conversation;
                 this.conversation.conversationCreateTime =
-                    new Date(this.conversation.conversationCreateTime + 'Z').toLocaleString([], this.option);
+                    new Date(this.conversation.conversationCreateTime).toLocaleString([], this.option);
                 this.groupMumbers = conversation.users.length;
             });
     }

@@ -57,7 +57,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.requests = response.items.filter(t => !t.completed);
                 response.items.forEach(item => {
-                    item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
+                    item.createTime = new Date(item.createTime).toLocaleString([], this.option);
                 });
                 this.cache.UpdateFriendRequests(response.items);
                 AppComponent.CurrentNav.ngOnInit();

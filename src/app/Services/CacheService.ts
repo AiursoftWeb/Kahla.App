@@ -51,7 +51,7 @@ export class CacheService {
     public AutoUpdateConversations(initAble: OnInit): void {
         this.apiService.MyRequests().subscribe(model => {
             model.items.forEach(item => {
-                item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
+                item.createTime = new Date(item.createTime).toLocaleString([], this.option);
             });
             CacheService.cachedData.requests = model.items;
             if (initAble) {

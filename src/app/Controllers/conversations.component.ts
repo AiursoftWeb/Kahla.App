@@ -55,7 +55,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                             e.latestMessage = 'File';
                         }
                     }
-                    e.latestMessageTime = new Date(e.latestMessageTime + 'Z').toLocaleString([], this.option);
+                    e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
                 });
                 component.info = info;
                 component.cache.UpdateConversations(info);

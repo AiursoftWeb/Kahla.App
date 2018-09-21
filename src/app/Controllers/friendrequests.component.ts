@@ -28,7 +28,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.apiService.MyRequests()
             .subscribe(response => {
                 response.items.forEach(item => {
-                    item.createTime = new Date(item.createTime + 'Z').toLocaleString([], this.option);
+                    item.createTime = new Date(item.createTime).toLocaleString([], this.option);
                 });
                 this.requests = response.items;
                 this.cache.UpdateFriendRequests(response.items);
