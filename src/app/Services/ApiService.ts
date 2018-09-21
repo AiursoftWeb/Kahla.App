@@ -57,7 +57,7 @@ export class ApiService {
         });
     }
 
-    public UploadFile(formData: FormData) {
+    public UploadFile(formData: FormData): Observable<number | string> {
         const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile`, formData, {
             reportProgress: true,
             withCredentials: true
@@ -69,7 +69,7 @@ export class ApiService {
         );
     }
 
-    private getProgress(event: HttpEvent<any>) {
+    private getProgress(event: HttpEvent<any>): number | string {
         switch (event.type) {
             case HttpEventType.UploadProgress:
                 return Math.round(100 * event.loaded / event.total);

@@ -110,7 +110,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.uploading = true;
                 this.apiService.UploadFile(formData).subscribe(response => {
                     if (Number(response)) {
-                        this.progress = response;
+                        this.progress = <number>response;
                     } else if (response != null) {
                         const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
                         this.apiService.SendMessage(this.conversation.id, encedMessages)
@@ -132,7 +132,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.uploading = true;
                 this.apiService.UploadFile(formData).subscribe(response => {
                     if (Number(response)) {
-                        this.progress = response;
+                        this.progress = <number>response;
                     } else if (response != null) {
                         const encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
                         this.apiService.SendMessage(this.conversation.id, encedMessages)
@@ -228,7 +228,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.uploading = true;
         this.apiService.UploadFile(file).subscribe(response => {
             if (Number(response)) {
-                this.progress = response;
+                this.progress = <number>response;
             } else if (response != null) {
                 let encedMessages;
                 if (image) {
