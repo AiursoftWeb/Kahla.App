@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -35,32 +35,30 @@ export class UserComponent implements OnInit {
             });
     }
     public delete(id: string): void {
-        swal({
+        Swal({
             title: 'Are you sure to delete a friend?',
-            icon: 'warning',
-             buttons: ['Cancel', true],
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    this.apiService.DeleteFriend(id)
-                        .subscribe(response => {
-                            swal('Success', response.message, 'success');
-                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                            this.router.navigate(['/kahla/friends']);
-                        });
-                } else {
-                }
-            });
+            type: 'warning',
+            showCancelButton: true
+        }).then((willDelete) => {
+            if (willDelete.value) {
+                this.apiService.DeleteFriend(id)
+                    .subscribe(response => {
+                        Swal('Success', response.message, 'success');
+                        this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                        this.router.navigate(['/kahla/friends']);
+                    });
+            } else {
+            }
+        });
     }
 
     public request(id: string): void {
         this.apiService.CreateRequest(id)
             .subscribe(response => {
                 if (response.code === 0) {
-                    swal('Success', response.message, 'success');
+                    Swal('Success', response.message, 'success');
                 } else {
-                    swal('Error', response.message, 'error');
+                    Swal('Error', response.message, 'error');
                 }
                 this.location.back();
             });

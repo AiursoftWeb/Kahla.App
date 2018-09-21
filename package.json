@@ -43,7 +43,7 @@
     "font-awesome": "^4.7.0",
     "pulltorefreshjs": "^0.1.14",
     "rxjs": "^6.3.2",
-    "sweetalert": "^2.1.0",
+    "sweetalert2": "^7.26.29",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

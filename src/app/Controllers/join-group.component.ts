@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 import { ApiService } from '../Services/ApiService';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs/';
@@ -41,7 +41,7 @@ export class JoinGroupComponent implements OnInit {
             if (response.code === 0) {
                 this.router.navigate(['/']);
             } else {
-                swal('Try again', response.message, 'error');
+                Swal('Try again', response.message, 'error');
             }
         });
     }

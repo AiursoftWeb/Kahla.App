@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -40,26 +40,24 @@ export class GroupComponent implements OnInit {
     }
 
     public leaveGroup(groupName: string): void {
-        swal({
+        Swal({
             title: 'Are you sure to leave this group?',
-            icon: 'warning',
-            buttons: ['Cancel', true],
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    this.apiService.LeaveGroup(groupName)
-                        .subscribe(response => {
-                            if (response.code === 0) {
-                                swal('Success', response.message, 'success');
-                                this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                                this.router.navigate(['/kahla/friends']);
-                            } else {
-                                swal('Error', response.message, 'error');
-                            }
-                        });
-                }
-            });
+            type: 'warning',
+            showCancelButton: true
+        }).then((willDelete) => {
+            if (willDelete.value) {
+                this.apiService.LeaveGroup(groupName)
+                    .subscribe(response => {
+                        if (response.code === 0) {
+                            Swal('Success', response.message, 'success');
+                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                            this.router.navigate(['/kahla/friends']);
+                        } else {
+                            Swal('Error', response.message, 'error');
+                        }
+                    });
+            }
+        });
     }
 
     public talk(id: number): void {

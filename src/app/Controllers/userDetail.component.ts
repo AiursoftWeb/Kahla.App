@@ -5,7 +5,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { AppComponent } from './app.component';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -52,7 +52,7 @@ export class UserDetailComponent implements OnInit {
             }
           });
         } else {
-          swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
+          Swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
         }
       }
     }
@@ -75,9 +75,9 @@ export class UserDetailComponent implements OnInit {
         AppComponent.me = Object.assign({}, this.user);
         this.router.navigate(['/kahla/settings']);
       } else if (t.code === -10) {
-        swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
+        Swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
       } else {
-        swal('input in failed', t.message, 'error');
+        Swal('input in failed', t.message, 'error');
       }
     });
   }

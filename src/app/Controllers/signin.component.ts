@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { catchError } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class SignInComponent implements OnInit {
         this.apiService.AuthByPassword(this.email, this.password)
             .pipe(catchError(error => {
                 this.connecting = false;
-                swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                Swal('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
             }))
             .subscribe(t => {
@@ -40,9 +40,9 @@ export class SignInComponent implements OnInit {
                     this.router.navigate(['/kahla/conversations']);
                     AppComponent.CurrentApp.ngOnInit();
                 } else if (t.code === -10) {
-                    swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
+                    Swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
                 } else {
-                    swal('Sign in failed', t.message, 'error');
+                    Swal('Sign in failed', t.message, 'error');
                 }
                 this.connecting = false;
             });

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
 import { versions } from '../../environments/versions';
-import 'sweetalert';
+import Swal from 'sweetalert2';
 import { AppComponent } from './app.component';
 @Component({
     templateUrl: '../Views/about.html',
@@ -37,7 +37,7 @@ export class AboutComponent implements OnInit {
                 } else if (latestVersion[2] > currentVersion[2]) {
                     this.appComponent.redirectToDownload(downloadAddress);
                 } else {
-                    swal('Alert', `You are running the latest version of Kahla!`, 'success');
+                    Swal('Alert', `You are running the latest version of Kahla!`, 'success');
                 }
                 this.checking = false;
             });
