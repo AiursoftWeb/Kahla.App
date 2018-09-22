@@ -46,6 +46,14 @@
     bottom: 0;
     height: 55px;
     float: center;
+    margin: auto;
+    text-align: center;
+}
+
+@media only screen and (min-width: 420px) {
+    .buttons {
+        max-width: 35%;
+    }
 }
 
 .buttons button {
@@ -54,7 +62,7 @@
     border-radius: 8px;
     color: #FFF;
     transition: all 0.2s ease;
-    width: 100%;
+    width: 80%;
     height: 40px;
     padding: 6px 12px;
     margin-bottom: 10px;
