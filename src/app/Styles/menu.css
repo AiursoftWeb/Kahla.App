@@ -50,19 +50,14 @@
     text-align: center;
 }
 
-@media only screen and (min-width: 420px) {
-    .buttons {
-        max-width: 35%;
-    }
-}
-
 .buttons button {
     border: none;
     outline: none;
     border-radius: 8px;
     color: #FFF;
     transition: all 0.2s ease;
-    width: 80%;
+    width: 100%;
+    max-width: 570px;
     height: 40px;
     padding: 6px 12px;
     margin-bottom: 10px;

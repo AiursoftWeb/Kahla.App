@@ -11,12 +11,6 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="info && areFriends" (click)="talk(conversationId)">
-    <div class="img">
-        <i class="fa fa-comments"></i>
-    </div>
-    <div class="text" i18n="@@Message">Message</div>
-</div>
 <div class="menu-button" *ngIf="info && areFriends">
     <div class="img">
         <i class="fa fa-history"></i>
@@ -45,4 +39,5 @@
 
 <div class="buttons">
     <button class="success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="success" *ngIf="info && areFriends"  (click)="talk(conversationId)" i18n="@@Message">Messages</button>
 </div>
