@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { ApiService } from '../Services/ApiService';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs/';
-import { Conversation } from '../Models/Conversation';
+import { GroupConversation } from '../Models/GroupConversation';
 
 @Component({
     templateUrl: '../Views/join-group.html',
@@ -14,7 +14,7 @@ import { Conversation } from '../Models/Conversation';
     ]
 })
 export class JoinGroupComponent implements OnInit {
-    public groups: Observable<Conversation[]> = new Observable<Conversation[]>();
+    public groups: Observable<GroupConversation[]> = new Observable<GroupConversation[]>();
     private searchTerms = new Subject<string>();
 
     constructor(

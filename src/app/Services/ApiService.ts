@@ -15,6 +15,7 @@ import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { GroupConversation } from '../Models/GroupConversation';
 
 
 @Injectable()
@@ -167,7 +168,7 @@ export class ApiService {
         return this.Post(`/LeaveGroup`, {GroupName: groupName});
     }
 
-    public SearchGroup(groupName: string): Observable<AiurCollection<Conversation>> {
+    public SearchGroup(groupName: string): Observable<AiurCollection<GroupConversation>> {
         return this.Get(`/SearchGroup?GroupName=${groupName}`);
     }
 

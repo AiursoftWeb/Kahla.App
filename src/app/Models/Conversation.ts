@@ -6,8 +6,6 @@ export class Conversation {
     public conversationCreateTime: string;
     public displayName: string;
     public displayImage: string;
-    public groupName: string;
-    public groupImage: string;
     public anotherUserId: string;
     public aesKey: string;
     public users: KahlaUsers[];
