@@ -103,6 +103,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public uploadImage(): void {
         if (this.imageInput) {
+            this.showPanel = !this.showPanel;
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -125,6 +126,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public uploadFile(): void {
         if (this.fileInput) {
+            this.showPanel = !this.showPanel;
             const fileBrowser = this.fileInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -148,7 +150,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private finishUpload() {
         this.uploading = false;
         this.progress = 0;
-        this.showPanel = !this.showPanel;
+        this.scrollBottom(true);
+    }
+
+    private scrollBottom(smooth: boolean) {
+        const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+        if (smooth) {
+            window.scroll({top: h, behavior: 'smooth'});
+        } else {
+            window.scroll(0, h);
+        }
     }
 
     public send(): void {
@@ -167,17 +178,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
         this.content = '';
-        setTimeout(() => {
-            const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-            window.scrollTo(h, h);
-        }, 0);
+        this.scrollBottom(true);
     }
 
     public startInput(): void {
         this.showPanel = false;
         setTimeout(() => {
-            const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-            window.scrollTo(h, h);
+            this.scrollBottom(true);
         }, 300);
     }
 
@@ -185,8 +192,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             setTimeout(() => {
-                const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-                window.scroll(0, h);
+                this.scrollBottom(false);
             }, 0);
         }
     }
@@ -237,8 +243,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 }
                 this.apiService.SendMessage(this.conversation.id, encedMessages)
                     .subscribe(() => {
-                        this.uploading = false;
-                        this.progress = 0;
+                        this.finishUpload();
                     });
             }
         });
