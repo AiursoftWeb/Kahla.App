@@ -88,8 +88,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.messages = messages;
                 if (getDown) {
                     setTimeout(() => {
-                        const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-                        window.scrollTo(h, h);
+                        this.scrollBottom(true);
                     }, 0);
                 } else {
                     setTimeout(() => {
@@ -101,48 +100,23 @@ export class TalkingComponent implements OnInit, OnDestroy {
             });
     }
 
-    public uploadImage(): void {
-        if (this.imageInput) {
-            this.showPanel = !this.showPanel;
-            const fileBrowser = this.imageInput.nativeElement;
-            if (fileBrowser.files && fileBrowser.files[0]) {
-                const formData = new FormData();
-                formData.append('image', fileBrowser.files[0]);
-                this.uploading = true;
-                this.apiService.UploadFile(formData).subscribe(response => {
-                    if (Number(response)) {
-                        this.progress = <number>response;
-                    } else if (response != null) {
-                        const encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
-                        this.apiService.SendMessage(this.conversation.id, encedMessages)
-                            .subscribe(() => {
-                                this.finishUpload();
-                            });
-                    }
-                });
-            }
-        }
-    }
-
-    public uploadFile(): void {
-        if (this.fileInput) {
+    public uploadInput(image: boolean): void {
+        if (this.fileInput && !image) {
             this.showPanel = !this.showPanel;
             const fileBrowser = this.fileInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
-                this.uploading = true;
-                this.apiService.UploadFile(formData).subscribe(response => {
-                    if (Number(response)) {
-                        this.progress = <number>response;
-                    } else if (response != null) {
-                        const encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
-                        this.apiService.SendMessage(this.conversation.id, encedMessages)
-                            .subscribe(() => {
-                                this.finishUpload();
-                            });
-                    }
-                });
+                this.upload(image, formData);
+            }
+        }
+        if (this.imageInput && image) {
+            this.showPanel = !this.showPanel;
+            const fileBrowser = this.imageInput.nativeElement;
+            if (fileBrowser.files && fileBrowser.files[0]) {
+                const formData = new FormData();
+                formData.append('image', fileBrowser.files[0]);
+                this.upload(image, formData);
             }
         }
     }
@@ -220,7 +194,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadByPasteOrDrag(true, formData);
+                            this.upload(true, formData);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -229,7 +203,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    private uploadByPasteOrDrag(image: boolean, file: FormData): void {
+    private upload(image: boolean, file: FormData): void {
         this.uploading = true;
         this.apiService.UploadFile(file).subscribe(response => {
             if (Number(response)) {
@@ -258,10 +232,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 if (items[i].type.match('^image') && blob != null) {
                     formData.append('image', blob);
-                    this.uploadByPasteOrDrag(true, formData);
+                    this.upload(true, formData);
                 } else if (blob != null) {
                     formData.append('file', blob);
-                    this.uploadByPasteOrDrag(false, formData);
+                    this.upload(false, formData);
                 }
             }
         } else {
@@ -271,10 +245,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 if (files[i].type.match('^image') && blob != null) {
                     formData.append('image', blob);
-                    this.uploadByPasteOrDrag(true, formData);
+                    this.upload(true, formData);
                 } else if (blob != null) {
                     formData.append('file', blob);
-                    this.uploadByPasteOrDrag(false, formData);
+                    this.upload(false, formData);
                 }
             }
         }

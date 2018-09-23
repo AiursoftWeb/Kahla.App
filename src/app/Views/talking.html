@@ -39,7 +39,7 @@
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadImage()" accept="image/*" />
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(true)" accept="image/*" />
             <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
@@ -47,7 +47,7 @@
             </label>
         </div>
         <div class="of4">
-            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadFile()" />
+            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(false)" />
             <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
                 <div class="text">
                     Send File
