@@ -48,6 +48,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(conversation => {
                 this.conversation = conversation;
                 AppComponent.CurrentHeader.title = conversation.displayName;
+                document.querySelector('app-header').setAttribute('title', conversation.displayName);
                 this.route.params.subscribe((params: Params) => {
                     this.getMessages(true, +params['id']);
                 });
