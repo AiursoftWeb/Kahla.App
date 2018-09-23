@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public static CurrentFriendRequests: FriendRequestsComponent;
     public ws: WebSocket;
     public wsconnected = false;
+    public checking = false;
     private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
     constructor(
         private apiService: ApiService,
@@ -43,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.check();
+        this.check(false);
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/kahla/signin']);
@@ -58,7 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
-    public check(): void {
+    public check(checkButton: boolean): void {
+        this.checking = true;
         this.apiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
@@ -70,7 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.redirectToDownload(downloadAddress);
                 } else if (latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
+                } else if (checkButton) {
+                    Swal('Alert', `You are running the latest version of Kahla!`, 'success');
                 }
+                this.checking = false;
             });
     }
 

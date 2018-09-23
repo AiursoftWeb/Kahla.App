@@ -12,13 +12,13 @@
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="!checking" (click)="check()">
+<div class="menu-button" *ngIf="!appComponent.checking" (click)="check()">
     <div class="img">
         <i class="fa fa-refresh"></i>
     </div>
     <div class="text" i18n="@@CheckForUpdates">Check for updates</div>
 </div>
-<div class="menu-button" *ngIf="checking">
+<div class="menu-button" *ngIf="appComponent.checking">
     <div class="img">
         <i class="fa fa-refresh fa-spin"></i>
     </div>
