@@ -42,10 +42,7 @@
 
 .buttons {
     padding: 10px;
-    z-index: 99;
-    bottom: 0;
     height: 55px;
-    float: center;
     margin: auto;
     text-align: center;
 }
@@ -53,17 +50,24 @@
 .buttons button {
     border: none;
     outline: none;
-    border-radius: 8px;
+    border-radius: 2px;
     color: #FFF;
     transition: all 0.2s ease;
     width: 100%;
-    max-width: 570px;
-    height: 40px;
-    padding: 6px 12px;
+    max-width: 500px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
     margin-bottom: 10px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     cursor: pointer;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+    text-transform: uppercase;
+}
+
+.buttons button:hover {
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
 }
 
 .buttons .success {
