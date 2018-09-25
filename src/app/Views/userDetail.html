@@ -12,12 +12,12 @@
     <label>Avatar</label>
     <img class="user-img" src="{{user.headImgUrl}}?w=100&h=100">
     <div class="grid">
-      <label class="inputButton" for="image">Upload new avatar</label>
+      <label id="upload" class="inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept=".png, .jpg, .bmp" />
     </div>
   </div>
   <div class="buttons">
-    <button class="primary" (click)="save()" i18n="@@save">Save</button>
+    <button id="save" class="primary" (click)="save()" i18n="@@save">Save</button>
   </div>
 </div>
 <progress *ngIf="uploading" max="100" value={{progress}}></progress>

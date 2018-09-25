@@ -112,10 +112,6 @@ input {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-input:last-of-type {
-    margin-bottom: 8%;
-}
-
 ::-webkit-input-placeholder {
     text-transform: uppercase;
     font-size: 11px;
@@ -164,6 +160,7 @@ input:last-of-type {
     text-decoration: none;
     user-select: none;
     transition: all 0.5s ease;
+    margin-top: 5%;
 }
 
 .whitebutton:hover {
@@ -176,4 +173,19 @@ input:last-of-type {
 
 .whitebutton:disabled {
     cursor: not-allowed;
+}
+
+.invalid, .ng-invalid:not(form) {
+    border-color: #C62828;
+}
+
+.alert {
+    color: #C62828;
+    margin: 2%;
+    font-size: 0.8rem;
+}
+
+.forgetPassword {
+    margin: 5% auto 0 auto;
+    display: block;
 }

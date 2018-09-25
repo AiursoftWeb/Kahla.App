@@ -81,6 +81,10 @@
     background-color: #4075d5
 }
 
+.buttons .primary:hover {
+    background-color: #0D47A1;
+}
+
 .buttons .primary:focus {
     background-color: #48A3DD;
 }

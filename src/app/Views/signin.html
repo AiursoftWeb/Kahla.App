@@ -13,16 +13,19 @@
                     <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
                 </div>
             </div>
-            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" (keyup.enter)="signin()">
-            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()">
-            <a href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
-            <br><br>
-            <button *ngIf="!connecting" [disabled]="email==undefined || password===undefined || connecting" class="whitebutton" (click)="signin()" i18n="@@LogIn">
-                    Log in
-            </button>
-            <button *ngIf="connecting" disabled="disabled" class="whitebutton" i18n="@@Connecting">
-                    Connecting...
-            </button>
+            <form (ngSubmit)="signin()" #loginForm="ngForm">
+                <input [(ngModel)]="email" name="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" required #emailInput="ngModel" email>
+                <div class="alert" [hidden]="emailInput.valid || emailInput.pristine">Invalid email!</div>
+                <input [(ngModel)]="password" name="password" type="password" minlength="6" maxlength="100" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()" required #passwordInput="ngModel">
+                <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
+                <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
+                <button *ngIf="!connecting" [disabled]="!loginForm.form.valid" class="whitebutton" i18n="@@LogIn" type="submit">
+                        Log in
+                </button>
+                <button *ngIf="connecting" disabled="disabled" class="whitebutton" i18n="@@Connecting" type="button">
+                        Connecting...
+                </button>
+            </form>
         </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ export class RegisterComponent {
     public password = '';
     public confirmPassword = '';
     public connecting = false;
+    public samePassword = true;
 
     constructor(
         private apiService: ApiService,
@@ -49,5 +50,16 @@ export class RegisterComponent {
                 }
                 this.connecting = false;
             });
+    }
+
+    public checkSame(): void {
+        const confirmInput = document.querySelector('#confirmInput');
+        if (this.password === this.confirmPassword) {
+            this.samePassword = true;
+            confirmInput.classList.remove('invalid');
+        } else {
+            this.samePassword = false;
+            confirmInput.classList.add('invalid');
+        }
     }
 }

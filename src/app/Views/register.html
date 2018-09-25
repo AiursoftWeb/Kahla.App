@@ -13,11 +13,16 @@
                     <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
                 </div>
             </div>
-            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" (keyup.enter)="register()">
-            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" autocomplete="new-password" (keyup.enter)="register()">
-            <input [(ngModel)]="confirmPassword" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()">
-            <button *ngIf="!connecting" class="whitebutton" (click)="register()" i18n="@@Register">Register</button>
-            <button *ngIf="connecting" class="whitebutton" i18n="@@Registering">Registering...</button>
+            <form (ngSubmit)="register()" #registerForm="ngForm">
+                <input [(ngModel)]="email" name="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" required #emailInput="ngModel" email>
+                <div class="alert" [hidden]="emailInput.valid || emailInput.pristine">Invalid email!</div>
+                <input [(ngModel)]="password" name="password" type="password" minlength="6" maxlength="100" i18n-placeholder="@@Password" placeholder="Password" autocomplete="new-password" required #passwordInput="ngModel" (ngModelChange)="checkSame()">
+                <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
+                <input [(ngModel)]="confirmPassword" id="confirmInput" name="confirmPassword" minlength="6" maxlength="100" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()" (ngModelChange)="checkSame()" required #confirmInput="ngModel">
+                <div class="alert" [hidden]="samePassword || confirmInput.pristine">Passwords should be equal.</div>
+                <button *ngIf="!connecting" [disabled]="!registerForm.form.valid || !samePassword" class="whitebutton" i18n="@@Register" type="submit">Register</button>
+                <button *ngIf="connecting" class="whitebutton" i18n="@@Registering" type="button">Registering...</button>
+            </form>
         </div>
     </div>
 </div>
