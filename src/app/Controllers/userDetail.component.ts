@@ -18,6 +18,7 @@ export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
   public progress = 0;
   public uploading = false;
+  private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
   @ViewChild('imageInput') public imageInput;
   constructor(
     private apiService: ApiService,
@@ -27,6 +28,7 @@ export class UserDetailComponent implements OnInit {
   public ngOnInit(): void {
     if (!AppComponent.me) {
       this.apiService.Me().subscribe(p => {
+        p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
       });
     } else {
@@ -42,6 +44,8 @@ export class UserDetailComponent implements OnInit {
           const formData = new FormData();
           formData.append('image', fileBrowser.files[0]);
           this.uploading = true;
+          const uploadButton = document.querySelector('#upload');
+          uploadButton.textContent = 'Uploading';
           this.apiService.UploadFile(formData).subscribe(response => {
             if (Number(response)) {
               this.progress = <number>response;
@@ -49,6 +53,7 @@ export class UserDetailComponent implements OnInit {
               this.progress = 0;
               this.user.headImgUrl = <string>response;
               this.uploading = false;
+              uploadButton.textContent = 'Upload new avatar';
             }
           });
         } else {
@@ -69,6 +74,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   public save() {
+    document.querySelector('#save').textContent = 'saving';
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgUrl)
       .subscribe((t) => {
       if (t.code === 0) {
