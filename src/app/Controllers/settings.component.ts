@@ -12,10 +12,14 @@ export class SettingsComponent {
     constructor(
         private apiService: ApiService,
         private router: Router) {
-    }
+        }
 
     public GetMe(): KahlaUser {
         return AppComponent.me;
+    }
+
+    public GetAvatar(): string {
+        return AppComponent.avatarURL;
     }
 
     public SignOut(): void {

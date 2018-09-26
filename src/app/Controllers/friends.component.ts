@@ -46,6 +46,16 @@ export class FriendsComponent implements OnInit, OnDestroy {
     public init(callback: () => void) {
         this.apiService.MyFriends(true)
             .subscribe(response => {
+                response.items.forEach(item => {
+                    if (item.displayImageKey === 766 || item.displayImageKey === 10) {
+                        item.avatarURL = '../../assets/group.jpg';
+                    } else if (item.displayImageKey === 739) {
+                        item.avatarURL = '../../assets/default.jpg';
+                    } else {
+                        this.apiService.GetFile(item.displayImageKey).subscribe(result =>
+                            item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                    }
+                });
                 this.infos = response.items;
                 this.cache.UpdateFriendList(response.items);
                 AppComponent.CurrentNav.ngOnInit();
@@ -58,6 +68,12 @@ export class FriendsComponent implements OnInit, OnDestroy {
                 this.requests = response.items.filter(t => !t.completed);
                 response.items.forEach(item => {
                     item.createTime = new Date(item.createTime).toLocaleString([], this.option);
+                    if (item.creator.headImgFileKey === 739) {
+                        item.creator.avatarURL = '../../assets/default.jpg';
+                    } else {
+                        this.apiService.GetFile(item.creator.headImgFileKey).subscribe(result =>
+                            item.creator.avatarURL = result.file.internetPath + '?w=100&h=100');
+                    }
                 });
                 this.cache.UpdateFriendRequests(response.items);
                 AppComponent.CurrentNav.ngOnInit();

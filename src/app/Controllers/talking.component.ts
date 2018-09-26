@@ -85,6 +85,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
                     t.sendTime = new Date(t.sendTime).toLocaleString([], this.option);
+                    this.apiService.GetFile(t.sender.headImgFileKey).subscribe(result =>
+                        t.sender.avatarURL = result.file.internetPath);
                 });
                 this.messages = messages;
                 if (getDown) {

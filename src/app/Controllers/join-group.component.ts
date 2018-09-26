@@ -28,7 +28,17 @@ export class JoinGroupComponent implements OnInit {
             distinctUntilChanged(),
             filter(term => term.length >= 3),
             switchMap(term => this.apiService.SearchGroup(term)),
-            map(t => t.items)
+            map(t => {
+                t.items.forEach(item => {
+                    if (item.groupImageKey === 766 || item.groupImageKey === 10) {
+                        item.avatarURL = '../../assets/group.jpg';
+                    } else {
+                        this.apiService.GetFile(item.groupImageKey).subscribe(result =>
+                        item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                    }
+                });
+                return t.items;
+            })
         );
     }
 

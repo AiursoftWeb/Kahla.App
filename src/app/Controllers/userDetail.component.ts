@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
+import { UploadFile } from '../Models/UploadFile';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -18,6 +19,7 @@ export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
   public progress = 0;
   public uploading = false;
+  public avatarURL: string;
   private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
   @ViewChild('imageInput') public imageInput;
   constructor(
@@ -30,9 +32,13 @@ export class UserDetailComponent implements OnInit {
       this.apiService.Me().subscribe(p => {
         p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
+        this.apiService.GetFile(p.value.headImgFileKey).subscribe(result => {
+          this.avatarURL = result.file.internetPath + '?w=100&h=100';
+        });
       });
     } else {
       this.user = Object.assign({}, AppComponent.me);
+      this.avatarURL = AppComponent.avatarURL;
     }
   }
 
@@ -51,7 +57,8 @@ export class UserDetailComponent implements OnInit {
               this.progress = <number>response;
             } else if (response != null) {
               this.progress = 0;
-              this.user.headImgUrl = <string>response;
+              this.user.headImgFileKey = (<UploadFile>response).fileKey;
+              this.avatarURL = (<UploadFile>response).path;
               this.uploading = false;
               uploadButton.textContent = 'Upload new avatar';
             }
@@ -75,7 +82,7 @@ export class UserDetailComponent implements OnInit {
 
   public save() {
     document.querySelector('#save').textContent = 'saving';
-    this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgUrl)
+    this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
       .subscribe((t) => {
       if (t.code === 0) {
         AppComponent.me = Object.assign({}, this.user);

@@ -24,6 +24,7 @@ import Swal from 'sweetalert2';
 })
 export class AppComponent implements OnInit, OnDestroy {
     public static me: KahlaUser;
+    public static avatarURL: string;
     public static CurrentHeader: HeaderComponent;
     public static CurrentNav: NavComponent;
     public static CurrentTalking: TalkingComponent;
@@ -52,6 +53,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.apiService.Me().subscribe(p => {
                     p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
+                    this.apiService.GetFile(p.value.headImgFileKey).subscribe(result =>
+                        AppComponent.avatarURL = result.file.internetPath + '?w=100&h=100');
                 });
                 this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
                 this.LoadPusher();

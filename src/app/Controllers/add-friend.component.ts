@@ -29,7 +29,17 @@ export class AddFriendComponent implements OnInit {
             distinctUntilChanged(),
             filter(term => term.length >= 3),
             switchMap(term => this.apiService.SearchFriends(term)),
-            map(t => t.items)
+            map(t => {
+                t.items.forEach(item => {
+                    if (item.headImgFileKey === 739) {
+                        item.avatarURL = '../../assets/default.jpg';
+                    } else {
+                        this.apiService.GetFile(item.headImgFileKey).subscribe(result =>
+                            item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                    }
+                });
+                return t.items;
+            })
         );
     }
 
