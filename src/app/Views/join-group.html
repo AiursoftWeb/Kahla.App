@@ -5,7 +5,7 @@
 </div>
 <div class="search-holder"></div>
 <div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
-    <img class="user-img" src="{{group.groupImage}}?w=100&h=100" />
+    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : '../../assets/loading.gif'}}" />
     <div class="sender">
         {{group.groupName}}
     </div>

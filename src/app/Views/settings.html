@@ -1,7 +1,7 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
 <div class="user">
-    <img class="user-img" src="{{GetMe() ? GetMe().headImgUrl : 'https://developer.aiursoft.com/images/appdefaulticon.png'}}?w=100&h=100">
+    <img class="user-img" src="{{GetAvatar() ? GetAvatar() : '../../assets/loading.gif'}}">
     <div class="name">
         {{GetMe() ? GetMe().nickName : "Loading..."}}
     </div>

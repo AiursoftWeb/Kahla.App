@@ -5,7 +5,7 @@
         {{request.creator.nickName}}
     </div>
 
-    <img class="user-img" src="{{request.creator.headImgUrl}}?w=100&h=100">
+    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : '../../assets/loading.gif'}}">
 
     <div class="time">
         {{request.createTime}}

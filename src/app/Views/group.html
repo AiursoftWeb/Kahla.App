@@ -1,6 +1,6 @@
 <app-header title="Group Info" i18n-title="@@GroupInfo" returnButton="true"></app-header>
 <div *ngIf="conversation" class="user">
-    <img class="user-img" src="{{conversation.displayImage}}?w=100&h=100">
+    <img class="user-img" src="{{conversation.avatarURL ? conversation.avatarURL : '../../assets/loading.gif'}}">
     <div class="name">
         {{conversation.displayName}}
     </div>
@@ -31,7 +31,7 @@
         <div class="text" i18n="@@GroupMembers">{{ groupMumbers }} members</div>
     </div>
     <div class="friend" *ngFor="let e of conversation.users" (click)="user(e.userId)">
-        <img class="user-img" src="{{e.user.headImgUrl}}?w=100&h=100">
+        <img class="user-img" src="{{e.user.avatarURL ? e.user.avatarURL : '../../assets/loading.gif'}}">
         <div class="name">
             {{e.user.nickName}}
         </div>
