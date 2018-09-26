@@ -2,9 +2,14 @@ import { Injectable } from '@angular/core';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
 import { environment } from '../../environments/environment';
 import { AES, enc } from 'crypto-js';
+import { ApiService } from '../Services/ApiService';
 
 @Injectable()
 export class Notify {
+    constructor(
+        private apiService: ApiService
+    ) { }
+
     public Show(title: string, content: string, icon: string, openPath: string): void {
         if ('Notification' in window) {
             Notification.requestPermission((result) => {
@@ -45,7 +50,9 @@ export class Notify {
             if (evt.content.startsWith('[file]')) {
                 evt.content = 'File';
             }
-            this.Show(evt.sender.nickName, evt.content, evt.sender.headImgUrl, openUrl);
+            this.apiService.GetFile(evt.sender.headImgFileKey).subscribe(result => {
+                this.Show(evt.sender.nickName, evt.content, result.file.internetPath, openUrl);
+            });
         }
     }
 

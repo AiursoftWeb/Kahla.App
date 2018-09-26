@@ -16,6 +16,9 @@ import { VersionViewModel } from '../Models/VersionViewModel';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { GroupConversation } from '../Models/GroupConversation';
+import { OneFile } from '../Models/OneFile';
+import { AiurFile } from '../Models/AiurFile';
+import { UploadFile } from '../Models/UploadFile';
 
 
 @Injectable()
@@ -58,7 +61,7 @@ export class ApiService {
         });
     }
 
-    public UploadFile(formData: FormData): Observable<number | string> {
+    public UploadFile(formData: FormData): Observable<number | UploadFile> {
         const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile`, formData, {
             reportProgress: true,
             withCredentials: true
@@ -70,12 +73,12 @@ export class ApiService {
         );
     }
 
-    private getProgress(event: HttpEvent<any>): number | string {
+    private getProgress(event: HttpEvent<any>): number | UploadFile {
         switch (event.type) {
             case HttpEventType.UploadProgress:
                 return Math.round(100 * event.loaded / event.total);
             case HttpEventType.Response:
-                return event.body.value;
+                return event.body;
             default:
                 return null;
         }
@@ -97,11 +100,11 @@ export class ApiService {
         return this.Get(`/Me`);
     }
 
-    public UpdateInfo(nickName: string, bio: string, headImgUrl: string): Observable<AiurProtocal> {
+    public UpdateInfo(nickName: string, bio: string, headImgKey: number): Observable<AiurProtocal> {
         return this.Post('/UpdateInfo', {
             nickName: nickName,
             bio: bio,
-            headImgUrl: headImgUrl
+            headImgKey: headImgKey
         });
     }
 
@@ -170,6 +173,11 @@ export class ApiService {
 
     public SearchGroup(groupName: string): Observable<AiurCollection<GroupConversation>> {
         return this.Get(`/SearchGroup?GroupName=${groupName}`);
+    }
+
+    public GetFile(fileKey: number): Observable<AiurFile<OneFile>> {
+        return this.http.get('https://oss.aiursoft.com/api/viewonefile?' + this.paramTool.param({fileKey: fileKey})).
+            pipe(catchError(this.handleError));
     }
 
     private handleError(error: any): Promise<any> {

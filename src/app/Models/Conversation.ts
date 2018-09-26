@@ -5,8 +5,9 @@ export class Conversation {
     public discriminator: string;
     public conversationCreateTime: string;
     public displayName: string;
-    public displayImage: string;
+    public displayImageKey: number;
     public anotherUserId: string;
     public aesKey: string;
     public users: KahlaUsers[];
+    public avatarURL: string;
 }
