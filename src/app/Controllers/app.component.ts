@@ -25,7 +25,6 @@ import { Values } from '../values';
 })
 export class AppComponent implements OnInit, OnDestroy {
     public static me: KahlaUser;
-    public static avatarURL: string;
     public static CurrentHeader: HeaderComponent;
     public static CurrentNav: NavComponent;
     public static CurrentTalking: TalkingComponent;
@@ -54,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.apiService.Me().subscribe(p => {
                     p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
-                    AppComponent.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                    AppComponent.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                     this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
                     this.LoadPusher();
                 });

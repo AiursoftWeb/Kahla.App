@@ -18,10 +18,6 @@ export class SettingsComponent {
         return AppComponent.me;
     }
 
-    public GetAvatar(): string {
-        return AppComponent.avatarURL;
-    }
-
     public SignOut(): void {
         this.apiService.LogOff().subscribe(() => {
             AppComponent.CurrentApp.destory();

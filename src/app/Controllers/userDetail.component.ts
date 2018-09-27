@@ -33,11 +33,10 @@ export class UserDetailComponent implements OnInit {
       this.apiService.Me().subscribe(p => {
         p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
-        this.avatarURL = Values.fileAddress + this.user.headImgFileKey;
+        this.user.avatarURL = Values.fileAddress + this.user.headImgFileKey;
       });
     } else {
       this.user = Object.assign({}, AppComponent.me);
-      this.avatarURL = AppComponent.avatarURL;
     }
   }
 
@@ -57,7 +56,7 @@ export class UserDetailComponent implements OnInit {
             } else if (response != null) {
               this.progress = 0;
               this.user.headImgFileKey = (<UploadFile>response).fileKey;
-              this.avatarURL = (<UploadFile>response).path;
+              this.user.avatarURL = (<UploadFile>response).path;
               this.uploading = false;
               uploadButton.textContent = 'Upload new avatar';
             }
