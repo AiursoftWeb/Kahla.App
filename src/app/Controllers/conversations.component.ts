@@ -61,8 +61,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                     } else if (e.displayImageKey === 739) {
                         e.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(e.displayImageKey).subscribe(result =>
-                            e.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        e.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + e.displayImageKey;
                     }
                 });
                 component.info = info;

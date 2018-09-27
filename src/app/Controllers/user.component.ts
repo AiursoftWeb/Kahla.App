@@ -32,8 +32,7 @@ export class UserComponent implements OnInit {
                 this.info = response.user;
                 this.conversationId = response.conversationId;
                 this.areFriends = response.areFriends;
-                this.apiService.GetFile(this.info.headImgFileKey).subscribe(result =>
-                    this.info.avatarURL = result.file.internetPath);
+                this.info.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + this.info.headImgFileKey;
             });
     }
     public delete(id: string): void {

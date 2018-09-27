@@ -53,11 +53,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.apiService.Me().subscribe(p => {
                     p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
-                    this.apiService.GetFile(p.value.headImgFileKey).subscribe(result =>
-                        AppComponent.avatarURL = result.file.internetPath + '?w=100&h=100');
+                    AppComponent.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + p.value.headImgFileKey;
+                    this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
+                    this.LoadPusher();
                 });
-                this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
-                this.LoadPusher();
             }
         });
     }

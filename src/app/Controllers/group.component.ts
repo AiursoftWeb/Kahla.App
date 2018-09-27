@@ -6,7 +6,6 @@ import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
-import { GroupConversation } from '../Models/GroupConversation';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -37,14 +36,12 @@ export class GroupComponent implements OnInit {
                 this.conversation.conversationCreateTime =
                     new Date(this.conversation.conversationCreateTime).toLocaleString([], this.option);
                 this.groupMumbers = conversation.users.length;
-                this.apiService.GetFile((<GroupConversation>this.conversation).groupImageKey).subscribe(result =>
-                    this.conversation.avatarURL = result.file.internetPath);
+                this.conversation.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + this.conversation.displayImageKey;
                 this.conversation.users.forEach(user => {
                     if (user.user.headImgFileKey === 739) {
                         user.user.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(user.user.headImgFileKey).subscribe(result =>
-                            user.user.avatarURL = result.file.internetPath);
+                        user.user.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + user.user.headImgFileKey;
                     }
                 });
             });

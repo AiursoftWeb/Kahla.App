@@ -8,6 +8,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import * as Autolinker from 'autolinker';
 import Swal from 'sweetalert2';
+import { UploadFile } from '../Models/UploadFile';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -81,12 +82,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
                     }
+                    console.log(t.content);
                     if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
                     t.sendTime = new Date(t.sendTime).toLocaleString([], this.option);
-                    this.apiService.GetFile(t.sender.headImgFileKey).subscribe(result =>
-                        t.sender.avatarURL = result.file.internetPath);
+                    t.sender.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + t.sender.headImgFileKey;
                 });
                 this.messages = messages;
                 if (getDown) {
@@ -214,9 +215,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
             } else if (response != null) {
                 let encedMessages;
                 if (image) {
-                    encedMessages = AES.encrypt(`[img]${response}`, this.conversation.aesKey).toString();
+                    encedMessages = AES.encrypt(`[img]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
                 } else {
-                    encedMessages = AES.encrypt(`[file]${response}`, this.conversation.aesKey).toString();
+                    encedMessages = AES.encrypt(`[file]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
                 }
                 this.apiService.SendMessage(this.conversation.id, encedMessages)
                     .subscribe(() => {

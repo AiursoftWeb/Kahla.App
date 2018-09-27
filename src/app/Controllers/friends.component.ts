@@ -52,8 +52,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                     } else if (item.displayImageKey === 739) {
                         item.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(item.displayImageKey).subscribe(result =>
-                            item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.displayImageKey;
                     }
                 });
                 this.infos = response.items;
@@ -71,8 +70,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                     if (item.creator.headImgFileKey === 739) {
                         item.creator.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(item.creator.headImgFileKey).subscribe(result =>
-                            item.creator.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        item.creator.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.creator.avatarURL;
                     }
                 });
                 this.cache.UpdateFriendRequests(response.items);

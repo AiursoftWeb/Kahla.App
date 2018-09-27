@@ -32,8 +32,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
                     if (item.creator.headImgFileKey === 739) {
                         item.creator.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(item.creator.headImgFileKey).subscribe(result =>
-                            item.creator.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        item.creator.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.creator.headImgFileKey;
                     }
                 });
                 this.requests = response.items;

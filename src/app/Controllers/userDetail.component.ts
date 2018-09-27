@@ -32,9 +32,7 @@ export class UserDetailComponent implements OnInit {
       this.apiService.Me().subscribe(p => {
         p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
-        this.apiService.GetFile(p.value.headImgFileKey).subscribe(result => {
-          this.avatarURL = result.file.internetPath + '?w=100&h=100';
-        });
+        this.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + this.user.headImgFileKey;
       });
     } else {
       this.user = Object.assign({}, AppComponent.me);

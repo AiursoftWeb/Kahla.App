@@ -34,8 +34,7 @@ export class AddFriendComponent implements OnInit {
                     if (item.headImgFileKey === 739) {
                         item.avatarURL = '../../assets/default.jpg';
                     } else {
-                        this.apiService.GetFile(item.headImgFileKey).subscribe(result =>
-                            item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.headImgFileKey;
                     }
                 });
                 return t.items;

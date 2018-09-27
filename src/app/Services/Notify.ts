@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
 import { environment } from '../../environments/environment';
 import { AES, enc } from 'crypto-js';
-import { ApiService } from '../Services/ApiService';
 
 @Injectable()
 export class Notify {
     constructor(
-        private apiService: ApiService
     ) { }
 
     public Show(title: string, content: string, icon: string, openPath: string): void {
@@ -50,9 +48,7 @@ export class Notify {
             if (evt.content.startsWith('[file]')) {
                 evt.content = 'File';
             }
-            this.apiService.GetFile(evt.sender.headImgFileKey).subscribe(result => {
-                this.Show(evt.sender.nickName, evt.content, result.file.internetPath, openUrl);
-            });
+            this.Show(evt.sender.nickName, evt.content, 'https://oss.aiursoft.com/download/fromkey/' + evt.sender.headImgFileKey, openUrl);
         }
     }
 

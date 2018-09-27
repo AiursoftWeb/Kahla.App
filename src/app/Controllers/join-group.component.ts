@@ -33,8 +33,7 @@ export class JoinGroupComponent implements OnInit {
                     if (item.groupImageKey === 766 || item.groupImageKey === 10) {
                         item.avatarURL = '../../assets/group.jpg';
                     } else {
-                        this.apiService.GetFile(item.groupImageKey).subscribe(result =>
-                        item.avatarURL = result.file.internetPath + '?w=100&h=100');
+                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.displayImageKey;
                     }
                 });
                 return t.items;
