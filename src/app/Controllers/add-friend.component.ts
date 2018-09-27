@@ -8,6 +8,7 @@ import { ApiService } from '../Services/ApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -34,7 +35,7 @@ export class AddFriendComponent implements OnInit {
                     if (item.headImgFileKey === 739) {
                         item.avatarURL = '../../assets/default.jpg';
                     } else {
-                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.headImgFileKey;
+                        item.avatarURL = Values.fileAddress + item.headImgFileKey;
                     }
                 });
                 return t.items;

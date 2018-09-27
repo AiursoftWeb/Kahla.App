@@ -9,6 +9,7 @@ import { AES, enc } from 'crypto-js';
 import * as Autolinker from 'autolinker';
 import Swal from 'sweetalert2';
 import { UploadFile } from '../Models/UploadFile';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -87,7 +88,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
                     t.sendTime = new Date(t.sendTime).toLocaleString([], this.option);
-                    t.sender.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + t.sender.headImgFileKey;
+                    t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 this.messages = messages;
                 if (getDown) {
@@ -147,6 +148,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const tempMessage = new Message();
         tempMessage.content = this.content;
         tempMessage.sender = AppComponent.me;
+        tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.sendTime = new Date(Date.now()).toLocaleString([], this.option);
         tempMessage.local = true;

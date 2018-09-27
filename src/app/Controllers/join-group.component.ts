@@ -5,6 +5,7 @@ import { ApiService } from '../Services/ApiService';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs/';
 import { GroupConversation } from '../Models/GroupConversation';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/join-group.html',
@@ -33,7 +34,7 @@ export class JoinGroupComponent implements OnInit {
                     if (item.groupImageKey === 766 || item.groupImageKey === 10) {
                         item.avatarURL = '../../assets/group.jpg';
                     } else {
-                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.displayImageKey;
+                        item.avatarURL = Values.fileAddress + item.displayImageKey;
                     }
                 });
                 return t.items;

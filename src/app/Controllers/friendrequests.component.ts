@@ -5,6 +5,7 @@ import { Request } from '../Models/Request';
 import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
@@ -32,7 +33,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
                     if (item.creator.headImgFileKey === 739) {
                         item.creator.avatarURL = '../../assets/default.jpg';
                     } else {
-                        item.creator.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.creator.headImgFileKey;
+                        item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
                     }
                 });
                 this.requests = response.items;

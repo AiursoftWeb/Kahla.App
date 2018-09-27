@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { Request } from '../Models/Request';
 import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/friends.html',
@@ -52,7 +53,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                     } else if (item.displayImageKey === 739) {
                         item.avatarURL = '../../assets/default.jpg';
                     } else {
-                        item.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.displayImageKey;
+                        item.avatarURL = Values.fileAddress + item.displayImageKey;
                     }
                 });
                 this.infos = response.items;
@@ -70,7 +71,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                     if (item.creator.headImgFileKey === 739) {
                         item.creator.avatarURL = '../../assets/default.jpg';
                     } else {
-                        item.creator.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + item.creator.avatarURL;
+                        item.creator.avatarURL = Values.fileAddress + item.creator.avatarURL;
                     }
                 });
                 this.cache.UpdateFriendRequests(response.items);

@@ -16,6 +16,7 @@ import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
 import { versions } from '../../environments/versions';
 import Swal from 'sweetalert2';
+import { Values } from '../values';
 
 @Component({
     selector: 'app-kahla',
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.apiService.Me().subscribe(p => {
                     p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
-                    AppComponent.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + p.value.headImgFileKey;
+                    AppComponent.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                     this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
                     this.LoadPusher();
                 });

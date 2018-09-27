@@ -7,6 +7,7 @@ import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -32,7 +33,7 @@ export class UserComponent implements OnInit {
                 this.info = response.user;
                 this.conversationId = response.conversationId;
                 this.areFriends = response.areFriends;
-                this.info.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + this.info.headImgFileKey;
+                this.info.avatarURL = Values.fileAddress + this.info.headImgFileKey;
             });
     }
     public delete(id: string): void {

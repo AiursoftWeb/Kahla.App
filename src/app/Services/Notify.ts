@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NewMessageEvent } from '../Models/NewMessageEvent';
 import { environment } from '../../environments/environment';
 import { AES, enc } from 'crypto-js';
+import { Values } from '../values';
 
 @Injectable()
 export class Notify {
@@ -48,7 +49,7 @@ export class Notify {
             if (evt.content.startsWith('[file]')) {
                 evt.content = 'File';
             }
-            this.Show(evt.sender.nickName, evt.content, 'https://oss.aiursoft.com/download/fromkey/' + evt.sender.headImgFileKey, openUrl);
+            this.Show(evt.sender.nickName, evt.content, Values.fileAddress + evt.sender.headImgFileKey, openUrl);
         }
     }
 

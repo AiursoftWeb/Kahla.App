@@ -7,6 +7,7 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { UploadFile } from '../Models/UploadFile';
+import { Values } from '../values';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -32,7 +33,7 @@ export class UserDetailComponent implements OnInit {
       this.apiService.Me().subscribe(p => {
         p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
-        this.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + this.user.headImgFileKey;
+        this.avatarURL = Values.fileAddress + this.user.headImgFileKey;
       });
     } else {
       this.user = Object.assign({}, AppComponent.me);

@@ -7,6 +7,7 @@ import { CacheService } from '../Services/CacheService';
 import { map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AES, enc } from 'crypto-js';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -61,7 +62,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                     } else if (e.displayImageKey === 739) {
                         e.avatarURL = '../../assets/default.jpg';
                     } else {
-                        e.avatarURL = 'https://oss.aiursoft.com/download/fromkey/' + e.displayImageKey;
+                        e.avatarURL = Values.fileAddress + e.displayImageKey;
                     }
                 });
                 component.info = info;
