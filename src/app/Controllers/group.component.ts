@@ -7,6 +7,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
+import { GroupConversation } from '../Models/GroupConversation';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -37,7 +38,7 @@ export class GroupComponent implements OnInit {
                 this.conversation.conversationCreateTime =
                     new Date(this.conversation.conversationCreateTime).toLocaleString([], this.option);
                 this.groupMumbers = conversation.users.length;
-                this.conversation.avatarURL = Values.fileAddress + this.conversation.displayImageKey;
+                this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
                     if (user.user.headImgFileKey === 739) {
                         user.user.avatarURL = '../../assets/default.jpg';
