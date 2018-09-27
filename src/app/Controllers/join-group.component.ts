@@ -11,7 +11,8 @@ import { Values } from '../values';
     templateUrl: '../Views/join-group.html',
     styleUrls: [
         '../Styles/add-friend.css',
-        '../Styles/menu.css'
+        '../Styles/menu.css',
+        '../Styles/button.css'
     ]
 })
 export class JoinGroupComponent implements OnInit {

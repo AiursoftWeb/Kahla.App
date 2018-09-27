@@ -12,7 +12,8 @@ import { GroupConversation } from '../Models/GroupConversation';
 @Component({
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.css',
-                '../Styles/friends.css']
+                '../Styles/friends.css',
+                '../Styles/button.css']
 })
 
 export class GroupComponent implements OnInit {

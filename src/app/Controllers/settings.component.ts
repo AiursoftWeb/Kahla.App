@@ -6,7 +6,8 @@ import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     templateUrl: '../Views/settings.html',
-    styleUrls: ['../Styles/menu.css']
+    styleUrls: ['../Styles/menu.css',
+                '../Styles/button.css']
 })
 export class SettingsComponent {
     constructor(

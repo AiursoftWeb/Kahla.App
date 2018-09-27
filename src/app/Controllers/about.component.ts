@@ -5,7 +5,8 @@ import { AppComponent } from './app.component';
     templateUrl: '../Views/about.html',
     styleUrls: [
         '../Styles/about.css',
-        '../Styles/menu.css']
+        '../Styles/menu.css',
+        '../Styles/button.css']
 })
 
 export class AboutComponent implements OnInit {

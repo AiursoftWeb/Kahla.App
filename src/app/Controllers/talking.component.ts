@@ -83,7 +83,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
                     }
-                    console.log(t.content);
                     if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }

@@ -10,7 +10,8 @@ import { AiurCollection } from '../Models/AiurCollection';
     templateUrl: '../Views/create-group.html',
     styleUrls: [
         '../Styles/add-friend.css',
-        '../Styles/menu.css'
+        '../Styles/menu.css',
+        '../Styles/button.css'
     ]
 })
 export class CreateGroupComponent {

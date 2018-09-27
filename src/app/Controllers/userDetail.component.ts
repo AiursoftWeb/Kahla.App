@@ -12,7 +12,8 @@ import { Values } from '../values';
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
     '../Styles/userDetail.css',
-    '../Styles/menu.css'
+    '../Styles/menu.css',
+    '../Styles/button.css'
   ]
 })
 
@@ -79,7 +80,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   public save() {
-    document.querySelector('#save').textContent = 'saving';
+    document.querySelector('#save').textContent = 'Saving';
     this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
       .subscribe((t) => {
       if (t.code === 0) {

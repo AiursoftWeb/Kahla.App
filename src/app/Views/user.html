@@ -38,6 +38,6 @@
 <div class="menu-holder"></div>
 
 <div class="buttons">
-    <button class="success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
-    <button class="success" *ngIf="info && areFriends"  (click)="talk(conversationId)" i18n="@@Message">Messages</button>
+    <button class="button success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button success" *ngIf="info && areFriends"  (click)="talk(conversationId)" i18n="@@Message">Messages</button>
 </div>
