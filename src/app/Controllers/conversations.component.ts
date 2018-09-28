@@ -57,13 +57,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                         }
                     }
                     e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
-                    if (e.displayImageKey === 766 || e.displayImageKey === 10) {
-                        e.avatarURL = '../../assets/group.jpg';
-                    } else if (e.displayImageKey === 739) {
-                        e.avatarURL = '../../assets/default.jpg';
-                    } else {
-                        e.avatarURL = Values.fileAddress + e.displayImageKey;
-                    }
+                    e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 component.info = info;
                 component.cache.UpdateConversations(info);

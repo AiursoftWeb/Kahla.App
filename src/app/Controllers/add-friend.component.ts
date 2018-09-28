@@ -32,11 +32,7 @@ export class AddFriendComponent implements OnInit {
             switchMap(term => this.apiService.SearchFriends(term)),
             map(t => {
                 t.items.forEach(item => {
-                    if (item.headImgFileKey === 739) {
-                        item.avatarURL = '../../assets/default.jpg';
-                    } else {
-                        item.avatarURL = Values.fileAddress + item.headImgFileKey;
-                    }
+                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });
                 return t.items;
             })

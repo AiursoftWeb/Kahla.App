@@ -30,11 +30,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 response.items.forEach(item => {
                     item.createTime = new Date(item.createTime).toLocaleString([], this.option);
-                    if (item.creator.headImgFileKey === 739) {
-                        item.creator.avatarURL = '../../assets/default.jpg';
-                    } else {
-                        item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
-                    }
+                    item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
                 });
                 this.requests = response.items;
                 this.cache.UpdateFriendRequests(response.items);

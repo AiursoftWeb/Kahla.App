@@ -41,11 +41,7 @@ export class GroupComponent implements OnInit {
                 this.groupMumbers = conversation.users.length;
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
-                    if (user.user.headImgFileKey === 739) {
-                        user.user.avatarURL = '../../assets/default.jpg';
-                    } else {
-                        user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
-                    }
+                    user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
                 });
             });
     }

@@ -32,11 +32,7 @@ export class JoinGroupComponent implements OnInit {
             switchMap(term => this.apiService.SearchGroup(term)),
             map(t => {
                 t.items.forEach(item => {
-                    if (item.groupImageKey === 766 || item.groupImageKey === 10) {
-                        item.avatarURL = '../../assets/group.jpg';
-                    } else {
-                        item.avatarURL = Values.fileAddress + item.displayImageKey;
-                    }
+                    item.avatarURL = Values.fileAddress + item.groupImageKey;
                 });
                 return t.items;
             })
