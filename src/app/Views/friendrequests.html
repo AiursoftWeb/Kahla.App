@@ -1,24 +1,23 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
 <div *ngFor="let request of requests" class="friendrequests">
 
+    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : '../../assets/loading.gif'}}">
     <div class="name">
         {{request.creator.nickName}}
     </div>
-
-    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : '../../assets/loading.gif'}}">
 
     <div class="time">
         {{request.createTime}}
     </div>
 
     <div class="decision">
-        <div *ngIf="request.completed; else elseblock">
-            <label class="Completed" disabled="disabled">Compeleted!</label>
+        <div class="Completed" *ngIf="request.completed; else elseblock">
+            <label disabled="disabled">Compeleted!</label>
         </div>
 
         <ng-template #elseblock>
-            <button class="Accept" (click)="accept(request.id)">Accept</button>
-            <button class="Decline" (click)="decline(request.id)">Decline</button>
+            <button class="button success" (click)="accept(request.id)">Accept</button>
+            <button class="button warning" (click)="decline(request.id)">Decline</button>
         </ng-template>
 
     </div>

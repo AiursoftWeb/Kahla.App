@@ -30,7 +30,7 @@ button:hover, .button:hover {
     background-color: #5cb85c;
 }
 
-.button.success:focus {
+.button.success:hover {
     background-color: #3c983c;
 }
 

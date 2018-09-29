@@ -9,7 +9,8 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
-    styleUrls: ['../Styles/friendrequests.css']
+    styleUrls: ['../Styles/friendrequests.css',
+                '../Styles/button.css']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
 
