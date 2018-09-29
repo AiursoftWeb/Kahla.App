@@ -7,7 +7,7 @@
 button, .button {
     border: none;
     outline: none;
-    border-radius: 2px;
+    border-radius: 8px;
     color: #FFF;
     transition: all 0.2s ease;
     width: 100%;
@@ -18,7 +18,6 @@ button, .button {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
     white-space: nowrap;
 }
 
@@ -55,7 +54,7 @@ button:hover, .button:hover {
 }
 
 .button.warning:hover {
-    background-color: #c9433f;
+    background-color: #ee4643;
 }
 
 .button.warning:active {

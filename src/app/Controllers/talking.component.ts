@@ -164,7 +164,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public startInput(): void {
         this.showPanel = false;
         setTimeout(() => {
-            this.scrollBottom(true);
+            this.scrollBottom(false);
         }, 300);
     }
 
