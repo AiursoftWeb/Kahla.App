@@ -158,6 +158,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(() => { });
         this.content = '';
         this.scrollBottom(true);
+        document.getElementById('chatInput').focus();
     }
 
     public startInput(): void {
