@@ -63,7 +63,7 @@ app.on('activate', function () {
 
 let tray = null
 app.on('ready', () => {
-  tray = new Tray(__dirname + '/assets/48x48.png')
+  tray = new Tray(__dirname + '/assets/KahlaTemplate.png')
   tray.addListener('double-click',function () { mainWindow.show(); })
   const contextMenu = Menu.buildFromTemplate([
     {
