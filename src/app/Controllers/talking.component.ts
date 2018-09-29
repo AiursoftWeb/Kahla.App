@@ -157,7 +157,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
         this.content = '';
-        this.scrollBottom(true);
+        setTimeout(() => {
+            this.scrollBottom(true);
+        }, 10);
         document.getElementById('chatInput').focus();
     }
 
