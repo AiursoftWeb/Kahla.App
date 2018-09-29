@@ -9,7 +9,8 @@ import { catchError } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/signin.html',
-    styleUrls: ['../Styles/signin.css']
+    styleUrls: ['../Styles/signin.css',
+                '../Styles/button.css']
 })
 export class SignInComponent implements OnInit {
     public email: string;

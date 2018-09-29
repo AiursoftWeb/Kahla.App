@@ -7,10 +7,10 @@
         <div class="auth-content">
             <div class="selector mode">
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</button>
+                    <a class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</a>
                 </div>
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
+                    <a class="btn" routerLink="/kahla/register" i18n="@@Register">Register</a>
                 </div>
             </div>
             <form (ngSubmit)="signin()" #loginForm="ngForm">
@@ -19,10 +19,10 @@
                 <input [(ngModel)]="password" name="password" type="password" minlength="6" maxlength="100" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()" required #passwordInput="ngModel">
                 <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
                 <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
-                <button *ngIf="!connecting" [disabled]="!loginForm.form.valid" class="whitebutton" i18n="@@LogIn" type="submit">
+                <button *ngIf="!connecting" [disabled]="!loginForm.form.valid" class="button white" i18n="@@LogIn" type="submit">
                         Log in
                 </button>
-                <button *ngIf="connecting" disabled="disabled" class="whitebutton" i18n="@@Connecting" type="button">
+                <button *ngIf="connecting" disabled="disabled" class="button white" i18n="@@Connecting" type="button">
                         Connecting...
                 </button>
             </form>

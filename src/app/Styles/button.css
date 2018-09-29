@@ -58,6 +58,23 @@ button:hover, .button:hover {
     background-color: #B12824;
 }
 
+.button.white {
+    background-color: #F5F5F5;
+    color: black;
+}
+
+.button.white:hover {
+    background-color: white;
+}
+
+.button.white:focus {
+    background-color: #BBB;
+}
+
+.button.white:disabled {
+    cursor: not-allowed;
+}
+
 .inputButton {
     width: auto !important;
 }

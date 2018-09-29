@@ -7,10 +7,10 @@
         <div class="auth-content">
             <div class="selector mode register">
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</button>
+                    <a class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</a>
                 </div>
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
+                    <a class="btn" routerLink="/kahla/register" i18n="@@Register">Register</a>
                 </div>
             </div>
             <form (ngSubmit)="register()" #registerForm="ngForm">
@@ -20,7 +20,7 @@
                 <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
                 <input [(ngModel)]="confirmPassword" id="confirmInput" name="confirmPassword" minlength="6" maxlength="100" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()" (ngModelChange)="checkSame()" required #confirmInput="ngModel">
                 <div class="alert" [hidden]="samePassword || confirmInput.pristine">Passwords should be equal.</div>
-                <button *ngIf="!connecting" [disabled]="!registerForm.form.valid || !samePassword" class="whitebutton" i18n="@@Register" type="submit">Register</button>
+                <button *ngIf="!connecting" [disabled]="!registerForm.form.valid || !samePassword" class="button white" i18n="@@Register" type="submit">Register</button>
                 <button *ngIf="connecting" class="whitebutton" i18n="@@Registering" type="button">Registering...</button>
             </form>
         </div>

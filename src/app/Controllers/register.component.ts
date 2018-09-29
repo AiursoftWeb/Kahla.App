@@ -8,7 +8,8 @@ import { catchError } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/register.html',
-    styleUrls: ['../Styles/signin.css']
+    styleUrls: ['../Styles/signin.css',
+                '../Styles/button.css']
 })
 export class RegisterComponent {
     public email = '';
