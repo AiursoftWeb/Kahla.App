@@ -1,6 +1,6 @@
 .buttons {
     padding: 10px;
-    margin: auto;
+    margin: 3% auto;
     text-align: center;
 }
 
@@ -77,4 +77,11 @@ button:hover, .button:hover {
 
 .inputButton {
     width: auto !important;
+}
+
+.alert {
+    color: #C62828;
+    margin-top: 2%;
+    font-size: 0.8rem;
+    text-align: center;
 }
