@@ -1,4 +1,4 @@
-﻿import { KahlaUsers } from './KahlaUsers';
+﻿import { UserGroupRelation } from './KahlaUsers';
 
 export class Conversation {
     public id: number;
@@ -8,6 +8,6 @@ export class Conversation {
     public displayImageKey: number;
     public anotherUserId: string;
     public aesKey: string;
-    public users: KahlaUsers[];
+    public users: UserGroupRelation[];
     public avatarURL: string;
 }

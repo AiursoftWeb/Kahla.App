@@ -16,8 +16,6 @@ import { VersionViewModel } from '../Models/VersionViewModel';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { GroupConversation } from '../Models/GroupConversation';
-import { OneFile } from '../Models/OneFile';
-import { AiurFile } from '../Models/AiurFile';
 import { UploadFile } from '../Models/UploadFile';
 
 
@@ -173,11 +171,6 @@ export class ApiService {
 
     public SearchGroup(groupName: string): Observable<AiurCollection<GroupConversation>> {
         return this.Get(`/SearchGroup?GroupName=${groupName}`);
-    }
-
-    public GetFile(fileKey: number): Observable<AiurFile<OneFile>> {
-        return this.http.get('https://oss.aiursoft.com/api/viewonefile?' + this.paramTool.param({fileKey: fileKey})).
-            pipe(catchError(this.handleError));
     }
 
     private handleError(error: any): Promise<any> {

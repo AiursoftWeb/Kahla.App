@@ -1,6 +1,6 @@
 import { KahlaUser } from './KahlaUser';
 
-export class KahlaUsers {
+export class UserGroupRelation {
     public groupId: number;
     public id: number;
     public joinTime: string;

@@ -4,8 +4,10 @@
         {
             "name": "kahla",
             "installMode": "prefetch",
+            "updateMode": "prefetch",
             "resources": {
                 "files": [
+                    "/",
                     "/favicon.ico",
                     "/*.bundle.css",
                     "/*.bundle.js",
