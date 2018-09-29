@@ -15,14 +15,15 @@ import { AiurCollection } from '../Models/AiurCollection';
     ]
 })
 export class CreateGroupComponent {
+    public groupName: string;
 
     constructor(
         private apiService: ApiService,
         private router: Router) {
     }
 
-    public createGroup(groupName: string) {
-        this.apiService.CreateGroup(groupName).subscribe((response) => {
+    public createGroup(): void {
+        this.apiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/kahla/talking', response.value]);
             } else if (response.code === -10) {

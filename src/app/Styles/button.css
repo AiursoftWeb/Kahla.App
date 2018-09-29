@@ -46,6 +46,10 @@ button:hover, .button:hover {
     background-color: #48A3DD;
 }
 
+.button:disabled, button:disabled {
+    cursor: not-allowed;
+}
+
 .button.warning {
     background-color: #d9534f;
 }
@@ -69,10 +73,6 @@ button:hover, .button:hover {
 
 .button.white:focus {
     background-color: #BBB;
-}
-
-.button.white:disabled {
-    cursor: not-allowed;
 }
 
 .inputButton {
