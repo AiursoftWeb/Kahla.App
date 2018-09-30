@@ -7,7 +7,7 @@
 button, .button {
     border: none;
     outline: none;
-    border-radius: 8px;
+    border-radius: 4px;
     color: #FFF;
     transition: all 0.2s ease;
     width: 100%;
@@ -19,10 +19,6 @@ button, .button {
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-}
-
-button:hover, .button:hover {
-    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
 }
 
 .button.success {
