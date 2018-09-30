@@ -15,6 +15,9 @@
                 <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.substring(6)}}?sd=true">
                     Click to download
                 </a>
+                <a *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.substring(6)}}?sd=true">
+                    <video src="{{message.content.substring(7)}}" loop="loop" autoplay="autoplay">
+                </a>
                 <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
