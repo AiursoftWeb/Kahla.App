@@ -75,7 +75,8 @@ button:hover, .button:hover {
 }
 
 .inputButton {
-    width: auto !important;
+    width: fit-content !important;
+    margin-left: 5%;
 }
 
 .alert {
