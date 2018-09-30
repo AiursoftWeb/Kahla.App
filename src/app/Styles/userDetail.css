@@ -64,18 +64,3 @@ progress {
 #image {
   opacity: 0;
 }
-
-.inputButton {
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  color: #FFF;
-  width: auto !important;
-  padding: 6px 12px;
-  margin-left: 5%;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  background-color: #4075d5;
-  white-space: nowrap;
-}

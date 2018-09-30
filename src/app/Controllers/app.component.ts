@@ -86,9 +86,10 @@ export class AppComponent implements OnInit, OnDestroy {
             title: 'There is a new version of Kahla!',
             text: 'Do you want to download the latest version of Kahla now?',
             type: 'warning',
-            confirmButtonText: 'Download now'
+            confirmButtonText: 'Download now',
+            showCancelButton: true
         }).then(ToDownload => {
-            if (ToDownload) {
+            if (ToDownload.value) {
                 location.href = downloadAddress;
             }
         });
