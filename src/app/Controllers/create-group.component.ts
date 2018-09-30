@@ -26,10 +26,12 @@ export class CreateGroupComponent {
         this.apiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/kahla/talking', response.value]);
-            } else if (response.code === -10) {
-                Swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
+            } else if (response.code === -7) {
+              Swal('Can not create group', response.message, 'error');
+             } else if (response.code === -10) {
+              Swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
             } else {
-                Swal('Try again', response.message, 'error');
+              Swal('Invalid group', response.message, 'error');
             }
         });
     }
