@@ -16,7 +16,7 @@
                     Click to download
                 </a>
                 <div *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}">
-                    <video src="{{message.content.substring(7)}}" loop="loop" autoplay="autoplay"></video>
+                    <video src="{{message.content.substring(7)}}" loop="loop" autoplay="autoplay" controls="controls" muted></video>
                 </div>
                 <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
