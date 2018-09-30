@@ -3,7 +3,8 @@
     public nickName: string;
     public bio: string;
     public sex: string;
-    public headImgUrl: string;
+    public headImgFileKey: number;
     public preferedLanguage: string;
     public accountCreateTime: string;
+    public avatarURL: string;
 }

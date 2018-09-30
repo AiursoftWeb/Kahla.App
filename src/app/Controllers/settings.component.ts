@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from '../Services/ApiService';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
@@ -6,20 +6,14 @@ import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     templateUrl: '../Views/settings.html',
-    styleUrls: ['../Styles/menu.css']
+    styleUrls: ['../Styles/menu.css',
+                '../Styles/button.css']
 })
-export class SettingsComponent implements OnInit {
-
+export class SettingsComponent {
     constructor(
         private apiService: ApiService,
         private router: Router) {
-    }
-
-    public ngOnInit(): void {
-        this.apiService.Me().subscribe(p => {
-            AppComponent.me = p.value;
-        });
-    }
+        }
 
     public GetMe(): KahlaUser {
         return AppComponent.me;

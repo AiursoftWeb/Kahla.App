@@ -12,12 +12,7 @@ Kahla is built with Angular 5 and typescript. And Kahla Server is built with ASP
 
 For more document about Kahla project and Kahla API, please view document [here](https://wiki.aiursoft.com/ReadDoc/Kahla/What%20is%20Kahla.md).
 
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.50.14.png?w=360&h=640)
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.50.17.png?w=360&h=640)
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.50.34.png?w=360&h=640)
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.51.20.png?w=360&h=640)
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.51.27.png?w=360&h=640)
-![KahlaImage](https://oss.aiursoft.com/MyPersonalFiles/2018-04-07_11.51.36.png?w=360&h=640)
+For our official website, please view [here](https://kahla.aiursoft.com).
 
 ## How to develope
 
@@ -74,7 +69,7 @@ cordova platform add android
 Run the following command to run on a Android device.
 
 ```bash
-npm run android
+cordova run android
 ```
 
 ## How to publish

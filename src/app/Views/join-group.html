@@ -1,0 +1,12 @@
+<app-header title="Join Group" i18n-title="@@JoinGroup" returnButton="true"></app-header>
+
+<div class="search-part">
+    <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value)"/>
+</div>
+<div class="search-holder"></div>
+<div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
+    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : '../../assets/loading.gif'}}" />
+    <div class="sender">
+        {{group.groupName}}
+    </div>
+</div>

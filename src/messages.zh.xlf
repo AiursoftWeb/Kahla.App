@@ -156,6 +156,102 @@
         </source>
         <target>注册时间</target>
       </trans-unit>
+      <trans-unit id="Groups" datatype="html">
+        <source>
+          Groups
+        </source>
+        <target>群</target>
+      </trans-unit>
+      <trans-unit id="NoMessage" datatype="html">
+        <source>
+          No message. Start talking now!
+        </source>
+        <target>没有消息。开始聊天吧！</target>
+      </trans-unit>
+      <trans-unit id="SearchFriend" datatype="html">
+        <source>
+          Search Friend
+        </source>
+        <target>搜索好友</target>
+      </trans-unit>
+      <trans-unit id="Requests" datatype="html">
+        <source>
+          Requests
+        </source>
+        <target>好友请求</target>
+      </trans-unit>
+      <trans-unit id="JoinGroup" datatype="html">
+        <source>
+          Join Group
+        </source>
+        <target>加入群</target>
+      </trans-unit>
+      <trans-unit id="CreateGroup" datatype="html">
+        <source>
+          Create Group
+        </source>
+        <target>创建群</target>
+      </trans-unit>
+      <trans-unit id="About" datatype="html">
+        <source>
+          About
+        </source>
+        <target>关于</target>
+      </trans-unit>
+      <trans-unit id="CheckForUpdates" datatype="html">
+        <source>
+          Check for updates
+        </source>
+        <target>检查更新</target>
+      </trans-unit>
+      <trans-unit id="UpdateHistory" datatype="html">
+        <source>
+          Update history
+        </source>
+        <target>更新历史</target>
+      </trans-unit>
+      <trans-unit id="Registering" datatype="html">
+        <source>
+          Registering...
+        </source>
+        <target>注册中</target>
+      </trans-unit>
+      <trans-unit id="FileHistory" datatype="html">
+        <source>
+          File History
+        </source>
+        <target>历史文件</target>
+      </trans-unit>
+      <trans-unit id="Report" datatype="html">
+        <source>
+          Report
+        </source>
+        <target>举报</target>
+      </trans-unit>
+      <trans-unit id="save" datatype="html">
+        <source>
+          Save
+        </source>
+        <target>保存</target>
+      </trans-unit>
+      <trans-unit id="OK" datatype="html">
+        <source>
+          OK
+        </source>
+        <target>确认</target>
+      </trans-unit>
+      <trans-unit id="GroupInfo" datatype="html">
+        <source>
+          Group Info
+        </source>
+        <target>群信息</target>
+      </trans-unit>
+      <trans-unit id="LeaveGroup" datatype="html">
+        <source>
+          Leave Group
+        </source>
+        <target>离开群</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

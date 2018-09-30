@@ -1,0 +1,9 @@
+<app-header title="Create Group" i18n-title="@@CreateGroup" returnButton="true"></app-header>
+
+<form (ngSubmit)="createGroup()" class="search-part" #createGroupForm="ngForm">
+    <input name="groupName" [(ngModel)]="groupName" placeholder="Enter group name" type="text" #groupNameInput="ngModel" required minlength="3" maxlength="25"/>
+    <div class="alert" [hidden]="groupNameInput.valid || groupNameInput.pristine">Group name length should between 3 and 25</div>
+    <div class="buttons">
+        <button class="button primary" [disabled]="!createGroupForm.form.valid" type="submit" i18n="@@OK">OK</button>
+    </div>
+</form>

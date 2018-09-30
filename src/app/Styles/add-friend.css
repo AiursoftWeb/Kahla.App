@@ -6,6 +6,7 @@
     width: 100%;
     position: fixed;
     height: 49px;
+    z-index: 1;
 }
 .search-holder{
     height: 49px;

@@ -7,6 +7,7 @@ import { CacheService } from '../Services/CacheService';
 import { map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AES, enc } from 'crypto-js';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -14,6 +15,7 @@ import { AES, enc } from 'crypto-js';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
+    private option = { hour: 'numeric', minute: 'numeric' };
     constructor(
         public apiService: ApiService,
         public router: Router,
@@ -45,21 +47,23 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             .pipe(map(t => t.items))
             .subscribe(info => {
                 info.forEach(e => {
-                    component.apiService.ConversationDetail(e.conversationId)
-                        .pipe(map(t => t.value))
-                        .subscribe(conversation => {
-                            e.latestMessage = AES.decrypt(e.latestMessage, conversation.aesKey).toString(enc.Utf8);
-                            if (e.latestMessage.startsWith('[img]')) {
-                                e.latestMessage = 'Photo';
-                            }
-                            if (e.latestMessage.startsWith('[file]')) {
-                                e.latestMessage = 'File';
-                            }
-                        });
+                    if (e.latestMessage != null) {
+                        e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                        if (e.latestMessage.startsWith('[img]')) {
+                            e.latestMessage = 'Photo';
+                        }
+                        if (e.latestMessage.startsWith('[file]')) {
+                            e.latestMessage = 'File';
+                        }
+                    }
+                    e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
+                    e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 component.info = info;
                 component.cache.UpdateConversations(info);
-                AppComponent.CurrentNav.ngOnInit();
+                if (AppComponent.CurrentApp !== null) {
+                    AppComponent.CurrentNav.ngOnInit();
+                }
                 if (callback != null) {
                     callback();
                 }

@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { Request } from '../Models/Request';
 import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/friends.html',
@@ -15,6 +16,7 @@ import * as PullToRefresh from 'pulltorefreshjs';
 export class FriendsComponent implements OnInit, OnDestroy {
     public infos: ContactInfo[];
     public requests: Request[];
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private apiService: ApiService,
@@ -45,6 +47,9 @@ export class FriendsComponent implements OnInit, OnDestroy {
     public init(callback: () => void) {
         this.apiService.MyFriends(true)
             .subscribe(response => {
+                response.items.forEach(item => {
+                    item.avatarURL = Values.fileAddress + item.displayImageKey;
+                });
                 this.infos = response.items;
                 this.cache.UpdateFriendList(response.items);
                 AppComponent.CurrentNav.ngOnInit();
@@ -55,6 +60,10 @@ export class FriendsComponent implements OnInit, OnDestroy {
         this.apiService.MyRequests()
             .subscribe(response => {
                 this.requests = response.items.filter(t => !t.completed);
+                response.items.forEach(item => {
+                    item.createTime = new Date(item.createTime).toLocaleString([], this.option);
+                    item.creator.avatarURL = Values.fileAddress + item.creator.avatarURL;
+                });
                 this.cache.UpdateFriendRequests(response.items);
                 AppComponent.CurrentNav.ngOnInit();
             });

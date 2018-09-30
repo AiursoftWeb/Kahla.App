@@ -8,6 +8,7 @@ import { ApiService } from '../Services/ApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -29,7 +30,12 @@ export class AddFriendComponent implements OnInit {
             distinctUntilChanged(),
             filter(term => term.length >= 3),
             switchMap(term => this.apiService.SearchFriends(term)),
-            map(t => t.items)
+            map(t => {
+                t.items.forEach(item => {
+                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
+                });
+                return t.items;
+            })
         );
     }
 

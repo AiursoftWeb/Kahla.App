@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="Aiursoft.Kahla" version="0.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="Aiursoft.Kahla" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Kahla</name>
     <description>
         Kahla is a cross platform messaging app.
@@ -79,12 +79,11 @@
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
     </platform>
-    <engine name="browser" spec="^5.0.0" />
-    <engine name="ios" spec="^4.5.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <vs:toolsetVersion xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">6.3.1</vs:toolsetVersion>
-    <engine name="ios" spec="4.2.0" />
-    <engine name="windows" spec="4.4.2" />
     <preference name="windows-target-version" value="10.0" />
-    <engine name="android" spec="~7.1.0" />
+    <engine name="android" spec="^7.1.1" />
+    <engine name="browser" spec="^5.0.0" />
+    <engine name="ios" spec="^4.5.1" />
+    <engine name="windows" spec="4.4.2" />
 </widget>

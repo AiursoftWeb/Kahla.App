@@ -7,22 +7,25 @@
         <div class="auth-content">
             <div class="selector mode">
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</button>
+                    <a class="btn" routerLink="/kahla/signin" i18n="@@LogIn">Log in</a>
                 </div>
                 <div class="column">
-                    <button class="btn" routerLink="/kahla/register" i18n="@@Register">Register</button>
+                    <a class="btn" routerLink="/kahla/register" i18n="@@Register">Register</a>
                 </div>
             </div>
-            <input [(ngModel)]="email" type="email" i18n-placeholder="@@Email" placeholder="Email" (keyup.enter)="signin()">
-            <input [(ngModel)]="password" type="password" i18n-placeholder="@@Password" placeholder="Password" (keyup.enter)="signin()">
-            <a href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank">Forgot password?</a>
-            <br><br>
-            <button *ngIf="!connecting" [disabled]="email==undefined || password===undefined || connecting" class="whitebutton" (click)="signin()" i18n="@@LogIn">
+            <form (ngSubmit)="signin()" #loginForm="ngForm">
+                <input [(ngModel)]="email" name="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" required #emailInput="ngModel" email>
+                <div class="alert" [hidden]="emailInput.valid || emailInput.pristine">Invalid email!</div>
+                <input [(ngModel)]="password" name="password" type="password" minlength="6" maxlength="100" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()" required #passwordInput="ngModel">
+                <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
+                <button *ngIf="!connecting" [disabled]="!loginForm.form.valid" class="button white" i18n="@@LogIn" type="submit">
                     Log in
-            </button>
-            <button *ngIf="connecting" disabled="disabled" class="whitebutton" i18n="@@Connecting">
+                </button>
+                <button *ngIf="connecting" disabled="disabled" class="button white" i18n="@@Connecting" type="button">
                     Connecting...
-            </button>
+                </button>
+                <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
+            </form>
         </div>
     </div>
 </div>

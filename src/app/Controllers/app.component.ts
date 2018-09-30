@@ -14,8 +14,9 @@ import { HeaderComponent } from './header.component';
 import { FriendRequestsComponent } from './friendrequests.component';
 import { Notify } from '../Services/Notify';
 import { CacheService } from '../Services/CacheService';
+import { versions } from '../../environments/versions';
+import Swal from 'sweetalert2';
 import { Values } from '../values';
-import 'sweetalert';
 
 @Component({
     selector: 'app-kahla',
@@ -33,6 +34,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public static CurrentFriendRequests: FriendRequestsComponent;
     public ws: WebSocket;
     public wsconnected = false;
+    public checking = false;
+    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
     constructor(
         private apiService: ApiService,
         private router: Router,
@@ -42,38 +45,54 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.check();
+        this.check(false);
         this.apiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/kahla/signin']);
             } else {
                 this.apiService.Me().subscribe(p => {
+                    p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
+                    AppComponent.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                    this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
+                    this.LoadPusher();
                 });
-                this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
-                this.LoadPusher();
             }
         });
     }
 
-    public check(): void {
+    public check(checkButton: boolean): void {
+        this.checking = true;
         this.apiService.Version()
             .subscribe(t => {
-                if (t.latestVersion === Values.currentVersion) {
-                } else {
-                    swal({
-                        title: 'There is a new version of Kahla!',
-                        text: 'Do you want to download the latest version of Kahla now?',
-                        icon: 'info',
-                        buttons: [true, 'Download now'],
-                        dangerMode: false,
-                    }).then(ToDownload => {
-                        if (ToDownload) {
-                            location.href = t.downloadAddress;
-                        }
-                    });
+                const latestVersion: Array<string> = t.latestVersion.split('.');
+                const currentVersion: Array<string> = versions.version.split('.');
+                const downloadAddress: string = t.downloadAddress;
+                if (latestVersion[0] > currentVersion[0]) {
+                    this.redirectToDownload(downloadAddress);
+                } else if (latestVersion[1] > currentVersion[1]) {
+                    this.redirectToDownload(downloadAddress);
+                } else if (latestVersion[2] > currentVersion[2]) {
+                    this.redirectToDownload(downloadAddress);
+                } else if (checkButton) {
+                    Swal('Alert', `You are running the latest version of Kahla!`, 'success');
                 }
+                this.checking = false;
             });
+    }
+
+    public redirectToDownload(downloadAddress: string): void {
+        Swal({
+            title: 'There is a new version of Kahla!',
+            text: 'Do you want to download the latest version of Kahla now?',
+            type: 'warning',
+            confirmButtonText: 'Download now',
+            showCancelButton: true
+        }).then(ToDownload => {
+            if (ToDownload.value) {
+                location.href = downloadAddress;
+            }
+        });
     }
 
     public LoadPusher(): void {
@@ -117,7 +136,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.NewFriendRequest:
-                swal('Friend request', 'You have got a new friend request!', 'info');
+                Swal('Friend request', 'You have got a new friend request!', 'info');
                 if (AppComponent.CurrentFriendRequests) {
                     AppComponent.CurrentFriendRequests.ngOnInit();
                 } else {
@@ -125,7 +144,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.WereDeletedEvent:
-                swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                Swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {
@@ -135,7 +154,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 break;
             case EventType.FriendAcceptedEvent:
-                swal('Friend request', 'Your friend request was accepted!', 'success');
+                Swal('Friend request', 'Your friend request was accepted!', 'success');
                 if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                 } else if (AppComponent.CurrentFriend) {

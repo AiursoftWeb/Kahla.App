@@ -4,22 +4,23 @@
     <img src="assets/144x144.png">
 </div>
 
-<p class="version">
-    Kahla {{version}} Alpha
-</p>
+<div class="version">
+    Kahla {{version}} - {{branch}} build
+    <p style="font-size:15px;">Last git commit: <a href="https://github.com/AiursoftWeb/Kahla.App/commit/{{revision}}" target="_blank" rel="noopener noreferrer"><kbd>{{revision}}</kbd></a> Build Date: <kbd>{{buildTime}}</kbd></p>
+</div>
 
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="!checking" (click)="check()">
+<div class="menu-button" *ngIf="!appComponent.checking" (click)="check()">
     <div class="img">
-        <i  class="fa fa-refresh"></i>
+        <i class="fa fa-refresh"></i>
     </div>
     <div class="text" i18n="@@CheckForUpdates">Check for updates</div>
 </div>
-<div class="menu-button" *ngIf="checking">
+<div class="menu-button" *ngIf="appComponent.checking">
     <div class="img">
-        <i  class="fa fa-refresh fa-spin"></i>
+        <i class="fa fa-refresh fa-spin"></i>
     </div>
     <div class="text" i18n="@@CheckingForUpdates">Checking for updates...</div>
 </div>
@@ -31,8 +32,8 @@
 </div>
 
 <div class="foot-text">
-    <a href="#" target="_blank">Terms</a>
+    <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
     |
-    <a href="#" target="_blank">Privacy Policy</a>    
-    <p>Copyright &copy; 2018 Aiursoft Corporation</p>    
+    <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+    <p>Copyright &copy; 2018 Aiursoft Corporation</p>
 </div>

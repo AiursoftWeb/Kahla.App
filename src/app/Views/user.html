@@ -1,6 +1,6 @@
 <app-header title="Profile" i18n-title="@@Profile" returnButton="true"></app-header>
 <div *ngIf="info" class="user">
-    <img class="user-img" src="{{info.headImgUrl}}?w=100&h=100">
+    <img class="user-img" src="{{info.avatarURL ? info.avatarURL : '../../assets/loading.gif'}}">
     <div class="name">
         {{info.nickName}}
     </div>
@@ -31,13 +31,13 @@
 </div>
 <div class="menu-button" *ngIf="info && areFriends" (click)="delete(info.id)">
     <div class="img">
-        <i class="fa fa-trash"></i>
+        <i class="fa fa-trash warning"></i>
     </div>
-    <div class="text" i18n="@@Delete">Delete</div>
+    <div class="text warning" i18n="@@Delete">Delete</div>
 </div>
 <div class="menu-holder"></div>
 
 <div class="buttons">
-    <button class="success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
-    <button class="success" *ngIf="info && areFriends" (click)="talk(conversationId)" i18n="@@Message">Message</button>
+    <button class="button success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button success" *ngIf="info && areFriends"  (click)="talk(conversationId)" i18n="@@Message">Messages</button>
 </div>

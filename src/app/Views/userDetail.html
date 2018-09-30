@@ -1,14 +1,23 @@
 <app-header title="Edit profile" returnButton="true" RouterLink="/"></app-header>
 <div *ngIf="user">
   <div class="profile">
-    <label>nickName</label>
+    <label>Nick name</label>
     <input [(ngModel)]="user.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
   </div>
   <div class="profile">
-    <label>bio</label>
+    <label>Bio</label>
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
+  <div class="profile avatar">
+    <label>Avatar</label>
+    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}">
+    <div class="grid">
+      <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
+      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept=".png, .jpg, .bmp" />
+    </div>
+  </div>
   <div class="buttons">
-    <button class="primary" (click)="save()" i18n="@@save">Save</button>
+    <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>
   </div>
 </div>
+<progress *ngIf="uploading" max="100" value={{progress}}></progress>

@@ -62,8 +62,13 @@ app.on('activate', function () {
 })
 
 let tray = null
+const platform = require('os').platform()
 app.on('ready', () => {
-  tray = new Tray(__dirname + '/assets/48x48.png')
+  if (platform === 'darwin') {
+    tray = new Tray(__dirname + '/assets/KahlaTemplate.png')
+  } else {
+    tray = new Tray(__dirname + '/assets/48x48.png')
+  }
   tray.addListener('double-click',function () { mainWindow.show(); })
   const contextMenu = Menu.buildFromTemplate([
     {
