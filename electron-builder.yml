@@ -1,0 +1,4 @@
+appId: "com.electron.kahla"
+productName: "Kahla"
+directories:
+  app: "www"
