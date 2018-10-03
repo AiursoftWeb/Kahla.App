@@ -18,8 +18,7 @@ export class Notify {
                         navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
                             serviceWorkerRegistration.showNotification(title, {
                                 body: content,
-                                icon: icon,
-                                tag: 'Kahla'
+                                icon: icon
                             });
                         });
                     } else {

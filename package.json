@@ -51,7 +51,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "npm run prebuild",
-    "electron": "ng build --base-href ./ && electron ./www/electron.js",
+    "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "npm run prebuild && ng serve --open",
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
