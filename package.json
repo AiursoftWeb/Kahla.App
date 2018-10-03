@@ -15,6 +15,7 @@
   ],
   "license": "MIT",
   "scripts": {
+    "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/electron.js",
     "start": "npm run prebuild && ng serve --open",
     "prebuild": "ts-node version.ts",
@@ -22,8 +23,7 @@
     "lint": "ng lint --type-check && tsc",
     "pack": "asar pack ./www ./www/app.asar",
     "prod": "npm run prebuild && ng build --base-href / --prod",
-    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf",
-    "postinstall": "npm run prebuild"
+    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
     "@angular/animations": "6.1.7",
