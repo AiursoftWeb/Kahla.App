@@ -2,3 +2,14 @@ appId: "com.electron.kahla"
 productName: "Kahla"
 directories:
   app: "www"
+win:
+  target:
+     - target: nsis
+       arch:
+         - x64
+         - ia32
+    - target: portable
+       arch:
+         - x64
+         - ia32
+  icon: "./src/assets/512x512.png"
