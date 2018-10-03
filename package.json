@@ -27,6 +27,19 @@
     },
     "mac": {
       "target": "dmg"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb"
+        },
+        {
+          "target": "rpm"
+        },
+        {
+          "target": "tar.gz"
+        }
+      ]
     }
   },
   "contributors": [
