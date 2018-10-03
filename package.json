@@ -7,6 +7,15 @@
     "email": "postmaster@aiursoft.com",
     "url": "https://www.aiursoft.com/"
   },
+  "build": {
+    "appId": "com.example.kahla",
+    "productName": "Kahla",
+    "copyright": "Copyright © year ${author}",
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true
+    }
+  },
   "contributors": [
     "Anduin@aiursoft.com",
     "xxyzz@aiursoft.com",
