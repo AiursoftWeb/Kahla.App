@@ -2,6 +2,11 @@
   "name": "kahla",
   "version": "2.0.0",
   "description": "Kahla is a cross-platform business messaging app.",
+  "author": {
+    "name": "Aiursoft",
+    "email": "postmaster@aiursoft.com",
+    "url": "https://www.aiursoft.com/"
+  },
   "contributors": [
     "Anduin@aiursoft.com",
     "xxyzz@aiursoft.com",
