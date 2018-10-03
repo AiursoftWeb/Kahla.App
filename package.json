@@ -10,10 +10,14 @@
   "build": {
     "appId": "com.example.kahla",
     "productName": "Kahla",
-    "copyright": "Copyright © year ${author}",
+    "copyright": "Copyright © 2018 Aiursoft",
     "nsis": {
       "oneClick": false,
-      "perMachine": true
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "win": {
+      "icon": "./assets/512x512.png"
     }
   },
   "contributors": [
