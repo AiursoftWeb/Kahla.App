@@ -2,27 +2,31 @@
   "name": "kahla",
   "version": "2.0.0",
   "description": "Kahla is a cross-platform business messaging app.",
-  "author": {
-    "name": "Aiursoft",
-    "email": "postmaster@aiursoft.com",
-    "url": "https://www.aiursoft.com/"
-  },
+  "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
     "appId": "com.example.kahla",
     "productName": "Kahla",
     "copyright": "Copyright © 2018 Aiursoft",
+    "directories": {
+      "app": "www"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
     },
     "win": {
-      "icon": "./assets/512x512.png",
       "target": [
-        {"target": "nsis"},
-        {"target": "zip"},
-        {"target": "portable"}
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "zip"
+        }
       ]
+    },
+    "mac": {
+      "target": "dmg"
     }
   },
   "contributors": [
@@ -41,6 +45,7 @@
     "lint": "ng lint --type-check && tsc",
     "pack": "asar pack ./www ./www/app.asar",
     "prod": "npm run prebuild && ng build --base-href / --prod",
+    "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
     "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
@@ -100,5 +105,15 @@
     "plugins": {
       "cordova-plugin-whitelist": {}
     }
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AiursoftWeb/Kahla.App.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/AiursoftWeb/Kahla.App/issues"
+  },
+  "homepage": "https://github.com/AiursoftWeb/Kahla.App#readme"
 }

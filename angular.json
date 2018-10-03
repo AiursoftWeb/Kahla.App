@@ -21,7 +21,7 @@
               "src/assets",
               "src/manifest.json",
               "src/favicon.ico",
-              "src/electron.js",
+              "src/index.js",
               "src/web.config"
             ],
             "styles": [
