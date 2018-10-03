@@ -17,7 +17,12 @@
       "allowToChangeInstallationDirectory": true
     },
     "win": {
-      "icon": "./assets/512x512.png"
+      "icon": "./assets/512x512.png",
+      "target": [
+        {"target": "nsis"},
+        {"target": "zip"},
+        {"target": "portable"}
+      ]
     }
   },
   "contributors": [
