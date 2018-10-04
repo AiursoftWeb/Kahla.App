@@ -1,10 +1,6 @@
 {
   "name": "kahla",
-<<<<<<< HEAD
   "version": "2.1.0",
-=======
-  "version": "2.0.1",
->>>>>>> 896db4d7d22f22a52c752f348cfbf97546e6eb36
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {

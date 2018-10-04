@@ -1,9 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<<<<<<< HEAD
 <widget id="Aiursoft.Kahla" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-=======
-<widget id="Aiursoft.Kahla" version="2.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
->>>>>>> 896db4d7d22f22a52c752f348cfbf97546e6eb36
     <name>Kahla</name>
     <description>
         Kahla is a cross platform messaging app.
