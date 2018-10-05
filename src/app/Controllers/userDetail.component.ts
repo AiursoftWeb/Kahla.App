@@ -22,7 +22,6 @@ export class UserDetailComponent implements OnInit {
   public progress = 0;
   public uploading = false;
   public avatarURL: string;
-  private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
   @ViewChild('imageInput') public imageInput;
   constructor(
     private apiService: ApiService,
@@ -32,7 +31,6 @@ export class UserDetailComponent implements OnInit {
   public ngOnInit(): void {
     if (!AppComponent.me) {
       this.apiService.Me().subscribe(p => {
-        p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
         this.user = p.value;
         this.user.avatarURL = Values.fileAddress + this.user.headImgFileKey;
       });

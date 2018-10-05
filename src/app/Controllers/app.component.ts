@@ -35,7 +35,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public ws: WebSocket;
     public wsconnected = false;
     public checking = false;
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
     constructor(
         private apiService: ApiService,
         private router: Router,
@@ -51,7 +50,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/kahla/signin']);
             } else {
                 this.apiService.Me().subscribe(p => {
-                    p.value.accountCreateTime = new Date(p.value.accountCreateTime).toLocaleString([], this.option);
                     AppComponent.me = p.value;
                     AppComponent.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                     this.cache.AutoUpdateConversations(AppComponent.CurrentNav);

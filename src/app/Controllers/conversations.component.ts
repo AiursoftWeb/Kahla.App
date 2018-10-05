@@ -15,7 +15,6 @@ import { Values } from '../values';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
-    private option = { hour: 'numeric', minute: 'numeric' };
     constructor(
         public apiService: ApiService,
         public router: Router,
@@ -56,7 +55,6 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                             e.latestMessage = 'File';
                         }
                     }
-                    e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 component.info = info;
