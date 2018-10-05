@@ -32,7 +32,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private route: ActivatedRoute,
@@ -86,7 +85,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
-                    t.sendTime = new Date(t.sendTime).toLocaleString([], this.option);
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 this.messages = messages;
@@ -149,7 +147,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.sender = AppComponent.me;
         tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
         tempMessage.senderId = AppComponent.me.id;
-        tempMessage.sendTime = new Date(Date.now()).toLocaleString([], this.option);
         tempMessage.local = true;
         this.messages.push(tempMessage);
         this.messageAmount++;

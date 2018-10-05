@@ -10,7 +10,7 @@
             Register Time:
         </ng-container>
         <ng-container *ngIf="GetMe()">
-            {{GetMe().accountCreateTime}}
+            {{GetMe().accountCreateTime | date:'M/d/yy h:mm a'}}
         </ng-container>
     </div>
 </div>
