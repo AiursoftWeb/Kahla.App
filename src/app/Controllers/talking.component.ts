@@ -102,23 +102,23 @@ export class TalkingComponent implements OnInit, OnDestroy {
             });
     }
 
-    public uploadInput(image: boolean): void {
-        if (this.fileInput && !image) {
-            this.showPanel = !this.showPanel;
+    public uploadInput(): void {
+        if (this.fileInput) {
+            this.showPanel = false;
             const fileBrowser = this.fileInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
-                formData.append('image', fileBrowser.files[0]);
-                this.upload(image, formData);
+                formData.append('file', fileBrowser.files[0]);
+                this.upload(this.getFileType(fileBrowser.files[0]), formData);
             }
         }
-        if (this.imageInput && image) {
-            this.showPanel = !this.showPanel;
+        if (this.imageInput) {
+            this.showPanel = false;
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
                 formData.append('image', fileBrowser.files[0]);
-                this.upload(image, formData);
+                this.upload(0, formData);
             }
         }
     }
@@ -199,7 +199,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.upload(true, formData);
+                            this.upload(0, formData);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -208,17 +208,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    private upload(image: boolean, file: FormData): void {
+    private upload(type: number, file: FormData): void {
         this.uploading = true;
         this.apiService.UploadFile(file).subscribe(response => {
             if (Number(response)) {
                 this.progress = <number>response;
             } else if (response != null) {
                 let encedMessages;
-                if (image) {
-                    encedMessages = AES.encrypt(`[img]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
-                } else {
-                    encedMessages = AES.encrypt(`[file]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
+                switch (type) {
+                    case 0:
+                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
+                        break;
+                    case 1:
+                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
+                        break;
+                    case 2:
+                        encedMessages = AES.encrypt(`[file]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
+                        break;
+                    default:
+                        break;
                 }
                 this.apiService.SendMessage(this.conversation.id, encedMessages)
                     .subscribe(() => {
@@ -235,12 +243,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
                 const formData = new FormData();
-                if (items[i].type.match('^image') && blob != null) {
-                    formData.append('image', blob);
-                    this.upload(true, formData);
-                } else if (blob != null) {
+                if (blob != null) {
                     formData.append('file', blob);
-                    this.upload(false, formData);
+                    this.upload(this.getFileType(blob), formData);
                 }
             }
         } else {
@@ -248,16 +253,26 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
                 const formData = new FormData();
-                if (files[i].type.match('^image') && blob != null) {
-                    formData.append('image', blob);
-                    this.upload(true, formData);
-                } else if (blob != null) {
+                if (blob != null) {
                     formData.append('file', blob);
-                    this.upload(false, formData);
+                    this.upload(this.getFileType(blob), formData);
                 }
             }
         }
         this.removeDragData(event);
+    }
+
+    private getFileType(file: Blob): number {
+        if (file == null) {
+            return -1;
+        }
+        if (file.type.match('^image')) {
+            return 0;
+        } else if (file.type.match('^video')) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     public preventDefault(event: DragEvent | ClipboardEvent): void {
