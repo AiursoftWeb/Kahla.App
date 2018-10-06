@@ -57,6 +57,9 @@ export class Notify {
             if (evt.content.startsWith('[img]')) {
                 evt.content = 'Photo';
             }
+            if (evt.content.startsWith('[video]')) {
+                evt.content = 'Video';
+            }
             if (evt.content.startsWith('[file]')) {
                 evt.content = 'File';
             }

@@ -51,6 +51,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                         if (e.latestMessage.startsWith('[img]')) {
                             e.latestMessage = 'Photo';
                         }
+                        if (e.latestMessage.startsWith('[video]')) {
+                            e.latestMessage = 'Video';
+                        }
                         if (e.latestMessage.startsWith('[file]')) {
                             e.latestMessage = 'File';
                         }
