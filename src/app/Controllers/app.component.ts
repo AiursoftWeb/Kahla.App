@@ -68,9 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 const downloadAddress: string = t.downloadAddress;
                 if (latestVersion[0] > currentVersion[0]) {
                     this.redirectToDownload(downloadAddress);
-                } else if (latestVersion[1] > currentVersion[1]) {
+                } else if (latestVersion[0] === currentVersion[0] && latestVersion[1] > currentVersion[1]) {
                     this.redirectToDownload(downloadAddress);
-                } else if (latestVersion[2] > currentVersion[2]) {
+                } else if (latestVersion[0] === currentVersion[0] && latestVersion[1] === currentVersion[1]
+                    && latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
                 } else if (checkButton) {
                     Swal('Alert', `You are running the latest version of Kahla!`, 'success');
