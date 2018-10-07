@@ -21,7 +21,7 @@
                 <input [(ngModel)]="confirmPassword" id="confirmInput" name="confirmPassword" minlength="6" maxlength="100" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()" (ngModelChange)="checkSame()" required #confirmInput="ngModel">
                 <div class="alert" [hidden]="samePassword || confirmInput.pristine">Passwords should be equal.</div>
                 <button *ngIf="!connecting" [disabled]="!registerForm.form.valid || !samePassword" class="button white" i18n="@@Register" type="submit">Register</button>
-                <button *ngIf="connecting" class="whitebutton" i18n="@@Registering" type="button">Registering...</button>
+                <button *ngIf="connecting" class="button white" i18n="@@Registering" type="button">Registering...</button>
             </form>
         </div>
     </div>
