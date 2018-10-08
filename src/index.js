@@ -1,5 +1,5 @@
 const electron = require('electron')
-const { Menu, Tray } = require('electron')
+const { Menu, Tray, Notification } = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 
@@ -7,6 +7,7 @@ const path = require('path')
 const url = require('url')
 
 let mainWindow
+app.showExitNotif = true
 
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 512, height: 768, icon :  __dirname + '/assets/48x48.png' })
@@ -19,11 +20,19 @@ function createWindow() {
   }))
   //mainWindow.webContents.openDevTools();
   mainWindow.on('close', function (event) {
-    if (!app.isQuiting) {
+    if (!app.isQuiting && app.showExitNotif) {
       event.preventDefault()
-      mainWindow.hide();
+      app.showExitNotif = false
+      new Notification({
+        title: 'Kahla',
+        body: 'Kahla is running in the background.'
+      }).show()
+      mainWindow.hide()
     }
-    return false;
+    if (!app.isQuiting && !app.shouldQuit) {
+      event.preventDefault()
+      mainWindow.hide()
+    }
   });
 
   mainWindow.on('minimize', function (event) {
@@ -58,7 +67,7 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 })
 
 let tray = null
