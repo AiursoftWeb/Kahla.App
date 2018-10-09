@@ -11,7 +11,7 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/conversations.html',
-    styleUrls: ['../Styles/conversations.css']
+    styleUrls: ['../Styles/conversations.css', '../Styles/reddot.css']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];

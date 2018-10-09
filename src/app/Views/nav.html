@@ -4,7 +4,7 @@
     <a class="nav-item" routerLink="/kahla/conversations" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-comment-o"></i>
-            <div *ngIf="totalUnread > 0" class="nav-reddot">
+            <div *ngIf="totalUnread > 0" class="reddot">
                 {{totalUnread}}
             </div>
         </div>
@@ -15,7 +15,7 @@
     <a class="nav-item" routerLink="/kahla/friends" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-address-book-o"></i>
-            <div *ngIf="totalRequests > 0" class="nav-reddot">
+            <div *ngIf="totalRequests > 0" class="reddot">
                 {{totalRequests}}
             </div>
         </div>
