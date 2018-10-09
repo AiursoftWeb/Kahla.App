@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { versions } from '../../environments/versions';
-import { AppComponent } from './app.component';
+import { Component } from '@angular/core';
+import { CheckService } from '../Services/CheckService';
+
 @Component({
     templateUrl: '../Views/about.html',
     styleUrls: [
@@ -9,19 +9,12 @@ import { AppComponent } from './app.component';
         '../Styles/button.css']
 })
 
-export class AboutComponent implements OnInit {
-    public version = versions.version;
-    public revision = versions.revision;
-    public branch = versions.branch;
-    public buildTime = versions.buildTime;
+export class AboutComponent {
     constructor(
-        public appComponent: AppComponent
+        public checkService: CheckService
     ) { }
 
-    public ngOnInit(): void {
-    }
-
     public check(): void {
-        this.appComponent.check(true);
+        this.checkService.checkVersion(true);
     }
 }
