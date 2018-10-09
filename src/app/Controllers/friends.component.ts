@@ -10,7 +10,7 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/friends.html',
-    styleUrls: ['../Styles/friends.css']
+    styleUrls: ['../Styles/friends.css', '../Styles/reddot.css']
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {

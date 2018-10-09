@@ -1,0 +1,13 @@
+.reddot {
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: #E53935;
+    font-size: 12px;
+    line-height: 20px;
+    border-radius: 50%;
+    text-align: center;
+}
