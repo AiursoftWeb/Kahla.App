@@ -10,7 +10,7 @@
             <div class="chat-content">
                 <span *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
-                    <img src="{{message.content.substring(5)}}?w=400">
+                    <img src="{{message.content.substring(5)}}">
                 </a>
                 <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.substring(6)}}?sd=true">
                     Click to download
