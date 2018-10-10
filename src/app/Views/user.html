@@ -1,6 +1,6 @@
 <app-header title="Profile" i18n-title="@@Profile" returnButton="true"></app-header>
 <div *ngIf="info" class="user">
-    <img class="user-img" src="{{info.avatarURL ? info.avatarURL : '../../assets/loading.gif'}}">
+    <img class="user-img" src="{{info.avatarURL ? info.avatarURL : '../../assets/loading.gif'}}?w=50&h=50">
     <div class="name">
         {{info.nickName}}
     </div>
