@@ -10,7 +10,7 @@
   </div>
   <div class="profile avatar">
     <label>Avatar</label>
-    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}">
+    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}?w=50&h=50">
     <div class="grid">
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept=".png, .jpg, .bmp" />
