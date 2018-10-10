@@ -60,7 +60,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.requests = response.items.filter(t => !t.completed);
                 response.items.forEach(item => {
-                    item.creator.avatarURL = Values.fileAddress + item.creator.avatarURL;
+                    item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
                 });
                 this.cache.UpdateFriendRequests(response.items);
                 AppComponent.CurrentNav.ngOnInit();

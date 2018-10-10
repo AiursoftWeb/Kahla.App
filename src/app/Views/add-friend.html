@@ -5,7 +5,7 @@
 <div class="search-holder"></div>
 
 <div class="result" *ngFor="let user of users | async" (click)="detail(user.id)">
-    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}?h=80&h=80" />
+    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}?w=80&h=80" />
     <div class="sender">
         {{user.nickName}}
     </div>
