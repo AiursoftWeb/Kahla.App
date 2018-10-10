@@ -10,7 +10,19 @@ export class Notify {
     ) { }
 
     public Show(title: string, content: string, icon: string, openPath: string): void {
-        if ('Notification' in window) {
+        const userAgent = navigator.userAgent.toLowerCase();
+        if (userAgent.indexOf(' electron/') > -1) {
+            console.warn('Running in Electron and send electron notification.');
+            const notify = new Notification(title, {
+                body: content,
+                icon: icon,
+            });
+            notify.onclick = function (event) {
+                event.preventDefault(); // prevent the browser from focusing the Notification's tab
+                location.href = openPath;
+                window.focus();
+            };
+        } else if ('Notification' in window) {
             Notification.requestPermission((result) => {
                 if (result === 'granted') {
                     if ('serviceWorker' in navigator && environment.production) {
@@ -18,8 +30,7 @@ export class Notify {
                         navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
                             serviceWorkerRegistration.showNotification(title, {
                                 body: content,
-                                icon: icon,
-                                tag: 'Kahla'
+                                icon: icon
                             });
                         });
                     } else {
@@ -45,6 +56,9 @@ export class Notify {
             evt.content = AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8);
             if (evt.content.startsWith('[img]')) {
                 evt.content = 'Photo';
+            }
+            if (evt.content.startsWith('[video]')) {
+                evt.content = 'Video';
             }
             if (evt.content.startsWith('[file]')) {
                 evt.content = 'File';

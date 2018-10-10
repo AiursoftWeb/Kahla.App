@@ -15,6 +15,9 @@
                 <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.substring(6)}}?sd=true">
                     Click to download
                 </a>
+                <div *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}">
+                    <video src="{{message.content.substring(7)}}" controls muted></video>
+                </div>
                 <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
@@ -22,7 +25,7 @@
                     Sending...
                 </span>
                 <span>
-                    {{message.sendTime}}
+                    {{message.sendTime | date:'M/d/yy h:mm a'}}
                 </span>
             </p>
         </div>
@@ -39,7 +42,7 @@
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(true)" accept="image/*" />
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput()" accept="image/*" />
             <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
@@ -47,7 +50,7 @@
             </label>
         </div>
         <div class="of4">
-            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(false)" />
+            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput()" />
             <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
                 <div class="text">
                     Send File

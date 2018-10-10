@@ -11,11 +11,10 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/conversations.html',
-    styleUrls: ['../Styles/conversations.css']
+    styleUrls: ['../Styles/conversations.css', '../Styles/reddot.css']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
-    private option = { hour: 'numeric', minute: 'numeric' };
     constructor(
         public apiService: ApiService,
         public router: Router,
@@ -52,11 +51,13 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                         if (e.latestMessage.startsWith('[img]')) {
                             e.latestMessage = 'Photo';
                         }
+                        if (e.latestMessage.startsWith('[video]')) {
+                            e.latestMessage = 'Video';
+                        }
                         if (e.latestMessage.startsWith('[file]')) {
                             e.latestMessage = 'File';
                         }
                     }
-                    e.latestMessageTime = new Date(e.latestMessageTime).toLocaleString([], this.option);
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 component.info = info;

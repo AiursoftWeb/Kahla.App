@@ -53,18 +53,3 @@
         margin: auto;
         font-size:13px;
     }
-
-.nav-reddot {
-    top: 0;
-    right: 0;
-    position: absolute;
-    width: 20px;
-    height: 17px;
-    padding-top: 2px;
-    color: white;
-    background-color: red;
-    font-size: 12px;
-    border-radius: 10px;
-    float: left;
-    text-align: center;
-}

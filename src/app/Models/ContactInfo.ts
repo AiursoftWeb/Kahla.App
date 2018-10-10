@@ -3,7 +3,7 @@ export class ContactInfo {
     public displayName: string;
     public displayImageKey: number;
     public latestMessage: string;
-    public latestMessageTime: string;
+    public latestMessageTime: Date;
     public unReadAmount: number;
     public conversationId: number;
     public discriminator: string;

@@ -5,7 +5,7 @@ import { CacheService } from '../Services/CacheService';
 @Component({
     selector: 'app-nav',
     templateUrl: '../Views/nav.html',
-    styleUrls: ['../Styles/nav.css']
+    styleUrls: ['../Styles/nav.css', '../Styles/reddot.css']
 })
 export class NavComponent implements OnInit, OnDestroy {
     public totalUnread = 0;

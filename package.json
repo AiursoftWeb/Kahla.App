@@ -1,7 +1,47 @@
 {
   "name": "kahla",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Kahla is a cross-platform business messaging app.",
+  "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
+  "build": {
+    "appId": "com.example.kahla",
+    "productName": "Kahla",
+    "copyright": "Copyright © 2018 Aiursoft",
+    "directories": {
+      "app": "www"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "zip"
+        }
+      ]
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb"
+        },
+        {
+          "target": "rpm"
+        },
+        {
+          "target": "tar.gz"
+        }
+      ]
+    }
+  },
   "contributors": [
     "Anduin@aiursoft.com",
     "xxyzz@aiursoft.com",
@@ -10,15 +50,16 @@
   ],
   "license": "MIT",
   "scripts": {
-    "electron": "ng build --base-href ./ && electron ./www/electron.js",
+    "postinstall": "npm run prebuild",
+    "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "npm run prebuild && ng serve --open",
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
     "pack": "asar pack ./www ./www/app.asar",
     "prod": "npm run prebuild && ng build --base-href / --prod",
-    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf",
-    "postinstall": "npm run prebuild"
+    "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
+    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
     "@angular/animations": "6.1.7",
@@ -59,6 +100,7 @@
     "asar": "^0.14.0",
     "codelyzer": "^4.4.4",
     "electron": "^2.0.10",
+    "electron-builder": "^20.28.4",
     "jasmine-core": "^3.2.1",
     "jasmine-spec-reporter": "~4.2.1",
     "ts-node": "^7.0.1",
@@ -76,5 +118,15 @@
     "plugins": {
       "cordova-plugin-whitelist": {}
     }
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AiursoftWeb/Kahla.App.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/AiursoftWeb/Kahla.App/issues"
+  },
+  "homepage": "https://kahla.aiursoft.com"
 }

@@ -90,48 +90,15 @@ ng build --prod --local zh --i18n-file ./src/message.zh.xlf
 
 Please view [here](https://electron.atom.io/docs/tutorial/application-distribution/) for Electron distribution document.
 
-Download the prebuilt electron [here](https://github.com/electron/electron/releases).
+Please view [here](https://www.electron.build/) for Electron builder document.
 
 Run:
 
 ```bash
-ng build --base-href ./ --prod
+./publish.sh
 ```
 
-And get the built production Kahla app.
-
-Run:
-
-```bash
-mv ./www/electron.js ./www/index.js
-```
-
-To rename `electron.js` to `index.js`.
-
-Run:
-
-```bash
-cp ./package.json ./www/
-```
-
-To copy that package.json to `www`.
-
-Run:
-
-```
-npm run pack
-```
-
-To pack the app.
-
-Next, the folder containing your app should be named app and placed in Electron's resources directory as shown in the following examples. Note that the location of Electron's prebuilt binaries is indicated with electron/ in the examples below.
-
-    electron/resources/app
-    ├── package.json
-    ├── main.js
-    └── index.html
-
-Then run `electron` (`electron.exe` on Windows).
+And you will publish the distributable version of Kahla desktop.
 
 ### How to publish as Cordova production version
 

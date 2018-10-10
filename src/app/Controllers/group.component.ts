@@ -19,7 +19,6 @@ import { GroupConversation } from '../Models/GroupConversation';
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
     public groupMumbers: number;
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
 
     constructor(
         private route: ActivatedRoute,
@@ -36,8 +35,6 @@ export class GroupComponent implements OnInit {
             )
             .subscribe(conversation => {
                 this.conversation = conversation;
-                this.conversation.conversationCreateTime =
-                    new Date(this.conversation.conversationCreateTime).toLocaleString([], this.option);
                 this.groupMumbers = conversation.users.length;
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
