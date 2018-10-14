@@ -4,8 +4,11 @@
     <a class="nav-item" routerLink="/kahla/conversations" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-comment-o"></i>
-            <div *ngIf="totalUnread > 0" class="reddot">
+            <div *ngIf="totalUnread > 0 && totalUnread < 100" class="reddot">
                 {{totalUnread}}
+            </div>
+            <div *ngIf="totalUnread > 99" class="reddot">
+                99+
             </div>
         </div>
         <div class="words" i18n="@@Kahla">
@@ -15,8 +18,11 @@
     <a class="nav-item" routerLink="/kahla/friends" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-address-book-o"></i>
-            <div *ngIf="totalRequests > 0" class="reddot">
+            <div *ngIf="totalRequests > 0 && totalRequests < 100" class="reddot">
                 {{totalRequests}}
+            </div>
+            <div *ngIf="totalRequests > 99" class="reddot">
+                99+
             </div>
         </div>
         <div class="words" i18n="@@Friends">
