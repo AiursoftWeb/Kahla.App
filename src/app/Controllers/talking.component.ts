@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
 import { Message } from '../Models/Message';
@@ -13,7 +13,9 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/talking.html',
-    styleUrls: ['../Styles/talking.css']
+    styleUrls: ['../Styles/talking.css',
+                '../Styles/button.css',
+                '../Styles/reddot.css']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
@@ -32,12 +34,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
+    public newMessages = 0;
+    public showScrollDown = false;
 
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService
     ) {
         AppComponent.CurrentTalking = this;
+    }
+
+    @HostListener('window:scroll', [])
+    onscroll() {
+        const offsetHeight = document.documentElement.scrollHeight - document.documentElement.scrollTop
+         - document.documentElement.clientHeight;
+        if (offsetHeight > 600) {
+            this.showScrollDown = true;
+        } else {
+            this.showScrollDown = false;
+        }
     }
 
     public ngOnInit(): void {
@@ -87,16 +102,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
+                if (this.messages !== undefined && messages !== null) {
+                    this.newMessages += messages[this.messageAmount - 1].id - this.messages[this.messages.length - 1].id;
+                }
                 this.messages = messages;
-                if (getDown) {
+                if (getDown && !this.showScrollDown) {
                     setTimeout(() => {
                         this.scrollBottom(true);
                     }, 0);
-                } else {
+                } else if (!getDown) {
                     setTimeout(() => {
-                        const model = AppComponent.CurrentTalking;
-                        window.scroll(0, model.mainList.nativeElement.offsetHeight - model.currentHeight);
-                        model.loadingMore = false;
+                        window.scroll({top: 0, behavior: 'smooth'});
+                        AppComponent.CurrentTalking.loadingMore = false;
                     }, 300);
                 }
             });
@@ -131,6 +148,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     private scrollBottom(smooth: boolean) {
         const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+        this.newMessages = 0;
         if (smooth) {
             window.scroll({top: h, behavior: 'smooth'});
         } else {
@@ -162,9 +180,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public startInput(): void {
         this.showPanel = false;
-        setTimeout(() => {
-            this.scrollBottom(false);
-        }, 300);
     }
 
     public togglePanel(): void {

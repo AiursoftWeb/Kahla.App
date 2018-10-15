@@ -21,6 +21,14 @@ button, .button {
     white-space: nowrap;
 }
 
+.button--fab {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    line-height: normal;
+}
+
 .button.success {
     background-color: #5cb85c;
 }

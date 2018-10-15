@@ -23,12 +23,7 @@
     .message-list .load-more{
         background-color: #EAEAEA;
         color: #AAAAAA;
-        outline: none;
-        border-radius:5px;
-        border-width: 0;
         width: 240px;
-        height: 25px;
-        margin: auto;
         margin-bottom: 20px;
     }
 
@@ -294,4 +289,10 @@ progress {
     height: 5px;
     top: 50px;
     z-index: 100;
+}
+
+#scrollDown {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
 }
