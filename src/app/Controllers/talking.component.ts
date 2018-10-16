@@ -97,7 +97,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         const model = AppComponent.CurrentTalking;
                         window.scroll(0, model.mainList.nativeElement.offsetHeight - model.currentHeight);
                         model.loadingMore = false;
-                    }, 300);
+                    }, 1);
                 }
             });
     }
