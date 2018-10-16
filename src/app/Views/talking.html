@@ -1,7 +1,5 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
 <ul class="message-list" #mainList [ngClass]="{'active': showPanel}" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
-    <button *ngIf="!loadingMore" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
-    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : '../../assets/loading.gif'}}?w=80&h=80">
@@ -32,12 +30,6 @@
     </li>
     <button *ngIf="showScrollDown" id="scrollDown" class="button button--fab primary" (click)="scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
-        <div *ngIf="newMessages > 0 && newMessages < 100" class="reddot">
-            {{newMessages}}
-        </div>
-        <div *ngIf="newMessages > 99" class="reddot">
-            99+
-        </div>
     </button>
 </ul>
 

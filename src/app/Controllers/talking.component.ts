@@ -27,15 +27,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput') public imageInput;
     @ViewChild('fileInput') public fileInput;
 
-    public currentHeight: number;
-    public loadingMore = false;
+    public oldHeight: number;
     public progress = 0;
     public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
-    public newMessages = 0;
     public showScrollDown = false;
+    private noMoreMessages = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -45,13 +44,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     @HostListener('window:scroll', [])
-    onscroll() {
-        const offsetHeight = document.documentElement.scrollHeight - document.documentElement.scrollTop
-         - document.documentElement.clientHeight;
-        if (offsetHeight > 600) {
+    onScroll() {
+        const offsetHeight = (document.documentElement.scrollHeight - document.documentElement.scrollTop
+         - document.documentElement.clientHeight) / document.documentElement.clientHeight;
+        if (offsetHeight > 0.5) {
             this.showScrollDown = true;
         } else {
             this.showScrollDown = false;
+        }
+        if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
+            this.oldHeight = document.documentElement.offsetHeight;
+            this.messageAmount += 15;
+            this.getMessages(false, this.conversation.id);
         }
     }
 
@@ -102,19 +106,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
-                if (this.messages !== undefined && messages !== null) {
-                    this.newMessages += messages[this.messageAmount - 1].id - this.messages[this.messages.length - 1].id;
+                if (typeof this.messages !== 'undefined' && messages.length > 0 && messages[0].id === this.messages[0].id) {
+                    this.noMoreMessages = true;
                 }
                 this.messages = messages;
                 if (getDown && !this.showScrollDown) {
                     setTimeout(() => {
-                        this.scrollBottom(true);
+                        this.scrollBottom(false);
                     }, 0);
                 } else if (!getDown) {
                     setTimeout(() => {
-                        window.scroll({top: 0, behavior: 'smooth'});
-                        AppComponent.CurrentTalking.loadingMore = false;
-                    }, 300);
+                        window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
+                    }, 1);
                 }
             });
     }
@@ -148,7 +151,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     private scrollBottom(smooth: boolean) {
         const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-        this.newMessages = 0;
         if (smooth) {
             window.scroll({top: h, behavior: 'smooth'});
         } else {
@@ -189,13 +191,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.scrollBottom(false);
             }, 0);
         }
-    }
-
-    public LoadMore(): void {
-        this.loadingMore = true;
-        this.currentHeight = this.mainList.nativeElement.offsetHeight;
-        this.messageAmount += 15;
-        this.getMessages(false, this.conversation.id);
     }
 
     public paste(event: ClipboardEvent): void {
