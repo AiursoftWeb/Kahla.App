@@ -146,7 +146,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private finishUpload() {
         this.uploading = false;
         this.progress = 0;
-        this.scrollBottom(true);
     }
 
     private scrollBottom(smooth: boolean) {
@@ -174,9 +173,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
         this.content = '';
-        setTimeout(() => {
-            this.scrollBottom(true);
-        }, 10);
         document.getElementById('chatInput').focus();
     }
 
@@ -187,9 +183,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            setTimeout(() => {
-                this.scrollBottom(false);
-            }, 0);
+            window.scroll(0, document.documentElement.scrollTop + 105);
+        } else {
+            window.scroll(0, document.documentElement.scrollTop - 105);
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
-<ul class="message-list" #mainList [ngClass]="{'active': showPanel}" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
+<ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
     <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : '../../assets/loading.gif'}}?w=80&h=80">
@@ -28,7 +28,7 @@
             </p>
         </div>
     </li>
-    <button *ngIf="showScrollDown" id="scrollDown" class="button button--fab primary" (click)="scrollBottom(true)">
+    <button *ngIf="showScrollDown" id="scrollDown" [ngClass]="{'active': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
     </button>
 </ul>
