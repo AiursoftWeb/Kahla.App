@@ -28,8 +28,10 @@
             </p>
         </div>
     </li>
-    <button *ngIf="showScrollDown" id="scrollDown" [ngClass]="{'active': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
+    <button *ngIf="showScrollDown || (!onBottom && newMessages)" id="scrollDown" [ngClass]="{'active': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
+        <div *ngIf="newMessages" class="reddot">
+        </div>
     </button>
 </ul>
 

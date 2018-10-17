@@ -34,7 +34,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
     public showScrollDown = false;
+    public newMessages = false;
     private noMoreMessages = false;
+    public onBottom = true;
 
     constructor(
         private route: ActivatedRoute,
@@ -49,8 +51,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
             - window.innerHeight) / window.innerHeight;
         if (belowWindowPercent > 0.8) {
             this.showScrollDown = true;
+        } else if (belowWindowPercent === 0) {
+            this.onBottom = true;
+            this.newMessages = false;
         } else {
             this.showScrollDown = false;
+            this.onBottom = false;
         }
         if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
             this.oldHeight = document.documentElement.offsetHeight;
@@ -106,14 +112,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
-                if (typeof this.messages !== 'undefined' && messages.length > 0 && messages[0].id === this.messages[0].id) {
-                    this.noMoreMessages = true;
+                if (typeof this.messages !== 'undefined' && messages.length > 0) {
+                    if (messages[0].id === this.messages[0].id) {
+                        this.noMoreMessages = true;
+                    }
+                    if (!this.onBottom && messages[messages.length - 1].content !== this.messages[this.messages.length - 1].content) {
+                        this.newMessages = true;
+                    }
                 }
                 this.messages = messages;
-                if (getDown && !this.showScrollDown) {
+                if (getDown && this.onBottom) {
                     setTimeout(() => {
                         this.scrollBottom(true);
-                    }, 100);
+                    }, 0);
                 } else if (!getDown) {
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
@@ -168,7 +179,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.local = true;
         this.messages.push(tempMessage);
-        this.messageAmount++;
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });
