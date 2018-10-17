@@ -17,7 +17,7 @@
 }
 
 .active {
-    margin-bottom: 161px;
+    bottom: 185px !important;
 }
 
     .message-list li {
