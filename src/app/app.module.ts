@@ -29,6 +29,7 @@ import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
+import { CheckService } from './Services/CheckService';
 import { environment } from '../environments/environment';
 
 
@@ -64,7 +65,8 @@ import { environment } from '../environments/environment';
         ApiService,
         Notify,
         ParamService,
-        CacheService
+        CacheService,
+        CheckService
     ],
     bootstrap: [AppComponent]
 })
