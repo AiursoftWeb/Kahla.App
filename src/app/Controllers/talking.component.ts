@@ -45,9 +45,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        const offsetHeight = (document.documentElement.scrollHeight - document.documentElement.scrollTop
-         - document.documentElement.clientHeight) / document.documentElement.clientHeight;
-        if (offsetHeight > 0.5) {
+        const belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+            - window.innerHeight) / window.innerHeight;
+        if (belowWindowPercent > 0.8) {
             this.showScrollDown = true;
         } else {
             this.showScrollDown = false;
@@ -112,8 +112,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.messages = messages;
                 if (getDown && !this.showScrollDown) {
                     setTimeout(() => {
-                        this.scrollBottom(false);
-                    }, 0);
+                        this.scrollBottom(true);
+                    }, 100);
                 } else if (!getDown) {
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
