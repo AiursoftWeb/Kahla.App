@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
 import { Message } from '../Models/Message';
@@ -13,7 +13,9 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/talking.html',
-    styleUrls: ['../Styles/talking.css']
+    styleUrls: ['../Styles/talking.css',
+                '../Styles/button.css',
+                '../Styles/reddot.css']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
@@ -25,19 +27,36 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput') public imageInput;
     @ViewChild('fileInput') public fileInput;
 
-    public currentHeight: number;
-    public loadingMore = false;
+    public oldHeight: number;
     public progress = 0;
     public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
     public userNameColors = new Map();
+    public showScrollDown = false;
+    private noMoreMessages = false;
 
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService
     ) {
         AppComponent.CurrentTalking = this;
+    }
+
+    @HostListener('window:scroll', [])
+    onScroll() {
+        const belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+            - window.innerHeight) / window.innerHeight;
+        if (belowWindowPercent > 0.8) {
+            this.showScrollDown = true;
+        } else {
+            this.showScrollDown = false;
+        }
+        if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
+            this.oldHeight = document.documentElement.offsetHeight;
+            this.messageAmount += 15;
+            this.getMessages(false, this.conversation.id);
+        }
     }
 
     public ngOnInit(): void {
@@ -87,16 +106,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
+                if (typeof this.messages !== 'undefined' && messages.length > 0 && messages[0].id === this.messages[0].id) {
+                    this.noMoreMessages = true;
+                }
                 this.messages = messages;
-                if (getDown) {
+                if (getDown && !this.showScrollDown) {
                     setTimeout(() => {
                         this.scrollBottom(true);
-                    }, 0);
-                } else {
+                    }, 100);
+                } else if (!getDown) {
                     setTimeout(() => {
-                        const model = AppComponent.CurrentTalking;
-                        window.scroll(0, model.mainList.nativeElement.offsetHeight - model.currentHeight);
-                        model.loadingMore = false;
+                        window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
                     }, 1);
                 }
             });
@@ -162,9 +182,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public startInput(): void {
         this.showPanel = false;
-        setTimeout(() => {
-            this.scrollBottom(false);
-        }, 300);
     }
 
     public togglePanel(): void {
@@ -174,13 +191,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.scrollBottom(false);
             }, 0);
         }
-    }
-
-    public LoadMore(): void {
-        this.loadingMore = true;
-        this.currentHeight = this.mainList.nativeElement.offsetHeight;
-        this.messageAmount += 15;
-        this.getMessages(false, this.conversation.id);
     }
 
     public paste(event: ClipboardEvent): void {
