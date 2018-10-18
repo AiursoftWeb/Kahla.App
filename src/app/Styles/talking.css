@@ -16,8 +16,12 @@
     min-height: calc(100vh - 121px);
 }
 
-.active {
+.active-button {
     bottom: 185px !important;
+}
+
+.active-list {
+    margin-bottom: 161px;
 }
 
     .message-list li {

@@ -21,7 +21,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
     public content: string;
     public messages: Message[];
-    public messageAmount = 15;
+    private messageAmount = 15;
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -106,17 +106,38 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
-                if (typeof this.messages !== 'undefined' && messages.length > 0) {
+                let start = 0, end = messages.length - 1 > 0 ? messages.length - 1 : 0;
+                if (typeof this.messages !== 'undefined' && this.messages.length > 0 && messages.length > 0) {
                     if (messages[0].id === this.messages[0].id) {
                         this.noMoreMessages = true;
                     }
-                    if (this.belowWindowPercent !== 0 && messages[messages.length - 1].content !==
-                        this.messages[this.messages.length - 1].content) {
-                        this.newMessages = true;
+                    while (!getDown && start < messages.length - 1) {
+                        if (messages[start].id === this.messages[0].id) {
+                            break;
+                        }
+                        start++;
                     }
+                    while (getDown && end >= 0) {
+                        if (messages[end].id === this.messages[this.messages.length - 1].id) {
+                            break;
+                        }
+                        end--;
+                    }
+                    if (start > 0) {
+                        this.messages.unshift(...messages.slice(0, start));
+                    }
+                    if (end < messages.length - 1) {
+                        this.messages.push(...messages.slice(end + 1));
+                        if (messages[messages.length - 1].senderId !== AppComponent.me.id) {
+                            this.newMessages = true;
+                        }
+                    } else {
+                        this.newMessages = false;
+                    }
+                } else {
+                    this.messages = messages;
                 }
-                this.messages = messages;
-                if (getDown && this.belowWindowPercent === 0) {
+                if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.scrollBottom(true);
                     }, 0);
@@ -167,19 +188,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.content.trim().length === 0) {
             return;
         }
-        const tempMessage = new Message();
-        tempMessage.content = this.content;
-        tempMessage.sender = AppComponent.me;
-        tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
-        tempMessage.senderId = AppComponent.me.id;
-        tempMessage.local = true;
-        this.messages.push(tempMessage);
-        setTimeout(() => {
-            this.scrollBottom(true);
-        }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
-            .subscribe(() => { });
+            .subscribe(() => {
+                this.scrollBottom(true);
+            });
         this.content = '';
         document.getElementById('chatInput').focus();
     }
@@ -191,9 +204,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
+            if (this.belowWindowPercent === 0) {
+                document.querySelector('.message-list').classList.add('active-list');
+            }
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
-            window.scroll(0, document.documentElement.scrollTop - 105);
+            document.querySelector('.message-list').classList.remove('active-list');
+            if (this.belowWindowPercent === 0) {
+                this.scrollBottom(false);
+            } else {
+                window.scroll(0, document.documentElement.scrollTop - 105);
+            }
         }
     }
 
