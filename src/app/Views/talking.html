@@ -2,7 +2,7 @@
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
     <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
-            <img src="{{message.sender.avatarURL ? message.sender.avatarURL : '../../assets/loading.gif'}}?w=80&h=80">
+            <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
         <div class="chat-text">
             <div class="chat-content">
@@ -28,10 +28,9 @@
             </p>
         </div>
     </li>
-    <button *ngIf="showScrollDown || (!onBottom && newMessages)" id="scrollDown" [ngClass]="{'active': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
+    <button *ngIf="belowWindowPercent > 0.2 || (belowWindowPercent > 0 && newMessages)" id="scrollDown" [ngClass]="{'active': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
-        <div *ngIf="newMessages" class="reddot">
-        </div>
+        <div *ngIf="newMessages" class="reddot"></div>
     </button>
 </ul>
 

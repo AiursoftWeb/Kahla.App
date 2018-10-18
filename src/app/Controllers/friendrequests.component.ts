@@ -15,6 +15,7 @@ import { Values } from '../values';
 export class FriendRequestsComponent implements OnInit, OnDestroy {
 
     public requests: Request[];
+    public loadingImgURL = Values.loadingImgURL;
 
     constructor(
         private apiService: ApiService,

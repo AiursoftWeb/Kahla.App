@@ -3,6 +3,7 @@ import { ApiService } from '../Services/ApiService';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -10,6 +11,7 @@ import { KahlaUser } from '../Models/KahlaUser';
                 '../Styles/button.css']
 })
 export class SettingsComponent {
+    public loadingImgURL = Values.loadingImgURL;
     constructor(
         private apiService: ApiService,
         private router: Router) {

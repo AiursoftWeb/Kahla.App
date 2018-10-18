@@ -27,16 +27,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput') public imageInput;
     @ViewChild('fileInput') public fileInput;
 
-    public oldHeight: number;
     public progress = 0;
     public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public userNameColors = new Map();
-    public showScrollDown = false;
+    public loadingImgURL = Values.loadingImgURL;
+    public belowWindowPercent = 0;
     public newMessages = false;
     private noMoreMessages = false;
-    public onBottom = true;
+    private oldOffsetHeight: number;
 
     constructor(
         private route: ActivatedRoute,
@@ -47,19 +47,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        const belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
             - window.innerHeight) / window.innerHeight;
-        if (belowWindowPercent > 0.8) {
-            this.showScrollDown = true;
-        } else if (belowWindowPercent === 0) {
-            this.onBottom = true;
+        if (this.belowWindowPercent === 0) {
             this.newMessages = false;
-        } else {
-            this.showScrollDown = false;
-            this.onBottom = false;
         }
         if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
-            this.oldHeight = document.documentElement.offsetHeight;
+            this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
             this.getMessages(false, this.conversation.id);
         }
@@ -76,7 +70,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 AppComponent.CurrentHeader.title = conversation.displayName;
                 document.querySelector('app-header').setAttribute('title', conversation.displayName);
                 this.route.params.subscribe((params: Params) => {
-                    this.getMessages(true, +params['id']);
+                    this.getMessages(true, params['id']);
                 });
                 if (conversation.anotherUserId) {
                     AppComponent.CurrentHeader.RouterLink = `/kahla/user/${this.conversation.anotherUserId}`;
@@ -116,19 +110,20 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (messages[0].id === this.messages[0].id) {
                         this.noMoreMessages = true;
                     }
-                    if (!this.onBottom && messages[messages.length - 1].content !== this.messages[this.messages.length - 1].content) {
+                    if (this.belowWindowPercent !== 0 && messages[messages.length - 1].content !==
+                        this.messages[this.messages.length - 1].content) {
                         this.newMessages = true;
                     }
                 }
                 this.messages = messages;
-                if (getDown && this.onBottom) {
+                if (getDown && this.belowWindowPercent === 0) {
                     setTimeout(() => {
                         this.scrollBottom(true);
                     }, 0);
                 } else if (!getDown) {
                     setTimeout(() => {
-                        window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
-                    }, 1);
+                        window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
+                    }, 0);
                 }
             });
     }
@@ -179,6 +174,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.local = true;
         this.messages.push(tempMessage);
+        setTimeout(() => {
+            this.scrollBottom(true);
+        }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => { });

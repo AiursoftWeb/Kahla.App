@@ -21,7 +21,7 @@ export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
   public progress = 0;
   public uploading = false;
-  public avatarURL: string;
+  public loadingImgURL = Values.loadingImgURL;
   @ViewChild('imageInput') public imageInput;
   constructor(
     private apiService: ApiService,

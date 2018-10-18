@@ -19,6 +19,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
     public groupMumbers: number;
+    public loadingImgURL = Values.loadingImgURL;
 
     constructor(
         private route: ActivatedRoute,

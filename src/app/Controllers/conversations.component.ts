@@ -15,6 +15,7 @@ import { Values } from '../values';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
+    public loadingImgURL = Values.loadingImgURL;
     constructor(
         public apiService: ApiService,
         public router: Router,
