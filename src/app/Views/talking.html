@@ -1,6 +1,6 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
-    <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
+    <li *ngFor="let message of localMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>

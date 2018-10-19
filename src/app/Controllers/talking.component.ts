@@ -20,7 +20,7 @@ import { Values } from '../values';
 export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
     public content: string;
-    public messages: Message[];
+    public localMessages: Message[];
     private messageAmount = 15;
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
@@ -107,28 +107,36 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 let start = 0, end = messages.length - 1 > 0 ? messages.length - 1 : 0;
-                if (typeof this.messages !== 'undefined' && this.messages.length > 0 && messages.length > 0) {
-                    if (messages[0].id === this.messages[0].id) {
+                if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
+                    if (messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;
-                    }
-                    while (!getDown && start < messages.length - 1) {
-                        if (messages[start].id === this.messages[0].id) {
-                            break;
+                    } else {
+                        while (!getDown && start < messages.length - 1) {
+                            // find the index of the message after the last older message
+                            if (messages[start].id === this.localMessages[0].id) {
+                                break;
+                            }
+                            start++;
                         }
-                        start++;
                     }
                     while (getDown && end >= 0) {
-                        if (messages[end].senderId === AppComponent.me.id) {
-                            this.messages[this.messages.length - 1] = messages[end];
+                        // find the index of the message before the first newer message
+                        if (messages[end].senderId === AppComponent.me.id && !messages[end].content.startsWith('[')) {
+                            // if the newer text message is send by current user, replace it to end sending status
+                            this.localMessages[this.localMessages.length - 1] = messages[end];
+                            break;
+                        } else if (messages[end].id === this.localMessages[this.localMessages.length - 1].id) {
                             break;
                         }
                         end--;
                     }
                     if (start > 0) {
-                        this.messages.unshift(...messages.slice(0, start));
+                        // add older messages to the beginning of the local messsages array
+                        this.localMessages.unshift(...messages.slice(0, start));
                     }
                     if (end < messages.length - 1) {
-                        this.messages.push(...messages.slice(end + 1));
+                        // push newer messages to the end of the local messages array
+                        this.localMessages.push(...messages.slice(end + 1));
                         if (messages[messages.length - 1].senderId !== AppComponent.me.id) {
                             this.newMessages = true;
                         }
@@ -136,7 +144,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.newMessages = false;
                     }
                 } else {
-                    this.messages = messages;
+                    this.localMessages = messages;
                 }
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
@@ -153,6 +161,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public uploadInput(): void {
         if (this.fileInput) {
             this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
             const fileBrowser = this.fileInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -162,6 +171,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         if (this.imageInput) {
             this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -174,6 +184,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private finishUpload() {
         this.uploading = false;
         this.progress = 0;
+        this.scrollBottom(true);
     }
 
     private scrollBottom(smooth: boolean) {
@@ -195,7 +206,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.local = true;
-        this.messages.push(tempMessage);
+        this.localMessages.push(tempMessage);
         setTimeout(() => {
             this.scrollBottom(true);
         }, 0);
