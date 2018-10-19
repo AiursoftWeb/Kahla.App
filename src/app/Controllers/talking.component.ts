@@ -118,7 +118,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         start++;
                     }
                     while (getDown && end >= 0) {
-                        if (messages[end].id === this.messages[this.messages.length - 1].id) {
+                        if (messages[end].senderId === AppComponent.me.id) {
+                            this.messages[this.messages.length - 1] = messages[end];
                             break;
                         }
                         end--;
@@ -188,11 +189,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.content.trim().length === 0) {
             return;
         }
+        const tempMessage = new Message();
+        tempMessage.content = this.content;
+        tempMessage.sender = AppComponent.me;
+        tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
+        tempMessage.senderId = AppComponent.me.id;
+        tempMessage.local = true;
+        this.messages.push(tempMessage);
+        setTimeout(() => {
+            this.scrollBottom(true);
+        }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
-            .subscribe(() => {
-                this.scrollBottom(true);
-            });
+            .subscribe(() => {});
         this.content = '';
         document.getElementById('chatInput').focus();
     }
