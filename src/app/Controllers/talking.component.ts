@@ -27,6 +27,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput') public imageInput;
     @ViewChild('fileInput') public fileInput;
 
+    public loadingMore = false;
     public progress = 0;
     public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
@@ -35,7 +36,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
     public belowWindowPercent = 0;
     public newMessages = false;
-    private noMoreMessages = false;
+    public noMoreMessages = false;
     private oldOffsetHeight: number;
 
     constructor(
@@ -49,13 +50,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     onScroll() {
         this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
             - window.innerHeight) / window.innerHeight;
-        if (this.belowWindowPercent === 0) {
+        if (this.belowWindowPercent <= 0) {
             this.newMessages = false;
-        }
-        if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
-            this.oldOffsetHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
         }
     }
 
@@ -106,56 +102,38 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
-                let start = 0, end = messages.length - 1 > 0 ? messages.length - 1 : 0;
                 if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
                     if (messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;
-                    } else {
-                        while (!getDown && start < messages.length - 1) {
-                            // find the index of the message after the last older message
-                            if (messages[start].id === this.localMessages[0].id) {
-                                break;
-                            }
-                            start++;
-                        }
                     }
-                    while (getDown && end >= 0) {
-                        // find the index of the message before the first newer message
-                        if (messages[end].senderId === AppComponent.me.id && !messages[end].content.startsWith('[')) {
-                            // if the newer text message is send by current user, replace it to end sending status
-                            this.localMessages[this.localMessages.length - 1] = messages[end];
-                            break;
-                        } else if (messages[end].id === this.localMessages[this.localMessages.length - 1].id) {
-                            break;
-                        }
-                        end--;
-                    }
-                    if (start > 0) {
-                        // add older messages to the beginning of the local messsages array
-                        this.localMessages.unshift(...messages.slice(0, start));
-                    }
-                    if (end < messages.length - 1) {
-                        // push newer messages to the end of the local messages array
-                        this.localMessages.push(...messages.slice(end + 1));
-                        if (messages[messages.length - 1].senderId !== AppComponent.me.id) {
-                            this.newMessages = true;
-                        }
+                    if (messages[messages.length - 1].senderId !== AppComponent.me.id && messages[messages.length - 1].id !==
+                        this.localMessages[this.localMessages.length - 1].id && this.belowWindowPercent > 0) {
+                        this.newMessages = true;
                     } else {
                         this.newMessages = false;
                     }
-                } else {
-                    this.localMessages = messages;
                 }
+                this.localMessages = messages;
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.scrollBottom(true);
                     }, 0);
                 } else if (!getDown) {
+                    this.loadingMore = false;
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
             });
+    }
+
+    public LoadMore(): void {
+        if (!this.noMoreMessages) {
+            this.loadingMore = true;
+            this.oldOffsetHeight = document.documentElement.offsetHeight;
+            this.messageAmount += 15;
+            this.getMessages(false, this.conversation.id);
+        }
     }
 
     public uploadInput(): void {
@@ -218,19 +196,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public startInput(): void {
-        this.showPanel = false;
+        if (this.showPanel) {
+            this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
+            if (this.belowWindowPercent > 0) {
+                window.scroll(0, document.documentElement.scrollTop - 105);
+            }
+        }
     }
 
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            if (this.belowWindowPercent === 0) {
+            if (this.belowWindowPercent <= 0) {
                 document.querySelector('.message-list').classList.add('active-list');
             }
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
-            if (this.belowWindowPercent === 0) {
+            if (this.belowWindowPercent <= 0) {
                 this.scrollBottom(false);
             } else {
                 window.scroll(0, document.documentElement.scrollTop - 105);

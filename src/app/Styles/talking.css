@@ -24,6 +24,17 @@
     margin-bottom: 161px;
 }
 
+.load-more {
+    width: 240px;
+    background-color: #EAEAEA;
+    color: #AAAAAA;
+    margin-bottom: 20px;
+}
+
+.load-more:focus{
+    background-color: #CCC
+}
+
     .message-list li {
         margin-bottom: 25px;
         clear: both;
