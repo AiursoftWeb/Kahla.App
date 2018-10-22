@@ -1,7 +1,7 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
 <div *ngFor="let request of requests" class="friendrequests">
 
-    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : '../../assets/loading.gif'}}?w=100&h=100">
+    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{request.creator.nickName}}
     </div>

@@ -31,7 +31,6 @@
 
 # IDE - VSCode
 .vs/*
-.vscode/*
 
 # misc
 /.sass-cache

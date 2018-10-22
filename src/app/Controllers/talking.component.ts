@@ -20,23 +20,24 @@ import { Values } from '../values';
 export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
     public content: string;
-    public messages: Message[];
+    public localMessages: Message[];
     public messageAmount = 15;
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('fileInput') public fileInput;
 
-    public oldHeight: number;
+    public loadingMore = false;
     public progress = 0;
     public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod', ];
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public userNameColors = new Map();
-    public showScrollDown = false;
+    public loadingImgURL = Values.loadingImgURL;
+    public belowWindowPercent = 0;
     public newMessages = false;
-    private noMoreMessages = false;
-    public onBottom = true;
+    public noMoreMessages = false;
+    private oldOffsetHeight: number;
 
     constructor(
         private route: ActivatedRoute,
@@ -47,21 +48,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        const belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
             - window.innerHeight) / window.innerHeight;
-        if (belowWindowPercent > 0.8) {
-            this.showScrollDown = true;
-        } else if (belowWindowPercent === 0) {
-            this.onBottom = true;
+        if (this.belowWindowPercent <= 0) {
             this.newMessages = false;
-        } else {
-            this.showScrollDown = false;
-            this.onBottom = false;
-        }
-        if (document.documentElement.scrollTop === 0 && !this.noMoreMessages) {
-            this.oldHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
         }
     }
 
@@ -76,7 +66,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 AppComponent.CurrentHeader.title = conversation.displayName;
                 document.querySelector('app-header').setAttribute('title', conversation.displayName);
                 this.route.params.subscribe((params: Params) => {
-                    this.getMessages(true, +params['id']);
+                    this.getMessages(true, params['id']);
                 });
                 if (conversation.anotherUserId) {
                     AppComponent.CurrentHeader.RouterLink = `/kahla/user/${this.conversation.anotherUserId}`;
@@ -112,30 +102,44 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
-                if (typeof this.messages !== 'undefined' && messages.length > 0) {
-                    if (messages[0].id === this.messages[0].id) {
+                if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
+                    if (messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;
                     }
-                    if (!this.onBottom && messages[messages.length - 1].content !== this.messages[this.messages.length - 1].content) {
+                    if (messages[messages.length - 1].senderId !== AppComponent.me.id && messages[messages.length - 1].id !==
+                        this.localMessages[this.localMessages.length - 1].id && this.belowWindowPercent > 0) {
                         this.newMessages = true;
+                    } else {
+                        this.newMessages = false;
                     }
                 }
-                this.messages = messages;
-                if (getDown && this.onBottom) {
+                this.localMessages = messages;
+                if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.scrollBottom(true);
-                    }, 0);
+                    }, 10);
                 } else if (!getDown) {
+                    this.loadingMore = false;
                     setTimeout(() => {
-                        window.scroll(0, document.documentElement.offsetHeight - this.oldHeight);
-                    }, 1);
+                        window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
+                    }, 0);
                 }
             });
+    }
+
+    public LoadMore(): void {
+        if (!this.noMoreMessages) {
+            this.loadingMore = true;
+            this.oldOffsetHeight = document.documentElement.offsetHeight;
+            this.messageAmount += 15;
+            this.getMessages(false, this.conversation.id);
+        }
     }
 
     public uploadInput(): void {
         if (this.fileInput) {
             this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
             const fileBrowser = this.fileInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -145,6 +149,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         if (this.imageInput) {
             this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
                 const formData = new FormData();
@@ -157,6 +162,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private finishUpload() {
         this.uploading = false;
         this.progress = 0;
+        this.scrollBottom(true);
     }
 
     private scrollBottom(smooth: boolean) {
@@ -178,24 +184,41 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
         tempMessage.senderId = AppComponent.me.id;
         tempMessage.local = true;
-        this.messages.push(tempMessage);
+        this.localMessages.push(tempMessage);
+        setTimeout(() => {
+            this.scrollBottom(true);
+        }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
-            .subscribe(() => { });
+            .subscribe(() => {});
         this.content = '';
         document.getElementById('chatInput').focus();
     }
 
     public startInput(): void {
-        this.showPanel = false;
+        if (this.showPanel) {
+            this.showPanel = false;
+            document.querySelector('.message-list').classList.remove('active-list');
+            if (this.belowWindowPercent > 0) {
+                window.scroll(0, document.documentElement.scrollTop - 105);
+            }
+        }
     }
 
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
+            if (this.belowWindowPercent <= 0) {
+                document.querySelector('.message-list').classList.add('active-list');
+            }
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
-            window.scroll(0, document.documentElement.scrollTop - 105);
+            document.querySelector('.message-list').classList.remove('active-list');
+            if (this.belowWindowPercent <= 0) {
+                this.scrollBottom(false);
+            } else {
+                window.scroll(0, document.documentElement.scrollTop - 105);
+            }
         }
     }
 

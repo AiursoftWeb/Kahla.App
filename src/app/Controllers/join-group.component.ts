@@ -17,6 +17,7 @@ import { Values } from '../values';
 })
 export class JoinGroupComponent implements OnInit {
     public groups: Observable<GroupConversation[]> = new Observable<GroupConversation[]>();
+    public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new Subject<string>();
 
     constructor(

@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
     public info: KahlaUser;
     public conversationId: number;
     public areFriends: boolean;
+    public loadingImgURL = Values.loadingImgURL;
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,

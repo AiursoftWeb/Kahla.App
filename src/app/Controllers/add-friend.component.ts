@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs/';
-
-
 import { ApiService } from '../Services/ApiService';
-
 import { KahlaUser } from '../Models/KahlaUser';
-
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
 
@@ -17,6 +13,7 @@ import { Values } from '../values';
 })
 export class AddFriendComponent implements OnInit {
     public users: Observable<KahlaUser[]> = new Observable<KahlaUser[]>();
+    public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new Subject<string>();
 
     constructor(
