@@ -30,6 +30,7 @@ import { ParamService } from './Services/ParamService';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
 import { environment } from '../environments/environment';
+import { UploadService } from './Services/UploadService';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { environment } from '../environments/environment';
         ApiService,
         Notify,
         ParamService,
-        CacheService
+        CacheService,
+        UploadService
     ],
     bootstrap: [AppComponent]
 })

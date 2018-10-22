@@ -8,8 +8,8 @@ import { switchMap, map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import * as Autolinker from 'autolinker';
 import Swal from 'sweetalert2';
-import { UploadFile } from '../Models/UploadFile';
 import { Values } from '../values';
+import { UploadService } from '../Services/UploadService';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -28,8 +28,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput') public fileInput;
 
     public loadingMore = false;
-    public progress = 0;
-    public uploading = false;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public userNameColors = new Map();
@@ -41,7 +39,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private uploadService: UploadService
     ) {
         AppComponent.CurrentTalking = this;
     }
@@ -103,7 +102,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
-                    if (messages[0].id === this.localMessages[0].id) {
+                    if (!getDown && messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;
                     }
                     if (messages[messages.length - 1].senderId !== AppComponent.me.id && messages[messages.length - 1].id !==
@@ -116,7 +115,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.localMessages = messages;
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
-                        this.scrollBottom(true);
+                        this.uploadService.scrollBottom(true);
                     }, 10);
                 } else if (!getDown) {
                     this.loadingMore = false;
@@ -136,44 +135,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public uploadInput(): void {
-        if (this.fileInput) {
-            this.showPanel = false;
-            document.querySelector('.message-list').classList.remove('active-list');
-            const fileBrowser = this.fileInput.nativeElement;
-            if (fileBrowser.files && fileBrowser.files[0]) {
-                const formData = new FormData();
-                formData.append('file', fileBrowser.files[0]);
-                this.upload(this.getFileType(fileBrowser.files[0]), formData);
-            }
-        }
-        if (this.imageInput) {
-            this.showPanel = false;
-            document.querySelector('.message-list').classList.remove('active-list');
-            const fileBrowser = this.imageInput.nativeElement;
-            if (fileBrowser.files && fileBrowser.files[0]) {
-                const formData = new FormData();
-                formData.append('image', fileBrowser.files[0]);
-                this.upload(0, formData);
-            }
-        }
-    }
-
-    private finishUpload() {
-        this.uploading = false;
-        this.progress = 0;
-        this.scrollBottom(true);
-    }
-
-    private scrollBottom(smooth: boolean) {
-        const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-        if (smooth) {
-            window.scroll({top: h, behavior: 'smooth'});
-        } else {
-            window.scroll(0, h);
-        }
-    }
-
     public send(): void {
         if (this.content.trim().length === 0) {
             return;
@@ -186,7 +147,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.local = true;
         this.localMessages.push(tempMessage);
         setTimeout(() => {
-            this.scrollBottom(true);
+            this.uploadService.scrollBottom(true);
         }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
         this.apiService.SendMessage(this.conversation.id, this.content)
@@ -215,10 +176,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.belowWindowPercent <= 0) {
-                this.scrollBottom(false);
+                this.uploadService.scrollBottom(false);
             } else {
                 window.scroll(0, document.documentElement.scrollTop - 105);
             }
+        }
+    }
+
+    public uploadInput(): void {
+        this.showPanel = false;
+        document.querySelector('.message-list').classList.remove('active-list');
+        let files;
+        if (this.fileInput.nativeElement.files.length > 0) {
+            files = this.fileInput.nativeElement.files[0];
+        }
+        if (this.imageInput.nativeElement.files.length > 0) {
+            files = this.imageInput.nativeElement.files[0];
+        }
+        if (files) {
+            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey);
         }
     }
 
@@ -229,8 +205,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.preventDefault(event);
                 const blob = items[i].getAsFile();
                 if (blob != null) {
-                    const formData = new FormData();
-                    formData.append('image', blob);
                     const urlString = URL.createObjectURL(blob);
                     Swal({
                         title: 'Are you sure to post this image?',
@@ -238,7 +212,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.upload(0, formData);
+                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -247,71 +221,26 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    private upload(type: number, file: FormData): void {
-        this.uploading = true;
-        this.apiService.UploadFile(file).subscribe(response => {
-            if (Number(response)) {
-                this.progress = <number>response;
-            } else if (response != null) {
-                let encedMessages;
-                switch (type) {
-                    case 0:
-                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
-                        break;
-                    case 1:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
-                        break;
-                    case 2:
-                        encedMessages = AES.encrypt(`[file]${(<UploadFile>response).path}`, this.conversation.aesKey).toString();
-                        break;
-                    default:
-                        break;
-                }
-                this.apiService.SendMessage(this.conversation.id, encedMessages)
-                    .subscribe(() => {
-                        this.finishUpload();
-                    });
-            }
-        });
-    }
-
     public drop(event: DragEvent): void {
         this.preventDefault(event);
         if (event.dataTransfer.items != null) {
             const items = event.dataTransfer.items;
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
-                const formData = new FormData();
                 if (blob != null) {
-                    formData.append('file', blob);
-                    this.upload(this.getFileType(blob), formData);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
                 }
             }
         } else {
             const files = event.dataTransfer.files;
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
-                const formData = new FormData();
                 if (blob != null) {
-                    formData.append('file', blob);
-                    this.upload(this.getFileType(blob), formData);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
                 }
             }
         }
         this.removeDragData(event);
-    }
-
-    private getFileType(file: Blob): number {
-        if (file == null) {
-            return -1;
-        }
-        if (file.type.match('^image')) {
-            return 0;
-        } else if (file.type.match('^video')) {
-            return 1;
-        } else {
-            return 2;
-        }
     }
 
     public preventDefault(event: DragEvent | ClipboardEvent): void {
