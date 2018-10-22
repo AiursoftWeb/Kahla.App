@@ -21,7 +21,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public conversation: Conversation;
     public content: string;
     public localMessages: Message[];
-    private messageAmount = 15;
+    public messageAmount = 15;
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -117,7 +117,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.scrollBottom(true);
-                    }, 0);
+                    }, 10);
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {

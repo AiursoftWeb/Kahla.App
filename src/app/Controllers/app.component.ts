@@ -126,6 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 if (AppComponent.CurrentTalking && AppComponent.CurrentTalking.conversation.id === evt.conversationId) {
                     // AppComponent.CurrentApp.notify.ShowNewMessage(evt, AppComponent.me.id);
                     AppComponent.CurrentTalking.getMessages(true, AppComponent.CurrentTalking.conversation.id);
+                    AppComponent.CurrentTalking.messageAmount++;
                 } else if (AppComponent.CurrentConversation) {
                     AppComponent.CurrentConversation.ngOnInit();
                     AppComponent.CurrentApp.notify.ShowNewMessage(evt, AppComponent.me.id);
