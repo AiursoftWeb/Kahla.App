@@ -24,7 +24,7 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private uploadService: UploadService
+    public uploadService: UploadService
   ) { }
 
   public ngOnInit(): void {

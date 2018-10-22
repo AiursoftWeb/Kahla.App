@@ -40,7 +40,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,
-        private uploadService: UploadService
+        public uploadService: UploadService
     ) {
         AppComponent.CurrentTalking = this;
     }
