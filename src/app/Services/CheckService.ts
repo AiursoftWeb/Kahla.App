@@ -11,7 +11,6 @@ export class CheckService {
     public checking = false;
     public version = versions.version;
     public revision = versions.revision;
-    public branch = versions.branch;
     public buildTime = versions.buildTime;
 
     constructor(

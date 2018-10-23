@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CheckService } from '../Services/CheckService';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -10,6 +11,7 @@ import { CheckService } from '../Services/CheckService';
 })
 
 export class AboutComponent {
+    public sourceCodeURL = Values.sourceCodeURL;
     constructor(
         public checkService: CheckService
     ) { }

@@ -5,8 +5,9 @@
 </div>
 
 <div class="version">
-    Kahla {{checkService.version}} - {{checkService.branch}} build
-    <p style="font-size:15px;">Last git commit: <a href="https://github.com/AiursoftWeb/Kahla.App/commit/{{checkService.revision}}" target="_blank" rel="noopener noreferrer"><kbd>{{checkService.revision}}</kbd></a> Build Date: <kbd>{{checkService.buildTime}}</kbd></p>
+    <h4>Kahla {{checkService.version}}</h4>
+    <p>Last git commit: <a href="{{sourceCodeURL}}{{checkService.revision}}" target="_blank" rel="noopener noreferrer"><kbd>{{checkService.revision.substring(0, 7)}}</kbd></a></p>
+    <p>Build Date: <kbd>{{checkService.buildTime}}</kbd></p>
 </div>
 
 <div class="menu-holder"></div>
