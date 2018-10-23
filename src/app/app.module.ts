@@ -31,6 +31,7 @@ import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
 import { environment } from '../environments/environment';
+import { UploadService } from './Services/UploadService';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { environment } from '../environments/environment';
         Notify,
         ParamService,
         CacheService,
+        UploadService,
         CheckService
     ],
     bootstrap: [AppComponent]

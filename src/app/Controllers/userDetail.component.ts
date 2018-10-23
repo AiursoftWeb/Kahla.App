@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../Services/ApiService';
+import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AppComponent } from './app.component';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
-import { UploadFile } from '../Models/UploadFile';
 import { Values } from '../values';
 @Component({
   templateUrl: '../Views/userDetail.html',
@@ -19,13 +19,12 @@ import { Values } from '../values';
 
 export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
-  public progress = 0;
-  public uploading = false;
   public loadingImgURL = Values.loadingImgURL;
   @ViewChild('imageInput') public imageInput;
   constructor(
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    public uploadService: UploadService
   ) { }
 
   public ngOnInit(): void {
@@ -43,38 +42,9 @@ export class UserDetailComponent implements OnInit {
     if (this.imageInput) {
       const fileBrowser = this.imageInput.nativeElement;
       if (fileBrowser.files && fileBrowser.files[0]) {
-        if (this.validImageType(fileBrowser.files[0])) {
-          const formData = new FormData();
-          formData.append('image', fileBrowser.files[0]);
-          this.uploading = true;
-          const uploadButton = document.querySelector('#upload');
-          uploadButton.textContent = 'Uploading';
-          this.apiService.UploadFile(formData).subscribe(response => {
-            if (Number(response)) {
-              this.progress = <number>response;
-            } else if (response != null) {
-              this.progress = 0;
-              this.user.headImgFileKey = (<UploadFile>response).fileKey;
-              this.user.avatarURL = (<UploadFile>response).path;
-              this.uploading = false;
-              uploadButton.textContent = 'Upload new avatar';
-            }
-          });
-        } else {
-          Swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
-        }
+        this.uploadService.uploadAvatar(this.user, fileBrowser.files[0]);
       }
     }
-  }
-
-  private validImageType(file: File): boolean {
-    const validImageTypes = ['png', 'jpg', 'bmp'];
-    for (const validType of validImageTypes) {
-      if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public save() {
