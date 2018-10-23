@@ -19,6 +19,12 @@
     margin-top: 10px;
 }
 
+.version p {
+    font-size: 15px;
+    display: inline-block;
+    margin: 0 2%;
+}
+
 .foot-text {
     position: fixed;
     width: 100%;
@@ -38,6 +44,7 @@ kbd {
     color: #fff;
     background-color: #212529;
     border-radius: .2rem;
+    vertical-align: middle;
 }
 
 a {
