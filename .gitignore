@@ -54,3 +54,4 @@ yarn.lock
 # generated file
 
 /src/environments/versions.ts
+/src/environments/environment.prod.ts

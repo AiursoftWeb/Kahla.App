@@ -30,7 +30,7 @@
             </p>
         </div>
     </li>
-    <button *ngIf="belowWindowPercent > 0.2 || (belowWindowPercent > 0.2 && newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="scrollBottom(true)">
+    <button *ngIf="belowWindowPercent > 0.2 || (belowWindowPercent > 0.2 && newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="newMessages" class="reddot"></div>
     </button>

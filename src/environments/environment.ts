@@ -1,6 +1,4 @@
-import { Values } from '../app/values';
-
 export const environment = {
   production: false,
-  server: Values.serverAddress + '/debugapi'
+  server: 'https://dev.kahla.server.aiursoft.com/api'
 };
