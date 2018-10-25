@@ -101,6 +101,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
+                if (messages.length < 15) {
+                    this.noMoreMessages = true;
+                }
                 if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
                     if (!getDown && messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;

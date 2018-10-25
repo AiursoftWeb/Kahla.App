@@ -8,13 +8,15 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
-    styleUrls: ['../Styles/add-friend.css']
+    styleUrls: ['../Styles/add-friend.css',
+                '../Styles/button.css']
 
 })
 export class AddFriendComponent implements OnInit {
     public users: Observable<KahlaUser[]> = new Observable<KahlaUser[]>();
     public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new Subject<string>();
+    public searching = false;
 
     constructor(
         private apiService: ApiService,
@@ -25,12 +27,26 @@ export class AddFriendComponent implements OnInit {
         this.users = this.searchTerms.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            filter(term => term.length >= 3),
-            switchMap(term => this.apiService.SearchFriends(term)),
+            filter(term => term.trim().length >= 3),
+            switchMap(term => this.apiService.SearchFriends(term.trim())),
+            map(t => {
+                this.searching = false;
+                t.items.forEach(item => {
+                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
+                });
+                return t.items;
+            })
+        );
+    }
+
+    public searchByName(name: string): void {
+        this.searching = true;
+        this.users = this.apiService.SearchFriends(name.trim()).pipe(
             map(t => {
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });
+                this.searching = false;
                 return t.items;
             })
         );
