@@ -4,6 +4,11 @@
 </div>
 <div class="search-holder"></div>
 
+<div class="buttons" *ngIf="friendSearch.value.trim().length < 3 && friendSearch.value.trim().length > 0">
+    <button *ngIf="!searching" class="button primary" (click)="searchByName(friendSearch.value)">Search</button>
+    <button *ngIf="searching" class="button primary" disabled>Searching</button>
+</div>
+
 <div class="result" *ngFor="let user of users | async" (click)="detail(user.id)">
     <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">
