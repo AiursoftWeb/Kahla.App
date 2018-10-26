@@ -24,6 +24,7 @@ import { UserDetailComponent } from './Controllers/userDetail.component';
 import { CreateGroupComponent } from './Controllers/create-group.component';
 import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
+import { ChangePasswordComponent } from './Controllers/changePassword.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -60,7 +61,8 @@ import { UploadService } from './Services/UploadService';
         UserDetailComponent,
         CreateGroupComponent,
         JoinGroupComponent,
-        GroupComponent
+        GroupComponent,
+        ChangePasswordComponent
     ],
     providers: [
         ApiService,

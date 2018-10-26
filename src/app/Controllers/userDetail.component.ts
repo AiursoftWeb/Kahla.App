@@ -12,7 +12,6 @@ import { Values } from '../values';
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
     '../Styles/userDetail.css',
-    '../Styles/menu.css',
     '../Styles/button.css'
   ]
 })
