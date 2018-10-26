@@ -18,7 +18,6 @@ import { catchError } from 'rxjs/operators';
 import { GroupConversation } from '../Models/GroupConversation';
 import { UploadFile } from '../Models/UploadFile';
 
-
 @Injectable()
 export class ApiService {
     public static serverAddress;
@@ -171,6 +170,14 @@ export class ApiService {
 
     public SearchGroup(groupName: string): Observable<AiurCollection<GroupConversation>> {
         return this.Get(`/SearchGroup?GroupName=${groupName}`);
+    }
+
+    public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string): Observable<AiurProtocal> {
+        return this.Post('/ChangePassword', {
+            OldPassword: oldPassword,
+            NewPassword: newPassword,
+            RepeatPassword: repeatPassword
+        });
     }
 
     private handleError(error: any): Promise<any> {
