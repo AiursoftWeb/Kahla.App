@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '
 import { catchError } from 'rxjs/operators';
 import { GroupConversation } from '../Models/GroupConversation';
 import { UploadFile } from '../Models/UploadFile';
+import { FilePath } from '../Models/FilePath';
 
 @Injectable()
 export class ApiService {
@@ -25,6 +26,11 @@ export class ApiService {
     private _headers: HttpHeaders =
         new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded'
+        });
+
+    private uploadFileHeader: HttpHeaders =
+        new HttpHeaders({
+            'Content-Type': 'multipart/form-data'
         });
 
 
@@ -58,10 +64,11 @@ export class ApiService {
         });
     }
 
-    public UploadFile(formData: FormData): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile`, formData, {
+    public UploadFile(formData: FormData, conversationID: number): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile?ConversationId=${conversationID}`, formData, {
             reportProgress: true,
-            withCredentials: true
+            withCredentials: true,
+            headers: this.uploadFileHeader
         });
 
         return this.http.request(req).pipe(
@@ -79,7 +86,11 @@ export class ApiService {
             default:
                 return null;
         }
-      }
+    }
+
+    public GetFileURL(fileKey: number): Observable<FilePath> {
+        return this.Post('/FileDownloadAddress', {FileKey: fileKey});
+    }
 
     public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {
         return this.Post('/RegisterKahla', {

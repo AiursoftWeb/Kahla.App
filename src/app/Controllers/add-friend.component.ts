@@ -30,7 +30,6 @@ export class AddFriendComponent implements OnInit {
             filter(term => term.trim().length >= 3),
             switchMap(term => this.apiService.SearchFriends(term.trim())),
             map(t => {
-                this.searching = false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });

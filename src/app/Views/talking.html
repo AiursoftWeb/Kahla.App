@@ -2,7 +2,7 @@
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
     <button *ngIf="!loadingMore && !noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of localMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
+    <li *ngFor="let message of localMessages; trackBy: trackByMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
@@ -18,7 +18,7 @@
                 <div *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}">
                     <video src="{{message.content.substring(7)}}" controls muted></video>
                 </div>
-                <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
+                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
                 <span *ngIf="message.local" i18n="@@Sending">
