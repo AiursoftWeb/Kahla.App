@@ -28,12 +28,6 @@ export class ApiService {
             'Content-Type': 'application/x-www-form-urlencoded'
         });
 
-    private uploadFileHeader: HttpHeaders =
-        new HttpHeaders({
-            'Content-Type': 'multipart/form-data'
-        });
-
-
     constructor(
         private http: HttpClient,
         private paramTool: ParamService) {
@@ -67,8 +61,7 @@ export class ApiService {
     public UploadFile(formData: FormData, conversationID: number): Observable<number | UploadFile> {
         const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadFile?ConversationId=${conversationID}`, formData, {
             reportProgress: true,
-            withCredentials: true,
-            headers: this.uploadFileHeader
+            withCredentials: true
         });
 
         return this.http.request(req).pipe(
