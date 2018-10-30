@@ -9,6 +9,10 @@
     <button *ngIf="searching" class="button primary" disabled>Searching</button>
 </div>
 
+<h3 *ngIf="noResult">
+    No result. Try another name.
+</h3>
+
 <div class="result" *ngFor="let user of users | async" (click)="detail(user.id)">
     <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">

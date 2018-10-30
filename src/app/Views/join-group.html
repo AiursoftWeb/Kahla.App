@@ -4,6 +4,11 @@
     <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value)"/>
 </div>
 <div class="search-holder"></div>
+
+<h3 *ngIf="noResult">
+    No result. Try another name.
+</h3>
+
 <div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
     <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=40&h=40" />
     <div class="sender">

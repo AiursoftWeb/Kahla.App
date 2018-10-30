@@ -18,6 +18,7 @@ export class AddFriendComponent implements OnInit {
     private searchTerms = new Subject<string>();
     public searching = false;
     private forceSearch = false;
+    public noResult = false;
 
     constructor(
         private apiService: ApiService,
@@ -39,6 +40,7 @@ export class AddFriendComponent implements OnInit {
             }),
             switchMap(term => this.apiService.SearchFriends(term.trim())),
             map(t => {
+                this.noResult = t.items.length === 0 ? true : false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });
