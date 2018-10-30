@@ -1,11 +1,11 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
-    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="search(friendSearch.value)" />
+    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="search(friendSearch.value, false)" />
 </div>
 <div class="search-holder"></div>
 
 <div class="buttons" *ngIf="friendSearch.value.trim().length < 3 && friendSearch.value.trim().length > 0">
-    <button *ngIf="!searching" class="button primary" (click)="searchByName(friendSearch.value)">Search</button>
+    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, true)">Search</button>
     <button *ngIf="searching" class="button primary" disabled>Searching</button>
 </div>
 
