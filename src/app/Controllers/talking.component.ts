@@ -34,7 +34,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
     public belowWindowPercent = 0;
     public newMessages = false;
-    public noMoreMessages = false;
+    public noMoreMessages = true;
     private oldOffsetHeight: number;
 
     constructor(
@@ -95,14 +95,26 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (!t.content.startsWith('[')) {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
+                    } else {
+                        const filekey = this.uploadService.getFileKey(t.content);
+                        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
+                            this.apiService.GetFileURL(filekey).subscribe(response => {
+                                if (response.code === 0) {
+                                    t.content = t.content.substring(0, t.content.indexOf(']') + 1) + response.downloadPath;
+                                }
+                            });
+                        }
                     }
-                    if (t.senderId !== this.myId() && !this.userNameColors.has(t.senderId)) {
+                    if (this.conversation.discriminator === 'GroupConversation' && t.senderId !== this.myId() &&
+                        !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
                     t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 if (messages.length < 15) {
                     this.noMoreMessages = true;
+                } else {
+                    this.noMoreMessages = false;
                 }
                 if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
                     if (!getDown && messages[0].id === this.localMessages[0].id) {
@@ -127,6 +139,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }, 0);
                 }
             });
+    }
+
+    public trackByMessages(_index: number, message: Message): number {
+        return message.id;
     }
 
     public LoadMore(): void {

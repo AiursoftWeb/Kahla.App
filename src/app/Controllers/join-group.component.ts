@@ -19,6 +19,7 @@ export class JoinGroupComponent implements OnInit {
     public groups: Observable<GroupConversation[]> = new Observable<GroupConversation[]>();
     public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new Subject<string>();
+    public noResult = false;
 
     constructor(
         private apiService: ApiService,
@@ -32,6 +33,7 @@ export class JoinGroupComponent implements OnInit {
             filter(term => term.length >= 3),
             switchMap(term => this.apiService.SearchGroup(term)),
             map(t => {
+                this.noResult = t.items.length === 0 ? true : false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.groupImageKey;
                 });

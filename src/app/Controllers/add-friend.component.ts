@@ -17,6 +17,8 @@ export class AddFriendComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new Subject<string>();
     public searching = false;
+    private forceSearch = false;
+    public noResult = false;
 
     constructor(
         private apiService: ApiService,
@@ -27,22 +29,18 @@ export class AddFriendComponent implements OnInit {
         this.users = this.searchTerms.pipe(
             debounceTime(300),
             distinctUntilChanged(),
-            filter(term => term.trim().length >= 3),
+            filter(term => {
+                if (this.forceSearch) {
+                    this.searching = true;
+                    this.forceSearch = false;
+                    return term.trim().length > 0;
+                } else {
+                    return term.trim().length >= 3;
+                }
+            }),
             switchMap(term => this.apiService.SearchFriends(term.trim())),
             map(t => {
-                this.searching = false;
-                t.items.forEach(item => {
-                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
-                });
-                return t.items;
-            })
-        );
-    }
-
-    public searchByName(name: string): void {
-        this.searching = true;
-        this.users = this.apiService.SearchFriends(name.trim()).pipe(
-            map(t => {
+                this.noResult = t.items.length === 0 ? true : false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });
@@ -52,8 +50,13 @@ export class AddFriendComponent implements OnInit {
         );
     }
 
-    public search(term: string): void {
-        this.searchTerms.next(term);
+    public search(term: string, force: boolean): void {
+        if (force) {
+            this.forceSearch = true;
+            this.searchTerms.next(term + ' ');
+        } else {
+            this.searchTerms.next(term);
+        }
     }
 
     public detail(id: number): void {

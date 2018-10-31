@@ -11,6 +11,7 @@
     position: relative;
     display: grid;
     grid-template-columns: 20% 40% 40%;
+    text-align: center;
 }
 
 .friendrequests .user-img {
@@ -58,6 +59,12 @@
 .friendrequests .decision {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.friendrequests h3 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    margin: auto;
 }
 
 .button {

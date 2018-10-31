@@ -39,7 +39,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.init(this, null);
+        this.apiService.SignInStatus().subscribe(signInStatus => {
+            if (signInStatus.value) {
+                this.init(this, null);
+            }
+        });
     }
 
     public init(component: ConversationsComponent, callback: () => void) {
