@@ -16,6 +16,10 @@ export class UploadService {
     ) {}
 
     public upload(file: File, conversationID: number, aesKey: string): void {
+        if (!this.validateFileSize(file)) {
+            Swal('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
+            return;
+        }
         const formData = new FormData();
         formData.append('file', file);
         this.uploading = true;
@@ -23,26 +27,41 @@ export class UploadService {
             if (Number(response)) {
                 this.progress = <number>response;
             } else if (response != null) {
-                let encedMessages;
-                switch (this.getFileType(file)) {
-                    case 0:
-                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                        break;
-                    case 1:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                        break;
-                    case 2:
-                        encedMessages = AES.encrypt(`[file]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                        break;
-                    default:
-                        break;
+                if ((<UploadFile>response).code === 0) {
+                    let encedMessages;
+                    switch (this.getFileType(file)) {
+                        case 0:
+                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                            break;
+                        case 1:
+                            encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                            break;
+                        case 2:
+                            encedMessages = AES.encrypt(`[file]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                            break;
+                        default:
+                            break;
+                    }
+                    this.apiService.SendMessage(conversationID, encedMessages)
+                        .subscribe(() => {
+                            this.finishUpload();
+                        });
+                } else {
+                    Swal('Error', 'Upload failed', 'error');
+                    this.finishUpload();
                 }
-                this.apiService.SendMessage(conversationID, encedMessages)
-                    .subscribe(() => {
-                        this.finishUpload();
-                    });
             }
         });
+    }
+
+    private validateFileSize(file: File): boolean {
+        if (file === null || file === undefined) {
+            return false;
+        }
+        if (file.size >= 0.125 && file.size <= 1000000000) {
+            return true;
+        }
+        return false;
     }
 
     private getFileType(file: Blob): number {
@@ -77,9 +96,10 @@ export class UploadService {
         if (this.validImageType(file)) {
             const formData = new FormData();
             formData.append('image', file);
-            this.uploading = true;
-            const uploadButton = document.querySelector('#upload');
-            uploadButton.textContent = 'Uploading';
+            Swal('Error', 'Not working yet. Try a few days later.', 'error');
+            // this.uploading = true;
+            // const uploadButton = document.querySelector('#upload');
+            // uploadButton.textContent = 'Uploading';
             if (user === null) {} // delete
             // this.apiService.UploadFile(formData).subscribe(response => {
             //     if (Number(response)) {
