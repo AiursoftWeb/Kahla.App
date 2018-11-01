@@ -92,19 +92,22 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(messages => {
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    if (!t.content.startsWith('[')) {
-                        // replace URLs to links
-                        t.content = Autolinker.link(t.content, { newWindow: true });
-                    }
-                    if (t.content.startsWith('[file]')) {
+                    if (t.content.startsWith('[file]') || t.content.startsWith('[video]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
                             this.apiService.GetFileURL(filekey).subscribe(response => {
                                 if (response.code === 0) {
-                                    t.content += '-' + response.downloadPath;
+                                    if (t.content.startsWith('[file]')) {
+                                        t.content += '-' + response.downloadPath;
+                                    } else {
+                                        t.content = '[video]' + response.downloadPath;
+                                    }
                                 }
                             });
                         }
+                    } else if (!t.content.startsWith('[img]')) {
+                        // replace URLs to links
+                        t.content = Autolinker.link(t.content, { newWindow: true });
                     }
                     if (this.conversation.discriminator === 'GroupConversation' && t.senderId !== this.myId() &&
                         !this.userNameColors.has(t.senderId)) {

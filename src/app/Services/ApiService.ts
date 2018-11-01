@@ -70,6 +70,18 @@ export class ApiService {
         );
     }
 
+    public UploadImage(formData: FormData): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', `${ApiService.serverAddress}/UploadImage`, formData, {
+            reportProgress: true,
+            withCredentials: true
+        });
+
+        return this.http.request(req).pipe(
+            map(event => this.getProgress(event)),
+            catchError(this.handleError)
+        );
+    }
+
     private getProgress(event: HttpEvent<any>): number | UploadFile {
         switch (event.type) {
             case HttpEventType.UploadProgress:
