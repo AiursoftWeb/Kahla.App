@@ -192,13 +192,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            if (this.belowWindowPercent <= 0) {
-                document.querySelector('.message-list').classList.add('active-list');
-            }
+            document.querySelector('.message-list').classList.add('active-list');
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
-            if (this.belowWindowPercent <= 0) {
+            if (this.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
                 window.scroll(0, document.documentElement.scrollTop - 105);
