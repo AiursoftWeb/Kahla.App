@@ -282,3 +282,18 @@ progress {
     bottom: 80px;
     right: 20px;
 }
+
+.chat-text a, p a {
+    text-decoration: none;
+    color: #000;
+}
+
+a h5 {
+    margin: 0;
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.right .chat-content span {
+    color: #fff;
+}

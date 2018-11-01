@@ -37,7 +37,7 @@ export class UploadService {
                             encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
                             break;
                         case 2:
-                            encedMessages = AES.encrypt(`[file]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                            encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
                             break;
                         default:
                             break;
@@ -134,11 +134,42 @@ export class UploadService {
         if (message.startsWith('[img]')) {
             return Number(message.substring(5));
         } else if (message.startsWith('[file]')) {
-            return Number(message.substring(6));
+            return Number(message.substring(6, message.indexOf('-')));
         } else if (message.startsWith('[video]')) {
             return Number(message.substring(7));
         } else {
             return -1;
         }
+    }
+
+    public getFileURL(event: MouseEvent, message: string): void {
+        const filekey = this.getFileKey(message);
+        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
+            this.apiService.GetFileURL(filekey).subscribe(response => {
+                if (response.code === 0) {
+                    const anchorElement = <HTMLAnchorElement>(<HTMLElement>event.target).parentElement;
+                    anchorElement.href = response.downloadPath;
+                }
+            });
+        }
+    }
+
+    private formateFileMessage(response: UploadFile): string {
+        let message = '[file]';
+        const units = ['kB', 'MB', 'GB'];
+        const thresh = 1000;
+        message += response.fileKey + '-';
+        message += response.savedFileName.replace(/-/g, '') + '-';
+        if (response.fileSize < thresh) {
+            message += response.fileSize + ' B';
+        } else {
+            let index = -1;
+            do {
+                response.fileSize /= thresh;
+                index++;
+            } while (response.fileSize >= thresh && index < units.length - 1);
+            message += response.fileSize.toFixed(1) + ' ' + units[index];
+        }
+        return message;
     }
 }

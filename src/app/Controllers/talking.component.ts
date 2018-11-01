@@ -95,12 +95,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (!t.content.startsWith('[')) {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
-                    } else {
+                    }
+                    if (t.content.startsWith('[file]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
                             this.apiService.GetFileURL(filekey).subscribe(response => {
                                 if (response.code === 0) {
-                                    t.content = t.content.substring(0, t.content.indexOf(']') + 1) + response.downloadPath;
+                                    t.content += '-' + response.downloadPath;
                                 }
                             });
                         }
