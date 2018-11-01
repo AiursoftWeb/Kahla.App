@@ -23,35 +23,46 @@ export class UploadService {
         const formData = new FormData();
         formData.append('file', file);
         this.uploading = true;
-        this.apiService.UploadFile(formData, conversationID).subscribe(response => {
-            if (Number(response)) {
-                this.progress = <number>response;
-            } else if (response != null) {
-                if ((<UploadFile>response).code === 0) {
-                    let encedMessages;
-                    switch (this.getFileType(file)) {
-                        case 0:
-                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                            break;
-                        case 1:
-                            encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                            break;
-                        case 2:
-                            encedMessages = AES.encrypt(`[file]${(<UploadFile>response).fileKey}`, aesKey).toString();
-                            break;
-                        default:
-                            break;
-                    }
-                    this.apiService.SendMessage(conversationID, encedMessages)
-                        .subscribe(() => {
-                            this.finishUpload();
-                        });
-                } else {
-                    Swal('Error', 'Upload failed', 'error');
-                    this.finishUpload();
+        const fileType = this.getFileType(file);
+        if (fileType === 0) {
+            this.apiService.UploadImage(formData).subscribe(response => {
+                this.encryptThenSend(response, fileType, conversationID, aesKey);
+            });
+        } else {
+            this.apiService.UploadFile(formData, conversationID).subscribe(response => {
+                this.encryptThenSend(response, fileType, conversationID, aesKey);
+            });
+        }
+    }
+
+    private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string): void {
+        if (Number(response)) {
+            this.progress = <number>response;
+        } else if (response != null) {
+            if ((<UploadFile>response).code === 0) {
+                let encedMessages;
+                switch (fileType) {
+                    case 0:
+                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).downloadPath}`, aesKey).toString();
+                        break;
+                    case 1:
+                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        break;
+                    case 2:
+                        encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
+                        break;
+                    default:
+                        break;
                 }
+                this.apiService.SendMessage(conversationID, encedMessages)
+                    .subscribe(() => {
+                        this.finishUpload();
+                    });
+            } else {
+                Swal('Error', 'Upload failed', 'error');
+                this.finishUpload();
             }
-        });
+        }
     }
 
     private validateFileSize(file: File): boolean {
@@ -64,11 +75,11 @@ export class UploadService {
         return false;
     }
 
-    private getFileType(file: Blob): number {
+    private getFileType(file: File): number {
         if (file == null) {
             return -1;
         }
-        if (file.type.match('^image')) {
+        if (this.validImageType(file)) {
             return 0;
         } else if (file.type.match('^video')) {
             return 1;
@@ -134,11 +145,42 @@ export class UploadService {
         if (message.startsWith('[img]')) {
             return Number(message.substring(5));
         } else if (message.startsWith('[file]')) {
-            return Number(message.substring(6));
+            return Number(message.substring(6, message.indexOf('-')));
         } else if (message.startsWith('[video]')) {
             return Number(message.substring(7));
         } else {
             return -1;
         }
+    }
+
+    public getFileURL(event: MouseEvent, message: string): void {
+        const filekey = this.getFileKey(message);
+        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
+            this.apiService.GetFileURL(filekey).subscribe(response => {
+                if (response.code === 0) {
+                    const anchorElement = <HTMLAnchorElement>(<HTMLElement>event.target).parentElement;
+                    anchorElement.href = response.downloadPath;
+                }
+            });
+        }
+    }
+
+    private formateFileMessage(response: UploadFile): string {
+        let message = '[file]';
+        const units = ['kB', 'MB', 'GB'];
+        const thresh = 1000;
+        message += response.fileKey + '-';
+        message += response.savedFileName.replace(/-/g, '') + '-';
+        if (response.fileSize < thresh) {
+            message += response.fileSize + ' B';
+        } else {
+            let index = -1;
+            do {
+                response.fileSize /= thresh;
+                index++;
+            } while (response.fileSize >= thresh && index < units.length - 1);
+            message += response.fileSize.toFixed(1) + ' ' + units[index];
+        }
+        return message;
     }
 }
