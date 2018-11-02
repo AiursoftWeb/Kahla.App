@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { AES, enc } from 'crypto-js';
 import { Values } from '../values';
+import { FriendsApiService } from '../Services/FriendsApiService';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -17,7 +18,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     public info: ContactInfo[];
     public loadingImgURL = Values.loadingImgURL;
     constructor(
-        public apiService: ApiService,
+        public authApiService: AuthApiService,
+        private friendsApiService: FriendsApiService,
         public router: Router,
         public cache: CacheService) {
         AppComponent.CurrentConversation = this;
@@ -39,7 +41,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.apiService.SignInStatus().subscribe(signInStatus => {
+        this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value) {
                 this.init(this, null);
             }
@@ -47,7 +49,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public init(component: ConversationsComponent, callback: () => void) {
-        component.apiService.MyFriends(false)
+        component.friendsApiService.MyFriends(false)
             .pipe(map(t => t.items))
             .subscribe(info => {
                 info.forEach(e => {

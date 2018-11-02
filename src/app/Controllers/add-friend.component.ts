@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs/';
-import { ApiService } from '../Services/ApiService';
+import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
@@ -21,7 +21,7 @@ export class AddFriendComponent implements OnInit {
     public noResult = false;
 
     constructor(
-        private apiService: ApiService,
+        private friendsApiService: FriendsApiService,
         private router: Router) {
     }
 
@@ -38,7 +38,7 @@ export class AddFriendComponent implements OnInit {
                     return term.trim().length >= 3;
                 }
             }),
-            switchMap(term => this.apiService.SearchFriends(term.trim())),
+            switchMap(term => this.friendsApiService.SearchFriends(term.trim())),
             map(t => {
                 this.noResult = t.items.length === 0 ? true : false;
                 t.items.forEach(item => {

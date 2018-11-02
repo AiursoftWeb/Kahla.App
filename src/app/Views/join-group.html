@@ -1,7 +1,7 @@
 <app-header title="Join Group" i18n-title="@@JoinGroup" returnButton="true"></app-header>
 
 <div class="search-part">
-    <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value)"/>
+    <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value, false)"/>
 </div>
 <div class="search-holder"></div>
 

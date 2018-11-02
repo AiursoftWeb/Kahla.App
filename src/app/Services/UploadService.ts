@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AES } from 'crypto-js';
-import { ApiService } from './ApiService';
+import { FilesApiService } from './FilesApiService';
 import Swal from 'sweetalert2';
 import { UploadFile } from '../Models/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
+import { ConversationApiService } from './ConversationApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,8 @@ export class UploadService {
     public progress = 0;
     public uploading = false;
     constructor(
-        private apiService: ApiService
+        private filesApiService: FilesApiService,
+        private conversationApiService: ConversationApiService
     ) {}
 
     public upload(file: File, conversationID: number, aesKey: string): void {
@@ -25,11 +27,11 @@ export class UploadService {
         this.uploading = true;
         const fileType = this.getFileType(file);
         if (fileType === 0) {
-            this.apiService.UploadImage(formData).subscribe(response => {
+            this.filesApiService.UploadImage(formData).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey);
             });
         } else {
-            this.apiService.UploadFile(formData, conversationID).subscribe(response => {
+            this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey);
             });
         }
@@ -54,7 +56,7 @@ export class UploadService {
                     default:
                         break;
                 }
-                this.apiService.SendMessage(conversationID, encedMessages)
+                this.conversationApiService.SendMessage(conversationID, encedMessages)
                     .subscribe(() => {
                         this.finishUpload();
                     });
@@ -156,7 +158,7 @@ export class UploadService {
     public getFileURL(event: MouseEvent, message: string): void {
         const filekey = this.getFileKey(message);
         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-            this.apiService.GetFileURL(filekey).subscribe(response => {
+            this.filesApiService.GetFileURL(filekey).subscribe(response => {
                 if (response.code === 0) {
                     const anchorElement = <HTMLAnchorElement>(<HTMLElement>event.target).parentElement;
                     anchorElement.href = response.downloadPath;

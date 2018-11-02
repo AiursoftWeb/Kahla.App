@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -18,7 +18,7 @@ export class SignInComponent implements OnInit {
     public connecting = false;
 
     constructor(
-        private apiService: ApiService,
+        private authApiService: AuthApiService,
         private router: Router) { }
 
     public ngOnInit(): void {
@@ -30,7 +30,7 @@ export class SignInComponent implements OnInit {
             return;
         }
         this.connecting = true;
-        this.apiService.AuthByPassword(this.email, this.password)
+        this.authApiService.AuthByPassword(this.email, this.password)
             .pipe(catchError(error => {
                 this.connecting = false;
                 Swal('Network issue', 'Could not connect to Kahla server.', 'error');

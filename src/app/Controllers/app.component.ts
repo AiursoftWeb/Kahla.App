@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AiurEvent } from '../Models/AiurEvent';
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public ws: WebSocket;
     public wsconnected = false;
     constructor(
-        private apiService: ApiService,
+        private authApiService: AuthApiService,
         private router: Router,
         private notify: Notify,
         private cache: CacheService,
@@ -45,11 +45,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.checkService.checkVersion(false);
-        this.apiService.SignInStatus().subscribe(signInStatus => {
+        this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/kahla/signin']);
             } else {
-                this.apiService.Me().subscribe(p => {
+                this.authApiService.Me().subscribe(p => {
                     AppComponent.me = p.value;
                     AppComponent.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                     this.cache.AutoUpdateConversations(AppComponent.CurrentNav);
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public LoadPusher(): void {
-        this.apiService.InitPusher().subscribe(model => {
+        this.authApiService.InitPusher().subscribe(model => {
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => this.wsconnected = true;
             this.ws.onmessage = this.OnMessage;

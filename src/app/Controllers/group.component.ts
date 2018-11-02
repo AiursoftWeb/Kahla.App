@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ApiService } from '../Services/ApiService';
+import { GroupsApiService } from '../Services/GroupsApiService';
 import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
+import { ConversationApiService } from '../Services/ConversationApiService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -23,7 +24,8 @@ export class GroupComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
+        private groupsApiService: GroupsApiService,
+        private conversationApiService: ConversationApiService,
         private router: Router,
         private cache: CacheService
     ) { }
@@ -31,7 +33,7 @@ export class GroupComponent implements OnInit {
     public ngOnInit(): void {
         this.route.params
             .pipe(
-                switchMap((params: Params) => this.apiService.ConversationDetail(+params['id'])),
+                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
                 map(t => t.value)
             )
             .subscribe(conversation => {
@@ -51,7 +53,7 @@ export class GroupComponent implements OnInit {
             showCancelButton: true
         }).then((willDelete) => {
             if (willDelete.value) {
-                this.apiService.LeaveGroup(groupName)
+                this.groupsApiService.LeaveGroup(groupName)
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');

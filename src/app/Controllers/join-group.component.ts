@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { ApiService } from '../Services/ApiService';
+import { GroupsApiService } from '../Services/GroupsApiService';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs/';
 import { GroupConversation } from '../Models/GroupConversation';
@@ -21,11 +21,11 @@ export class JoinGroupComponent implements OnInit {
     private searchTerms = new BehaviorSubject<string>('');
     public noResult = false;
     public searching = false;
-    private searchNumbers = 1;
+    private searchNumbers = 20;
     public noMoreGroups = false;
 
     constructor(
-        private apiService: ApiService,
+        private groupsApiService: GroupsApiService,
         private router: Router) {
     }
 
@@ -36,7 +36,7 @@ export class JoinGroupComponent implements OnInit {
             filter(term => {
                 return term.trim().length >= 3 && !this.noMoreGroups;
             }),
-            switchMap(term => this.apiService.SearchGroup(term.trim(), this.searchNumbers)),
+            switchMap(term => this.groupsApiService.SearchGroup(term.trim(), this.searchNumbers)),
             map(t => {
                 this.noResult = t.items.length === 0 ? true : false;
                 this.noMoreGroups = t.items.length < this.searchNumbers ? true : false;
@@ -53,16 +53,16 @@ export class JoinGroupComponent implements OnInit {
         this.searching = true;
         if (!loadMore) {
             this.searchTerms.next(term.trim());
-            this.searchNumbers = 1;
+            this.searchNumbers = 20;
             this.noMoreGroups = false;
         } else {
             this.searchTerms.next(this.searchTerms.value + ' ');
-            this.searchNumbers += 1;
+            this.searchNumbers += 20;
         }
     }
 
     public joinGroup(groupName: string) {
-        this.apiService.JoinGroup(groupName).subscribe((response) => {
+        this.groupsApiService.JoinGroup(groupName).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/']);
             } else {

@@ -33,6 +33,11 @@ import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
 import { environment } from '../environments/environment';
 import { UploadService } from './Services/UploadService';
+import { AuthApiService } from './Services/AuthApiService';
+import { ConversationApiService } from './Services/ConversationApiService';
+import { FilesApiService } from './Services/FilesApiService';
+import { FriendsApiService } from './Services/FriendsApiService';
+import { GroupsApiService } from './Services/GroupsApiService';
 
 
 @NgModule({
@@ -70,7 +75,12 @@ import { UploadService } from './Services/UploadService';
         ParamService,
         CacheService,
         UploadService,
-        CheckService
+        CheckService,
+        AuthApiService,
+        ConversationApiService,
+        FilesApiService,
+        FriendsApiService,
+        GroupsApiService
     ],
     bootstrap: [AppComponent]
 })
