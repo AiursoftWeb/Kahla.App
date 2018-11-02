@@ -39,8 +39,8 @@ export class FriendsApiService {
         return this.apiService.Get(FriendsApiService.serverPath + `/MyRequests`);
     }
 
-    public SearchFriends(nickName: string): Observable<AiurCollection<KahlaUser>> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/SearchFriends/?nickname=${nickName}`);
+    public SearchFriends(nickName: string, take: number): Observable<AiurCollection<KahlaUser>> {
+        return this.apiService.Get(FriendsApiService.serverPath + `/SearchFriends/?nickname=${nickName}&take=${take}`);
     }
 
     public UserDetail(id: string): Observable<UserDetailViewModel> {

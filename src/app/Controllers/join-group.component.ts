@@ -19,10 +19,11 @@ export class JoinGroupComponent implements OnInit {
     public groups: Observable<GroupConversation[]> = new Observable<GroupConversation[]>();
     public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new BehaviorSubject<string>('');
-    public noResult = false;
     public searching = false;
-    private searchNumbers = 20;
+    private searchMode = false;
+    public resultLength = -1;
     public noMoreGroups = false;
+    private searchNumbers = 0;
 
     constructor(
         private groupsApiService: GroupsApiService,
@@ -34,11 +35,21 @@ export class JoinGroupComponent implements OnInit {
             debounceTime(300),
             distinctUntilChanged(),
             filter(term => {
-                return term.trim().length >= 3 && !this.noMoreGroups;
+                if (term.trim().length >= 3) {
+                    if (this.searchMode) {
+                        this.searchNumbers += 20;
+                    } else {
+                        this.searchNumbers = 20;
+                    }
+                    this.searching = true;
+                    return true;
+                } else {
+                    return false;
+                }
             }),
             switchMap(term => this.groupsApiService.SearchGroup(term.trim(), this.searchNumbers)),
             map(t => {
-                this.noResult = t.items.length === 0 ? true : false;
+                this.resultLength = t.items.length;
                 this.noMoreGroups = t.items.length < this.searchNumbers ? true : false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.groupImageKey;
@@ -50,14 +61,11 @@ export class JoinGroupComponent implements OnInit {
     }
 
     public search(term: string, loadMore: boolean): void {
-        this.searching = true;
+        this.searchMode = loadMore;
         if (!loadMore) {
             this.searchTerms.next(term.trim());
-            this.searchNumbers = 20;
-            this.noMoreGroups = false;
         } else {
             this.searchTerms.next(this.searchTerms.value + ' ');
-            this.searchNumbers += 20;
         }
     }
 

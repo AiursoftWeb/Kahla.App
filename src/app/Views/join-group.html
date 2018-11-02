@@ -5,7 +5,7 @@
 </div>
 <div class="search-holder"></div>
 
-<h3 *ngIf="noResult">
+<h3 *ngIf="resultLength == 0">
     No result. Try another name.
 </h3>
 
@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<div class="buttons" *ngIf="!noMoreGroups && !noResult && groupSearch.value.trim().length > 0">
+<div class="buttons" *ngIf="!noMoreGroups && resultLength > 0">
     <button *ngIf="!searching" class="button primary" (click)="search(groupSearch.value, true)">Load More</button>
-    <button *ngIf="searching" class="button primary" disabled>Loading</button>
+    <button *ngIf="searchMode && searching" class="button primary" disabled>Loading</button>
 </div>

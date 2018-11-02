@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs/';
+import { Observable, BehaviorSubject } from 'rxjs/';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
@@ -15,10 +15,12 @@ import { Values } from '../values';
 export class AddFriendComponent implements OnInit {
     public users: Observable<KahlaUser[]> = new Observable<KahlaUser[]>();
     public loadingImgURL = Values.loadingImgURL;
-    private searchTerms = new Subject<string>();
+    private searchTerms = new BehaviorSubject<string>('');
     public searching = false;
-    private forceSearch = false;
-    public noResult = false;
+    public searchMode = 0;
+    public resultLength = -1;
+    public noMoreUsers = false;
+    private searchNumbers = 0;
 
     constructor(
         private friendsApiService: FriendsApiService,
@@ -30,17 +32,36 @@ export class AddFriendComponent implements OnInit {
             debounceTime(300),
             distinctUntilChanged(),
             filter(term => {
-                if (this.forceSearch) {
-                    this.searching = true;
-                    this.forceSearch = false;
-                    return term.trim().length > 0;
-                } else {
-                    return term.trim().length >= 3;
+                switch (this.searchMode) {
+                    case 0:    // auto search
+                        if (term.trim().length >= 3) {
+                            this.searching = true;
+                            this.searchNumbers = 20;
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    case 1:    // force search
+                    case 2:    // load more
+                        if (term.trim().length > 0) {
+                            this.searching = true;
+                            if (this.searchMode === 1) {
+                                this.searchNumbers = 20;
+                            } else {
+                                this.searchNumbers += 20;
+                            }
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    default:
+                        return false;
                 }
             }),
-            switchMap(term => this.friendsApiService.SearchFriends(term.trim())),
+            switchMap(term => this.friendsApiService.SearchFriends(term.trim(), this.searchNumbers)),
             map(t => {
-                this.noResult = t.items.length === 0 ? true : false;
+                this.resultLength = t.items.length;
+                this.noMoreUsers = t.items.length < this.searchNumbers ? true : false;
                 t.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.headImgFileKey;
                 });
@@ -50,12 +71,12 @@ export class AddFriendComponent implements OnInit {
         );
     }
 
-    public search(term: string, force: boolean): void {
-        if (force) {
-            this.forceSearch = true;
-            this.searchTerms.next(term + ' ');
-        } else {
+    public search(term: string, mode: number): void {
+        this.searchMode = mode;
+        if (mode === 0) {    // auto search
             this.searchTerms.next(term.trim());
+        } else {    // force search or load more
+            this.searchTerms.next(this.searchTerms.value + ' ');
         }
     }
 
