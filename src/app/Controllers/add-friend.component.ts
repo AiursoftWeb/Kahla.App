@@ -55,7 +55,7 @@ export class AddFriendComponent implements OnInit {
             this.forceSearch = true;
             this.searchTerms.next(term + ' ');
         } else {
-            this.searchTerms.next(term);
+            this.searchTerms.next(term.trim());
         }
     }
 

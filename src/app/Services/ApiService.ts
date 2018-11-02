@@ -184,8 +184,8 @@ export class ApiService {
         return this.Post(`/LeaveGroup`, {GroupName: groupName});
     }
 
-    public SearchGroup(groupName: string): Observable<AiurCollection<GroupConversation>> {
-        return this.Get(`/SearchGroup?GroupName=${groupName}`);
+    public SearchGroup(groupName: string, take: number): Observable<AiurCollection<GroupConversation>> {
+        return this.Get(`/SearchGroup?GroupName=${groupName}&take=${take}`);
     }
 
     public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string): Observable<AiurProtocal> {

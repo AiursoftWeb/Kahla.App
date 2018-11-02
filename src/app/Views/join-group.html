@@ -10,8 +10,13 @@
 </h3>
 
 <div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
-    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=40&h=40" />
+    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">
         {{group.groupName}}
     </div>
+</div>
+
+<div class="buttons" *ngIf="!noMoreGroups && !noResult && groupSearch.value.trim().length > 0">
+    <button *ngIf="!searching" class="button primary" (click)="search(groupSearch.value, true)">Load More</button>
+    <button *ngIf="searching" class="button primary" disabled>Loading</button>
 </div>
