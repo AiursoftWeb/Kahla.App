@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { FriendsApiService } from '../Services/FriendsApiService';
 import { Router } from '@angular/router';
 import { ContactInfo } from '../Models/ContactInfo';
 import { AppComponent } from './app.component';
@@ -19,7 +19,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private apiService: ApiService,
+        private friendsApiService: FriendsApiService,
         private router: Router,
         private cache: CacheService) {
         AppComponent.CurrentFriend = this;
@@ -45,7 +45,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     }
 
     public init(callback: () => void) {
-        this.apiService.MyFriends(true)
+        this.friendsApiService.MyFriends(true)
             .subscribe(response => {
                 response.items.forEach(item => {
                     item.avatarURL = Values.fileAddress + item.displayImageKey;
@@ -57,7 +57,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                     callback();
                 }
             });
-        this.apiService.MyRequests()
+        this.friendsApiService.MyRequests()
             .subscribe(response => {
                 this.requests = response.items.filter(t => !t.completed);
                 response.items.forEach(item => {

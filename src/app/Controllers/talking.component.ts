@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ApiService } from '../Services/ApiService';
+import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
 import { Conversation } from '../Models/Conversation';
 import { AppComponent } from './app.component';
@@ -10,6 +10,7 @@ import * as Autolinker from 'autolinker';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
+import { FilesApiService } from '../Services/FilesApiService';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -39,7 +40,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
+        private conversationApiService: ConversationApiService,
+        private filesApiService: FilesApiService,
         public uploadService: UploadService
     ) {
         AppComponent.CurrentTalking = this;
@@ -57,7 +59,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.params
             .pipe(
-                switchMap((params: Params) => this.apiService.ConversationDetail(+params['id'])),
+                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
                 map(t => t.value)
             )
             .subscribe(conversation => {
@@ -85,7 +87,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public getMessages(getDown: boolean, id: number): void {
-        this.apiService.GetMessage(id, this.messageAmount)
+        this.conversationApiService.GetMessage(id, this.messageAmount)
             .pipe(
                 map(t => t.items)
             )
@@ -95,7 +97,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (t.content.startsWith('[file]') || t.content.startsWith('[video]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-                            this.apiService.GetFileURL(filekey).subscribe(response => {
+                            this.filesApiService.GetFileURL(filekey).subscribe(response => {
                                 if (response.code === 0) {
                                     if (t.content.startsWith('[file]')) {
                                         t.content += '-' + response.downloadPath;
@@ -173,7 +175,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.scrollBottom(true);
         }, 0);
         this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
-        this.apiService.SendMessage(this.conversation.id, this.content)
+        this.conversationApiService.SendMessage(this.conversation.id, this.content)
             .subscribe(() => {});
         this.content = '';
         document.getElementById('chatInput').focus();
@@ -192,13 +194,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            if (this.belowWindowPercent <= 0) {
-                document.querySelector('.message-list').classList.add('active-list');
-            }
+            document.querySelector('.message-list').classList.add('active-list');
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
-            if (this.belowWindowPercent <= 0) {
+            if (this.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
                 window.scroll(0, document.documentElement.scrollTop - 105);

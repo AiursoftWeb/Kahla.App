@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
-import { ApiService } from './ApiService';
+import { FriendsApiService } from './FriendsApiService';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Request } from '../Models/Request';
 
@@ -9,10 +9,8 @@ export class CacheService {
     public static cachedData: CacheModel = new CacheModel();
 
     constructor(
-        private apiService: ApiService) {
-
-    }
-
+        private friendsApiService: FriendsApiService
+    ) { }
 
     public GetFriendList(): ContactInfo[] {
         return CacheService.cachedData.friendList;
@@ -39,7 +37,7 @@ export class CacheService {
     }
 
     public AutoUpdateUnread(initAble: OnInit): void {
-        this.apiService.MyFriends(false).subscribe(model => {
+        this.friendsApiService.MyFriends(false).subscribe(model => {
             CacheService.cachedData.conversations = model.items;
             if (initAble) {
                 initAble.ngOnInit();
@@ -48,7 +46,7 @@ export class CacheService {
     }
 
     public AutoUpdateConversations(initAble: OnInit): void {
-        this.apiService.MyRequests().subscribe(model => {
+        this.friendsApiService.MyRequests().subscribe(model => {
             CacheService.cachedData.requests = model.items;
             if (initAble) {
                 initAble.ngOnInit();

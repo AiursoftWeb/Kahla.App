@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import Swal from 'sweetalert2';
 import { catchError } from 'rxjs/operators';
 
@@ -18,7 +18,7 @@ export class ChangePasswordComponent {
     private valid = false;
 
     constructor(
-        private apiServer: ApiService
+        private authApiServer: AuthApiService
     ) {}
 
     public checkValid(): void {
@@ -38,7 +38,7 @@ export class ChangePasswordComponent {
             Swal('Password length should between six and thirty-two');
         }
         if (this.valid) {
-            this.apiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
+            this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
             .pipe(catchError(error => {
                 Swal('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);

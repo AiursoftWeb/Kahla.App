@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AppComponent } from './app.component';
@@ -21,14 +21,14 @@ export class UserDetailComponent implements OnInit {
   public loadingImgURL = Values.loadingImgURL;
   @ViewChild('imageInput') public imageInput;
   constructor(
-    private apiService: ApiService,
+    private authApiService: AuthApiService,
     private router: Router,
     public uploadService: UploadService
   ) { }
 
   public ngOnInit(): void {
     if (!AppComponent.me) {
-      this.apiService.Me().subscribe(p => {
+      this.authApiService.Me().subscribe(p => {
         this.user = p.value;
         this.user.avatarURL = Values.fileAddress + this.user.headImgFileKey;
       });
@@ -48,7 +48,7 @@ export class UserDetailComponent implements OnInit {
 
   public save() {
     document.querySelector('#save').textContent = 'Saving';
-    this.apiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
+    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
       .subscribe((t) => {
       if (t.code === 0) {
         AppComponent.me = Object.assign({}, this.user);

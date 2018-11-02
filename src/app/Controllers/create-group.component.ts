@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
-import { ApiService } from '../Services/ApiService';
+import { GroupsApiService } from '../Services/GroupsApiService';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 
@@ -18,12 +17,12 @@ export class CreateGroupComponent {
     public groupName: string;
 
     constructor(
-        private apiService: ApiService,
+        private groupsApiService: GroupsApiService,
         private router: Router) {
     }
 
     public createGroup(): void {
-        this.apiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
+        this.groupsApiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/kahla/talking', response.value]);
             } else if (response.code === -7) {

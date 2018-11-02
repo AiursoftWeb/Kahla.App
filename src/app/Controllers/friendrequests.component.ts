@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { FriendsApiService } from '../Services/FriendsApiService';
 import { Location } from '@angular/common';
 import { Request } from '../Models/Request';
 import { AppComponent } from './app.component';
@@ -18,7 +18,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private apiService: ApiService,
+        private friendsApiService: FriendsApiService,
         private location: Location,
         private cache: CacheService
     ) {
@@ -27,7 +27,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.apiService.MyRequests()
+        this.friendsApiService.MyRequests()
             .subscribe(response => {
                 response.items.forEach(item => {
                     item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
@@ -38,7 +38,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     }
 
     public accept(id: number): void {
-        this.apiService.CompleteRequest(id, true)
+        this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
                 Swal('Success', r.message, 'success');
                 this.ngOnInit();
@@ -46,7 +46,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     }
 
     public decline(id: number): void {
-        this.apiService.CompleteRequest(id, false)
+        this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
                 Swal('Success', r.message, 'success');
                 this.ngOnInit();

@@ -1,17 +1,22 @@
 <app-header title="Join Group" i18n-title="@@JoinGroup" returnButton="true"></app-header>
 
 <div class="search-part">
-    <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value)"/>
+    <input placeholder="Enter group name" type="text" #groupSearch (keyup)="search(groupSearch.value, false)"/>
 </div>
 <div class="search-holder"></div>
 
-<h3 *ngIf="noResult">
+<h3 *ngIf="resultLength == 0">
     No result. Try another name.
 </h3>
 
 <div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
-    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=40&h=40" />
+    <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">
         {{group.groupName}}
     </div>
+</div>
+
+<div class="buttons" *ngIf="!noMoreGroups && resultLength > 0">
+    <button *ngIf="!searching" class="button primary" (click)="search(groupSearch.value, true)">Load More</button>
+    <button *ngIf="searchMode && searching" class="button primary" disabled>Loading</button>
 </div>

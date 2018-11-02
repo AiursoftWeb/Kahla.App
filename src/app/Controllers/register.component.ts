@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { AuthApiService } from '../Services/AuthApiService';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -19,7 +19,7 @@ export class RegisterComponent {
     public samePassword = true;
 
     constructor(
-        private apiService: ApiService,
+        private authApiService: AuthApiService,
         private router: Router) { }
 
     public register(): void {
@@ -27,7 +27,7 @@ export class RegisterComponent {
             return;
         }
         this.connecting = true;
-        this.apiService.RegisterKahla(this.email, this.password, this.confirmPassword)
+        this.authApiService.RegisterKahla(this.email, this.password, this.confirmPassword)
             .pipe(catchError(error => {
                 this.connecting = false;
                 Swal('Network issue', 'Could not connect to Kahla server.', 'error');
@@ -35,7 +35,7 @@ export class RegisterComponent {
             }))
             .subscribe(t => {
                 if (t.code === 0) {
-                    this.apiService.AuthByPassword(this.email, this.password)
+                    this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
                                 this.router.navigate(['/kahla/conversations']);

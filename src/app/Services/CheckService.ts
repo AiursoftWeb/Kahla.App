@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './ApiService';
+import { AuthApiService } from './AuthApiService';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 
@@ -14,12 +14,12 @@ export class CheckService {
     public buildTime = versions.buildTime;
 
     constructor(
-        private apiService: ApiService
+        private authApiService: AuthApiService
     ) {}
 
     public checkVersion(checkButton: boolean): void {
         this.checking = true;
-        this.apiService.Version()
+        this.authApiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
                 const currentVersion: Array<string> = versions.version.split('.');
