@@ -41,7 +41,7 @@ button, .button {
     background-color: #4075d5
 }
 
-.button.primary:hover:enabled {
+.button.primary:hover:enabled, .inputButton:hover {
     background-color: #0D47A1;
 }
 
@@ -81,11 +81,7 @@ button, .button {
 
 .inputButton {
     width: fit-content !important;
-    margin-left: 5%;
-}
-
-.inputButton:hover {
-    background-color: #0D47A1;
+    margin: 0 auto !important;
 }
 
 .alert {
