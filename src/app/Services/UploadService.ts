@@ -156,12 +156,12 @@ export class UploadService {
     }
 
     public getFileURL(event: MouseEvent, message: string): void {
+        event.preventDefault();
         const filekey = this.getFileKey(message);
         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
             this.filesApiService.GetFileURL(filekey).subscribe(response => {
                 if (response.code === 0) {
-                    const anchorElement = <HTMLAnchorElement>(<HTMLElement>event.target).parentElement;
-                    anchorElement.href = response.downloadPath;
+                    window.location.href = response.downloadPath;
                 }
             });
         }
