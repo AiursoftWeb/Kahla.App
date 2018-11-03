@@ -94,16 +94,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(messages => {
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    if (t.content.startsWith('[file]') || t.content.startsWith('[video]')) {
+                    if (t.content.startsWith('[video]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
                             this.filesApiService.GetFileURL(filekey).subscribe(response => {
                                 if (response.code === 0) {
-                                    if (t.content.startsWith('[file]')) {
-                                        t.content += '-' + response.downloadPath;
-                                    } else {
-                                        t.content = '[video]' + response.downloadPath;
-                                    }
+                                    t.content = '[video]' + response.downloadPath;
                                 }
                             });
                         }
