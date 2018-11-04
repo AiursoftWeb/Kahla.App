@@ -202,7 +202,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public uploadInput(): void {
+    public uploadInput(image: boolean): void {
         this.showPanel = false;
         document.querySelector('.message-list').classList.remove('active-list');
         let files;
@@ -213,7 +213,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             files = this.imageInput.nativeElement.files[0];
         }
         if (files) {
-            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey);
+            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey, image);
         }
     }
 
@@ -231,7 +231,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
+                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, true);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -247,7 +247,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, false);
                 }
             }
         } else {
@@ -255,7 +255,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, false);
                 }
             }
         }

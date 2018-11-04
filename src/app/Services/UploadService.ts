@@ -17,7 +17,7 @@ export class UploadService {
         private conversationApiService: ConversationApiService
     ) {}
 
-    public upload(file: File, conversationID: number, aesKey: string): void {
+    public upload(file: File, conversationID: number, aesKey: string, image: boolean): void {
         if (!this.validateFileSize(file)) {
             Swal('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
             return;
@@ -25,14 +25,13 @@ export class UploadService {
         const formData = new FormData();
         formData.append('file', file);
         this.uploading = true;
-        const fileType = this.getFileType(file);
-        if (fileType === 0) {
+        if (image) {
             this.filesApiService.UploadImage(formData).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey);
+                this.encryptThenSend(response, 0, conversationID, aesKey);
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey);
+                this.encryptThenSend(response, this.getFileType(file), conversationID, aesKey);
             });
         }
     }
@@ -61,7 +60,7 @@ export class UploadService {
                         this.finishUpload();
                     });
             } else {
-                Swal('Error', 'Upload failed', 'error');
+                Swal('Error', (<UploadFile>response).message, 'error');
                 this.finishUpload();
             }
         }
@@ -81,9 +80,7 @@ export class UploadService {
         if (file == null) {
             return -1;
         }
-        if (this.validImageType(file)) {
-            return 0;
-        } else if (file.type.match('^video')) {
+        if (file.type.match('^video')) {
             return 1;
         } else {
             return 2;
