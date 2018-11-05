@@ -26,6 +26,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
+    @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
 
     public loadingMore = false;
@@ -202,18 +203,21 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public uploadInput(image: boolean): void {
+    public uploadInput(fileType: number): void {
         this.showPanel = false;
         document.querySelector('.message-list').classList.remove('active-list');
         let files;
         if (this.fileInput.nativeElement.files.length > 0) {
             files = this.fileInput.nativeElement.files[0];
         }
+        if (this.videoInput.nativeElement.files.length > 0) {
+            files = this.videoInput.nativeElement.files[0];
+        }
         if (this.imageInput.nativeElement.files.length > 0) {
             files = this.imageInput.nativeElement.files[0];
         }
         if (files) {
-            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey, image);
+            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey, fileType);
         }
     }
 
@@ -231,7 +235,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, true);
+                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 0);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -247,7 +251,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, false);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 2);
                 }
             }
         } else {
@@ -255,7 +259,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, false);
+                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 2);
                 }
             }
         }

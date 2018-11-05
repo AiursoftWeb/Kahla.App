@@ -15,8 +15,8 @@ export class FilesApiService {
         private http: HttpClient,
     ) {}
 
-    public UploadImage(formData: FormData): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', `${ApiService.serverAddress + FilesApiService.serverPath}/UploadImage`, formData, {
+    public UploadMedia(formData: FormData): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', `${ApiService.serverAddress + FilesApiService.serverPath}/UploadMedia`, formData, {
             reportProgress: true,
             withCredentials: true
         });
