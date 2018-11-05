@@ -54,4 +54,16 @@ export class FilesApiService {
     public GetFileURL(fileKey: number): Observable<FilePath> {
         return this.apiService.Post(FilesApiService.serverPath + '/FileDownloadAddress', {FileKey: fileKey});
     }
+
+    public UploadIcon(formData: FormData): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', `${ApiService.serverAddress + FilesApiService.serverPath}/UploadMedia`, formData, {
+            reportProgress: true,
+            withCredentials: true
+        });
+
+        return this.http.request(req).pipe(
+            map(event => this.getProgress(event)),
+            catchError(this.apiService.handleError)
+        );
+    }
 }

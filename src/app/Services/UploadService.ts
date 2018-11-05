@@ -95,22 +95,20 @@ export class UploadService {
         if (this.validImageType(file)) {
             const formData = new FormData();
             formData.append('image', file);
-            Swal('Error', 'Not working yet. Try a few days later.', 'error');
-            // this.uploading = true;
-            // const uploadButton = document.querySelector('#upload');
-            // uploadButton.textContent = 'Uploading';
-            if (user === null) {} // delete
-            // this.apiService.UploadFile(formData).subscribe(response => {
-            //     if (Number(response)) {
-            //         this.progress = <number>response;
-            //     } else if (response != null) {
-            //         this.progress = 0;
-            //         user.headImgFileKey = (<UploadFile>response).fileKey;
-            //         user.avatarURL = (<UploadFile>response).path;
-            //         this.uploading = false;
-            //         uploadButton.textContent = 'Upload new avatar';
-            //     }
-            // });
+            this.uploading = true;
+            const uploadButton = document.querySelector('#upload');
+            uploadButton.textContent = 'Uploading';
+            this.filesApiService.UploadIcon(formData).subscribe(response => {
+                if (Number(response)) {
+                    this.progress = <number>response;
+                } else if (response != null && (<UploadFile>response).code === 0) {
+                    this.progress = 0;
+                    user.headImgFileKey = (<UploadFile>response).fileKey;
+                    user.avatarURL = (<UploadFile>response).downloadPath;
+                    this.uploading = false;
+                    uploadButton.textContent = 'Upload new avatar';
+                }
+            });
         } else {
             Swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
         }
