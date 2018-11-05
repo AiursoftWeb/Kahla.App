@@ -297,3 +297,19 @@ a h5 {
 .right .chat-content span {
     color: #fff;
 }
+
+.file {
+    display: grid;
+    grid-template-columns: 40px 2fr;
+}
+
+.file div {
+    grid-row-start: 1;
+    grid-row-end: 3;
+    text-align: center;
+}
+
+.file span {
+    grid-column-start: 2;
+    text-align: right;
+}
