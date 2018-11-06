@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
-import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { catchError } from 'rxjs/operators';
+import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -19,10 +19,11 @@ export class SignInComponent implements OnInit {
 
     constructor(
         private authApiService: AuthApiService,
-        private router: Router) { }
+        private router: Router,
+        private initService: InitService) { }
 
     public ngOnInit(): void {
-        AppComponent.CurrentApp.destory();
+        this.initService.destory();
     }
 
     public signin(): void {
@@ -39,7 +40,7 @@ export class SignInComponent implements OnInit {
             .subscribe(t => {
                 if (t.code === 0) {
                     this.router.navigate(['/kahla/conversations']);
-                    AppComponent.CurrentApp.ngOnInit();
+                    this.initService.init();
                 } else if (t.code === -10) {
                     Swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
                 } else {

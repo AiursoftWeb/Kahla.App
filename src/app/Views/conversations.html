@@ -1,11 +1,11 @@
 <app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/kahla/addfriend"></app-header>
 <div id="main">
-    <div class="conversation" *ngFor="let inf of info" (click)="talk(inf.conversationId)">
+    <div class="conversation" *ngFor="let inf of cacheService.GetConversations()" (click)="talk(inf.conversationId)">
         <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100" (click)="detail(inf)"/>
-        <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="reddot">
-            {{inf.unReadAmount}}
+        <div *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100" class="reddot">
+            {{cacheService.totalUnread}}
         </div>
-        <div *ngIf="inf.unReadAmount > 99" class="reddot">
+        <div *ngIf="cacheService.totalUnread > 99" class="reddot">
             99+
         </div>
         <div class="sender">

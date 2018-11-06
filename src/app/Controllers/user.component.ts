@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
@@ -24,7 +23,7 @@ export class UserComponent implements OnInit {
         private route: ActivatedRoute,
         private friendsApiService: FriendsApiService,
         private router: Router,
-        private cache: CacheService,
+        private cacheService: CacheService,
         private location: Location
     ) { }
 
@@ -38,6 +37,7 @@ export class UserComponent implements OnInit {
                 this.info.avatarURL = Values.fileAddress + this.info.headImgFileKey;
             });
     }
+
     public delete(id: string): void {
         Swal({
             title: 'Are you sure to delete a friend?',
@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
                 this.friendsApiService.DeleteFriend(id)
                     .subscribe(response => {
                         Swal('Success', response.message, 'success');
-                        this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                        this.cacheService.autoUpdateConversation(null);
                         this.router.navigate(['/kahla/friends']);
                     });
             } else {

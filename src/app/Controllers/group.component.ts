@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
-import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
@@ -57,7 +56,7 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');
-                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                            this.cache.autoUpdateConversation(null);
                             this.router.navigate(['/kahla/friends']);
                         } else {
                             Swal('Error', response.message, 'error');

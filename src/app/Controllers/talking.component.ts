@@ -2,15 +2,12 @@
 import { ActivatedRoute, Params } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
-import { Conversation } from '../Models/Conversation';
-import { AppComponent } from './app.component';
 import { switchMap, map } from 'rxjs/operators';
-import { AES, enc } from 'crypto-js';
-import * as Autolinker from 'autolinker';
+import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
-import { FilesApiService } from '../Services/FilesApiService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -19,41 +16,26 @@ import { FilesApiService } from '../Services/FilesApiService';
                 '../Styles/reddot.css']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
-    public conversation: Conversation;
     public content: string;
-    public localMessages: Message[];
-    public messageAmount = 15;
     public showPanel = false;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
 
-    public loadingMore = false;
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
-    public userNameColors = new Map();
-    public loadingImgURL = Values.loadingImgURL;
-    public belowWindowPercent = 0;
-    public newMessages = false;
-    public noMoreMessages = true;
-    private oldOffsetHeight: number;
-
     constructor(
         private route: ActivatedRoute,
         private conversationApiService: ConversationApiService,
-        private filesApiService: FilesApiService,
-        public uploadService: UploadService
-    ) {
-        AppComponent.CurrentTalking = this;
-    }
+        public uploadService: UploadService,
+        public messaageService: MessageService
+    ) {}
 
     @HostListener('window:scroll', [])
     onScroll() {
-        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+        this.messaageService.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
             - window.innerHeight) / window.innerHeight;
-        if (this.belowWindowPercent <= 0) {
-            this.newMessages = false;
+        if (this.messaageService.belowWindowPercent <= 0) {
+            this.messaageService.newMessages = false;
         }
     }
 
@@ -64,82 +46,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                this.conversation = conversation;
-                AppComponent.CurrentHeader.title = conversation.displayName;
+                this.messaageService.conversation = conversation;
+                this.messaageService.headerTitle = conversation.displayName;
                 document.querySelector('app-header').setAttribute('title', conversation.displayName);
                 this.route.params.subscribe((params: Params) => {
-                    this.getMessages(true, params['id']);
+                    this.messaageService.getMessages(true, params['id']);
                 });
                 if (conversation.anotherUserId) {
-                    AppComponent.CurrentHeader.RouterLink = `/kahla/user/${this.conversation.anotherUserId}`;
+                    this.messaageService.routerLink = `/kahla/user/${conversation.anotherUserId}`;
                 } else {
-                    AppComponent.CurrentHeader.ButtonIcon = `users`;
-                    AppComponent.CurrentHeader.RouterLink = `/kahla/group/${this.conversation.id}`;
-                }
-            });
-    }
-
-    public myId(): string {
-        if (AppComponent.me) {
-            return AppComponent.me.id;
-        } else {
-            return null;
-        }
-    }
-
-    public getMessages(getDown: boolean, id: number): void {
-        this.conversationApiService.GetMessage(id, this.messageAmount)
-            .pipe(
-                map(t => t.items)
-            )
-            .subscribe(messages => {
-                messages.forEach(t => {
-                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    if (t.content.startsWith('[video]')) {
-                        const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-                            this.filesApiService.GetFileURL(filekey).subscribe(response => {
-                                if (response.code === 0) {
-                                    t.content = '[video]' + response.downloadPath;
-                                }
-                            });
-                        }
-                    } else if (!t.content.startsWith('[img]')) {
-                        // replace URLs to links
-                        t.content = Autolinker.link(t.content, { newWindow: true });
-                    }
-                    if (this.conversation.discriminator === 'GroupConversation' && t.senderId !== this.myId() &&
-                        !this.userNameColors.has(t.senderId)) {
-                        this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
-                    }
-                    t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
-                });
-                if (messages.length < 15) {
-                    this.noMoreMessages = true;
-                } else {
-                    this.noMoreMessages = false;
-                }
-                if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
-                    if (!getDown && messages[0].id === this.localMessages[0].id) {
-                        this.noMoreMessages = true;
-                    }
-                    if (messages[messages.length - 1].senderId !== AppComponent.me.id && messages[messages.length - 1].id !==
-                        this.localMessages[this.localMessages.length - 1].id && this.belowWindowPercent > 0) {
-                        this.newMessages = true;
-                    } else {
-                        this.newMessages = false;
-                    }
-                }
-                this.localMessages = messages;
-                if (getDown && this.belowWindowPercent <= 0.2) {
-                    setTimeout(() => {
-                        this.uploadService.scrollBottom(true);
-                    }, 10);
-                } else if (!getDown) {
-                    this.loadingMore = false;
-                    setTimeout(() => {
-                        window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
-                    }, 0);
+                    this.messaageService.buttonIcon = `users`;
+                    this.messaageService.routerLink = `/kahla/group/${conversation.id}`;
                 }
             });
     }
@@ -149,12 +66,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public LoadMore(): void {
-        if (!this.noMoreMessages) {
-            this.loadingMore = true;
-            this.oldOffsetHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
-        }
+        this.messaageService.loadMore();
     }
 
     public send(): void {
@@ -163,16 +75,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         const tempMessage = new Message();
         tempMessage.content = this.content;
-        tempMessage.sender = AppComponent.me;
-        tempMessage.sender.avatarURL = Values.fileAddress + AppComponent.me.headImgFileKey;
-        tempMessage.senderId = AppComponent.me.id;
+        tempMessage.sender = this.messaageService.me;
+        tempMessage.sender.avatarURL = Values.fileAddress + this.messaageService.me.headImgFileKey;
+        tempMessage.senderId = this.messaageService.me.id;
         tempMessage.local = true;
-        this.localMessages.push(tempMessage);
+        this.messaageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        this.content = AES.encrypt(this.content, this.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.conversation.id, this.content)
+        this.content = AES.encrypt(this.content, this.messaageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messaageService.conversation.id, this.content)
             .subscribe(() => {});
         this.content = '';
         document.getElementById('chatInput').focus();
@@ -182,7 +94,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.showPanel) {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
-            if (this.belowWindowPercent > 0) {
+            if (this.messaageService.belowWindowPercent > 0) {
                 window.scroll(0, document.documentElement.scrollTop - 105);
             }
         }
@@ -195,7 +107,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
-            if (this.belowWindowPercent <= 0.2) {
+            if (this.messaageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
                 window.scroll(0, document.documentElement.scrollTop - 105);
@@ -217,7 +129,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             files = this.imageInput.nativeElement.files[0];
         }
         if (files) {
-            this.uploadService.upload(files, this.conversation.id, this.conversation.aesKey, fileType);
+            this.uploadService.upload(files, this.messaageService.conversation.id, this.messaageService.conversation.aesKey, fileType);
         }
     }
 
@@ -235,7 +147,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 0);
+                            this.uploadService.upload(blob, this.messaageService.conversation.id,
+                                this.messaageService.conversation.aesKey, 0);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -251,7 +164,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 2);
+                    this.uploadService.upload(blob, this.messaageService.conversation.id, this.messaageService.conversation.aesKey, 2);
                 }
             }
         } else {
@@ -259,7 +172,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
                 if (blob != null) {
-                    this.uploadService.upload(blob, this.conversation.id, this.conversation.aesKey, 2);
+                    this.uploadService.upload(blob, this.messaageService.conversation.id, this.messaageService.conversation.aesKey, 2);
                 }
             }
         }
@@ -280,7 +193,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        AppComponent.CurrentTalking = null;
         window.onscroll = null;
+        this.content = null;
+        this.showPanel = null;
     }
 }

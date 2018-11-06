@@ -1,5 +1,5 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
-<div *ngFor="let request of requests" class="friendrequests">
+<div *ngFor="let request of cacheService.GetFriendRequests()" class="friendrequests">
     <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{request.creator.nickName}}
@@ -21,6 +21,6 @@
 
     </div>
 </div>
-<div *ngIf="requests.length == 0" class="friendrequests">
+<div *ngIf="cacheService.GetFriendRequests() && cacheService.GetFriendRequests().length == 0" class="friendrequests">
     <h3>No requests for now.</h3>
 </div>

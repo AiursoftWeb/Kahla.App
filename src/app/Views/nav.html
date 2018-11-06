@@ -4,10 +4,10 @@
     <a class="nav-item" routerLink="/kahla/conversations" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-comment-o"></i>
-            <div *ngIf="totalUnread > 0 && totalUnread < 100" class="reddot">
-                {{totalUnread}}
+            <div *ngIf="cacheService.getTotalUnread() > 0 && cacheService.getTotalUnread() < 100" class="reddot">
+                {{cacheService.getTotalUnread()}}
             </div>
-            <div *ngIf="totalUnread > 99" class="reddot">
+            <div *ngIf="cacheService.getTotalUnread() > 99" class="reddot">
                 99+
             </div>
         </div>
@@ -18,10 +18,10 @@
     <a class="nav-item" routerLink="/kahla/friends" routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-address-book-o"></i>
-            <div *ngIf="totalRequests > 0 && totalRequests < 100" class="reddot">
-                {{totalRequests}}
+            <div *ngIf="cacheService.getTotalRequests() > 0 && cacheService.getTotalRequests() < 100" class="reddot">
+                {{cacheService.getTotalRequests()}}
             </div>
-            <div *ngIf="totalRequests > 99" class="reddot">
+            <div *ngIf="cacheService.getTotalRequests() > 99" class="reddot">
                 99+
             </div>
         </div>

@@ -38,6 +38,8 @@ import { ConversationApiService } from './Services/ConversationApiService';
 import { FilesApiService } from './Services/FilesApiService';
 import { FriendsApiService } from './Services/FriendsApiService';
 import { GroupsApiService } from './Services/GroupsApiService';
+import { MessageService } from './Services/MessageService';
+import { InitService } from './Services/InitService';
 
 
 @NgModule({
@@ -80,7 +82,9 @@ import { GroupsApiService } from './Services/GroupsApiService';
         ConversationApiService,
         FilesApiService,
         FriendsApiService,
-        GroupsApiService
+        GroupsApiService,
+        MessageService,
+        InitService
     ],
     bootstrap: [AppComponent]
 })

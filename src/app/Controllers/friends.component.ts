@@ -1,12 +1,10 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FriendsApiService } from '../Services/FriendsApiService';
 import { Router } from '@angular/router';
 import { ContactInfo } from '../Models/ContactInfo';
-import { AppComponent } from './app.component';
-import { Request } from '../Models/Request';
-import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
+import { MessageService } from '../Services/MessageService';
+import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/friends.html',
@@ -14,19 +12,12 @@ import { Values } from '../values';
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {
-    public infos: ContactInfo[];
-    public requests: Request[];
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private friendsApiService: FriendsApiService,
         private router: Router,
-        private cache: CacheService) {
-        AppComponent.CurrentFriend = this;
-        if (this.cache.GetFriendList()) {
-            this.infos = this.cache.GetFriendList();
-            this.requests = this.cache.GetFriendRequests().filter(t => !t.completed);
-        }
+        private messageService: MessageService,
+        public cacheService: CacheService) {
     }
     public ngOnInit(): void {
         PullToRefresh.destroyAll();
@@ -36,38 +27,13 @@ export class FriendsComponent implements OnInit, OnDestroy {
             passive: true,
             refreshTimeout: 200,
             onRefresh: function (done) {
-                AppComponent.CurrentFriend.init(function () {
+                this.messageService.updateFriends(function () {
                     done();
                 });
             }
         });
-        this.init(null);
+        this.messageService.updateFriends(null);
     }
-
-    public init(callback: () => void) {
-        this.friendsApiService.MyFriends(true)
-            .subscribe(response => {
-                response.items.forEach(item => {
-                    item.avatarURL = Values.fileAddress + item.displayImageKey;
-                });
-                this.infos = response.items;
-                this.cache.UpdateFriendList(response.items);
-                AppComponent.CurrentNav.ngOnInit();
-                if (callback != null) {
-                    callback();
-                }
-            });
-        this.friendsApiService.MyRequests()
-            .subscribe(response => {
-                this.requests = response.items.filter(t => !t.completed);
-                response.items.forEach(item => {
-                    item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
-                });
-                this.cache.UpdateFriendRequests(response.items);
-                AppComponent.CurrentNav.ngOnInit();
-            });
-    }
-
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
@@ -79,6 +45,5 @@ export class FriendsComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         PullToRefresh.destroyAll();
-        AppComponent.CurrentFriend = null;
     }
 }

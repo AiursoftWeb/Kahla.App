@@ -1,14 +1,14 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
-    <button *ngIf="!loadingMore && !noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
-    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of localMessages; trackBy: trackByMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
+    <button *ngIf="!messaageService.loadingMore && !messaageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
+    <button *ngIf="messaageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    <li *ngFor="let message of messaageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
         <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
         <div class="chat-text">
             <div class="chat-content">
-                <span *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
+                <span *ngIf="messaageService.conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': messaageService.userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
@@ -64,9 +64,9 @@
             </p>
         </div>
     </li>
-    <button *ngIf="belowWindowPercent > 0.2 || (belowWindowPercent > 0.2 && newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
+    <button *ngIf="messaageService.belowWindowPercent > 0.2 || (messaageService.belowWindowPercent > 0.2 && messaageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
-        <div *ngIf="newMessages" class="reddot"></div>
+        <div *ngIf="messaageService.newMessages" class="reddot"></div>
     </button>
 </ul>
 

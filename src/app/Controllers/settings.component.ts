@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
-import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Values } from '../values';
+import { InitService } from '../Services/InitService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -14,16 +15,18 @@ export class SettingsComponent {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
         private authApiService: AuthApiService,
-        private router: Router) {
+        private router: Router,
+        private initSerivce: InitService,
+        public messageService: MessageService) {
         }
 
     public GetMe(): KahlaUser {
-        return AppComponent.me;
+        return this.messageService.me;
     }
 
     public SignOut(): void {
         this.authApiService.LogOff().subscribe(() => {
-            AppComponent.CurrentApp.destory();
+            this.initSerivce.destory();
             this.router.navigate(['/kahla/signin']);
         });
     }
