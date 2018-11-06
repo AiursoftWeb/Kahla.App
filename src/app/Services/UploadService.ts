@@ -37,9 +37,19 @@ export class UploadService {
     }
 
     private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string): void {
+        let interval;
         if (Number(response)) {
-            this.progress = <number>response;
+            interval = setInterval(() => {
+                if (<number>response > this.progress) {
+                    this.progress = <number>response;
+                }
+            }, 100);
+            if (<number>response === 100) {
+                this.progress = 100;
+                clearInterval(interval);
+            }
         } else if (response != null) {
+            clearInterval(interval);
             if ((<UploadFile>response).code === 0) {
                 let encedMessages;
                 switch (fileType) {
