@@ -8,7 +8,7 @@
         </div>
         <div class="chat-text">
             <div class="chat-content">
-                <span *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
+                <span class="userName" *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
