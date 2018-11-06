@@ -17,7 +17,7 @@ export class UploadService {
         private conversationApiService: ConversationApiService
     ) {}
 
-    public upload(file: File, conversationID: number, aesKey: string, image: boolean): void {
+    public upload(file: File, conversationID: number, aesKey: string, fileType: number): void {
         if (!this.validateFileSize(file)) {
             Swal('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
             return;
@@ -25,13 +25,13 @@ export class UploadService {
         const formData = new FormData();
         formData.append('file', file);
         this.uploading = true;
-        if (image) {
-            this.filesApiService.UploadImage(formData).subscribe(response => {
-                this.encryptThenSend(response, 0, conversationID, aesKey);
+        if (fileType === 0 || fileType === 1) {
+            this.filesApiService.UploadMedia(formData).subscribe(response => {
+                this.encryptThenSend(response, fileType, conversationID, aesKey);
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, this.getFileType(file), conversationID, aesKey);
+                this.encryptThenSend(response, 2, conversationID, aesKey);
             });
         }
     }
@@ -47,7 +47,7 @@ export class UploadService {
                         encedMessages = AES.encrypt(`[img]${(<UploadFile>response).downloadPath}`, aesKey).toString();
                         break;
                     case 1:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).downloadPath}`, aesKey).toString();
                         break;
                     case 2:
                         encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
@@ -76,17 +76,6 @@ export class UploadService {
         return false;
     }
 
-    private getFileType(file: File): number {
-        if (file == null) {
-            return -1;
-        }
-        if (file.type.match('^video')) {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
-
     private finishUpload() {
         this.uploading = false;
         this.progress = 0;
@@ -106,22 +95,20 @@ export class UploadService {
         if (this.validImageType(file)) {
             const formData = new FormData();
             formData.append('image', file);
-            Swal('Error', 'Not working yet. Try a few days later.', 'error');
-            // this.uploading = true;
-            // const uploadButton = document.querySelector('#upload');
-            // uploadButton.textContent = 'Uploading';
-            if (user === null) {} // delete
-            // this.apiService.UploadFile(formData).subscribe(response => {
-            //     if (Number(response)) {
-            //         this.progress = <number>response;
-            //     } else if (response != null) {
-            //         this.progress = 0;
-            //         user.headImgFileKey = (<UploadFile>response).fileKey;
-            //         user.avatarURL = (<UploadFile>response).path;
-            //         this.uploading = false;
-            //         uploadButton.textContent = 'Upload new avatar';
-            //     }
-            // });
+            this.uploading = true;
+            const uploadButton = document.querySelector('#upload');
+            uploadButton.textContent = 'Uploading';
+            this.filesApiService.UploadIcon(formData).subscribe(response => {
+                if (Number(response)) {
+                    this.progress = <number>response;
+                } else if (response != null && (<UploadFile>response).code === 0) {
+                    this.progress = 0;
+                    user.headImgFileKey = (<UploadFile>response).fileKey;
+                    user.avatarURL = (<UploadFile>response).downloadPath;
+                    this.uploading = false;
+                    uploadButton.textContent = 'Upload new avatar';
+                }
+            });
         } else {
             Swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
         }

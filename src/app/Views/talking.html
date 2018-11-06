@@ -12,7 +12,40 @@
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
-                <a class="file" *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.split('-')[3]}}" (click)="uploadService.getFileURL($event, message.content)">
+                <a class="file" *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
+                    <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
+                        <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'png'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'svg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'bmp'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'jpeg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mp3'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'aac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'flac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'wav'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mp4'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'avi'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mkv'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'ogg'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'webm'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'m4v'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'zip'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'tar'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'7z'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'dmg'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'tar.gz'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'doc'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'pages'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'xls'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'numbers'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'ppt'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'key'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchDefault class="fa fa-file" aria-hidden="true"></i>
+                    </div>
                     <h5>{{message.content.split('-')[1]}}</h5>
                     <span>{{message.content.split('-')[2]}}</span>
                 </a>
@@ -47,15 +80,23 @@
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(true)" accept="image/*" />
-            <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/*" />
+            <label for="image"><i style="color: #FF9800;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
             </div>
             </label>
         </div>
         <div class="of4">
-            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(false)" />
+            <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)" accept="video/*" />
+            <label for="video"><i style="color: #00CC9C;" class="fa fa-file-video-o"></i>
+                <div class="text">
+                Send Video
+            </div>
+            </label>
+        </div>
+        <div class="of4">
+            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)" />
             <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
                 <div class="text">
                     Send File
