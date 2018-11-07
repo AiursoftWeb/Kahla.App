@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -26,8 +27,13 @@ export class GroupComponent implements OnInit {
         private groupsApiService: GroupsApiService,
         private conversationApiService: ConversationApiService,
         private router: Router,
-        private cache: CacheService
-    ) { }
+        private cache: CacheService,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'Group Info';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+    }
 
     public ngOnInit(): void {
         this.route.params

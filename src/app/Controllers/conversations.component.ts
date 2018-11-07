@@ -6,6 +6,7 @@ import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/conversations.html',
@@ -17,7 +18,13 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         public authApiService: AuthApiService,
         public router: Router,
         public cacheService: CacheService,
-        public messaageService: MessageService) {
+        public messaageService: MessageService,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Kahla';
+            this.headerService.returnButton = false;
+            this.headerService.button = true;
+            this.headerService.routerLink = '/kahla/addfriend';
+            this.headerService.buttonIcon = 'search';
     }
 
     public ngOnInit(): void {
@@ -33,6 +40,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                 });
             }
         });
+        this.cacheService.autoUpdateConversation(null);
     }
 
     public detail(info: ContactInfo): void {

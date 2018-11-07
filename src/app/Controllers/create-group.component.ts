@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/create-group.html',
@@ -18,7 +19,11 @@ export class CreateGroupComponent {
 
     constructor(
         private groupsApiService: GroupsApiService,
-        private router: Router) {
+        private router: Router,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Create Group';
+            this.headerService.returnButton = true;
+            this.headerService.button = false;
     }
 
     public createGroup(): void {

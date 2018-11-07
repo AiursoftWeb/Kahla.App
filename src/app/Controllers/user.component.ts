@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -24,8 +25,13 @@ export class UserComponent implements OnInit {
         private friendsApiService: FriendsApiService,
         private router: Router,
         private cacheService: CacheService,
-        private location: Location
-    ) { }
+        private location: Location,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'Profile';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+    }
 
     public ngOnInit(): void {
         this.route.params

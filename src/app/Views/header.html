@@ -1,10 +1,10 @@
 <div class="header">
-    <div class="returnButton" *ngIf="messaageService.returnButton" (click)="goBack()">
+    <div class="returnButton" *ngIf="headerService.returnButton" (click)="goBack()">
         <i class="fa fa-caret-left"></i>
     </div>
-    <div class="text">{{messaageService.headerTitle}}</div>
-    <div *ngIf="messaageService.button" class="user-button" routerLink="{{messaageService.routerLink}}">
-        <i class="fa fa-{{messaageService.buttonIcon}}"></i>
+    <div class="text">{{headerService.title}}</div>
+    <div *ngIf="headerService.button" class="user-button" routerLink="{{headerService.routerLink}}">
+        <i class="fa fa-{{headerService.buttonIcon}}"></i>
     </div>
 </div>
 

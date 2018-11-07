@@ -8,6 +8,7 @@ import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -24,8 +25,13 @@ export class UserDetailComponent implements OnInit {
     private authApiService: AuthApiService,
     private router: Router,
     public uploadService: UploadService,
-    public messageService: MessageService
-  ) { }
+    public messageService: MessageService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.title = 'Edit Profile';
+    this.headerService.returnButton = true;
+    this.headerService.button = false;
+  }
 
   public ngOnInit(): void {
     if (!this.messageService.me) {

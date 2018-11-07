@@ -40,6 +40,7 @@ import { FriendsApiService } from './Services/FriendsApiService';
 import { GroupsApiService } from './Services/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
+import { HeaderService } from './Services/HeaderService';
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import { InitService } from './Services/InitService';
         FriendsApiService,
         GroupsApiService,
         MessageService,
-        InitService
+        InitService,
+        HeaderService
     ],
     bootstrap: [AppComponent]
 })

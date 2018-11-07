@@ -5,6 +5,7 @@ import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/friends.html',
@@ -17,7 +18,13 @@ export class FriendsComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private messageService: MessageService,
-        public cacheService: CacheService) {
+        public cacheService: CacheService,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Friends';
+            this.headerService.returnButton = false;
+            this.headerService.button = true;
+            this.headerService.routerLink = '/kahla/addfriend';
+            this.headerService.buttonIcon = 'plus';
     }
     public ngOnInit(): void {
         PullToRefresh.destroyAll();

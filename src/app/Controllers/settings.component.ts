@@ -5,6 +5,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { Values } from '../values';
 import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -17,7 +18,11 @@ export class SettingsComponent {
         private authApiService: AuthApiService,
         private router: Router,
         private initSerivce: InitService,
-        public messageService: MessageService) {
+        public messageService: MessageService,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Me';
+            this.headerService.returnButton = false;
+            this.headerService.button = false;
         }
 
     public GetMe(): KahlaUser {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
-import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     selector: 'app-header',
@@ -10,7 +10,7 @@ import { MessageService } from '../Services/MessageService';
 export class HeaderComponent {
     constructor(
         private location: Location,
-        public messaageService: MessageService) {
+        public headerService: HeaderService) {
     }
 
     public goBack(): void {

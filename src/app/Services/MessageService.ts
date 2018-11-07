@@ -21,11 +21,7 @@ import { CacheService } from './CacheService';
 })
 
 export class MessageService {
-    public me: KahlaUser;
-    public eventType: EventType;
-
-    // talking
-    public conversation: Conversation;
+    public static conversation: Conversation;
     public localMessages: Message[];
     public messageAmount = 15;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
@@ -33,33 +29,32 @@ export class MessageService {
     public userNameColors = new Map();
     public noMoreMessages = true;
     public loadingMore = false;
-    public loadingImgURL = Values.loadingImgURL;
     public belowWindowPercent = 0;
     public newMessages = false;
     private oldOffsetHeight: number;
 
-    // header
-    public headerTitle = 'Kahla';
-    public routerLink = '';
-    public buttonIcon = '';
-    public button = false;
-    public returnButton = false;
+    public me: KahlaUser;
+    public eventType: EventType;
 
     constructor(
         private conversationApiService: ConversationApiService,
-        public uploadService: UploadService,
+        private uploadService: UploadService,
         private filesApiService: FilesApiService,
         private notify: Notify,
-        private cacheService: CacheService,
+        private cacheService: CacheService
     ) {}
+
+    public getConversation(): Conversation {
+        return MessageService.conversation;
+    }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         switch (ev.type) {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
-                if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id);
+                if (MessageService.conversation && MessageService.conversation.id === evt.conversationId) {
+                    this.getMessages(true, MessageService.conversation.id);
                 } else {
                     this.cacheService.autoUpdateConversation(null);
                     this.notify.ShowNewMessage(evt, this.me.id);
@@ -87,7 +82,7 @@ export class MessageService {
             )
             .subscribe(messages => {
                 messages.forEach(t => {
-                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+                    t.content = AES.decrypt(t.content, MessageService.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
@@ -101,7 +96,7 @@ export class MessageService {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { newWindow: true });
                     }
-                    if (this.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
+                    if (MessageService.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
                         !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
@@ -142,7 +137,7 @@ export class MessageService {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
+            this.getMessages(false, MessageService.conversation.id);
         }
     }
 

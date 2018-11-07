@@ -4,7 +4,6 @@ import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { Values } from '../values';
-import { CacheService } from './CacheService';
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +16,7 @@ export class InitService {
         private authApiService: AuthApiService,
         private router: Router,
         private checkService: CheckService,
-        private messageService: MessageService,
-        private cacheService: CacheService) {
+        private messageService: MessageService) {
     }
 
     public init(): void {
@@ -31,8 +29,6 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-                        this.cacheService.autoUpdateConversation(null);
-                        this.cacheService.autoUpdateRequests();
                         this.loadPusher();
                     }
                 });
@@ -69,7 +65,7 @@ export class InitService {
 
     private OnError(): void {
         setTimeout(function () {
-            this.Reconnect();
+            this.reconnect();
         }, 10000);
     }
 }
