@@ -55,6 +55,7 @@ export class MessageService {
                 const evt = ev as NewMessageEvent;
                 if (MessageService.conversation && MessageService.conversation.id === evt.conversationId) {
                     this.getMessages(true, MessageService.conversation.id);
+                    this.messageAmount++;
                 } else {
                     this.cacheService.autoUpdateConversation(null);
                     this.notify.ShowNewMessage(evt, this.me.id);

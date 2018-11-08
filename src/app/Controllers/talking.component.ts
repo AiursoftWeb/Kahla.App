@@ -43,19 +43,21 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        let conversationID = 0;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.route.params
             .pipe(
-                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                switchMap((params: Params) => {
+                    conversationID = params['id'];
+                    return this.conversationApiService.ConversationDetail(conversationID);
+                }),
                 map(t => t.value)
             )
             .subscribe(conversation => {
                 MessageService.conversation = conversation;
                 document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                this.route.params.subscribe((params: Params) => {
-                    this.messageService.getMessages(true, params['id']);
-                });
+                this.messageService.getMessages(true, conversationID);
                 this.headerService.title = conversation.displayName;
                 this.headerService.button = true;
                 if (conversation.anotherUserId) {

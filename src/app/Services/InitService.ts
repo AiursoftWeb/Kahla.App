@@ -13,9 +13,9 @@ export class InitService {
     public wsconnected = false;
 
     constructor(
+        private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
-        private checkService: CheckService,
         private messageService: MessageService) {
     }
 
@@ -40,7 +40,7 @@ export class InitService {
         this.authApiService.InitPusher().subscribe(model => {
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => this.wsconnected = true;
-            this.ws.onmessage = this.messageService.OnMessage;
+            this.ws.onmessage = evt => this.messageService.OnMessage(evt);
             this.ws.onerror = this.OnError;
             this.ws.onclose = this.OnError;
             if ('Notification' in window) {
