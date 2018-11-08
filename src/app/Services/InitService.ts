@@ -41,16 +41,12 @@ export class InitService {
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => this.wsconnected = true;
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = this.OnError;
-            this.ws.onclose = this.OnError;
+            this.ws.onerror = () => this.OnError();
+            this.ws.onclose = () => this.OnError();
             if ('Notification' in window) {
                 Notification.requestPermission();
             }
         });
-    }
-
-    public reconnect(): void {
-        this.init();
     }
 
     public destory(): void {
@@ -64,8 +60,6 @@ export class InitService {
     }
 
     private OnError(): void {
-        setTimeout(function () {
-            this.reconnect();
-        }, 10000);
+        setTimeout(() => this.init(), 10000);
     }
 }
