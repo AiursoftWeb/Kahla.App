@@ -313,4 +313,5 @@ a h5 {
 .file span {
     grid-column-start: 2;
     text-align: right;
+    word-break: break-all;
 }
