@@ -95,7 +95,7 @@ export class MessageService {
                         }
                     } else if (!t.content.startsWith('[img]')) {
                         // replace URLs to links
-                        t.content = Autolinker.link(t.content, { newWindow: true });
+                        t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
                     if (MessageService.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
                         !this.userNameColors.has(t.senderId)) {
