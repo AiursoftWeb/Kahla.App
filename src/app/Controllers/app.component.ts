@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
-                this.router.navigate(['/kahla/signin']);
+                this.router.navigate(['/signin']);
             } else {
                 this.authApiService.Me().subscribe(p => {
                     AppComponent.me = p.value;

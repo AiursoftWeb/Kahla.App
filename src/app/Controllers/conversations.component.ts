@@ -80,15 +80,15 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
-            this.router.navigate(['/kahla/group', info.conversationId]);
+            this.router.navigate(['/group', info.conversationId]);
         } else {
-            this.router.navigate(['/kahla/user', info.userId]);
+            this.router.navigate(['/user', info.userId]);
         }
     }
 
     public talk(id: number): void {
         PullToRefresh.destroyAll();
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 
     public ngOnDestroy(): void {

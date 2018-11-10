@@ -24,7 +24,7 @@ export class SettingsComponent {
     public SignOut(): void {
         this.authApiService.LogOff().subscribe(() => {
             AppComponent.CurrentApp.destory();
-            this.router.navigate(['/kahla/signin']);
+            this.router.navigate(['/signin']);
         });
     }
 }

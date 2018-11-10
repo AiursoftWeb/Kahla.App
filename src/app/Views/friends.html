@@ -1,7 +1,7 @@
-﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/kahla/addfriend"></app-header>
+﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/addfriend"></app-header>
 
 <div class="friends-header" id="main">
-    <a class="friends-button" routerLink="/kahla/addfriend">
+    <a class="friends-button" routerLink="/addfriend">
         <div class="icon">
             <i class="fa fa-user-plus"></i>
         </div>
@@ -9,7 +9,7 @@
             Search Friend
         </div>
     </a>
-    <a class="friends-button" routerLink="/kahla/friendrequests">
+    <a class="friends-button" routerLink="/friendrequests">
         <div class="icon">
             <i class="fa fa-check-square-o"></i>
             <div class="reddot" *ngIf="requests && requests.length > 0 && requests.length < 100">
@@ -23,7 +23,7 @@
             Requests
         </div>
     </a>
-    <a class="friends-button" routerLink="/kahla/join-group">
+    <a class="friends-button" routerLink="/join-group">
         <div class="icon">
             <i class="fa fa-user-plus"></i>
         </div>
@@ -31,7 +31,7 @@
             Join Group
         </div>
     </a>
-    <a class="friends-button" routerLink="/kahla/create-group">
+    <a class="friends-button" routerLink="/create-group">
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>

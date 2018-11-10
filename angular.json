@@ -54,8 +54,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "kahla:build",
-            "port": 8001
+            "browserTarget": "kahla:build"
           },
           "configurations": {
             "production": {

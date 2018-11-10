@@ -24,7 +24,7 @@ export class CreateGroupComponent {
     public createGroup(): void {
         this.groupsApiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
-                this.router.navigate(['/kahla/talking', response.value]);
+                this.router.navigate(['/talking', response.value]);
             } else if (response.code === -7) {
               Swal('Can not create group', response.message, 'error');
              } else if (response.code === -10) {
