@@ -38,7 +38,7 @@ export class RegisterComponent {
                     this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                this.router.navigate(['/kahla/conversations']);
+                                this.router.navigate(['/conversations']);
                                 AppComponent.CurrentApp.ngOnInit();
                             } else {
                                 Swal('Sign in failed', 'An error occured while signing in.', 'error');

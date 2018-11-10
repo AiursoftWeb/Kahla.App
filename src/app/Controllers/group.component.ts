@@ -58,7 +58,7 @@ export class GroupComponent implements OnInit {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');
                             this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                            this.router.navigate(['/kahla/friends']);
+                            this.router.navigate(['/friends']);
                         } else {
                             Swal('Error', response.message, 'error');
                         }
@@ -68,7 +68,7 @@ export class GroupComponent implements OnInit {
     }
 
     public talk(id: number): void {
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 
     public user(id: string): void {

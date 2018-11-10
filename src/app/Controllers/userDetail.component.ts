@@ -52,7 +52,7 @@ export class UserDetailComponent implements OnInit {
       .subscribe((t) => {
       if (t.code === 0) {
         AppComponent.me = Object.assign({}, this.user);
-        this.router.navigate(['/kahla/settings']);
+        this.router.navigate(['/settings']);
       } else if (t.code === -10) {
         Swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
       } else {

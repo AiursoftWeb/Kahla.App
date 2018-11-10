@@ -38,7 +38,7 @@ export class SignInComponent implements OnInit {
             }))
             .subscribe(t => {
                 if (t.code === 0) {
-                    this.router.navigate(['/kahla/conversations']);
+                    this.router.navigate(['/conversations']);
                     AppComponent.CurrentApp.ngOnInit();
                 } else if (t.code === -10) {
                     Swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');

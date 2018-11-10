@@ -71,10 +71,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.getMessages(true, params['id']);
                 });
                 if (conversation.anotherUserId) {
-                    AppComponent.CurrentHeader.RouterLink = `/kahla/user/${this.conversation.anotherUserId}`;
+                    AppComponent.CurrentHeader.RouterLink = `/user/${this.conversation.anotherUserId}`;
                 } else {
                     AppComponent.CurrentHeader.ButtonIcon = `users`;
-                    AppComponent.CurrentHeader.RouterLink = `/kahla/group/${this.conversation.id}`;
+                    AppComponent.CurrentHeader.RouterLink = `/group/${this.conversation.id}`;
                 }
             });
     }
