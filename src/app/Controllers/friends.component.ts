@@ -23,7 +23,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.title = 'Friends';
             this.headerService.returnButton = false;
             this.headerService.button = true;
-            this.headerService.routerLink = '/kahla/addfriend';
+            this.headerService.routerLink = '/addfriend';
             this.headerService.buttonIcon = 'plus';
     }
     public ngOnInit(): void {
@@ -44,9 +44,9 @@ export class FriendsComponent implements OnInit, OnDestroy {
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
-            this.router.navigate(['/kahla/group', info.conversationId]);
+            this.router.navigate(['/group', info.conversationId]);
         } else {
-            this.router.navigate(['/kahla/user', info.userId]);
+            this.router.navigate(['/user', info.userId]);
         }
     }
 

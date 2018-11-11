@@ -23,7 +23,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.headerService.title = 'Kahla';
             this.headerService.returnButton = false;
             this.headerService.button = true;
-            this.headerService.routerLink = '/kahla/addfriend';
+            this.headerService.routerLink = '/addfriend';
             this.headerService.buttonIcon = 'search';
     }
 
@@ -40,20 +40,22 @@ export class ConversationsComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.cacheService.autoUpdateConversation(null);
+        if (this.messaageService.me) {
+            this.cacheService.autoUpdateConversation(null);
+        }
     }
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
-            this.router.navigate(['/kahla/group', info.conversationId]);
+            this.router.navigate(['/group', info.conversationId]);
         } else {
-            this.router.navigate(['/kahla/user', info.userId]);
+            this.router.navigate(['/user', info.userId]);
         }
     }
 
     public talk(id: number): void {
         PullToRefresh.destroyAll();
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 
     public ngOnDestroy(): void {

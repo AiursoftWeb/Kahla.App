@@ -62,10 +62,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.headerService.button = true;
                 if (conversation.anotherUserId) {
                     this.headerService.buttonIcon = 'user';
-                    this.headerService.routerLink = `/kahla/user/${conversation.anotherUserId}`;
+                    this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
                 } else {
                     this.headerService.buttonIcon = `users`;
-                    this.headerService.routerLink = `/kahla/group/${conversation.id}`;
+                    this.headerService.routerLink = `/group/${conversation.id}`;
                 }
             });
     }

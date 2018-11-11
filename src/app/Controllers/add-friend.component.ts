@@ -86,6 +86,6 @@ export class AddFriendComponent implements OnInit {
     }
 
     public detail(id: number): void {
-        this.router.navigate(['/kahla/user', id]);
+        this.router.navigate(['/user', id]);
     }
 }

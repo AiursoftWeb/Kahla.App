@@ -32,7 +32,7 @@ export class SettingsComponent {
     public SignOut(): void {
         this.authApiService.LogOff().subscribe(() => {
             this.initSerivce.destory();
-            this.router.navigate(['/kahla/signin']);
+            this.router.navigate(['/signin']);
         });
     }
 }

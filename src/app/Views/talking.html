@@ -3,7 +3,7 @@
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
-        <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
+        <div class="chat-avatar" routerLink="/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
         <div class="chat-text">

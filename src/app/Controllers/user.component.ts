@@ -55,7 +55,7 @@ export class UserComponent implements OnInit {
                     .subscribe(response => {
                         Swal('Success', response.message, 'success');
                         this.cacheService.autoUpdateConversation(null);
-                        this.router.navigate(['/kahla/friends']);
+                        this.router.navigate(['/friends']);
                     });
             } else {
             }
@@ -75,6 +75,6 @@ export class UserComponent implements OnInit {
     }
 
     public talk(id: number): void {
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 }
