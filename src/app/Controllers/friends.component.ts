@@ -33,7 +33,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             mainElement: '#main',
             passive: true,
             refreshTimeout: 200,
-            onRefresh: function (done) {
+            onRefresh: done => {
                 this.messageService.updateFriends(function () {
                     done();
                 });

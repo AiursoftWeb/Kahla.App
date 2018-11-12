@@ -34,7 +34,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             mainElement: '#main',
             // passive: true,
             refreshTimeout: 200,
-            onRefresh: function (done) {
+            onRefresh: done => {
                 this.cacheService.autoUpdateConversation(function () {
                     done();
                 });
