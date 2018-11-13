@@ -13,7 +13,7 @@
     <div class="grid">
       <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=100&h=100">
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
-      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept=".png, .jpg, .bmp, .jpeg" />
+      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
     </div>
   </div>
   <div class="buttons">
