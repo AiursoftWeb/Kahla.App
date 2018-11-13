@@ -126,7 +126,7 @@ export class MessageService {
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
-                    }, 10);
+                    }, 0);
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {

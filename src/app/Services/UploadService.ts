@@ -105,11 +105,40 @@ export class UploadService {
     }
 
     public scrollBottom(smooth: boolean) {
-        const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-        if (smooth) {
-            window.scroll({top: h, behavior: 'smooth'});
-        } else {
-            window.scroll(0, h);
+        const images: NodeListOf<HTMLImageElement> = document.querySelectorAll('.chat-content img');
+        const videos = document.querySelectorAll('video');
+        let loaded = images.length + videos.length;
+        if (loaded === 0) {
+            this.scrollHelper(0, smooth);
+            return;
+        }
+        for (let i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                loaded--;
+            } else {
+                images[i].addEventListener('load', () => {
+                    loaded--;
+                    this.scrollHelper(loaded, smooth);
+                });
+            }
+        }
+        for (let j = 0; j < videos.length; j++) {
+            videos[j].addEventListener('loadeddata', () => {
+                loaded--;
+                this.scrollHelper(loaded, smooth);
+            });
+        }
+        this.scrollHelper(loaded, smooth);
+    }
+
+    private scrollHelper(loaded: number, smooth: boolean): void {
+        if (loaded === 0) {
+            const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+            if (smooth) {
+                window.scroll({top: h, behavior: 'smooth'});
+            } else {
+                window.scroll(0, h);
+            }
         }
     }
 
