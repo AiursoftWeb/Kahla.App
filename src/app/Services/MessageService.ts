@@ -9,7 +9,6 @@ import { ConversationApiService } from './ConversationApiService';
 import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
 import * as Autolinker from 'autolinker';
-import { FilesApiService } from './FilesApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Values } from '../values';
 import { AES, enc } from 'crypto-js';
@@ -39,7 +38,6 @@ export class MessageService {
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
-        private filesApiService: FilesApiService,
         private notify: Notify,
         private cacheService: CacheService
     ) {}
@@ -87,14 +85,16 @@ export class MessageService {
             .subscribe(messages => {
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, MessageService.conversation.aesKey).toString(enc.Utf8);
-                    if (t.content.startsWith('[video]')) {
+                    if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-                            this.filesApiService.GetFileURL(filekey).subscribe(response => {
-                                if (response.code === 0) {
-                                    t.content = '[video]' + response.downloadPath;
-                                }
-                            });
+                            if (t.content.startsWith('[video]')) {
+                                t.content = '[video]' + Values.ossDownloadPath + filekey;
+                            } else {
+                                t.content = '[img]' + Values.ossDownloadPath + filekey;
+                            }
+                        } else {
+                            t.content = '';
                         }
                     } else if (!t.content.startsWith('[img]')) {
                         // replace URLs to links

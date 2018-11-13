@@ -62,10 +62,10 @@ export class UploadService {
                 let encedMessages;
                 switch (fileType) {
                     case 0:
-                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).downloadPath}`, aesKey).toString();
+                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
                         break;
                     case 1:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).downloadPath}`, aesKey).toString();
+                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
                         break;
                     case 2:
                         encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
