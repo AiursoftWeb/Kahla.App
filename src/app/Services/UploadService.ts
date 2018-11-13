@@ -33,6 +33,10 @@ export class UploadService {
         const formData = new FormData();
         formData.append('file', file);
         UploadService.uploading = true;
+        if (fileType === 0 && !this.validImageType(file, false)) {
+            Swal('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
+            return;
+        }
         if (fileType === 0 || fileType === 1) {
             this.filesApiService.UploadMedia(formData).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey);
@@ -110,7 +114,7 @@ export class UploadService {
     }
 
     public uploadAvatar(user: KahlaUser, file: File): void {
-        if (this.validImageType(file)) {
+        if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
             UploadService.uploading = true;
@@ -128,16 +132,25 @@ export class UploadService {
                 }
             });
         } else {
-            Swal('Try again', 'Only support .png, .jpg or .bmp file', 'error');
+            Swal('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }
     }
 
-    private validImageType(file: File): boolean {
-        const validImageTypes = ['png', 'jpg', 'bmp'];
-        for (const validType of validImageTypes) {
-          if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
-            return true;
-          }
+    private validImageType(file: File, avatar: boolean): boolean {
+        const validAvatarTypes = ['png', 'jpg', 'bmp', 'jpeg'];
+        const validChatTypes = ['png', 'jpg', 'bmp', 'jpeg', 'gif', 'svg'];
+        if (avatar) {
+            for (const validType of validAvatarTypes) {
+                if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
+                    return true;
+                }
+            }
+        } else {
+            for (const validType of validChatTypes) {
+                if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
+                    return true;
+                }
+            }
         }
         return false;
     }

@@ -80,7 +80,7 @@
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/*" />
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept=".png, .jpg, .bmp, .jpeg, .gif, .svg" />
             <label for="image"><i style="color: #FF9800;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
