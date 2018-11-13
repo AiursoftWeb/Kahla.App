@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
-import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 import { catchError } from 'rxjs/operators';
+import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/register.html',
@@ -20,7 +20,8 @@ export class RegisterComponent {
 
     constructor(
         private authApiService: AuthApiService,
-        private router: Router) { }
+        private router: Router,
+        private initService: InitService) { }
 
     public register(): void {
         if (this.connecting) {
@@ -39,7 +40,7 @@ export class RegisterComponent {
                         .subscribe(p => {
                             if (p.code === 0) {
                                 this.router.navigate(['/conversations']);
-                                AppComponent.CurrentApp.ngOnInit();
+                                this.initService.init();
                             } else {
                                 Swal('Sign in failed', 'An error occured while signing in.', 'error');
                             }

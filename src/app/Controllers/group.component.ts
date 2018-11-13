@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
-import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
@@ -9,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -27,8 +27,13 @@ export class GroupComponent implements OnInit {
         private groupsApiService: GroupsApiService,
         private conversationApiService: ConversationApiService,
         private router: Router,
-        private cache: CacheService
-    ) { }
+        private cache: CacheService,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'Group Info';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+    }
 
     public ngOnInit(): void {
         this.route.params
@@ -57,7 +62,7 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');
-                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
+                            this.cache.autoUpdateConversation(null);
                             this.router.navigate(['/friends']);
                         } else {
                             Swal('Error', response.message, 'error');
@@ -72,6 +77,6 @@ export class GroupComponent implements OnInit {
     }
 
     public user(id: string): void {
-        this.router.navigate(['kahla/user', id]);
+        this.router.navigate(['/user', id]);
     }
 }

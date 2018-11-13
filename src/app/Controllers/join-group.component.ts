@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs
 import { Observable, BehaviorSubject } from 'rxjs/';
 import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/join-group.html',
@@ -27,7 +28,11 @@ export class JoinGroupComponent implements OnInit {
 
     constructor(
         private groupsApiService: GroupsApiService,
-        private router: Router) {
+        private router: Router,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Join Group';
+            this.headerService.returnButton = true;
+            this.headerService.button = false;
     }
 
     public ngOnInit(): void {

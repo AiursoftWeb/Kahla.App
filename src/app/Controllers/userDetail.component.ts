@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { AuthApiService } from '../Services/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AppComponent } from './app.component';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
+import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -23,17 +24,23 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private authApiService: AuthApiService,
     private router: Router,
-    public uploadService: UploadService
-  ) { }
+    public uploadService: UploadService,
+    public messageService: MessageService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.title = 'Edit Profile';
+    this.headerService.returnButton = true;
+    this.headerService.button = false;
+  }
 
   public ngOnInit(): void {
-    if (!AppComponent.me) {
+    if (!this.messageService.me) {
       this.authApiService.Me().subscribe(p => {
         this.user = p.value;
         this.user.avatarURL = Values.fileAddress + this.user.headImgFileKey;
       });
     } else {
-      this.user = Object.assign({}, AppComponent.me);
+      this.user = Object.assign({}, this.messageService.me);
     }
   }
 
@@ -51,7 +58,7 @@ export class UserDetailComponent implements OnInit {
     this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
       .subscribe((t) => {
       if (t.code === 0) {
-        AppComponent.me = Object.assign({}, this.user);
+        this.messageService.me = Object.assign({}, this.user);
         this.router.navigate(['/settings']);
       } else if (t.code === -10) {
         Swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');

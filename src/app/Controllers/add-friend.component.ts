@@ -5,6 +5,7 @@ import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -24,7 +25,11 @@ export class AddFriendComponent implements OnInit {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private router: Router) {
+        private router: Router,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Add Friend';
+            this.headerService.returnButton = true;
+            this.headerService.button = false;
     }
 
     public ngOnInit(): void {

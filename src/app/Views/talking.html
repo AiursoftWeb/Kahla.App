@@ -1,18 +1,18 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
-    <button *ngIf="!loadingMore && !noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
-    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of localMessages; trackBy: trackByMessages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
+    <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
+    <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
         <div class="chat-avatar" routerLink="/user/{{message.sender.id}}">
             <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
         <div class="chat-text">
             <div class="chat-content">
-                <span class="userName" *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
+                <span *ngIf="messageService.getConversation() && messageService.getConversation().discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
-                <a class="file" *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
+                <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
                     <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
                         <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
                         <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
@@ -64,9 +64,9 @@
             </p>
         </div>
     </li>
-    <button *ngIf="belowWindowPercent > 0.2 || (belowWindowPercent > 0.2 && newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
+    <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
-        <div *ngIf="newMessages" class="reddot"></div>
+        <div *ngIf="messageService.newMessages" class="reddot"></div>
     </button>
 </ul>
 
@@ -105,4 +105,4 @@
         </div>
     </div>
 </div>
-<progress *ngIf="uploadService.uploading" max="100" value={{uploadService.progress}}></progress>
+<progress *ngIf="uploadService.getUploading()" max="100" value={{uploadService.getProgress()}}></progress>
