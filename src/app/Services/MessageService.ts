@@ -83,6 +83,9 @@ export class MessageService {
                 map(t => t.items)
             )
             .subscribe(messages => {
+                if (!MessageService.conversation) {
+                    return;
+                }
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, MessageService.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {

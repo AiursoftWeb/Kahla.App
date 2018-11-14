@@ -138,7 +138,9 @@ export class UploadService {
     public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
         if ((loaded === 0 && UploadService.scroll) || force) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-            if (smooth) {
+            if (document.querySelector('.message-list').scrollHeight < window.innerHeight) {
+                window.scroll(0, 0);
+            } else if (smooth) {
                 window.scroll({top: h, behavior: 'smooth'});
             } else {
                 window.scroll(0, h);

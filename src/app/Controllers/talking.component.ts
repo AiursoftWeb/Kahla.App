@@ -221,6 +221,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         window.onscroll = null;
+        window.onresize = null;
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
