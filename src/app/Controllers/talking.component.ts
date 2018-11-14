@@ -44,6 +44,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         let conversationID = 0;
+        UploadService.scroll = true;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.route.params
@@ -205,6 +206,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         window.onscroll = null;
         this.content = null;
         this.showPanel = null;
-        this.messageService.localMessages = [];
+        this.messageService.resetVariables();
     }
 }

@@ -12,6 +12,7 @@ import { ConversationApiService } from './ConversationApiService';
 export class UploadService {
     public static progress = 0;
     public static uploading = false;
+    public static scroll = true;
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService
@@ -101,7 +102,6 @@ export class UploadService {
     private finishUpload() {
         UploadService.uploading = false;
         UploadService.progress = 0;
-        this.scrollBottom(true);
     }
 
     public scrollBottom(smooth: boolean) {
@@ -109,7 +109,7 @@ export class UploadService {
         const videos = document.querySelectorAll('video');
         let loaded = images.length + videos.length;
         if (loaded === 0) {
-            this.scrollHelper(0, smooth);
+            this.scrollHelper(0, smooth, false);
             return;
         }
         for (let i = 0; i < images.length; i++) {
@@ -118,21 +118,25 @@ export class UploadService {
             } else {
                 images[i].addEventListener('load', () => {
                     loaded--;
-                    this.scrollHelper(loaded, smooth);
+                    this.scrollHelper(loaded, smooth, false);
                 });
             }
         }
         for (let j = 0; j < videos.length; j++) {
-            videos[j].addEventListener('loadeddata', () => {
+            if (videos[j].buffered.length > 0) {
                 loaded--;
-                this.scrollHelper(loaded, smooth);
-            });
+            } else {
+                videos[j].addEventListener('loadeddata', () => {
+                    loaded--;
+                    this.scrollHelper(loaded, smooth, false);
+                });
+            }
         }
-        this.scrollHelper(loaded, smooth);
+        this.scrollHelper(loaded, smooth, false);
     }
 
-    private scrollHelper(loaded: number, smooth: boolean): void {
-        if (loaded === 0) {
+    public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
+        if ((loaded === 0 && UploadService.scroll) || force) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (smooth) {
                 window.scroll({top: h, behavior: 'smooth'});
