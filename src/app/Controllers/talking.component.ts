@@ -20,6 +20,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
     public showPanel = false;
     public loadingImgURL = Values.loadingImgURL;
+    private windowInnerHeight = 0;
+    private formerWindowInnerHeight = 0;
+    private keyBoardHeight = 0;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -42,8 +45,22 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
+    @HostListener('window:resize', [])
+    onResize() {
+        if (window.innerHeight < this.windowInnerHeight) {
+            this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
+            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
+        } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
+            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
+        } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
+            window.scroll(0, document.documentElement.scrollTop);
+        }
+        this.formerWindowInnerHeight = window.innerHeight;
+    }
+
     public ngOnInit(): void {
         let conversationID = 0;
+        UploadService.scroll = true;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.route.params
@@ -68,6 +85,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.headerService.routerLink = `/group/${conversation.id}`;
                 }
             });
+        this.windowInnerHeight = window.innerHeight;
     }
 
     public trackByMessages(_index: number, message: Message): number {
@@ -203,8 +221,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         window.onscroll = null;
+        window.onresize = null;
         this.content = null;
         this.showPanel = null;
-        this.messageService.localMessages = [];
+        this.messageService.resetVariables();
     }
 }

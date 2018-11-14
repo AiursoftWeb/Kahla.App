@@ -64,7 +64,7 @@
             </p>
         </div>
     </li>
-    <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollBottom(true)">
+    <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollHelper(0, true, true)">
         <i class="fa fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="messageService.newMessages" class="reddot"></div>
     </button>
@@ -80,7 +80,7 @@
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/*" />
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml" />
             <label for="image"><i style="color: #FF9800;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
@@ -88,7 +88,7 @@
             </label>
         </div>
         <div class="of4">
-            <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)" accept="video/*" />
+            <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)" accept="video/mp4, video/x-m4v, video/*" />
             <label for="video"><i style="color: #00CC9C;" class="fa fa-file-video-o"></i>
                 <div class="text">
                 Send Video

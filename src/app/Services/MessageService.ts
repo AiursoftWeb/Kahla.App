@@ -83,11 +83,14 @@ export class MessageService {
                 map(t => t.items)
             )
             .subscribe(messages => {
+                if (!MessageService.conversation) {
+                    return;
+                }
                 messages.forEach(t => {
                     t.content = AES.decrypt(t.content, MessageService.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
+                        if (filekey !== -1 && !isNaN(filekey)) {
                             if (t.content.startsWith('[video]')) {
                                 t.content = '[video]' + Values.ossDownloadPath + filekey;
                             } else {
@@ -111,7 +114,8 @@ export class MessageService {
                 } else {
                     this.noMoreMessages = false;
                 }
-                if (typeof this.localMessages !== 'undefined' && this.localMessages.length > 0 && messages.length > 0) {
+                if (typeof this.localMessages !== 'undefined' && this.localMessages !== null &&
+                    this.localMessages.length > 0 && messages.length > 0) {
                     if (!getDown && messages[0].id === this.localMessages[0].id) {
                         this.noMoreMessages = true;
                     }
@@ -126,7 +130,7 @@ export class MessageService {
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
-                    }, 10);
+                    }, 0);
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
@@ -148,5 +152,18 @@ export class MessageService {
     public updateFriends(callback: () => void): void {
         this.cacheService.autoUpdateConversation(callback);
         this.cacheService.autoUpdateRequests();
+    }
+
+    public resetVariables(): void {
+        MessageService.conversation = null;
+        this.localMessages = null;
+        this.messageAmount = 15;
+        this.userNameColors = new Map();
+        this.noMoreMessages = true;
+        this.loadingMore = false;
+        this.belowWindowPercent = 0;
+        this.newMessages = false;
+        this.oldOffsetHeight = 0;
+        UploadService.scroll = false;
     }
 }
