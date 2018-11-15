@@ -12,6 +12,7 @@ import { CacheService } from './CacheService';
 export class InitService {
     public ws: WebSocket;
     public wsconnected = false;
+    private timeout = 1000;
 
     constructor(
         private checkService: CheckService,
@@ -63,6 +64,11 @@ export class InitService {
     }
 
     private OnError(): void {
-        setTimeout(() => this.init(), 10000);
+        setTimeout(() => {
+            this.init();
+            if (this.timeout < 10000 && this.timeout > 1000) {
+                this.timeout += 1000;
+            }
+        }, this.timeout);
     }
 }
