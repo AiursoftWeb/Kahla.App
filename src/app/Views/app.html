@@ -1,4 +1,4 @@
-﻿<div class="header-alert" *ngIf="!initService.wsconnected || initService.ws.readyState!=1">
+﻿<div class="header-alert" *ngIf="initService.connecting">
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fa fa-refresh fa-spin"></i>
         Connecting...

@@ -150,7 +150,7 @@ export class MessageService {
     }
 
     public updateFriends(callback: () => void): void {
-        this.cacheService.autoUpdateConversation(callback);
+        this.cacheService.autoUpdateFriends(callback);
         this.cacheService.autoUpdateRequests();
     }
 
