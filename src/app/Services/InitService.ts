@@ -5,9 +5,6 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
-import { HttpClient } from '@angular/common/http';
-import { ApiService } from './ApiService';
-import { AiurProtocal } from '../Models/AiurProtocal';
 
 @Injectable({
     providedIn: 'root'
@@ -18,17 +15,18 @@ export class InitService {
     public connecting = false;
     private interval;
     private timeout;
+    private online;
 
     constructor(
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
         private messageService: MessageService,
-        private cacheService: CacheService,
-        private http: HttpClient) {
+        private cacheService: CacheService) {
     }
 
     public init(): void {
+        this.online = navigator.onLine;
         this.connecting = true;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
@@ -67,22 +65,14 @@ export class InitService {
     }
 
     private checkNetwork(): void {
-        if (navigator.onLine) {
-            this.http.get(ApiService.serverAddress).subscribe(response => {
-                if ((<AiurProtocal>response).code !== 0) {
-                    this.autoReconnect();
-                }
-            }, error => {
-                console.log(error);
-                this.autoReconnect();
-            });
+        if (navigator.onLine && !this.online) {
+            this.autoReconnect();
         }
+        this.online = navigator.onLine;
     }
 
     public destory(): void {
-        if (this.ws !== null && this.ws !== undefined) {
-            this.ws = null;
-        }
+        this.ws = null;
     }
 
     private autoReconnect(): void {
