@@ -16,6 +16,7 @@ export class InitService {
     private interval;
     private timeout;
     private online;
+    private initPusherError;
 
     constructor(
         private checkService: CheckService,
@@ -48,6 +49,7 @@ export class InitService {
     private loadPusher(): void {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
+            this.initPusherError = false;
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
                 this.connecting = false;
@@ -61,11 +63,17 @@ export class InitService {
             if ('Notification' in window) {
                 Notification.requestPermission();
             }
-        });
+        }, () => {
+                this.connecting = false;
+                this.initPusherError = true;
+                clearTimeout(this.timeout);
+                clearInterval(this.interval);
+                this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+            });
     }
 
     private checkNetwork(): void {
-        if (navigator.onLine && !this.online) {
+        if (navigator.onLine && !this.connecting && (!this.online || this.initPusherError)) {
             this.autoReconnect();
         }
         this.online = navigator.onLine;
