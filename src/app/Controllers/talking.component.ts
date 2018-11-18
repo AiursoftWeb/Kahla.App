@@ -23,6 +23,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
+    private destroied;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -59,6 +60,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.destroied = false;
         let conversationID = 0;
         UploadService.scroll = true;
         this.headerService.title = 'Loading...';
@@ -72,17 +74,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                MessageService.conversation = conversation;
-                document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                this.messageService.getMessages(true, conversationID);
-                this.headerService.title = conversation.displayName;
-                this.headerService.button = true;
-                if (conversation.anotherUserId) {
-                    this.headerService.buttonIcon = 'user';
-                    this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
-                } else {
-                    this.headerService.buttonIcon = `users`;
-                    this.headerService.routerLink = `/group/${conversation.id}`;
+                if (!this.destroied) {
+                    MessageService.conversation = conversation;
+                    document.querySelector('app-header').setAttribute('title', conversation.displayName);
+                    this.messageService.getMessages(true, conversationID);
+                    this.headerService.title = conversation.displayName;
+                    this.headerService.button = true;
+                    if (conversation.anotherUserId) {
+                        this.headerService.buttonIcon = 'user';
+                        this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
+                    } else {
+                        this.headerService.buttonIcon = `users`;
+                        this.headerService.routerLink = `/group/${conversation.id}`;
+                    }
                 }
             });
         this.windowInnerHeight = window.innerHeight;
@@ -220,6 +224,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.destroied = true;
         window.onscroll = null;
         window.onresize = null;
         this.content = null;
