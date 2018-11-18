@@ -51,19 +51,21 @@ export class CacheService {
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 this.UpdateConversations(info);
-                this.UpdateFriendList(info);
                 if (callback != null) {
                     callback();
                 }
             });
     }
 
-    public autoUpdateFriends(): void {
-        this.friendsApiService.MyFriends(false).subscribe(response => {
+    public autoUpdateFriends(callback: () => void): void {
+        this.friendsApiService.MyFriends(true).subscribe(response => {
             response.items.forEach(item => {
                 item.avatarURL = Values.fileAddress + item.displayImageKey;
             });
-            this.cachedData.conversations = response.items;
+            this.cachedData.friendList = response.items;
+            if (callback != null) {
+                callback();
+            }
         });
     }
 

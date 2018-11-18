@@ -11,7 +11,11 @@ import { CacheService } from './CacheService';
 })
 export class InitService {
     public ws: WebSocket;
-    public wsconnected = false;
+    private timeoutNumber = 1000;
+    public connecting = false;
+    private interval;
+    private timeout;
+    private online;
 
     constructor(
         private checkService: CheckService,
@@ -22,6 +26,8 @@ export class InitService {
     }
 
     public init(): void {
+        this.online = navigator.onLine;
+        this.connecting = true;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
@@ -40,29 +46,41 @@ export class InitService {
     }
 
     private loadPusher(): void {
+        this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
             this.ws = new WebSocket(model.serverPath);
-            this.ws.onopen = () => this.wsconnected = true;
+            this.ws.onopen = () => {
+                this.connecting = false;
+                clearTimeout(this.timeout);
+                clearInterval(this.interval);
+                this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+            };
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = () => this.OnError();
-            this.ws.onclose = () => this.OnError();
+            this.ws.onerror = () => this.autoReconnect();
+            this.ws.onclose = () => this.autoReconnect();
             if ('Notification' in window) {
                 Notification.requestPermission();
             }
         });
     }
 
-    public destory(): void {
-        if (this.ws !== null && this.ws !== undefined) {
-            this.ws.onclose = function () { };
-            this.ws.onmessage = function () { };
-            this.ws.close();
-            this.ws = null;
+    private checkNetwork(): void {
+        if (navigator.onLine && !this.online) {
+            this.autoReconnect();
         }
-        this.wsconnected = false;
+        this.online = navigator.onLine;
     }
 
-    private OnError(): void {
-        setTimeout(() => this.init(), 10000);
+    public destory(): void {
+        this.ws = null;
+    }
+
+    private autoReconnect(): void {
+        this.timeout = setTimeout(() => {
+            this.loadPusher();
+            if (this.timeoutNumber < 10000 && this.timeoutNumber > 1000) {
+                this.timeoutNumber += 1000;
+            }
+        }, this.timeoutNumber);
     }
 }
