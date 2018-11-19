@@ -21,11 +21,19 @@ button, .button {
     white-space: nowrap;
 }
 
+.button--fab {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    line-height: normal;
+}
+
 .button.success {
     background-color: #5cb85c;
 }
 
-.button.success:hover {
+.button.success:hover:enabled {
     background-color: #3c983c;
 }
 
@@ -33,16 +41,17 @@ button, .button {
     background-color: #4075d5
 }
 
-.button.primary:hover {
+.button.primary:hover:enabled, .inputButton:hover {
     background-color: #0D47A1;
 }
 
-.button.primary:focus {
+.button.primary:focus:enabled {
     background-color: #48A3DD;
 }
 
 .button:disabled, button:disabled {
     cursor: not-allowed;
+    background-color: #7c7c7c;
 }
 
 .button.warning {
@@ -62,17 +71,17 @@ button, .button {
     color: black;
 }
 
-.button.white:hover {
+.button.white:hover:enabled {
     background-color: white;
 }
 
-.button.white:focus {
+.button.white:focus:enabled {
     background-color: #BBB;
 }
 
 .inputButton {
     width: fit-content !important;
-    margin-left: 5%;
+    margin: 0 auto !important;
 }
 
 .alert {

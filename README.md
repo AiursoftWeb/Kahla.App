@@ -95,7 +95,7 @@ Please view [here](https://www.electron.build/) for Electron builder document.
 Run:
 
 ```bash
-publish.sh
+./publish.sh
 ```
 
 And you will publish the distributable version of Kahla desktop.

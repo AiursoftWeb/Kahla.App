@@ -1,32 +1,30 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
 import { Router } from '@angular/router';
 import { ContactInfo } from '../Models/ContactInfo';
-import { AppComponent } from './app.component';
-import { Request } from '../Models/Request';
-import { CacheService } from '../Services/CacheService';
 import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
+import { MessageService } from '../Services/MessageService';
+import { CacheService } from '../Services/CacheService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/friends.html',
-    styleUrls: ['../Styles/friends.css']
+    styleUrls: ['../Styles/friends.css', '../Styles/reddot.css']
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {
-    public infos: ContactInfo[];
-    public requests: Request[];
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
+    public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private apiService: ApiService,
         private router: Router,
-        private cache: CacheService) {
-        AppComponent.CurrentFriend = this;
-        if (this.cache.GetFriendList()) {
-            this.infos = this.cache.GetFriendList();
-            this.requests = this.cache.GetFriendRequests().filter(t => !t.completed);
-        }
+        private messageService: MessageService,
+        public cacheService: CacheService,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Friends';
+            this.headerService.returnButton = false;
+            this.headerService.button = true;
+            this.headerService.routerLink = '/addfriend';
+            this.headerService.buttonIcon = 'plus';
     }
     public ngOnInit(): void {
         PullToRefresh.destroyAll();
@@ -35,51 +33,24 @@ export class FriendsComponent implements OnInit, OnDestroy {
             mainElement: '#main',
             passive: true,
             refreshTimeout: 200,
-            onRefresh: function (done) {
-                AppComponent.CurrentFriend.init(function () {
+            onRefresh: done => {
+                this.messageService.updateFriends(function () {
                     done();
                 });
             }
         });
-        this.init(null);
+        this.messageService.updateFriends(null);
     }
-
-    public init(callback: () => void) {
-        this.apiService.MyFriends(true)
-            .subscribe(response => {
-                response.items.forEach(item => {
-                    item.avatarURL = Values.fileAddress + item.displayImageKey;
-                });
-                this.infos = response.items;
-                this.cache.UpdateFriendList(response.items);
-                AppComponent.CurrentNav.ngOnInit();
-                if (callback != null) {
-                    callback();
-                }
-            });
-        this.apiService.MyRequests()
-            .subscribe(response => {
-                this.requests = response.items.filter(t => !t.completed);
-                response.items.forEach(item => {
-                    item.createTime = new Date(item.createTime).toLocaleString([], this.option);
-                    item.creator.avatarURL = Values.fileAddress + item.creator.avatarURL;
-                });
-                this.cache.UpdateFriendRequests(response.items);
-                AppComponent.CurrentNav.ngOnInit();
-            });
-    }
-
 
     public detail(info: ContactInfo): void {
         if (info.userId == null) {
-            this.router.navigate(['/kahla/group', info.conversationId]);
+            this.router.navigate(['/group', info.conversationId]);
         } else {
-            this.router.navigate(['/kahla/user', info.userId]);
+            this.router.navigate(['/user', info.userId]);
         }
     }
 
     public ngOnDestroy(): void {
         PullToRefresh.destroyAll();
-        AppComponent.CurrentFriend = null;
     }
 }

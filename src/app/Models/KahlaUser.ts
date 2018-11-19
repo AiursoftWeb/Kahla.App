@@ -5,6 +5,6 @@
     public sex: string;
     public headImgFileKey: number;
     public preferedLanguage: string;
-    public accountCreateTime: string;
+    public accountCreateTime: Date;
     public avatarURL: string;
 }

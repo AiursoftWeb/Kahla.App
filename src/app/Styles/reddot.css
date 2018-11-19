@@ -1,0 +1,17 @@
+.reddot {
+    top: 0;
+    right: 0;
+    position: absolute;
+    min-width: 20px;
+    max-width: 24px;
+    height: 20px;
+    color: white;
+    background-color: #E53935;
+    font-size: 12px;
+    line-height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

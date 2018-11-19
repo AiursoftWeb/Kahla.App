@@ -1,53 +1,102 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
-<ul class="message-list" #mainList [ngClass]="{'active': showPanel}" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
-    <button *ngIf="!loadingMore" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
-    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messages" [ngClass]="{'left': message.senderId != myId(), 'right': message.senderId == myId()}">
-        <div class="chat-avatar" routerLink="/kahla/user/{{message.sender.id}}">
-            <img src="{{message.sender.avatarURL ? message.sender.avatarURL : '../../assets/loading.gif'}}">
+<ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
+    <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
+    <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
+        <div class="chat-avatar" routerLink="/user/{{message.sender.id}}">
+            <img src="{{message.sender.avatarURL ? message.sender.avatarURL : loadingImgURL}}?w=80&h=80">
         </div>
         <div class="chat-text">
             <div class="chat-content">
-                <span *ngIf="conversation.discriminator === 'GroupConversation' && message.senderId != myId()" [ngStyle]="{'color': userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
+                <span *ngIf="messageService.getConversation() && messageService.getConversation().discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
-                <a *ngIf="message.content.startsWith('[file]')" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="{{message.content.substring(6)}}?sd=true">
-                    Click to download
+                <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
+                    <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
+                        <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'png'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'svg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'bmp'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'jpeg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mp3'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'aac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'flac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'wav'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mp4'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'avi'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'mkv'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'ogg'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'webm'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'m4v'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'zip'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'tar'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'7z'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'dmg'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'tar.gz'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'doc'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'pages'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'xls'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'numbers'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'ppt'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchCase="'key'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                        <i *ngSwitchDefault class="fa fa-file" aria-hidden="true"></i>
+                    </div>
+                    <h5>{{message.content.split('-')[1]}}</h5>
+                    <span>{{message.content.split('-')[2]}}</span>
                 </a>
-                <p *ngIf="!message.content.startsWith('[')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
+                <div *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}">
+                    <video src="{{message.content.substring(7)}}" controls muted></video>
+                </div>
+                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
                 <span *ngIf="message.local" i18n="@@Sending">
                     Sending...
                 </span>
                 <span>
-                    {{message.sendTime}}
+                    {{message.sendTime | date:'M/d/yy h:mm a'}}
                 </span>
             </p>
         </div>
     </li>
+    <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel}" class="button button--fab primary" (click)="uploadService.scrollHelper(0, true, true)">
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
+        <div *ngIf="messageService.newMessages" class="reddot"></div>
+    </button>
 </ul>
 
 <div class="chat-action">
     <div class="chat-part">
         <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" (keyup.enter)="send()" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
-        <button [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
+        <button class="button success" [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
     <div class="button-part" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0">
         <i class="icon fa fa-plus-circle"></i>
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(true)" accept="image/*" />
-            <label for="image"><i style="color: #00CC9C;" class="fa fa-picture-o"></i>
+            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml" />
+            <label for="image"><i style="color: #FF9800;" class="fa fa-picture-o"></i>
                 <div class="text">
                 Send Image
             </div>
             </label>
         </div>
         <div class="of4">
-            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(false)" />
+            <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)" accept="video/mp4, video/x-m4v, video/*" />
+            <label for="video"><i style="color: #00CC9C;" class="fa fa-file-video-o"></i>
+                <div class="text">
+                Send Video
+            </div>
+            </label>
+        </div>
+        <div class="of4">
+            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)" />
             <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
                 <div class="text">
                     Send File
@@ -56,4 +105,4 @@
         </div>
     </div>
 </div>
-<progress *ngIf="uploading" max="100" value={{progress}}></progress>
+<progress *ngIf="uploadService.getUploading()" max="100" value={{uploadService.getProgress()}}></progress>

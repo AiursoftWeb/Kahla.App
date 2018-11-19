@@ -10,11 +10,12 @@
     background-color: #FFF;
     position: relative;
     display: grid;
-    grid-template-columns: 0.5fr 2fr 2fr;
+    grid-template-columns: 20% 40% 40%;
+    text-align: center;
 }
 
 .friendrequests .user-img {
-    margin: 10px 15px;
+    margin: 10px auto;
     width: 50px;
     height: 50px;
     float: left;
@@ -58,6 +59,12 @@
 .friendrequests .decision {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.friendrequests h3 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    margin: auto;
 }
 
 .button {

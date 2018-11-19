@@ -1,11 +1,10 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
+import { FriendsApiService } from '../Services/FriendsApiService';
 import { Location } from '@angular/common';
-import { Request } from '../Models/Request';
-import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
@@ -13,44 +12,38 @@ import { Values } from '../values';
                 '../Styles/button.css']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
-
-    public requests: Request[];
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
+    public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private apiService: ApiService,
+        private friendsApiService: FriendsApiService,
         private location: Location,
-        private cache: CacheService
+        public cacheService: CacheService,
+        private headerService: HeaderService
     ) {
-        AppComponent.CurrentFriendRequests = this;
-        this.requests = this.cache.GetFriendRequests();
+        this.headerService.title = 'Friend Requests';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
     }
 
     public ngOnInit(): void {
-        this.apiService.MyRequests()
-            .subscribe(response => {
-                response.items.forEach(item => {
-                    item.createTime = new Date(item.createTime).toLocaleString([], this.option);
-                    item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
-                });
-                this.requests = response.items;
-                this.cache.UpdateFriendRequests(response.items);
-            });
+        if (!this.cacheService.cachedData.requests) {
+            this.cacheService.autoUpdateRequests();
+        }
     }
 
     public accept(id: number): void {
-        this.apiService.CompleteRequest(id, true)
+        this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
                 Swal('Success', r.message, 'success');
-                this.ngOnInit();
+                this.cacheService.autoUpdateRequests();
             });
     }
 
     public decline(id: number): void {
-        this.apiService.CompleteRequest(id, false)
+        this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
                 Swal('Success', r.message, 'success');
-                this.ngOnInit();
+                this.cacheService.autoUpdateRequests();
             });
     }
 
@@ -59,6 +52,6 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        AppComponent.CurrentFriendRequests = null;
+        this.loadingImgURL = null;
     }
 }

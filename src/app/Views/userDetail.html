@@ -10,14 +10,14 @@
   </div>
   <div class="profile avatar">
     <label>Avatar</label>
-    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}">
     <div class="grid">
+      <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=100&h=100">
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
-      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept=".png, .jpg, .bmp" />
+      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
     </div>
   </div>
   <div class="buttons">
     <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>
   </div>
 </div>
-<progress *ngIf="uploading" max="100" value={{progress}}></progress>
+<progress *ngIf="uploadService.getUploading()" max="100" value={{uploadService.getProgress()}}></progress>

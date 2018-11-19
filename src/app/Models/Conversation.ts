@@ -3,7 +3,7 @@
 export class Conversation {
     public id: number;
     public discriminator: string;
-    public conversationCreateTime: string;
+    public conversationCreateTime: Date;
     public displayName: string;
     public displayImageKey: number;
     public anotherUserId: string;

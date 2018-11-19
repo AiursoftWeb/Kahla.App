@@ -9,5 +9,4 @@ if (environment.production) {
 }
 ApiService.serverAddress = environment.server;
 
-
 platformBrowserDynamic().bootstrapModule(AppModule);

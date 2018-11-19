@@ -14,23 +14,25 @@ import { UserDetailComponent } from '../Controllers/userDetail.component';
 import { CreateGroupComponent } from '../Controllers/create-group.component';
 import { JoinGroupComponent } from '../Controllers/join-group.component';
 import { GroupComponent } from '../Controllers/group.component';
+import { ChangePasswordComponent } from '../Controllers/changePassword.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/kahla/conversations', pathMatch: 'full' },
-    { path: 'kahla/conversations', component: ConversationsComponent },
-    { path: 'kahla/friends', component: FriendsComponent },
-    { path: 'kahla/addfriend', component: AddFriendComponent },
-    { path: 'kahla/settings', component: SettingsComponent },
-    { path: 'kahla/friendrequests', component: FriendRequestsComponent },
-    { path: 'kahla/talking/:id', component: TalkingComponent },
-    { path: 'kahla/user/:id', component: UserComponent },
-    { path: 'kahla/signin', component: SignInComponent },
-    { path: 'kahla/register', component: RegisterComponent },
-    { path: 'kahla/about', component: AboutComponent },
-    { path: 'kahla/userInforDet', component: UserDetailComponent },
-    { path: 'kahla/create-group', component: CreateGroupComponent },
-    { path: 'kahla/join-group', component: JoinGroupComponent },
-    { path: 'kahla/group/:id', component: GroupComponent }
+    { path: '', redirectTo: '/conversations', pathMatch: 'full' },
+    { path: 'conversations', component: ConversationsComponent },
+    { path: 'friends', component: FriendsComponent },
+    { path: 'addfriend', component: AddFriendComponent },
+    { path: 'settings', component: SettingsComponent },
+    { path: 'friendrequests', component: FriendRequestsComponent },
+    { path: 'talking/:id', component: TalkingComponent },
+    { path: 'user/:id', component: UserComponent },
+    { path: 'signin', component: SignInComponent },
+    { path: 'register', component: RegisterComponent },
+    { path: 'about', component: AboutComponent },
+    { path: 'userInforDet', component: UserDetailComponent },
+    { path: 'create-group', component: CreateGroupComponent },
+    { path: 'join-group', component: JoinGroupComponent },
+    { path: 'group/:id', component: GroupComponent },
+    { path: 'changepassword', component: ChangePasswordComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

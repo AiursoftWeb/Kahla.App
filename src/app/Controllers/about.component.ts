@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { versions } from '../../environments/versions';
-import { AppComponent } from './app.component';
+import { Component } from '@angular/core';
+import { CheckService } from '../Services/CheckService';
+import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
+
 @Component({
     templateUrl: '../Views/about.html',
     styleUrls: [
@@ -9,19 +11,18 @@ import { AppComponent } from './app.component';
         '../Styles/button.css']
 })
 
-export class AboutComponent implements OnInit {
-    public version = versions.version;
-    public revision = versions.revision;
-    public branch = versions.branch;
-    public buildTime = versions.buildTime;
+export class AboutComponent {
+    public sourceCodeURL = Values.sourceCodeURL;
     constructor(
-        public appComponent: AppComponent
-    ) { }
-
-    public ngOnInit(): void {
+        public checkService: CheckService,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'About';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
     }
 
     public check(): void {
-        this.appComponent.check(true);
+        this.checkService.checkVersion(true);
     }
 }

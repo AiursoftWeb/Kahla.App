@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
-import { ApiService } from '../Services/ApiService';
+import { GroupsApiService } from '../Services/GroupsApiService';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/create-group.html',
@@ -18,14 +18,18 @@ export class CreateGroupComponent {
     public groupName: string;
 
     constructor(
-        private apiService: ApiService,
-        private router: Router) {
+        private groupsApiService: GroupsApiService,
+        private router: Router,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Create Group';
+            this.headerService.returnButton = true;
+            this.headerService.button = false;
     }
 
     public createGroup(): void {
-        this.apiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
+        this.groupsApiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
-                this.router.navigate(['/kahla/talking', response.value]);
+                this.router.navigate(['/talking', response.value]);
             } else if (response.code === -7) {
               Swal('Can not create group', response.message, 'error');
              } else if (response.code === -10) {

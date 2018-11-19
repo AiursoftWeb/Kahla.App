@@ -1,15 +1,18 @@
-<app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/kahla/addfriend"></app-header>
+<app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/addfriend"></app-header>
 <div id="main">
-    <div class="conversation" *ngFor="let inf of info" (click)="talk(inf.conversationId)">
-        <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : '../../assets/loading.gif'}}" (click)="detail(inf)"/>
-        <div *ngIf="inf.unReadAmount > 0" class="reddot">
+    <div class="conversation" *ngFor="let inf of cacheService.cachedData.conversations" (click)="talk(inf.conversationId)">
+        <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100" (click)="detail(inf)"/>
+        <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="reddot">
             {{inf.unReadAmount}}
+        </div>
+        <div *ngIf="inf.unReadAmount > 99" class="reddot">
+            99+
         </div>
         <div class="sender">
             {{inf.displayName}}
         </div>
         <div class="last-time">
-            {{inf.latestMessageTime}}
+            {{inf.latestMessageTime | date:'shortTime'}}
         </div>
         <div class="last-message" *ngIf="inf.latestMessage != null">
             {{inf.latestMessage}}

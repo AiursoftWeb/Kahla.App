@@ -24,12 +24,23 @@ import { UserDetailComponent } from './Controllers/userDetail.component';
 import { CreateGroupComponent } from './Controllers/create-group.component';
 import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
+import { ChangePasswordComponent } from './Controllers/changePassword.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
 import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
+import { CheckService } from './Services/CheckService';
 import { environment } from '../environments/environment';
+import { UploadService } from './Services/UploadService';
+import { AuthApiService } from './Services/AuthApiService';
+import { ConversationApiService } from './Services/ConversationApiService';
+import { FilesApiService } from './Services/FilesApiService';
+import { FriendsApiService } from './Services/FriendsApiService';
+import { GroupsApiService } from './Services/GroupsApiService';
+import { MessageService } from './Services/MessageService';
+import { InitService } from './Services/InitService';
+import { HeaderService } from './Services/HeaderService';
 
 
 @NgModule({
@@ -58,13 +69,24 @@ import { environment } from '../environments/environment';
         UserDetailComponent,
         CreateGroupComponent,
         JoinGroupComponent,
-        GroupComponent
+        GroupComponent,
+        ChangePasswordComponent
     ],
     providers: [
         ApiService,
         Notify,
         ParamService,
-        CacheService
+        CacheService,
+        UploadService,
+        CheckService,
+        AuthApiService,
+        ConversationApiService,
+        FilesApiService,
+        FriendsApiService,
+        GroupsApiService,
+        MessageService,
+        InitService,
+        HeaderService
     ],
     bootstrap: [AppComponent]
 })

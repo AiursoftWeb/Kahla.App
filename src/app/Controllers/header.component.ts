@@ -1,29 +1,16 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Location } from '@angular/common';
-import { AppComponent } from './app.component';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     selector: 'app-header',
     templateUrl: '../Views/header.html',
     styleUrls: ['../Styles/header.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-
-    @Input() public title: string;
-    @Input() public returnButton: boolean;
-    @Input() public Button: boolean;
-    @Input() public RouterLink: string;
-    @Input() public ButtonIcon: string;
+export class HeaderComponent {
     constructor(
-        private location: Location) {
-    }
-
-    public ngOnInit(): void {
-        AppComponent.CurrentHeader = this;
-    }
-
-    public ngOnDestroy(): void {
-        AppComponent.CurrentHeader = null;
+        private location: Location,
+        public headerService: HeaderService) {
     }
 
     public goBack(): void {

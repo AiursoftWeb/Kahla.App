@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
-import { AppComponent } from './app.component';
+import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import { KahlaUser } from '../Models/KahlaUser';
+import { Values } from '../values';
+import { InitService } from '../Services/InitService';
+import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -10,19 +13,26 @@ import { KahlaUser } from '../Models/KahlaUser';
                 '../Styles/button.css']
 })
 export class SettingsComponent {
+    public loadingImgURL = Values.loadingImgURL;
     constructor(
-        private apiService: ApiService,
-        private router: Router) {
+        private authApiService: AuthApiService,
+        private router: Router,
+        private initSerivce: InitService,
+        public messageService: MessageService,
+        private headerService: HeaderService) {
+            this.headerService.title = 'Me';
+            this.headerService.returnButton = false;
+            this.headerService.button = false;
         }
 
     public GetMe(): KahlaUser {
-        return AppComponent.me;
+        return this.messageService.me;
     }
 
     public SignOut(): void {
-        this.apiService.LogOff().subscribe(() => {
-            AppComponent.CurrentApp.destory();
-            this.router.navigate(['/kahla/signin']);
+        this.authApiService.LogOff().subscribe(() => {
+            this.initSerivce.destory();
+            this.router.navigate(['/signin']);
         });
     }
 }

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ApiService } from '../Services/ApiService';
-import { AppComponent } from './app.component';
+import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
+import { ConversationApiService } from '../Services/ConversationApiService';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -19,25 +20,29 @@ import { GroupConversation } from '../Models/GroupConversation';
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
     public groupMumbers: number;
-    private option = { month: 'numeric', day: 'numeric', year: '2-digit', hour: 'numeric', minute: 'numeric' };
+    public loadingImgURL = Values.loadingImgURL;
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
+        private groupsApiService: GroupsApiService,
+        private conversationApiService: ConversationApiService,
         private router: Router,
-        private cache: CacheService
-    ) { }
+        private cache: CacheService,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'Group Info';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+    }
 
     public ngOnInit(): void {
         this.route.params
             .pipe(
-                switchMap((params: Params) => this.apiService.ConversationDetail(+params['id'])),
+                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
                 map(t => t.value)
             )
             .subscribe(conversation => {
                 this.conversation = conversation;
-                this.conversation.conversationCreateTime =
-                    new Date(this.conversation.conversationCreateTime).toLocaleString([], this.option);
                 this.groupMumbers = conversation.users.length;
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
@@ -53,12 +58,12 @@ export class GroupComponent implements OnInit {
             showCancelButton: true
         }).then((willDelete) => {
             if (willDelete.value) {
-                this.apiService.LeaveGroup(groupName)
+                this.groupsApiService.LeaveGroup(groupName)
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');
-                            this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                            this.router.navigate(['/kahla/friends']);
+                            this.cache.autoUpdateConversation(null);
+                            this.router.navigate(['/friends']);
                         } else {
                             Swal('Error', response.message, 'error');
                         }
@@ -68,10 +73,10 @@ export class GroupComponent implements OnInit {
     }
 
     public talk(id: number): void {
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 
     public user(id: string): void {
-        this.router.navigate(['kahla/user', id]);
+        this.router.navigate(['/user', id]);
     }
 }

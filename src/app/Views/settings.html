@@ -1,7 +1,7 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
 <div class="user">
-    <img class="user-img" src="{{GetMe() ? GetMe().avatarURL : '../../assets/loading.gif'}}">
+    <img class="user-img" src="{{GetMe() ? GetMe().avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{GetMe() ? GetMe().nickName : "Loading..."}}
     </div>
@@ -10,25 +10,31 @@
             Register Time:
         </ng-container>
         <ng-container *ngIf="GetMe()">
-            {{GetMe().accountCreateTime}}
+            {{GetMe().accountCreateTime | date:'M/d/yy h:mm a'}}
         </ng-container>
     </div>
 </div>
-
 <div class="menu-holder"></div>
-<div class="menu-button" routerLink="/kahla/userInforDet">
+<div class="menu-button" routerLink="/userInforDet">
     <div class="img">
         <i class="fa fa-user"></i>
     </div>
     <div class="text" i18n="@@ProfileSettings">Profile Settings</div>
 </div>
+<div class="menu-button" routerLink="/changepassword">
+    <div class="img">
+        <i class="fa fa-lock" aria-hidden="true"></i>
+    </div>
+    <div class="text">Change Password</div>
+</div>
+
 <div class="menu-button">
     <div class="img">
         <i class="fa fa-language"></i>
     </div>
     <div class="text" i18n="@@Language">Language</div>
 </div>
-<div class="menu-button" routerLink="/kahla/about">
+<div class="menu-button" routerLink="/about">
     <div class="img">
         <i class="fa fa-server "></i>
     </div>

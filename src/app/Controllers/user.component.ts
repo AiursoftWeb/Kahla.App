@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ApiService } from '../Services/ApiService';
+import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AppComponent } from './app.component';
 import { CacheService } from '../Services/CacheService';
 import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
+import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -19,17 +19,23 @@ export class UserComponent implements OnInit {
     public info: KahlaUser;
     public conversationId: number;
     public areFriends: boolean;
+    public loadingImgURL = Values.loadingImgURL;
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
+        private friendsApiService: FriendsApiService,
         private router: Router,
-        private cache: CacheService,
-        private location: Location
-    ) { }
+        private cacheService: CacheService,
+        private location: Location,
+        private headerService: HeaderService
+    ) {
+        this.headerService.title = 'Profile';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+    }
 
     public ngOnInit(): void {
         this.route.params
-            .pipe(switchMap((params: Params) => this.apiService.UserDetail(params['id'])))
+            .pipe(switchMap((params: Params) => this.friendsApiService.UserDetail(params['id'])))
             .subscribe(response => {
                 this.info = response.user;
                 this.conversationId = response.conversationId;
@@ -37,6 +43,7 @@ export class UserComponent implements OnInit {
                 this.info.avatarURL = Values.fileAddress + this.info.headImgFileKey;
             });
     }
+
     public delete(id: string): void {
         Swal({
             title: 'Are you sure to delete a friend?',
@@ -44,11 +51,11 @@ export class UserComponent implements OnInit {
             showCancelButton: true
         }).then((willDelete) => {
             if (willDelete.value) {
-                this.apiService.DeleteFriend(id)
+                this.friendsApiService.DeleteFriend(id)
                     .subscribe(response => {
                         Swal('Success', response.message, 'success');
-                        this.cache.AutoUpdateUnread(AppComponent.CurrentNav);
-                        this.router.navigate(['/kahla/friends']);
+                        this.cacheService.autoUpdateConversation(null);
+                        this.router.navigate(['/friends']);
                     });
             } else {
             }
@@ -56,7 +63,7 @@ export class UserComponent implements OnInit {
     }
 
     public request(id: string): void {
-        this.apiService.CreateRequest(id)
+        this.friendsApiService.CreateRequest(id)
             .subscribe(response => {
                 if (response.code === 0) {
                     Swal('Success', response.message, 'success');
@@ -68,6 +75,6 @@ export class UserComponent implements OnInit {
     }
 
     public talk(id: number): void {
-        this.router.navigate(['/kahla/talking', id]);
+        this.router.navigate(['/talking', id]);
     }
 }

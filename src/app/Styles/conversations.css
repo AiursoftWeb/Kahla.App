@@ -55,14 +55,7 @@
 
 .conversation .reddot {
     margin-left:-10px;
+    margin-top: 2px;
     position: relative;
-    width: 20px;
-    height: 17px;
-    padding-top: 2px;
-    color: white;
-    background-color: red;
-    font-size: 12px;
-    border-radius: 10px;
     float: left;
-    text-align: center;
 }

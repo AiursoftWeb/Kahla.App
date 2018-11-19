@@ -1,12 +1,26 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
-    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="search(friendSearch.value)" />
+    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="search(friendSearch.value, 0)" />
 </div>
 <div class="search-holder"></div>
 
+<div class="buttons" *ngIf="friendSearch.value.trim().length < 3 && friendSearch.value.trim().length > 0">
+    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 1)">Search</button>
+    <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Searching</button>
+</div>
+
+<h3 *ngIf="resultLength == 0">
+    No result. Try another name.
+</h3>
+
 <div class="result" *ngFor="let user of users | async" (click)="detail(user.id)">
-    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : '../../assets/loading.gif'}}" />
+    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">
         {{user.nickName}}
     </div>
+</div>
+
+<div class="buttons" *ngIf="!noMoreUsers && resultLength > 0">
+    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 2)">Load More</button>
+    <button *ngIf="searchMode == 2 && searching" class="button primary" disabled>Loading</button>
 </div>

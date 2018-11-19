@@ -1,24 +1,28 @@
 ﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
-<div *ngFor="let request of requests" class="friendrequests">
-
-    <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : '../../assets/loading.gif'}}">
-    <div class="name">
-        {{request.creator.nickName}}
-    </div>
-
-    <div class="time">
-        {{request.createTime}}
-    </div>
-
-    <div class="decision">
-        <div class="Completed" *ngIf="request.completed; else elseblock">
-            <label disabled="disabled">Compeleted!</label>
-        </div>
-
-        <ng-template #elseblock>
-            <button class="button success" (click)="accept(request.id)">Accept</button>
-            <button class="button warning" (click)="decline(request.id)">Decline</button>
-        </ng-template>
-
-    </div>
+<div *ngIf="cacheService.cachedData.requests && cacheService.cachedData.requests.length === 0; else hasRequests" class="friendrequests">
+    <h3>No requests for now.</h3>
 </div>
+<ng-template #hasRequests>
+    <div *ngFor="let request of cacheService.cachedData.requests" class="friendrequests">
+            <img class="user-img" src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&h=100">
+            <div class="name">
+                {{request.creator.nickName}}
+            </div>
+        
+            <div class="time">
+                {{request.createTime | date:'shortDate'}}
+            </div>
+        
+            <div class="decision">
+                <div class="Completed" *ngIf="request.completed; else elseblock">
+                    <label disabled="disabled">Compeleted!</label>
+                </div>
+        
+                <ng-template #elseblock>
+                    <button class="button success" (click)="accept(request.id)">Accept</button>
+                    <button class="button warning" (click)="decline(request.id)">Decline</button>
+                </ng-template>
+        
+            </div>
+        </div>
+</ng-template>

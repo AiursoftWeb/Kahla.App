@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../Services/ApiService';
-import { AppComponent } from './app.component';
+import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 import { catchError } from 'rxjs/operators';
+import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/register.html',
@@ -19,15 +19,16 @@ export class RegisterComponent {
     public samePassword = true;
 
     constructor(
-        private apiService: ApiService,
-        private router: Router) { }
+        private authApiService: AuthApiService,
+        private router: Router,
+        private initService: InitService) { }
 
     public register(): void {
         if (this.connecting) {
             return;
         }
         this.connecting = true;
-        this.apiService.RegisterKahla(this.email, this.password, this.confirmPassword)
+        this.authApiService.RegisterKahla(this.email, this.password, this.confirmPassword)
             .pipe(catchError(error => {
                 this.connecting = false;
                 Swal('Network issue', 'Could not connect to Kahla server.', 'error');
@@ -35,11 +36,11 @@ export class RegisterComponent {
             }))
             .subscribe(t => {
                 if (t.code === 0) {
-                    this.apiService.AuthByPassword(this.email, this.password)
+                    this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                this.router.navigate(['/kahla/conversations']);
-                                AppComponent.CurrentApp.ngOnInit();
+                                this.router.navigate(['/conversations']);
+                                this.initService.init();
                             } else {
                                 Swal('Sign in failed', 'An error occured while signing in.', 'error');
                             }
