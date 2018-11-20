@@ -1,6 +1,6 @@
 # Kahla
 
-[![Build Status](https://travis-ci.org/AiursoftWeb/Kahla.App.svg?branch=master)](https://travis-ci.org/AiursoftWeb/Kahla.App)
+[![Build status](https://aiursoft.visualstudio.com/Kahla/_apis/build/status/Kahla.App%20CI)](https://aiursoft.visualstudio.com/Kahla/_build/latest?definitionId=9)
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
