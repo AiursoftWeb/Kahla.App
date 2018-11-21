@@ -24,6 +24,9 @@ export class SettingsComponent {
             this.headerService.title = 'Me';
             this.headerService.returnButton = false;
             this.headerService.button = false;
+            if (!this.messageService.me) {
+                this.router.navigate(['/signin']);
+            }
         }
 
     public GetMe(): KahlaUser {

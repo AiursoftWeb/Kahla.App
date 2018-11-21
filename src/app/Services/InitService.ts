@@ -81,6 +81,9 @@ export class InitService {
 
     public destory(): void {
         this.ws = null;
+        this.messageService.resetVariables();
+        this.cacheService.reset();
+        this.messageService.me = null;
     }
 
     private autoReconnect(): void {

@@ -17,6 +17,10 @@ export class CacheService {
         private friendsApiService: FriendsApiService
     ) { }
 
+    public reset() {
+        this.cachedData = new CacheModel();
+    }
+
     public UpdateFriendList(data: ContactInfo[]): void {
         this.cachedData.friendList = data;
     }
