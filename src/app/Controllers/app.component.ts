@@ -1,7 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
-import { PlatformLocation } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,11 +12,12 @@ import Swal from 'sweetalert2';
 
 export class AppComponent implements OnInit, OnDestroy {
     constructor(
-        public initService: InitService,
-        public location: PlatformLocation) {
-            location.onPopState(() => {
-                Swal.close();
-            });
+        public initService: InitService) {
+    }
+
+    @HostListener('window:popstate', [])
+    onPopstate() {
+        Swal.close();
     }
 
     public ngOnInit(): void {
