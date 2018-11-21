@@ -32,7 +32,7 @@ export class InitService {
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
-                this.router.navigate(['/signin']);
+                this.router.navigate(['/signin'], {replaceUrl: true});
             } else {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {

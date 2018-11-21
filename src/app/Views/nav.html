@@ -1,7 +1,7 @@
 
 <div class="nav-bar-holder"></div>
 <div class="nav-bar">
-    <a class="nav-item" routerLink="/conversations" routerLinkActive="current">
+    <a class="nav-item" routerLink="/conversations" replaceUrl routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-comment-o"></i>
             <div *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100" class="reddot">
@@ -15,7 +15,7 @@
             Kahla
         </div>
     </a>
-    <a class="nav-item" routerLink="/friends" routerLinkActive="current">
+    <a class="nav-item" routerLink="/friends" replaceUrl routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-address-book-o"></i>
             <div *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100" class="reddot">
@@ -29,7 +29,7 @@
             Friends
         </div>
     </a>
-    <a class="nav-item" routerLink="/settings" routerLinkActive="current">
+    <a class="nav-item" routerLink="/settings" replaceUrl routerLinkActive="current">
         <div class="icon">
             <i class="fa fa-user-o"></i>
         </div>

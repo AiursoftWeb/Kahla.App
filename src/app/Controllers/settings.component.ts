@@ -42,7 +42,7 @@ export class SettingsComponent {
             if (willSignOut.value) {
                 this.authApiService.LogOff().subscribe(() => {
                     this.initSerivce.destory();
-                    this.router.navigate(['/signin']);
+                    this.router.navigate(['/signin'], {replaceUrl: true});
                 });
             }
         });
