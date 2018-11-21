@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
 import { HeaderService } from '../Services/HeaderService';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -9,11 +9,15 @@ import { HeaderService } from '../Services/HeaderService';
 })
 export class HeaderComponent {
     constructor(
-        private location: Location,
-        public headerService: HeaderService) {
+        public headerService: HeaderService,
+        private router: Router) {
     }
 
     public goBack(): void {
-        this.location.back();
+        if (history.state.navigationId === 1) {
+            this.router.navigate(['/conversations']);
+        } else {
+            history.back();
+        }
     }
 }
