@@ -92,9 +92,9 @@ export class MessageService {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey)) {
                             if (t.content.startsWith('[video]')) {
-                                t.content = '[video]' + Values.ossDownloadPath + filekey;
+                                t.content = '[video]' + Values.fileAddress + filekey;
                             } else {
-                                t.content = '[img]' + Values.ossDownloadPath + filekey;
+                                t.content = '[img]' + Values.fileAddress + filekey;
                             }
                         } else {
                             t.content = '';
