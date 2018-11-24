@@ -13,6 +13,7 @@ export class UploadService {
     public static progress = 0;
     public static uploading = false;
     public static scroll = true;
+    public talkingDestroied = false;
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService
@@ -136,7 +137,7 @@ export class UploadService {
     }
 
     public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
-        if ((loaded === 0 && UploadService.scroll) || force) {
+        if (((loaded === 0 && UploadService.scroll) || force) && !this.talkingDestroied) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);

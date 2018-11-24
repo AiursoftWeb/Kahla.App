@@ -23,7 +23,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    private destroied;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -60,7 +59,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.destroied = false;
+        this.uploadService.talkingDestroied = false;
         let conversationID = 0;
         UploadService.scroll = true;
         this.headerService.title = 'Loading...';
@@ -74,7 +73,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.destroied) {
+                if (!this.uploadService.talkingDestroied) {
                     MessageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, conversationID);
@@ -224,7 +223,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.destroied = true;
+        this.uploadService.talkingDestroied = true;
         window.onscroll = null;
         window.onresize = null;
         this.content = null;
