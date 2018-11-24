@@ -20,6 +20,9 @@
                 <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
                 <input [(ngModel)]="confirmPassword" id="confirmInput" name="confirmPassword" minlength="6" maxlength="100" type="password" i18n-placeholder="@@ConfirmPassword" placeholder="Confirm password" autocomplete="new-password" (keyup.enter)="register()" (ngModelChange)="checkSame()" required #confirmInput="ngModel">
                 <div class="alert" [hidden]="samePassword || confirmInput.pristine">Passwords should be equal.</div>
+                <p>
+                    By clicking "Register" below, you agree to our <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">terms of service</a> and <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">privacy statment</a>.
+                </p>
                 <button *ngIf="!connecting" [disabled]="!registerForm.form.valid || !samePassword" class="button white" i18n="@@Register" type="submit">Register</button>
                 <button *ngIf="connecting" class="button white" i18n="@@Registering" type="button">Registering...</button>
             </form>
