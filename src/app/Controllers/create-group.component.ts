@@ -27,6 +27,14 @@ export class CreateGroupComponent {
     }
 
     public createGroup(): void {
+        if (this.groupName.includes(' ')) {
+            Swal('Try again', 'Group name can\'t contain whitespaces.', 'error');
+            return;
+        }
+        if (this.groupName.length < 3 || this.groupName.length > 25) {
+            Swal('Try again', 'Group name length must between three and twenty five.', 'error');
+            return;
+        }
         this.groupsApiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/talking', response.value]);
