@@ -29,4 +29,11 @@ export class GroupsApiService {
     public SearchGroup(groupName: string, take: number): Observable<AiurCollection<GroupConversation>> {
         return this.apiService.Get(GroupsApiService.serverPath + `/SearchGroup?GroupName=${groupName}&take=${take}`);
     }
+
+    public MuteGroup(groupName: string, setMuted: boolean): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/SetGroupMuted', {
+            groupName: groupName,
+            setMuted: setMuted
+        });
+    }
 }

@@ -10,4 +10,5 @@ export class ContactInfo {
     public userId: string;
     public aesKey: string;
     public avatarURL: string;
+    public muted: boolean;
 }

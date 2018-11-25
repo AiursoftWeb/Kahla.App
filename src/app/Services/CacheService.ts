@@ -32,7 +32,7 @@ export class CacheService {
 
     public UpdateConversations(data: ContactInfo[]): void {
         this.cachedData.conversations = data;
-        this.totalUnread = data.map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
+        this.totalUnread = data.filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
     }
 
     public autoUpdateConversation(callback: () => void): void {
