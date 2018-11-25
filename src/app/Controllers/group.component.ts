@@ -79,4 +79,16 @@ export class GroupComponent implements OnInit {
     public user(id: string): void {
         this.router.navigate(['/user', id]);
     }
+
+    public mute(): void {
+        this.groupsApiService.MuteGroup(this.conversation.displayName, true).subscribe(
+            result => {
+                if (result.code === 0) {
+                    Swal('Success', result.message, 'success');
+                } else {
+                    Swal('Error', result.message, 'error');
+                }
+            }
+        );
+    }
 }
