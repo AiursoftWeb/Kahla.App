@@ -17,10 +17,18 @@
     <div class="text" i18n="@@Message">Message</div>
 </div>
 <div class="menu-button" (click)="mute()">
-    <div class="img">
-        <i class="fa fa-bell-slash"></i>
+    <div *ngIf="!muted">
+        <div class="img">
+            <i class="fa fa-bell-slash"></i>
+        </div>
+        <div class="text" i18n="@@Mute">Mute</div>
     </div>
-    <div class="text" i18n="@@Mute">Mute</div>
+    <div *ngIf="muted">
+        <div class="img">
+            <i class="fa fa-bell"></i>
+        </div>
+        <div class="text" i18n="@@UnMute">Unmute</div>
+    </div>
 </div>
 <div class="menu-button">
     <div class="img">
