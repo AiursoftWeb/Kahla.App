@@ -54,12 +54,14 @@ export class MessageService {
                 if (MessageService.conversation && MessageService.conversation.id === evt.conversationId) {
                     this.getMessages(true, MessageService.conversation.id);
                     this.messageAmount++;
-                    if (!document.hasFocus()) {
+                    if (!document.hasFocus() && !evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
                 } else {
                     this.cacheService.autoUpdateConversation(null);
-                    this.notify.ShowNewMessage(evt, this.me.id);
+                    if (!evt.muted) {
+                        this.notify.ShowNewMessage(evt, this.me.id);
+                    }
                 }
                 break;
             case EventType.NewFriendRequest:

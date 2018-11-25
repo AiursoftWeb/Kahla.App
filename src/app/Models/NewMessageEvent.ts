@@ -6,4 +6,5 @@ export class NewMessageEvent extends AiurEvent {
     public sender: KahlaUser;
     public content: string;
     public aesKey: string;
+    public muted: boolean;
 }
