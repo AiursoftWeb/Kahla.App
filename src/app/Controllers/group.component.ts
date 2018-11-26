@@ -15,7 +15,8 @@ import { MessageService } from '../Services/MessageService';
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.css',
                 '../Styles/friends.css',
-                '../Styles/button.css']
+                '../Styles/button.css',
+                '../Styles/toggleButton.css']
 })
 
 export class GroupComponent implements OnInit {
@@ -23,6 +24,7 @@ export class GroupComponent implements OnInit {
     public groupMumbers: number;
     public loadingImgURL = Values.loadingImgURL;
     public muted: boolean;
+    public muting = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -95,15 +97,18 @@ export class GroupComponent implements OnInit {
     }
 
     public mute(): void {
-        this.groupsApiService.MuteGroup(this.conversation.displayName, !this.muted).subscribe(
-            result => {
-                if (result.code === 0) {
-                    Swal('Success', result.message, 'success');
-                    this.muted = !this.muted;
-                } else {
-                    Swal('Error', result.message, 'error');
+        if (!this.muting) {
+            this.muting = true;
+            this.groupsApiService.MuteGroup(this.conversation.displayName, !this.muted).subscribe(
+                result => {
+                    this.muting = false;
+                    if (result.code === 0) {
+                        this.muted = !this.muted;
+                    } else {
+                        Swal('Error', result.message, 'error');
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 }
