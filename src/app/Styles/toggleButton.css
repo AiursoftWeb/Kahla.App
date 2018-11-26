@@ -29,7 +29,7 @@
 }
 
 .tgl:checked + .tgl-btn {
-    background: #9FD6AE;
+    background: #5cb85c;
 }
 
 .tgl:checked + .tgl-btn::after {
