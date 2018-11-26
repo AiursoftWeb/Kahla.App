@@ -17,18 +17,13 @@
     <div class="text" i18n="@@Message">Message</div>
 </div>
 <div class="menu-button" (click)="mute()">
-    <div *ngIf="!muted">
-        <div class="img">
-            <i class="fa fa-bell-slash"></i>
-        </div>
-        <div class="text" i18n="@@Mute">Mute</div>
+    <div class="img">
+        <i *ngIf="muted" class="fa fa-bell-slash"></i>
+        <i *ngIf="!muted" class="fa fa-bell"></i>
     </div>
-    <div *ngIf="muted">
-        <div class="img">
-            <i class="fa fa-bell"></i>
-        </div>
-        <div class="text" i18n="@@UnMute">Unmute</div>
-    </div>
+    <div class="text" i18n="@@Notification">Notification</div>
+    <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()"/>
+    <label for="toggleMute" class="tgl-btn"></label>
 </div>
 <div class="menu-button">
     <div class="img">

@@ -1,0 +1,37 @@
+.tgl {
+    display: none;
+}
+
+.tgl-btn {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    width: 4em;
+    height: 2em;
+    top: 25%;
+    float: right;
+    margin-right: 5%;
+    transition: all .4s ease;
+    background: #f0f0f0;
+    border-radius: 2em;
+    padding: 2px;
+}
+
+.tgl-btn::after {
+    position: relative;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+    border-radius: 50%;
+    transition: all .2s ease;
+    background: #fff;
+}
+
+.tgl:checked + .tgl-btn {
+    background: #9FD6AE;
+}
+
+.tgl:checked + .tgl-btn::after {
+    left: 50%;
+}
