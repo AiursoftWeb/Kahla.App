@@ -23,6 +23,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    public users = new Map();
+    public fileAddress = Values.fileAddress;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -73,6 +77,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroied) {
+                    if (conversation.discriminator === 'GroupConversation') {
+                        conversation.users.forEach(user => {
+                            this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
+                                this.colors[Math.floor(Math.random() * this.colors.length)]]);
+                        });
+                    }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, conversationID);
@@ -104,8 +114,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         const tempMessage = new Message();
         tempMessage.content = this.content;
-        tempMessage.sender = this.messageService.me;
-        tempMessage.sender.avatarURL = Values.fileAddress + this.messageService.me.headImgFileKey;
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
@@ -228,5 +236,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
+        this.colors = null;
+        this.users = null;
     }
 }

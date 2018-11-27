@@ -23,9 +23,6 @@ export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[];
     public messageAmount = 15;
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
-    public userNameColors = new Map();
     public noMoreMessages = true;
     public loadingMore = false;
     public belowWindowPercent = 0;
@@ -101,11 +98,6 @@ export class MessageService {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
-                    if (this.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
-                        !this.userNameColors.has(t.senderId)) {
-                        this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
-                    }
-                    t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 if (messages.length < 15) {
                     this.noMoreMessages = true;
@@ -156,7 +148,6 @@ export class MessageService {
         this.conversation = null;
         this.localMessages = null;
         this.messageAmount = 15;
-        this.userNameColors = new Map();
         this.noMoreMessages = true;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
