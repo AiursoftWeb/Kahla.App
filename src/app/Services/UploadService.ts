@@ -10,21 +10,13 @@ import { ConversationApiService } from './ConversationApiService';
     providedIn: 'root'
 })
 export class UploadService {
-    public static progress = 0;
-    public static uploading = false;
-    public static scroll = true;
+    public progress = 0;
+    public uploading = false;
+    public talkingDestroied = false;
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService
     ) {}
-
-    public getProgress(): number {
-        return UploadService.progress;
-    }
-
-    public getUploading(): boolean {
-        return UploadService.uploading;
-    }
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: number): void {
         if (!this.validateFileSize(file)) {
@@ -33,7 +25,7 @@ export class UploadService {
         }
         const formData = new FormData();
         formData.append('file', file);
-        UploadService.uploading = true;
+        this.uploading = true;
         if (fileType === 0 && !this.validImageType(file, false)) {
             Swal('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
             return;
@@ -41,28 +33,24 @@ export class UploadService {
         if (fileType === 0 || fileType === 1) {
             this.filesApiService.UploadMedia(formData).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey);
+            }, () => {
+                Swal('Error', 'Upload failed', 'error');
+                this.finishUpload();
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                 this.encryptThenSend(response, 2, conversationID, aesKey);
+            }, () => {
+                Swal('Error', 'Upload failed', 'error');
+                this.finishUpload();
             });
         }
     }
 
     private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string): void {
-        let interval;
         if (Number(response)) {
-            interval = setInterval(() => {
-                if (<number>response > UploadService.progress) {
-                    UploadService.progress = <number>response;
-                }
-            }, 100);
-            if (<number>response === 100) {
-                UploadService.progress = 100;
-                clearInterval(interval);
-            }
+            this.progress = <number>response;
         } else if (response != null) {
-            clearInterval(interval);
             if ((<UploadFile>response).code === 0) {
                 let encedMessages;
                 switch (fileType) {
@@ -81,10 +69,9 @@ export class UploadService {
                 this.conversationApiService.SendMessage(conversationID, encedMessages)
                     .subscribe(() => {
                         this.finishUpload();
+                    }, () => {
+                        this.finishUpload();
                     });
-            } else {
-                Swal('Error', (<UploadFile>response).message, 'error');
-                this.finishUpload();
             }
         }
     }
@@ -100,8 +87,8 @@ export class UploadService {
     }
 
     private finishUpload() {
-        UploadService.uploading = false;
-        UploadService.progress = 0;
+        this.uploading = false;
+        this.progress = 0;
     }
 
     public scrollBottom(smooth: boolean) {
@@ -136,7 +123,7 @@ export class UploadService {
     }
 
     public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
-        if ((loaded === 0 && UploadService.scroll) || force) {
+        if ((loaded === 0 || force) && !this.talkingDestroied) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);
@@ -152,17 +139,17 @@ export class UploadService {
         if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
-            UploadService.uploading = true;
+            this.uploading = true;
             const uploadButton = document.querySelector('#upload');
             uploadButton.textContent = 'Uploading';
             this.filesApiService.UploadIcon(formData).subscribe(response => {
                 if (Number(response)) {
-                    UploadService.progress = <number>response;
+                    this.progress = <number>response;
                 } else if (response != null && (<UploadFile>response).code === 0) {
-                    UploadService.progress = 0;
+                    this.progress = 0;
                     user.headImgFileKey = (<UploadFile>response).fileKey;
                     user.avatarURL = (<UploadFile>response).downloadPath;
-                    UploadService.uploading = false;
+                    this.uploading = false;
                     uploadButton.textContent = 'Upload new avatar';
                 }
             });

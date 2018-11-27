@@ -32,7 +32,7 @@ export class CheckService {
                     && latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
                 } else if (checkButton) {
-                    Swal('Alert', `You are running the latest version of Kahla!`, 'success');
+                    Swal('Success', 'You are running the latest version of Kahla!', 'success');
                 }
                 this.checking = false;
             });

@@ -7,4 +7,5 @@ export class UserGroupRelation {
     public readTimeStamp: string;
     public user: KahlaUser;
     public userId: string;
+    public muted: boolean;
 }

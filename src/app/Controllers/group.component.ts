@@ -9,18 +9,22 @@ import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { HeaderService } from '../Services/HeaderService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.css',
                 '../Styles/friends.css',
-                '../Styles/button.css']
+                '../Styles/button.css',
+                '../Styles/toggleButton.css']
 })
 
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
     public groupMumbers: number;
     public loadingImgURL = Values.loadingImgURL;
+    public muted: boolean;
+    public muting = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -28,7 +32,8 @@ export class GroupComponent implements OnInit {
         private conversationApiService: ConversationApiService,
         private router: Router,
         private cache: CacheService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private messageService: MessageService
     ) {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
@@ -47,6 +52,17 @@ export class GroupComponent implements OnInit {
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
                     user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
+                    try {
+                        if (user.userId === this.messageService.me.id) {
+                            this.muted = user.muted;
+                        }
+                    } catch (error) {
+                        setTimeout(() => {
+                            if (user.userId === this.messageService.me.id) {
+                                this.muted = user.muted;
+                            }
+                        }, 1000);
+                    }
                 });
             });
     }
@@ -78,5 +94,21 @@ export class GroupComponent implements OnInit {
 
     public user(id: string): void {
         this.router.navigate(['/user', id]);
+    }
+
+    public mute(): void {
+        if (!this.muting) {
+            this.muting = true;
+            this.groupsApiService.MuteGroup(this.conversation.displayName, !this.muted).subscribe(
+                result => {
+                    this.muting = false;
+                    if (result.code === 0) {
+                        this.muted = !this.muted;
+                    } else {
+                        Swal('Error', result.message, 'error');
+                    }
+                }
+            );
+        }
     }
 }

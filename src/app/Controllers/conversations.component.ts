@@ -43,6 +43,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         if (this.messaageService.me) {
             this.cacheService.autoUpdateConversation(null);
         }
+        setTimeout(() => {
+            window.scroll(0, 0);
+        }, 0);
     }
 
     public detail(info: ContactInfo): void {

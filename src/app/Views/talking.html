@@ -8,7 +8,7 @@
         </div>
         <div class="chat-text">
             <div class="chat-content">
-                <span *ngIf="messageService.getConversation() && messageService.getConversation().discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
+                <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.userNameColors.get(message.senderId)}">{{ message.sender.nickName }}<br></span>
                 <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{message.content.substring(5)}}">
                     <img src="{{message.content.substring(5)}}">
                 </a>
@@ -81,7 +81,7 @@
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
             <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml" />
-            <label for="image"><i style="color: #FF9800;" class="fa fa-picture-o"></i>
+            <label for="image"><i style="color: #FF9800;" class="fa fa-file-image-o"></i>
                 <div class="text">
                 Send Image
             </div>
@@ -97,7 +97,7 @@
         </div>
         <div class="of4">
             <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)" />
-            <label for="file"><i style="color: #4694F6;" class="fa fa-file-image-o"></i>
+            <label for="file"><i style="color: #4694F6;" class="fa fa-file-text"></i>
                 <div class="text">
                     Send File
                 </div>
@@ -105,4 +105,4 @@
         </div>
     </div>
 </div>
-<progress *ngIf="uploadService.getUploading()" max="100" value={{uploadService.getProgress()}}></progress>
+<progress *ngIf="uploadService.uploading" max="100" value={{uploadService.progress}}></progress>

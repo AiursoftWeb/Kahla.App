@@ -20,7 +20,7 @@ import { CacheService } from './CacheService';
 })
 
 export class MessageService {
-    public static conversation: Conversation;
+    public conversation: Conversation;
     public localMessages: Message[];
     public messageAmount = 15;
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
@@ -42,24 +42,22 @@ export class MessageService {
         private cacheService: CacheService
     ) {}
 
-    public getConversation(): Conversation {
-        return MessageService.conversation;
-    }
-
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         switch (ev.type) {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
-                if (MessageService.conversation && MessageService.conversation.id === evt.conversationId) {
-                    this.getMessages(true, MessageService.conversation.id);
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.getMessages(true, this.conversation.id);
                     this.messageAmount++;
-                    if (!document.hasFocus()) {
+                    if (!document.hasFocus() && !evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
                 } else {
                     this.cacheService.autoUpdateConversation(null);
-                    this.notify.ShowNewMessage(evt, this.me.id);
+                    if (!evt.muted) {
+                        this.notify.ShowNewMessage(evt, this.me.id);
+                    }
                 }
                 break;
             case EventType.NewFriendRequest:
@@ -83,18 +81,18 @@ export class MessageService {
                 map(t => t.items)
             )
             .subscribe(messages => {
-                if (!MessageService.conversation) {
+                if (!this.conversation) {
                     return;
                 }
                 messages.forEach(t => {
-                    t.content = AES.decrypt(t.content, MessageService.conversation.aesKey).toString(enc.Utf8);
+                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey !== -1 && !isNaN(filekey)) {
                             if (t.content.startsWith('[video]')) {
-                                t.content = '[video]' + Values.ossDownloadPath + filekey;
+                                t.content = '[video]' + Values.fileAddress + filekey;
                             } else {
-                                t.content = '[img]' + Values.ossDownloadPath + filekey;
+                                t.content = '[img]' + Values.fileAddress + filekey;
                             }
                         } else {
                             t.content = '';
@@ -103,7 +101,7 @@ export class MessageService {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
-                    if (MessageService.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
+                    if (this.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
                         !this.userNameColors.has(t.senderId)) {
                         this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
                     }
@@ -145,7 +143,7 @@ export class MessageService {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
-            this.getMessages(false, MessageService.conversation.id);
+            this.getMessages(false, this.conversation.id);
         }
     }
 
@@ -155,7 +153,7 @@ export class MessageService {
     }
 
     public resetVariables(): void {
-        MessageService.conversation = null;
+        this.conversation = null;
         this.localMessages = null;
         this.messageAmount = 15;
         this.userNameColors = new Map();
@@ -164,6 +162,5 @@ export class MessageService {
         this.belowWindowPercent = 0;
         this.newMessages = false;
         this.oldOffsetHeight = 0;
-        UploadService.scroll = false;
     }
 }

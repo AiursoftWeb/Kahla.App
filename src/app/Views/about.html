@@ -11,8 +11,7 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-holder"></div>
-<div class="menu-holder"></div>
+
 <div *ngIf="checkService.checking; then checkingButton else checkButton"></div>
 <ng-template #checkButton>
     <div class="menu-button" (click)="check()">

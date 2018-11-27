@@ -57,7 +57,6 @@ export class UserComponent implements OnInit {
                         this.cacheService.autoUpdateConversation(null);
                         this.router.navigate(['/friends']);
                     });
-            } else {
             }
         });
     }

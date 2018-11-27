@@ -1,4 +1,4 @@
-.reddot {
+.dot {
     top: 0;
     right: 0;
     position: absolute;
@@ -6,7 +6,6 @@
     max-width: 24px;
     height: 20px;
     color: white;
-    background-color: #E53935;
     font-size: 12px;
     line-height: 20px;
     border-radius: 50%;
@@ -14,4 +13,12 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.reddot {
+    background-color: #E53935;
+}
+
+.bluedot {
+    background-color: #26c6da;
 }

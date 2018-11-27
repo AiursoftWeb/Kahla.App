@@ -39,7 +39,7 @@ export class RegisterComponent {
                     this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                this.router.navigate(['/conversations']);
+                                this.router.navigate(['/conversations'], {replaceUrl: true});
                                 this.initService.init();
                             } else {
                                 Swal('Sign in failed', 'An error occured while signing in.', 'error');

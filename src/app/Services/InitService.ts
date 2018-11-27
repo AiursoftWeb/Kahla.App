@@ -27,12 +27,15 @@ export class InitService {
     }
 
     public init(): void {
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
         this.online = navigator.onLine;
         this.connecting = true;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
-                this.router.navigate(['/signin']);
+                this.router.navigate(['/signin'], {replaceUrl: true});
             } else {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
@@ -60,9 +63,6 @@ export class InitService {
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
             this.ws.onerror = () => this.autoReconnect();
             this.ws.onclose = () => this.autoReconnect();
-            if ('Notification' in window) {
-                Notification.requestPermission();
-            }
         }, () => {
                 this.connecting = false;
                 this.initPusherError = true;
@@ -81,6 +81,9 @@ export class InitService {
 
     public destory(): void {
         this.ws = null;
+        this.messageService.resetVariables();
+        this.cacheService.reset();
+        this.messageService.me = null;
     }
 
     private autoReconnect(): void {
