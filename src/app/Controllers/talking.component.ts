@@ -61,7 +61,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
         let conversationID = 0;
-        UploadService.scroll = true;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.route.params
@@ -74,7 +73,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroied) {
-                    MessageService.conversation = conversation;
+                    this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, conversationID);
                     this.headerService.title = conversation.displayName;
@@ -113,8 +112,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        this.content = AES.encrypt(this.content, MessageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(MessageService.conversation.id, this.content)
+        this.content = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, this.content)
             .subscribe(() => {});
         this.content = '';
         document.getElementById('chatInput').focus();
@@ -159,7 +158,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             files = this.imageInput.nativeElement.files[0];
         }
         if (files) {
-            this.uploadService.upload(files, MessageService.conversation.id, MessageService.conversation.aesKey, fileType);
+            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
         }
     }
 
@@ -177,8 +176,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         showCancelButton: true
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadService.upload(blob, MessageService.conversation.id,
-                                MessageService.conversation.aesKey, 0);
+                            this.uploadService.upload(blob, this.messageService.conversation.id,
+                                this.messageService.conversation.aesKey, 0);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -194,7 +193,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < items.length; i++) {
                 const blob = items[i].getAsFile();
                 if (blob != null) {
-                    this.uploadService.upload(blob, MessageService.conversation.id, MessageService.conversation.aesKey, 2);
+                    this.uploadService.upload(blob, this.messageService.conversation.id, this.messageService.conversation.aesKey, 2);
                 }
             }
         } else {
@@ -202,7 +201,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             for (let i = 0; i < files.length; i++) {
                 const blob = files[i];
                 if (blob != null) {
-                    this.uploadService.upload(blob, MessageService.conversation.id, MessageService.conversation.aesKey, 2);
+                    this.uploadService.upload(blob, this.messageService.conversation.id, this.messageService.conversation.aesKey, 2);
                 }
             }
         }
