@@ -19,6 +19,7 @@
 
 .tgl-btn::after {
     position: relative;
+    left: 0;
     display: block;
     content: "";
     width: 50%;
