@@ -27,6 +27,9 @@ export class InitService {
     }
 
     public init(): void {
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
         this.online = navigator.onLine;
         this.connecting = true;
         this.checkService.checkVersion(false);
@@ -60,9 +63,6 @@ export class InitService {
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
             this.ws.onerror = () => this.autoReconnect();
             this.ws.onclose = () => this.autoReconnect();
-            if ('Notification' in window) {
-                Notification.requestPermission();
-            }
         }, () => {
                 this.connecting = false;
                 this.initPusherError = true;
