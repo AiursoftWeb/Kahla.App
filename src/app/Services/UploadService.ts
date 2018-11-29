@@ -91,39 +91,8 @@ export class UploadService {
         this.progress = 0;
     }
 
-    public scrollBottom(smooth: boolean) {
-        const images: NodeListOf<HTMLImageElement> = document.querySelectorAll('.chat-content img');
-        const videos = document.querySelectorAll('video');
-        let loaded = images.length + videos.length;
-        if (loaded === 0) {
-            this.scrollHelper(0, smooth, false);
-            return;
-        }
-        for (let i = 0; i < images.length; i++) {
-            if (images[i].complete) {
-                loaded--;
-            } else {
-                images[i].addEventListener('load', () => {
-                    loaded--;
-                    this.scrollHelper(loaded, smooth, false);
-                });
-            }
-        }
-        for (let j = 0; j < videos.length; j++) {
-            if (videos[j].buffered.length > 0) {
-                loaded--;
-            } else {
-                videos[j].addEventListener('loadeddata', () => {
-                    loaded--;
-                    this.scrollHelper(loaded, smooth, false);
-                });
-            }
-        }
-        this.scrollHelper(loaded, smooth, false);
-    }
-
-    public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
-        if ((loaded === 0 || force) && !this.talkingDestroied) {
+    public scrollBottom(smooth: boolean): void {
+        if (!this.talkingDestroied) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);
