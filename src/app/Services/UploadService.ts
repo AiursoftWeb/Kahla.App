@@ -32,14 +32,14 @@ export class UploadService {
         }
         if (fileType === 0 || fileType === 1) {
             this.filesApiService.UploadMedia(formData).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey);
+                this.encryptMessge(response, fileType, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, 2, conversationID, aesKey);
+                this.encryptMessge(response, 2, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
@@ -47,7 +47,7 @@ export class UploadService {
         }
     }
 
-    private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string): void {
+    private encryptMessge(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string, file: File): void {
         if (Number(response)) {
             this.progress = <number>response;
         } else if (response != null) {
@@ -55,25 +55,35 @@ export class UploadService {
                 let encedMessages;
                 switch (fileType) {
                     case 0:
-                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        const image = new Image;
+                        image.src = URL.createObjectURL(file);
+                        image.addEventListener('load', () => {
+                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${
+                                image.naturalWidth}-${image.naturalHeight}`, aesKey).toString();
+                            this.sendMessage(encedMessages, conversationID);
+                        });
                         break;
                     case 1:
                         encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
                         break;
                     case 2:
                         encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
+                        this.sendMessage(encedMessages, conversationID);
                         break;
                     default:
                         break;
                 }
-                this.conversationApiService.SendMessage(conversationID, encedMessages)
-                    .subscribe(() => {
-                        this.finishUpload();
-                    }, () => {
-                        this.finishUpload();
-                    });
             }
         }
+    }
+
+    private sendMessage(message: string, conversationID: number): void {
+        this.conversationApiService.SendMessage(conversationID, message)
+            .subscribe(() => {
+                this.finishUpload();
+            }, () => {
+                this.finishUpload();
+            });
     }
 
     private validateFileSize(file: File): boolean {
@@ -94,6 +104,15 @@ export class UploadService {
     public scrollBottom(smooth: boolean): void {
         if (!this.talkingDestroied) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+            const images: NodeListOf<HTMLImageElement> = document.querySelectorAll('.chat-content img');
+            for (let i = 0; i < images.length; i++) {
+                if (!images[i].complete) {
+                    images[i].classList.add('loading');
+                    images[i].addEventListener('load', () => {
+                        images[i].classList.remove('loading');
+                    });
+                }
+            }
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);
             } else if (smooth) {
@@ -147,15 +166,15 @@ export class UploadService {
     }
 
     public getFileKey(message: string): number {
-        if (message === null || message.length < 5) {
+        if (message === null || message.length < 5 || !message.includes('-')) {
             return -1;
         }
         if (message.startsWith('[img]')) {
-            return Number(message.substring(5));
+            return Number(message.substring(5, message.indexOf('-')));
         } else if (message.startsWith('[file]')) {
             return Number(message.substring(6, message.indexOf('-')));
         } else if (message.startsWith('[video]')) {
-            return Number(message.substring(7));
+            return Number(message.substring(7, message.indexOf('-')));
         } else {
             return -1;
         }

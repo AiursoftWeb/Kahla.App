@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
 import * as Autolinker from 'autolinker';
 import { KahlaUser } from '../Models/KahlaUser';
-import { Values } from '../values';
 import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
@@ -45,7 +44,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id, false);
+                    this.getMessages(true, this.conversation.id);
                     this.messageAmount++;
                     if (!document.hasFocus() && !evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
@@ -72,7 +71,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number, init: boolean): void {
+    public getMessages(getDown: boolean, id: number): void {
         this.conversationApiService.GetMessage(id, this.messageAmount)
             .pipe(
                 map(t => t.items)
@@ -85,16 +84,10 @@ export class MessageService {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey !== -1 && !isNaN(filekey)) {
-                            if (t.content.startsWith('[video]')) {
-                                t.content = '[video]' + Values.fileAddress + filekey;
-                            } else {
-                                t.content = '[img]' + Values.fileAddress + filekey;
-                            }
-                        } else {
+                        if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         }
-                    } else if (!t.content.startsWith('[img]')) {
+                    } else if (!t.content.startsWith('[file]')) {
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
@@ -121,7 +114,7 @@ export class MessageService {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
                     }, 0);
-                } else if (!getDown && !init) {
+                } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
@@ -135,7 +128,7 @@ export class MessageService {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id, false);
+            this.getMessages(false, this.conversation.id);
         }
     }
 
