@@ -133,8 +133,12 @@
         margin: 0;
     }
 
+    .image-container {
+        height: 0;
+        position: relative;
+    }
+
     .message-list .chat-content img, .message-list .chat-content video {
-       height: 100%;
        width: 100%;
     }
 

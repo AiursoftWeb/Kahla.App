@@ -11,10 +11,12 @@
         <div class="chat-text">
             <div class="chat-content">
                 <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': users.get(message.senderId)[2]}">{{ users.get(message.senderId)[0] }}<br></span>
-                <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{ fileAddress + message.content.substring(5) }}">
-                    <img src="{{ fileAddress + message.content.substring(5) }}">
+                <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 2" target="_blank" href="{{ fileAddress + message.content.substring(5).split('-')[0] }}">
+                    <div class="image-container" [style.padding-bottom.%]="message.content.split('-')[1]">
+                        <img src="{{ fileAddress + message.content.substring(5).split('-')[0] }}">
+                    </div>
                 </a>
-                <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
+                <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3"  target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
                     <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
                         <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
                         <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
@@ -51,10 +53,10 @@
                     <h5>{{message.content.split('-')[1]}}</h5>
                     <span>{{message.content.split('-')[2]}}</span>
                 </a>
-                <div *ngIf="message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}">
+                <div *ngIf="message.content.startsWith('[video]')" >
                     <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
                 </div>
-                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]')" [ngClass]="{'loading': message.local}" [innerHTML]="message.content"></p>
+                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]')"  [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
                 <span *ngIf="message.local" i18n="@@Sending">
