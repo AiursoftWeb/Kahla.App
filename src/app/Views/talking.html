@@ -11,8 +11,8 @@
         <div class="chat-text">
             <div class="chat-content">
                 <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': users.get(message.senderId)[2]}">{{ users.get(message.senderId)[0] }}<br></span>
-                <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 3" [ngClass]="{'loading': message.local}" target="_blank" href="{{ fileAddress + message.content.substring(5).split('-')[0] }}">
-                    <img width="{{ message.content.split('-')[1] }}" height="{{ message.content.split('-')[2] }}" src="{{ fileAddress + message.content.substring(5).split('-')[0] }}">
+                <a *ngIf="message.content.startsWith('[img]')" [ngClass]="{'loading': message.local}" target="_blank" href="{{ fileAddress + message.content.substring(5) }}">
+                    <img src="{{ fileAddress + message.content.substring(5) }}">
                 </a>
                 <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3" [ngClass]="{'loading': message.local}" target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
                     <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
