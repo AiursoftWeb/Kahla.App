@@ -8,9 +8,15 @@ import { Router } from '@angular/router';
     styleUrls: ['../Styles/header.css']
 })
 export class HeaderComponent {
+    public macOSElectron = false;
+
     constructor(
         public headerService: HeaderService,
         private router: Router) {
+            const userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes('electron') && userAgent.includes('macintosh')) {
+                this.macOSElectron = true;
+            }
     }
 
     public goBack(): void {

@@ -16,6 +16,7 @@ function createWindow() {
             height: 768,
             icon: __dirname + '/assets/48x48.png',
             frame: false,
+            titleBarStyle: 'hiddenInset',
             minWidth: 200,
             minHeight: 300
         })
