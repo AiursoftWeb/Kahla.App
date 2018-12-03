@@ -2,7 +2,7 @@
     <div class="returnButton" *ngIf="headerService.returnButton" (click)="goBack()">
         <i class="fa fa-caret-left"></i>
     </div>
-    <div class="text">{{headerService.title}}</div>
+    <div class="text" style="-webkit-app-region: drag">{{headerService.title}}</div>
     <div *ngIf="headerService.button" class="user-button" routerLink="{{headerService.routerLink}}">
         <i class="fa fa-{{headerService.buttonIcon}}"></i>
     </div>
