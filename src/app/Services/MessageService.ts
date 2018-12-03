@@ -88,6 +88,8 @@ export class MessageService {
                             t.content = '';
                         }
                     } else if (!t.content.startsWith('[file]')) {
+                        // strip html tags
+                        t.content.replace(/<[^>]+>/ig, '');
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
