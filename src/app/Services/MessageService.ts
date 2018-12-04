@@ -13,6 +13,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
+import * as he from 'he';
 
 @Injectable({
     providedIn: 'root'
@@ -88,9 +89,7 @@ export class MessageService {
                             t.content = '';
                         }
                     } else if (!t.content.startsWith('[file]')) {
-                        // replace html tags
-                        t.content = t.content.replace(/</g, '&lt;');
-                        t.content = t.content.replace(/>/g, '&gt;');
+                        t.content = he.encode(t.content);
                         // replace URLs to links
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
