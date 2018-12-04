@@ -82,6 +82,7 @@
     "core-js": "^2.5.7",
     "crypto-js": "^3.1.9-1",
     "font-awesome": "^4.7.0",
+    "he": "^1.2.0",
     "pulltorefreshjs": "^0.1.14",
     "rxjs": "^6.3.3",
     "sweetalert2": "^7.28.2",

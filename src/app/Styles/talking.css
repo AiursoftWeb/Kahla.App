@@ -133,16 +133,13 @@
         margin: 0;
     }
 
-    .message-list .chat-content img {
-        width: 100%;
-        height: 100%;
-        max-width:400px;
+    .image-container {
+        height: 0;
+        position: relative;
     }
 
-    .message-list .chat-content video {
-        width: 100%;
-        height: 100%;
-        max-width:400px;
+    .message-list .chat-content img, .message-list .chat-content video {
+       width: 100%;
     }
 
     .message-list .left .chat-content {

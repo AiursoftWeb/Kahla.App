@@ -8,12 +8,12 @@ import { Message } from '../Models/Message';
 import { ConversationApiService } from './ConversationApiService';
 import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
-import * as Autolinker from 'autolinker';
 import { KahlaUser } from '../Models/KahlaUser';
-import { Values } from '../values';
 import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
+import * as he from 'he';
+import * as Autolinker from 'autolinker';
 
 @Injectable({
     providedIn: 'root'
@@ -85,17 +85,11 @@ export class MessageService {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey !== -1 && !isNaN(filekey)) {
-                            if (t.content.startsWith('[video]')) {
-                                t.content = '[video]' + Values.fileAddress + filekey;
-                            } else {
-                                t.content = '[img]' + Values.fileAddress + filekey;
-                            }
-                        } else {
+                        if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         }
-                    } else if (!t.content.startsWith('[img]')) {
-                        // replace URLs to links
+                    } else if (!t.content.startsWith('[file]')) {
+                        t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
                 });
@@ -120,7 +114,7 @@ export class MessageService {
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
-                    }, 0);
+                    }, 1000);
                 } else if (!getDown && !init) {
                     this.loadingMore = false;
                     setTimeout(() => {
