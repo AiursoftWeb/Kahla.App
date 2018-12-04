@@ -60,6 +60,7 @@ export class UploadService {
                         image.addEventListener('load', () => {
                             encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${
                                 image.naturalHeight / image.naturalWidth * 100}`, aesKey).toString();
+                            URL.revokeObjectURL(image.src);
                             this.sendMessage(encedMessages, conversationID);
                         });
                         break;
