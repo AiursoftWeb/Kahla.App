@@ -6,7 +6,6 @@ import { Request } from '../Models/Request';
 import { Values } from '../values';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
-import * as he from 'he';
 
 @Injectable()
 export class CacheService {
@@ -45,12 +44,12 @@ export class CacheService {
                         e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
                         if (e.latestMessage.startsWith('[img]')) {
                             e.latestMessage = 'Photo';
-                        } else if (e.latestMessage.startsWith('[video]')) {
+                        }
+                        if (e.latestMessage.startsWith('[video]')) {
                             e.latestMessage = 'Video';
-                        } else if (e.latestMessage.startsWith('[file]')) {
+                        }
+                        if (e.latestMessage.startsWith('[file]')) {
                             e.latestMessage = 'File';
-                        } else {
-                            e.latestMessage = he.decode(e.latestMessage);
                         }
                     }
                     e.avatarURL = Values.fileAddress + e.displayImageKey;

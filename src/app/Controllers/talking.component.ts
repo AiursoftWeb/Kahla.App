@@ -115,9 +115,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
-        this.content = he.encode(this.content);
-        this.content = Autolinker.link(this.content, { stripPrefix: false});
-        tempMessage.content = this.content;
+        tempMessage.content = he.encode(this.content);
+        tempMessage.content = Autolinker.link(tempMessage.content, { stripPrefix: false});
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
