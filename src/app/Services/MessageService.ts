@@ -8,12 +8,10 @@ import { Message } from '../Models/Message';
 import { ConversationApiService } from './ConversationApiService';
 import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
-import * as Autolinker from 'autolinker';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
-import * as he from 'he';
 
 @Injectable({
     providedIn: 'root'
@@ -88,10 +86,6 @@ export class MessageService {
                         if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         }
-                    } else if (!t.content.startsWith('[file]')) {
-                        t.content = he.encode(t.content);
-                        // replace URLs to links
-                        t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
                 });
                 if (messages.length < 15) {

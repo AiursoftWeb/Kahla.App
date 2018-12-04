@@ -9,6 +9,8 @@ import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
+import * as he from 'he';
+import * as Autolinker from 'autolinker';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -113,6 +115,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
+        this.content = he.encode(this.content);
+        this.content = Autolinker.link(this.content, { stripPrefix: false});
         tempMessage.content = this.content;
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
