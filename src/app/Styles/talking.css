@@ -131,6 +131,7 @@
 
     .message-list .chat-content p {
         margin: 0;
+        white-space: pre-wrap;
     }
 
     .image-container {
