@@ -4,6 +4,8 @@
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
+![screenshot](https://oss.aiursoft.com/ColossusPublic/d505f40c7f6943bda7f2106673f27140.png)
+
 ![KahlaLogo](./src/assets/144x144.png)
 
 Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
