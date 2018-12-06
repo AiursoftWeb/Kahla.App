@@ -58,7 +58,7 @@ export class UploadService {
                         const image = new Image;
                         image.src = URL.createObjectURL(file);
                         image.addEventListener('load', () => {
-                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${
+                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${image.naturalHeight}-${
                                 image.naturalHeight / image.naturalWidth * 100}`, aesKey).toString();
                             URL.revokeObjectURL(image.src);
                             this.sendMessage(encedMessages, conversationID);

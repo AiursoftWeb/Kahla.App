@@ -29,6 +29,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public users = new Map();
     public fileAddress = Values.fileAddress;
+    public maxImageWidth = 0;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -66,6 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
+        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
         let conversationID = 0;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
