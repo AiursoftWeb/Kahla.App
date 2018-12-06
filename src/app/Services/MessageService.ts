@@ -114,14 +114,24 @@ export class MessageService {
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
-                    }, 1000);
+                    }, 0);
                 } else if (!getDown && !init) {
                     this.loadingMore = false;
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
+                if (init) {
+                    setTimeout(() => {
+                        this.updateBelowWindowPercent();
+                    }, 0);
+                }
             });
+    }
+
+    public updateBelowWindowPercent(): void {
+        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+            - window.innerHeight) / window.innerHeight;
     }
 
     public loadMore(): void {

@@ -139,7 +139,7 @@
         position: relative;
     }
 
-    .message-list .chat-content img, .message-list .chat-content video {
+    .message-list .chat-content video {
        width: 100%;
     }
 
