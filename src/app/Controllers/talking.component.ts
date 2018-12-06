@@ -45,8 +45,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        this.messageService.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
-            - window.innerHeight) / window.innerHeight;
+        this.messageService.updateBelowWindowPercent();
         if (this.messageService.belowWindowPercent <= 0) {
             this.messageService.newMessages = false;
         }

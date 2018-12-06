@@ -121,7 +121,17 @@ export class MessageService {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
+                if (init) {
+                    setTimeout(() => {
+                        this.updateBelowWindowPercent();
+                    }, 0);
+                }
             });
+    }
+
+    public updateBelowWindowPercent(): void {
+        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+            - window.innerHeight) / window.innerHeight;
     }
 
     public loadMore(): void {
