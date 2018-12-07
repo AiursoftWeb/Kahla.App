@@ -3,7 +3,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
-import { Location } from '@angular/common';
 import { switchMap,  } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -25,7 +24,6 @@ export class UserComponent implements OnInit {
         private friendsApiService: FriendsApiService,
         private router: Router,
         private cacheService: CacheService,
-        private location: Location,
         private headerService: HeaderService
     ) {
         this.headerService.title = 'Profile';
@@ -69,7 +67,6 @@ export class UserComponent implements OnInit {
                 } else {
                     Swal('Error', response.message, 'error');
                 }
-                this.location.back();
             });
     }
 

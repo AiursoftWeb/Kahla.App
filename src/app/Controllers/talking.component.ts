@@ -53,6 +53,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:resize', [])
     onResize() {
+        this.getMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
@@ -66,7 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
+        this.getMaxImageWidth();
         let conversationID = 0;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
@@ -101,6 +102,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 }
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    public getMaxImageWidth(): void {
+        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
     }
 
     public trackByMessages(_index: number, message: Message): number {
