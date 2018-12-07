@@ -89,7 +89,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(false, conversationID, true);
+                    this.messageService.getMessages(true, conversationID, true);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
                     if (conversation.anotherUserId) {
