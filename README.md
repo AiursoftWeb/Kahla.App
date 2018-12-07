@@ -1,3 +1,5 @@
+![KahlaLogo](./src/assets/144x144.png)
+
 # Kahla
 
 [![Build status](https://aiursoft.visualstudio.com/Kahla/_apis/build/status/Kahla.App%20CI)](https://aiursoft.visualstudio.com/Kahla/_build/latest?definitionId=9)
@@ -6,7 +8,7 @@ Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also a
 
 ![screenshot](https://oss.aiursoft.com/ColossusPublic/d505f40c7f6943bda7f2106673f27140.png?w=1440&h=875)
 
-![KahlaLogo](./src/assets/144x144.png)
+Try it here: [web.kahla.app](https://web.kahla.app)
 
 Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
 
@@ -14,7 +16,7 @@ Kahla is built with Angular 5 and typescript. And Kahla Server is built with ASP
 
 For more document about Kahla project and Kahla API, please view document [here](https://wiki.aiursoft.com/ReadDoc/Kahla/What%20is%20Kahla.md).
 
-For our official website, please view [here](https://kahla.aiursoft.com).
+For our official website, please view [here](https://www.kahla.app).
 
 ## How to develope
 
