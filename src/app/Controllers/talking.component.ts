@@ -9,6 +9,8 @@ import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
+import * as he from 'he';
+import * as Autolinker from 'autolinker';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -23,6 +25,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    public users = new Map();
+    public fileAddress = Values.fileAddress;
+    public maxImageWidth = 0;
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -38,8 +45,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        this.messageService.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
-            - window.innerHeight) / window.innerHeight;
+        this.messageService.updateBelowWindowPercent();
         if (this.messageService.belowWindowPercent <= 0) {
             this.messageService.newMessages = false;
         }
@@ -47,6 +53,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:resize', [])
     onResize() {
+        this.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
@@ -60,6 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
+        this.updateMaxImageWidth();
         let conversationID = 0;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
@@ -73,9 +81,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroied) {
+                    if (conversation.discriminator === 'GroupConversation') {
+                        conversation.users.forEach(user => {
+                            this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
+                                this.colors[Math.floor(Math.random() * this.colors.length)]]);
+                        });
+                    }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, conversationID);
+                    this.messageService.getMessages(true, conversationID, true);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
                     if (conversation.anotherUserId) {
@@ -88,6 +102,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 }
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    public updateMaxImageWidth(): void {
+        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
     }
 
     public trackByMessages(_index: number, message: Message): number {
@@ -103,9 +121,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
-        tempMessage.content = this.content;
-        tempMessage.sender = this.messageService.me;
-        tempMessage.sender.avatarURL = Values.fileAddress + this.messageService.me.headImgFileKey;
+        tempMessage.content = he.encode(this.content);
+        tempMessage.content = Autolinker.link(tempMessage.content, { stripPrefix: false});
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
@@ -228,5 +245,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
+        this.colors = null;
+        this.users = null;
     }
 }

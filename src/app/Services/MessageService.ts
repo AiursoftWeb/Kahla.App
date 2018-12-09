@@ -8,12 +8,12 @@ import { Message } from '../Models/Message';
 import { ConversationApiService } from './ConversationApiService';
 import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
-import * as Autolinker from 'autolinker';
 import { KahlaUser } from '../Models/KahlaUser';
-import { Values } from '../values';
 import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
+import * as he from 'he';
+import * as Autolinker from 'autolinker';
 
 @Injectable({
     providedIn: 'root'
@@ -23,9 +23,6 @@ export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[];
     public messageAmount = 15;
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
-    public userNameColors = new Map();
     public noMoreMessages = true;
     public loadingMore = false;
     public belowWindowPercent = 0;
@@ -48,7 +45,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id);
+                    this.getMessages(true, this.conversation.id, false);
                     this.messageAmount++;
                     if (!document.hasFocus() && !evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
@@ -75,7 +72,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number): void {
+    public getMessages(getDown: boolean, id: number, init: boolean): void {
         this.conversationApiService.GetMessage(id, this.messageAmount)
             .pipe(
                 map(t => t.items)
@@ -88,24 +85,13 @@ export class MessageService {
                     t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey !== -1 && !isNaN(filekey)) {
-                            if (t.content.startsWith('[video]')) {
-                                t.content = '[video]' + Values.fileAddress + filekey;
-                            } else {
-                                t.content = '[img]' + Values.fileAddress + filekey;
-                            }
-                        } else {
+                        if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         }
-                    } else if (!t.content.startsWith('[img]')) {
-                        // replace URLs to links
+                    } else if (!t.content.startsWith('[file]')) {
+                        t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, { stripPrefix: false});
                     }
-                    if (this.conversation.discriminator === 'GroupConversation' && this.me && t.senderId !== this.me.id &&
-                        !this.userNameColors.has(t.senderId)) {
-                        this.userNameColors.set(t.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
-                    }
-                    t.sender.avatarURL = Values.fileAddress + t.sender.headImgFileKey;
                 });
                 if (messages.length < 15) {
                     this.noMoreMessages = true;
@@ -129,13 +115,23 @@ export class MessageService {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
                     }, 0);
-                } else if (!getDown) {
+                } else if (!getDown && !init) {
                     this.loadingMore = false;
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
+                if (init) {
+                    setTimeout(() => {
+                        this.updateBelowWindowPercent();
+                    }, 0);
+                }
             });
+    }
+
+    public updateBelowWindowPercent(): void {
+        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+            - window.innerHeight) / window.innerHeight;
     }
 
     public loadMore(): void {
@@ -143,7 +139,7 @@ export class MessageService {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
+            this.getMessages(false, this.conversation.id, false);
         }
     }
 
@@ -156,7 +152,6 @@ export class MessageService {
         this.conversation = null;
         this.localMessages = null;
         this.messageAmount = 15;
-        this.userNameColors = new Map();
         this.noMoreMessages = true;
         this.loadingMore = false;
         this.belowWindowPercent = 0;

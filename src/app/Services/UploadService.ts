@@ -32,14 +32,14 @@ export class UploadService {
         }
         if (fileType === 0 || fileType === 1) {
             this.filesApiService.UploadMedia(formData).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey);
+                this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, 2, conversationID, aesKey);
+                this.encryptThenSend(response, 2, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
@@ -47,7 +47,7 @@ export class UploadService {
         }
     }
 
-    private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string): void {
+    private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string, file: File): void {
         if (Number(response)) {
             this.progress = <number>response;
         } else if (response != null) {
@@ -55,25 +55,38 @@ export class UploadService {
                 let encedMessages;
                 switch (fileType) {
                     case 0:
-                        encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        const image = new Image;
+                        image.src = URL.createObjectURL(file);
+                        image.addEventListener('load', () => {
+                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${image.naturalHeight}-${
+                                image.naturalWidth}`, aesKey).toString();
+                            URL.revokeObjectURL(image.src);
+                            this.sendMessage(encedMessages, conversationID);
+                        });
                         break;
                     case 1:
                         encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        this.sendMessage(encedMessages, conversationID);
                         break;
                     case 2:
                         encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
+                        this.sendMessage(encedMessages, conversationID);
                         break;
                     default:
                         break;
                 }
-                this.conversationApiService.SendMessage(conversationID, encedMessages)
-                    .subscribe(() => {
-                        this.finishUpload();
-                    }, () => {
-                        this.finishUpload();
-                    });
             }
         }
+    }
+
+    private sendMessage(message: string, conversationID: number): void {
+        this.conversationApiService.SendMessage(conversationID, message)
+            .subscribe(() => {
+                this.finishUpload();
+                this.scrollBottom(true);
+            }, () => {
+                this.finishUpload();
+            });
     }
 
     private validateFileSize(file: File): boolean {
@@ -91,39 +104,8 @@ export class UploadService {
         this.progress = 0;
     }
 
-    public scrollBottom(smooth: boolean) {
-        const images: NodeListOf<HTMLImageElement> = document.querySelectorAll('.chat-content img');
-        const videos = document.querySelectorAll('video');
-        let loaded = images.length + videos.length;
-        if (loaded === 0) {
-            this.scrollHelper(0, smooth, false);
-            return;
-        }
-        for (let i = 0; i < images.length; i++) {
-            if (images[i].complete) {
-                loaded--;
-            } else {
-                images[i].addEventListener('load', () => {
-                    loaded--;
-                    this.scrollHelper(loaded, smooth, false);
-                });
-            }
-        }
-        for (let j = 0; j < videos.length; j++) {
-            if (videos[j].buffered.length > 0) {
-                loaded--;
-            } else {
-                videos[j].addEventListener('loadeddata', () => {
-                    loaded--;
-                    this.scrollHelper(loaded, smooth, false);
-                });
-            }
-        }
-        this.scrollHelper(loaded, smooth, false);
-    }
-
-    public scrollHelper(loaded: number, smooth: boolean, force: boolean): void {
-        if ((loaded === 0 || force) && !this.talkingDestroied) {
+    public scrollBottom(smooth: boolean): void {
+        if (!this.talkingDestroied) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);
@@ -182,7 +164,7 @@ export class UploadService {
             return -1;
         }
         if (message.startsWith('[img]')) {
-            return Number(message.substring(5));
+            return Number(message.substring(5, message.indexOf('-')));
         } else if (message.startsWith('[file]')) {
             return Number(message.substring(6, message.indexOf('-')));
         } else if (message.startsWith('[video]')) {

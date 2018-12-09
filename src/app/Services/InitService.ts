@@ -16,7 +16,7 @@ export class InitService {
     private interval;
     private timeout;
     private online;
-    private initPusherError;
+    private errorOrClose;
 
     constructor(
         private checkService: CheckService,
@@ -52,7 +52,7 @@ export class InitService {
     private loadPusher(): void {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
-            this.initPusherError = false;
+            this.errorOrClose = false;
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
                 this.connecting = false;
@@ -61,19 +61,23 @@ export class InitService {
                 this.interval = setInterval(this.checkNetwork.bind(this), 3000);
             };
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = () => this.autoReconnect();
-            this.ws.onclose = () => this.autoReconnect();
+            this.ws.onerror = () => this.errorOrClosedFunc();
+            this.ws.onclose = () => this.errorOrClosedFunc();
         }, () => {
-                this.connecting = false;
-                this.initPusherError = true;
-                clearTimeout(this.timeout);
-                clearInterval(this.interval);
-                this.interval = setInterval(this.checkNetwork.bind(this), 3000);
-            });
+                this.errorOrClosedFunc();
+        });
+    }
+
+    private errorOrClosedFunc(): void {
+        this.connecting = false;
+        this.errorOrClose = true;
+        clearTimeout(this.timeout);
+        clearInterval(this.interval);
+        this.interval = setInterval(this.checkNetwork.bind(this), 3000);
     }
 
     private checkNetwork(): void {
-        if (navigator.onLine && !this.connecting && (!this.online || this.initPusherError)) {
+        if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
         }
         this.online = navigator.onLine;
