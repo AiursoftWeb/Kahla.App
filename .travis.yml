@@ -20,3 +20,11 @@ script:
   - echo Writting JSON: \"$json\"
   - echo $json > ./src/environments/environment.prod.ts
   - ./publish.sh
+
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  file: ./dist/*.txt
+  skip_cleanup: true
+  on:
+    tags: true

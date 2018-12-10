@@ -22,4 +22,4 @@ else
     ./node_modules/.bin/electron-builder -p onTagOrDraft
 fi
 
-shasum -a 256 ./dist/Kahla*
+shasum -a 256 ./dist/Kahla* >> ./dist/"$OSTYPE"-shasum.txt
