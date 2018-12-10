@@ -21,3 +21,5 @@ then
 else
     ./node_modules/.bin/electron-builder -p onTagOrDraft
 fi
+
+shasum -a 256 ./dist/Kahla*
