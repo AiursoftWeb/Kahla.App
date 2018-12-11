@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [[ -z "${GH_TOKEN}" ]]
+then
+    json="export const environment = { production: true, server: 'https://server.kahla.app' };"
+    echo Writting JSON: \"$json\"
+    echo $json > ./src/environments/environment.prod.ts
+fi
+
 rm -rf ./www/
 rm -rf ./dist/
 npm run prod-electron
