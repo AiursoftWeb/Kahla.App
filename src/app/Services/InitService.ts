@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
+import { ConversationApiService } from './ConversationApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,8 @@ export class InitService {
         private authApiService: AuthApiService,
         private router: Router,
         private messageService: MessageService,
-        private cacheService: CacheService) {
+        private cacheService: CacheService,
+        private conversationApiService: ConversationApiService) {
     }
 
     public init(): void {
@@ -79,6 +81,7 @@ export class InitService {
     private checkNetwork(): void {
         if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
+            this.resend();
         }
         this.online = navigator.onLine;
     }
@@ -97,5 +100,15 @@ export class InitService {
                 this.timeoutNumber += 1000;
             }
         }, this.timeoutNumber);
+    }
+
+    private resend(): void {
+        for (const item in localStorage) {
+            if (localStorage.hasOwnProperty(item) && !item.startsWith('draft')) {
+                this.conversationApiService.SendMessage(Number(localStorage.getItem(item)), item).subscribe(() => {
+                    localStorage.removeItem(item);
+                });
+            }
+        }
     }
 }

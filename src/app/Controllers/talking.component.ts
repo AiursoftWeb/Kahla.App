@@ -101,10 +101,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.headerService.routerLink = `/group/${conversation.id}`;
                     }
 
-                    this.content = localStorage.getItem(String(this.conversationID));
+                    this.content = localStorage.getItem('draft' + this.conversationID);
 
                     this.autoSaveInterval = setInterval(() => {
-                        localStorage.setItem(String(this.conversationID), this.content);
+                        localStorage.setItem('draft' + this.conversationID, this.content);
                     }, 1000);
                 }
             });
@@ -132,9 +132,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        this.content = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, this.content)
-            .subscribe(() => {});
+        const encryptdMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptdMessage)
+            .subscribe(() => {}, () => {
+                localStorage.setItem(encryptdMessage, String(this.conversationID));
+            });
         this.content = '';
         document.getElementById('chatInput').focus();
     }
