@@ -2,24 +2,34 @@ const electron = require('electron')
 const { Menu, Tray, Notification } = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
-
 const path = require('path')
 const url = require('url')
+const platform = require('os').platform()
 
 let mainWindow
 app.showExitNotif = true
 
 function createWindow() {
-    mainWindow = new BrowserWindow(
-        {
-            width: 512,
-            height: 768,
-            icon: __dirname + '/assets/48x48.png',
-            frame: false,
-            titleBarStyle: 'hiddenInset',
-            minWidth: 200,
-            minHeight: 300
-        })
+    if (platform === 'darwin') {
+        mainWindow = new BrowserWindow(
+            {
+                width: 512,
+                height: 768,
+                icon: __dirname + '/assets/48x48.png',
+                titleBarStyle: 'hiddenInset',
+                minWidth: 200,
+                minHeight: 300
+            })
+    } else {
+        mainWindow = new BrowserWindow(
+            {
+                width: 512,
+                height: 768,
+                icon: __dirname + '/assets/48x48.png',
+                minWidth: 200,
+                minHeight: 300
+            })
+    }
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
@@ -80,7 +90,6 @@ app.on('activate', function () {
 })
 
 let tray = null
-const platform = require('os').platform()
 app.on('ready', () => {
     if (platform === 'darwin') {
         tray = new Tray(__dirname + '/assets/KahlaTemplate.png')
