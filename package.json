@@ -1,6 +1,6 @@
 {
   "name": "kahla",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
@@ -123,11 +123,12 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AiursoftWeb/Kahla.App.git"
+    "url": "https://github.com/AiursoftWeb/Kahla.App.git"
   },
   "keywords": [],
   "bugs": {
     "url": "https://github.com/AiursoftWeb/Kahla.App/issues"
   },
-  "homepage": "https://kahla.aiursoft.com"
+  "homepage": "https://kahla.aiursoft.com",
+  "release": "build"
 }

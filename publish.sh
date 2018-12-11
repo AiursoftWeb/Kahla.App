@@ -14,4 +14,12 @@ fi
 
 echo '  "main": "index.js"' >> ./www/package.json
 echo '}' >> ./www/package.json
-./node_modules/.bin/electron-builder
+
+if [[ -z "${GH_TOKEN}" ]]
+then
+    ./node_modules/.bin/electron-builder
+else
+    ./node_modules/.bin/electron-builder -p onTagOrDraft
+fi
+
+shasum -a 256 ./dist/Kahla* >> ./dist/"$OSTYPE"-shasum.txt

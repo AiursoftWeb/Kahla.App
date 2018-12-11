@@ -1,12 +1,30 @@
-sudo: required
-dist: trusty
+branches:
+  only:
+  - master
+
 language: node_js
 node_js:
-  - '10.1.0'
+  - 'node'
 
-before_script:
-- npm install
+os:
+  - windows
+  - osx
+  - linux
 
-script: 
-- npm run lint
-- npm run prod
+install:
+  - npm install
+
+script:
+  - npm run lint
+  - json="export const environment = { production: true, server: 'https://server.kahla.app' };"
+  - echo Writting JSON: \"$json\"
+  - echo $json > ./src/environments/environment.prod.ts
+  - ./publish.sh
+
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  file: ./dist/*.txt
+  skip_cleanup: true
+  on:
+    tags: true
