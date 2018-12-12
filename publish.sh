@@ -1,7 +1,7 @@
 #!/bin/bash
 
-rm -rf ./www/
-rm -rf ./dist/
+rm -rvf ./www/
+rm -rvf ./dist/
 npm run prod-electron
 cp ./package.json ./www/
 
@@ -14,4 +14,5 @@ fi
 
 echo '  "main": "index.js"' >> ./www/package.json
 echo '}' >> ./www/package.json
-./node_modules/.bin/electron-builder
+./node_modules/.bin/electron-builder -p never
+for f in dist/*\ *; do mv "$f" "${f// /.}"; done
