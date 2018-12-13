@@ -81,6 +81,7 @@ app.on('window-all-closed', function () {
         app.quit()
     }
 })
+app.setAppUserModelId('com.example.kahla');
 
 app.on('activate', function () {
     if (mainWindow === null) {

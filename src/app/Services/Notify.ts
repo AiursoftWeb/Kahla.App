@@ -19,7 +19,7 @@ export class Notify {
             });
             notify.onclick = function (event) {
                 event.preventDefault(); // prevent the browser from focusing the Notification's tab
-                location.href = openPath;
+                // location.href = openPath;
                 window.focus();
             };
         } else if ('Notification' in window) {
