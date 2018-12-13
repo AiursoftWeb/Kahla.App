@@ -14,6 +14,7 @@ import { Notify } from './Notify';
 import { CacheService } from './CacheService';
 import * as he from 'he';
 import * as Autolinker from 'autolinker';
+import { Values } from '../values';
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +29,7 @@ export class MessageService {
     public belowWindowPercent = 0;
     public newMessages = false;
     private oldOffsetHeight: number;
+    public maxImageWidth = 0;
 
     public me: KahlaUser;
     public eventType: EventType;
@@ -87,6 +89,18 @@ export class MessageService {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
+                        } else if (t.content.startsWith('[img]')) {
+                            let imageWidth = 0, imageHeight = 0;
+                            if (this.maxImageWidth > Number(t.content.split('-')[2])) {
+                                imageWidth = Number(t.content.split('-')[2]);
+                                imageHeight = Number(t.content.split('-')[1]);
+                            } else {
+                                imageWidth = this.maxImageWidth;
+                                imageHeight = Math.floor(this.maxImageWidth *
+                                    Number(t.content.split('-')[1]) / Number(t.content.split('-')[2]));
+                            }
+                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
+                                '&h=' + imageHeight + '-' + imageWidth + '-' + imageHeight / imageWidth * 100;
                         }
                     } else if (!t.content.startsWith('[file]')) {
                         t.content = he.encode(t.content);
@@ -148,6 +162,10 @@ export class MessageService {
         this.cacheService.autoUpdateRequests();
     }
 
+    public updateMaxImageWidth(): void {
+        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
+    }
+
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = null;
@@ -157,5 +175,6 @@ export class MessageService {
         this.belowWindowPercent = 0;
         this.newMessages = false;
         this.oldOffsetHeight = 0;
+        this.maxImageWidth = 0;
     }
 }

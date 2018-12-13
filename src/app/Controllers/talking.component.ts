@@ -29,7 +29,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public users = new Map();
     public fileAddress = Values.fileAddress;
-    public maxImageWidth = 0;
+
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -53,7 +53,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:resize', [])
     onResize() {
-        this.updateMaxImageWidth();
+        this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
@@ -67,7 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
-        this.updateMaxImageWidth();
+        this.messageService.updateMaxImageWidth();
         let conversationID = 0;
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
@@ -102,10 +102,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 }
             });
         this.windowInnerHeight = window.innerHeight;
-    }
-
-    public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
     }
 
     public trackByMessages(_index: number, message: Message): number {
