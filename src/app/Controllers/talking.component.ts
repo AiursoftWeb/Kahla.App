@@ -104,7 +104,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.content = localStorage.getItem('draft' + this.conversationID);
 
                     this.autoSaveInterval = setInterval(() => {
-                        localStorage.setItem('draft' + this.conversationID, this.content);
+                        if (this.content != null) {
+                            localStorage.setItem('draft' + this.conversationID, this.content);
+                        }
                     }, 1000);
                 }
             });
@@ -135,7 +137,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const encryptdMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptdMessage)
             .subscribe(() => {}, () => {
-                localStorage.setItem(encryptdMessage, String(this.conversationID));
+                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
+                    const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
+                    tempArray.push(encryptdMessage);
+                    unsentMessages.set(this.conversationID, tempArray);
+                } else {
+                    unsentMessages.set(this.conversationID, [encryptdMessage]);
+                }
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
             });
         this.content = '';
         document.getElementById('chatInput').focus();
@@ -253,6 +263,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.colors = null;
         this.users = null;
         this.conversationID = null;
+        clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;
     }
 }

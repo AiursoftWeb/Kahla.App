@@ -79,9 +79,12 @@ export class InitService {
     }
 
     private checkNetwork(): void {
+        if (navigator.onLine) {
+            this.resend();
+        }
+
         if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
-            this.resend();
         }
         this.online = navigator.onLine;
     }
@@ -103,12 +106,18 @@ export class InitService {
     }
 
     private resend(): void {
-        for (const item in localStorage) {
-            if (localStorage.hasOwnProperty(item) && !item.startsWith('draft')) {
-                this.conversationApiService.SendMessage(Number(localStorage.getItem(item)), item).subscribe(() => {
-                    localStorage.removeItem(item);
-                });
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        unsentMessages.forEach((messages, id) => {
+            const sendFailMessages = [];
+            for (let i = 0; i < (<Array<string>>messages).length; i++) {
+                setTimeout(() => {
+                    this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
+                        sendFailMessages.push((<Array<string>>messages)[i]);
+                    });
+                }, 500);
             }
-        }
+            unsentMessages.set(id, sendFailMessages);
+            localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+        });
     }
 }
