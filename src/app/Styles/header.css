@@ -15,22 +15,14 @@
     text-align: center;
 }
 
-
 .header-holder {
     height: 40px;
-}
-
-.header .returnButton {
-    margin: auto auto auto 10px;
 }
 
 .header .headerButton:hover {
     background-color: rgba(230,230,230,0.4);
 }
 
-.header .user-button{
-    margin: auto 10px auto auto;
-}
 
 .header .text {
     font-size: 20px;
@@ -46,6 +38,7 @@
     font-size: 1.7em;
     outline: none;
     border-radius: 5px;
+    margin: auto;
 }
 
 .macOSReturnButton {
