@@ -47,7 +47,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id, false);
+                    this.getMessages(true, this.conversation.id);
                     this.messageAmount++;
                     if (!document.hasFocus() && !evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
@@ -74,7 +74,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number, init: boolean): void {
+    public getMessages(getDown: boolean, id: number): void {
         this.conversationApiService.GetMessage(id, this.messageAmount)
             .pipe(
                 map(t => t.items)
@@ -129,15 +129,10 @@ export class MessageService {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
                     }, 0);
-                } else if (!getDown && !init) {
+                } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
-                    }, 0);
-                }
-                if (init) {
-                    setTimeout(() => {
-                        this.updateBelowWindowPercent();
                     }, 0);
                 }
             });
@@ -153,7 +148,7 @@ export class MessageService {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
             this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id, false);
+            this.getMessages(false, this.conversation.id);
         }
     }
 

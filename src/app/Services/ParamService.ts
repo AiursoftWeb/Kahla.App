@@ -6,7 +6,7 @@ export class ParamService {
     public param(obj: any): string {
         let data = ``;
         for (const prop in obj) {
-            if (true) {
+            if (obj.hasOwnProperty(prop) && obj[prop] != null) {
                 data += prop + '=' + encodeURIComponent(obj[prop].toString()) + '&';
             }
         }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
+import { ConversationApiService } from './ConversationApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,8 @@ export class InitService {
         private authApiService: AuthApiService,
         private router: Router,
         private messageService: MessageService,
-        private cacheService: CacheService) {
+        private cacheService: CacheService,
+        private conversationApiService: ConversationApiService) {
     }
 
     public init(): void {
@@ -77,6 +79,10 @@ export class InitService {
     }
 
     private checkNetwork(): void {
+        if (navigator.onLine) {
+            this.resend();
+        }
+
         if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
         }
@@ -97,5 +103,21 @@ export class InitService {
                 this.timeoutNumber += 1000;
             }
         }, this.timeoutNumber);
+    }
+
+    private resend(): void {
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        unsentMessages.forEach((messages, id) => {
+            const sendFailMessages = [];
+            for (let i = 0; i < (<Array<string>>messages).length; i++) {
+                setTimeout(() => {
+                    this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
+                        sendFailMessages.push((<Array<string>>messages)[i]);
+                    });
+                }, 500);
+            }
+            unsentMessages.set(id, sendFailMessages);
+            localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+        });
     }
 }
