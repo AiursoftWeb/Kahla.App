@@ -11,14 +11,14 @@ import { ConversationApiService } from './ConversationApiService';
     providedIn: 'root'
 })
 export class InitService {
-    public ws: WebSocket;
+    private ws: WebSocket;
     private timeoutNumber = 1000;
     public connecting = false;
     private interval;
     private timeout;
     private online;
     private errorOrClose;
-    private signout = false;
+    private closeWebSocket = false;
 
     constructor(
         private checkService: CheckService,
@@ -35,7 +35,7 @@ export class InitService {
         }
         this.online = navigator.onLine;
         this.connecting = true;
-        this.signout = false;
+        this.closeWebSocket = false;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
@@ -57,6 +57,11 @@ export class InitService {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
             this.errorOrClose = false;
+            if (this.ws) {
+                this.closeWebSocket = true;
+                this.ws.close();
+            }
+            this.closeWebSocket = false;
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
                 this.connecting = false;
@@ -73,7 +78,7 @@ export class InitService {
     }
 
     private errorOrClosedFunc(): void {
-        if (!this.signout) {
+        if (!this.closeWebSocket) {
             this.connecting = false;
             this.errorOrClose = true;
             clearTimeout(this.timeout);
@@ -94,7 +99,7 @@ export class InitService {
     }
 
     public destroy(): void {
-        this.signout = true;
+        this.closeWebSocket = true;
         if (this.ws) {
             this.ws.close();
         }
