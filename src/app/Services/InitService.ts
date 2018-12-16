@@ -56,11 +56,11 @@ export class InitService {
     private loadPusher(): void {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
-            this.errorOrClose = false;
             if (this.ws) {
                 this.closeWebSocket = true;
                 this.ws.close();
             }
+            this.errorOrClose = false;
             this.closeWebSocket = false;
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
@@ -72,6 +72,7 @@ export class InitService {
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
             this.ws.onerror = () => this.errorOrClosedFunc();
             this.ws.onclose = () => this.errorOrClosedFunc();
+            this.resend();
         }, () => {
                 this.errorOrClosedFunc();
         });
@@ -88,11 +89,7 @@ export class InitService {
     }
 
     private checkNetwork(): void {
-        if (navigator.onLine) {
-            this.resend();
-        }
-
-        if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
+    if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
         }
         this.online = navigator.onLine;
