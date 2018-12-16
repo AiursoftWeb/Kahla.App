@@ -18,6 +18,7 @@ export class InitService {
     private timeout;
     private online;
     private errorOrClose;
+    private signout = false;
 
     constructor(
         private checkService: CheckService,
@@ -34,6 +35,7 @@ export class InitService {
         }
         this.online = navigator.onLine;
         this.connecting = true;
+        this.signout = false;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
@@ -71,11 +73,13 @@ export class InitService {
     }
 
     private errorOrClosedFunc(): void {
-        this.connecting = false;
-        this.errorOrClose = true;
-        clearTimeout(this.timeout);
-        clearInterval(this.interval);
-        this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+        if (!this.signout) {
+            this.connecting = false;
+            this.errorOrClose = true;
+            clearTimeout(this.timeout);
+            clearInterval(this.interval);
+            this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+        }
     }
 
     private checkNetwork(): void {
@@ -89,8 +93,15 @@ export class InitService {
         this.online = navigator.onLine;
     }
 
-    public destory(): void {
-        this.ws = null;
+    public destroy(): void {
+        this.signout = true;
+        if (this.ws) {
+            this.ws.close();
+        }
+        clearTimeout(this.timeout);
+        clearInterval(this.interval);
+        this.timeout = null;
+        this.interval = null;
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.messageService.me = null;
