@@ -38,7 +38,7 @@ export class SettingsComponent {
         }).then((willSignOut) => {
             if (willSignOut.value) {
                 this.authApiService.LogOff().subscribe(() => {
-                    this.initSerivce.destory();
+                    this.initSerivce.destroy();
                     this.router.navigate(['/signin'], {replaceUrl: true});
                 });
             }
