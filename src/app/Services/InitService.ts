@@ -5,25 +5,28 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
+import { ConversationApiService } from './ConversationApiService';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InitService {
-    public ws: WebSocket;
+    private ws: WebSocket;
     private timeoutNumber = 1000;
     public connecting = false;
     private interval;
     private timeout;
     private online;
     private errorOrClose;
+    private closeWebSocket = false;
 
     constructor(
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
         private messageService: MessageService,
-        private cacheService: CacheService) {
+        private cacheService: CacheService,
+        private conversationApiService: ConversationApiService) {
     }
 
     public init(): void {
@@ -32,6 +35,7 @@ export class InitService {
         }
         this.online = navigator.onLine;
         this.connecting = true;
+        this.closeWebSocket = false;
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
@@ -52,7 +56,12 @@ export class InitService {
     private loadPusher(): void {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
+            if (this.ws) {
+                this.closeWebSocket = true;
+                this.ws.close();
+            }
             this.errorOrClose = false;
+            this.closeWebSocket = false;
             this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
                 this.connecting = false;
@@ -63,28 +72,38 @@ export class InitService {
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
             this.ws.onerror = () => this.errorOrClosedFunc();
             this.ws.onclose = () => this.errorOrClosedFunc();
+            this.resend();
         }, () => {
                 this.errorOrClosedFunc();
         });
     }
 
     private errorOrClosedFunc(): void {
-        this.connecting = false;
-        this.errorOrClose = true;
-        clearTimeout(this.timeout);
-        clearInterval(this.interval);
-        this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+        if (!this.closeWebSocket) {
+            this.connecting = false;
+            this.errorOrClose = true;
+            clearTimeout(this.timeout);
+            clearInterval(this.interval);
+            this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+        }
     }
 
     private checkNetwork(): void {
-        if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
+    if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
         }
         this.online = navigator.onLine;
     }
 
-    public destory(): void {
-        this.ws = null;
+    public destroy(): void {
+        this.closeWebSocket = true;
+        if (this.ws) {
+            this.ws.close();
+        }
+        clearTimeout(this.timeout);
+        clearInterval(this.interval);
+        this.timeout = null;
+        this.interval = null;
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.messageService.me = null;
@@ -97,5 +116,21 @@ export class InitService {
                 this.timeoutNumber += 1000;
             }
         }, this.timeoutNumber);
+    }
+
+    private resend(): void {
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        unsentMessages.forEach((messages, id) => {
+            const sendFailMessages = [];
+            for (let i = 0; i < (<Array<string>>messages).length; i++) {
+                setTimeout(() => {
+                    this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
+                        sendFailMessages.push((<Array<string>>messages)[i]);
+                    });
+                }, 500);
+            }
+            unsentMessages.set(id, sendFailMessages);
+            localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+        });
     }
 }

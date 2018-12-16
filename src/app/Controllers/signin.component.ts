@@ -23,7 +23,7 @@ export class SignInComponent implements OnInit {
         private initService: InitService) { }
 
     public ngOnInit(): void {
-        this.initService.destory();
+        this.initService.destroy();
     }
 
     public signin(): void {

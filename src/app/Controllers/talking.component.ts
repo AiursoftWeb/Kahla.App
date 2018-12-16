@@ -29,7 +29,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public users = new Map();
     public fileAddress = Values.fileAddress;
-    public maxImageWidth = 0;
+    private conversationID = 0;
+    public autoSaveInterval;
+
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -53,7 +55,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('window:resize', [])
     onResize() {
-        this.updateMaxImageWidth();
+        this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
@@ -67,15 +69,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.uploadService.talkingDestroied = false;
-        this.updateMaxImageWidth();
-        let conversationID = 0;
+        this.messageService.updateMaxImageWidth();
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    conversationID = params['id'];
-                    return this.conversationApiService.ConversationDetail(conversationID);
+                    this.conversationID = params['id'];
+                    return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
             )
@@ -89,7 +90,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, conversationID, true);
+                    this.messageService.getMessages(true, this.conversationID);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
                     if (conversation.anotherUserId) {
@@ -99,13 +100,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.headerService.buttonIcon = `users`;
                         this.headerService.routerLink = `/group/${conversation.id}`;
                     }
+
+                    this.content = localStorage.getItem('draft' + this.conversationID);
+
+                    this.autoSaveInterval = setInterval(() => {
+                        if (this.content != null) {
+                            localStorage.setItem('draft' + this.conversationID, this.content);
+                        }
+                    }, 1000);
                 }
             });
         this.windowInnerHeight = window.innerHeight;
-    }
-
-    public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
     }
 
     public trackByMessages(_index: number, message: Message): number {
@@ -129,9 +134,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        this.content = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, this.content)
-            .subscribe(() => {});
+        const encryptdMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptdMessage)
+            .subscribe(() => {}, () => {
+                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
+                    const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
+                    tempArray.push(encryptdMessage);
+                    unsentMessages.set(this.conversationID, tempArray);
+                } else {
+                    unsentMessages.set(this.conversationID, [encryptdMessage]);
+                }
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+            });
         this.content = '';
         document.getElementById('chatInput').focus();
     }
@@ -247,5 +262,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.resetVariables();
         this.colors = null;
         this.users = null;
+        this.conversationID = null;
+        clearInterval(this.autoSaveInterval);
+        this.autoSaveInterval = null;
     }
 }

@@ -5,59 +5,42 @@
     position: fixed;
     background-color: #2391d3;
     /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
-    height: 50px;
+    height: 40px;
     width: 100%;
     top: 0;
     overflow: auto;
     z-index: 999;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    text-align: center;
 }
-
 
 .header-holder {
-    height: 50px;
+    height: 40px;
 }
 
-.header .returnButton {
-    float: left;
-    width:30px;
-    height:30px;
-    margin-left:20px;
-    margin-top:10px;
-    color:white;
-    font-size:1.8em;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 5px;
-}
-
-.header .returnButton:hover {
+.header .headerButton:hover {
     background-color: rgba(230,230,230,0.4);
 }
 
-.header .user-button{
+
+.header .text {
+    font-size: 20px;
+    color: white;
+    margin: auto;
+}
+
+.headerButton {
     cursor: pointer;
-    float: left;
     width: 35px;
-    height: 35px;
     color: #FFF;
-    position: absolute;
-    right: 20px;
-    top: 10px;
     text-align: center;
     font-size: 1.7em;
     outline: none;
     border-radius: 5px;
+    margin: auto;
 }
 
-.header .user-button:hover{
-    background-color: rgba(230,230,230,0.4);
+.macOSReturnButton {
+    margin: auto auto auto 70px !important;
 }
-
-.header .text {
-    float: left;
-    margin-top: 10px;
-    margin-left: 15px;
-    font-size: 20px;
-    color: white;
-}
-

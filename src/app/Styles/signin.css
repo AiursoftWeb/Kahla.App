@@ -144,10 +144,6 @@ input {
     text-transform: uppercase;
 }
 
-.invalid, .ng-invalid:not(form) {
-    border-color: #C62828;
-}
-
 .forgetPassword {
     margin: 5% auto 0 auto;
     display: block;
