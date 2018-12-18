@@ -12,7 +12,7 @@ import { ConversationApiService } from './ConversationApiService';
 export class UploadService {
     public progress = 0;
     public uploading = false;
-    public talkingDestroied = false;
+    public talkingDestroyed = false;
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService
@@ -114,7 +114,7 @@ export class UploadService {
     }
 
     public scrollBottom(smooth: boolean): void {
-        if (!this.talkingDestroied) {
+        if (!this.talkingDestroyed) {
             const h = document.documentElement.scrollHeight || document.body.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
                 window.scroll(0, 0);

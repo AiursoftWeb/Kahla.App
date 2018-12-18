@@ -68,7 +68,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.uploadService.talkingDestroied = false;
+        this.uploadService.talkingDestroyed = false;
         this.messageService.updateMaxImageWidth();
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
@@ -81,7 +81,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroied) {
+                if (!this.uploadService.talkingDestroyed) {
                     if (conversation.discriminator === 'GroupConversation') {
                         conversation.users.forEach(user => {
                             this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
@@ -254,7 +254,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.uploadService.talkingDestroied = true;
+        this.uploadService.talkingDestroyed = true;
         window.onscroll = null;
         window.onresize = null;
         this.content = null;
