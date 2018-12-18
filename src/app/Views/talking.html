@@ -79,8 +79,12 @@
         <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" (keyup.enter)="send()" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
         <button class="button success" [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
-    <div class="button-part" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0">
-        <i class="icon fa fa-plus-circle"></i>
+    <div class="button-part">
+        <label for="recorder" (click)="record()">
+            <i class="fa fa-microphone" aria-hidden="true"></i>
+        </label>
+        <input class="recorder" type="file" accept="audio/*" capture id="recorder">
+        <i class="icon fa fa-plus-circle" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0"></i>
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">

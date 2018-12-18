@@ -179,7 +179,7 @@
 }
 
 .chat-part{
-    margin-right: 45px;
+    margin-right: 90px;
 }
 
 .chat-part textarea {
@@ -207,18 +207,14 @@
 }
 
 .button-part {
-    width: 45px;
-    float: left;
+    display: grid;
+    grid-template-columns: 50% 50%;
     text-align: center;
 }
 
 .button-part i {
-    padding: 2px;
-    padding-left: 10px;
     cursor: pointer;
-    width: 35px;
     color: #BBB;
-    text-align: center;
     font-size: 2.5em;
     outline: none;
 }
@@ -320,4 +316,8 @@ a h5 {
     grid-column-start: 2;
     text-align: right;
     word-break: break-all;
+}
+
+.recorder {
+    display: none;
 }
