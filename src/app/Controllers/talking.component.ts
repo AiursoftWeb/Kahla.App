@@ -261,9 +261,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.mediaRecorder.stop();
             this.recording = false;
         } else {
-            this.recording = true;
             navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
+                this.recording = true;
                 this.mediaRecorder = new MediaRecorder(stream);
                 this.mediaRecorder.start();
                 const audioChunks = [];
@@ -277,6 +277,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.mediaRecorder.stop();
                 }, 1000 * 60 * 5);
+            }, () => {
+                return;
             });
         }
     }
