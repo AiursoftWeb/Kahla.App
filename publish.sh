@@ -23,4 +23,4 @@ echo '}' >> ./www/package.json
 cp ./package.json ./dist/
 
 # rename built files to avoid space in file names.
-for f in dist/*\ *; do mv "$f" "${f// /.}"; done
+for f in dist/*\ *; do mv "$f" "${f// /.}"; done || true
