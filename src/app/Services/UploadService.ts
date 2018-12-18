@@ -85,6 +85,15 @@ export class UploadService {
                 this.finishUpload();
                 this.scrollBottom(true);
             }, () => {
+                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                if (unsentMessages.get(conversationID) && (<Array<string>>unsentMessages.get(conversationID)).length > 0) {
+                    const tempArray = <Array<string>>unsentMessages.get(conversationID);
+                    tempArray.push(message);
+                    unsentMessages.set(conversationID, tempArray);
+                } else {
+                    unsentMessages.set(conversationID, [message]);
+                }
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
                 this.finishUpload();
             });
     }
