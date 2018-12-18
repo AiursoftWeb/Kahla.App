@@ -37,7 +37,7 @@ function createWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    //mainWindow.webContents.openDevTools();
+
     mainWindow.on('close', function (event) {
         if (!app.isQuiting && app.showExitNotif) {
             event.preventDefault()
@@ -48,46 +48,31 @@ function createWindow() {
             }).show()
             mainWindow.hide()
         }
-        if (!app.isQuiting && !app.shouldQuit) {
+        if (!app.isQuiting) {
             event.preventDefault()
             mainWindow.hide()
         }
     });
-
-    mainWindow.on('minimize', function (event) {
-        event.preventDefault()
-        mainWindow.hide();
-    });
-
-}
-
-var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
-    if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.show();
-        mainWindow.focus();
-    }
-});
-
-if (shouldQuit) {
-    app.quit();
-    return;
 }
 
 app.on('ready', createWindow)
 
+app.addListener('before-quit', () => {
+    app.isQuiting = true;
+});
+
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    app.quit();
 })
+
 app.setAppUserModelId('com.example.kahla');
 
 app.on('activate', function () {
     if (mainWindow === null) {
         createWindow()
+    } else {
+        mainWindow.show();
     }
-    // mainWindow.webContents.openDevTools();
 })
 
 let tray = null
