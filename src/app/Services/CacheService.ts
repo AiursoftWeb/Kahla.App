@@ -51,6 +51,9 @@ export class CacheService {
                         if (e.latestMessage.startsWith('[file]')) {
                             e.latestMessage = 'File';
                         }
+                        if (e.latestMessage.startsWith('[audio]')) {
+                            e.latestMessage = 'Audio';
+                        }
                     }
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });

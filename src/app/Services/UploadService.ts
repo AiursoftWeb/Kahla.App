@@ -39,7 +39,7 @@ export class UploadService {
             });
         } else {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, 2, conversationID, aesKey, file);
+                this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
@@ -69,7 +69,11 @@ export class UploadService {
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     case 2:
-                        encedMessages = AES.encrypt(this.formateFileMessage(<UploadFile>response), aesKey).toString();
+                        encedMessages = AES.encrypt(this.formatFileMessage(<UploadFile>response), aesKey).toString();
+                        this.sendMessage(encedMessages, conversationID);
+                        break;
+                    case 3:
+                        encedMessages = AES.encrypt(`[audio]${(<UploadFile>response).fileKey}`, aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     default:
@@ -176,7 +180,7 @@ export class UploadService {
             return Number(message.substring(5, message.indexOf('-')));
         } else if (message.startsWith('[file]')) {
             return Number(message.substring(6, message.indexOf('-')));
-        } else if (message.startsWith('[video]')) {
+        } else if (message.startsWith('[video]') || message.startsWith('[audio]')) {
             return Number(message.substring(7));
         } else {
             return -1;
@@ -195,7 +199,22 @@ export class UploadService {
         }
     }
 
-    private formateFileMessage(response: UploadFile): string {
+    public getAudio(event: MouseEvent, message: string): void {
+        const filekey = this.getFileKey(message);
+        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
+            this.filesApiService.GetFileURL(filekey).subscribe(response => {
+                if (response.code === 0) {
+                    (<HTMLElement>event.target).style.display = 'none';
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = response.downloadPath;
+                    audioElement.controls = true;
+                    (<HTMLElement>event.target).parentElement.appendChild(audioElement);
+                }
+            });
+        }
+    }
+
+    private formatFileMessage(response: UploadFile): string {
         let message = '[file]';
         const units = ['kB', 'MB', 'GB'];
         const thresh = 1000;

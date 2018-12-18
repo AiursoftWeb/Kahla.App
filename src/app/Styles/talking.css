@@ -318,6 +318,6 @@ a h5 {
     word-break: break-all;
 }
 
-.recorder {
-    display: none;
+.red {
+    color: red !important;
 }
