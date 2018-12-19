@@ -56,7 +56,10 @@
                 <div *ngIf="message.content.startsWith('[video]')" >
                     <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
                 </div>
-                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]')"  [innerHTML]="message.content"></p>
+                <div *ngIf="message.content.startsWith('[audio]')">
+                    <button class="button white" (click)="uploadService.getAudio($event, message.content)">Click to load audio</button>
+                </div>
+                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
             </div>
             <p class="sendTime">
                 <span *ngIf="message.local" i18n="@@Sending">
@@ -79,8 +82,9 @@
         <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" (keyup.enter)="send()" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
         <button class="button success" [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
-    <div class="button-part" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0">
-        <i class="icon fa fa-plus-circle"></i>
+    <div class="button-part">
+        <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>
+        <i class="icon fa fa-plus-circle" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0"></i>
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">

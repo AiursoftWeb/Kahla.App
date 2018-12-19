@@ -11,6 +11,7 @@ import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
 import * as Autolinker from 'autolinker';
+declare var MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -31,6 +32,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
+    public recording = false;
+    private mediaRecorder;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -68,7 +71,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.uploadService.talkingDestroied = false;
+        this.uploadService.talkingDestroyed = false;
         this.messageService.updateMaxImageWidth();
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
@@ -81,7 +84,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroied) {
+                if (!this.uploadService.talkingDestroyed) {
                     if (conversation.discriminator === 'GroupConversation') {
                         conversation.users.forEach(user => {
                             this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
@@ -253,8 +256,35 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public record(): void {
+        if (this.recording) {
+            this.mediaRecorder.stop();
+            this.recording = false;
+        } else {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                this.recording = true;
+                this.mediaRecorder = new MediaRecorder(stream);
+                this.mediaRecorder.start();
+                const audioChunks = [];
+                this.mediaRecorder.addEventListener('dataavailable', event => {
+                    audioChunks.push(event.data);
+                });
+                this.mediaRecorder.addEventListener('stop', () => {
+                    const audioBlob = new File(audioChunks, 'audio');
+                    this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                });
+                setTimeout(() => {
+                    this.mediaRecorder.stop();
+                }, 1000 * 60 * 5);
+            }, () => {
+                return;
+            });
+        }
+    }
+
     public ngOnDestroy(): void {
-        this.uploadService.talkingDestroied = true;
+        this.uploadService.talkingDestroyed = true;
         window.onscroll = null;
         window.onresize = null;
         this.content = null;
