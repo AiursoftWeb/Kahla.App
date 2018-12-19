@@ -52,6 +52,7 @@
     cursor: pointer;
     background-color: #FFF;
     outline: none;
+    display: block;
 }
 
 .menu-button:hover {
@@ -78,6 +79,7 @@
     margin-top: 15px;
     font-size: 15px;
     font-weight: 400;
+    color: black;
 }
 
 .menu-button .warning {
