@@ -114,6 +114,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 }
             });
         this.windowInnerHeight = window.innerHeight;
+        const inputElement = document.querySelector('#chatInput');
+        inputElement.addEventListener('input', () => {
+            (<HTMLElement>inputElement).style.height = 'auto';
+            (<HTMLElement>inputElement).style.height = (inputElement.scrollHeight) + 'px';
+        });
     }
 
     public trackByMessages(_index: number, message: Message): number {

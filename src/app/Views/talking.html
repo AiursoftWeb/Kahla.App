@@ -79,12 +79,12 @@
 
 <div class="chat-action">
     <div class="chat-part">
-        <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" (keyup.enter)="send()" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
+        <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500" (keyup.enter)="send()" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
         <button class="button success" [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
-    <div class="button-part">
+    <div class="button-part" *ngIf="content==undefined || content.trim().length === 0">
         <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>
-        <i class="icon fa fa-plus-circle" (click)="togglePanel()" *ngIf="content==undefined || content.trim().length === 0"></i>
+        <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
     </div>
     <div *ngIf="showPanel" class="more-panel">
         <div class="of4">
