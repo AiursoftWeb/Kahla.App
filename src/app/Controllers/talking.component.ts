@@ -118,6 +118,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         inputElement.addEventListener('input', () => {
             (<HTMLElement>inputElement).style.height = 'auto';
             (<HTMLElement>inputElement).style.height = (inputElement.scrollHeight) + 'px';
+            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
         });
     }
 
