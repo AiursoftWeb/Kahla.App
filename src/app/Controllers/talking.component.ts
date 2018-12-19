@@ -34,6 +34,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public autoSaveInterval;
     public recording = false;
     private mediaRecorder;
+    private oldContent: string;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -68,6 +69,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
             window.scroll(0, document.documentElement.scrollTop);
         }
         this.formerWindowInnerHeight = window.innerHeight;
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeydown(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.oldContent = this.content;
+        }
+    }
+
+    @HostListener('keyup', ['$event'])
+    onKeyup(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+        if (e.key === 'Enter' && this.oldContent === this.content) {
+            this.send();
+        }
     }
 
     public ngOnInit(): void {
