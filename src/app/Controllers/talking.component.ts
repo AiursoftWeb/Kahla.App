@@ -32,7 +32,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
-    private recording = false;
+    public recording = false;
     private mediaRecorder;
 
     @ViewChild('mainList') public mainList: ElementRef;
