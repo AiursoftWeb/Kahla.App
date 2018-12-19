@@ -34,6 +34,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public autoSaveInterval;
     public recording = false;
     private mediaRecorder;
+    private oldContent: string;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -68,6 +69,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
             window.scroll(0, document.documentElement.scrollTop);
         }
         this.formerWindowInnerHeight = window.innerHeight;
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeydown(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.oldContent = this.content;
+        }
+    }
+
+    @HostListener('keyup', ['$event'])
+    onKeyup(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+        if (e.key === 'Enter' && this.oldContent === this.content) {
+            this.send();
+        }
     }
 
     public ngOnInit(): void {
@@ -111,6 +130,20 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             localStorage.setItem('draft' + this.conversationID, this.content);
                         }
                     }, 1000);
+
+                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
+
+                    setTimeout(() => {
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                    }, 0);
+
+                    inputElement.addEventListener('input', () => {
+                        inputElement.style.height = 'auto';
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                        if (document.querySelector('#scrollDown')) {
+                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+                        }
+                    });
                 }
             });
         this.windowInnerHeight = window.innerHeight;
@@ -137,21 +170,23 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        const encryptdMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptdMessage)
+        const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
             .subscribe(() => {}, () => {
                 const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
                 if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
                     const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
-                    tempArray.push(encryptdMessage);
+                    tempArray.push(encryptedMessage);
                     unsentMessages.set(this.conversationID, tempArray);
                 } else {
-                    unsentMessages.set(this.conversationID, [encryptdMessage]);
+                    unsentMessages.set(this.conversationID, [encryptedMessage]);
                 }
                 localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
             });
         this.content = '';
-        document.getElementById('chatInput').focus();
+        const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
+        inputElement.focus();
+        inputElement.style.height = 34 + 'px';
     }
 
     public startInput(): void {
