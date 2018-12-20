@@ -83,9 +83,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
     onKeyup(e: KeyboardEvent) {
         if (e.key === 'Enter') {
             e.preventDefault();
-        }
-        if (e.key === 'Enter' && this.oldContent === this.content) {
-            this.send();
+            if (this.oldContent === this.content) {
+                this.send();
+            }
         }
     }
 
@@ -294,7 +294,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public record(): void {
         if (this.recording) {
             this.mediaRecorder.stop();
-            this.recording = false;
         } else {
             navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
@@ -306,6 +305,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     audioChunks.push(event.data);
                 });
                 this.mediaRecorder.addEventListener('stop', () => {
+                    this.recording = false;
                     const audioBlob = new File(audioChunks, 'audio');
                     this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
                 });
