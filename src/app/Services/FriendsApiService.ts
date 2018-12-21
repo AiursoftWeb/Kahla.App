@@ -46,4 +46,11 @@ export class FriendsApiService {
     public UserDetail(id: string): Observable<UserDetailViewModel> {
         return this.apiService.Get(FriendsApiService.serverPath + `/UserDetail/${id}`);
     }
+
+    public Report(id: string, reason: string): Observable<AiurCollection<string>> {
+        return this.apiService.Post(FriendsApiService.serverPath + '/ReportHim', {
+            TargetUserId: id,
+            Reason: reason
+        });
+    }
 }

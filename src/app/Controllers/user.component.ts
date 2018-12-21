@@ -73,4 +73,33 @@ export class UserComponent implements OnInit {
     public talk(id: number): void {
         this.router.navigate(['/talking', id]);
     }
+
+    public report(): void {
+        Swal({
+            input: 'textarea',
+            inputPlaceholder: 'Type your reason here...',
+            inputAttributes: {
+                maxlength: '200'
+            },
+            confirmButtonColor: 'red',
+            showCancelButton: true,
+            confirmButtonText: 'Report'
+          }).then((result) => {
+            if (result.value) {
+                if (result.value.length >= 5) {
+                    this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
+                        if (response.code === 0) {
+                            Swal('Success', response.message, 'success');
+                        } else {
+                            Swal('Error', response.message, 'error');
+                        }
+                    }, () => {
+                        Swal('Error', 'Report error.', 'error');
+                    });
+                } else {
+                    Swal('Error', 'The reason\'s length should between five and two hundreds.', 'error');
+                }
+            }
+          });
+    }
 }
