@@ -14,8 +14,12 @@ export class GroupsApiService {
         private apiService: ApiService
     ) {}
 
-    public CreateGroup(groupName: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(GroupsApiService.serverPath + '/CreateGroupConversation', { GroupName: groupName });
+    public CreateGroup(groupName: string, password: string): Observable<AiurValue<number>> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/CreateGroupConversation',
+            {
+                GroupName: groupName,
+                JoinPassword: password
+            });
     }
 
     public JoinGroup(groupName: string): Observable<AiurProtocal> {
