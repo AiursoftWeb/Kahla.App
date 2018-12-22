@@ -156,20 +156,12 @@ export class UploadService {
     private validImageType(file: File, avatar: boolean): boolean {
         const validAvatarTypes = ['png', 'jpg', 'bmp', 'jpeg'];
         const validChatTypes = ['png', 'jpg', 'bmp', 'jpeg', 'gif', 'svg'];
+        const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
         if (avatar) {
-            for (const validType of validAvatarTypes) {
-                if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
-                    return true;
-                }
-            }
+            return validAvatarTypes.includes(fileExtension);
         } else {
-            for (const validType of validChatTypes) {
-                if (file.name.substring(file.name.lastIndexOf('.') + 1) === validType) {
-                    return true;
-                }
-            }
+            return validChatTypes.includes(fileExtension);
         }
-        return false;
     }
 
     public getFileKey(message: string): number {

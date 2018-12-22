@@ -322,3 +322,7 @@ a h5 {
 .red {
     color: red !important;
 }
+
+#scrollDown {
+    background-color: #bed0f1;
+}
