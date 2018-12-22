@@ -75,8 +75,28 @@ export class JoinGroupComponent implements OnInit {
         }
     }
 
-    public joinGroup(groupName: string) {
-        this.groupsApiService.JoinGroup(groupName).subscribe((response) => {
+    public joinGroup(groupName: string, privateGroup: boolean) {
+        if (privateGroup) {
+            Swal({
+                title: 'Enter group password.',
+                input: 'text',
+                inputAttributes: {
+                    maxlength: '100'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Join'
+            }).then((result) => {
+                if (result.value) {
+                    this.joinGroupWithPassword(groupName, result.value);
+                }
+            });
+        } else {
+            this.joinGroupWithPassword(groupName, '');
+        }
+    }
+
+    private joinGroupWithPassword(groupName: string, password: string) {
+        this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
                 this.router.navigate(['/']);
             } else {

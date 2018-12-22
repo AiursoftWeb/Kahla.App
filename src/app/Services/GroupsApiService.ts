@@ -22,8 +22,12 @@ export class GroupsApiService {
             });
     }
 
-    public JoinGroup(groupName: string): Observable<AiurProtocal> {
-        return this.apiService.Post(GroupsApiService.serverPath + '/JoinGroup', {GroupName: groupName});
+    public JoinGroup(groupName: string, password: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/JoinGroup',
+        {
+            GroupName: groupName,
+            password: password
+        });
     }
 
     public LeaveGroup(groupName: string): Observable<AiurProtocal> {

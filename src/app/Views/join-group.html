@@ -9,7 +9,7 @@
     No result. Try another name.
 </h3>
 
-<div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName)">
+<div class="result" *ngFor="let group of groups | async" (click)="joinGroup(group.groupName, group.hasPassword)">
     <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
     <i class="fa fa-lock" aria-hidden="true" *ngIf="group.hasPassword"></i>
     <div class="sender">
