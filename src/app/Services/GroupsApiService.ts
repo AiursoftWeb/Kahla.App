@@ -26,7 +26,7 @@ export class GroupsApiService {
         return this.apiService.Post(GroupsApiService.serverPath + '/JoinGroup',
         {
             GroupName: groupName,
-            password: password
+            JoinPassword: password
         });
     }
 

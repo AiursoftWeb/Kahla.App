@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { AiurCollection } from '../Models/AiurCollection';
 import { HeaderService } from '../Services/HeaderService';
 
 @Component({
@@ -27,7 +25,7 @@ export class CreateGroupComponent {
             this.headerService.shadow = false;
     }
 
-    public createGroup(): void {
+    public createGroup(privateGroup: boolean): void {
         if (this.groupName.includes(' ')) {
             Swal('Try again', 'Group name can\'t contain whitespaces.', 'error');
             return;
@@ -36,27 +34,39 @@ export class CreateGroupComponent {
             Swal('Try again', 'Group name length must between three and twenty five.', 'error');
             return;
         }
-        Swal({
-            title: 'Enter your group password if you want to create a private group.',
-            input: 'text',
-            inputAttributes: {
-                maxlength: '100'
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Private group',
-            cancelButtonText: 'Public group'
-          }).then((result) => {
-              this.groupsApiService.CreateGroup(this.groupName.trim(), result.value).subscribe((response) => {
-                  if (response.code === 0) {
-                      this.router.navigate(['/talking', response.value]);
-                  } else if (response.code === -7) {
-                    Swal('Can not create group', response.message, 'error');
-                   } else if (response.code === -10) {
-                    Swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
-                  } else {
-                    Swal('Invalid group', response.message, 'error');
-                  }
-              });
-          });
+        if (privateGroup) {
+            Swal({
+                title: 'Enter your group password if you want to create a private group.',
+                input: 'text',
+                inputAttributes: {
+                    maxlength: '100'
+                },
+                showCancelButton: true
+            }).then((result) => {
+                if (result.value) {
+                    this.createPrivateGroup(result.value);
+                }
+            });
+        } else {
+            Swal({
+                title: 'Are you sure to create this group?',
+                type: 'question',
+                showCancelButton: true
+            }).then((result) => {
+                if (result.value) {
+                    this.createPrivateGroup('');
+                }
+            });
+        }
+    }
+
+    private createPrivateGroup(password: string): void {
+        this.groupsApiService.CreateGroup(this.groupName, password).subscribe((response) => {
+            if (response.code === 0) {
+                this.router.navigate(['/talking', response.value]);
+            } else {
+                Swal('Can\'t create group', response.message, 'error');
+            }
+        });
     }
 }
