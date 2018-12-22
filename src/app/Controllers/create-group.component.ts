@@ -36,16 +36,27 @@ export class CreateGroupComponent {
             Swal('Try again', 'Group name length must between three and twenty five.', 'error');
             return;
         }
-        this.groupsApiService.CreateGroup(this.groupName.trim()).subscribe((response) => {
-            if (response.code === 0) {
-                this.router.navigate(['/talking', response.value]);
-            } else if (response.code === -7) {
-              Swal('Can not create group', response.message, 'error');
-             } else if (response.code === -10) {
-              Swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
-            } else {
-              Swal('Invalid group', response.message, 'error');
-            }
-        });
+        Swal({
+            title: 'Enter your group password if you want to create a private group.',
+            input: 'text',
+            inputAttributes: {
+                maxlength: '100'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Private group',
+            cancelButtonText: 'Public group'
+          }).then((result) => {
+              this.groupsApiService.CreateGroup(this.groupName.trim(), result.value).subscribe((response) => {
+                  if (response.code === 0) {
+                      this.router.navigate(['/talking', response.value]);
+                  } else if (response.code === -7) {
+                    Swal('Can not create group', response.message, 'error');
+                   } else if (response.code === -10) {
+                    Swal(response.message, (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
+                  } else {
+                    Swal('Invalid group', response.message, 'error');
+                  }
+              });
+          });
     }
 }
