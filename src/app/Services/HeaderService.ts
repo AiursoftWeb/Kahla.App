@@ -10,4 +10,5 @@ export class HeaderService {
     public button = false;
     public routerLink = '';
     public buttonIcon = '';
+    public shadow = false;
 }

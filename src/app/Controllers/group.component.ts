@@ -38,6 +38,7 @@ export class GroupComponent implements OnInit {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
         this.headerService.button = false;
+        this.headerService.shadow = false;
     }
 
     public ngOnInit(): void {

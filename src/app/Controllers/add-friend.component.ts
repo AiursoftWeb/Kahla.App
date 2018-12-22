@@ -30,7 +30,8 @@ export class AddFriendComponent implements OnInit {
             this.headerService.title = 'Add Friend';
             this.headerService.returnButton = true;
             this.headerService.button = false;
-    }
+            this.headerService.shadow = false;
+        }
 
     public ngOnInit(): void {
         this.users = this.searchTerms.pipe(

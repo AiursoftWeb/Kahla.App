@@ -15,6 +15,10 @@
     text-align: center;
 }
 
+.header.shadow {
+    box-shadow: 0 16px 28px 0 rgba(0,0,0,.20)
+}
+
 .header-holder {
     height: 40px;
 }

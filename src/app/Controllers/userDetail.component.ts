@@ -31,7 +31,8 @@ export class UserDetailComponent implements OnInit {
     this.headerService.title = 'Edit Profile';
     this.headerService.returnButton = true;
     this.headerService.button = false;
-  }
+    this.headerService.shadow = false;
+}
 
   public ngOnInit(): void {
     if (!this.messageService.me) {
@@ -54,7 +55,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   public save() {
-    document.querySelector('#save').textContent = 'Saving';
+    document.querySelector('#save').textContent = 'Saving...';
     this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
       .subscribe((t) => {
       if (t.code === 0) {

@@ -33,6 +33,7 @@ export class JoinGroupComponent implements OnInit {
             this.headerService.title = 'Join Group';
             this.headerService.returnButton = true;
             this.headerService.button = false;
+            this.headerService.shadow = false;
     }
 
     public ngOnInit(): void {

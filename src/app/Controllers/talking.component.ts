@@ -94,6 +94,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.updateMaxImageWidth();
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
+        this.headerService.shadow = true;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {

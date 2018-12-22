@@ -29,6 +29,7 @@ export class UserComponent implements OnInit {
         this.headerService.title = 'Profile';
         this.headerService.returnButton = true;
         this.headerService.button = false;
+        this.headerService.shadow = false;
     }
 
     public ngOnInit(): void {

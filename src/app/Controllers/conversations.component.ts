@@ -25,7 +25,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.headerService.button = true;
             this.headerService.routerLink = '/addfriend';
             this.headerService.buttonIcon = 'search';
-    }
+            this.headerService.shadow = false;
+        }
 
     public ngOnInit(): void {
         PullToRefresh.destroyAll();
