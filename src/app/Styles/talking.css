@@ -176,6 +176,7 @@
     position: fixed;
     z-index: 99;
     bottom: 0;
+    box-shadow: 0px 19px 50px 10px rgba(0,0,0,0.37);
 }
 
 .chat-part{
@@ -246,7 +247,7 @@
     border-radius: 5px;
     color: white;
     display: inline-block;
-    cursor: pointer; 
+    cursor: pointer;
     width: 80px;
 }
 

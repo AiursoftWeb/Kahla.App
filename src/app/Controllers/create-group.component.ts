@@ -24,6 +24,7 @@ export class CreateGroupComponent {
             this.headerService.title = 'Create Group';
             this.headerService.returnButton = true;
             this.headerService.button = false;
+            this.headerService.shadow = false;
     }
 
     public createGroup(): void {
