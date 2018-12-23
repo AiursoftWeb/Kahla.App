@@ -37,7 +37,7 @@
         <div class="img">
             <i class="fa fa-users"></i>
         </div>
-        <div class="text" i18n="@@GroupMembers">{{ groupMumbers }} members</div>
+        <div class="text" i18n="@@GroupMembers">{{ groupMembers }} members</div>
     </div>
     <div class="friend" *ngFor="let e of conversation.users" (click)="user(e.userId)">
         <img class="user-img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
