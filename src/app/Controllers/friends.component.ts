@@ -1,7 +1,6 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ContactInfo } from '../Models/ContactInfo';
-import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
@@ -28,18 +27,6 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.shadow = false;
     }
     public ngOnInit(): void {
-        PullToRefresh.destroyAll();
-        PullToRefresh.init({
-            distMax: 120,
-            mainElement: '#main',
-            passive: true,
-            refreshTimeout: 200,
-            onRefresh: done => {
-                this.messageService.updateFriends(function () {
-                    done();
-                });
-            }
-        });
         this.messageService.updateFriends(null);
     }
 
@@ -52,6 +39,5 @@ export class FriendsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        PullToRefresh.destroyAll();
     }
 }
