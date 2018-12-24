@@ -34,6 +34,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public autoSaveInterval;
     public recording = false;
     private mediaRecorder;
+    private forceStopTimeout;
     private oldContent: string;
 
     @ViewChild('mainList') public mainList: ElementRef;
@@ -309,8 +310,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.recording = false;
                     const audioBlob = new File(audioChunks, 'audio');
                     this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                    clearTimeout(this.forceStopTimeout);
                 });
-                setTimeout(() => {
+                this.forceStopTimeout = setTimeout(() => {
                     this.mediaRecorder.stop();
                 }, 1000 * 60 * 5);
             }, () => {
