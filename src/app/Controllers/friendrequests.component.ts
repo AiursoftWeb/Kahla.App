@@ -23,6 +23,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.headerService.title = 'Friend Requests';
         this.headerService.returnButton = true;
         this.headerService.button = false;
+        this.headerService.shadow = false;
     }
 
     public ngOnInit(): void {

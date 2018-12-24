@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" [ngClass]="{'shadow': headerService.shadow }">
     <div class="returnButton headerButton" *ngIf="headerService.returnButton" (click)="goBack()" [ngClass]="{ 'macOSReturnButton': macOSElectron }">
         <i class="fa fa-caret-left"></i>
     </div>

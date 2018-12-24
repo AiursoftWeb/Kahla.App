@@ -176,10 +176,11 @@
     position: fixed;
     z-index: 99;
     bottom: 0;
+    box-shadow: 0px 23px 50px 10px rgba(0,0,0,0.37);
 }
 
 .chat-part{
-    margin-right: 45px;
+    margin-right: 90px;
 }
 
 .chat-part textarea {
@@ -190,7 +191,7 @@
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     box-shadow: none;
     color: #808080;
-    height: 34px;
+    min-height: 34px;
     padding: 6px 12px;
     font-size: 14px;
     background-color: #fff;
@@ -207,18 +208,14 @@
 }
 
 .button-part {
-    width: 45px;
-    float: left;
+    display: grid;
+    grid-template-columns: 50% 50%;
     text-align: center;
 }
 
 .button-part i {
-    padding: 2px;
-    padding-left: 10px;
     cursor: pointer;
-    width: 35px;
     color: #BBB;
-    text-align: center;
     font-size: 2.5em;
     outline: none;
 }
@@ -250,7 +247,7 @@
     border-radius: 5px;
     color: white;
     display: inline-block;
-    cursor: pointer; 
+    cursor: pointer;
     width: 80px;
 }
 
@@ -272,7 +269,7 @@ progress {
     position: fixed;
     width: 100%;
     height: 5px;
-    top: 50px;
+    top: 40px;
     z-index: 100;
 }
 
@@ -320,4 +317,12 @@ a h5 {
     grid-column-start: 2;
     text-align: right;
     word-break: break-all;
+}
+
+.red {
+    color: red !important;
+}
+
+#scrollDown {
+    background-color: #bed0f1;
 }

@@ -84,7 +84,11 @@ export class MessageService {
                     return;
                 }
                 messages.forEach(t => {
-                    t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+                    try {
+                        t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+                    } catch (error) {
+                        t.content = '';
+                    }
                     if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
                         const filekey = this.uploadService.getFileKey(t.content);
                         if (filekey === -1 || isNaN(filekey)) {

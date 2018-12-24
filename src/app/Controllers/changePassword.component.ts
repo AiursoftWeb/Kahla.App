@@ -25,6 +25,7 @@ export class ChangePasswordComponent {
         this.headerService.title = 'Change Password';
         this.headerService.returnButton = true;
         this.headerService.button = false;
+        this.headerService.shadow = false;
     }
 
     public checkValid(): void {

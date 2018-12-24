@@ -41,7 +41,11 @@ export class CacheService {
             .subscribe(info => {
                 info.forEach(e => {
                     if (e.latestMessage != null) {
-                        e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                        try {
+                            e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                        } catch (error) {
+                            e.latestMessage = '';
+                        }
                         if (e.latestMessage.startsWith('[img]')) {
                             e.latestMessage = 'Photo';
                         }
@@ -50,6 +54,9 @@ export class CacheService {
                         }
                         if (e.latestMessage.startsWith('[file]')) {
                             e.latestMessage = 'File';
+                        }
+                        if (e.latestMessage.startsWith('[audio]')) {
+                            e.latestMessage = 'Audio';
                         }
                     }
                     e.avatarURL = Values.fileAddress + e.displayImageKey;

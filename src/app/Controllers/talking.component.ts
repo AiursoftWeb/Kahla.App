@@ -11,6 +11,7 @@ import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
 import * as Autolinker from 'autolinker';
+declare var MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -31,6 +32,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
+    public recording = false;
+    private mediaRecorder;
+    private forceStopTimeout;
+    private oldContent: string;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -67,11 +72,30 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.formerWindowInnerHeight = window.innerHeight;
     }
 
+    @HostListener('keydown', ['$event'])
+    onKeydown(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.oldContent = this.content;
+        }
+    }
+
+    @HostListener('keyup', ['$event'])
+    onKeyup(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (this.oldContent === this.content) {
+                this.send();
+            }
+        }
+    }
+
     public ngOnInit(): void {
-        this.uploadService.talkingDestroied = false;
+        this.uploadService.talkingDestroyed = false;
         this.messageService.updateMaxImageWidth();
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
+        this.headerService.shadow = true;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -81,7 +105,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroied) {
+                if (!this.uploadService.talkingDestroyed) {
                     if (conversation.discriminator === 'GroupConversation') {
                         conversation.users.forEach(user => {
                             this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
@@ -108,6 +132,20 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             localStorage.setItem('draft' + this.conversationID, this.content);
                         }
                     }, 1000);
+
+                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
+
+                    setTimeout(() => {
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                    }, 0);
+
+                    inputElement.addEventListener('input', () => {
+                        inputElement.style.height = 'auto';
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                        if (document.querySelector('#scrollDown')) {
+                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+                        }
+                    });
                 }
             });
         this.windowInnerHeight = window.innerHeight;
@@ -134,21 +172,23 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        const encryptdMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptdMessage)
+        const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
             .subscribe(() => {}, () => {
                 const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
                 if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
                     const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
-                    tempArray.push(encryptdMessage);
+                    tempArray.push(encryptedMessage);
                     unsentMessages.set(this.conversationID, tempArray);
                 } else {
-                    unsentMessages.set(this.conversationID, [encryptdMessage]);
+                    unsentMessages.set(this.conversationID, [encryptedMessage]);
                 }
                 localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
             });
         this.content = '';
-        document.getElementById('chatInput').focus();
+        const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
+        inputElement.focus();
+        inputElement.style.height = 34 + 'px';
     }
 
     public startInput(): void {
@@ -253,8 +293,37 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public record(): void {
+        if (this.recording) {
+            this.mediaRecorder.stop();
+        } else {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                this.recording = true;
+                this.mediaRecorder = new MediaRecorder(stream);
+                this.mediaRecorder.start();
+                const audioChunks = [];
+                this.mediaRecorder.addEventListener('dataavailable', event => {
+                    audioChunks.push(event.data);
+                });
+                this.mediaRecorder.addEventListener('stop', () => {
+                    this.recording = false;
+                    const audioBlob = new File(audioChunks, 'audio');
+                    this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                    clearTimeout(this.forceStopTimeout);
+                    stream.getTracks().forEach(track => track.stop());
+                });
+                this.forceStopTimeout = setTimeout(() => {
+                    this.mediaRecorder.stop();
+                }, 1000 * 60 * 5);
+            }, () => {
+                return;
+            });
+        }
+    }
+
     public ngOnDestroy(): void {
-        this.uploadService.talkingDestroied = true;
+        this.uploadService.talkingDestroyed = true;
         window.onscroll = null;
         window.onresize = null;
         this.content = null;

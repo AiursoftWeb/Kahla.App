@@ -24,6 +24,7 @@ export class SettingsComponent {
             this.headerService.title = 'Me';
             this.headerService.returnButton = false;
             this.headerService.button = false;
+            this.headerService.shadow = false;
         }
 
     public GetMe(): KahlaUser {

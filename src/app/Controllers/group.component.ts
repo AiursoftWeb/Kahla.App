@@ -21,7 +21,7 @@ import { MessageService } from '../Services/MessageService';
 
 export class GroupComponent implements OnInit {
     public conversation: Conversation;
-    public groupMumbers: number;
+    public groupMembers: number;
     public loadingImgURL = Values.loadingImgURL;
     public muted: boolean;
     public muting = false;
@@ -38,6 +38,7 @@ export class GroupComponent implements OnInit {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
         this.headerService.button = false;
+        this.headerService.shadow = false;
     }
 
     public ngOnInit(): void {
@@ -48,7 +49,7 @@ export class GroupComponent implements OnInit {
             )
             .subscribe(conversation => {
                 this.conversation = conversation;
-                this.groupMumbers = conversation.users.length;
+                this.groupMembers = conversation.users.length;
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
                     user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
@@ -68,8 +69,14 @@ export class GroupComponent implements OnInit {
     }
 
     public leaveGroup(groupName: string): void {
+        let alertTitle = '';
+        if (this.groupMembers === 1) {
+            alertTitle = 'This group will be deleted, are you sure?';
+        } else {
+            alertTitle = 'Are you sure to leave this group?';
+        }
         Swal({
-            title: 'Are you sure to leave this group?',
+            title: alertTitle,
             type: 'warning',
             showCancelButton: true
         }).then((willDelete) => {

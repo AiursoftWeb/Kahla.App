@@ -1,6 +1,5 @@
 .buttons {
     padding: 10px;
-    margin: 3% auto;
     text-align: center;
 }
 
@@ -38,7 +37,7 @@ button, .button {
 }
 
 .button.primary {
-    background-color: #4075d5
+    background-color: #4075d5 !important;
 }
 
 .button.primary:hover:enabled, .inputButton:hover {

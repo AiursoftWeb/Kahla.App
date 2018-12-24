@@ -3,7 +3,6 @@ import { AuthApiService } from '../Services/AuthApiService';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
-import * as PullToRefresh from 'pulltorefreshjs';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
@@ -25,21 +24,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.headerService.button = true;
             this.headerService.routerLink = '/addfriend';
             this.headerService.buttonIcon = 'search';
-    }
+            this.headerService.shadow = false;
+        }
 
     public ngOnInit(): void {
-        PullToRefresh.destroyAll();
-        PullToRefresh.init({
-            distMax: 120,
-            mainElement: '#main',
-            // passive: true,
-            refreshTimeout: 200,
-            onRefresh: done => {
-                this.cacheService.autoUpdateConversation(function () {
-                    done();
-                });
-            }
-        });
         if (this.messaageService.me) {
             this.cacheService.autoUpdateConversation(null);
         }
@@ -57,12 +45,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public talk(id: number): void {
-        PullToRefresh.destroyAll();
         this.router.navigate(['/talking', id]);
     }
 
     public ngOnDestroy(): void {
-        PullToRefresh.destroyAll();
         this.loadingImgURL = null;
     }
 }

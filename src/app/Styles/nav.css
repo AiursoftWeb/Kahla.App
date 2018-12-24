@@ -11,6 +11,7 @@
     background-color: #FFF;
     border-color: #D6D6D6;
     border-top-style: solid;
+    box-shadow: 0px 22px 50px 10px rgba(0,0,0,0.37);
 }
 
 .nav-bar-holder {
