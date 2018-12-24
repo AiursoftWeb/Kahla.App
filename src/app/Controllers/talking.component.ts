@@ -311,6 +311,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     const audioBlob = new File(audioChunks, 'audio');
                     this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
                     clearTimeout(this.forceStopTimeout);
+                    stream.getTracks().forEach(track => track.stop());
                 });
                 this.forceStopTimeout = setTimeout(() => {
                     this.mediaRecorder.stop();
