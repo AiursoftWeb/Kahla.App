@@ -8,6 +8,8 @@
     border-bottom-style: solid;
     border-color: #D9D9D9;
     background-color: #FFF;
+    outline: none;
+    cursor: pointer;
 }
 
 .user .user-img {

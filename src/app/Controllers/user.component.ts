@@ -77,6 +77,7 @@ export class UserComponent implements OnInit {
 
     public report(): void {
         Swal({
+            title: 'Report',
             input: 'textarea',
             inputPlaceholder: 'Type your reason here...',
             inputAttributes: {
