@@ -21,7 +21,6 @@ import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
 import { UserDetailComponent } from './Controllers/userDetail.component';
-import { CreateGroupComponent } from './Controllers/create-group.component';
 import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
@@ -66,7 +65,6 @@ import { HeaderService } from './Services/HeaderService';
         HeaderComponent,
         UserComponent,
         UserDetailComponent,
-        CreateGroupComponent,
         JoinGroupComponent,
         GroupComponent,
         ChangePasswordComponent
