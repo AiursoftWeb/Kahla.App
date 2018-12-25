@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs/';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
@@ -25,7 +24,6 @@ export class AddFriendComponent implements OnInit {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private router: Router,
         private headerService: HeaderService) {
             this.headerService.title = 'Add Friend';
             this.headerService.returnButton = true;
@@ -84,9 +82,5 @@ export class AddFriendComponent implements OnInit {
         } else {    // force search or load more
             this.searchTerms.next(this.searchTerms.value + ' ');
         }
-    }
-
-    public detail(id: number): void {
-        this.router.navigate(['/user', id]);
     }
 }

@@ -10,7 +10,7 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" (click)="talk(conversation.id)">
+<div class="menu-button" routerLink="/talking/{{ conversation ? conversation.id : 0 }}">
     <div class="img">
         <i class="fa fa-comments"></i>
     </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="text" i18n="@@GroupMembers">{{ groupMembers }} members</div>
     </div>
-    <div class="friend" *ngFor="let e of conversation.users" (click)="user(e.userId)">
+    <div class="friend" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
         <img class="user-img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
         <div class="name">
             {{e.user.nickName}}
