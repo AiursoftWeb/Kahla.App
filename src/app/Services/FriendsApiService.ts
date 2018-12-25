@@ -8,6 +8,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { Request } from '../Models/Request';
 import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { ApiService } from './ApiService';
+import { DiscoverUser } from '../Models/DiscoverUser';
 
 @Injectable()
 export class FriendsApiService {
@@ -52,5 +53,9 @@ export class FriendsApiService {
             TargetUserId: id,
             Reason: reason
         });
+    }
+
+    public Discover(amount: number): Observable<AiurCollection<DiscoverUser>> {
+        return this.apiService.Get(FriendsApiService.serverPath + '/DiscoverFriends?take=' + amount);
     }
 }

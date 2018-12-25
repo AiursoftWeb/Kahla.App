@@ -22,7 +22,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.title = 'Friends';
             this.headerService.returnButton = false;
             this.headerService.button = true;
-            this.headerService.routerLink = '/addfriend';
+            this.headerService.routerLink = '/discover';
             this.headerService.buttonIcon = 'plus';
             this.headerService.shadow = false;
     }

@@ -1,48 +1,25 @@
-<app-header title="Discover" i18n-title="@@Discover"></app-header>
-<div class="menu-holder"></div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-lightbulb-o"></i>
+<app-header></app-header>
+<div class="discoverUsers result" *ngFor="let user of users" routerLink="/user/{{ user.value.id }}">
+    <img class="user-img" src="{{user.value.avatarURL ? user.value.avatarURL : loadingImgURL}}?w=80&h=80" />
+    <div class="sender">
+        {{user.value.nickName}}
     </div>
-    <div class="text" i18n="@@FriendSuggestion">Friend Suggestion</div>
+    <p>{{ user.key }} common friends</p>
 </div>
-<div class="menu-holder"></div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-map-marker"></i>
+
+<div *ngIf="users && users.length == 0">
+    <h3>
+        Search users or join groups to add more friends then try again.
+    </h3>
+    <div class="buttons">
+        <button class="button primary" routerLink="/addfriend" replaceUrl>Search user</button>
     </div>
-    <div class="text" i18n="@@PeopleNearby">People Nearby</div>
-</div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-location-arrow"></i>
+    <div class="buttons">
+        <button class="button primary" routerLink="/join-group" replaceUrl>Search group</button>
     </div>
-    <div class="text" i18n="@@CityGroup">City Group</div>
 </div>
-<div class="menu-holder"></div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-paper-plane"></i>
-    </div>
-    <div class="text" i18n="@@Community">Community</div>
+
+<div class="buttons" *ngIf="!noMoreUsers">
+    <button *ngIf="!loading" class="button primary" (click)="loadMore()">Load More</button>
+    <button *ngIf="loading" class="button primary" disabled>Loading</button>
 </div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-hashtag"></i>
-    </div>
-    <div class="text" i18n="@@OpenGroup">Open Group</div>
-</div>
-<div class="menu-holder"></div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-graduation-cap"></i>
-    </div>
-    <div class="text" i18n="@@KahlaUniversity">Kahla University</div>
-</div>
-<div class="menu-button">
-    <div class="img">
-        <i class="fa fa-comments-o "></i>
-    </div>
-    <div class="text" i18n="@@Feedback">Feedback</div>
-</div>
-<app-nav></app-nav>

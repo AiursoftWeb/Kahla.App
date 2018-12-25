@@ -15,6 +15,7 @@ import { CreateGroupComponent } from '../Controllers/create-group.component';
 import { JoinGroupComponent } from '../Controllers/join-group.component';
 import { GroupComponent } from '../Controllers/group.component';
 import { ChangePasswordComponent } from '../Controllers/changePassword.component';
+import { DiscoverComponent } from '../Controllers/discover.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
     { path: 'create-group', component: CreateGroupComponent },
     { path: 'join-group', component: JoinGroupComponent },
     { path: 'group/:id', component: GroupComponent },
-    { path: 'changepassword', component: ChangePasswordComponent }
+    { path: 'changepassword', component: ChangePasswordComponent },
+    { path: 'discover', component: DiscoverComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
