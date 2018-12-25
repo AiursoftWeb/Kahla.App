@@ -71,10 +71,6 @@ export class UserComponent implements OnInit {
             });
     }
 
-    public talk(id: number): void {
-        this.router.navigate(['/talking', id]);
-    }
-
     public report(): void {
         Swal({
             title: 'Report',

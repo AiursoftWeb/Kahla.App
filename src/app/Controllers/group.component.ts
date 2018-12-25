@@ -95,14 +95,6 @@ export class GroupComponent implements OnInit {
         });
     }
 
-    public talk(id: number): void {
-        this.router.navigate(['/talking', id]);
-    }
-
-    public user(id: string): void {
-        this.router.navigate(['/user', id]);
-    }
-
     public mute(): void {
         if (!this.muting) {
             this.muting = true;

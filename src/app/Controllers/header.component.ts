@@ -20,7 +20,7 @@ export class HeaderComponent {
     }
 
     public goBack(): void {
-        if (history.state.navigationId === 1) {
+        if (history.length === 1 || history.state.navigationId === 1) {
             this.router.navigate(['/conversations']);
         } else {
             history.back();

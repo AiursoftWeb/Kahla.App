@@ -12,7 +12,6 @@ import { HeaderService } from '../Services/HeaderService';
     templateUrl: '../Views/join-group.html',
     styleUrls: [
         '../Styles/add-friend.css',
-        '../Styles/menu.css',
         '../Styles/button.css'
     ]
 })
