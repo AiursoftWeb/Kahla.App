@@ -25,21 +25,42 @@ export class UploadService {
         }
         const formData = new FormData();
         formData.append('file', file);
-        this.uploading = true;
         if (fileType === 0 && !this.validImageType(file, false)) {
             Swal('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
             return;
         }
         if (fileType === 0 || fileType === 1) {
+            this.uploading = true;
             this.filesApiService.UploadMedia(formData).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
             });
+        } else if (fileType === 3) {
+            const audioSrc = URL.createObjectURL(file);
+            const audioHTMLString = `<audio controls src="${ audioSrc }"></audio>`;
+            Swal({
+                title: 'Are you sure to send this message?',
+                html: audioHTMLString,
+                type: 'question',
+                showCancelButton: true
+            }).then(result => {
+                if (result.value) {
+                    this.uploading = true;
+                    this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
+                        this.encryptThenSend(response, fileType, conversationID, aesKey, file);
+                    }, () => {
+                        Swal('Error', 'Upload failed', 'error');
+                        this.finishUpload();
+                    });
+                }
+                URL.revokeObjectURL(audioSrc);
+            });
         } else {
+            this.uploading = true;
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey, file);
+                    this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
                 Swal('Error', 'Upload failed', 'error');
                 this.finishUpload();
