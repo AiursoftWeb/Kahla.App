@@ -19,19 +19,19 @@
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
 </div>
-<div class="menu-button" (click)="report()">
+<div class="menu-button" (click)="report()" *ngIf="info && messageService.me && info.id != messageService.me.id">
     <div class="img">
         <i class="fa fa-gavel "></i>
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
-<div class="menu-button" *ngIf="info && areFriends">
+<div class="menu-button" *ngIf="info && messageService.me && areFriends && info.id != messageService.me.id">
     <div class="img">
         <i class="fa fa-ban"></i>
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
-<div class="menu-button" *ngIf="info && areFriends" (click)="delete(info.id)">
+<div class="menu-button" *ngIf="info && messageService.me && areFriends && info.id != messageService.me.id" (click)="delete(info.id)">
     <div class="img">
         <i class="fa fa-trash warning"></i>
     </div>
