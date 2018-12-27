@@ -93,6 +93,6 @@ app.on('ready', () => {
         }
     ])
     Menu.setApplicationMenu(null)
-    tray.setToolTip('This is my application.')
+    tray.setToolTip('Kahla')
     tray.setContextMenu(contextMenu)
 })
