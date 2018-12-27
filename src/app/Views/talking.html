@@ -5,7 +5,7 @@
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
         <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
             <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{users.get(message.senderId)[1] ? users.get(message.senderId)[1] : loadingImgURL}}?w=80&h=80">
-            <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
+            <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id && messageService.conversation.requestUser.id != messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
             <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.targetUser.headImgFileKey }}?w=80&h=80">
         </div>
         <div class="chat-text">
