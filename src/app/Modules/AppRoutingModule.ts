@@ -11,10 +11,10 @@ import { RegisterComponent } from '../Controllers/register.component';
 import { UserComponent } from '../Controllers/user.component';
 import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
-import { CreateGroupComponent } from '../Controllers/create-group.component';
 import { JoinGroupComponent } from '../Controllers/join-group.component';
 import { GroupComponent } from '../Controllers/group.component';
 import { ChangePasswordComponent } from '../Controllers/changePassword.component';
+import { DiscoverComponent } from '../Controllers/discover.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -28,11 +28,11 @@ const routes: Routes = [
     { path: 'signin', component: SignInComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'about', component: AboutComponent },
-    { path: 'userInforDet', component: UserDetailComponent },
-    { path: 'create-group', component: CreateGroupComponent },
+    { path: 'userInfo', component: UserDetailComponent },
     { path: 'join-group', component: JoinGroupComponent },
     { path: 'group/:id', component: GroupComponent },
-    { path: 'changepassword', component: ChangePasswordComponent }
+    { path: 'changepassword', component: ChangePasswordComponent },
+    { path: 'discover', component: DiscoverComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

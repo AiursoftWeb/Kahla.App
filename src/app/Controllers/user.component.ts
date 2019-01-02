@@ -7,6 +7,7 @@ import { switchMap,  } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -24,7 +25,8 @@ export class UserComponent implements OnInit {
         private friendsApiService: FriendsApiService,
         private router: Router,
         private cacheService: CacheService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        public messageService: MessageService
     ) {
         this.headerService.title = 'Profile';
         this.headerService.returnButton = true;
@@ -71,12 +73,9 @@ export class UserComponent implements OnInit {
             });
     }
 
-    public talk(id: number): void {
-        this.router.navigate(['/talking', id]);
-    }
-
     public report(): void {
         Swal({
+            title: 'Report',
             input: 'textarea',
             inputPlaceholder: 'Type your reason here...',
             inputAttributes: {

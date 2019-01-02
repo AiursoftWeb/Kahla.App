@@ -21,6 +21,14 @@
             No message. Start talking now!
         </div>
     </div>
+    <div *ngIf="cacheService.cachedData.conversations && cacheService.cachedData.conversations.length == 0">
+        <div class="buttons">
+            <button class="button primary" routerLink="/addfriend">Search user</button>
+        </div>
+        <div class="buttons">
+            <button class="button primary" routerLink="/join-group">Search group</button>
+        </div>
+    </div>
 </div>
 <div class="holder"></div>
 <app-nav></app-nav>

@@ -9,7 +9,9 @@ import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/conversations.html',
-    styleUrls: ['../Styles/conversations.css', '../Styles/reddot.css']
+    styleUrls: ['../Styles/conversations.css',
+                '../Styles/reddot.css',
+                '../Styles/button.css']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
