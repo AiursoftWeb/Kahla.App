@@ -1,6 +1,6 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
-<div class="user" routerLink="/userInforDet">
+<div class="user" routerLink="/userInfo">
     <img class="user-img" src="{{GetMe() ? GetMe().avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{GetMe() ? GetMe().nickName : "Loading..."}}
