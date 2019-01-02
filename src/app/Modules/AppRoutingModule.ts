@@ -28,7 +28,7 @@ const routes: Routes = [
     { path: 'signin', component: SignInComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'about', component: AboutComponent },
-    { path: 'userInforDet', component: UserDetailComponent },
+    { path: 'userInfo', component: UserDetailComponent },
     { path: 'join-group', component: JoinGroupComponent },
     { path: 'group/:id', component: GroupComponent },
     { path: 'changepassword', component: ChangePasswordComponent },
