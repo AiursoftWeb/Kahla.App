@@ -30,6 +30,7 @@
 
 .friends-header .friends-button .words{
     text-align: center;    
+    user-select: none;
 }
 
 .friends-header .friends-button .reddot{
@@ -43,6 +44,7 @@
     border-color: #E8E8E8;
     cursor: pointer;
     background-color: #FFF;
+    user-select: none;
 }
 
 .friend:hover {

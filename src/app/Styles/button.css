@@ -18,6 +18,7 @@ button, .button {
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
+    user-select: none;
 }
 
 .button--fab {
