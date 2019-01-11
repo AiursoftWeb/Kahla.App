@@ -33,7 +33,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.shadow = false;
     }
     public ngOnInit(): void {
-        this.messageService.updateFriends(null);
+        this.messageService.updateFriends();
     }
 
     public detail(info: ContactInfo): void {

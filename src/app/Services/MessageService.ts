@@ -53,7 +53,7 @@ export class MessageService {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
                 } else {
-                    this.cacheService.autoUpdateConversation(null);
+                    this.cacheService.autoUpdateConversation();
                     if (!evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
@@ -65,11 +65,11 @@ export class MessageService {
                 break;
             case EventType.WereDeletedEvent:
                 Swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
-                this.cacheService.autoUpdateConversation(null);
+                this.cacheService.autoUpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
                 Swal('Friend request', 'Your friend request was accepted!', 'success');
-                this.cacheService.autoUpdateConversation(null);
+                this.cacheService.autoUpdateConversation();
                 break;
         }
     }
@@ -156,8 +156,8 @@ export class MessageService {
         }
     }
 
-    public updateFriends(callback: () => void): void {
-        this.cacheService.autoUpdateFriends(callback);
+    public updateFriends(): void {
+        this.cacheService.autoUpdateFriends();
         this.cacheService.autoUpdateRequests();
     }
 
