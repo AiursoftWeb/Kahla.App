@@ -46,7 +46,8 @@ export class InitService {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                         this.loadPusher();
-                        this.cacheService.autoUpdateConversation(null);
+                        this.cacheService.autoUpdateConversation();
+                        this.cacheService.autoUpdateRequests();
                     }
                 });
             }

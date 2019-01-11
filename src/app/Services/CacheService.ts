@@ -35,7 +35,7 @@ export class CacheService {
         this.totalUnread = data.filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
     }
 
-    public autoUpdateConversation(callback: () => void): void {
+    public autoUpdateConversation(): void {
         this.friendsApiService.MyFriends(false)
             .pipe(map(t => t.items))
             .subscribe(info => {
@@ -62,21 +62,15 @@ export class CacheService {
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 this.UpdateConversations(info);
-                if (callback != null) {
-                    callback();
-                }
             });
     }
 
-    public autoUpdateFriends(callback: () => void): void {
+    public autoUpdateFriends(): void {
         this.friendsApiService.MyFriends(true).subscribe(response => {
             response.items.forEach(item => {
                 item.avatarURL = Values.fileAddress + item.displayImageKey;
             });
             this.cachedData.friendList = response.items;
-            if (callback != null) {
-                callback();
-            }
         });
     }
 

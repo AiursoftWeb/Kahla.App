@@ -85,7 +85,7 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal('Success', response.message, 'success');
-                            this.cache.autoUpdateConversation(null);
+                            this.cache.autoUpdateConversation();
                             this.router.navigate(['/friends']);
                         } else {
                             Swal('Error', response.message, 'error');
