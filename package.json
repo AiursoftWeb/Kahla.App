@@ -74,6 +74,7 @@
     "@angular/router": "6.1.7",
     "@angular/service-worker": "6.1.7",
     "autolinker": "^1.7.1",
+    "blueimp-load-image": "^2.20.1",
     "cordova-android": "^7.1.1",
     "cordova-browser": "^5.0.0",
     "cordova-ios": "^4.5.1",

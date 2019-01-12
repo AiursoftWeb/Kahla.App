@@ -332,3 +332,20 @@ a h5 {
 #scrollDown {
     background-color: #bed0f1;
 }
+
+.bottom_right {
+    transform: rotate(180deg);
+}
+
+.right_top {
+    transform: rotate(90deg);
+}
+
+.left_bottom {
+    transform: rotate(-90deg);
+}
+
+.rotate {
+    transform-origin: top left;
+    position: absolute;
+}

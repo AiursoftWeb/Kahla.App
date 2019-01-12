@@ -94,17 +94,22 @@ export class MessageService {
                         if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = 0, imageHeight = 0;
-                            if (this.maxImageWidth > Number(t.content.split('-')[2])) {
-                                imageWidth = Number(t.content.split('-')[2]);
-                                imageHeight = Number(t.content.split('-')[1]);
-                            } else {
+                            let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8') {
+                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
+                            }
+                            const ratio = imageHeight / imageWidth * 100;
+                            if (this.maxImageWidth < imageWidth) {
                                 imageWidth = this.maxImageWidth;
-                                imageHeight = Math.floor(this.maxImageWidth *
-                                    Number(t.content.split('-')[1]) / Number(t.content.split('-')[2]));
+                                imageHeight = Math.floor(this.maxImageWidth * ratio / 100);
+                            }
+                            const displayWidth = imageWidth;
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8') {
+                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
-                                '&h=' + imageHeight + '-' + imageWidth + '-' + imageHeight / imageWidth * 100;
+                                '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
+                                this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (!t.content.startsWith('[file]')) {
                         t.content = he.encode(t.content);
@@ -175,5 +180,21 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
+    }
+
+    private getOrientationClassName(exifValue: string): string {
+        switch (exifValue) {
+            case '0':
+            case '1':
+                return '';
+            case '3':
+                return 'bottom_right rotate';
+            case '6':
+                return 'right_top rotate';
+            case '8':
+                return 'left_bottom rotate';
+            default:
+                return '';
+        }
     }
 }
