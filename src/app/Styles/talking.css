@@ -339,13 +339,36 @@ a h5 {
 
 .right_top {
     transform: rotate(90deg);
+    position: absolute;
+    transform-origin: top left;
+    left: 100%;
 }
 
 .left_bottom {
     transform: rotate(-90deg);
+    transform-origin: top right;
+    position: absolute;
+    right: 100%;
 }
 
-.rotate {
-    transform-origin: top left;
+.flip_bottom_right {
+    transform: scaleX(-1) rotate(180deg);
+}
+
+.flip_right_top {
+    transform: scaleX(-1) rotate(90deg);
     position: absolute;
+    transform-origin: top left;
+    left: 0;
+}
+
+.flip_left_bottom {
+    transform: scaleX(-1) rotate(-90deg);
+    position: absolute;
+    transform-origin: top right;
+    right: 0;
+}
+
+.flip {
+    transform: scaleX(-1);
 }

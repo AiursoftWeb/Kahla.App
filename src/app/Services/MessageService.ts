@@ -95,7 +95,8 @@ export class MessageService {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
                             let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
-                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8') {
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
+                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             const ratio = imageHeight / imageWidth * 100;
@@ -104,7 +105,8 @@ export class MessageService {
                                 imageHeight = Math.floor(this.maxImageWidth * ratio / 100);
                             }
                             const displayWidth = imageWidth;
-                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8') {
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
+                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
@@ -187,12 +189,20 @@ export class MessageService {
             case '0':
             case '1':
                 return '';
+            case '2':
+                return 'flip';
             case '3':
-                return 'bottom_right rotate';
+                return 'bottom_right';
+            case '4':
+                return 'flip_bottom_right';
+            case '5':
+                return 'flip_right_top';
             case '6':
-                return 'right_top rotate';
+                return 'right_top';
+            case '7':
+                return 'flip_left_bottom';
             case '8':
-                return 'left_bottom rotate';
+                return 'left_bottom';
             default:
                 return '';
         }
