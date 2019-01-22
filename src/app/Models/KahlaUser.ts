@@ -1,10 +1,12 @@
 ﻿export class KahlaUser {
-    public id: string;
-    public nickName: string;
-    public bio: string;
-    public sex: string;
-    public headImgFileKey: number;
-    public preferedLanguage: string;
     public accountCreateTime: Date;
     public avatarURL: string;
+    public bio: string;
+    public email: string;
+    public emailConfirmed: boolean;
+    public headImgFileKey: number;
+    public id: string;
+    public nickName: string;
+    public preferedLanguage: string;
+    public sex: string;
 }

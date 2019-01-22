@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
-import { KahlaUser } from '../Models/KahlaUser';
 import { Values } from '../values';
 import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
@@ -27,10 +26,6 @@ export class SettingsComponent {
             this.headerService.shadow = false;
         }
 
-    public GetMe(): KahlaUser {
-        return this.messageService.me;
-    }
-
     public SignOut(): void {
         Swal({
             title: 'Are you sure to sign out?',
@@ -41,6 +36,35 @@ export class SettingsComponent {
                 this.authApiService.LogOff().subscribe(() => {
                     this.initSerivce.destroy();
                     this.router.navigate(['/signin'], {replaceUrl: true});
+                });
+            }
+        });
+    }
+
+    public sendEmail(): void {
+        Swal({
+            title: 'Please verify your email.',
+            text: 'Please confirm your email as soon as possible! Or you may lose access \
+                to your account in a few days! Without confirming your email, you won\'t receive \
+                any important notifications and cannot reset your password!',
+            type: 'warning',
+            confirmButtonText: 'Send Email',
+            showCancelButton: true
+        }).then((sendEmail) => {
+            if (sendEmail.value && this.messageService.me) {
+                this.authApiService.SendMail(this.messageService.me.email).subscribe((result) => {
+                    if (result.code === 0) {
+                        Swal({
+                            title: 'Please check your inbox.',
+                            type: 'success'
+                        });
+                    } else {
+                        Swal({
+                            title: 'Error',
+                            text: result.message,
+                            type: 'error'
+                        });
+                    }
                 });
             }
         });

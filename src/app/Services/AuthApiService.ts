@@ -65,4 +65,8 @@ export class AuthApiService {
     public LogOff(): Observable<AiurProtocal> {
         return this.apiService.Get(AuthApiService.serverPath + '/LogOff');
     }
+
+    public SendMail(email: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/SendEmail', {email: email});
+    }
 }
