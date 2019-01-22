@@ -1,20 +1,28 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
 <div class="user" routerLink="/userInfo">
-    <img class="user-img" src="{{GetMe() ? GetMe().avatarURL : loadingImgURL}}?w=100&h=100">
+    <img class="user-img" src="{{messageService.me ? messageService.me.avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
-        {{GetMe() ? GetMe().nickName : "Loading..."}}
+        {{messageService.me ? messageService.me.nickName : "Loading..."}}
     </div>
     <div class="create-time">
         <ng-container i18n="@@RegisterTime">
             Register Time:
         </ng-container>
-        <ng-container *ngIf="GetMe()">
-            {{GetMe().accountCreateTime | date:'M/d/yy h:mm a'}}
+        <ng-container *ngIf="messageService.me">
+            {{messageService.me.accountCreateTime | date:'M/d/yy h:mm a'}}
         </ng-container>
     </div>
 </div>
 <div class="menu-holder"></div>
+<div class="menu-button" *ngIf="messageService.me && !messageService.me.emailConfirmed" (click)="sendEmail()">
+    <div class="img warning">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    </div>
+    <div class="text warning">
+        <strong>Your account email was not confirmed!</strong>
+    </div>
+</div>
 <div class="menu-button" routerLink="/changepassword">
     <div class="img">
         <i class="fa fa-lock" aria-hidden="true"></i>
@@ -38,6 +46,5 @@
 <div class="buttons">
     <button class="button warning" (click)="SignOut()" i18n="@@Signout">Sign out</button>
 </div>
-
 
 <app-nav></app-nav>
