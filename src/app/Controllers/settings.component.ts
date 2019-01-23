@@ -56,6 +56,7 @@ export class SettingsComponent {
                     if (result.code === 0) {
                         Swal({
                             title: 'Please check your inbox.',
+                            text: 'Email was send to ' + this.messageService.me.email,
                             type: 'success'
                         });
                     } else {
