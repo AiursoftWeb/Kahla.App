@@ -61,6 +61,11 @@
         width: 100%;
         height: 100%;
         border-radius: 8px;
+        user-select: none;
+    }
+
+    .chat-avatar:focus {
+        outline: none;
     }
 
     .message-list .chat-text {
@@ -263,6 +268,7 @@ i {
 .of4 .text{
     margin-top: 15px;
     color: #727272;
+    user-select: none;
 }
 
 progress {
@@ -325,4 +331,44 @@ a h5 {
 
 #scrollDown {
     background-color: #bed0f1;
+}
+
+.bottom_right {
+    transform: rotate(180deg);
+}
+
+.right_top {
+    transform: rotate(90deg);
+    position: absolute;
+    transform-origin: top left;
+    left: 100%;
+}
+
+.left_bottom {
+    transform: rotate(-90deg);
+    transform-origin: top right;
+    position: absolute;
+    right: 100%;
+}
+
+.flip_bottom_right {
+    transform: scaleX(-1) rotate(180deg);
+}
+
+.flip_right_top {
+    transform: scaleX(-1) rotate(90deg);
+    position: absolute;
+    transform-origin: top left;
+    left: 0;
+}
+
+.flip_left_bottom {
+    transform: scaleX(-1) rotate(-90deg);
+    position: absolute;
+    transform-origin: top right;
+    right: 0;
+}
+
+.flip {
+    transform: scaleX(-1);
 }

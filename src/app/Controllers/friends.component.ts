@@ -10,7 +10,10 @@ import { GroupsApiService } from '../Services/GroupsApiService';
 
 @Component({
     templateUrl: '../Views/friends.html',
-    styleUrls: ['../Styles/friends.css', '../Styles/reddot.css']
+    styleUrls: [
+        '../Styles/friends.css',
+        '../Styles/menu.css',
+        '../Styles/reddot.css']
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {
@@ -30,7 +33,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.shadow = false;
     }
     public ngOnInit(): void {
-        this.messageService.updateFriends(null);
+        this.messageService.updateFriends();
     }
 
     public detail(info: ContactInfo): void {

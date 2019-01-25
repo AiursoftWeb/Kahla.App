@@ -53,7 +53,7 @@ export class MessageService {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
                 } else {
-                    this.cacheService.autoUpdateConversation(null);
+                    this.cacheService.autoUpdateConversation();
                     if (!evt.muted) {
                         this.notify.ShowNewMessage(evt, this.me.id);
                     }
@@ -65,11 +65,11 @@ export class MessageService {
                 break;
             case EventType.WereDeletedEvent:
                 Swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
-                this.cacheService.autoUpdateConversation(null);
+                this.cacheService.autoUpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
                 Swal('Friend request', 'Your friend request was accepted!', 'success');
-                this.cacheService.autoUpdateConversation(null);
+                this.cacheService.autoUpdateConversation();
                 break;
         }
     }
@@ -94,17 +94,24 @@ export class MessageService {
                         if (filekey === -1 || isNaN(filekey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = 0, imageHeight = 0;
-                            if (this.maxImageWidth > Number(t.content.split('-')[2])) {
-                                imageWidth = Number(t.content.split('-')[2]);
-                                imageHeight = Number(t.content.split('-')[1]);
-                            } else {
+                            let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
+                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
+                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
+                            }
+                            const ratio = imageHeight / imageWidth * 100;
+                            if (this.maxImageWidth < imageWidth) {
                                 imageWidth = this.maxImageWidth;
-                                imageHeight = Math.floor(this.maxImageWidth *
-                                    Number(t.content.split('-')[1]) / Number(t.content.split('-')[2]));
+                                imageHeight = Math.floor(this.maxImageWidth * ratio / 100);
+                            }
+                            const displayWidth = imageWidth;
+                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
+                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
+                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
-                                '&h=' + imageHeight + '-' + imageWidth + '-' + imageHeight / imageWidth * 100;
+                                '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
+                                this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (!t.content.startsWith('[file]')) {
                         t.content = he.encode(t.content);
@@ -156,8 +163,8 @@ export class MessageService {
         }
     }
 
-    public updateFriends(callback: () => void): void {
-        this.cacheService.autoUpdateFriends(callback);
+    public updateFriends(): void {
+        this.cacheService.autoUpdateFriends();
         this.cacheService.autoUpdateRequests();
     }
 
@@ -175,5 +182,29 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
+    }
+
+    private getOrientationClassName(exifValue: string): string {
+        switch (exifValue) {
+            case '0':
+            case '1':
+                return '';
+            case '2':
+                return 'flip';
+            case '3':
+                return 'bottom_right';
+            case '4':
+                return 'flip_bottom_right';
+            case '5':
+                return 'flip_right_top';
+            case '6':
+                return 'right_top';
+            case '7':
+                return 'flip_left_bottom';
+            case '8':
+                return 'left_bottom';
+            default:
+                return '';
+        }
     }
 }

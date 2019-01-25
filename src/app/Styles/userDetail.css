@@ -9,6 +9,7 @@
   border-color: #e1e1e1;
   display: grid;
   grid-template-columns: 1fr 2fr;
+  user-select: none;
 }
 
 .profile input {

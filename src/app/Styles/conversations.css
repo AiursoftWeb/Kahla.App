@@ -8,6 +8,7 @@
     border-color: #D9D9D9;
     cursor: pointer;
     background-color: #FFF;
+    user-select: none;
 }
 
 .conversation:hover{

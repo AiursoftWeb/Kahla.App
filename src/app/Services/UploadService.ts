@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { UploadFile } from '../Models/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
+import * as loadImage from 'blueimp-load-image';
 
 @Injectable({
     providedIn: 'root'
@@ -76,14 +77,19 @@ export class UploadService {
                 let encedMessages;
                 switch (fileType) {
                     case 0:
-                        const image = new Image;
-                        image.src = URL.createObjectURL(file);
-                        image.addEventListener('load', () => {
-                            encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${image.naturalHeight}-${
-                                image.naturalWidth}`, aesKey).toString();
-                            URL.revokeObjectURL(image.src);
-                            this.sendMessage(encedMessages, conversationID);
-                        });
+                        loadImage(
+                            file,
+                            function (img, data) {
+                                let orientation = 0;
+                                if (data.exif) {
+                                    orientation = data.exif.get('Orientation');
+                                }
+                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${img.height}-${
+                                    img.width}-${orientation}`, aesKey).toString();
+                                this.sendMessage(encedMessages, conversationID);
+                            }.bind(this),
+                            {meta: true}
+                        );
                         break;
                     case 1:
                         encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
