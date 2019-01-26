@@ -13,6 +13,9 @@
             {{messageService.me.accountCreateTime | date:'M/d/yy h:mm a'}}
         </ng-container>
     </div>
+    <div class="email">
+        Email: {{ messageService.me ? messageService.me.email : "Loading..." }}
+    </div>
 </div>
 <div class="menu-holder"></div>
 <div class="menu-button" *ngIf="messageService.me && !messageService.me.emailConfirmed" (click)="sendEmail()">
