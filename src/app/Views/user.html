@@ -39,7 +39,16 @@
 </div>
 <div class="menu-holder"></div>
 
+<div class="menu-button" *ngIf="info && !areFriends && !messageService.me.emailConfirmed">
+    <div class="img warning">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    </div>
+    <div class="text warning">
+        <strong>You can't send friend requests until your email is verified.</strong>
+    </div>
+</div>
+
 <div class="buttons">
-    <button class="button success" *ngIf="info && !areFriends" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button success" *ngIf="info && !areFriends && messageService.me.emailConfirmed" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
     <button class="button success" *ngIf="info && areFriends"  routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
 </div>
