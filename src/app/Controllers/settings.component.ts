@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import { Values } from '../values';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
     styleUrls: ['../Styles/menu.css',
                 '../Styles/button.css']
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
         private authApiService: AuthApiService,
@@ -25,6 +25,14 @@ export class SettingsComponent {
             this.headerService.button = false;
             this.headerService.shadow = false;
         }
+
+    public ngOnInit(): void {
+        this.authApiService.Me().subscribe(p => {
+            if (p.code === 0) {
+                this.messageService.me = p.value;
+            }
+        });
+    }
 
     public SignOut(): void {
         Swal({
