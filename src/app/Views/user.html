@@ -10,6 +10,15 @@
     </div>
 </div>
 
+<div class="menu-button" *ngIf="info && !info.emailConfirmed">
+    <div class="img warning">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    </div>
+    <div class="text warning">
+        <strong>This user's email is not verified.</strong>
+    </div>
+</div>
+
 <div class="menu-holder"></div>
 <div class="menu-button" *ngIf="info && areFriends">
     <div class="img">
