@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
         this.authApiService.Me().subscribe(p => {
             if (p.code === 0) {
                 this.messageService.me = p.value;
+                this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
             }
         });
     }
