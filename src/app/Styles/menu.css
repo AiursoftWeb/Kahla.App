@@ -3,7 +3,6 @@
 ********************/
 
 .user {
-    height: 70px;
     border-width: 1px;
     border-bottom-style: solid;
     border-color: #D9D9D9;
@@ -11,37 +10,49 @@
     outline: none;
     cursor: pointer;
     user-select: none;
+    display: grid;
+    grid-template-columns: 10% 90%;
+    min-height: 75px;
+}
+
+.user > * {
+    align-self: center;
 }
 
 .user .user-img {
-    margin-left: 15px;
-    margin-top: 10px;
     width: 50px;
     height: 50px;
-    float: left;
     border-radius: 10px;
     user-select: none;
+    grid-row: 1 / 4;
+    grid-column: 1 / 2;
+    margin: auto;
 }
 
 .user .name {
-    position: absolute;
-    margin-left: 85px;
-    margin-top: 15px;
     font-size: 15px;
     font-weight: 400;
+    grid-row: 1;
+    grid-column: 2 / 3;
 }
 
+
 .user .create-time {
-    position: absolute;
-    margin-left: 85px;
-    margin-top: 40px;
     font-size: 13px;
     color: #999999;
     max-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 65%;
+    grid-row: 2;
+    grid-column: 2 / 3;
+}
+
+.user .email {
+    font-size: 13px;
+    color: #999999;
+    grid-row: 3;
+    grid-column: 2 / 3;
 }
 
 .menu-holder {
