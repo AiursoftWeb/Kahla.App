@@ -99,7 +99,7 @@ export class JoinGroupComponent implements OnInit {
             if (response.code === 0) {
                 this.router.navigate(['/']);
             } else {
-                Swal('Try again', response.message, 'error');
+                Swal('Error', response.message, 'error');
             }
         });
     }

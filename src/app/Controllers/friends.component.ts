@@ -45,6 +45,11 @@ export class FriendsComponent implements OnInit, OnDestroy {
     }
 
     public createGroup(): void {
+        if (!this.messageService.me.emailConfirmed) {
+            Swal('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
+            return;
+        }
+
         Swal({
             title: 'Enter your group name:',
             input: 'text',
