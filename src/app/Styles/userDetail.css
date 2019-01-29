@@ -8,7 +8,7 @@
   border-bottom-style: solid;
   border-color: #e1e1e1;
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 3fr;
   user-select: none;
 }
 
@@ -35,13 +35,12 @@
 }
 
 .profile label, .profile .text {
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
-  white-space: nowrap;
+  margin-left: 20px;
 }
 
 .avatar {
-  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-columns: 1fr 2fr 1fr;
 }
 
 .user-img {
@@ -60,4 +59,9 @@ progress {
 
 #image {
   display: none;
+}
+
+.email {
+  font-size: 13px;
+  color: #999999
 }
