@@ -4,6 +4,9 @@
     <div class="name">
         {{info.nickName}}
     </div>
+    <div class="email" *ngIf="info.email">
+        Email: {{ info.email }}
+    </div>
 </div>
 
 <div class="menu-button" *ngIf="info && !info.emailConfirmed">
