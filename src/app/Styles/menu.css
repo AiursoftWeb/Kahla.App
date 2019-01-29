@@ -92,3 +92,7 @@
 .menu-button .warning {
     color: #d9534f;
 }
+
+.menu-button.notification {
+    grid-template-columns: 1fr 2fr 2fr;
+}

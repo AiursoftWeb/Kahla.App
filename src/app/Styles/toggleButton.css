@@ -3,13 +3,9 @@
 }
 
 .tgl-btn {
-    display: block;
-    position: relative;
     cursor: pointer;
     width: 4em;
     height: 2em;
-    top: 25%;
-    float: right;
     margin-right: 5%;
     transition: all .4s ease;
     background: #f0f0f0;

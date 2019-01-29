@@ -14,7 +14,6 @@ import { MessageService } from '../Services/MessageService';
 @Component({
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.css',
-                '../Styles/friends.css',
                 '../Styles/button.css',
                 '../Styles/toggleButton.css']
 })

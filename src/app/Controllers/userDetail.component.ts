@@ -13,7 +13,8 @@ import { HeaderService } from '../Services/HeaderService';
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
     '../Styles/userDetail.css',
-    '../Styles/button.css'
+    '../Styles/button.css',
+    '../Styles/toggleButton.css'
   ]
 })
 
@@ -56,7 +57,8 @@ export class UserDetailComponent implements OnInit {
 
   public save() {
     document.querySelector('#save').textContent = 'Saving...';
-    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey)
+    const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
+    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey, hideEmail)
       .subscribe((t) => {
       if (t.code === 0) {
         this.messageService.me = Object.assign({}, this.user);
