@@ -14,8 +14,9 @@
     <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
     <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
   </div>
-  <div class="profile">
+  <div class="profile avatar">
     <div class="text">Hide email</div>
+    <div class="email">{{ this.user.email }}</div>
     <input id="toggleHideEmail" class="tgl" type="checkbox" [checked]="!user.email"/>
     <label for="toggleHideEmail" class="tgl-btn"></label>
   </div>
