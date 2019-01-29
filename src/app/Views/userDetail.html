@@ -1,5 +1,11 @@
 <app-header title="Edit profile" returnButton="true" RouterLink="/"></app-header>
 <div *ngIf="user">
+  <div class="profile avatar">
+      <label>Avatar</label>
+      <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=140&h=140">
+      <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
+      <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
+    </div>
   <div class="profile">
     <label>Nick name</label>
     <input [(ngModel)]="user.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
@@ -8,16 +14,11 @@
     <label>Bio</label>
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
-  <div class="profile avatar">
-    <label>Avatar</label>
-    <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=100&h=100">
-    <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
-    <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
-  </div>
+
   <div class="profile avatar">
     <div class="text">Hide email</div>
     <div class="email">{{ this.user.email }}</div>
-    <input id="toggleHideEmail" class="tgl" type="checkbox" [checked]="!user.email"/>
+    <input id="toggleHideEmail" class="tgl" type="checkbox" [checked]="!user.makeEmailPublic"/>
     <label for="toggleHideEmail" class="tgl-btn"></label>
   </div>
   <div class="buttons">

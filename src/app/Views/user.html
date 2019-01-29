@@ -6,6 +6,10 @@
     </div>
     <div class="email" *ngIf="info.email">
         Email: {{ info.email }}
+        <label class="badge badge-success" *ngIf="info && info.emailConfirmed">Verified.</label>
+    </div>
+    <div class="email" *ngIf="!info.email">
+        Email: <label class="badge badge-danger">Not visiable.</label>
     </div>
 </div>
 
