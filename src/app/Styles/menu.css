@@ -11,11 +11,11 @@
     cursor: pointer;
     user-select: none;
     display: grid;
-    grid-template-columns: 10% 90%;
+    grid-template-columns: 1fr 4fr;
     min-height: 70px;
 }
 
-.user > * {
+.user > *, .menu-button > * {
     align-self: center;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .menu-button {
-    height: 50px;
+    min-height: 50px;
     border-width: 1px;
     border-bottom-style: solid;
     border-color: #E8E8E8;
@@ -57,6 +57,12 @@
     outline: none;
     display: block;
     user-select: none;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.menu-button > * {
+    margin: auto;
 }
 
 .menu-button:hover {
@@ -64,13 +70,11 @@
 }
 
 .menu-button .img {
-    margin-left: 10px;
-    margin-top: 13px;
     width: 36px;
-    float: left;
     border-radius: 8px;
     text-align: center;
     color: #18A4F9;
+    grid-column: 1 / 2;
 }
 
 .menu-button .img i {
@@ -78,12 +82,11 @@
 }
 
 .menu-button .text {
-    position: absolute;
-    margin-left: 55px;
-    margin-top: 15px;
     font-size: 15px;
     font-weight: 400;
     color: black;
+    grid-column: 2 / 3;
+    margin-left: 0;
 }
 
 .menu-button .warning {
