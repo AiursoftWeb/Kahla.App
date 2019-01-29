@@ -1,20 +1,12 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
-<div class="user" routerLink="/userInfo">
-    <img class="user-img" src="{{messageService.me ? messageService.me.avatarURL : loadingImgURL}}?w=100&h=100">
+<div class="user" routerLink="/userInfo" *ngIf="messageService.me">
+    <img class="user-img" src="{{ messageService.me.avatarURL}}?w=100&h=100 ">
     <div class="name">
-        {{messageService.me ? messageService.me.nickName : "Loading..."}}
+        {{ messageService.me.nickName }}
     </div>
-    <div class="create-time">
-        <ng-container i18n="@@RegisterTime">
-            Register Time:
-        </ng-container>
-        <ng-container *ngIf="messageService.me">
-            {{messageService.me.accountCreateTime | date:'M/d/yy h:mm a'}}
-        </ng-container>
-    </div>
-    <div class="email">
-        Email: {{ messageService.me ? messageService.me.email : "Loading..." }}
+    <div class="email" *ngIf="messageService.me.email">
+        Public email: {{ messageService.me.email }}
     </div>
 </div>
 <div class="menu-holder"></div>
