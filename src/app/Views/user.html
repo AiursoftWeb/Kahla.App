@@ -1,15 +1,15 @@
 <app-header title="Profile" i18n-title="@@Profile" returnButton="true"></app-header>
 <div *ngIf="info" class="user">
-    <img class="user-img" src="{{info.avatarURL ? info.avatarURL : loadingImgURL}}?w=100&h=100">
+    <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=100&h=100">
     <div class="name">
-        {{info.nickName}}
+        {{ info.nickName }}
     </div>
-    <div class="email" *ngIf="info.email">
-        Email: {{ info.email }}
-        <label class="badge badge-success" *ngIf="info && info.emailConfirmed">Verified.</label>
+    <div class="bio">
+        {{ info.bio }}
     </div>
-    <div class="email" *ngIf="!info.email">
-        Email: <label class="badge badge-danger">Not visiable.</label>
+    <div class="email">
+        {{ info.email }}
+        <label class="badge badge-success" *ngIf="info.emailConfirmed">Verified</label>
     </div>
 </div>
 

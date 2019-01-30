@@ -10,7 +10,8 @@ import Swal from 'sweetalert2';
 @Component({
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css']
+                '../Styles/button.css',
+                '../Styles/badge.css']
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;

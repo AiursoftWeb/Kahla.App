@@ -5,12 +5,14 @@
     <div class="name">
         {{ messageService.me.nickName }}
     </div>
+    <div class="bio">
+        {{ messageService.me.bio }}
+    </div>
     <div class="email" *ngIf="messageService.me.email">
-        Email: {{ messageService.me.email }}
+        {{ messageService.me.email }}
         <label class="badge badge-success" *ngIf="messageService.me.emailConfirmed">Verified</label>
-        <label class="badge badge-danger" *ngIf="!messageService.me.emailConfirmed">Not verified</label>
         <label class="badge badge-primary" *ngIf="messageService.me.makeEmailPublic">Public</label>
-        <label class="badge badge-danger" *ngIf="!messageService.me.makeEmailPublic">Not visiable</label>
+        <label class="badge badge-primary" *ngIf="!messageService.me.makeEmailPublic">Hidden</label>
     </div>
 </div>
 <div class="menu-holder"></div>

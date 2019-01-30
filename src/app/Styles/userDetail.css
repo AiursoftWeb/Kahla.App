@@ -14,8 +14,7 @@
 
 .profile > * {
   align-self: center;
-  margin-left: 15px;
-  margin-right: 15px;
+  margin: auto;
 }
 
 .profile input {
@@ -26,7 +25,7 @@
   height: 35px;
   padding: 6px 12px;
   font-size: 14px;
-  background-color: #fff;
+  background-color: #efefef;
   box-sizing: border-box;
   outline: none;
 }
@@ -41,14 +40,13 @@
 }
 
 .avatar {
-  padding-right: 30px;
   grid-template-columns: 1fr 2fr 1fr;
 }
 
 .user-img {
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
 }
 
 progress {
