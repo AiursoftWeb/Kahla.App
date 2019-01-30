@@ -1,6 +1,6 @@
 <app-header title="Group Info" i18n-title="@@GroupInfo" returnButton="true"></app-header>
 <div *ngIf="conversation" class="user">
-    <img class="user-img" src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
+    <img class="user-img groupGridRow" src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{conversation.displayName}}
     </div>
