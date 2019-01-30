@@ -56,18 +56,18 @@ export class UserDetailComponent implements OnInit {
   }
 
   public save() {
-    document.querySelector('#save').textContent = 'Saving...';
+    const saveButton =  document.querySelector('#save');
+    saveButton.textContent = 'Saving...';
     const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
-    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio ? this.user.bio : ``, this.user.headImgFileKey, hideEmail)
-      .subscribe((t) => {
-      if (t.code === 0) {
-        this.messageService.me = Object.assign({}, this.user);
-        this.router.navigate(['/settings']);
-      } else if (t.code === -10) {
-        Swal(t.message, (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
-      } else {
-        Swal('input in failed', t.message, 'error');
-      }
+    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.headImgFileKey, hideEmail)
+      .subscribe((response) => {
+        if (response.code === 0) {
+          this.messageService.me = Object.assign({}, this.user);
+          this.router.navigate(['/settings']);
+        } else {
+          Swal('Error', (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
+        }
+        saveButton.textContent = 'Save';
     });
   }
 }
