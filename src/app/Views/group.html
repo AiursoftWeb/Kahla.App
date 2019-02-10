@@ -1,6 +1,6 @@
 <app-header title="Group Info" i18n-title="@@GroupInfo" returnButton="true"></app-header>
 <div *ngIf="conversation" class="user">
-    <img class="user-img" src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
+    <img class="user-img groupGridRow" src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
     <div class="name">
         {{conversation.displayName}}
     </div>
@@ -16,7 +16,7 @@
     </div>
     <div class="text" i18n="@@Message">Message</div>
 </div>
-<div class="menu-button" (click)="mute()">
+<div class="menu-button notification" (click)="mute()">
     <div class="img">
         <i *ngIf="muted" class="fa fa-bell-slash"></i>
         <i *ngIf="!muted" class="fa fa-bell"></i>
@@ -39,9 +39,9 @@
         </div>
         <div class="text" i18n="@@GroupMembers">{{ groupMembers }} members</div>
     </div>
-    <div class="friend" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
-        <img class="user-img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
-        <div class="name">
+    <div class="menu-button" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
+        <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
+        <div class="text">
             {{e.user.nickName}}
         </div>
     </div>

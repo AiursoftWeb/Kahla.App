@@ -1,15 +1,20 @@
 .profile {
-  background-color: #efefef;
+  background-color: #fcfcfc;
   padding: 7px;
   box-sizing: border-box;
   width: 100%;
-  height: 49px;
+  min-height: 49px;
   border-width: 1px;
   border-bottom-style: solid;
   border-color: #e1e1e1;
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   user-select: none;
+}
+
+.profile > * {
+  align-self: center;
+  margin: auto;
 }
 
 .profile input {
@@ -20,7 +25,7 @@
   height: 35px;
   padding: 6px 12px;
   font-size: 14px;
-  background-color: #fff;
+  background-color: #efefef;
   box-sizing: border-box;
   outline: none;
 }
@@ -29,29 +34,19 @@
   height: 49px;
 }
 
-.profile label {
-  font-family: Arial, Helvetica, sans-serif;
+.profile label, .profile .text {
   font-size: 14px;
-  margin-top: 8px;
-  white-space: nowrap;
-  margin: auto;
+  margin-left: 20px;
 }
 
 .avatar {
-  height: 70px;
+  grid-template-columns: 1fr 2fr 1fr;
 }
 
 .user-img {
   width: 50px;
   height: 50px;
-  border-radius: 10px;
-  margin: auto;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
+  border-radius: 4px;
 }
 
 progress {
@@ -64,4 +59,9 @@ progress {
 
 #image {
   display: none;
+}
+
+.email {
+  font-size: 13px;
+  color: #999999
 }

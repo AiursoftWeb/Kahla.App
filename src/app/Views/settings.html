@@ -1,17 +1,18 @@
 <app-header title="Me" i18n-title="@@Me"></app-header>
 
-<div class="user" routerLink="/userInfo">
-    <img class="user-img" src="{{messageService.me ? messageService.me.avatarURL : loadingImgURL}}?w=100&h=100">
+<div class="user" routerLink="/userInfo" *ngIf="messageService.me">
+    <img class="user-img" src="{{ messageService.me.avatarURL}}?w=100&h=100 ">
     <div class="name">
-        {{messageService.me ? messageService.me.nickName : "Loading..."}}
+        {{ messageService.me.nickName }}
     </div>
-    <div class="create-time">
-        <ng-container i18n="@@RegisterTime">
-            Register Time:
-        </ng-container>
-        <ng-container *ngIf="messageService.me">
-            {{messageService.me.accountCreateTime | date:'M/d/yy h:mm a'}}
-        </ng-container>
+    <div class="bio">
+        {{ messageService.me.bio }}
+    </div>
+    <div class="email" *ngIf="messageService.me.email">
+        {{ messageService.me.email }}
+        <label class="badge badge-success" *ngIf="messageService.me.emailConfirmed">Verified</label>
+        <label class="badge badge-primary" *ngIf="messageService.me.makeEmailPublic">Public</label>
+        <label class="badge badge-primary" *ngIf="!messageService.me.makeEmailPublic">Hidden</label>
     </div>
 </div>
 <div class="menu-holder"></div>

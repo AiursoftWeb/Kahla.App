@@ -9,4 +9,5 @@
     public nickName: string;
     public preferedLanguage: string;
     public sex: string;
+    public makeEmailPublic: boolean;
 }

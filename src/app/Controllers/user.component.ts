@@ -12,7 +12,8 @@ import { MessageService } from '../Services/MessageService';
 @Component({
     templateUrl: '../Views/user.html',
     styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css']
+                '../Styles/button.css',
+                '../Styles/badge.css']
 })
 
 export class UserComponent implements OnInit {
