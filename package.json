@@ -56,7 +56,6 @@
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "pack": "asar pack ./www ./www/app.asar",
     "prod": "npm run prebuild && ng build --base-href / --prod",
     "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
     "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
@@ -98,9 +97,8 @@
     "@types/jasmine": "^2.8.8",
     "@types/jasminewd2": "^2.0.4",
     "@types/node": "^10.11.2",
-    "asar": "^0.14.0",
     "codelyzer": "^4.4.4",
-    "electron": "^2.0.10",
+    "electron": "^4.0.4",
     "electron-builder": "^20.28.4",
     "jasmine-core": "^3.2.1",
     "jasmine-spec-reporter": "~4.2.1",
