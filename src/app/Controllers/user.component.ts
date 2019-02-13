@@ -47,7 +47,7 @@ export class UserComponent implements OnInit {
     }
 
     public delete(id: string): void {
-        Swal({
+        Swal.fire({
             title: 'Are you sure to delete a friend?',
             type: 'warning',
             showCancelButton: true
@@ -55,7 +55,7 @@ export class UserComponent implements OnInit {
             if (willDelete.value) {
                 this.friendsApiService.DeleteFriend(id)
                     .subscribe(response => {
-                        Swal('Success', response.message, 'success');
+                        Swal.fire('Success', response.message, 'success');
                         this.cacheService.autoUpdateConversation();
                         this.router.navigate(['/friends']);
                     });
@@ -67,15 +67,15 @@ export class UserComponent implements OnInit {
         this.friendsApiService.CreateRequest(id)
             .subscribe(response => {
                 if (response.code === 0) {
-                    Swal('Success', response.message, 'success');
+                    Swal.fire('Success', response.message, 'success');
                 } else {
-                    Swal('Error', response.message, 'error');
+                    Swal.fire('Error', response.message, 'error');
                 }
             });
     }
 
     public report(): void {
-        Swal({
+        Swal.fire({
             title: 'Report',
             input: 'textarea',
             inputPlaceholder: 'Type your reason here...',
@@ -90,15 +90,15 @@ export class UserComponent implements OnInit {
                 if (result.value.length >= 5) {
                     this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
                         if (response.code === 0) {
-                            Swal('Success', response.message, 'success');
+                            Swal.fire('Success', response.message, 'success');
                         } else {
-                            Swal('Error', response.message, 'error');
+                            Swal.fire('Error', response.message, 'error');
                         }
                     }, () => {
-                        Swal('Error', 'Report error.', 'error');
+                        Swal.fire('Error', 'Report error.', 'error');
                     });
                 } else {
-                    Swal('Error', 'The reason\'s length should between five and two hundreds.', 'error');
+                    Swal.fire('Error', 'The reason\'s length should between five and two hundreds.', 'error');
                 }
             }
           });

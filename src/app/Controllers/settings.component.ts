@@ -37,7 +37,7 @@ export class SettingsComponent implements OnInit {
     }
 
     public SignOut(): void {
-        Swal({
+        Swal.fire({
             title: 'Are you sure to sign out?',
             type: 'warning',
             showCancelButton: true
@@ -52,7 +52,7 @@ export class SettingsComponent implements OnInit {
     }
 
     public sendEmail(): void {
-        Swal({
+        Swal.fire({
             title: 'Please verify your email.',
             text: 'Please confirm your email as soon as possible! Or you may lose access \
                 to your account in a few days! Without confirming your email, you won\'t receive \
@@ -64,13 +64,13 @@ export class SettingsComponent implements OnInit {
             if (sendEmail.value && this.messageService.me) {
                 this.authApiService.SendMail(this.messageService.me.email).subscribe((result) => {
                     if (result.code === 0) {
-                        Swal({
+                        Swal.fire({
                             title: 'Please check your inbox.',
                             text: 'Email was send to ' + this.messageService.me.email,
                             type: 'success'
                         });
                     } else {
-                        Swal({
+                        Swal.fire({
                             title: 'Error',
                             text: result.message,
                             type: 'error'
