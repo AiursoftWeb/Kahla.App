@@ -13,7 +13,9 @@
     "nsis": {
       "oneClick": false,
       "perMachine": true,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE",
+      "artifactName": "${productName}.Setup.${version}.${ext}"
     },
     "win": {
       "target": [
