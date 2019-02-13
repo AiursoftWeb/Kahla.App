@@ -74,7 +74,7 @@ export class GroupComponent implements OnInit {
         } else {
             alertTitle = 'Are you sure to leave this group?';
         }
-        Swal({
+        Swal.fire({
             title: alertTitle,
             type: 'warning',
             showCancelButton: true
@@ -83,11 +83,11 @@ export class GroupComponent implements OnInit {
                 this.groupsApiService.LeaveGroup(groupName)
                     .subscribe(response => {
                         if (response.code === 0) {
-                            Swal('Success', response.message, 'success');
+                            Swal.fire('Success', response.message, 'success');
                             this.cache.autoUpdateConversation();
                             this.router.navigate(['/friends']);
                         } else {
-                            Swal('Error', response.message, 'error');
+                            Swal.fire('Error', response.message, 'error');
                         }
                     });
             }
@@ -103,7 +103,7 @@ export class GroupComponent implements OnInit {
                     if (result.code === 0) {
                         this.muted = !this.muted;
                     } else {
-                        Swal('Error', result.message, 'error');
+                        Swal.fire('Error', result.message, 'error');
                     }
                 }
             );

@@ -39,22 +39,22 @@ export class ChangePasswordComponent {
     public onSubmit(): void {
         this.checkValid();
         if (!this.samePassword) {
-            Swal('Passwords are not same!', 'error');
+            Swal.fire('Passwords are not same!', 'error');
         }
         if (!this.valid && this.samePassword) {
-            Swal('Password length should between six and thirty-two');
+            Swal.fire('Password length should between six and thirty-two');
         }
         if (this.valid) {
             this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
             .pipe(catchError(error => {
-                Swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
             }))
             .subscribe(result => {
                 if (result.code === 0) {
-                    Swal('All set', result.message, 'success');
+                    Swal.fire('All set', result.message, 'success');
                 } else {
-                    Swal('Try again', result.message, 'error');
+                    Swal.fire('Try again', result.message, 'error');
                 }
             });
         }

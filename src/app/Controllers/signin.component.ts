@@ -34,7 +34,7 @@ export class SignInComponent implements OnInit {
         this.authApiService.AuthByPassword(this.email, this.password)
             .pipe(catchError(error => {
                 this.connecting = false;
-                Swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
             }))
             .subscribe(t => {
@@ -42,9 +42,9 @@ export class SignInComponent implements OnInit {
                     this.router.navigate(['/conversations'], {replaceUrl: true});
                     this.initService.init();
                 } else if (t.code === -10) {
-                    Swal('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
+                    Swal.fire('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
                 } else {
-                    Swal('Sign in failed', t.message, 'error');
+                    Swal.fire('Sign in failed', t.message, 'error');
                 }
                 this.connecting = false;
             });

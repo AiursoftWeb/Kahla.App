@@ -13,7 +13,7 @@ import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
 import * as he from 'he';
-import * as Autolinker from 'autolinker';
+import { Autolinker } from 'autolinker';
 import { Values } from '../values';
 
 @Injectable({
@@ -60,15 +60,15 @@ export class MessageService {
                 }
                 break;
             case EventType.NewFriendRequest:
-                Swal('Friend request', 'You have got a new friend request!', 'info');
+                Swal.fire('Friend request', 'You have got a new friend request!', 'info');
                 this.cacheService.autoUpdateRequests();
                 break;
             case EventType.WereDeletedEvent:
-                Swal('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
                 this.cacheService.autoUpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
-                Swal('Friend request', 'Your friend request was accepted!', 'success');
+                Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
                 this.cacheService.autoUpdateConversation();
                 break;
         }
