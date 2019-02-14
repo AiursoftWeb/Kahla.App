@@ -26,7 +26,6 @@ import { ChangePasswordComponent } from './Controllers/changePassword.component'
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
-import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
 import { UploadService } from './Services/UploadService';
@@ -68,7 +67,6 @@ import { HeaderService } from './Services/HeaderService';
     ],
     providers: [
         ApiService,
-        Notify,
         ParamService,
         CacheService,
         UploadService,
