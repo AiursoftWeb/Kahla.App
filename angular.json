@@ -21,7 +21,6 @@
               "src/assets",
               "src/manifest.json",
               "src/favicon.ico",
-              "src/index.js",
               "src/web.config"
             ],
             "styles": [
@@ -40,7 +39,6 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json",
               "fileReplacements": [
                 {
