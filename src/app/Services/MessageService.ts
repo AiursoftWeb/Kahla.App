@@ -13,7 +13,7 @@ import { AES, enc } from 'crypto-js';
 import { Notify } from './Notify';
 import { CacheService } from './CacheService';
 import * as he from 'he';
-import { Autolinker } from 'autolinker';
+import Autolinker from 'autolinker';
 import { Values } from '../values';
 
 @Injectable({

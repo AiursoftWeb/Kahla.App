@@ -10,7 +10,7 @@ import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
-import { Autolinker } from 'autolinker';
+import Autolinker from 'autolinker';
 declare var MediaRecorder: any;
 
 @Component({
