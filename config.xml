@@ -82,8 +82,8 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <vs:toolsetVersion xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">6.3.1</vs:toolsetVersion>
     <preference name="windows-target-version" value="10.0" />
-    <engine name="android" spec="^7.1.1" />
-    <engine name="browser" spec="^5.0.0" />
-    <engine name="ios" spec="^4.5.1" />
-    <engine name="windows" spec="4.4.2" />
+    <engine name="android" spec="^7.1.4" />
+    <engine name="browser" spec="^6.0.0" />
+    <engine name="ios" spec="^5.0.0" />
+    <engine name="windows" spec="6.0.1" />
 </widget>
