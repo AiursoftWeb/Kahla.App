@@ -49,6 +49,10 @@
   border-radius: 4px;
 }
 
+.user-img img{
+  width: 100%;
+}
+
 progress {
   position: fixed;
   width: 100%;
