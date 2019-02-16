@@ -21,13 +21,13 @@ export class UploadService {
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: number): void {
         if (!this.validateFileSize(file)) {
-            Swal('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
+            Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
             return;
         }
         const formData = new FormData();
         formData.append('file', file);
         if (fileType === 0 && !this.validImageType(file, false)) {
-            Swal('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
+            Swal.fire('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
             return;
         }
         if (fileType === 0 || fileType === 1) {
@@ -35,13 +35,13 @@ export class UploadService {
             this.filesApiService.UploadMedia(formData).subscribe(response => {
                 this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
-                Swal('Error', 'Upload failed', 'error');
+                Swal.fire('Error', 'Upload failed', 'error');
                 this.finishUpload();
             });
         } else if (fileType === 3) {
             const audioSrc = URL.createObjectURL(file);
             const audioHTMLString = `<audio controls src="${ audioSrc }"></audio>`;
-            Swal({
+            Swal.fire({
                 title: 'Are you sure to send this message?',
                 html: audioHTMLString,
                 type: 'question',
@@ -52,7 +52,7 @@ export class UploadService {
                     this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                         this.encryptThenSend(response, fileType, conversationID, aesKey, file);
                     }, () => {
-                        Swal('Error', 'Upload failed', 'error');
+                        Swal.fire('Error', 'Upload failed', 'error');
                         this.finishUpload();
                     });
                 }
@@ -63,7 +63,7 @@ export class UploadService {
             this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                     this.encryptThenSend(response, fileType, conversationID, aesKey, file);
             }, () => {
-                Swal('Error', 'Upload failed', 'error');
+                Swal.fire('Error', 'Upload failed', 'error');
                 this.finishUpload();
             });
         }
@@ -176,7 +176,7 @@ export class UploadService {
                 }
             });
         } else {
-            Swal('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
+            Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }
     }
 

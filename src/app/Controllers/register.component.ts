@@ -31,7 +31,7 @@ export class RegisterComponent {
         this.authApiService.RegisterKahla(this.email, this.password, this.confirmPassword)
             .pipe(catchError(error => {
                 this.connecting = false;
-                Swal('Network issue', 'Could not connect to Kahla server.', 'error');
+                Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
             }))
             .subscribe(t => {
@@ -42,13 +42,13 @@ export class RegisterComponent {
                                 this.router.navigate(['/conversations'], {replaceUrl: true});
                                 this.initService.init();
                             } else {
-                                Swal('Sign in failed', 'An error occured while signing in.', 'error');
+                                Swal.fire('Sign in failed', 'An error occured while signing in.', 'error');
                             }
                         });
                 } else if (t.code === -10) {
-                    Swal('Sign in failed', (t as AiurCollection<string>).items[0], 'error');
+                    Swal.fire('Sign in failed', (t as AiurCollection<string>).items[0], 'error');
                 } else {
-                    Swal('Sign in failed', t.message, 'error');
+                    Swal.fire('Sign in failed', t.message, 'error');
                 }
                 this.connecting = false;
             });

@@ -65,7 +65,7 @@ export class UserDetailComponent implements OnInit {
           this.messageService.me = Object.assign({}, this.user);
           this.router.navigate(['/settings']);
         } else {
-          Swal('Error', (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
+          Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
         }
         saveButton.textContent = 'Save';
     });

@@ -32,14 +32,14 @@ export class CheckService {
                     && latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
                 } else if (checkButton) {
-                    Swal('Success', 'You are running the latest version of Kahla!', 'success');
+                    Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
                 this.checking = false;
             });
     }
 
     private redirectToDownload(downloadAddress: string): void {
-        Swal({
+        Swal.fire({
             title: 'There is a new version of Kahla!',
             text: 'Do you want to download the latest version of Kahla now?',
             type: 'warning',

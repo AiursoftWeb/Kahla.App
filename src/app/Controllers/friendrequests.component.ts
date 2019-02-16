@@ -35,7 +35,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public accept(id: number): void {
         this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
-                Swal('Success', r.message, 'success');
+                Swal.fire('Success', r.message, 'success');
                 this.cacheService.autoUpdateRequests();
             });
     }
@@ -43,7 +43,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public decline(id: number): void {
         this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
-                Swal('Success', r.message, 'success');
+                Swal.fire('Success', r.message, 'success');
                 this.cacheService.autoUpdateRequests();
             });
     }
