@@ -21,6 +21,3 @@ echo '}' >> ./www/package.json
 
 # cp package.json so that release server could read version number.
 cp ./package.json ./dist/
-
-# rename built files to avoid space in file names.
-for f in dist/*\ *; do mv "$f" "${f// /.}"; done || true

@@ -46,11 +46,11 @@ export class FriendsComponent implements OnInit, OnDestroy {
 
     public createGroup(): void {
         if (!this.messageService.me.emailConfirmed) {
-            Swal('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
+            Swal.fire('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
             return;
         }
 
-        Swal({
+        Swal.fire({
             title: 'Enter your group name:',
             input: 'text',
             inputAttributes: {
@@ -61,15 +61,15 @@ export class FriendsComponent implements OnInit, OnDestroy {
         }).then(input => {
             if (input.value) {
                 if (input.value.includes(' ')) {
-                    Swal('Try again', 'Group name can\'t contain whitespaces.', 'error');
+                    Swal.fire('Try again', 'Group name can\'t contain whitespaces.', 'error');
                     return;
                 }
                 if (input.value.length < 3 || input.value.length > 25) {
-                    Swal('Try again', 'Group name length must between three and twenty five.', 'error');
+                    Swal.fire('Try again', 'Group name length must between three and twenty five.', 'error');
                     return;
                 }
                 if (!(<HTMLInputElement>document.querySelector('#checkPrivate')).checked) {
-                    Swal({
+                    Swal.fire({
                         title: 'Are you sure to create this group?',
                         type: 'question',
                         showCancelButton: true
@@ -79,7 +79,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
                         }
                     });
                 } else {
-                    Swal({
+                    Swal.fire({
                         title: 'Enter your group password:',
                         input: 'text',
                         inputAttributes: {
@@ -101,7 +101,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             if (response.code === 0) {
                 this.router.navigate(['/talking', response.value]);
             } else {
-                Swal('Can\'t create group', response.message, 'error');
+                Swal.fire('Can\'t create group', response.message, 'error');
             }
         });
     }

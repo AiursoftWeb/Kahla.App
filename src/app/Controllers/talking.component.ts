@@ -10,7 +10,7 @@ import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
-import * as Autolinker from 'autolinker';
+import Autolinker from 'autolinker';
 declare var MediaRecorder: any;
 
 @Component({
@@ -242,7 +242,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const blob = items[i].getAsFile();
                 if (blob != null) {
                     const urlString = URL.createObjectURL(blob);
-                    Swal({
+                    Swal.fire({
                         title: 'Are you sure to post this image?',
                         imageUrl: urlString,
                         showCancelButton: true

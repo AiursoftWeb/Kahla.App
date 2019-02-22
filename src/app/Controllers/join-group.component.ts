@@ -76,7 +76,7 @@ export class JoinGroupComponent implements OnInit {
 
     public joinGroup(groupName: string, privateGroup: boolean) {
         if (privateGroup) {
-            Swal({
+            Swal.fire({
                 title: 'Enter group password.',
                 input: 'text',
                 inputAttributes: {
@@ -99,7 +99,7 @@ export class JoinGroupComponent implements OnInit {
             if (response.code === 0) {
                 this.router.navigate(['/']);
             } else {
-                Swal('Error', response.message, 'error');
+                Swal.fire('Error', response.message, 'error');
             }
         });
     }
