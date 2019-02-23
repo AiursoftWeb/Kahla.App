@@ -1,3 +1,5 @@
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js');
+
 self.addEventListener('activate', function(event) {
     event.waitUntil(self.clients.claim());
 });
@@ -23,8 +25,9 @@ self.addEventListener('push', function(event) {
 
     const title = data.title;
     const message = data.message;
+    const aesKey =  data.aesKey;
     
     event.waitUntil(self.registration.showNotification(title, {
-        body: message
+        body: CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8)
     }));
 })
