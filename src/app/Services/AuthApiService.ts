@@ -70,4 +70,12 @@ export class AuthApiService {
     public SendMail(email: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/SendEmail', {email: email});
     }
+
+    public AddDevice(PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/AddDevice', {
+            PushEndpoint: PushEndpoint,
+            PushP256DH: PushP256DH,
+            PushAuth: PushAuth
+        });
+    }
 }

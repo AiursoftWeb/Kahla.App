@@ -144,23 +144,9 @@ export class InitService {
                             userVisibleOnly: true,
                             applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
                         }).then(function(pushSubscription) {
-                            const searchParams = [];
-                            searchParams.push(encodeURIComponent('UserID') + '=' +
-                                encodeURIComponent(_this.messageService.me.id));
-                            searchParams.push(encodeURIComponent('PushEndpoint') + '=' +
-                                encodeURIComponent(pushSubscription.endpoint));
-                            searchParams.push(encodeURIComponent('PushP256DH') + '=' +
-                                encodeURIComponent(pushSubscription.toJSON().keys.p256dh));
-                            searchParams.push(encodeURIComponent('PushAuth') + '=' +
-                                encodeURIComponent(pushSubscription.toJSON().keys.auth));
-
-                            fetch(environment.server + '/auth/addDevice', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded'
-                                },
-                                body: searchParams.join('&')
-                            });
+                            _this.authApiService.AddDevice(pushSubscription.endpoint,
+                                pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                .subscribe();
                         });
                     }
                 });
