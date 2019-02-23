@@ -43,10 +43,18 @@ export class SettingsComponent implements OnInit {
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
-                this.authApiService.LogOff().subscribe(() => {
-                    this.initSerivce.destroy();
-                    this.router.navigate(['/signin'], {replaceUrl: true});
-                });
+                const _this = this;
+                navigator.serviceWorker.ready.then(function(reg) {
+                    reg.pushManager.getSubscription().then(function(subscription) {
+                        subscription.unsubscribe().then().catch(function(e) {
+                            console.log(e);
+                        });
+                        _this.authApiService.LogOff(subscription.endpoint).subscribe(() => {
+                            _this.initSerivce.destroy();
+                            _this.router.navigate(['/signin'], {replaceUrl: true});
+                        });
+                    });
+                }.bind(_this));
             }
         });
     }

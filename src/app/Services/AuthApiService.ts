@@ -63,8 +63,8 @@ export class AuthApiService {
         return this.apiService.Get(AuthApiService.serverPath + '/InitPusher');
     }
 
-    public LogOff(): Observable<AiurProtocal> {
-        return this.apiService.Get(AuthApiService.serverPath + '/LogOff');
+    public LogOff(endPoint: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/LogOff', {endPoint: endPoint});
     }
 
     public SendMail(email: string): Observable<AiurProtocal> {
