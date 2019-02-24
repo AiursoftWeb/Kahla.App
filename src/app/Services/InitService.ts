@@ -144,7 +144,7 @@ export class InitService {
                             userVisibleOnly: true,
                             applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
                         }).then(function(pushSubscription) {
-                            _this.authApiService.AddDevice(pushSubscription.endpoint,
+                            _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
                                 pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();
                         });

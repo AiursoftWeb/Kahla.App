@@ -63,16 +63,17 @@ export class AuthApiService {
         return this.apiService.Get(AuthApiService.serverPath + '/InitPusher');
     }
 
-    public LogOff(endPoint: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/LogOff', {endPoint: endPoint});
+    public LogOff(deviceID: number): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/LogOff', {deviceID: deviceID});
     }
 
     public SendMail(email: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/SendEmail', {email: email});
     }
 
-    public AddDevice(PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurProtocal> {
+    public AddDevice(userAgent: string, PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
         return this.apiService.Post(AuthApiService.serverPath + '/AddDevice', {
+            Name: userAgent,
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth

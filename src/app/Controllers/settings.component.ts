@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit {
                         subscription.unsubscribe().then().catch(function(e) {
                             console.log(e);
                         });
-                        _this.authApiService.LogOff(subscription.endpoint).subscribe(() => {
+                        _this.authApiService.LogOff(Number(localStorage.getItem('deviceID'))).subscribe(() => {
                             _this.initSerivce.destroy();
                             _this.router.navigate(['/signin'], {replaceUrl: true});
                         });
