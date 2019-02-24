@@ -38,10 +38,12 @@ self.addEventListener('push', function(event) {
             message = 'Audio';
         }
 
-        event.waitUntil(self.registration.showNotification(title, {
-            body: message,
-            icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
-            tag: data.conversationId.toString()
-        }));
+        if (!data.sendByMe) {
+            event.waitUntil(self.registration.showNotification(title, {
+                body: message,
+                icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
+                tag: data.conversationId.toString()
+            }));
+        }
     }
 });
