@@ -1,4 +1,4 @@
-import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 })
 
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
     constructor(
         public initService: InitService) {
     }
@@ -20,10 +20,24 @@ export class AppComponent implements OnInit, OnDestroy {
         Swal.close();
     }
 
-    public ngOnInit(): void {
-        this.initService.init();
+    @HostListener('window:load', [])
+    onLoad() {
+        if ('Notification' in window && 'serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function (err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+
+            if (Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
     }
 
-    public ngOnDestroy(): void {
+    public ngOnInit(): void {
+        this.initService.init();
     }
 }

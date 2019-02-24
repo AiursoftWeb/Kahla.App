@@ -6,6 +6,7 @@ import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -30,9 +31,6 @@ export class InitService {
     }
 
     public init(): void {
-        if ('Notification' in window) {
-            Notification.requestPermission();
-        }
         this.online = navigator.onLine;
         this.connecting = true;
         this.closeWebSocket = false;
@@ -45,6 +43,7 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        this.subscribeUser();
                         this.loadPusher();
                         this.cacheService.autoUpdateConversation();
                         this.cacheService.autoUpdateRequests();
@@ -133,5 +132,53 @@ export class InitService {
             unsentMessages.set(id, sendFailMessages);
             localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
         });
+    }
+
+    private subscribeUser(): void {
+        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+            const _this = this;
+            const options = {
+                userVisibleOnly: true,
+                applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
+            };
+            navigator.serviceWorker.ready.then(function(registration) {
+                registration.pushManager.getSubscription().then(function(sub) {
+                    if (sub === null) {
+                        registration.pushManager.subscribe(options)
+                            .then(function(pushSubscription) {
+                                _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                    .subscribe(function(result) {
+                                        localStorage.setItem('deviceID', result.value.toString());
+                                    });
+                            });
+                    }
+                });
+
+                navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+                    registration.pushManager.subscribe(options)
+                        .then(function(pushSubscription) {
+                            _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
+                                pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                .subscribe();
+                        });
+                });
+            }.bind(_this));
+        }
+    }
+
+    private urlBase64ToUint8Array(base64String: string): Uint8Array {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
     }
 }

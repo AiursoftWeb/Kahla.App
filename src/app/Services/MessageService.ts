@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
-import { Notify } from './Notify';
 import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
@@ -37,7 +36,6 @@ export class MessageService {
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
-        private notify: Notify,
         private cacheService: CacheService
     ) {}
 
@@ -49,14 +47,8 @@ export class MessageService {
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id);
                     this.messageAmount++;
-                    if (!document.hasFocus() && !evt.muted) {
-                        this.notify.ShowNewMessage(evt, this.me.id);
-                    }
                 } else {
                     this.cacheService.autoUpdateConversation();
-                    if (!evt.muted) {
-                        this.notify.ShowNewMessage(evt, this.me.id);
-                    }
                 }
                 break;
             case EventType.NewFriendRequest:
