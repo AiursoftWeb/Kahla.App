@@ -18,16 +18,20 @@ self.addEventListener('notificationclick', function(event) {
 });
 
 self.addEventListener('push', function(event) {
-    let data = {};
-    if (event.data) {
-        data = event.data.json();
+    if (!event.data) {
+        return;
+    }
+    let data = event.data.json();
+    if (data.type == 0 && !data.muted) {
+        const title = data.sender.nickName;
+        const message = data.content;
+        const aesKey = data.aesKey;
+        
+        event.waitUntil(self.registration.showNotification(title, {
+            body: CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8),
+            icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
+            tag: data.conversationId.toString()
+        }));
     }
 
-    const title = data.title;
-    const message = data.message;
-    const aesKey =  data.aesKey;
-    
-    event.waitUntil(self.registration.showNotification(title, {
-        body: CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8)
-    }));
 })
