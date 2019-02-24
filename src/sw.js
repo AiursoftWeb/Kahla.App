@@ -24,11 +24,22 @@ self.addEventListener('push', function(event) {
     let data = event.data.json();
     if (data.type == 0 && !data.muted) {
         const title = data.sender.nickName;
-        const message = data.content;
+        let message = data.content;
         const aesKey = data.aesKey;
         
+        message = CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8);
+        if (message.startsWith('[img]')) {
+            message = 'Photo';
+        } else if (message.startsWith('[video]')) {
+            message = 'Video';
+        } else if (message.startsWith('[file]')) {
+            message = 'File';
+        } else if (message.startsWith('[audio]')) {
+            message = 'Audio';
+        }
+
         event.waitUntil(self.registration.showNotification(title, {
-            body: CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8),
+            body: message,
             icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
             tag: data.conversationId.toString()
         }));
