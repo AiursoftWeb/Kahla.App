@@ -58,9 +58,6 @@
           "configurations": {
             "production": {
               "browserTarget": "kahla:build:production"
-            },
-            "development": {
-              "browserTarget": "kahla:build:development"
             }
           }
         },
