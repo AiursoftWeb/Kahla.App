@@ -79,4 +79,15 @@ export class AuthApiService {
             PushAuth: PushAuth
         });
     }
+
+    public UpdateDevice(deviceID: number, userAgent: string, PushEndpoint: string,
+        PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
+        return this.apiService.Post(AuthApiService.serverPath + '/UpdateDevice', {
+            DeviceId: deviceID,
+            Name: userAgent,
+            PushEndpoint: PushEndpoint,
+            PushP256DH: PushP256DH,
+            PushAuth: PushAuth
+        });
+    }
 }

@@ -33,5 +33,4 @@ self.addEventListener('push', function(event) {
             tag: data.conversationId.toString()
         }));
     }
-
-})
+});

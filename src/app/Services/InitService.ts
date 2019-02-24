@@ -137,18 +137,31 @@ export class InitService {
     private subscribeUser(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
+            const options = {
+                userVisibleOnly: true,
+                applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
+            };
             navigator.serviceWorker.ready.then(function(registration) {
                 registration.pushManager.getSubscription().then(function(sub) {
                     if (sub === null) {
-                        registration.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
-                        }).then(function(pushSubscription) {
-                            _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                                pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                        registration.pushManager.subscribe(options)
+                            .then(function(pushSubscription) {
+                                _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                    .subscribe(function(result) {
+                                        localStorage.setItem('deviceID', result.value.toString());
+                                    });
+                            });
+                    }
+                });
+
+                navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+                    registration.pushManager.subscribe(options)
+                        .then(function(pushSubscription) {
+                            _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
+                                pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();
                         });
-                    }
                 });
             }.bind(_this));
         }
