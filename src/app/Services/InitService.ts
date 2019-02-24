@@ -20,6 +20,10 @@ export class InitService {
     private online;
     private errorOrClose;
     private closeWebSocket = false;
+    private options = {
+        userVisibleOnly: true,
+        applicationServerKey: this.urlBase64ToUint8Array(environment.applicationServerKey)
+    };
 
     constructor(
         private checkService: CheckService,
@@ -44,7 +48,9 @@ export class InitService {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
                         this.subscribeUser();
+                        this.updateSubscription();
                         this.loadPusher();
+                        this.interval = setInterval(this.resend.bind(this), 3000);
                         this.cacheService.autoUpdateConversation();
                         this.cacheService.autoUpdateRequests();
                     }
@@ -119,34 +125,32 @@ export class InitService {
     }
 
     private resend(): void {
-        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        unsentMessages.forEach((messages, id) => {
-            const sendFailMessages = [];
-            for (let i = 0; i < (<Array<string>>messages).length; i++) {
-                setTimeout(() => {
-                    this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
-                        sendFailMessages.push((<Array<string>>messages)[i]);
-                    });
-                }, 500);
-            }
-            unsentMessages.set(id, sendFailMessages);
-            localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-        });
+        if (navigator.onLine) {
+            const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+            unsentMessages.forEach((messages, id) => {
+                const sendFailMessages = [];
+                for (let i = 0; i < (<Array<string>>messages).length; i++) {
+                    setTimeout(() => {
+                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
+                            sendFailMessages.push((<Array<string>>messages)[i]);
+                        });
+                    }, 500);
+                }
+                unsentMessages.set(id, sendFailMessages);
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+            });
+        }
     }
 
     private subscribeUser(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            const options = {
-                userVisibleOnly: true,
-                applicationServerKey: _this.urlBase64ToUint8Array(environment.applicationServerKey)
-            };
             navigator.serviceWorker.ready.then(function(registration) {
-                registration.pushManager.getSubscription().then(function(sub) {
+                return registration.pushManager.getSubscription().then(function(sub) {
                     if (sub === null) {
-                        registration.pushManager.subscribe(options)
+                        return registration.pushManager.subscribe(_this.options)
                             .then(function(pushSubscription) {
-                                _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                                return _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
                                     pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                     .subscribe(function(result) {
                                         localStorage.setItem('deviceID', result.value.toString());
@@ -154,11 +158,18 @@ export class InitService {
                             });
                     }
                 });
+            }.bind(_this));
+        }
+    }
 
-                navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
-                    registration.pushManager.subscribe(options)
+    private updateSubscription(): void {
+        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+            const _this = this;
+            navigator.serviceWorker.ready.then(function(registration) {
+                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+                    registration.pushManager.subscribe(_this.options)
                         .then(function(pushSubscription) {
-                            _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
+                            return _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
                                 pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();
                         });
