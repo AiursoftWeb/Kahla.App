@@ -45,11 +45,11 @@ export class SettingsComponent implements OnInit {
             if (willSignOut.value) {
                 const _this = this;
                 navigator.serviceWorker.ready.then(function(reg) {
-                    reg.pushManager.getSubscription().then(function(subscription) {
+                    return reg.pushManager.getSubscription().then(function(subscription) {
                         subscription.unsubscribe().then().catch(function(e) {
                             console.log(e);
                         });
-                        _this.authApiService.LogOff(Number(localStorage.getItem('deviceID'))).subscribe(() => {
+                        return _this.authApiService.LogOff(Number(localStorage.getItem('deviceID'))).subscribe(() => {
                             _this.initSerivce.destroy();
                             _this.router.navigate(['/signin'], {replaceUrl: true});
                         });
