@@ -50,7 +50,6 @@ export class InitService {
                         this.subscribeUser();
                         this.updateSubscription();
                         this.loadPusher();
-                        this.interval = setInterval(this.resend.bind(this), 3000);
                         this.cacheService.autoUpdateConversation();
                         this.cacheService.autoUpdateRequests();
                     }
