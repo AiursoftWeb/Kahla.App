@@ -46,13 +46,19 @@ export class SettingsComponent implements OnInit {
                 const _this = this;
                 navigator.serviceWorker.ready.then(function(reg) {
                     return reg.pushManager.getSubscription().then(function(subscription) {
-                        subscription.unsubscribe().then().catch(function(e) {
-                            console.log(e);
-                        });
-                        return _this.authApiService.LogOff(Number(localStorage.getItem('deviceID'))).subscribe(() => {
-                            _this.initSerivce.destroy();
-                            _this.router.navigate(['/signin'], {replaceUrl: true});
-                        });
+                        if (subscription != null) {
+                            subscription.unsubscribe().then().catch(function(e) {
+                                console.log(e);
+                            });
+                            let deviceID = localStorage.getItem('deviceID');
+                            if (deviceID === null) {
+                                deviceID = '-1';
+                            }
+                            return _this.authApiService.LogOff(Number(deviceID)).subscribe(() => {
+                                _this.initSerivce.destroy();
+                                _this.router.navigate(['/signin'], {replaceUrl: true});
+                            });
+                        }
                     });
                 }.bind(_this));
             }
