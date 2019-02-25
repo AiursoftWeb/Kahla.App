@@ -42,7 +42,7 @@ self.addEventListener('push', function(event) {
             event.waitUntil(self.registration.showNotification(title, {
                 body: message,
                 icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
-                tag: data.conversationId.toString()
+                tag: data.conversationId.toString() + Date.now()
             }));
         }
     }
