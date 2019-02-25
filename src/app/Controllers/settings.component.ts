@@ -6,6 +6,7 @@ import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs/';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -54,14 +55,20 @@ export class SettingsComponent implements OnInit {
                             if (deviceID === null) {
                                 deviceID = '-1';
                             }
-                            return _this.authApiService.LogOff(Number(deviceID)).subscribe(() => {
-                                _this.initSerivce.destroy();
-                                _this.router.navigate(['/signin'], {replaceUrl: true});
-                            });
+                            return _this.callLogOffAPI(Number(deviceID));
+                        } else {
+                            return _this.callLogOffAPI(-1);
                         }
                     });
                 }.bind(_this));
             }
+        });
+    }
+
+    private callLogOffAPI(deviceID: number): Subscription {
+        return this.authApiService.LogOff(deviceID).subscribe(() => {
+            this.initSerivce.destroy();
+            this.router.navigate(['/signin'], {replaceUrl: true});
         });
     }
 
