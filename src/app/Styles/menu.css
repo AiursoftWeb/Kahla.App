@@ -106,3 +106,11 @@
 .groupGridRow {
     grid-row: 1 / 3 !important;
 }
+
+.device-menu-button {
+    grid-template-columns: 1fr 2fr 1fr 2fr 2fr !important;
+}
+
+.device-img, .device-text {
+    grid-column: unset !important;
+}

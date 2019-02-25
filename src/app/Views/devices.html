@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices">
+    <div class="img device-img">
+        <i *ngIf="device.name.includes('Windows')" class="fa fa-windows" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fa fa-apple" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Android')" class="fa fa-android" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Linux')" class="fa fa-linux" aria-hidden="true"></i>
+    </div>
+    <div class="text device-text">{{ device.name.split('-')[0] }}</div>
+
+    <div class="img device-img">
+        <i *ngIf="device.name.includes('Firefox')" class="fa fa-firefox" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Chromium') || device.name.includes('Chrome')" class="fa fa-chrome" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Safari')" class="fa fa-safari" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Opera')" class="fa fa-opera" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Internet Explorer')" class="fa fa-internet-explorer" aria-hidden="true"></i>
+        <i *ngIf="device.name.includes('Edge')" class="fa fa-edge" aria-hidden="true"></i>
+    </div>
+    <div class="text device-text">{{ device.name.split('-')[1] }}</div>
+    <div class="text device-text">{{ device.addTime | date:'mediumDate' }}</div>
+</div>

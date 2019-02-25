@@ -6,6 +6,8 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
 import { VersionViewModel } from '../Models/VersionViewModel';
 import { ApiService } from './ApiService';
+import { AiurCollection } from '../Models/AiurCollection';
+import { Device } from '../Models/Device';
 
 @Injectable()
 export class AuthApiService {
@@ -89,5 +91,9 @@ export class AuthApiService {
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
         });
+    }
+
+    public MyDevices(): Observable<AiurCollection<Device>> {
+        return this.apiService.Get(AuthApiService.serverPath + '/MyDevices');
     }
 }
