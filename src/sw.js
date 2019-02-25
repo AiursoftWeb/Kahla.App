@@ -38,10 +38,11 @@ self.addEventListener('push', function(event) {
             message = 'Audio';
         }
 
-        if (!data.sendByMe) {
+        if (!data.sentByMe) {
             event.waitUntil(self.registration.showNotification(title, {
                 body: message,
                 icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
+                renotify: true,
                 tag: data.conversationId.toString()
             }));
         }
