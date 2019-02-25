@@ -1,6 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { Location } from '@angular/common';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -16,7 +15,6 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private location: Location,
         public cacheService: CacheService,
         private headerService: HeaderService
     ) {
@@ -46,10 +44,6 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
                 Swal.fire('Success', r.message, 'success');
                 this.cacheService.autoUpdateRequests();
             });
-    }
-
-    public goBack(): void {
-        this.location.back();
     }
 
     public ngOnDestroy(): void {
