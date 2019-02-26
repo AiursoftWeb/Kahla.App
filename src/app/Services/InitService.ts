@@ -112,6 +112,7 @@ export class InitService {
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.messageService.me = null;
+        localStorage.clear();
     }
 
     private autoReconnect(): void {
