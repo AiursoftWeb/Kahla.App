@@ -31,7 +31,6 @@ export class MessageService {
     public maxImageWidth = 0;
 
     public me: KahlaUser;
-    public eventType: EventType;
 
     constructor(
         private conversationApiService: ConversationApiService,

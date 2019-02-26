@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -12,7 +12,7 @@ import { InitService } from '../Services/InitService';
     styleUrls: ['../Styles/signin.css',
                 '../Styles/button.css']
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
     public email: string;
     public password: string;
     public connecting = false;
@@ -21,10 +21,6 @@ export class SignInComponent implements OnInit {
         private authApiService: AuthApiService,
         private router: Router,
         private initService: InitService) { }
-
-    public ngOnInit(): void {
-        this.initService.destroy();
-    }
 
     public signin(): void {
         if (this.connecting) {

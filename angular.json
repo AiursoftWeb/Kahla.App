@@ -22,7 +22,8 @@
               "src/manifest.json",
               "src/favicon.ico",
               "src/web.config",
-              "src/sw.js"
+              "src/sw.js",
+              "src/index.js"
             ],
             "styles": [
               "node_modules/font-awesome/css/font-awesome.min.css"
