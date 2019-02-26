@@ -1,7 +1,46 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js');
 
+const CACHE = 'v1';
+
+self.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches.open(CACHE).then(function(cache) {
+            return cache.addAll([
+                '/index.html',
+                '/main.js',
+                '/manifest.json',
+                '/polyfills.js',
+                '/runtime.js',
+                '/styles.js',
+                '/vendor.js',
+                '/favicon.ico',
+                '/fontawesome-webfont.woff2',
+                '/assets/KahlaWhite.png'
+            ]);
+        })
+    );
+});
+
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
+        })
+    );
+});
+
 self.addEventListener('activate', function(event) {
-    event.waitUntil(self.clients.claim());
+    const cacheKeeplist = [CACHE];
+    event.waitUntil(
+        self.clients.claim(),
+        caches.keys().then(function(keyList) {
+            return Promise.all(keyList.map(function(key) {
+                if (cacheKeeplist.indexOf(key) === -1) {
+                    return caches.delete(key);
+                }
+            }));
+        })
+    );
 });
 
 self.addEventListener('notificationclick', function(event) {
