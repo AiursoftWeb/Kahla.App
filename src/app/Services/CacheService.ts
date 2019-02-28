@@ -106,6 +106,10 @@ export class CacheService {
                         deviceName.push('Unknown OS');
                     }
 
+                    if (item.id === Number(localStorage.getItem('deviceID'))) {
+                        deviceName[0] += '(Current device)';
+                    }
+
                     // Browser Name
                     if (item.name.includes('Firefox') && !item.name.includes('Seamonkey')) {
                         deviceName.push('Firefox');
