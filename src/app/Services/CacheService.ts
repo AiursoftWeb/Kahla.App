@@ -106,6 +106,10 @@ export class CacheService {
                         deviceName.push('Unknown OS');
                     }
 
+                    if (item.id === Number(localStorage.getItem('deviceID'))) {
+                        deviceName[0] += '(Current device)';
+                    }
+
                     // Browser Name
                     if (item.name.includes('Firefox') && !item.name.includes('Seamonkey')) {
                         deviceName.push('Firefox');
@@ -126,8 +130,6 @@ export class CacheService {
                     } else {
                         deviceName.push('Unknown browser');
                     }
-
-                    deviceName.push(item.name.replace(/-/g, ''));
 
                     item.name = deviceName.join('-');
                 }

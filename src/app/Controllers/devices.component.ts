@@ -8,7 +8,6 @@ import { Device } from '../Models/Device';
     styleUrls: ['../Styles/menu.css']
 })
 export class DevicesComponent implements OnInit {
-
     constructor(
         public cacheService: CacheService,
         private headerService: HeaderService
@@ -29,8 +28,7 @@ export class DevicesComponent implements OnInit {
         if (device !== null) {
             Swal.fire({
                 title: 'Device detail',
-                html: '<table style="margin: auto;"><tr><th>UserAgent</th><td>' + device.name.split('-')[2] +
-                    '</td></tr><tr><th>IP</th><td>' + device.ipAddress +
+                html: '<table style="margin: auto;"><tr><th>IP</th><td>' + device.ipAddress +
                     '</td></tr><tr><th>Add time</th><td>' + new Date(device.addTime).toLocaleString() +
                     '</td></tr></table>'
             });
