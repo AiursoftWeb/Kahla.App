@@ -1,6 +1,6 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js');
 
-const CACHE = 'v1';
+const CACHE = 'v2';
 
 self.addEventListener('install', function(event) {
     event.waitUntil(
@@ -15,7 +15,8 @@ self.addEventListener('install', function(event) {
                 '/vendor.js',
                 '/favicon.ico',
                 '/fontawesome-webfont.woff2',
-                '/assets/KahlaWhite.png'
+                '/assets/KahlaWhite.png',
+                '/assets/144x144.png'
             ]);
         })
     );
@@ -25,6 +26,18 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(
         caches.match(event.request).then(function(response) {
             return response || fetch(event.request);
+        })
+    );
+
+    event.waitUntil(
+        caches.match(event.request).then(function(response) {
+            if (response) {
+                caches.open(CACHE).then(function(cache) {
+                    fetch(event.request).then(function(resp) {
+                        cache.put(event.request, resp);
+                    });
+                });
+            }
         })
     );
 });
