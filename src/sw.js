@@ -27,6 +27,18 @@ self.addEventListener('fetch', function(event) {
             return response || fetch(event.request);
         })
     );
+
+    event.waitUntil(
+        caches.match(event.request).then(function(response) {
+            if (response) {
+                caches.open(CACHE).then(function(cache) {
+                    fetch(event.request).then(function(resp) {
+                        cache.put(event.request, resp);
+                    });
+                });
+            }
+        })
+    );
 });
 
 self.addEventListener('activate', function(event) {
