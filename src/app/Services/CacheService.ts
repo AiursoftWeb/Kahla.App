@@ -127,6 +127,8 @@ export class CacheService {
                         deviceName.push('Unknown browser');
                     }
 
+                    deviceName.push(item.name.replace(/-/g, ''));
+
                     item.name = deviceName.join('-');
                 }
             });

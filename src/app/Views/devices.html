@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices">
+<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices" (click)="detail(device)">
     <div class="img device-img">
         <i *ngIf="device.name.includes('Windows')" class="fa fa-windows" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fa fa-apple" aria-hidden="true"></i>
