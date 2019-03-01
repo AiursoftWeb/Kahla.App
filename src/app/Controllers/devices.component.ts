@@ -3,14 +3,17 @@ import { CacheService } from '../Services/CacheService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
+import { AuthApiService } from '../Services/AuthApiService';
 @Component({
     templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.css']
+    styleUrls: ['../Styles/menu.css',
+                '../Styles/button.css']
 })
 export class DevicesComponent implements OnInit {
     constructor(
         public cacheService: CacheService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private authApiService: AuthApiService
     ) {
         this.headerService.title = 'Devices';
         this.headerService.returnButton = true;
@@ -33,5 +36,9 @@ export class DevicesComponent implements OnInit {
                     '</td></tr></table>'
             });
         }
+    }
+
+    public testPush(): void {
+        this.authApiService.PushTestMessage().subscribe();
     }
 }

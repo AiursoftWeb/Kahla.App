@@ -96,4 +96,8 @@ export class AuthApiService {
     public MyDevices(): Observable<AiurCollection<Device>> {
         return this.apiService.Get(AuthApiService.serverPath + '/MyDevices');
     }
+
+    public PushTestMessage(): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/PushTestMessage', {});
+    }
 }
