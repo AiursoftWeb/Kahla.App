@@ -48,18 +48,7 @@ export class CacheService {
                         } catch (error) {
                             e.latestMessage = '';
                         }
-                        if (e.latestMessage.startsWith('[img]')) {
-                            e.latestMessage = 'Photo';
-                        }
-                        if (e.latestMessage.startsWith('[video]')) {
-                            e.latestMessage = 'Video';
-                        }
-                        if (e.latestMessage.startsWith('[file]')) {
-                            e.latestMessage = 'File';
-                        }
-                        if (e.latestMessage.startsWith('[audio]')) {
-                            e.latestMessage = 'Audio';
-                        }
+                        e.latestMessage = this.modifyMessage(e.latestMessage);
                     }
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
@@ -136,5 +125,19 @@ export class CacheService {
             });
             this.cachedData.devices = response.items;
         });
+    }
+
+    public modifyMessage(content: string): string {
+        let returnString = content;
+        if (content.startsWith('[img]')) {
+            returnString = 'Photo';
+        } else if (content.startsWith('[video]')) {
+            returnString = 'Video';
+        } else if (content.startsWith('[file]')) {
+            returnString = 'File';
+        } else if (content.startsWith('[audio]')) {
+            returnString = 'Audio';
+        }
+        return returnString;
     }
 }

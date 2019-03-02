@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     selector: 'app-kahla',
@@ -12,7 +13,8 @@ import Swal from 'sweetalert2';
 
 export class AppComponent implements OnInit {
     constructor(
-        public initService: InitService) {
+        public initService: InitService,
+        private messageService: MessageService) {
     }
 
     @HostListener('window:popstate', [])
@@ -23,7 +25,7 @@ export class AppComponent implements OnInit {
     @HostListener('window:load', [])
     onLoad() {
         if ('Notification' in window && 'serviceWorker' in navigator) {
-            if (!this.initService.electron) {
+            if (!this.messageService.electron) {
                 navigator.serviceWorker.register('/sw.js').then(function (registration) {
                     // Registration was successful
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);

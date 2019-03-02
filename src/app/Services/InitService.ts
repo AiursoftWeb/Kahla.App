@@ -13,7 +13,6 @@ import { environment } from '../../environments/environment';
 })
 export class InitService {
     public connecting = false;
-    public electron = false;
     private ws: WebSocket;
     private timeoutNumber = 1000;
     private interval;
@@ -39,9 +38,6 @@ export class InitService {
         this.online = navigator.onLine;
         this.connecting = true;
         this.closeWebSocket = false;
-        if (navigator.userAgent.toLowerCase().includes('electron')) {
-            this.electron = true;
-        }
         this.checkService.checkVersion(false);
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
@@ -51,7 +47,7 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-                        if (!this.electron) {
+                        if (!this.messageService.electron) {
                             this.subscribeUser();
                             this.updateSubscription();
                         }
