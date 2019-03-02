@@ -7,7 +7,7 @@ import { AuthApiService } from '../Services/AuthApiService';
 @Component({
     templateUrl: '../Views/devices.html',
     styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css']
+        '../Styles/button.css']
 })
 export class DevicesComponent implements OnInit {
     constructor(
@@ -31,7 +31,7 @@ export class DevicesComponent implements OnInit {
         if (device !== null) {
             Swal.fire({
                 title: 'Device detail',
-                html: '<table style="margin: auto;"><tr><th>IP</th><td>' + device.ipAddress +
+                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.ipAddress +
                     '</td></tr><tr><th>Add time</th><td>' + new Date(device.addTime).toLocaleString() +
                     '</td></tr></table>'
             });
@@ -39,6 +39,14 @@ export class DevicesComponent implements OnInit {
     }
 
     public testPush(): void {
-        this.authApiService.PushTestMessage().subscribe();
+        this.authApiService.PushTestMessage().subscribe(t => {
+            if (t.code === 0) {
+                Swal.fire(
+                    'Successfully sent!',
+                    t.message,
+                    'info'
+                );
+            }
+        });
     }
 }
