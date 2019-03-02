@@ -3,7 +3,6 @@
 ********************/
 
 .message-list {
-    background-color: #efeff4;
     list-style: none;
     overflow-x: hidden;
     padding-top: 20px;
@@ -16,6 +15,14 @@
     min-height: calc(100vh - 130px);
 }
 
+:host-context(.theme-light) .message-list {
+    background-color: #efeff4;
+}
+
+:host-context(.theme-dark) .message-list {
+    background-color: #2c3e50;
+}
+
 .active-button {
     bottom: 185px !important;
 }
@@ -26,154 +33,179 @@
 
 .load-more {
     width: 240px;
-    background-color: #EAEAEA;
-    color: #AAAAAA;
     margin-bottom: 20px;
 }
 
-.load-more:focus{
+:host-context(.theme-light) .load-more {
+    background-color: #EAEAEA;
+    color: #AAAAAA;
+}
+
+:host-context(.theme-dark) .load-more {
+    background-color: #2f3640;
+    color: #AAAAAA;
+}
+
+.load-more:focus {
     background-color: #CCC
 }
 
-    .message-list li {
-        margin-bottom: 25px;
-        clear: both;
-        box-sizing: border-box;
-    }
+.message-list li {
+    margin-bottom: 25px;
+    clear: both;
+    box-sizing: border-box;
+}
 
-    .message-list .chat-avatar {
-        width: 40px;
-        height: 40px;
-        display: inline-block;
-        text-align: center;
-        cursor: pointer;
-    }
+.message-list .chat-avatar {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
 
-    .message-list .left .chat-avatar {
-        float: left;
-    }
+.message-list .left .chat-avatar {
+    float: left;
+}
 
-    .message-list .right .chat-avatar {
-        float: right;
-    }
+.message-list .right .chat-avatar {
+    float: right;
+}
 
-    .message-list .chat-avatar img {
-        width: 100%;
-        height: 100%;
-        border-radius: 8px;
-        user-select: none;
-    }
+.message-list .chat-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    user-select: none;
+}
 
-    .chat-avatar:focus {
-        outline: none;
-    }
+.chat-avatar:focus {
+    outline: none;
+}
 
-    .message-list .chat-text {
-        display: block;
-        font-size: 12px;
-        width: 70%;
-        margin-bottom: 1.5%;
-    }
+.message-list .chat-text {
+    display: block;
+    font-size: 12px;
+    width: 70%;
+    margin-bottom: 1.5%;
+}
 
-    .message-list .left .chat-text {
-        float: left;
-        text-align: left;
-        margin-left: 12px;
-    }
+.message-list .left .chat-text {
+    float: left;
+    text-align: left;
+    margin-left: 12px;
+}
 
-    .message-list .right .chat-text {
-        float: right;
-        text-align: right;
-        margin-right: 12px;
-    }
+.message-list .right .chat-text {
+    float: right;
+    text-align: right;
+    margin-right: 12px;
+}
 
-    .message-list .chat-content {
-        border-radius: 8px;
-        color: white;
-        padding: 10px;
-        position: relative;
-        display: inline-block;
-        min-height: 17px;
-    }
+.message-list .chat-content {
+    border-radius: 8px;
+    color: white;
+    padding: 10px;
+    position: relative;
+    display: inline-block;
+    min-height: 17px;
+}
 
-    .message-list .left .chat-content{
-        border: 1px solid #E4E4E4;
-        color: grey;
-    }
+:host-context(.theme-light) .message-list .left .chat-content {
+    border: 1px solid #E4E4E4;
+    color: grey;
+}
 
-    .message-list .chat-content p{
-        text-align:left;
-        word-break:break-all;
-    }
+:host-context(.theme-dark) .message-list .left .chat-content {
+    border: 1px solid #718093;
+    color: white;
+}
 
-    .message-list .chat-content .loading{
-        color: #EEEEEE;
-    }
+.message-list .chat-content p {
+    text-align: left;
+    word-break: break-all;
+}
 
-        .message-list .chat-content:after {
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-            border-width: 5px;
-            margin-top: -5px;
-        }
+.message-list .chat-content .loading {
+    color: #EEEEEE;
+}
 
-    .message-list .left .chat-content:after {
-        right: 100%;
-        top: 20px;;
-        border-right-color: white;
-    }
+.message-list .chat-content:after {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-width: 5px;
+    margin-top: -5px;
+}
 
-    .message-list .right .chat-content:after {
-        left: 100%;
-        top: 20px;
-        border-color: rgba(238,238,242,0);
-        border-left-color: #18A4F9;
-    }
+.message-list .left .chat-content:after {
+    right: 100%;
+    top: 20px;
+    ;
+    
+}
 
-    .message-list .chat-content p {
-        margin: 0;
-        white-space: pre-wrap;
-    }
+:host-context(.theme-light) .message-list .left .chat-content:after{
+    border-right-color: white;
+}
 
-    .image-container {
-        height: 0;
-        position: relative;
-    }
+:host-context(.theme-dark) .message-list .left .chat-content:after{
+    border-right-color: #718093;
+}
 
-    .message-list .chat-content video {
-       width: 100%;
-    }
+.message-list .right .chat-content:after {
+    left: 100%;
+    top: 20px;
+    border-color: rgba(238, 238, 242, 0);
+    border-left-color: #18A4F9;
+}
 
-    .message-list .left .chat-content {
-        background-color: white;
-    }
+.message-list .chat-content p {
+    margin: 0;
+    white-space: pre-wrap;
+}
 
-    .message-list .right .chat-content {
-        background-color: #18A4F9;
-    }
+.image-container {
+    height: 0;
+    position: relative;
+}
 
-    .message-list .chat-text span {
-        color: #AAA;
-    }
+.message-list .chat-content video {
+    width: 100%;
+}
 
-    .message-list .left .sendTime {
-        margin: 0.5% 0 0 1%;
-    }
+:host-context(.theme-light) .message-list .left .chat-content {
+    background-color: white;
+}
 
-    .message-list .right .sendTime {
-        margin: 0.5% 1% 0 0;
-    }
+:host-context(.theme-dark) .message-list .left .chat-content {
+    background-color: black;
+}
 
-    .message-list .chat-content span {
-        font-weight: bold;
-    }
+.message-list .right .chat-content {
+    background-color: #18A4F9;
+}
+
+.message-list .chat-text span {
+    color: #AAA;
+}
+
+.message-list .left .sendTime {
+    margin: 0.5% 0 0 1%;
+}
+
+.message-list .right .sendTime {
+    margin: 0.5% 1% 0 0;
+}
+
+.message-list .chat-content span {
+    font-weight: bold;
+}
 
 .chat-action {
-    background-color: #E4E4E4;
     padding: 10px;
     display: inline-block;
     box-sizing: border-box;
@@ -181,28 +213,44 @@
     position: fixed;
     z-index: 99;
     bottom: 0;
-    box-shadow: 0px 23px 50px 10px rgba(0,0,0,0.37);
+    box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
 }
 
-.chat-part{
+:host-context(.theme-light) .chat-action{
+    background-color: #E4E4E4;
+}
+
+:host-context(.theme-dark) .chat-action{
+    background-color: #2f3640;
+}
+
+.chat-part {
     margin-right: 90px;
 }
 
 .chat-part textarea {
-    width:  75%;
+    width: 75%;
     float: left;
     border: none;
     border-radius: 6px 0 0 6px;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     box-shadow: none;
-    color: #808080;
     min-height: 34px;
     padding: 6px 12px;
     font-size: 14px;
-    background-color: #fff;
     box-sizing: border-box;
     outline: none;
     resize: none;
+}
+
+:host-context(.theme-light) .chat-part textarea{
+    color: #808080;
+    background-color: #fff;
+}
+
+:host-context(.theme-dark) .chat-part textarea{
+    background-color: #1e272e;
+    color:white;
 }
 
 .chat-part button {
@@ -231,20 +279,20 @@
     width: 100%;
 }
 
-.of4{
+.of4 {
     text-align: center;
 }
 
 .inputfile {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 
-.inputfile + label {
+.inputfile+label {
     text-align: center;
     padding: 10px;
     margin-top: 15px;
@@ -260,12 +308,11 @@ i {
     font-size: 1.5rem;
 }
 
-.inputfile:focus + label,
-.inputfile + label:hover {
+.inputfile:focus+label, .inputfile+label:hover {
     background-color: #CCC;
 }
 
-.of4 .text{
+.of4 .text {
     margin-top: 15px;
     color: #727272;
     user-select: none;

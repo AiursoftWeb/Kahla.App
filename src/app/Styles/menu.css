@@ -5,14 +5,22 @@
 .user {
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: #D9D9D9;
-    background-color: #FFF;
     outline: none;
     cursor: pointer;
     user-select: none;
     display: grid;
     grid-template-columns: 25% auto;
     min-height: 70px;
+}
+
+:host-context(.theme-light) .user,:host-context(.theme-light) .menu-button{
+    border-color: #D9D9D9;
+    background-color: #FFF;
+}
+
+:host-context(.theme-dark) .user,:host-context(.theme-dark) .menu-button{
+    border-color: #353b48;
+    background-color: #2f3640;
 }
 
 .user > *, .menu-button > * {
@@ -57,9 +65,7 @@
     min-height: 50px;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: #E8E8E8;
     cursor: pointer;
-    background-color: #FFF;
     outline: none;
     display: block;
     user-select: none;
@@ -71,8 +77,12 @@
     margin: auto;
 }
 
-.menu-button:hover {
+:host-context(.theme-light) .menu-button:hover {
     background-color: #F6F6F6;
+}
+
+:host-context(.theme-dark) .menu-button:hover {
+    background-color: #576574 ;
 }
 
 .menu-button .img {
@@ -94,9 +104,16 @@
 .menu-button .text {
     font-size: 15px;
     font-weight: 400;
-    color: black;
     grid-column: 2 / 3;
     margin-left: 0;
+}
+
+:host-context(.theme-light) .menu-button .text{
+    color: black;
+}
+
+:host-context(.theme-dark) .menu-button .text{
+    color: white;
 }
 
 .menu-button .warning {

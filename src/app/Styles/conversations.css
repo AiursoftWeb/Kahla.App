@@ -1,61 +1,74 @@
 ﻿/******************
     Conversation
 ********************/
+
 .conversation {
     height: 70px;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: #D9D9D9;
     cursor: pointer;
-    background-color: #FFF;
     user-select: none;
 }
 
-.conversation:hover{
+:host-context(.theme-light) .conversation {
+    background-color: #FFF;
+    border-color: #D9D9D9;
+}
+
+:host-context(.theme-dark) .conversation {
+    border-color: #353b48;
+    background-color: #2f3640;
+}
+
+:host-context(.theme-light) .conversation:hover {
     background-color: #F8F8F8;
 }
 
-    .conversation .user-img {
-        margin-left: 15px;
-        margin-top: 10px;
-        width: 50px;
-        height: 50px;
-        float: left;
-        border-radius: 10px;
-    }
+:host-context(.theme-dark) .conversation:hover {
+    background-color: #576574;
+}
 
-    .conversation .sender {
-        position: absolute;
-        margin-left: 85px;
-        margin-top: 15px;
-        font-size: 15px;
-        font-weight: 400;
-    }
+.conversation .user-img {
+    margin-left: 15px;
+    margin-top: 10px;
+    width: 50px;
+    height: 50px;
+    float: left;
+    border-radius: 10px;
+}
 
-    .conversation .last-message {
-        position: absolute;
-        margin-left: 85px;
-        margin-top: 40px;
-        font-size: 13px;
-        color: #999999;
-        max-height: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 65%;
-    }
+.conversation .sender {
+    position: absolute;
+    margin-left: 85px;
+    margin-top: 15px;
+    font-size: 15px;
+    font-weight: 400;
+}
 
-    .conversation .last-time {
-        margin-right: 10px;
-        margin-top: 15px;
-        float: right;
-        height: 20px;
-        overflow: hidden;
-        color: #BBBBBB;
-    }
+.conversation .last-message {
+    position: absolute;
+    margin-left: 85px;
+    margin-top: 40px;
+    font-size: 13px;
+    color: #999999;
+    max-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 65%;
+}
+
+.conversation .last-time {
+    margin-right: 10px;
+    margin-top: 15px;
+    float: right;
+    height: 20px;
+    overflow: hidden;
+    color: #BBBBBB;
+}
 
 .conversation .dot {
-    margin-left:-10px;
+    margin-left: -10px;
     margin-top: 2px;
     position: relative;
     float: left;
