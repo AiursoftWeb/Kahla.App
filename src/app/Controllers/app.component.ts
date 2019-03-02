@@ -23,13 +23,15 @@ export class AppComponent implements OnInit {
     @HostListener('window:load', [])
     onLoad() {
         if ('Notification' in window && 'serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(function (registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function (err) {
-                // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
-            });
+            if (!this.initService.electron) {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            }
 
             if (Notification.permission === 'default') {
                 Notification.requestPermission();
