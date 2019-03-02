@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (themeSet == null) {
             // load and set default setting
             theme = Themes.light;
-            localStorage.setItem('setting-theme',theme.toString());
+            localStorage.setItem('setting-theme', theme.toString());
         } else {
             theme = parseInt(themeSet, 10) as Themes;
         }

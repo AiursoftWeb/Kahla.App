@@ -9,7 +9,7 @@ import { Themes } from '../Models/Themes';
 export class ThemeComponent implements OnInit {
     constructor(
         private headerService: HeaderService,
-        private elementRef : ElementRef
+        private elementRef: ElementRef
     ) {
         this.headerService.title = 'Theme';
         this.headerService.returnButton = true;
