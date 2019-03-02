@@ -64,7 +64,7 @@
     display: block;
     user-select: none;
     display: grid;
-    grid-template-columns: 15% auto;
+    grid-template-columns: 15% auto 15%;
 }
 
 .menu-button > * {
@@ -85,6 +85,10 @@
 
 .menu-button .img i {
     font-size: 2em;
+}
+
+.menu-button .checked {
+    grid-column: 3/3;
 }
 
 .menu-button .text {

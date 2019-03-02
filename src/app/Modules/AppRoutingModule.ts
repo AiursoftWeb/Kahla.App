@@ -16,6 +16,7 @@ import { GroupComponent } from '../Controllers/group.component';
 import { ChangePasswordComponent } from '../Controllers/changePassword.component';
 import { DiscoverComponent } from '../Controllers/discover.component';
 import { DevicesComponent } from '../Controllers/devices.component';
+import { ThemeComponent } from '../Controllers/theme.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },
     { path: 'devices', component: DevicesComponent },
+    { path: 'theme' , component: ThemeComponent},
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
