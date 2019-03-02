@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { HeaderService } from '../Services/HeaderService';
 import { Themes } from '../Models/Themes';
 
@@ -8,7 +8,8 @@ import { Themes } from '../Models/Themes';
 })
 export class ThemeComponent implements OnInit {
     constructor(
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private elementRef : ElementRef
     ) {
         this.headerService.title = 'Theme';
         this.headerService.returnButton = true;
@@ -29,7 +30,14 @@ export class ThemeComponent implements OnInit {
         const theme = themeId as Themes;
         if (this.currentTheme === theme) { return; }
         this.currentTheme = theme;
-        localStorage.setItem("setting-theme",this.currentTheme.toString());
-        console.log(theme === Themes.light);
+        localStorage.setItem('setting-theme', this.currentTheme.toString());
+        switch (theme) {
+            case Themes.light:
+            this.elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
+            break;
+            case Themes.dark:
+            this.elementRef.nativeElement.ownerDocument.body.className = 'theme-dark';
+            break;
+        }
     }
 }
