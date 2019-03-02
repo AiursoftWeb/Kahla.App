@@ -8,9 +8,16 @@
     height: 2em;
     margin-right: 5%;
     transition: all .4s ease;
-    background: #f0f0f0;
     border-radius: 2em;
     padding: 2px;
+}
+
+:host-context(.theme-light) .tgl-btn{
+    background: #f0f0f0;
+}
+
+:host-context(.theme-dark) .tgl-btn{
+    background: black;
 }
 
 .tgl-btn::after {

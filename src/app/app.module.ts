@@ -24,6 +24,7 @@ import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
 import { DevicesComponent } from './Controllers/devices.component';
+import { ThemeComponent } from './Controllers/theme.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -65,7 +66,8 @@ import { HeaderService } from './Services/HeaderService';
         JoinGroupComponent,
         GroupComponent,
         ChangePasswordComponent,
-        DevicesComponent
+        DevicesComponent,
+        ThemeComponent
     ],
     providers: [
         ApiService,

@@ -1,39 +1,54 @@
 /******************
     Friends
 ********************/
-.friends-header{
-    width:100%;
+
+.friends-header {
+    width: 100%;
     height: 80px;
-    border-color: #E8E8E8;
     border-bottom-style: solid;
     border-width: 1px;
 }
 
-.friends-header .friends-button{
+:host-context(.theme-light) .friends-header {
+    border-color: #E8E8E8;
+}
+
+:host-context(.theme-dark) .friends-header {
+    border-color: #353b48;
+}
+
+.friends-header .friends-button {
     width: 25%;
     float: left;
     height: 80px;
-    background-color:#FEFEFE;
     text-decoration: none;
+}
+
+:host-context(.theme-light) .friends-header .friends-button {
+    background-color: #FEFEFE;
     color: #CCCCCC;
 }
 
-.friends-header .friends-button .icon{
+:host-context(.theme-dark) .friends-header .friends-button {
+    background-color: #2f3640;
+    color: #CCCCCC;
+}
+
+.friends-header .friends-button .icon {
     width: 70px;
     position: relative;
     text-align: center;
     margin: auto;
     margin-top: 7px;
     font-size: 2.4em;
-        
 }
 
-.friends-header .friends-button .words{
-    text-align: center;    
+.friends-header .friends-button .words {
+    text-align: center;
     user-select: none;
 }
 
-.friends-header .friends-button .reddot{
+.friends-header .friends-button .reddot {
     right: 10px;
 }
 
@@ -41,29 +56,41 @@
     height: 50px;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: #E8E8E8;
     cursor: pointer;
-    background-color: #FFF;
     user-select: none;
 }
 
-.friend:hover {
-    background-color: #F8F8F8;
+:host-context(.theme-light) .friend {
+    border-color: #E8E8E8;
+    background-color: #FFF;
 }
 
-    .friend .user-img {
-        margin-left: 10px;
-        margin-top: 7px;
-        width: 36px;
-        height: 36px;
-        float: left;
-        border-radius: 8px;
-    }
+:host-context(.theme-dark) .friend {
+    border-color: #353b48;
+    background-color: #2f3640;
+}
 
-    .friend .name {
-        position: absolute;
-        margin-left: 55px;
-        margin-top: 15px;
-        font-size: 15px;
-        font-weight: 400;
-    }
+:host-context(.theme-light) .friend:hover,:host-context(.theme-light) .friends-header .friends-button:hover {
+    background-color: #F6F6F6;
+}
+
+:host-context(.theme-dark) .friend:hover,:host-context(.theme-dark) .friends-header .friends-button:hover {
+    background-color: #576574;
+}
+
+.friend .user-img {
+    margin-left: 10px;
+    margin-top: 7px;
+    width: 36px;
+    height: 36px;
+    float: left;
+    border-radius: 8px;
+}
+
+.friend .name {
+    position: absolute;
+    margin-left: 55px;
+    margin-top: 15px;
+    font-size: 15px;
+    font-weight: 400;
+}

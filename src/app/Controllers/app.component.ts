@@ -1,7 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, AfterViewInit, ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
+import { Themes } from '../Models/Themes';
 import { MessageService } from '../Services/MessageService';
 
 @Component({
@@ -11,9 +12,11 @@ import { MessageService } from '../Services/MessageService';
 })
 
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+
     constructor(
         public initService: InitService,
+        private elementRef: ElementRef,
         private messageService: MessageService) {
     }
 
@@ -43,5 +46,25 @@ export class AppComponent implements OnInit {
 
     public ngOnInit(): void {
         this.initService.init();
+    }
+
+    public ngAfterViewInit(): void {
+        const themeSet = localStorage.getItem('setting-theme');
+        let theme: Themes;
+        if (themeSet == null) {
+            // load and set default setting
+            theme = Themes.light;
+            localStorage.setItem('setting-theme', theme.toString());
+        } else {
+            theme = parseInt(themeSet, 10) as Themes;
+        }
+        switch (theme) {
+            case Themes.light:
+                this.elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
+                break;
+            case Themes.dark:
+                this.elementRef.nativeElement.ownerDocument.body.className = 'theme-dark';
+                break;
+        }
     }
 }
