@@ -12,9 +12,9 @@ import { environment } from '../../environments/environment';
     providedIn: 'root'
 })
 export class InitService {
+    public connecting = false;
     private ws: WebSocket;
     private timeoutNumber = 1000;
-    public connecting = false;
     private interval;
     private timeout;
     private online;
@@ -47,8 +47,10 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-                        this.subscribeUser();
-                        this.updateSubscription();
+                        if (!this.messageService.electron) {
+                            this.subscribeUser();
+                            this.updateSubscription();
+                        }
                         this.loadPusher();
                         this.cacheService.autoUpdateConversation();
                         this.cacheService.autoUpdateRequests();
