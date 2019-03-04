@@ -1,6 +1,6 @@
 {
   "name": "kahla",
-  "version": "2.7.1",
+  "version": "3.0.0",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
@@ -58,7 +58,7 @@
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "npm run prebuild && ng build --base-href / --prod",
+    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
     "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
     "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
@@ -71,9 +71,7 @@
     "@angular/http": "7.2.4",
     "@angular/platform-browser": "7.2.4",
     "@angular/platform-browser-dynamic": "7.2.4",
-    "@angular/pwa": "^0.13.1",
     "@angular/router": "7.2.4",
-    "@angular/service-worker": "7.2.4",
     "autolinker": "^3.0.0",
     "blueimp-load-image": "^2.20.1",
     "cordova-android": "^7.1.4",

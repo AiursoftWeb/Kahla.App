@@ -1,6 +1,5 @@
 // Modules
 import { AppRoutingModule } from './Modules/AppRoutingModule';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -24,13 +23,13 @@ import { UserDetailComponent } from './Controllers/userDetail.component';
 import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
+import { DevicesComponent } from './Controllers/devices.component';
+import { ThemeComponent } from './Controllers/theme.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
-import { Notify } from './Services/Notify';
 import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
-import { environment } from '../environments/environment';
 import { UploadService } from './Services/UploadService';
 import { AuthApiService } from './Services/AuthApiService';
 import { ConversationApiService } from './Services/ConversationApiService';
@@ -46,8 +45,7 @@ import { HeaderService } from './Services/HeaderService';
         BrowserModule,
         FormsModule,
         HttpClientModule,
-        AppRoutingModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+        AppRoutingModule
     ],
     declarations: [
         AboutComponent,
@@ -67,11 +65,12 @@ import { HeaderService } from './Services/HeaderService';
         UserDetailComponent,
         JoinGroupComponent,
         GroupComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        DevicesComponent,
+        ThemeComponent
     ],
     providers: [
         ApiService,
-        Notify,
         ParamService,
         CacheService,
         UploadService,

@@ -38,7 +38,7 @@ button, .button {
 }
 
 .button.primary {
-    background-color: #4075d5 !important;
+    background-color: #4075d5;
 }
 
 .button.primary:hover:enabled, .inputButton:hover {

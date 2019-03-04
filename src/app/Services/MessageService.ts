@@ -10,7 +10,6 @@ import { map } from 'rxjs/operators';
 import { UploadService } from './UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
-import { Notify } from './Notify';
 import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
@@ -30,16 +29,18 @@ export class MessageService {
     public newMessages = false;
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
-
+    public electron = false;
     public me: KahlaUser;
-    public eventType: EventType;
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
-        private notify: Notify,
         private cacheService: CacheService
-    ) {}
+    ) {
+        if (navigator.userAgent.toLowerCase().includes('electron')) {
+            this.electron = true;
+        }
+    }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -49,14 +50,12 @@ export class MessageService {
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id);
                     this.messageAmount++;
-                    if (!document.hasFocus() && !evt.muted) {
-                        this.notify.ShowNewMessage(evt, this.me.id);
+                    if (!document.hasFocus()) {
+                        this.showNotification(evt);
                     }
                 } else {
                     this.cacheService.autoUpdateConversation();
-                    if (!evt.muted) {
-                        this.notify.ShowNewMessage(evt, this.me.id);
-                    }
+                    this.showNotification(evt);
                 }
                 break;
             case EventType.NewFriendRequest:
@@ -205,6 +204,21 @@ export class MessageService {
                 return 'left_bottom';
             default:
                 return '';
+        }
+    }
+
+    private showNotification(event: NewMessageEvent): void {
+        if (!event.muted && event.sender.id !== this.me.id && this.electron) {
+            event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
+            event.content = this.cacheService.modifyMessage(event.content);
+            const notify = new Notification(event.sender.nickName, {
+                body: event.content,
+                icon: Values.fileAddress + event.sender.headImgFileKey
+            });
+            notify.onclick = function(clickEvent) {
+                clickEvent.preventDefault();
+                window.focus();
+            };
         }
     }
 }

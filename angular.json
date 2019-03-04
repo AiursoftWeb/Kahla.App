@@ -21,11 +21,13 @@
               "src/assets",
               "src/manifest.json",
               "src/favicon.ico",
-              "src/index.js",
-              "src/web.config"
+              "src/web.config",
+              "src/sw.js",
+              "src/index.js"
             ],
             "styles": [
-              "node_modules/font-awesome/css/font-awesome.min.css"
+              "node_modules/font-awesome/css/font-awesome.min.css",
+              "src/app/Styles/index.css"
             ],
             "scripts": []
           },
@@ -40,7 +42,6 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json",
               "fileReplacements": [
                 {

@@ -6,13 +6,20 @@
     height: 70px;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: #E8E8E8;
-    background-color: #FFF;
     position: relative;
     display: grid;
     grid-template-columns: 20% 40% 40%;
     text-align: center;
     user-select: none;
+}
+:host-context(.theme-light) .friendrequests{
+    border-color: #E8E8E8;
+    background-color: #FFF;
+}
+
+:host-context(.theme-dark) .friendrequests{
+    border-color: #353b48;
+    background-color: #2f3640;
 }
 
 .friendrequests .user-img {

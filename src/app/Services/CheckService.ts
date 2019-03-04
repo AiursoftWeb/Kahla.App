@@ -44,6 +44,7 @@ export class CheckService {
             text: 'Do you want to download the latest version of Kahla now?',
             type: 'warning',
             confirmButtonText: 'Download now',
+            cancelButtonText: 'Remind me later',
             showCancelButton: true
         }).then(ToDownload => {
             if (ToDownload.value) {

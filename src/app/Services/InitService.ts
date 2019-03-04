@@ -6,19 +6,24 @@ import { MessageService } from './MessageService';
 import { Values } from '../values';
 import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InitService {
+    public connecting = false;
     private ws: WebSocket;
     private timeoutNumber = 1000;
-    public connecting = false;
     private interval;
     private timeout;
     private online;
     private errorOrClose;
     private closeWebSocket = false;
+    private options = {
+        userVisibleOnly: true,
+        applicationServerKey: this.urlBase64ToUint8Array(environment.applicationServerKey)
+    };
 
     constructor(
         private checkService: CheckService,
@@ -30,9 +35,6 @@ export class InitService {
     }
 
     public init(): void {
-        if ('Notification' in window) {
-            Notification.requestPermission();
-        }
         this.online = navigator.onLine;
         this.connecting = true;
         this.closeWebSocket = false;
@@ -45,6 +47,10 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        if (!this.messageService.electron) {
+                            this.subscribeUser();
+                            this.updateSubscription();
+                        }
                         this.loadPusher();
                         this.cacheService.autoUpdateConversation();
                         this.cacheService.autoUpdateRequests();
@@ -108,6 +114,7 @@ export class InitService {
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.messageService.me = null;
+        localStorage.clear();
     }
 
     private autoReconnect(): void {
@@ -120,18 +127,71 @@ export class InitService {
     }
 
     private resend(): void {
-        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        unsentMessages.forEach((messages, id) => {
-            const sendFailMessages = [];
-            for (let i = 0; i < (<Array<string>>messages).length; i++) {
-                setTimeout(() => {
-                    this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
-                        sendFailMessages.push((<Array<string>>messages)[i]);
-                    });
-                }, 500);
-            }
-            unsentMessages.set(id, sendFailMessages);
-            localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-        });
+        if (navigator.onLine) {
+            const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+            unsentMessages.forEach((messages, id) => {
+                const sendFailMessages = [];
+                for (let i = 0; i < (<Array<string>>messages).length; i++) {
+                    setTimeout(() => {
+                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
+                            sendFailMessages.push((<Array<string>>messages)[i]);
+                        });
+                    }, 500);
+                }
+                unsentMessages.set(id, sendFailMessages);
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+            });
+        }
+    }
+
+    private subscribeUser(): void {
+        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+            const _this = this;
+            navigator.serviceWorker.ready.then(function(registration) {
+                return registration.pushManager.getSubscription().then(function(sub) {
+                    if (sub === null) {
+                        return registration.pushManager.subscribe(_this.options)
+                            .then(function(pushSubscription) {
+                                return _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                    .subscribe(function(result) {
+                                        localStorage.setItem('deviceID', result.value.toString());
+                                    });
+                            });
+                    }
+                });
+            }.bind(_this));
+        }
+    }
+
+    private updateSubscription(): void {
+        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+            const _this = this;
+            navigator.serviceWorker.ready.then(function(registration) {
+                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+                    registration.pushManager.subscribe(_this.options)
+                        .then(function(pushSubscription) {
+                            return _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
+                                pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
+                                .subscribe();
+                        });
+                });
+            }.bind(_this));
+        }
+    }
+
+    private urlBase64ToUint8Array(base64String: string): Uint8Array {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
     }
 }
