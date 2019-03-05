@@ -46,7 +46,7 @@
 }
 
 :host-context(.theme-dark) .nav-bar .nav-item:hover{
-    background-color: #718093;
+    background-color: #374554;
 }
 
     .nav-bar .nav-item.current {

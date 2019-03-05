@@ -75,7 +75,7 @@
 }
 
 :host-context(.theme-dark) .friend:hover,:host-context(.theme-dark) .friends-header .friends-button:hover {
-    background-color: #576574;
+    background-color: #374554;
 }
 
 .friend .user-img {

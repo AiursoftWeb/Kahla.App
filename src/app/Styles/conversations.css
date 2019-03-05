@@ -25,7 +25,7 @@
 }
 
 :host-context(.theme-dark) .conversation:hover {
-    background-color: #576574;
+    background-color: #374554;
 }
 
 .conversation .user-img {

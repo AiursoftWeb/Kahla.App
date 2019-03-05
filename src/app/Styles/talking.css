@@ -182,7 +182,7 @@
 }
 
 :host-context(.theme-dark) .message-list .left .chat-content {
-    background-color: black;
+    background-color: #707E8A;
 }
 
 .message-list .right .chat-content {
@@ -308,8 +308,12 @@ i {
     font-size: 1.5rem;
 }
 
-.inputfile:focus+label, .inputfile+label:hover {
+:host-context(.theme-light) .inputfile:focus+label, .inputfile+label:hover {
     background-color: #CCC;
+}
+
+:host-context(.theme-dark) .inputfile:focus+label, .inputfile+label:hover {
+    background-color: #384553;
 }
 
 .of4 .text {
