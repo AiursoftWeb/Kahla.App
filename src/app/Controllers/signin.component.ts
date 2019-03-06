@@ -7,6 +7,7 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { catchError } from 'rxjs/operators';
 import { InitService } from '../Services/InitService';
 import { ApiService } from '../Services/ApiService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -22,7 +23,8 @@ export class SignInComponent {
     constructor(
         private authApiService: AuthApiService,
         private router: Router,
-        private initService: InitService) {
+        private initService: InitService,
+        public messageService: MessageService) {
             this.OAuthURL = ApiService.serverAddress + '/Auth/Oauth';
         }
 
