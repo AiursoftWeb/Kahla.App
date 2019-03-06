@@ -90,13 +90,26 @@ self.addEventListener('push', function(event) {
             message = 'Audio';
         }
 
-        if (!data.sentByMe) {
-            event.waitUntil(self.registration.showNotification(title, {
-                body: message,
-                icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
-                renotify: true,
-                tag: data.conversationId.toString()
-            }));
-        }
+        let showNotification = true;
+        event.waitUntil(
+            self.clients.matchAll().then(function(clientList) {
+                clientList.forEach(function(client) {
+                    const URLArray = client.url.split('/');
+                    const URLId = parseInt(URLArray[URLArray.length - 1]);
+                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused) {
+                        showNotification = false;
+                    }
+                });
+    
+                if (!data.sentByMe && showNotification) {
+                    self.registration.showNotification(title, {
+                        body: message,
+                        icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
+                        renotify: true,
+                        tag: data.conversationId.toString()
+                    });
+                }
+            })
+        );
     }
 });
