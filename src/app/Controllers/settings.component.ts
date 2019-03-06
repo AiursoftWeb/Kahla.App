@@ -6,7 +6,6 @@ import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
-import { Subscription } from 'rxjs/';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -47,29 +46,32 @@ export class SettingsComponent implements OnInit {
                 const _this = this;
                 navigator.serviceWorker.ready.then(function(reg) {
                     return reg.pushManager.getSubscription().then(function(subscription) {
+                        let deviceID = localStorage.getItem('deviceID');
+                        if (deviceID === null) {
+                            deviceID = '-1';
+                        }
                         if (subscription != null) {
                             subscription.unsubscribe().then().catch(function(e) {
                                 console.log(e);
                             });
-                            let deviceID = localStorage.getItem('deviceID');
-                            if (deviceID === null) {
-                                deviceID = '-1';
-                            }
-                            return _this.callLogOffAPI(Number(deviceID));
-                        } else {
-                            return _this.callLogOffAPI(-1);
                         }
+                        return _this.authApiService.LogOff(Number(deviceID)).subscribe({
+                            next() {
+                                _this.destroy();
+                            },
+                            error() {
+                                _this.destroy();
+                            }
+                        });
                     });
                 }.bind(_this));
             }
         });
     }
 
-    private callLogOffAPI(deviceID: number): Subscription {
-        return this.authApiService.LogOff(deviceID).subscribe(() => {
-            this.initSerivce.destroy();
-            this.router.navigate(['/signin'], {replaceUrl: true});
-        });
+    private destroy(): void {
+        this.initSerivce.destroy();
+        this.router.navigate(['/signin'], {replaceUrl: true});
     }
 
     public sendEmail(): void {
