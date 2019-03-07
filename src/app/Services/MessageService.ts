@@ -114,7 +114,10 @@ export class MessageService {
                         }
                     } else if (!t.content.startsWith('[file]')) {
                         t.content = he.encode(t.content);
-                        t.content = Autolinker.link(t.content, { stripPrefix: false});
+                        t.content = Autolinker.link(t.content, {
+                            stripPrefix: false,
+                            className : 'chat-inline-link'
+                        });
                     }
                 });
                 if (messages.length < 15) {

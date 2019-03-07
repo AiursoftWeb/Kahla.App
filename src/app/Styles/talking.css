@@ -308,11 +308,11 @@ i {
     font-size: 1.5rem;
 }
 
-:host-context(.theme-light) .inputfile:focus+label, .inputfile+label:hover {
+:host-context(.theme-light) .inputfile:focus+label,:host-context(.theme-light) .inputfile+label:hover {
     background-color: #CCC;
 }
 
-:host-context(.theme-dark) .inputfile:focus+label, .inputfile+label:hover {
+:host-context(.theme-dark) .inputfile:focus+label,:host-context(.theme-dark) .inputfile+label:hover {
     background-color: #384553;
 }
 
