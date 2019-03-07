@@ -104,6 +104,8 @@ export class CacheService {
                         deviceName.push('Firefox');
                     } else if (item.name.includes('Seamonkey')) {
                         deviceName.push('Seamonkey');
+                    } else if (item.name.includes('Edge')) {
+                        deviceName.push('Microsoft Edge');
                     } else if (item.name.includes('Chrome') && !item.name.includes('Chromium')) {
                         deviceName.push('Chrome');
                     } else if (item.name.includes('Chromium')) {
@@ -114,8 +116,6 @@ export class CacheService {
                         deviceName.push('Opera');
                     } else if (item.name.includes('MSIE')) {
                         deviceName.push('Internet Explorer');
-                    } else if (item.name.includes('Edge')) {
-                        deviceName.push('Microsoft Edge');
                     } else {
                         deviceName.push('Unknown browser');
                     }

@@ -24,6 +24,9 @@
                 <button *ngIf="connecting" disabled="disabled" class="button white" i18n="@@Connecting" type="button">
                     Connecting...
                 </button>
+                <a class="button white login" href="{{ OAuthURL }}" *ngIf="!messageService.electron">
+                    Sign in with browser(OAuth)
+                </a>
                 <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
             </form>
         </div>

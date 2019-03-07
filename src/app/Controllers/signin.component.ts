@@ -6,6 +6,8 @@ import { AiurCollection } from '../Models/AiurCollection';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { catchError } from 'rxjs/operators';
 import { InitService } from '../Services/InitService';
+import { ApiService } from '../Services/ApiService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -16,11 +18,15 @@ export class SignInComponent {
     public email: string;
     public password: string;
     public connecting = false;
+    public OAuthURL: string;
 
     constructor(
         private authApiService: AuthApiService,
         private router: Router,
-        private initService: InitService) { }
+        private initService: InitService,
+        public messageService: MessageService) {
+            this.OAuthURL = ApiService.serverAddress + '/Auth/Oauth';
+        }
 
     public signin(): void {
         if (this.connecting) {

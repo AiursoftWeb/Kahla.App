@@ -145,7 +145,7 @@ input {
 }
 
 .forgetPassword {
-    margin: 5% auto 0 auto;
+    margin: 5% auto;
     display: block;
     text-decoration: none;
     font-size: 12px;
@@ -159,4 +159,10 @@ p {
 
 a {
     text-decoration: none;
+}
+
+.login {
+    display: block;
+    padding: 0 !important;
+    margin-top:8%;
 }
