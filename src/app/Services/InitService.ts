@@ -133,8 +133,12 @@ export class InitService {
                 const sendFailMessages = [];
                 for (let i = 0; i < (<Array<string>>messages).length; i++) {
                     setTimeout(() => {
-                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
-                            sendFailMessages.push((<Array<string>>messages)[i]);
+                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe({
+                            error(e) {
+                                if (e.status === 0 || e.status === 503) {
+                                    sendFailMessages.push((<Array<string>>messages)[i]);
+                                }
+                            }
                         });
                     }, 500);
                 }
