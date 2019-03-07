@@ -43,6 +43,10 @@ export class SettingsComponent implements OnInit {
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
+                if (this.messageService.electron) {
+                    this.callLogOffAPI(-1);
+                    return;
+                }
                 const _this = this;
                 navigator.serviceWorker.ready.then(function(reg) {
                     return reg.pushManager.getSubscription().then(function(subscription) {
@@ -55,23 +59,24 @@ export class SettingsComponent implements OnInit {
                                 console.log(e);
                             });
                         }
-                        return _this.authApiService.LogOff(Number(deviceID)).subscribe({
-                            next() {
-                                _this.destroy();
-                            },
-                            error() {
-                                _this.destroy();
-                            }
-                        });
+                        _this.callLogOffAPI(Number(deviceID));
                     });
                 }.bind(_this));
             }
         });
     }
 
-    private destroy(): void {
-        this.initSerivce.destroy();
-        this.router.navigate(['/signin'], {replaceUrl: true});
+    private callLogOffAPI(deviceID: number): void {
+        const _this = this;
+        this.authApiService.LogOff(Number(deviceID)).subscribe({
+            next() {
+                _this.initSerivce.destroy();
+                _this.router.navigate(['/signin'], {replaceUrl: true});
+            },
+            error(e) {
+                Swal.fire('Logoff error', e.message, 'error');
+            }
+        });
     }
 
     public sendEmail(): void {
