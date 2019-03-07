@@ -172,18 +172,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
+        const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
-            .subscribe(() => {}, () => {
-                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
-                    const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
-                    tempArray.push(encryptedMessage);
-                    unsentMessages.set(this.conversationID, tempArray);
-                } else {
-                    unsentMessages.set(this.conversationID, [encryptedMessage]);
+            .subscribe({
+                error(e) {
+                    if (e.status === 0 || e.status === 503) {
+                        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                        if (unsentMessages.get(_this.conversationID) &&
+                            (<Array<string>>unsentMessages.get(_this.conversationID)).length > 0) {
+                            const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
+                            tempArray.push(encryptedMessage);
+                            unsentMessages.set(_this.conversationID, tempArray);
+                        } else {
+                            unsentMessages.set(_this.conversationID, [encryptedMessage]);
+                        }
+                        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                    }
                 }
-                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
             });
         this.content = '';
         const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
