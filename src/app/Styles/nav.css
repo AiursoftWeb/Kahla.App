@@ -35,6 +35,7 @@
     color: #BBBBBB;
     text-decoration: none;
     border-radius: 10px;
+    transition: all 0.2s ease-out;
 }
 
 .nav-bar .nav-item:hover {

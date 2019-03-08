@@ -302,6 +302,7 @@
     display: inline-block;
     cursor: pointer;
     width: 80px;
+    transition: all 0.2s ease-out;
 }
 
 i {

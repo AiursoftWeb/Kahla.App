@@ -8,6 +8,7 @@
     border-bottom-style: solid;
     cursor: pointer;
     user-select: none;
+    transition: all 0.2s ease-out;
 }
 
 :host-context(.theme-light) .conversation {
