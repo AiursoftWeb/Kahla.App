@@ -44,6 +44,7 @@
     outline: none;
     border-radius: 5px;
     margin: auto;
+    transition: all 0.2s ease-out;
 }
 
 .macOSReturnButton {

@@ -71,6 +71,7 @@
     user-select: none;
     display: grid;
     grid-template-columns: 15% auto 15%;
+    transition: all 0.2s ease-out;
 }
 
 .menu-button > * {
