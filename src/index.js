@@ -9,6 +9,12 @@ const platform = require('os').platform()
 let mainWindow
 app.showExitNotif = true
 
+const singleLock = app.requestSingleInstanceLock();
+
+if (!singleLock) {
+    app.quit();
+}
+
 function createWindow() {
     if (platform === 'darwin') {
         mainWindow = new BrowserWindow(
@@ -74,6 +80,12 @@ app.on('activate', function () {
         mainWindow.show();
     }
 })
+
+app.on("second-instance",(event, commandLine, workingDirectory) => {
+    if(mainWindow !== null){
+        mainWindow.show();
+    }
+});
 
 let tray = null
 app.on('ready', () => {
