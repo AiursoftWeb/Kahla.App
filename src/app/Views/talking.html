@@ -57,7 +57,10 @@
                     <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
                 </div>
                 <div *ngIf="message.content.startsWith('[audio]')">
-                    <button class="button white" (click)="uploadService.getAudio($event, message.content)">Click to load audio</button>
+                    <a href="javascript:void(0)" class="voicemsg" (click)="uploadService.getAudio($event.currentTarget, message.content)">
+                        <i class="fa fa-play"></i>
+                        <span>Voice Message</span>
+                    </a>
                 </div>
                 <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
             </div>

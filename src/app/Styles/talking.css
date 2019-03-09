@@ -144,15 +144,13 @@
 .message-list .left .chat-content:after {
     right: 100%;
     top: 20px;
-    ;
-    
 }
 
-:host-context(.theme-light) .message-list .left .chat-content:after{
+:host-context(.theme-light) .message-list .left .chat-content:after {
     border-right-color: white;
 }
 
-:host-context(.theme-dark) .message-list .left .chat-content:after{
+:host-context(.theme-dark) .message-list .left .chat-content:after {
     border-right-color: #718093;
 }
 
@@ -216,11 +214,11 @@
     box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
 }
 
-:host-context(.theme-light) .chat-action{
+:host-context(.theme-light) .chat-action {
     background-color: #E4E4E4;
 }
 
-:host-context(.theme-dark) .chat-action{
+:host-context(.theme-dark) .chat-action {
     background-color: #2f3640;
 }
 
@@ -248,14 +246,14 @@
     resize: none;
 }
 
-:host-context(.theme-light) .chat-part textarea{
+:host-context(.theme-light) .chat-part textarea {
     color: #808080;
     background-color: #fff;
 }
 
-:host-context(.theme-dark) .chat-part textarea{
+:host-context(.theme-dark) .chat-part textarea {
     background-color: #1e272e;
-    color:white;
+    color: white;
 }
 
 .chat-part button {
@@ -272,7 +270,7 @@
     transition: all 0.4s ease-in-out;
 }
 
-.button-part-invisible{
+.button-part-invisible {
     visibility: hidden;
     opacity: 0;
 }
@@ -320,11 +318,11 @@ i {
     font-size: 1.5rem;
 }
 
-:host-context(.theme-light) .inputfile:focus+label,:host-context(.theme-light) .inputfile+label:hover {
+:host-context(.theme-light) .inputfile:focus+label, :host-context(.theme-light) .inputfile+label:hover {
     background-color: #CCC;
 }
 
-:host-context(.theme-dark) .inputfile:focus+label,:host-context(.theme-dark) .inputfile+label:hover {
+:host-context(.theme-dark) .inputfile:focus+label, :host-context(.theme-dark) .inputfile+label:hover {
     background-color: #384553;
 }
 
@@ -352,11 +350,11 @@ progress {
     text-decoration: none;
 }
 
-.left .chat-text a {
+.left .chat-text a,.left .chat-content .voicemsg span{
     color: #9baec8;
 }
 
-.right .chat-text a {
+.right .chat-text a,.right .chat-content .voicemsg span {
     color: #d9e1e8;
 }
 
@@ -386,6 +384,22 @@ a h5 {
     grid-column-start: 2;
     text-align: right;
     word-break: break-all;
+}
+
+.message-list .chat-content .voicemsg {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 40px 2fr;
+    grid-template-rows: 100%;
+}
+
+.message-list .chat-content .voicemsg .fa {
+    text-align: center;
+}
+
+.message-list .chat-content .voicemsg span {
+    font-size: 16px;
+    grid-column-start: 2;
 }
 
 .red {
