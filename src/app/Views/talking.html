@@ -78,11 +78,11 @@
 </ul>
 
 <div class="chat-action">
-    <div class="chat-part">
+    <div class="chat-part" [ngClass]="{'chat-part-extented': !(content==undefined || content.trim().length === 0)}">
         <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
         <button class="button success" [disabled]="content==undefined || content.trim().length === 0" (click)="send()" i18n="@@Send">Send</button>
     </div>
-    <div class="button-part" *ngIf="content==undefined || content.trim().length === 0">
+    <div class="button-part" [ngClass]="{'button-part-invisible': !(content==undefined || content.trim().length === 0)}">
         <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>
         <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
     </div>

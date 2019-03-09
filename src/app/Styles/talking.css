@@ -226,6 +226,11 @@
 
 .chat-part {
     margin-right: 90px;
+    transition: all 0.4s ease-in-out;
+}
+
+.chat-part-extented {
+    margin-right: 0px;
 }
 
 .chat-part textarea {
@@ -264,6 +269,12 @@
     display: grid;
     grid-template-columns: 50% 50%;
     text-align: center;
+    transition: all 0.4s ease-in-out;
+}
+
+.button-part-invisible{
+    visibility: hidden;
+    opacity: 0;
 }
 
 .button-part i {
