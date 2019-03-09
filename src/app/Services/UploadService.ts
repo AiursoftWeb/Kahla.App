@@ -228,6 +228,7 @@ export class UploadService {
                     audioElement.src = response.downloadPath;
                     audioElement.controls = true;
                     target.parentElement.appendChild(audioElement);
+                    audioElement.play();
                 }
             });
         }
