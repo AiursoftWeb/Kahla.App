@@ -22,7 +22,6 @@ import { Values } from '../values';
 export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[];
-    public messageAmount = 15;
     public noMoreMessages = true;
     public loadingMore = false;
     public belowWindowPercent = 0;
@@ -48,8 +47,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id);
-                    this.messageAmount++;
+                    this.getMessages(true, this.conversation.id, -1, 1);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -73,8 +71,8 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number): void {
-        this.conversationApiService.GetMessage(id, this.messageAmount)
+    public getMessages(getDown: boolean, id: number, messageID: number, take: number): void {
+        this.conversationApiService.GetMessage(id, messageID, take)
             .pipe(
                 map(t => t.items)
             )
@@ -137,7 +135,11 @@ export class MessageService {
                         this.newMessages = false;
                     }
                 }
-                this.localMessages = messages;
+                if (messageID === -1) {
+                    this.localMessages.push(...messages);
+                } else {
+                    this.localMessages.unshift(...messages);
+                }
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
@@ -160,8 +162,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
+            this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
 
@@ -177,7 +178,6 @@ export class MessageService {
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = null;
-        this.messageAmount = 15;
         this.noMoreMessages = true;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
