@@ -100,14 +100,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    console.log(params);
                     this.conversationID = params.id;
                     this.unread = params.unread;
                     if (this.unread > 50 || this.unread <= 0) {
                         this.unread = 15;
                     }
-                    console.log(this.conversationID);
-                    console.log(this.unread);
                     return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
