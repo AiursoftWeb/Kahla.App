@@ -118,7 +118,7 @@ export class MessageService {
                         });
                     }
                 });
-                if (!getDown && messages.length < 15) {
+                if (take !== 1 && messages.length < 15) {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
@@ -179,8 +179,8 @@ export class MessageService {
 
     public resetVariables(): void {
         this.conversation = null;
-        this.localMessages = null;
-        this.noMoreMessages = true;
+        this.localMessages = [];
+        this.noMoreMessages = false;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
