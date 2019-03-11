@@ -62,5 +62,5 @@
 
 <div class="buttons">
     <button class="button success" *ngIf="info && !areFriends && messageService.me.emailConfirmed" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
-    <button class="button success" *ngIf="info && areFriends"  routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
+    <button class="button success" *ngIf="info && areFriends"  routerLink="/talking/{{ conversationId }}/15" i18n="@@Message">Messages</button>
 </div>
