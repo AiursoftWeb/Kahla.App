@@ -15,8 +15,8 @@ export class ConversationApiService {
         private apiService: ApiService
     ) {}
 
-    public GetMessage(id: number, take: number): Observable<AiurCollection<Message>> {
-        return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage/${id}?take=${take}`);
+    public GetMessage(id: number, skipTill: number, take: number): Observable<AiurCollection<Message>> {
+        return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipTill=${skipTill}&take=${take}`);
     }
 
     public SendMessage(id: number, content: string): Observable<AiurProtocal> {

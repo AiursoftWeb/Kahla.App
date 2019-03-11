@@ -21,9 +21,8 @@ import { Values } from '../values';
 
 export class MessageService {
     public conversation: Conversation;
-    public localMessages: Message[];
-    public messageAmount = 15;
-    public noMoreMessages = true;
+    public localMessages: Message[] = [];
+    public noMoreMessages = false;
     public loadingMore = false;
     public belowWindowPercent = 0;
     public newMessages = false;
@@ -48,8 +47,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id);
-                    this.messageAmount++;
+                    this.getMessages(true, this.conversation.id, -1, 1);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -73,8 +71,8 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number): void {
-        this.conversationApiService.GetMessage(id, this.messageAmount)
+    public getMessages(getDown: boolean, id: number, skipTill: number, take: number): void {
+        this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
                 map(t => t.items)
             )
@@ -120,24 +118,30 @@ export class MessageService {
                         });
                     }
                 });
-                if (messages.length < 15) {
+                if (!getDown && messages.length < 15) {
                     this.noMoreMessages = true;
-                } else {
-                    this.noMoreMessages = false;
                 }
-                if (typeof this.localMessages !== 'undefined' && this.localMessages !== null &&
-                    this.localMessages.length > 0 && messages.length > 0) {
-                    if (!getDown && messages[0].id === this.localMessages[0].id) {
-                        this.noMoreMessages = true;
-                    }
-                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && messages[messages.length - 1].id !==
-                        this.localMessages[this.localMessages.length - 1].id && this.belowWindowPercent > 0) {
+                if (this.localMessages.length > 0 && messages.length > 0) {
+                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && take === 1 && this.belowWindowPercent > 0) {
                         this.newMessages = true;
                     } else {
                         this.newMessages = false;
                     }
                 }
-                this.localMessages = messages;
+                if (skipTill === -1) {
+                    if (take === 1 && messages[0].senderId === this.me.id) {
+                        for (let index = 0; index < this.localMessages.length; index++) {
+                            if (this.localMessages[index].local) {
+                                this.localMessages[index] = messages[0];
+                                break;
+                            }
+                        }
+                    } else {
+                        this.localMessages.push(...messages);
+                    }
+                } else {
+                    this.localMessages.unshift(...messages);
+                }
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
@@ -160,8 +164,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
+            this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
 
@@ -177,7 +180,6 @@ export class MessageService {
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = null;
-        this.messageAmount = 15;
         this.noMoreMessages = true;
         this.loadingMore = false;
         this.belowWindowPercent = 0;

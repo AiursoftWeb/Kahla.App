@@ -36,6 +36,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private mediaRecorder;
     private forceStopTimeout;
     private oldContent: string;
+    private unread = 15;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -99,7 +100,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    this.conversationID = params['id'];
+                    this.conversationID = params.id;
+                    this.unread = params.unread;
+                    if (this.unread > 50 || this.unread <= 0) {
+                        this.unread = 15;
+                    }
                     return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
@@ -114,7 +119,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, this.conversationID);
+                    this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
                     if (conversation.anotherUserId) {
