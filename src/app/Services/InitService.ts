@@ -114,7 +114,8 @@ export class InitService {
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.messageService.me = null;
-        localStorage.clear();
+        // Don't clear it to save theme settings.
+        // localStorage.clear();
     }
 
     private autoReconnect(): void {
