@@ -13,6 +13,7 @@ import { HeaderService } from '../Services/HeaderService';
 
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
+    public homepage = Values.homepage;
     constructor(
         public checkService: CheckService,
         private headerService: HeaderService

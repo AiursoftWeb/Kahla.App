@@ -50,12 +50,16 @@ export class CheckService {
             showCancelButton: true
         }).then(ToDownload => {
             if (ToDownload.value) {
-                if (this._electronService.isElectronApp) {
-                    this._electronService.shell.openExternal(downloadAddress);
-                } else {
-                    location.href = downloadAddress;
-                }
+                this.openWebPage(downloadAddress);
             }
         });
+    }
+
+    public openWebPage(url: string): void {
+        if (this._electronService.isElectronApp) {
+            this._electronService.shell.openExternal(url);
+        } else {
+            location.href = url;
+        }
     }
 }
