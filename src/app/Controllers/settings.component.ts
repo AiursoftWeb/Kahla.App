@@ -6,6 +6,7 @@ import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -20,7 +21,8 @@ export class SettingsComponent implements OnInit {
         private router: Router,
         private initSerivce: InitService,
         public messageService: MessageService,
-        private headerService: HeaderService) {
+        private headerService: HeaderService,
+        private _electronService: ElectronService) {
             this.headerService.title = 'Me';
             this.headerService.returnButton = false;
             this.headerService.button = false;
@@ -43,7 +45,7 @@ export class SettingsComponent implements OnInit {
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
-                if (this.messageService.electron) {
+                if (this._electronService.isElectronApp) {
                     this.callLogOffAPI(-1);
                     return;
                 }

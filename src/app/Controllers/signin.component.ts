@@ -7,7 +7,7 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { catchError } from 'rxjs/operators';
 import { InitService } from '../Services/InitService';
 import { ApiService } from '../Services/ApiService';
-import { MessageService } from '../Services/MessageService';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -24,7 +24,7 @@ export class SignInComponent {
         private authApiService: AuthApiService,
         private router: Router,
         private initService: InitService,
-        public messageService: MessageService) {
+        public _electronService: ElectronService) {
             this.OAuthURL = ApiService.serverAddress + '/Auth/Oauth';
         }
 
