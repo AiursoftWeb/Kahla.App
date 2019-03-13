@@ -248,7 +248,7 @@
 
 .chat-part .chatinput-extented {
     width: 100%;
-    border-radius: 6px 6px 6px 6px;
+    border-radius: 6px;
 }
 
 :host-context(.theme-light) .chat-part textarea {
