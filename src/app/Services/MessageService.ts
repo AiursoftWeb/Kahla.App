@@ -14,6 +14,7 @@ import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -28,18 +29,14 @@ export class MessageService {
     public newMessages = false;
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
-    public electron = false;
     public me: KahlaUser;
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
-        private cacheService: CacheService
-    ) {
-        if (navigator.userAgent.toLowerCase().includes('electron')) {
-            this.electron = true;
-        }
-    }
+        private cacheService: CacheService,
+        private _electronService: ElectronService
+    ) {}
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -213,7 +210,7 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.sender.id !== this.me.id && this.electron) {
+        if (!event.muted && event.sender.id !== this.me.id && this._electronService.isElectronApp) {
             event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
             event.content = this.cacheService.modifyMessage(event.content);
             const notify = new Notification(event.sender.nickName, {

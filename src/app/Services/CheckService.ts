@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthApiService } from './AuthApiService';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,8 @@ export class CheckService {
     public buildTime = versions.buildTime;
 
     constructor(
-        private authApiService: AuthApiService
+        private authApiService: AuthApiService,
+        private _electronService: ElectronService
     ) {}
 
     public checkVersion(checkButton: boolean): void {
@@ -48,8 +50,16 @@ export class CheckService {
             showCancelButton: true
         }).then(ToDownload => {
             if (ToDownload.value) {
-                location.href = downloadAddress;
+                this.openWebPage(downloadAddress);
             }
         });
+    }
+
+    public openWebPage(url: string): void {
+        if (this._electronService.isElectronApp) {
+            this._electronService.shell.openExternal(url);
+        } else {
+            location.href = url;
+        }
     }
 }
