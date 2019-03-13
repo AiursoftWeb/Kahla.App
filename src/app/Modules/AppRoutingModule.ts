@@ -25,6 +25,7 @@ const routes: Routes = [
     { path: 'addfriend', component: AddFriendComponent },
     { path: 'settings', component: SettingsComponent },
     { path: 'friendrequests', component: FriendRequestsComponent },
+    { path: 'talking/:id', component: TalkingComponent },
     { path: 'talking/:id/:unread', component: TalkingComponent },
     { path: 'user/:id', component: UserComponent },
     { path: 'signin', component: SignInComponent },
