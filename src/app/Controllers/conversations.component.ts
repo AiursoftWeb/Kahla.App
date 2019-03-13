@@ -45,7 +45,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public talk(id: number, unread: number): void {
-        this.router.navigate(['/talking', id, unread]);
+        if (unread > 0 && unread <= 50) {
+            this.router.navigate(['/talking', id, unread]);
+        } else {
+            this.router.navigate(['/talking', id]);
+        }
     }
 
     public ngOnDestroy(): void {
