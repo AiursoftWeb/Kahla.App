@@ -111,7 +111,15 @@ export class MessageService {
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
                             stripPrefix: false,
-                            className : 'chat-inline-link'
+                            className : 'chat-inline-link',
+                            replaceFn : (match) => {
+                                const tag = match.buildTag();
+                                if (this._electronService.isElectronApp) {
+                                    // add electron broswer flag
+                                    tag.setAttr('href', `electron-bs:${tag.getAttr('href')}`);
+                                }
+                                return tag;
+                            }
                         });
                     }
                 });

@@ -85,6 +85,7 @@
     "font-awesome": "^4.7.0",
     "he": "^1.2.0",
     "ngx-electron": "^2.1.1",
+    "opn": "^5.4.0",
     "rxjs": "^6.4.0",
     "sweetalert2": "^8.0.7",
     "zone.js": "^0.8.29"
