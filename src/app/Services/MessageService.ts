@@ -115,7 +115,7 @@ export class MessageService {
                         });
                     }
                 });
-                if (take !== 1 && messages.length < 15) {
+                if (messages.length < take) {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
