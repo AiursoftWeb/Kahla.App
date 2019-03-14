@@ -5,6 +5,7 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 const platform = require('os').platform()
+const opn = require('opn');
 
 let mainWindow
 app.showExitNotif = true
@@ -57,6 +58,15 @@ function createWindow() {
         if (!app.isQuiting) {
             event.preventDefault()
             mainWindow.hide()
+        }
+    });
+
+    mainWindow.webContents.on("new-window",(event,url) => {
+        if(url.startsWith("unsafe:electron-bs:")) {
+            // should open in broswer
+            event.preventDefault();
+            let absUrl = url.substring(19);
+            opn(absUrl);
         }
     });
 }
