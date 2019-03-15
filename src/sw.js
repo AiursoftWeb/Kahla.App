@@ -15,7 +15,6 @@ self.addEventListener('install', function(event) {
                 '/vendor.js',
                 '/favicon.ico',
                 '/fontawesome-webfont.woff2',
-                '/assets/KahlaWhite.png',
                 '/assets/144x144.png'
             ]);
         })
