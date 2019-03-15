@@ -21,7 +21,7 @@ function createWindow() {
             {
                 width: 512,
                 height: 768,
-                icon: __dirname + '/assets/48x48.png',
+                icon: __dirname + '/assets/144x144.png',
                 titleBarStyle: 'hiddenInset',
                 minWidth: 200,
                 minHeight: 300
@@ -31,7 +31,7 @@ function createWindow() {
             {
                 width: 512,
                 height: 768,
-                icon: __dirname + '/assets/48x48.png',
+                icon: __dirname + '/assets/144x144.png',
                 minWidth: 200,
                 minHeight: 300
             })
@@ -97,7 +97,7 @@ app.on('ready', () => {
     if (platform === 'darwin') {
         tray = new Tray(__dirname + '/assets/KahlaTemplate.png')
     } else {
-        tray = new Tray(__dirname + '/assets/48x48.png')
+        tray = new Tray(__dirname + '/assets/144x144.png')
     }
     tray.addListener('double-click', function () { mainWindow.show(); })
     const contextMenu = Menu.buildFromTemplate([
