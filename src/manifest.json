@@ -20,7 +20,7 @@
         }
     ],
     "background_color": "#fff",
-    "theme_color": "#fff",
+    "theme_color": "#2391D3",
     "display": "standalone",
     "orientation": "portrait"
 }
