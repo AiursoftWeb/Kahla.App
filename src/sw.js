@@ -95,7 +95,7 @@ self.addEventListener('push', function(event) {
             self.clients.matchAll().then(function(clientList) {
                 clientList.forEach(function(client) {
                     const URLArray = client.url.split('/');
-                    const URLId = -1;
+                    let URLId = -1;
                     let talkingPage = false;
                     if (URLArray.length > 4) {
                         URLId = parseInt(URLArray[4]);
