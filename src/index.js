@@ -1,5 +1,5 @@
 const electron = require('electron')
-const { Menu, Tray, Notification } = require('electron')
+const { Menu, Tray, Notification, shell } = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
@@ -59,6 +59,11 @@ function createWindow() {
             mainWindow.hide()
         }
     });
+
+    mainWindow.webContents.on("new-window", (event, url) => {
+        event.preventDefault()
+        shell.openExternal(url)
+    })
 }
 
 app.on('ready', createWindow)
