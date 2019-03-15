@@ -95,14 +95,21 @@ self.addEventListener('push', function(event) {
             self.clients.matchAll().then(function(clientList) {
                 clientList.forEach(function(client) {
                     const URLArray = client.url.split('/');
-                    const URLId = parseInt(URLArray[URLArray.length - 1]);
-                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused) {
+                    const URLId = -1;
+                    let talkingPage = false;
+                    if (URLArray.length > 4) {
+                        URLId = parseInt(URLArray[4]);
+                        if (URLArray[3] == 'talking') {
+                            talkingPage = true;
+                        }
+                    }
+                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused && talkingPage) {
                         showNotification = false;
                     }
                 });
     
                 if (!data.sentByMe && showNotification) {
-                    self.registration.showNotification(title, {
+                    return self.registration.showNotification(title, {
                         body: message,
                         icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
                         renotify: true,

@@ -83,9 +83,9 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
-                    if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
-                        const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey === -1 || isNaN(filekey)) {
+                    if (t.content.match(/^\[(video|img)\].*/)) {
+                        const fileKey = this.uploadService.getFileKey(t.content);
+                        if (fileKey === -1 || isNaN(fileKey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
                             let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
@@ -107,7 +107,12 @@ export class MessageService {
                                 '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
                                 this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
-                    } else if (!t.content.startsWith('[file]')) {
+                    } else if (t.content.match(/^\[(file|audio)\].*/)) {
+                        const fileKey = this.uploadService.getFileKey(t.content);
+                        if (fileKey === -1 || isNaN(fileKey)) {
+                            t.content = '';
+                        }
+                    } else {
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
                             stripPrefix: false,
@@ -126,7 +131,7 @@ export class MessageService {
                     }
                 }
                 if (skipTill === -1) {
-                    if (take === 1 && messages[0].senderId === this.me.id) {
+                    if (take === 1 && messages[0].senderId === this.me.id && !messages[0].content.match(/^\[(img|file|video|audio)\].*/)) {
                         for (let index = 0; index < this.localMessages.length; index++) {
                             if (this.localMessages[index].local) {
                                 this.localMessages[index] = messages[0];
