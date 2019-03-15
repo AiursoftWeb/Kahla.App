@@ -115,7 +115,8 @@ export class MessageService {
                     } else {
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
-                            stripPrefix: false
+                            stripPrefix: false,
+                            className : 'chat-inline-link'
                         });
                     }
                 });
