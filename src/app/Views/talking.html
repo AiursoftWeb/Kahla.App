@@ -82,8 +82,8 @@
 
 <div class="chat-action">
     <div class="chat-part" [ngClass]="{'chat-part-extented': !(content==undefined || content.trim().length === 0)}">
-        <textarea id="chatInput" [ngClass]="{'chatinput-extented': content==undefined || content.trim().length === 0}" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
-        <button class="button success" [ngClass]="{'sendbtn-hidden': content==undefined || content.trim().length === 0}" (click)="send()" i18n="@@Send">Send</button>
+        <textarea id="chatInput" [ngClass]="{'chatinput-shorten': !(content==undefined || content.trim().length === 0)}" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
+        <button class="button success" [ngClass]="{'sendbtn-shown':!(content==undefined || content.trim().length === 0)}" (click)="send()" i18n="@@Send">Send</button>
     </div>
     <div class="button-part" [ngClass]="{'button-part-invisible': !(content==undefined || content.trim().length === 0)}">
         <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>

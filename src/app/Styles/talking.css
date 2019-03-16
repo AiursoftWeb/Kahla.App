@@ -232,10 +232,10 @@
 }
 
 .chat-part textarea {
-    width: 75%;
+    width: 100%;
     float: left;
     border: none;
-    border-radius: 6px 0 0 6px;
+    border-radius: 6px;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s,width ease-in-out 0.15s;
     box-shadow: none;
     min-height: 34px;
@@ -246,9 +246,9 @@
     resize: none;
 }
 
-.chat-part .chatinput-extented {
-    width: 100%;
-    border-radius: 6px;
+.chat-part .chatinput-shorten {
+    width: 75%;
+    border-radius: 6px 0 0 6px;
 }
 
 :host-context(.theme-light) .chat-part textarea {
@@ -262,18 +262,21 @@
 }
 
 .chat-part button {
-    width: 25%;
+    visibility: hidden;
+    padding: 0px;
+    width: 0%;
+    opacity: 0;
     float: left;
     border-radius: 0 6px 6px 0;
     height: 34px;
     transition: all 0.15s ease-in-out;
 }
 
-.chat-part .sendbtn-hidden {
-    visibility: hidden;
-    padding: 0px;
-    width: 0%;
-    opacity: 0;
+.chat-part .sendbtn-shown {
+    visibility: visible;
+    padding: 0 16px;
+    width: 25%;
+    opacity: 1;
 }
 
 .button-part {
