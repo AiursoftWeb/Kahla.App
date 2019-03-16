@@ -244,6 +244,7 @@
     box-sizing: border-box;
     outline: none;
     resize: none;
+    overflow-x: hidden;
 }
 
 .chat-part .chatinput-shorten {
