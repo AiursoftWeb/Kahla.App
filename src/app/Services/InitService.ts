@@ -7,6 +7,7 @@ import { Values } from '../values';
 import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +32,8 @@ export class InitService {
         private router: Router,
         private messageService: MessageService,
         private cacheService: CacheService,
-        private conversationApiService: ConversationApiService) {
+        private conversationApiService: ConversationApiService,
+        private _electronService: ElectronService) {
     }
 
     public init(): void {
@@ -47,7 +49,7 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-                        if (!this.messageService.electron) {
+                        if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
                             this.updateSubscription();
                         }
@@ -133,8 +135,12 @@ export class InitService {
                 const sendFailMessages = [];
                 for (let i = 0; i < (<Array<string>>messages).length; i++) {
                     setTimeout(() => {
-                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe(() => {}, () => {
-                            sendFailMessages.push((<Array<string>>messages)[i]);
+                        this.conversationApiService.SendMessage(Number(id), (<Array<string>>messages)[i]).subscribe({
+                            error(e) {
+                                if (e.status === 0 || e.status === 503) {
+                                    sendFailMessages.push((<Array<string>>messages)[i]);
+                                }
+                            }
                         });
                     }, 500);
                 }

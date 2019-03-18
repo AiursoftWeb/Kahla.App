@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthApiService } from '../Services/AuthApiService';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
@@ -16,7 +15,6 @@ import { HeaderService } from '../Services/HeaderService';
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
-        public authApiService: AuthApiService,
         public router: Router,
         public cacheService: CacheService,
         public messaageService: MessageService,
@@ -46,8 +44,12 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public talk(id: number): void {
-        this.router.navigate(['/talking', id]);
+    public talk(id: number, unread: number): void {
+        if (unread > 0 && unread <= 50) {
+            this.router.navigate(['/talking', id, unread]);
+        } else {
+            this.router.navigate(['/talking', id]);
+        }
     }
 
     public ngOnDestroy(): void {

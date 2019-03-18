@@ -6,6 +6,7 @@ import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/settings.html',
@@ -20,7 +21,8 @@ export class SettingsComponent implements OnInit {
         private router: Router,
         private initSerivce: InitService,
         public messageService: MessageService,
-        private headerService: HeaderService) {
+        private headerService: HeaderService,
+        private _electronService: ElectronService) {
             this.headerService.title = 'Me';
             this.headerService.returnButton = false;
             this.headerService.button = false;
@@ -43,6 +45,10 @@ export class SettingsComponent implements OnInit {
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
+                if (this._electronService.isElectronApp) {
+                    this.callLogOffAPI(-1);
+                    return;
+                }
                 const _this = this;
                 navigator.serviceWorker.ready.then(function(reg) {
                     return reg.pushManager.getSubscription().then(function(subscription) {
@@ -55,23 +61,24 @@ export class SettingsComponent implements OnInit {
                                 console.log(e);
                             });
                         }
-                        return _this.authApiService.LogOff(Number(deviceID)).subscribe({
-                            next() {
-                                _this.destroy();
-                            },
-                            error() {
-                                _this.destroy();
-                            }
-                        });
+                        _this.callLogOffAPI(Number(deviceID));
                     });
                 }.bind(_this));
             }
         });
     }
 
-    private destroy(): void {
-        this.initSerivce.destroy();
-        this.router.navigate(['/signin'], {replaceUrl: true});
+    private callLogOffAPI(deviceID: number): void {
+        const _this = this;
+        this.authApiService.LogOff(Number(deviceID)).subscribe({
+            next() {
+                _this.initSerivce.destroy();
+                _this.router.navigate(['/signin'], {replaceUrl: true});
+            },
+            error(e) {
+                Swal.fire('Logoff error', e.message, 'error');
+            }
+        });
     }
 
     public sendEmail(): void {

@@ -14,6 +14,7 @@ import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -21,26 +22,21 @@ import { Values } from '../values';
 
 export class MessageService {
     public conversation: Conversation;
-    public localMessages: Message[];
-    public messageAmount = 15;
-    public noMoreMessages = true;
+    public localMessages: Message[] = [];
+    public noMoreMessages = false;
     public loadingMore = false;
     public belowWindowPercent = 0;
     public newMessages = false;
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
-    public electron = false;
     public me: KahlaUser;
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
-        private cacheService: CacheService
-    ) {
-        if (navigator.userAgent.toLowerCase().includes('electron')) {
-            this.electron = true;
-        }
-    }
+        private cacheService: CacheService,
+        private _electronService: ElectronService
+    ) {}
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -48,8 +44,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id);
-                    this.messageAmount++;
+                    this.getMessages(true, this.conversation.id, -1, 1);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -73,8 +68,8 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number): void {
-        this.conversationApiService.GetMessage(id, this.messageAmount)
+    public getMessages(getDown: boolean, id: number, skipTill: number, take: number): void {
+        this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
                 map(t => t.items)
             )
@@ -88,9 +83,9 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
-                    if (t.content.startsWith('[video]') || t.content.startsWith('[img]')) {
-                        const filekey = this.uploadService.getFileKey(t.content);
-                        if (filekey === -1 || isNaN(filekey)) {
+                    if (t.content.match(/^\[(video|img)\].*/)) {
+                        const fileKey = this.uploadService.getFileKey(t.content);
+                        if (fileKey === -1 || isNaN(fileKey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
                             let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
@@ -112,29 +107,43 @@ export class MessageService {
                                 '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
                                 this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
-                    } else if (!t.content.startsWith('[file]')) {
+                    } else if (t.content.match(/^\[(file|audio)\].*/)) {
+                        const fileKey = this.uploadService.getFileKey(t.content);
+                        if (fileKey === -1 || isNaN(fileKey)) {
+                            t.content = '';
+                        }
+                    } else {
                         t.content = he.encode(t.content);
-                        t.content = Autolinker.link(t.content, { stripPrefix: false});
+                        t.content = Autolinker.link(t.content, {
+                            stripPrefix: false,
+                            className : 'chat-inline-link'
+                        });
                     }
                 });
-                if (messages.length < 15) {
+                if (messages.length < take) {
                     this.noMoreMessages = true;
-                } else {
-                    this.noMoreMessages = false;
                 }
-                if (typeof this.localMessages !== 'undefined' && this.localMessages !== null &&
-                    this.localMessages.length > 0 && messages.length > 0) {
-                    if (!getDown && messages[0].id === this.localMessages[0].id) {
-                        this.noMoreMessages = true;
-                    }
-                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && messages[messages.length - 1].id !==
-                        this.localMessages[this.localMessages.length - 1].id && this.belowWindowPercent > 0) {
+                if (this.localMessages.length > 0 && messages.length > 0) {
+                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && take === 1 && this.belowWindowPercent > 0) {
                         this.newMessages = true;
                     } else {
                         this.newMessages = false;
                     }
                 }
-                this.localMessages = messages;
+                if (skipTill === -1) {
+                    if (take === 1 && messages[0].senderId === this.me.id && !messages[0].content.match(/^\[(img|file|video|audio)\].*/)) {
+                        for (let index = 0; index < this.localMessages.length; index++) {
+                            if (this.localMessages[index].local) {
+                                this.localMessages[index] = messages[0];
+                                break;
+                            }
+                        }
+                    } else {
+                        this.localMessages.push(...messages);
+                    }
+                } else {
+                    this.localMessages.unshift(...messages);
+                }
                 if (getDown && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
@@ -157,8 +166,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldOffsetHeight = document.documentElement.offsetHeight;
-            this.messageAmount += 15;
-            this.getMessages(false, this.conversation.id);
+            this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
 
@@ -173,9 +181,8 @@ export class MessageService {
 
     public resetVariables(): void {
         this.conversation = null;
-        this.localMessages = null;
-        this.messageAmount = 15;
-        this.noMoreMessages = true;
+        this.localMessages = [];
+        this.noMoreMessages = false;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
@@ -208,7 +215,7 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.sender.id !== this.me.id && this.electron) {
+        if (!event.muted && event.sender.id !== this.me.id && this._electronService.isElectronApp) {
             event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
             event.content = this.cacheService.modifyMessage(event.content);
             const notify = new Notification(event.sender.nickName, {

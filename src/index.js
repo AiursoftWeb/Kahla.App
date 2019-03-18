@@ -1,5 +1,5 @@
 const electron = require('electron')
-const { Menu, Tray, Notification } = require('electron')
+const { Menu, Tray, Notification, shell } = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
@@ -9,13 +9,19 @@ const platform = require('os').platform()
 let mainWindow
 app.showExitNotif = true
 
+const singleLock = app.requestSingleInstanceLock();
+
+if (!singleLock) {
+    app.quit();
+}
+
 function createWindow() {
     if (platform === 'darwin') {
         mainWindow = new BrowserWindow(
             {
                 width: 512,
                 height: 768,
-                icon: __dirname + '/assets/48x48.png',
+                icon: __dirname + '/assets/144x144.png',
                 titleBarStyle: 'hiddenInset',
                 minWidth: 200,
                 minHeight: 300
@@ -25,7 +31,7 @@ function createWindow() {
             {
                 width: 512,
                 height: 768,
-                icon: __dirname + '/assets/48x48.png',
+                icon: __dirname + '/assets/144x144.png',
                 minWidth: 200,
                 minHeight: 300
             })
@@ -53,6 +59,11 @@ function createWindow() {
             mainWindow.hide()
         }
     });
+
+    mainWindow.webContents.on("new-window", (event, url) => {
+        event.preventDefault()
+        shell.openExternal(url)
+    })
 }
 
 app.on('ready', createWindow)
@@ -75,12 +86,18 @@ app.on('activate', function () {
     }
 })
 
+app.on("second-instance",(event, commandLine, workingDirectory) => {
+    if(mainWindow !== null){
+        mainWindow.show();
+    }
+});
+
 let tray = null
 app.on('ready', () => {
     if (platform === 'darwin') {
         tray = new Tray(__dirname + '/assets/KahlaTemplate.png')
     } else {
-        tray = new Tray(__dirname + '/assets/48x48.png')
+        tray = new Tray(__dirname + '/assets/144x144.png')
     }
     tray.addListener('double-click', function () { mainWindow.show(); })
     const contextMenu = Menu.buildFromTemplate([

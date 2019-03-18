@@ -218,16 +218,17 @@ export class UploadService {
         }
     }
 
-    public getAudio(event: MouseEvent, message: string): void {
+    public getAudio(target: HTMLElement, message: string): void {
         const filekey = this.getFileKey(message);
         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
             this.filesApiService.GetFileURL(filekey).subscribe(response => {
                 if (response.code === 0) {
-                    (<HTMLElement>event.target).style.display = 'none';
+                    target.style.display = 'none';
                     const audioElement = document.createElement('audio');
                     audioElement.src = response.downloadPath;
                     audioElement.controls = true;
-                    (<HTMLElement>event.target).parentElement.appendChild(audioElement);
+                    target.parentElement.appendChild(audioElement);
+                    audioElement.play();
                 }
             });
         }

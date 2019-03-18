@@ -7,3 +7,31 @@
     color: #FFF;
     background-color: #2c3e50;
 }
+
+.theme-light a {
+    color: #1e3799;
+}
+
+.theme-dark a {
+    color: #3498db;
+}
+
+.theme-dark .left .chat-inline-link {
+    color: #74b9ff;
+}
+
+.right .chat-inline-link {
+    color: white;
+}
+
+.theme-dark .swal2-popup {
+    background-color: #2f3640;
+}
+
+.theme-dark .swal2-popup .swal2-content {
+    color:#FFF;
+}
+
+.theme-dark .swal2-popup .swal2-title {
+    color:#FFF;
+}

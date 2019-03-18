@@ -3,36 +3,24 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: ''
-assignees: ''
+assignees: 'Anduin2017'
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+[//]: <Don't delete any header! Please fill out the form or your bug report will not be considered!> 
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Environment
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- Environment: `Staging(Pre-release)\Production`
+- Last git commit: `aaaaaa`
+- Platform: `Web Desktop\Web Mobile\Electron\Cordova\PWA`
+- Browser: `Chrome\Edge\Firefox\Safari\Others`
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## How to repro
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+- Step 1: 
+- Step 2: 
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+## Other information
 
-**Additional context**
-Add any other context about the problem here.
+Nothing.

@@ -36,6 +36,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private mediaRecorder;
     private forceStopTimeout;
     private oldContent: string;
+    private unread = 15;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -99,7 +100,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    this.conversationID = params['id'];
+                    this.conversationID = params.id;
+                    this.unread = params.unread;
+                    if (!this.unread || this.unread > 50 || this.unread < 15) {
+                        this.unread = 15;
+                    }
                     return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
@@ -114,7 +119,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, this.conversationID);
+                    this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
                     if (conversation.anotherUserId) {
@@ -165,25 +170,34 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         const tempMessage = new Message();
         tempMessage.content = he.encode(this.content);
-        tempMessage.content = Autolinker.link(tempMessage.content, { stripPrefix: false});
+        tempMessage.content = Autolinker.link(tempMessage.content, {
+            stripPrefix: false,
+            className : 'chat-inline-link'
+        });
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
+        const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
-            .subscribe(() => {}, () => {
-                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                if (unsentMessages.get(this.conversationID) && (<Array<string>>unsentMessages.get(this.conversationID)).length > 0) {
-                    const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
-                    tempArray.push(encryptedMessage);
-                    unsentMessages.set(this.conversationID, tempArray);
-                } else {
-                    unsentMessages.set(this.conversationID, [encryptedMessage]);
+            .subscribe({
+                error(e) {
+                    if (e.status === 0 || e.status === 503) {
+                        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                        if (unsentMessages.get(_this.conversationID) &&
+                            (<Array<string>>unsentMessages.get(_this.conversationID)).length > 0) {
+                            const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
+                            tempArray.push(encryptedMessage);
+                            unsentMessages.set(_this.conversationID, tempArray);
+                        } else {
+                            unsentMessages.set(_this.conversationID, [encryptedMessage]);
+                        }
+                        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                    }
                 }
-                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
             });
         this.content = '';
         const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');

@@ -3,7 +3,7 @@ import { OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { Themes } from '../Models/Themes';
-import { MessageService } from '../Services/MessageService';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'app-kahla',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     constructor(
         public initService: InitService,
         private elementRef: ElementRef,
-        private messageService: MessageService) {
+        private _electronService: ElectronService) {
     }
 
     @HostListener('window:popstate', [])
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     @HostListener('window:load', [])
     onLoad() {
         if ('Notification' in window && 'serviceWorker' in navigator) {
-            if (!this.messageService.electron) {
+            if (!this._electronService.isElectronApp) {
                 navigator.serviceWorker.register('/sw.js').then(function (registration) {
                     // Registration was successful
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);

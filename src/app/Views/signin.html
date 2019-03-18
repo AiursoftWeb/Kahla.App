@@ -1,7 +1,7 @@
 <div class="signin-back">
     <div class="auth-page">
         <div class="auth-header">
-            <img src="assets/KahlaWhite.png">
+            <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
         </div>
         <div class="auth-content">
@@ -24,7 +24,7 @@
                 <button *ngIf="connecting" disabled="disabled" class="button white" i18n="@@Connecting" type="button">
                     Connecting...
                 </button>
-                <a class="button white login" href="{{ OAuthURL }}" *ngIf="!messageService.electron">
+                <a class="button white login" href="{{ OAuthURL }}" *ngIf="!_electronService.isElectronApp">
                     Sign in with browser(OAuth)
                 </a>
                 <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
