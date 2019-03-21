@@ -44,7 +44,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id, -1, 1);
+                    this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -131,15 +131,10 @@ export class MessageService {
                     }
                 }
                 if (skipTill === -1) {
-                    if (take === 1 && messages[0].senderId === this.me.id && !messages[0].content.match(/^\[(img|file|video|audio)\].*/)) {
-                        for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].local) {
-                                this.localMessages[index] = messages[0];
-                                break;
-                            }
-                        }
+                    if (this.localMessages.length > 0) {
+                        this.localMessages.splice(this.localMessages.length - messages.length, messages.length, ...messages);
                     } else {
-                        this.localMessages.push(...messages);
+                        this.localMessages = messages;
                     }
                 } else {
                     this.localMessages.unshift(...messages);
