@@ -8,6 +8,7 @@ import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
+import { DeviesApiService } from './DevicesApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +34,8 @@ export class InitService {
         private messageService: MessageService,
         private cacheService: CacheService,
         private conversationApiService: ConversationApiService,
-        private _electronService: ElectronService) {
+        private _electronService: ElectronService,
+        private devicesApiService: DeviesApiService) {
     }
 
     public init(): void {
@@ -158,7 +160,7 @@ export class InitService {
                     if (sub === null) {
                         return registration.pushManager.subscribe(_this.options)
                             .then(function(pushSubscription) {
-                                return _this.authApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                                return _this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
                                     pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                     .subscribe(function(result) {
                                         localStorage.setItem('deviceID', result.value.toString());
@@ -177,7 +179,7 @@ export class InitService {
                 return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
                     registration.pushManager.subscribe(_this.options)
                         .then(function(pushSubscription) {
-                            return _this.authApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
+                            return _this.devicesApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
                                 pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();
                         });

@@ -6,7 +6,7 @@ import { Request } from '../Models/Request';
 import { Values } from '../values';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
-import { AuthApiService } from './AuthApiService';
+import { DeviesApiService } from './DevicesApiService';
 
 @Injectable()
 export class CacheService {
@@ -16,7 +16,7 @@ export class CacheService {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private authApiService: AuthApiService
+        private devicesApiService: DeviesApiService
     ) { }
 
     public reset() {
@@ -76,7 +76,7 @@ export class CacheService {
     }
 
     public updateDevice(): void {
-        this.authApiService.MyDevices().subscribe(response => {
+        this.devicesApiService.MyDevices().subscribe(response => {
             response.items.forEach(item => {
                 if (item.name !== null && item.name.length >= 0) {
                     const deviceName = [];
