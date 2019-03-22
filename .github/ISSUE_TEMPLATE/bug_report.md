@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a bug report to help us improve.
 title: ''
 labels: ''
 assignees: 'Anduin2017'
@@ -20,6 +20,13 @@ assignees: 'Anduin2017'
 
 - Step 1: 
 - Step 2: 
+- Step 3: 
+
+And then...<What happened?>
+
+## Expected situation
+
+I expect that...
 
 ## Other information
 
