@@ -41,18 +41,27 @@ export class CheckService {
     }
 
     private redirectToDownload(downloadAddress: string): void {
-        Swal.fire({
-            title: 'There is a new version of Kahla!',
-            text: 'Do you want to download the latest version of Kahla now?',
-            type: 'warning',
-            confirmButtonText: 'Download now',
-            cancelButtonText: 'Remind me later',
-            showCancelButton: true
-        }).then(ToDownload => {
-            if (ToDownload.value) {
-                this.openWebPage(downloadAddress);
-            }
-        });
+        if (window.hasOwnProperty('cordova') || this._electronService.isElectronApp) {
+            Swal.fire({
+                title: 'There is a new version of Kahla!',
+                text: 'Do you want to download the latest version of Kahla now?',
+                type: 'warning',
+                confirmButtonText: 'Download now',
+                cancelButtonText: 'Remind me later',
+                showCancelButton: true
+            }).then(ToDownload => {
+                if (ToDownload.value) {
+                    this.openWebPage(downloadAddress);
+                }
+            });
+        } else {
+            // in a browser
+            Swal.fire({
+                title: 'There is a new version of Kahla!',
+                text: 'Please refresh then reopen the page to use the latest version.',
+                type: 'warning'
+            });
+        }
     }
 
     public openWebPage(url: string): void {

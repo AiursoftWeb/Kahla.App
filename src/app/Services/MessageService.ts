@@ -44,7 +44,7 @@ export class MessageService {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id, -1, 1);
+                    this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -130,16 +130,28 @@ export class MessageService {
                         this.newMessages = false;
                     }
                 }
+                if (this.localMessages.length > 1000) {
+                    this.localMessages.splice(0, 500);
+                }
                 if (skipTill === -1) {
-                    if (take === 1 && messages[0].senderId === this.me.id && !messages[0].content.match(/^\[(img|file|video|audio)\].*/)) {
+                    if (this.localMessages.length > 0 && messages.length > 0) {
+                        let firstLocalIndex = 0;
+                        let firstLocalID = Number.MAX_SAFE_INTEGER;
                         for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].local) {
-                                this.localMessages[index] = messages[0];
+                            if (this.localMessages[index].local && this.localMessages[index].id < firstLocalID) {
+                                firstLocalIndex = index;
+                                firstLocalID = this.localMessages[index].id;
+                            }
+                            if (this.localMessages[index].id === messages[0].id) {
+                                this.localMessages.splice(index, messages.length, ...messages);
                                 break;
                             }
                         }
+                        if (this.localMessages[this.localMessages.length - 1].local) {
+                            this.localMessages.splice(firstLocalIndex, this.localMessages.length - firstLocalIndex, ...messages);
+                        }
                     } else {
-                        this.localMessages.push(...messages);
+                        this.localMessages = messages;
                     }
                 } else {
                     this.localMessages.unshift(...messages);

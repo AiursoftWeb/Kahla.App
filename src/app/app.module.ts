@@ -40,6 +40,7 @@ import { GroupsApiService } from './Services/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
 import { HeaderService } from './Services/HeaderService';
+import { DeviesApiService } from './Services/DevicesApiService';
 
 @NgModule({
     imports: [
@@ -84,7 +85,8 @@ import { HeaderService } from './Services/HeaderService';
         GroupsApiService,
         MessageService,
         InitService,
-        HeaderService
+        HeaderService,
+        DeviesApiService
     ],
     bootstrap: [AppComponent]
 })

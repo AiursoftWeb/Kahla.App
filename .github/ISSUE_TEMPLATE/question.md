@@ -1,16 +1,16 @@
 ---
-name: Feature request
-about: Request a feature for this project.
+name: Question
+about: Ask us a question about this project.
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-## Describe the solution you'd like
+## What do you want to know?
 
-<!--A clear and concise description of what you want to happen.-->
-When I was...
+<!--A clear and concise description of what you want to know.-->
+Hello, I want to know if this project could...
 
 ## Describe alternatives you've considered
 
