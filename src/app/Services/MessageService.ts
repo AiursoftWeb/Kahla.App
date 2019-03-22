@@ -131,8 +131,22 @@ export class MessageService {
                     }
                 }
                 if (skipTill === -1) {
-                    if (this.localMessages.length > 0) {
-                        this.localMessages.splice(this.localMessages.length - messages.length, messages.length, ...messages);
+                    if (this.localMessages.length > 0 && messages.length > 0) {
+                        let firstLocalIndex = 0;
+                        let firstLocalID = Number.MAX_SAFE_INTEGER;
+                        for (let index = 0; index < this.localMessages.length; index++) {
+                            if (this.localMessages[index].local && this.localMessages[index].id < firstLocalID) {
+                                firstLocalIndex = index;
+                                firstLocalID = this.localMessages[index].id;
+                            }
+                            if (this.localMessages[index].id === messages[0].id) {
+                                this.localMessages.splice(index, messages.length, ...messages);
+                                break;
+                            }
+                        }
+                        if (this.localMessages[this.localMessages.length - 1].local) {
+                            this.localMessages.splice(firstLocalIndex, this.localMessages.length - firstLocalIndex, ...messages);
+                        }
                     } else {
                         this.localMessages = messages;
                     }
