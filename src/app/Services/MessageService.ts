@@ -130,6 +130,9 @@ export class MessageService {
                         this.newMessages = false;
                     }
                 }
+                if (this.localMessages.length > 1000) {
+                    this.localMessages.splice(0, 500);
+                }
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
                         let firstLocalIndex = 0;
