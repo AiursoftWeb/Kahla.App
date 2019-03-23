@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DeviesApiService } from './DevicesApiService';
+import { ThemeService } from './ThemeService';
 
 @Injectable({
     providedIn: 'root'
@@ -35,10 +36,11 @@ export class InitService {
         private cacheService: CacheService,
         private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
+        private themeService: ThemeService,
         private devicesApiService: DeviesApiService) {
     }
 
-    public init(): void {
+    public init(elementRef: ElementRef): void {
         this.online = navigator.onLine;
         this.connecting = true;
         this.closeWebSocket = false;
@@ -51,6 +53,7 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        this.themeService.ApplyThemeFromRemote(elementRef, p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
                             this.updateSubscription();
