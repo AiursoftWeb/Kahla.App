@@ -40,6 +40,7 @@ export class MessageService {
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
+        const fireAlert  = window.hasOwnProperty('cordova') || this._electronService.isElectronApp;
         switch (ev.type) {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
@@ -54,15 +55,21 @@ export class MessageService {
                 }
                 break;
             case EventType.NewFriendRequest:
-                Swal.fire('Friend request', 'You have got a new friend request!', 'info');
+                if (fireAlert) {
+                    Swal.fire('Friend request', 'You have got a new friend request!', 'info');
+                }
                 this.cacheService.autoUpdateRequests();
                 break;
             case EventType.WereDeletedEvent:
-                Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                if (fireAlert) {
+                    Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                }
                 this.cacheService.autoUpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
-                Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
+                if (fireAlert) {
+                    Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
+                }
                 this.cacheService.autoUpdateConversation();
                 break;
         }
