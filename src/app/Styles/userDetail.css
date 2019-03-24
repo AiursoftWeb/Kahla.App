@@ -86,3 +86,7 @@ progress {
   font-size: 13px;
   color: #999999
 }
+
+a {
+  text-decoration: none;
+}
