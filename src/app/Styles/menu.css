@@ -136,3 +136,7 @@
 .device-img, .device-text {
     grid-column: unset !important;
 }
+
+a {
+    text-decoration: none;
+}
