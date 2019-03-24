@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DeviesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
+import Swal from 'sweetalert2';
 
 @Injectable({
     providedIn: 'root'
@@ -45,6 +46,13 @@ export class InitService {
         this.connecting = true;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
+        if (navigator.userAgent.includes('Trident', 0)) {
+            Swal.fire('Oops, it seems that you are opening Kahla in IE.',
+            'Please note that Kahla doesn\'t support IE :(<br/>' +
+            'We recommend upgrading to the latest <a href="https://chrome.google.com">Google Chrome</a>, ' +
+            '<a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>, ' +
+            'or <a href="https://mozilla.org/firefox/">Firefox</a>', 'warning');
+        }
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/signin'], {replaceUrl: true});
