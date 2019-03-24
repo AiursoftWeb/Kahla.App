@@ -107,7 +107,7 @@ self.addEventListener('push', function(event) {
                     }
                 });
     
-                if (!data.sentByMe && showNotification) {
+                if (showNotification) {
                     return self.registration.showNotification(title, {
                         body: message,
                         icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
