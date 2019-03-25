@@ -40,7 +40,7 @@ export class MessageService {
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
-        const fireAlert  = window.hasOwnProperty('cordova') || this._electronService.isElectronApp;
+        const fireAlert = localStorage.getItem('deviceID');
         switch (ev.type) {
             case EventType.NewMessage:
                 const evt = ev as NewMessageEvent;
