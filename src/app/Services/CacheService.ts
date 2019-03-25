@@ -114,7 +114,7 @@ export class CacheService {
                         deviceName.push('Safari');
                     } else if (item.name.includes('Opera') || item.name.includes('OPR')) {
                         deviceName.push('Opera');
-                    } else if (item.name.includes('MSIE')) {
+                    } else if (item.name.match(/MSIE|Trident/)) {
                         deviceName.push('Internet Explorer');
                     } else {
                         deviceName.push('Unknown browser');

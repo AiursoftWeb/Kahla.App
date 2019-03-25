@@ -46,12 +46,14 @@ export class InitService {
         this.connecting = true;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
-        if (navigator.userAgent.includes('Trident', 0)) {
-            Swal.fire('Oops, it seems that you are opening Kahla in IE.',
-            'Please note that Kahla doesn\'t support IE :(<br/>' +
-            'We recommend upgrading to the latest <a href="https://chrome.google.com">Google Chrome</a>, ' +
-            '<a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>, ' +
-            'or <a href="https://mozilla.org/firefox/">Firefox</a>', 'warning');
+        if (navigator.userAgent.match(/MSIE|Trident/)) {
+            Swal.fire(
+                'Oops, it seems that you are opening Kahla in IE.',
+                'Please note that Kahla doesn\'t support IE :(<br/>' +
+                'We recommend upgrading to the latest <a href="https://mozilla.org/firefox/">Firefox</a>, ' +
+                '<a href="https://chrome.google.com">Google Chrome, </a>' +
+                'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
+            );
         }
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {

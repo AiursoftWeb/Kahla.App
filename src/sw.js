@@ -73,7 +73,11 @@ self.addEventListener('push', function(event) {
         return;
     }
     let data = event.data.json();
+    const pushTitle = 'Aiursoft Push System';
+    const fileLink = 'https://oss.aiursoft.com/download/fromkey/';
+    const imageLink = fileLink + '4251';
     if (data.type == 0 && !data.muted) {
+        // new message
         const title = data.sender.nickName;
         let message = data.content;
         const aesKey = data.aesKey;
@@ -110,12 +114,36 @@ self.addEventListener('push', function(event) {
                 if (showNotification) {
                     return self.registration.showNotification(title, {
                         body: message,
-                        icon: 'https://oss.aiursoft.com/download/fromkey/' + data.sender.headImgFileKey,
+                        icon: fileLink + data.sender.headImgFileKey,
                         renotify: true,
                         tag: data.conversationId.toString()
                     });
                 }
             })
         );
+    } else if (data.type == 1) {
+        // new friend request
+        self.registration.showNotification(pushTitle, {
+            body: 'You have got a new friend request!',
+            icon: imageLink,
+            renotify: true,
+            tag: -1
+        });
+    } else if (data.type == 2) {
+        // were deleted event
+        self.registration.showNotification(pushTitle, {
+            body: 'You were deleted by one of your friends from his friend list.',
+            icon: imageLink,
+            renotify: true,
+            tag: -1
+        });
+    } else if (data.type == 3) {
+        // friend accepted event
+        self.registration.showNotification(pushTitle, {
+            body: 'Your friend request was accepted!',
+            icon: imageLink,
+            renotify: true,
+            tag: -1
+        });
     }
 });
