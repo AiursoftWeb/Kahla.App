@@ -75,7 +75,7 @@ self.addEventListener('push', function(event) {
     let data = event.data.json();
     const pushTitle = 'Aiursoft Push System';
     const fileLink = 'https://oss.aiursoft.com/download/fromkey/';
-    const imageLink = fileLink + '667';
+    const imageLink = fileLink + '4251';
     if (data.type == 0 && !data.muted) {
         // new message
         const title = data.sender.nickName;
