@@ -12,7 +12,7 @@ Try it here: [web.kahla.app](https://web.kahla.app)
 
 Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
 
-Kahla is built with Angular 7 and typescript. And [Kahla Server](https://github.com/AiursoftWeb/Kahla) is built with .Net Core.
+Kahla is built with Angular 7 and typescript. And [Kahla Server](https://github.com/AiursoftWeb/Kahla) is built with .NET Core.
 
 For more document about Kahla project and Kahla API, please view document [here](https://wiki.aiursoft.com/ReadDoc/Kahla/What%20is%20Kahla.md).
 
