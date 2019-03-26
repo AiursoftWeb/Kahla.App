@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs/';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
 import { CacheService } from '../Services/CacheService';
@@ -29,7 +29,6 @@ export class LocalSearchComponent implements OnInit {
 
     public ngOnInit(): void {
         this.results = this.searchTerms.pipe(
-            debounceTime(300),
             distinctUntilChanged(),
             filter(term => {
                 if (term.trim().length > 0) {
