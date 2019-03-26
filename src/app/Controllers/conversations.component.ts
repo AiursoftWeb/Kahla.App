@@ -22,7 +22,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.headerService.title = 'Kahla';
             this.headerService.returnButton = false;
             this.headerService.button = true;
-            this.headerService.routerLink = '/addfriend';
+            this.headerService.routerLink = '/localsearch';
             this.headerService.buttonIcon = 'search';
             this.headerService.shadow = false;
         }
