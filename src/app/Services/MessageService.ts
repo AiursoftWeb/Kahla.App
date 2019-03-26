@@ -50,7 +50,7 @@ export class MessageService {
                         this.showNotification(evt);
                     }
                 } else {
-                    this.cacheService.autoUpdateConversation();
+                    this.cacheService.UpdateConversation();
                     this.showNotification(evt);
                 }
                 break;
@@ -64,13 +64,13 @@ export class MessageService {
                 if (fireAlert) {
                     Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
                 }
-                this.cacheService.autoUpdateConversation();
+                this.cacheService.UpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
                 if (fireAlert) {
                     Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
                 }
-                this.cacheService.autoUpdateConversation();
+                this.cacheService.UpdateConversation();
                 break;
         }
     }
@@ -190,7 +190,7 @@ export class MessageService {
     }
 
     public updateFriends(): void {
-        this.cacheService.autoUpdateFriends();
+        this.cacheService.UpdateConversation();
         this.cacheService.autoUpdateRequests();
     }
 

@@ -17,6 +17,7 @@ import { ChangePasswordComponent } from '../Controllers/changePassword.component
 import { DiscoverComponent } from '../Controllers/discover.component';
 import { DevicesComponent } from '../Controllers/devices.component';
 import { ThemeComponent } from '../Controllers/theme.component';
+import { LocalSearchComponent } from '../Controllers/localSearch.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -37,7 +38,8 @@ const routes: Routes = [
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },
     { path: 'devices', component: DevicesComponent },
-    { path: 'theme' , component: ThemeComponent},
+    { path: 'theme', component: ThemeComponent},
+    { path: 'localsearch', component: LocalSearchComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

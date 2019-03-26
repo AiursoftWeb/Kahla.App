@@ -30,12 +30,14 @@ export class SettingsComponent implements OnInit {
         }
 
     public ngOnInit(): void {
-        this.authApiService.Me().subscribe(p => {
-            if (p.code === 0) {
-                this.messageService.me = p.value;
-                this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-            }
-        });
+        if (!this.messageService.me) {
+            this.authApiService.Me().subscribe(p => {
+                if (p.code === 0) {
+                    this.messageService.me = p.value;
+                    this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                }
+            });
+        }
     }
 
     public SignOut(): void {

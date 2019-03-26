@@ -56,7 +56,7 @@ export class UserComponent implements OnInit {
                 this.friendsApiService.DeleteFriend(id)
                     .subscribe(response => {
                         Swal.fire('Success', response.message, 'success');
-                        this.cacheService.autoUpdateConversation();
+                        this.cacheService.UpdateConversation();
                         this.router.navigate(['/friends']);
                     });
             }
