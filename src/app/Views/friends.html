@@ -47,7 +47,7 @@
     <div class="text" i18n="@@AboutKahla">Discover Friends</div>
 </div>
 <div class="holder"></div>
-<div *ngFor="let info of cacheService.cachedData.friendList" class="friend" (click)="detail(info)">
+<div *ngFor="let info of cacheService.cachedData.conversations" class="friend" (click)="detail(info)">
     <img class="user-img" src="{{info.avatarURL ? info.avatarURL : loadingImgURL}}?w=72&h=72">
     <div class="name">
         {{info.displayName}}
