@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { KahlaUser } from '../Models/KahlaUser';
 import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
+import { SearchResult } from '../Models/SearchResult';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -13,7 +13,7 @@ import { HeaderService } from '../Services/HeaderService';
 
 })
 export class AddFriendComponent implements OnInit {
-    public users: Observable<KahlaUser[]> = new Observable<KahlaUser[]>();
+    public users: Observable<SearchResult> = new Observable<SearchResult>();
     public loadingImgURL = Values.loadingImgURL;
     private searchTerms = new BehaviorSubject<string>('');
     public searching = false;
@@ -62,15 +62,9 @@ export class AddFriendComponent implements OnInit {
                         return false;
                 }
             }),
-            switchMap(term => this.friendsApiService.SearchFriends(term.trim(), this.searchNumbers)),
+            switchMap(term => this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers)),
             map(t => {
-                this.resultLength = t.items.length;
-                this.noMoreUsers = t.items.length < this.searchNumbers ? true : false;
-                t.items.forEach(item => {
-                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
-                });
-                this.searching = false;
-                return t.items;
+                return t;
             })
         );
     }

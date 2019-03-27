@@ -50,9 +50,9 @@ export class MessageService {
                         this.showNotification(evt);
                     }
                 } else {
-                    this.cacheService.UpdateConversation();
                     this.showNotification(evt);
                 }
+                this.cacheService.UpdateConversation();
                 break;
             case EventType.NewFriendRequest:
                 if (fireAlert) {
