@@ -51,7 +51,7 @@
     border-bottom-style: solid;
     cursor: pointer;
     display: grid;
-    grid-template-columns: 20% 40% 40%;
+    grid-template-columns: 50% 50%;
     outline: none;
     user-select: none;
 }
@@ -75,6 +75,7 @@
 .result .sender {
     font-size: 15px;
     font-weight: 400;
+    position: relative;
 }
 
 .result i {
@@ -94,4 +95,28 @@ h3 {
 
 .searchGroupIamge {
     position: relative;
+}
+
+.discoverUsers {
+    grid-template-columns: 20% 40% 40%;
+}
+
+.dot {
+    position: unset !important;
+}
+
+.selectResult {
+    width: 100%;
+}
+
+:host-context(.theme-light) .selectResult {
+    background-color: #a3aab4;
+}
+
+:host-context(.theme-light) .selected{
+    background-color: #FFF;
+}
+
+:host-context(.theme-dark) .selected{
+    background-color: #a3aab4;
 }

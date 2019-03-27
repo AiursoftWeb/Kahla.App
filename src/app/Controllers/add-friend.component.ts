@@ -1,29 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs/';
+import { Component } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { KahlaUser } from '../Models/KahlaUser';
-import { debounceTime, distinctUntilChanged, switchMap, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
+import { SearchResult } from '../Models/SearchResult';
+import Swal from 'sweetalert2';
+import { GroupsApiService } from '../Services/GroupsApiService';
+import { Router } from '@angular/router';
+import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
     styleUrls: ['../Styles/add-friend.css',
-                '../Styles/button.css']
+                '../Styles/button.css',
+                '../Styles/reddot.css']
 
 })
-export class AddFriendComponent implements OnInit {
-    public users: Observable<KahlaUser[]> = new Observable<KahlaUser[]>();
+export class AddFriendComponent {
+    public results: SearchResult;
     public loadingImgURL = Values.loadingImgURL;
-    private searchTerms = new BehaviorSubject<string>('');
     public searching = false;
     public searchMode = 0;
-    public resultLength = -1;
-    public noMoreUsers = false;
-    private searchNumbers = 0;
+    public showUsers = true;
+    public searchNumbers = 0;
 
     constructor(
         private friendsApiService: FriendsApiService,
+        private groupsApiService: GroupsApiService,
+        private router: Router,
+        private cacheService: CacheService,
         private headerService: HeaderService) {
             this.headerService.title = 'Add Friend';
             this.headerService.returnButton = true;
@@ -31,56 +35,63 @@ export class AddFriendComponent implements OnInit {
             this.headerService.shadow = false;
         }
 
-    public ngOnInit(): void {
-        this.users = this.searchTerms.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            filter(term => {
-                switch (this.searchMode) {
-                    case 0:    // auto search
-                        if (term.trim().length >= 3) {
-                            this.searching = true;
-                            this.searchNumbers = 20;
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    case 1:    // force search
-                    case 2:    // load more
-                        if (term.trim().length > 0) {
-                            this.searching = true;
-                            if (this.searchMode === 1) {
-                                this.searchNumbers = 20;
-                            } else {
-                                this.searchNumbers += 20;
-                            }
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    default:
-                        return false;
-                }
-            }),
-            switchMap(term => this.friendsApiService.SearchFriends(term.trim(), this.searchNumbers)),
-            map(t => {
-                this.resultLength = t.items.length;
-                this.noMoreUsers = t.items.length < this.searchNumbers ? true : false;
-                t.items.forEach(item => {
-                    item.avatarURL = Values.fileAddress + item.headImgFileKey;
-                });
-                this.searching = false;
-                return t.items;
-            })
-        );
-    }
-
     public search(term: string, mode: number): void {
         this.searchMode = mode;
-        if (mode === 0) {    // auto search
-            this.searchTerms.next(term.trim());
-        } else {    // force search or load more
-            this.searchTerms.next(this.searchTerms.value + ' ');
+        if (mode === 0) {
+            this.searchNumbers = 20;
+        } else {
+            // load more
+            this.searchNumbers += 20;
+        }
+        this.callSearchApi(term);
+    }
+
+    private callSearchApi(term: string): void {
+        this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
+            result.users.forEach(user => {
+                user.avatarURL = Values.fileAddress + user.headImgFileKey;
+            });
+            result.groups.forEach(group => {
+                group.avatarURL = Values.fileAddress + group.groupImageKey;
+            });
+            this.results = result;
+        });
+    }
+
+    public showUsersResults(selectUsers: boolean): void {
+        this.showUsers = selectUsers;
+    }
+
+    public joinGroup(groupName: string, privateGroup: boolean, id: number) {
+        if (privateGroup) {
+            Swal.fire({
+                title: 'Enter group password.',
+                input: 'text',
+                inputAttributes: {
+                    maxlength: '100'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Join'
+            }).then((result) => {
+                if (result.value) {
+                    this.joinGroupWithPassword(groupName, result.value, id);
+                }
+            });
+        } else {
+            this.joinGroupWithPassword(groupName, '', id);
         }
     }
+
+    private joinGroupWithPassword(groupName: string, password: string, id: number) {
+        this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
+            if (response.code === 0) {
+                this.cacheService.UpdateConversation();
+                this.router.navigate(['/']);
+            } else if (response.code === -6) {
+                this.router.navigate(['/talking/' + id]);
+            } else {
+                Swal.fire('Error', response.message, 'error');
+            }
+        });
+}
 }

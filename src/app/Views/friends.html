@@ -5,8 +5,8 @@
         <div class="icon">
             <i class="fa fa-user-plus"></i>
         </div>
-        <div class="words" i18n="@@SearchFriend">
-            Search Friend
+        <div class="words" i18n="@@GlobalSearch">
+            Global Search
         </div>
     </a>
     <a class="friends-button" routerLink="/friendrequests">
@@ -23,13 +23,11 @@
             Requests
         </div>
     </a>
-    <a class="friends-button" routerLink="/join-group">
+    <a class="friends-button" routerLink="/discover">
         <div class="icon">
-            <i class="fa fa-user-plus"></i>
+            <i class="fa fa fa-magic"></i>
         </div>
-        <div class="words" i18n="@@JoinGroup">
-            Search Group
-        </div>
+        <div class="words" i18n="@@Discover">Discover Friends</div>
     </a>
     <a class="friends-button" (click)="createGroup()">
         <div class="icon">
@@ -39,12 +37,6 @@
             Create Group
         </div>
     </a>
-</div>
-<div class="menu-button" routerLink="/discover">
-    <div class="img">
-        <i class="fa fa-magic "></i>
-    </div>
-    <div class="text" i18n="@@AboutKahla">Discover Friends</div>
 </div>
 <div class="holder"></div>
 <div *ngFor="let info of cacheService.cachedData.conversations" class="friend" (click)="detail(info)">

@@ -101,6 +101,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     private createPrivateGroup(groupName: string, password: string): void {
         this.groupsApiService.CreateGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
+                this.cacheService.UpdateConversation();
                 this.router.navigate(['/talking', response.value]);
             } else {
                 Swal.fire('Can\'t create group', response.message, 'error');

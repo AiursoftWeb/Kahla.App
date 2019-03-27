@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, filter } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -44,6 +44,7 @@ export class GroupComponent implements OnInit {
         this.route.params
             .pipe(
                 switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                filter(t => t.code === 0),
                 map(t => t.value)
             )
             .subscribe(conversation => {
