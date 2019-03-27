@@ -25,6 +25,12 @@
 </div>
 
 <div class="menu-holder"></div>
+<div class="menu-button" *ngIf="info && areFriends" (click)="setTimer()">
+    <div class="img">
+        <i class="fa fa-clock-o"></i>
+    </div>
+    <div class="text">Self-destruct Timer</div>
+</div>
 <div class="menu-button" *ngIf="info && areFriends">
     <div class="img">
         <i class="fa fa-history"></i>
