@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
         private cacheService: CacheService,
         private headerService: HeaderService,
         public messageService: MessageService,
-        private conversationApiService: ConversationApiService
+        public timerService: TimerService
     ) {
         this.headerService.title = 'Profile';
         this.headerService.returnButton = true;
@@ -104,43 +104,5 @@ export class UserComponent implements OnInit {
                 }
             }
           });
-    }
-
-    public setTimer(): void {
-        Swal.fire({
-            title: 'Set self-destruct timer',
-            input: 'select',
-            inputOptions: {
-                5: '5 seconds',
-                30: '30 seconds',
-                60: '1 minute',
-                600: '10 minutes',
-                3600: '1 hour',
-                [3600 * 24]: '1 day',
-                [3600 * 24 * 7]: '1 week',
-                [Math.pow(2, 31) - 1]: 'off'
-            },
-            inputPlaceholder: 'Select one',
-            showCancelButton: true
-        }).then(selected => {
-            if (selected.value) {
-                this.conversationApiService.UpdateMessageLifeTime(this.conversationId, selected.value)
-                    .subscribe(result => {
-                        if (result.code === 0) {
-                            Swal.fire({
-                                title: 'Success!',
-                                type: 'success',
-                                text: result.message
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                type: 'error',
-                                text: result.message
-                            });
-                        }
-                    });
-            }
-        });
     }
 }

@@ -29,7 +29,7 @@ export class AddFriendComponent {
         private router: Router,
         private cacheService: CacheService,
         private headerService: HeaderService) {
-            this.headerService.title = 'Add Friend';
+            this.headerService.title = 'Global Search';
             this.headerService.returnButton = true;
             this.headerService.button = false;
             this.headerService.shadow = false;
@@ -86,9 +86,9 @@ export class AddFriendComponent {
         this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
                 this.cacheService.UpdateConversation();
-                this.router.navigate(['/']);
-            } else if (response.code === -6) {
                 this.router.navigate(['/talking/' + id]);
+            } else if (response.code === -6) {
+                this.router.navigate(['/group/' + id]);
             } else {
                 Swal.fire('Error', response.message, 'error');
             }

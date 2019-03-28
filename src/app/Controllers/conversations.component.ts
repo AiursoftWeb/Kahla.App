@@ -28,7 +28,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
 
     public ngOnInit(): void {
-        if (this.messageService.me && !this.cacheService.cachedData.conversations) {
+        if (this.messageService.me) {
             this.cacheService.UpdateConversation();
         }
         setTimeout(() => {

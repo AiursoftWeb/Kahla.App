@@ -10,6 +10,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
+import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -32,7 +33,8 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cache: CacheService,
         private headerService: HeaderService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        public timerService: TimerService
     ) {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
