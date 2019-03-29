@@ -60,6 +60,11 @@ export class AddFriendComponent {
                     group.avatarURL = Values.fileAddress + group.imageKey;
                 });
                 this.results = result;
+                if (this.showUsers && result.usersCount === 0 && result.groupsCount !== 0) {
+                    this.showUsers = false;
+                } else if (!this.showUsers && result.groupsCount === 0 && result.usersCount !== 0) {
+                    this.showUsers = true;
+                }
             }
         });
     }
@@ -99,5 +104,12 @@ export class AddFriendComponent {
                 Swal.fire('Error', response.message, 'error');
             }
         });
+    }
+
+    SearchBoxKeyUp(event: KeyboardEvent, element: HTMLInputElement) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.search(element.value, 0);
+        }
     }
 }
