@@ -6,9 +6,9 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
     templateUrl: '../Views/about.html',
     styleUrls: [
-        '../Styles/about.sass',
-        '../Styles/menu.sass',
-        '../Styles/button.sass']
+        '../Styles/about.scss',
+        '../Styles/menu.scss',
+        '../Styles/button.scss']
 })
 
 export class AboutComponent {

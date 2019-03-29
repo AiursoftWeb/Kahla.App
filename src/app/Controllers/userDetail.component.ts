@@ -12,9 +12,9 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
-    '../Styles/userDetail.sass',
-    '../Styles/button.sass',
-    '../Styles/toggleButton.sass'
+    '../Styles/userDetail.scss',
+    '../Styles/button.scss',
+    '../Styles/toggleButton.scss'
   ]
 })
 

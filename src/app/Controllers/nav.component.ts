@@ -5,8 +5,8 @@ import { CacheService } from '../Services/CacheService';
     selector: 'app-nav',
     templateUrl: '../Views/nav.html',
     styleUrls: [
-        '../Styles/nav.sass',
-        '../Styles/reddot.sass'
+        '../Styles/nav.scss',
+        '../Styles/reddot.scss'
     ]
 })
 export class NavComponent {

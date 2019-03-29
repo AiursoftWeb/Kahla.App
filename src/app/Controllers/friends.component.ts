@@ -11,9 +11,9 @@ import { GroupsApiService } from '../Services/GroupsApiService';
 @Component({
     templateUrl: '../Views/friends.html',
     styleUrls: [
-        '../Styles/friends.sass',
-        '../Styles/menu.sass',
-        '../Styles/reddot.sass']
+        '../Styles/friends.scss',
+        '../Styles/menu.scss',
+        '../Styles/reddot.scss']
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {

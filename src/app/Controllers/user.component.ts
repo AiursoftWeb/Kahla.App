@@ -12,9 +12,9 @@ import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/user.html',
-    styleUrls: ['../Styles/menu.sass',
-                '../Styles/button.sass',
-                '../Styles/badge.sass']
+    styleUrls: ['../Styles/menu.scss',
+                '../Styles/button.scss',
+                '../Styles/badge.scss']
 })
 
 export class UserComponent implements OnInit {

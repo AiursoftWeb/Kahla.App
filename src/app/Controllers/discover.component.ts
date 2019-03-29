@@ -6,8 +6,8 @@ import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/discover.html',
-    styleUrls: ['../Styles/add-friend.sass',
-                '../Styles/button.sass']
+    styleUrls: ['../Styles/add-friend.scss',
+                '../Styles/button.scss']
 })
 export class DiscoverComponent implements OnInit {
     private amount = 15;
