@@ -25,6 +25,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.headerService.routerLink = '/localsearch';
             this.headerService.buttonIcon = 'search';
             this.headerService.shadow = false;
+            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {

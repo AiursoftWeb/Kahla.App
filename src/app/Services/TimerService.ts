@@ -6,6 +6,8 @@ import { ConversationApiService } from './ConversationApiService';
     providedIn: 'root'
 })
 export class TimerService {
+    public destructTime = 'off';
+
     constructor(
         private conversationApiService: ConversationApiService) {}
 
@@ -35,6 +37,7 @@ export class TimerService {
                                 type: 'success',
                                 text: result.message
                             });
+                            this.updateDestructTime(selected.value);
                         } else {
                             Swal.fire({
                                 title: 'Error!',
@@ -45,5 +48,30 @@ export class TimerService {
                     });
             }
         });
+    }
+
+    public updateDestructTime(time: number): void {
+        this.destructTime = this.getDestructTime(time);
+    }
+
+    private getDestructTime(time: number): string {
+        time = Number(time);
+        if (time === 5) {
+            return '5s';
+        } else if (time === 30) {
+            return '30s';
+        } else if (time === 60) {
+            return '1m';
+        } else if (time === 600) {
+            return '10m';
+        } else if (time === 3600) {
+            return '1h';
+        } else if (time === 3600 * 24) {
+            return '1d';
+        } else if (time === 3600 * 24 * 7) {
+            return '1w';
+        } else {
+            return 'off';
+        }
     }
 }

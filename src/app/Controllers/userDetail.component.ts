@@ -33,6 +33,7 @@ export class UserDetailComponent implements OnInit {
     this.headerService.returnButton = true;
     this.headerService.button = false;
     this.headerService.shadow = false;
+    this.headerService.timer = false;
 }
 
   public ngOnInit(): void {

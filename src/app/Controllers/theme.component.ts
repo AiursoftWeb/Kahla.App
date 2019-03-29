@@ -17,6 +17,7 @@ export class ThemeComponent implements OnInit {
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     currentTheme: Themes = Themes.light;
