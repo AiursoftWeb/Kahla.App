@@ -1,31 +1,33 @@
 .search-part {
-  padding: 7px;
   display: inline-block;
   box-sizing: border-box;
   width: 100%;
   position: fixed;
-  height: 105px;
+  height: 102px;
   z-index: 1;
 
-  input {
-    border-radius: 6px 0 0 6px;
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-    box-shadow: none;
-    width: 80%;
-    height: 35px;
-    padding: 6px 12px;
-    font-size: 14px;
-    box-sizing: border-box;
-    outline: none;
-    margin-bottom: 15px;
-    float: left;
-  }
-
-  button {
-    float: left;
-    border-radius: 0 6px 6px 0;
-    width: 20%;
-    height: 35px;
+  .search-input{
+    padding: 7px;
+    input {
+      border-radius: 6px 0 0 6px;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      box-shadow: none;
+      width: 80%;
+      height: 35px;
+      padding: 6px 12px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      margin-bottom: 15px;
+      float: left;
+    }
+  
+    button {
+      float: left;
+      border-radius: 0 6px 6px 0;
+      width: 20%;
+      height: 35px;
+    }
   }
 
   .search-type {
@@ -41,24 +43,43 @@
       display: inline-block;
       cursor: pointer;
       transition: background-color ease-out 0.2s;
+      border-radius: 6px 6px 0 0;
+
+      .dot{
+        border-radius: 50%;
+      }
 
       span {
         line-height: 40px;
       }
     }
   }
+  &::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+    left: 0;
+  }
 }
 
 :host-context(.theme-light) .search-part {
   background-color: #cac9cf;
+  &::after{
+    background-color: #ecf0f1;
+  }
 }
 
 :host-context(.theme-dark) .search-part {
   background-color: #333;
+  &::after{
+    background-color: #57606f;
+  }
 }
 
 .search-holder {
-  height: 105px;
+  height: 102px;
 }
 
 :host-context(.theme-light) .search-part input {
@@ -151,4 +172,10 @@ h3 {
 
 :host-context(.theme-dark) .selected {
   background-color: #57606f;
+}
+
+.empty-result-notice{
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
 }
