@@ -1,6 +1,7 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
     <input placeholder="Enter your friend's nickname" type="text" #friendSearch />
+    <button class="button success" (click)="search(friendSearch.value, 0)" [disabled]="searching"><i class="fa fa-search"></i></button>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
             <span><i class="fa fa-user"></i>
@@ -27,11 +28,6 @@
     </div>
 </div>
 <div class="search-holder"></div>
-
-<div class="buttons">
-    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 0)">Search</button>
-    <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Searching</button>
-</div>
 
 <div *ngIf="showUsers && results">
     <div class="result" *ngFor="let user of results.users" routerLink="/user/{{ user.id }}">
