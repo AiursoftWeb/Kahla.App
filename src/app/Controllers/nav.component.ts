@@ -4,7 +4,10 @@ import { CacheService } from '../Services/CacheService';
 @Component({
     selector: 'app-nav',
     templateUrl: '../Views/nav.html',
-    styleUrls: ['../Styles/nav.css', '../Styles/reddot.css']
+    styleUrls: [
+        '../Styles/nav.sass',
+        '../Styles/reddot.sass'
+    ]
 })
 export class NavComponent {
     constructor(

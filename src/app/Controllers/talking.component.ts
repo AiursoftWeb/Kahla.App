@@ -15,9 +15,9 @@ declare var MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
-    styleUrls: ['../Styles/talking.css',
-                '../Styles/button.css',
-                '../Styles/reddot.css']
+    styleUrls: ['../Styles/talking.sass',
+                '../Styles/button.sass',
+                '../Styles/reddot.sass']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;

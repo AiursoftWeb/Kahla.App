@@ -10,9 +10,9 @@ import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
-    styleUrls: ['../Styles/add-friend.css',
-                '../Styles/button.css',
-                '../Styles/reddot.css']
+    styleUrls: ['../Styles/add-friend.sass',
+                '../Styles/button.sass',
+                '../Styles/reddot.sass']
 
 })
 export class AddFriendComponent {

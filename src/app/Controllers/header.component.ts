@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-header',
     templateUrl: '../Views/header.html',
-    styleUrls: ['../Styles/header.css']
+    styleUrls: ['../Styles/header.sass']
 })
 export class HeaderComponent {
     public macOSElectron = false;

@@ -8,8 +8,8 @@ import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/register.html',
-    styleUrls: ['../Styles/signin.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/signin.sass',
+                '../Styles/button.sass']
 })
 export class RegisterComponent {
     public email = '';
