@@ -1,33 +1,36 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
     <input placeholder="Enter your friend's nickname" type="text" #friendSearch />
+    <div class="search-type">
+        <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
+            <span><i class="fa fa-user"></i>
+                Users
+            </span>
+            <div *ngIf="results && results.usersCount >= 0 && results.usersCount < 100" class="dot bluedot">
+                {{results.usersCount}}
+            </div>
+            <div *ngIf="results && results.usersCount > 99" class="dot bluedot">
+                99+
+            </div>
+        </div>
+        <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
+            <span><i class="fa fa-users"></i>
+                Groups
+            </span>
+            <div *ngIf="results && results.groupsCount >= 0 && results.groupsCount < 100" class="dot bluedot">
+                {{results.groupsCount}}
+            </div>
+            <div *ngIf="results && results.groupsCount > 99" class="dot bluedot">
+                99+
+            </div>
+        </div>
+    </div>
 </div>
 <div class="search-holder"></div>
 
 <div class="buttons">
     <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 0)">Search</button>
     <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Searching</button>
-</div>
-
-<div class="result" *ngIf="results">
-    <div class="selectResult result" (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-        <div class="sender">Users</div>
-        <div *ngIf="results.usersCount >= 0 && results.usersCount < 100" class="dot bluedot">
-            {{results.usersCount}}
-        </div>
-        <div *ngIf="results.usersCount > 99" class="dot bluedot">
-            99+
-        </div>
-    </div>
-    <div class="selectResult result" (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-        <div class="sender">Groups</div>
-        <div *ngIf="results.groupsCount >= 0 && results.groupsCount < 100" class="dot bluedot">
-            {{results.groupsCount}}
-        </div>
-        <div *ngIf="results.groupsCount > 99" class="dot bluedot">
-            99+
-        </div>
-    </div>
 </div>
 
 <div *ngIf="showUsers && results">
@@ -51,7 +54,8 @@
     </div>
 </div>
 
-<div class="buttons" *ngIf="results && ((showUsers && results.usersCount >= 0 && results.users.length < results.usersCount) || (!showUsers && results.groupsCount >= 0 && results.groups.length < results.groupsCount))">
+<div class="buttons"
+    *ngIf="results && ((showUsers && results.usersCount >= 0 && results.users.length < results.usersCount) || (!showUsers && results.groupsCount >= 0 && results.groups.length < results.groupsCount))">
     <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 1)">Load More</button>
     <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Loading</button>
 </div>
