@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
+import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -55,7 +56,7 @@ export class AddFriendComponent {
                     user.avatarURL = Values.fileAddress + user.headImgFileKey;
                 });
                 result.groups.forEach(group => {
-                    group.avatarURL = Values.fileAddress + group.groupImageKey;
+                    group.avatarURL = Values.fileAddress + group.imageKey;
                 });
                 this.results = result;
             }
@@ -66,8 +67,10 @@ export class AddFriendComponent {
         this.showUsers = selectUsers;
     }
 
-    public joinGroup(groupName: string, privateGroup: boolean, id: number) {
-        if (privateGroup) {
+    public joinGroup(group: GroupsResult) {
+        if (group.joined) {
+            this.router.navigate(['/group/' + group.id]);
+        } else if (group.hasPassword) {
             Swal.fire({
                 title: 'Enter group password.',
                 input: 'text',
@@ -78,11 +81,11 @@ export class AddFriendComponent {
                 confirmButtonText: 'Join'
             }).then((result) => {
                 if (result.value) {
-                    this.joinGroupWithPassword(groupName, result.value, id);
+                    this.joinGroupWithPassword(group.name, result.value, group.id);
                 }
             });
         } else {
-            this.joinGroupWithPassword(groupName, '', id);
+            this.joinGroupWithPassword(group.name, '', group.id);
         }
     }
 
@@ -91,8 +94,6 @@ export class AddFriendComponent {
             if (response.code === 0) {
                 this.cacheService.UpdateConversation();
                 this.router.navigate(['/talking/' + id]);
-            } else if (response.code === -6) {
-                this.router.navigate(['/group/' + id]);
             } else {
                 Swal.fire('Error', response.message, 'error');
             }
