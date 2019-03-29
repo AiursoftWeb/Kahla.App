@@ -8,7 +8,7 @@ import { ThemeService } from '../Services/ThemeService';
 @Component({
     selector: 'app-kahla',
     templateUrl: '../Views/app.html',
-    styleUrls: ['../Styles/app.css']
+    styleUrls: ['../Styles/app.sass']
 })
 
 

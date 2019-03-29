@@ -10,9 +10,9 @@ import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/settings.html',
-    styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css',
-                '../Styles/badge.css']
+    styleUrls: ['../Styles/menu.sass',
+                '../Styles/button.sass',
+                '../Styles/badge.sass']
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;

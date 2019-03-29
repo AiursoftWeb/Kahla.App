@@ -5,7 +5,7 @@ import { ThemeService } from '../Services/ThemeService';
 
 @Component({
     templateUrl: '../Views/theme.html',
-    styleUrls: ['../Styles/menu.css'],
+    styleUrls: ['../Styles/menu.sass'],
 })
 export class ThemeComponent implements OnInit {
     constructor(

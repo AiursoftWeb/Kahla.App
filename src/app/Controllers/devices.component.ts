@@ -7,8 +7,8 @@ import { DeviesApiService } from '../Services/DevicesApiService';
 
 @Component({
     templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.css',
-        '../Styles/button.css']
+    styleUrls: ['../Styles/menu.sass',
+        '../Styles/button.sass']
 })
 export class DevicesComponent implements OnInit {
     constructor(

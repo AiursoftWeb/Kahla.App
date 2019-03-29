@@ -8,8 +8,8 @@ import { ContactInfo } from '../Models/ContactInfo';
 
 @Component({
     templateUrl: '../Views/localSearch.html',
-    styleUrls: ['../Styles/add-friend.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/add-friend.sass',
+                '../Styles/button.sass']
 
 })
 export class LocalSearchComponent implements OnInit {

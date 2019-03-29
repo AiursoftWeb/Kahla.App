@@ -8,6 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "sass"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -27,7 +32,7 @@
             ],
             "styles": [
               "node_modules/font-awesome/css/font-awesome.min.css",
-              "src/app/Styles/index.css"
+              "src/app/Styles/index.sass"
             ],
             "scripts": []
           },
@@ -87,14 +92,5 @@
       "projectType": "application"
     }
   },
-  "defaultProject": "kahla",
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "css"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
-    }
-  }
+  "defaultProject": "kahla"
 }

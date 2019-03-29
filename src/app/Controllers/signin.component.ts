@@ -11,8 +11,8 @@ import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/signin.html',
-    styleUrls: ['../Styles/signin.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/signin.sass',
+                '../Styles/button.sass']
 })
 export class SignInComponent {
     public email: string;
