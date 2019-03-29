@@ -151,6 +151,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
                         }
                     });
+
+                    this.messageService.setTimer();
                 }
             });
         this.windowInnerHeight = window.innerHeight;
@@ -348,5 +350,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.conversationID = null;
         clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;
+        this.messageService.clearTimer();
     }
 }

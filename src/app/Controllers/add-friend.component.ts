@@ -98,5 +98,5 @@ export class AddFriendComponent {
                 Swal.fire('Error', response.message, 'error');
             }
         });
-}
+    }
 }

@@ -30,6 +30,7 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
+    private timer;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -245,5 +246,17 @@ export class MessageService {
                 window.focus();
             };
         }
+    }
+
+    public setTimer(): void {
+        this.timer = setInterval(() => {
+            if (this.localMessages.length > 0) {
+                this.getMessages(false, this.conversation.id, -1, 15);
+            }
+        }, this.conversation.maxLiveSeconds * 1000);
+    }
+
+    public clearTimer(): void {
+        clearInterval(this.timer);
     }
 }
