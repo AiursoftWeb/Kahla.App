@@ -11,6 +11,7 @@ import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
+import { TimerService } from '../Services/TimerService';
 declare var MediaRecorder: any;
 
 @Component({
@@ -48,7 +49,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private timerService: TimerService
     ) {}
 
     @HostListener('window:scroll', [])
@@ -97,6 +99,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.headerService.shadow = true;
+        this.headerService.timer = true;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -129,6 +132,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.headerService.buttonIcon = `users`;
                         this.headerService.routerLink = `/group/${conversation.id}`;
                     }
+                    this.timerService.updateDestructTime(conversation.maxLiveSeconds);
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
 

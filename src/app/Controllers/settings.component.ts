@@ -27,6 +27,7 @@ export class SettingsComponent implements OnInit {
             this.headerService.returnButton = false;
             this.headerService.button = false;
             this.headerService.shadow = false;
+            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {

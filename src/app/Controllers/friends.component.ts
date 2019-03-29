@@ -31,6 +31,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.routerLink = '/discover';
             this.headerService.buttonIcon = 'plus';
             this.headerService.shadow = false;
+            this.headerService.timer = false;
     }
     public ngOnInit(): void {
         if (this.messageService.me && !this.cacheService.cachedData.conversations) {

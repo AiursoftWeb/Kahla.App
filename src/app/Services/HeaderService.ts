@@ -11,4 +11,5 @@ export class HeaderService {
     public routerLink = '';
     public buttonIcon = '';
     public shadow = false;
+    public timer = false;
 }

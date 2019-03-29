@@ -249,11 +249,13 @@ export class MessageService {
     }
 
     public setTimer(): void {
-        this.timer = setInterval(() => {
-            if (this.localMessages.length > 0) {
-                this.getMessages(false, this.conversation.id, -1, 15);
-            }
-        }, this.conversation.maxLiveSeconds * 1000);
+        if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
+            this.timer = setInterval(() => {
+                if (this.localMessages.length > 0) {
+                    this.getMessages(false, this.conversation.id, -1, 15);
+                }
+            }, this.conversation.maxLiveSeconds * 1000);
+        }
     }
 
     public clearTimer(): void {
