@@ -30,7 +30,7 @@ export class AddFriendComponent {
         private router: Router,
         private cacheService: CacheService,
         private headerService: HeaderService) {
-            this.headerService.title = 'Global Search';
+            this.headerService.title = 'Add New';
             this.headerService.returnButton = true;
             this.headerService.button = false;
             this.headerService.shadow = false;
