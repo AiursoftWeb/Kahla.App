@@ -7,8 +7,8 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
     templateUrl: '../Views/changePassword.html',
     styleUrls: [
-      '../Styles/userDetail.sass',
-      '../Styles/button.sass'
+      '../Styles/userDetail.scss',
+      '../Styles/button.scss'
     ]
 })
 export class ChangePasswordComponent {

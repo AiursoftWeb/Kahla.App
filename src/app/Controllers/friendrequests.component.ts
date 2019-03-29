@@ -7,8 +7,8 @@ import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
-    styleUrls: ['../Styles/friendrequests.sass',
-                '../Styles/button.sass']
+    styleUrls: ['../Styles/friendrequests.scss',
+                '../Styles/button.scss']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;

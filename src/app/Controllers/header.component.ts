@@ -7,8 +7,8 @@ import { TimerService } from '../Services/TimerService';
 @Component({
     selector: 'app-header',
     templateUrl: '../Views/header.html',
-    styleUrls: ['../Styles/header.sass',
-                '../Styles/reddot.sass']
+    styleUrls: ['../Styles/header.scss',
+                '../Styles/reddot.scss']
 })
 export class HeaderComponent {
     public macOSElectron = false;

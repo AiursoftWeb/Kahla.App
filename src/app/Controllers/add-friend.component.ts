@@ -11,9 +11,9 @@ import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
-    styleUrls: ['../Styles/add-friend.sass',
-                '../Styles/button.sass',
-                '../Styles/reddot.sass']
+    styleUrls: ['../Styles/add-friend.scss',
+                '../Styles/button.scss',
+                '../Styles/reddot.scss']
 
 })
 export class AddFriendComponent {
