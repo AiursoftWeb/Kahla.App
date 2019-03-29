@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
+import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -37,24 +38,28 @@ export class AddFriendComponent {
 
     public search(term: string, mode: number): void {
         this.searchMode = mode;
-        if (mode === 0) {
-            this.searchNumbers = 20;
-        } else {
-            // load more
-            this.searchNumbers += 20;
+        if (term && term.trim().length > 0) {
+            if (mode === 0) {
+                this.searchNumbers = 20;
+            } else {
+                // load more
+                this.searchNumbers += 20;
+            }
+            this.callSearchApi(term);
         }
-        this.callSearchApi(term);
     }
 
     private callSearchApi(term: string): void {
         this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
-            result.users.forEach(user => {
-                user.avatarURL = Values.fileAddress + user.headImgFileKey;
-            });
-            result.groups.forEach(group => {
-                group.avatarURL = Values.fileAddress + group.groupImageKey;
-            });
-            this.results = result;
+            if (result.code === 0) {
+                result.users.forEach(user => {
+                    user.avatarURL = Values.fileAddress + user.headImgFileKey;
+                });
+                result.groups.forEach(group => {
+                    group.avatarURL = Values.fileAddress + group.imageKey;
+                });
+                this.results = result;
+            }
         });
     }
 
@@ -62,8 +67,10 @@ export class AddFriendComponent {
         this.showUsers = selectUsers;
     }
 
-    public joinGroup(groupName: string, privateGroup: boolean, id: number) {
-        if (privateGroup) {
+    public joinGroup(group: GroupsResult) {
+        if (group.joined) {
+            this.router.navigate(['/group/' + group.id]);
+        } else if (group.hasPassword) {
             Swal.fire({
                 title: 'Enter group password.',
                 input: 'text',
@@ -74,11 +81,11 @@ export class AddFriendComponent {
                 confirmButtonText: 'Join'
             }).then((result) => {
                 if (result.value) {
-                    this.joinGroupWithPassword(groupName, result.value, id);
+                    this.joinGroupWithPassword(group.name, result.value, group.id);
                 }
             });
         } else {
-            this.joinGroupWithPassword(groupName, '', id);
+            this.joinGroupWithPassword(group.name, '', group.id);
         }
     }
 
@@ -87,11 +94,9 @@ export class AddFriendComponent {
             if (response.code === 0) {
                 this.cacheService.UpdateConversation();
                 this.router.navigate(['/talking/' + id]);
-            } else if (response.code === -6) {
-                this.router.navigate(['/group/' + id]);
             } else {
                 Swal.fire('Error', response.message, 'error');
             }
         });
-}
+    }
 }
