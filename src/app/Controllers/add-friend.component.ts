@@ -105,4 +105,11 @@ export class AddFriendComponent {
             }
         });
     }
+
+    SearchBoxKeyUp(event: KeyboardEvent, element: HTMLInputElement) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.search(element.value, 0);
+        }
+    }
 }

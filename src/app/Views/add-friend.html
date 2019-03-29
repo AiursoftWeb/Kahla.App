@@ -1,6 +1,6 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
-    <input placeholder="Enter your friend's nickname" type="text" #friendSearch />
+    <input placeholder="Enter your friend's nickname" type="text" #friendSearch (keyup)="SearchBoxKeyUp($event,$event.currentTarget)"/>
     <button class="button success" (click)="search(friendSearch.value, 0)" [disabled]="searching"><i class="fa fa-search"></i></button>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
