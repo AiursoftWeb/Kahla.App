@@ -37,24 +37,28 @@ export class AddFriendComponent {
 
     public search(term: string, mode: number): void {
         this.searchMode = mode;
-        if (mode === 0) {
-            this.searchNumbers = 20;
-        } else {
-            // load more
-            this.searchNumbers += 20;
+        if (term && term.trim().length > 0) {
+            if (mode === 0) {
+                this.searchNumbers = 20;
+            } else {
+                // load more
+                this.searchNumbers += 20;
+            }
+            this.callSearchApi(term);
         }
-        this.callSearchApi(term);
     }
 
     private callSearchApi(term: string): void {
         this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
-            result.users.forEach(user => {
-                user.avatarURL = Values.fileAddress + user.headImgFileKey;
-            });
-            result.groups.forEach(group => {
-                group.avatarURL = Values.fileAddress + group.groupImageKey;
-            });
-            this.results = result;
+            if (result.code === 0) {
+                result.users.forEach(user => {
+                    user.avatarURL = Values.fileAddress + user.headImgFileKey;
+                });
+                result.groups.forEach(group => {
+                    group.avatarURL = Values.fileAddress + group.groupImageKey;
+                });
+                this.results = result;
+            }
         });
     }
 
