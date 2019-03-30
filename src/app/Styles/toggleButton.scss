@@ -1,8 +1,11 @@
+@import "themes";
+
 .tgl {
   display: none;
 }
 
 .tgl-btn {
+  @extend %tgl-btn;
   cursor: pointer;
   width: 4em;
   height: 2em;
@@ -10,14 +13,6 @@
   transition: all 0.4s ease;
   border-radius: 2em;
   padding: 2px;
-}
-
-:host-context(.theme-light) .tgl-btn {
-  background: #f0f0f0;
-}
-
-:host-context(.theme-dark) .tgl-btn {
-  background: #888;
 }
 
 .tgl-btn::after {

@@ -20,6 +20,7 @@
   }
 
   input {
+    @extend %text-input;
     border-radius: 6px;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     box-shadow: none;
@@ -29,17 +30,6 @@
     box-sizing: border-box;
     outline: none;
   }
-}
-
-:host-context(.theme-light) .profile input {
-  border: 1px solid #e2e2e4;
-  background-color: #efefef;
-}
-
-:host-context(.theme-dark) .profile input {
-  border: 1px solid #e2e2e4;
-  background-color: #1e272e;
-  color: white;
 }
 
 .placeholder {

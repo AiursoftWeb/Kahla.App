@@ -1,48 +1,37 @@
 //
 // Light Theme
 //
-$default-textcolor-light: black;
-$menuitem-bg-light: #fff;
-$menuitem-border-color-light: #e8e8e8;
-$menuitem-hover-bg-light: #f6f6f6;
-$nav-bg-light: #fff;
-$nav-border-color-light: #d6d6d6;
-$nav-color-light: #bbbbbb;
-$nav-item-hover-bg-light: #f8f8f8;
-$nav-item-hover-color-light: rgb(131, 182, 211);
-$nav-item-current-color-light: #18a4f9;
+:host-context(.theme-light) {
+  $default-background: #efeff4;
+  $default-textcolor: #333;
+  $menuitem-bg: #fff;
+  $menuitem-border-color: #e8e8e8;
+  $menuitem-hover-bg: #f6f6f6;
+  $nav-bg: #fff;
+  $nav-border-color: #d6d6d6;
+  $nav-color: #bbbbbb;
+  $nav-item-hover-bg: #f8f8f8;
+  $nav-item-hover-color: rgb(131, 182, 211);
+  $nav-item-current-color: #18a4f9;
+  $text-input-color: #808080;
+  $text-input-border-color: #e2e2e4;
+  $text-input-bg: #fff;
+  $search-part-bg: #cac9cf;
+  $search-part-tab-selected-bg: #ecf0f1;
+  $talking-chat-border-color: #e4e4e4;
+  $talking-chat-color: grey;
+  $talking-chat-bg: white;
+  $talking-action-bg: #e4e4e4;
+  $tgl-btn-bg: #f0f0f0;
 
-:host-context(.theme-light) %text {
-  color: $default-textcolor-light;
+  @import "shared";
 }
 
-:host-context(.theme-light) %menu-item {
-  background-color: $menuitem-bg-light;
-  border-color: $menuitem-border-color-light;
-}
+%body.theme-light {
+  color: #333;
+  background-color: #efeff4;
 
-:host-context(.theme-light) %menu-item-clickable {
-  @extend %menu-item;
-
-  &:hover {
-    background-color: $menuitem-hover-bg-light;
-  }
-}
-
-:host-context(.theme-light) %nav-bar {
-  background-color: $menuitem-bg-light;
-  border-color: $nav-border-color-light;
-
-  .nav-item {
-    color: $nav-color-light;
-
-    &:hover {
-      background-color: $nav-item-hover-bg-light;
-      color: $nav-item-hover-color-light;
-    }
-
-    &.current {
-      color: $nav-item-current-color-light;
-    }
+  a {
+    color: #1e3799;
   }
 }

@@ -1,0 +1,91 @@
+%text {
+  color: $default-textcolor;
+}
+
+%menu-item {
+  background-color: $menuitem-bg;
+  border-color: $menuitem-border-color;
+}
+
+%menu-item-clickable {
+  @extend %menu-item;
+
+  &:hover {
+    background-color: $menuitem-hover-bg;
+  }
+}
+
+%nav-bar {
+  background-color: $menuitem-bg;
+  border-color: $nav-border-color;
+
+  .nav-item {
+    color: $nav-color;
+
+    &:hover {
+      background-color: $nav-item-hover-bg;
+      color: $nav-item-hover-color;
+    }
+
+    &.current {
+      color: $nav-item-current-color;
+    }
+  }
+}
+
+%text-input {
+  border: 1px solid $text-input-border-color;
+  color: $text-input-color;
+  background-color: $text-input-bg;
+}
+
+%search-part {
+  background-color: $search-part-bg;
+
+  &::after {
+    background-color: $search-part-tab-selected-bg;
+  }
+
+  .search-type .selected {
+    background-color: $search-part-tab-selected-bg;
+  }
+}
+
+%message-list {
+  background-color: $default-background;
+
+  .load-more {
+    background-color: $menuitem-bg;
+    color: $nav-color;
+  }
+
+  .left .chat-content {
+    border-color: $talking-chat-border-color;
+    color: $talking-chat-color;
+    background-color: $talking-chat-bg;
+
+    &::after {
+      border-right-color: $talking-chat-border-color;
+    }
+  }
+}
+
+%chat-action {
+  background-color: $talking-action-bg;
+
+  .chat-part textarea {
+    background-color: $text-input-bg;
+    color: $text-input-color;
+  }
+
+  .input-file {
+    &:focus + label,
+    + label:hover {
+      background-color: $menuitem-hover-bg;
+    }
+  }
+}
+
+%tgl-btn {
+  background-color: $tgl-btn-bg;
+}
