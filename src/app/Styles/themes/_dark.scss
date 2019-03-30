@@ -1,3 +1,24 @@
 //
 // Dark Theme
 //
+$default-textcolor-dark: #fff;
+$menuitem-background-dark: #2f3640;
+$menuitem-border-color-dark: #353b48;
+$menuitem-hover-dark: #374554;
+
+:host-context(.theme-dark) %text {
+  color: $default-textcolor-dark;
+}
+
+:host-context(.theme-dark) %menu-item {
+  background-color: $menuitem-background-dark;
+  border-color: $menuitem-border-color-dark;
+}
+
+:host-context(.theme-dark) %menu-item-clickable {
+  @extend %menu-item;
+
+  &:hover {
+    background-color: $menuitem-hover-dark;
+  }
+}

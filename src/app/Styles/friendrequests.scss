@@ -1,8 +1,11 @@
+@import "themes";
+
 /**********************
  *    friendrequests
  ************************ */
 
 .friendrequests {
+  @extend %menu-item;
   height: 70px;
   border-width: 1px;
   border-bottom-style: solid;
@@ -11,19 +14,7 @@
   grid-template-columns: 20% 40% 40%;
   text-align: center;
   user-select: none;
-}
 
-:host-context(.theme-light) .friendrequests {
-  border-color: #E8E8E8;
-  background-color: #FFF;
-}
-
-:host-context(.theme-dark) .friendrequests {
-  border-color: #353b48;
-  background-color: #2f3640;
-}
-
-.friendrequests {
   .user-img {
     margin: 10px auto;
     width: 50px;
@@ -59,7 +50,7 @@
   .decision {
     .Completed {
       text-align: center;
-      color: #E8E8E8;
+      color: #e8e8e8;
       font-size: 14px;
       font-weight: 400;
       margin-top: 25px;

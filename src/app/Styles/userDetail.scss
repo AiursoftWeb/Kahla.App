@@ -1,4 +1,7 @@
+@import "themes";
+
 .profile {
+  @extend %menu-item;
   padding: 7px;
   box-sizing: border-box;
   width: 100%;
@@ -8,16 +11,6 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   user-select: none;
-}
-
-:host-context(.theme-light) .profile {
-  background-color: #fcfcfc;
-  border-color: #e1e1e1;
-}
-
-:host-context(.theme-dark) .profile {
-  border-color: #353b48;
-  background-color: #2f3640;
 }
 
 .profile {
@@ -54,7 +47,8 @@
 }
 
 .profile {
-  label, .text {
+  label,
+  .text {
     font-size: 14px;
     margin-left: 20px;
   }

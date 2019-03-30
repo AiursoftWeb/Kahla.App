@@ -1,3 +1,24 @@
 //
 // Light Theme
 //
+$default-textcolor-light: black;
+$menuitem-background-light: #fff;
+$menuitem-border-color-light: #e8e8e8;
+$menuitem-hover-light: #f6f6f6;
+
+:host-context(.theme-light) %text {
+  color: $default-textcolor-light;
+}
+
+:host-context(.theme-light) %menu-item {
+  background-color: $menuitem-background-light;
+  border-color: $menuitem-border-color-light;
+}
+
+:host-context(.theme-light) %menu-item-clickable {
+  @extend %menu-item;
+
+  &:hover {
+    background-color: $menuitem-hover-light;
+  }
+}
