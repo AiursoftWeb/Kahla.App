@@ -46,6 +46,7 @@ export class AddFriendComponent {
                 // load more
                 this.searchNumbers += 20;
             }
+            document.querySelector('.search-part').classList.add('search-holder');
             this.callSearchApi(term);
         }
     }

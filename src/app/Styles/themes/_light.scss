@@ -4,6 +4,8 @@
 :host-context(.theme-light) {
   $default-background: #efeff4;
   $default-textcolor: #333;
+  $load-more-button-bg: #e3e3e3;
+  $load-more-button-color: #aaaaaa;
   $menuitem-bg: #fff;
   $menuitem-border-color: #e8e8e8;
   $menuitem-hover-bg: #f6f6f6;
@@ -17,7 +19,7 @@
   $text-input-border-color: #e2e2e4;
   $text-input-bg: #fff;
   $search-part-bg: #cac9cf;
-  $search-part-tab-selected-bg: #ecf0f1;
+  $search-part-tab-selected-bg: #fff;
   $talking-chat-border-color: #e4e4e4;
   $talking-chat-color: grey;
   $talking-chat-bg: white;
