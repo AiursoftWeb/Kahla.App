@@ -2,16 +2,22 @@
 // Light Theme
 //
 $default-textcolor-light: black;
-$menuitem-background-light: #fff;
+$menuitem-bg-light: #fff;
 $menuitem-border-color-light: #e8e8e8;
-$menuitem-hover-light: #f6f6f6;
+$menuitem-hover-bg-light: #f6f6f6;
+$nav-bg-light: #fff;
+$nav-border-color-light: #d6d6d6;
+$nav-color-light: #bbbbbb;
+$nav-item-hover-bg-light: #f8f8f8;
+$nav-item-hover-color-light: rgb(131, 182, 211);
+$nav-item-current-color-light: #18a4f9;
 
 :host-context(.theme-light) %text {
   color: $default-textcolor-light;
 }
 
 :host-context(.theme-light) %menu-item {
-  background-color: $menuitem-background-light;
+  background-color: $menuitem-bg-light;
   border-color: $menuitem-border-color-light;
 }
 
@@ -19,6 +25,24 @@ $menuitem-hover-light: #f6f6f6;
   @extend %menu-item;
 
   &:hover {
-    background-color: $menuitem-hover-light;
+    background-color: $menuitem-hover-bg-light;
+  }
+}
+
+:host-context(.theme-light) %nav-bar {
+  background-color: $menuitem-bg-light;
+  border-color: $nav-border-color-light;
+
+  .nav-item {
+    color: $nav-color-light;
+
+    &:hover {
+      background-color: $nav-item-hover-bg-light;
+      color: $nav-item-hover-color-light;
+    }
+
+    &.current {
+      color: $nav-item-current-color-light;
+    }
   }
 }
