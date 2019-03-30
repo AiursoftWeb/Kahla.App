@@ -1,4 +1,7 @@
+@import "themes";
+
 .profile {
+  @extend %menu-item;
   padding: 7px;
   box-sizing: border-box;
   width: 100%;
@@ -10,16 +13,6 @@
   user-select: none;
 }
 
-:host-context(.theme-light) .profile {
-  background-color: #fcfcfc;
-  border-color: #e1e1e1;
-}
-
-:host-context(.theme-dark) .profile {
-  border-color: #353b48;
-  background-color: #2f3640;
-}
-
 .profile {
   > * {
     align-self: center;
@@ -27,6 +20,7 @@
   }
 
   input {
+    @extend %text-input;
     border-radius: 6px;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     box-shadow: none;
@@ -38,23 +32,13 @@
   }
 }
 
-:host-context(.theme-light) .profile input {
-  border: 1px solid #e2e2e4;
-  background-color: #efefef;
-}
-
-:host-context(.theme-dark) .profile input {
-  border: 1px solid #e2e2e4;
-  background-color: #1e272e;
-  color: white;
-}
-
 .placeholder {
   height: 49px;
 }
 
 .profile {
-  label, .text {
+  label,
+  .text {
     font-size: 14px;
     margin-left: 20px;
   }

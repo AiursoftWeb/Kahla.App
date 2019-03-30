@@ -1,4 +1,7 @@
+@import "themes";
+
 .search-part {
+  @extend %search-part;
   display: inline-block;
   box-sizing: border-box;
   width: 100%;
@@ -6,9 +9,10 @@
   height: 102px;
   z-index: 1;
 
-  .search-input{
+  .search-input {
     padding: 7px;
     input {
+      @extend %text-input;
       border-radius: 6px 0 0 6px;
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
       box-shadow: none;
@@ -21,7 +25,7 @@
       margin-bottom: 15px;
       float: left;
     }
-  
+
     button {
       float: left;
       border-radius: 0 6px 6px 0;
@@ -45,7 +49,7 @@
       transition: background-color ease-out 0.2s;
       border-radius: 6px 6px 0 0;
 
-      .dot{
+      .dot {
         border-radius: 50%;
         width: unset;
       }
@@ -55,8 +59,8 @@
       }
     }
   }
-  &::after{
-    content: '';
+  &::after {
+    content: "";
     position: absolute;
     width: 100%;
     height: 5px;
@@ -65,37 +69,12 @@
   }
 }
 
-:host-context(.theme-light) .search-part {
-  background-color: #cac9cf;
-  &::after{
-    background-color: #ecf0f1;
-  }
-}
-
-:host-context(.theme-dark) .search-part {
-  background-color: #333;
-  &::after{
-    background-color: #57606f;
-  }
-}
-
 .search-holder {
   height: 102px;
 }
 
-:host-context(.theme-light) .search-part input {
-  border: 1px solid #e2e2e4;
-  color: #808080;
-  background-color: #fff;
-}
-
-:host-context(.theme-dark) .search-part input {
-  border: 1px solid #e2e2e4;
-  background-color: #1e272e;
-  color: white;
-}
-
 .result {
+  @extend %menu-item-clickable;
   height: 60px;
   border-width: 1px;
   border-bottom-style: solid;
@@ -104,19 +83,8 @@
   grid-template-columns: 50% 50%;
   outline: none;
   user-select: none;
-}
+  transition: all ease-out 0.2s;
 
-:host-context(.theme-light) .result {
-  border-color: #D9D9D9;
-  background-color: #FFF;
-}
-
-:host-context(.theme-dark) .result {
-  border-color: #353b48;
-  background-color: #2f3640;
-}
-
-.result {
   .user-img {
     width: 40px;
     height: 40px;
@@ -157,25 +125,7 @@ h3 {
   position: unset !important;
 }
 
-.selectResult {
-  width: 100%;
-}
-
-:host-context(.theme-light) {
-  .selectResult {
-    background-color: #a3aab4;
-  }
-
-  .selected {
-    background-color: #ecf0f1;
-  }
-}
-
-:host-context(.theme-dark) .selected {
-  background-color: #57606f;
-}
-
-.empty-result-notice{
+.empty-result-notice {
   margin-top: 40px;
   text-align: center;
   font-size: 14px;

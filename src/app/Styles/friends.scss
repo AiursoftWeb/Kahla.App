@@ -1,3 +1,5 @@
+@import "themes";
+
 /******************
  *    Friends
  ******************** */
@@ -5,88 +7,45 @@
 .friends-header {
   width: 100%;
   height: 80px;
-  border-bottom-style: solid;
-  border-width: 1px;
-}
 
-:host-context(.theme-light) .friends-header {
-  border-color: #E8E8E8;
-}
+  .friends-button {
+    @extend %menu-item-clickable;
+    width: 25%;
+    float: left;
+    height: 80px;
+    text-decoration: none;
+    transition: all 0.2s ease-out;
+    color: #cccccc;
 
-:host-context(.theme-dark) .friends-header {
-  border-color: #353b48;
-}
+    .icon {
+      width: 70px;
+      position: relative;
+      text-align: center;
+      margin: auto;
+      margin-top: 7px;
+      font-size: 2.4em;
+    }
 
-.friends-header .friends-button {
-  width: 25%;
-  float: left;
-  height: 80px;
-  text-decoration: none;
-  transition: all 0.2s ease-out;
-}
+    .words {
+      text-align: center;
+      user-select: none;
+    }
 
-:host-context(.theme-light) .friends-header .friends-button {
-  background-color: #FEFEFE;
-  color: #CCCCCC;
-}
-
-:host-context(.theme-dark) .friends-header .friends-button {
-  background-color: #2f3640;
-  color: #CCCCCC;
-}
-
-.friends-header .friends-button {
-  .icon {
-    width: 70px;
-    position: relative;
-    text-align: center;
-    margin: auto;
-    margin-top: 7px;
-    font-size: 2.4em;
-  }
-
-  .words {
-    text-align: center;
-    user-select: none;
-  }
-
-  .reddot {
-    right: 10px;
+    .reddot {
+      right: 10px;
+    }
   }
 }
 
 .friend {
+  @extend %menu-item-clickable;
   height: 50px;
   border-width: 1px;
   border-bottom-style: solid;
   cursor: pointer;
   user-select: none;
   transition: all 0.2s ease-out;
-}
 
-:host-context(.theme-light) .friend {
-  border-color: #E8E8E8;
-  background-color: #FFF;
-}
-
-:host-context(.theme-dark) .friend {
-  border-color: #353b48;
-  background-color: #2f3640;
-}
-
-:host-context(.theme-light) {
-  .friend:hover, .friends-header .friends-button:hover {
-    background-color: #F6F6F6;
-  }
-}
-
-:host-context(.theme-dark) {
-  .friend:hover, .friends-header .friends-button:hover {
-    background-color: #374554;
-  }
-}
-
-.friend {
   .user-img {
     margin-left: 10px;
     margin-top: 7px;
