@@ -8,7 +8,7 @@ import { ContactInfo } from '../Models/ContactInfo';
 
 @Component({
     templateUrl: '../Views/localSearch.html',
-    styleUrls: ['../Styles/add-friend.scss',
+    styleUrls: ['../Styles/local-search.scss',
                 '../Styles/button.scss']
 
 })
