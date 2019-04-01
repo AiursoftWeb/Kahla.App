@@ -22,6 +22,7 @@ export class UserComponent implements OnInit {
     public conversationId: number;
     public areFriends: boolean;
     public loadingImgURL = Values.loadingImgURL;
+    public sentRequest: boolean;
     constructor(
         private route: ActivatedRoute,
         private friendsApiService: FriendsApiService,
@@ -43,8 +44,9 @@ export class UserComponent implements OnInit {
             .pipe(switchMap((params: Params) => this.friendsApiService.UserDetail(params['id'])))
             .subscribe(response => {
                 this.info = response.user;
-                this.conversationId = response.conversationId;
                 this.areFriends = response.areFriends;
+                this.conversationId = response.conversationId;
+                this.sentRequest = response.sentRequest;
                 this.info.avatarURL = Values.fileAddress + this.info.headImgFileKey;
             });
     }
@@ -71,6 +73,7 @@ export class UserComponent implements OnInit {
             .subscribe(response => {
                 if (response.code === 0) {
                     Swal.fire('Success', response.message, 'success');
+                    this.sentRequest = true;
                 } else {
                     Swal.fire('Error', response.message, 'error');
                 }
