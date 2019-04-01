@@ -55,6 +55,12 @@ export class DiscoverComponent implements OnInit {
             .subscribe(response => {
                 if (response.code === 0) {
                     Swal.fire('Success', response.message, 'success');
+                    for (let index = 0; index < this.users.length; index++) {
+                        if (this.users[index].targetUser.id === id) {
+                            this.users[index].sentRequest = true;
+                            break;
+                        }
+                    }
                 } else {
                     Swal.fire('Error', response.message, 'error');
                 }
