@@ -19,6 +19,8 @@ button, .button {
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button--fab {
