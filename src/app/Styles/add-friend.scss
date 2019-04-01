@@ -94,6 +94,7 @@
     font-size: 15px;
     font-weight: 400;
     position: relative;
+    word-break: break-all;
   }
 
   i {
@@ -117,7 +118,7 @@ h3 {
 }
 
 .discoverUsers {
-  grid-template-columns: 20% 40% 40%;
+  grid-template-columns: 20% 20% 20% 40%;
 }
 
 .dot {
