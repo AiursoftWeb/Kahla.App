@@ -1,39 +1,44 @@
+@import "shared";
 //
 // Light Theme
 //
 :host-context(.theme-light) {
-  $default-background: #efeff4;
-  $default-textcolor: #333;
-  $load-more-button-bg: #e3e3e3;
-  $load-more-button-color: #aaaaaa;
-  $menuitem-bg: #fff;
-  $menuitem-border-color: #e8e8e8;
-  $menuitem-hover-bg: #f6f6f6;
-  $nav-bg: #fff;
-  $nav-border-color: #d6d6d6;
-  $nav-color: #bbbbbb;
-  $nav-item-hover-bg: #f8f8f8;
-  $nav-item-hover-color: rgb(131, 182, 211);
-  $nav-item-current-color: #18a4f9;
-  $text-input-color: #808080;
-  $text-input-border-color: #e2e2e4;
-  $text-input-bg: #fff;
-  $search-part-bg: #cac9cf;
-  $search-part-tab-selected-bg: #fff;
-  $talking-chat-border-color: #e4e4e4;
-  $talking-chat-color: grey;
-  $talking-chat-bg: white;
-  $talking-action-bg: #e4e4e4;
-  $tgl-btn-bg: #f0f0f0;
-
-  @import "shared";
+  $colors: (
+    default-background: #efeff4,
+    default-textcolor: #333,
+    load-more-button-bg: #e3e3e3,
+    load-more-button-color: #aaaaaa,
+    menuitem-bg: #fff,
+    menuitem-border-color: #e8e8e8,
+    menuitem-hover-bg: #f6f6f6,
+    nav-bg: #fff,
+    nav-border-color: #d6d6d6,
+    nav-color: #bbbbbb,
+    nav-item-hover-bg: #f8f8f8,
+    nav-item-hover-color: rgb(131, 182, 211),
+    nav-item-current-color: #18a4f9,
+    text-input-color: #808080,
+    text-input-border-color: #e2e2e4,
+    text-input-bg: #fff,
+    search-part-bg: #cac9cf,
+    search-part-tab-selected-bg: #fff,
+    talking-chat-border-color: #e4e4e4,
+    talking-chat-color: grey,
+    talking-chat-bg: white,
+    talking-action-bg: #e4e4e4,
+    tgl-btn-bg: #f0f0f0
+  );
+  @include theme-shared($colors);
 }
 
 %body.theme-light {
-  color: #333;
-  background-color: #efeff4;
+  $colors: (
+    text-color: #333,
+    bg: #efeff4,
+    a-color: #1e3799,
+    left-a-color: #1e3799,
+    alert-bg: #fff
+  );
 
-  a {
-    color: #1e3799;
-  }
+  @include body-shared($colors);
 }
