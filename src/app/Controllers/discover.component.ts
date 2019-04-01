@@ -3,6 +3,7 @@ import { FriendsApiService } from '../Services/FriendsApiService';
 import { HeaderService } from '../Services/HeaderService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/discover.html',
@@ -45,5 +46,18 @@ export class DiscoverComponent implements OnInit {
         }, () => {
             this.loading = false;
         });
+    }
+
+    public request(event: any, id: string): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.friendsApiService.CreateRequest(id)
+            .subscribe(response => {
+                if (response.code === 0) {
+                    Swal.fire('Success', response.message, 'success');
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            });
     }
 }
