@@ -1,91 +1,114 @@
-%text {
-  color: $default-textcolor;
-}
-
-%menu-item {
-  background-color: $menuitem-bg;
-  border-color: $menuitem-border-color;
-}
-
-%menu-item-clickable {
-  @extend %menu-item;
-
-  &:hover {
-    background-color: $menuitem-hover-bg;
+@mixin theme-shared($colors) {
+  %text {
+    color: map-get($colors, default-textcolor);
   }
-}
 
-%nav-bar {
-  background-color: $menuitem-bg;
-  border-color: $nav-border-color;
+  %menu-item {
+    background-color: map-get($colors, menuitem-bg);
+    border-color: map-get($colors, menuitem-border-color);
+  }
 
-  .nav-item {
-    color: $nav-color;
+  %menu-item-clickable {
+    @extend %menu-item;
 
     &:hover {
-      background-color: $nav-item-hover-bg;
-      color: $nav-item-hover-color;
-    }
-
-    &.current {
-      color: $nav-item-current-color;
+      background-color: map-get($colors, menuitem-hover-bg);
     }
   }
-}
 
-%text-input {
-  border: 1px solid $text-input-border-color;
-  color: $text-input-color;
-  background-color: $text-input-bg;
-}
+  %nav-bar {
+    background-color: map-get($colors, menuitem-bg);
+    border-color: map-get($colors, nav-border-color);
 
-%search-part {
-  background-color: $search-part-bg;
+    .nav-item {
+      color: map-get($colors, nav-color);
 
-  &::after {
-    background-color: $search-part-tab-selected-bg;
+      &:hover {
+        background-color: map-get($colors, nav-item-hover-bg);
+        color: map-get($colors, nav-item-hover-color);
+      }
+
+      &.current {
+        color: map-get($colors, nav-item-current-color);
+      }
+    }
   }
 
-  .search-type .selected {
-    background-color: $search-part-tab-selected-bg;
-  }
-}
-
-%message-list {
-  background-color: $default-background;
-
-  .load-more {
-    background-color: $load-more-button-bg;
-    color: $load-more-button-color;
+  %text-input {
+    border: 1px solid map-get($colors, text-input-border-color);
+    color: map-get($colors, text-input-color);
+    background-color: map-get($colors, text-input-bg);
   }
 
-  .left .chat-content {
-    border-color: $talking-chat-border-color;
-    color: $talking-chat-color;
-    background-color: $talking-chat-bg;
+  %search-part {
+    background-color: map-get($colors, search-part-bg);
 
     &::after {
-      border-right-color: $talking-chat-border-color;
+      background-color: map-get($colors, search-part-tab-selected-bg);
     }
+
+    .search-type .selected {
+      background-color: map-get($colors, search-part-tab-selected-bg);
+    }
+  }
+
+  %message-list {
+    background-color: map-get($colors, default-background);
+
+    .load-more {
+      background-color: map-get($colors, load-more-button-bg);
+      color: map-get($colors, load-more-button-color);
+    }
+
+    .left .chat-content {
+      border-color: map-get($colors, talking-chat-border-color);
+      color: map-get($colors, talking-chat-color);
+      background-color: map-get($colors, talking-chat-bg);
+
+      &::after {
+        border-right-color: map-get($colors, talking-chat-border-color);
+      }
+    }
+  }
+
+  %chat-action {
+    background-color: map-get($colors, talking-action-bg);
+
+    .chat-part textarea {
+      background-color: map-get($colors, text-input-bg);
+      color: map-get($colors, text-input-color);
+    }
+
+    .input-file {
+      &:focus + label,
+      + label:hover {
+        background-color: map-get($colors, menuitem-hover-bg);
+      }
+    }
+  }
+
+  %tgl-btn {
+    background-color: map-get($colors, tgl-btn-bg);
   }
 }
 
-%chat-action {
-  background-color: $talking-action-bg;
-
-  .chat-part textarea {
-    background-color: $text-input-bg;
-    color: $text-input-color;
+@mixin body-shared($colors) {
+  color: map-get($colors, text-color);
+  background-color: map-get($colors, bg);
+  a {
+    color: map-get($colors, a-color);
   }
 
-  .input-file {
-    &:focus + label,
-    + label:hover {
-      background-color: $menuitem-hover-bg;
+  .left .chat-inline-link {
+    color: map-get($colors, left-a-color);
+  }
+
+  .swal2-popup {
+    background-color: map-get($colors, alert-bg);
+
+    .swal2-content,
+    .swal2-title {
+      color: map-get($colors, text-color);
     }
   }
-}
-
-%tgl-btn {
-  background-color: $tgl-btn-bg;
 }

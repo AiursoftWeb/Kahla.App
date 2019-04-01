@@ -1,51 +1,45 @@
+@import "shared";
 //
 // Dark Theme
 //
 :host-context(.theme-dark) {
-  $default-background: #2c3e50;
-  $default-textcolor: #fff;
-  $load-more-button-bg: #2f3640;
-  $load-more-button-color: #aaaaaa;
-  $menuitem-bg: #2f3640;
-  $menuitem-border-color: #353b48;
-  $menuitem-hover-bg: #374554;
-  $nav-bg: #2f3640;
-  $nav-border-color: #34495e;
-  $nav-color: #bbbbbb;
-  $nav-item-hover-bg: #374554;
-  $nav-item-hover-color: rgb(131, 182, 211);
-  $nav-item-current-color: #18a4f9;
-  $text-input-color: white;
-  $text-input-border-color: #e2e2e4;
-  $text-input-bg: #1e272e;
-  $search-part-bg: #222;
-  $search-part-tab-selected-bg: #2f3640;
-  $talking-chat-border-color: #718093;
-  $talking-chat-color: white;
-  $talking-chat-bg: #707e8a;
-  $talking-action-bg: #2f3640;
-  $tgl-btn-bg: #888;
+  $colors: (
+    default-background: #2c3e50,
+    default-textcolor: #fff,
+    load-more-button-bg: #2f3640,
+    load-more-button-color: #aaaaaa,
+    menuitem-bg: #2f3640,
+    menuitem-border-color: #353b48,
+    menuitem-hover-bg: #374554,
+    nav-bg: #2f3640,
+    nav-border-color: #34495e,
+    nav-color: #bbbbbb,
+    nav-item-hover-bg: #374554,
+    nav-item-hover-color: rgb(131, 182, 211),
+    nav-item-current-color: #18a4f9,
+    text-input-color: white,
+    text-input-border-color: #e2e2e4,
+    text-input-bg: #1e272e,
+    search-part-bg: #222,
+    search-part-tab-selected-bg: #2f3640,
+    talking-chat-border-color: #718093,
+    talking-chat-color: white,
+    talking-chat-bg: #707e8a,
+    talking-action-bg: #2f3640,
+    tgl-btn-bg: #888
+  );
 
-  @import "shared";
+  @include theme-shared($colors);
 }
 
 %body.theme-dark {
-  color: #fff;
-  background-color: #2c3e50;
-  a {
-    color: #3498db;
-  }
+  $colors: (
+    text-color: #fff,
+    bg: #2c3e50,
+    a-color: #3498db,
+    left-a-color: #74b9ff,
+    alert-bg: #2f3640
+  );
 
-  .left .chat-inline-link {
-    color: #74b9ff;
-  }
-
-  .swal2-popup {
-    background-color: #2f3640;
-
-    .swal2-content,
-    .swal2-title {
-      color: #fff;
-    }
-  }
+  @include body-shared($colors);
 }
