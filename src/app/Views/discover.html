@@ -6,7 +6,7 @@
     </div>
     <p>{{ user.commonFriends }} common friends</p>
     <button *ngIf="!user.sentRequest" class="button primary" (click)="request($event, user.targetUser.id)">Send Request</button>
-    <button *ngIf="user.sentRequest" class="button primary" disabled>Request was sent</button>
+    <button *ngIf="user.sentRequest" class="button primary" disabled>Pending</button>
 </div>
 
 <div *ngIf="users && users.length == 0">
