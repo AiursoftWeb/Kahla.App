@@ -46,7 +46,6 @@ export class AddFriendComponent {
                 // load more
                 this.searchNumbers += 20;
             }
-            document.querySelector('.search-part').classList.add('search-holder');
             this.callSearchApi(term);
         }
     }
@@ -66,6 +65,7 @@ export class AddFriendComponent {
                 } else if (!this.showUsers && result.groupsCount === 0 && result.usersCount !== 0) {
                     this.showUsers = true;
                 }
+                document.querySelector('.search-part').classList.add('search-holder');
             }
         });
     }
