@@ -133,6 +133,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.headerService.routerLink = `/group/${conversation.id}`;
                     }
                     this.timerService.updateDestructTime(conversation.maxLiveSeconds);
+                    if (this.timerService.destructTime === 'off') {
+                        this.headerService.timer = false;
+                    }
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
 
