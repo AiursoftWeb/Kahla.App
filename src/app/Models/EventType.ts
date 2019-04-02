@@ -2,5 +2,6 @@
     NewMessage = 0,
     NewFriendRequest = 1,
     WereDeletedEvent = 2,
-    FriendAcceptedEvent = 3
+    FriendAcceptedEvent = 3,
+    TimerUpdatedEvent = 4
 }

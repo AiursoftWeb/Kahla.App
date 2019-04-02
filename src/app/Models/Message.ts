@@ -7,4 +7,5 @@
     public read: boolean;
     public local = false;
     public avatarURL: string;
+    public timeStamp: number;
 }

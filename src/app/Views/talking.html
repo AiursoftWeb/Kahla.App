@@ -3,75 +3,77 @@
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
-        <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-            <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{users.get(message.senderId)[1] ? users.get(message.senderId)[1] : loadingImgURL}}?w=80&h=80">
-            <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id && messageService.conversation.requestUser.id != messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
-            <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.targetUser.headImgFileKey }}?w=80&h=80">
-        </div>
-        <div class="chat-text">
-            <div class="chat-content">
-                <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': users.get(message.senderId)[2]}">{{ users.get(message.senderId)[0] }}<br></span>
-                <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5, message.content.indexOf('?')) }}">
-                    <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.padding-bottom.%]="message.content.split('-')[2]">
-                        <img src="{{ message.content.substring(5).split('-')[0] }}" [ngClass]="message.content.split('-')[3]">
-                    </div>
-                </a>
-                <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3"  target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
-                    <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
-                        <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'png'" class="fa fa-file-image-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'svg'" class="fa fa-file-image-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'bmp'" class="fa fa-file-image-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'jpeg'" class="fa fa-file-image-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mp3'" class="fa fa-file-audio-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'aac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'flac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'wav'" class="fa fa-file-audio-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mp4'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'avi'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mkv'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'ogg'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'webm'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'m4v'" class="fa fa-file-video-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'zip'" class="fa fa-file-archive-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'tar'" class="fa fa-file-archive-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'7z'" class="fa fa-file-archive-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'dmg'" class="fa fa-file-archive-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'tar.gz'" class="fa fa-file-archive-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'doc'" class="fa fa-file-word-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'pages'" class="fa fa-file-word-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'xls'" class="fa fa-file-excel-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'numbers'" class="fa fa-file-excel-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'ppt'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'key'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
-                        <i *ngSwitchDefault class="fa fa-file" aria-hidden="true"></i>
-                    </div>
-                    <h5>{{message.content.split('-')[1]}}</h5>
-                    <span>{{message.content.split('-')[2]}}</span>
-                </a>
-                <div *ngIf="message.content.startsWith('[video]')" >
-                    <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
-                </div>
-                <div *ngIf="message.content.startsWith('[audio]')">
-                    <a href="javascript:void(0)" class="voicemsg" (click)="uploadService.getAudio($event.currentTarget, message.content)">
-                        <i class="fa fa-play"></i>
-                        <span>Voice Message</span>
-                    </a>
-                </div>
-                <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
+        <div *ngIf="message.local || message.timeStamp > messageService.currentTime">
+            <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
+                <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{users.get(message.senderId)[1] ? users.get(message.senderId)[1] : loadingImgURL}}?w=80&h=80">
+                <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id && messageService.conversation.requestUser.id != messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
+                <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.targetUser.headImgFileKey }}?w=80&h=80">
             </div>
-            <p class="sendTime">
-                <span *ngIf="message.local" i18n="@@Sending">
-                    Sending...
-                </span>
-                <span>
-                    {{message.sendTime | date:'M/d/yy h:mm a'}}
-                </span>
-            </p>
+            <div class="chat-text">
+                <div class="chat-content">
+                    <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': users.get(message.senderId)[2]}">{{ users.get(message.senderId)[0] }}<br></span>
+                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5, message.content.indexOf('?')) }}">
+                        <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.padding-bottom.%]="message.content.split('-')[2]">
+                            <img src="{{ message.content.substring(5).split('-')[0] }}" [ngClass]="message.content.split('-')[3]">
+                        </div>
+                    </a>
+                    <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3"  target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
+                        <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
+                            <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'png'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'svg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'bmp'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'jpeg'" class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mp3'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'aac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'flac'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'wav'" class="fa fa-file-audio-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mp4'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'avi'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mkv'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'ogg'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'webm'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'m4v'" class="fa fa-file-video-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'zip'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'tar'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'7z'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'dmg'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'tar.gz'" class="fa fa-file-archive-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'doc'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'pages'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'xls'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'numbers'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'ppt'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'key'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                            <i *ngSwitchDefault class="fa fa-file" aria-hidden="true"></i>
+                        </div>
+                        <h5>{{message.content.split('-')[1]}}</h5>
+                        <span>{{message.content.split('-')[2]}}</span>
+                    </a>
+                    <div *ngIf="message.content.startsWith('[video]')" >
+                        <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
+                    </div>
+                    <div *ngIf="message.content.startsWith('[audio]')">
+                        <a href="javascript:void(0)" class="voicemsg" (click)="uploadService.getAudio($event.currentTarget, message.content)">
+                            <i class="fa fa-play"></i>
+                            <span>Voice Message</span>
+                        </a>
+                    </div>
+                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
+                </div>
+                <p class="sendTime">
+                    <span *ngIf="message.local" i18n="@@Sending">
+                        Sending...
+                    </span>
+                    <span>
+                        {{message.sendTime | date:'M/d/yy h:mm a'}}
+                    </span>
+                </p>
+            </div>
         </div>
     </li>
     <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}" class="button button--fab" (click)="uploadService.scrollBottom(true)">
