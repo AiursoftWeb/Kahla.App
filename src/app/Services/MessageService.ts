@@ -31,6 +31,7 @@ export class MessageService {
     public maxImageWidth = 0;
     public me: KahlaUser;
     private timer;
+    public currentTime = Date.now();
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -90,6 +91,7 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
+                    t.timeStamp = new Date(t.sendTime).getTime() + this.conversation.maxLiveSeconds * 1000;
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
                         if (fileKey === -1 || isNaN(fileKey)) {
@@ -251,9 +253,7 @@ export class MessageService {
     public setTimer(): void {
         if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
             this.timer = setInterval(() => {
-                if (this.localMessages.length > 0) {
-                    this.getMessages(false, this.conversation.id, -1, 15);
-                }
+                this.currentTime = Date.now();
             }, this.conversation.maxLiveSeconds * 1000);
         }
     }

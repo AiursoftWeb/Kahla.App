@@ -122,6 +122,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.messageService.conversation = conversation;
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
+                    this.messageService.setTimer();
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
@@ -158,8 +159,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
                         }
                     });
-
-                    this.messageService.setTimer();
                 }
             });
         this.windowInnerHeight = window.innerHeight;
