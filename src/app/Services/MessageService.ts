@@ -15,6 +15,8 @@ import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
 import { ElectronService } from 'ngx-electron';
+import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
+import { TimerService } from './TimerService';
 
 @Injectable({
     providedIn: 'root'
@@ -37,15 +39,17 @@ export class MessageService {
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
         private cacheService: CacheService,
-        private _electronService: ElectronService
+        private _electronService: ElectronService,
+        private timerService: TimerService
     ) {}
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         const fireAlert = localStorage.getItem('deviceID');
+        let evt: NewMessageEvent | TimerUpdatedEvent;
         switch (ev.type) {
             case EventType.NewMessage:
-                const evt = ev as NewMessageEvent;
+                evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
@@ -72,6 +76,17 @@ export class MessageService {
                     Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
                 }
                 this.cacheService.UpdateConversation();
+                break;
+            case EventType.TimerUpdatedEvent:
+                evt = ev as TimerUpdatedEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversation.maxLiveSeconds = evt.newTimer;
+                    this.timerService.updateDestructTime(evt.newTimer);
+                    Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
+                        this.timerService.destructTime, 'info');
+                }
+                break;
+            default:
                 break;
         }
     }
