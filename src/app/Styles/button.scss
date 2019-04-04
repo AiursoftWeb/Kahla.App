@@ -34,7 +34,6 @@ button,
 }
 
 .button {
-  @extend %button;
   &.success {
     background-color: #5cb85c;
 
@@ -44,15 +43,7 @@ button,
   }
 
   &.primary {
-    background-color: #4075d5;
-
-    &:hover:enabled {
-      background-color: #0d47a1;
-    }
-
-    &:active {
-      background-color: #48a3dd;
-    }
+    @extend %primary-button;
   }
 
   &.warning {
@@ -82,7 +73,7 @@ button,
 
   &:disabled {
     cursor: not-allowed;
-    background-color: #7c7c7c;
+    background-color: #7c7c7c !important;
   }
 }
 
@@ -92,7 +83,7 @@ button,
 
 button:disabled {
   cursor: not-allowed;
-  background-color: #7c7c7c;
+  background-color: #7c7c7c !important;
 }
 
 .inputButton {

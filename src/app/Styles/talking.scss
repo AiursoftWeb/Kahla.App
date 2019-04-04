@@ -352,7 +352,7 @@ a h5 {
 }
 
 #scrollDown {
-  background-color: #bed0f1;
+  @extend %primary-button;
 }
 
 .bottom_right {

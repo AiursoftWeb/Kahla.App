@@ -20,7 +20,7 @@ export class ThemeComponent implements OnInit {
         this.headerService.timer = false;
     }
 
-    currentTheme: Themes = Themes.light;
+    currentTheme: Themes = Themes.kahlaLight;
 
     ngOnInit(): void {
         this.currentTheme = this.themeService.LocalThemeSetting;

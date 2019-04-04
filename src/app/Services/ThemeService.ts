@@ -23,12 +23,26 @@ export class ThemeService {
 
     ApplyTheme(elementRef: ElementRef, theme: Themes) {
         switch (theme) {
-            case Themes.dark:
+            case Themes.kahlaDark:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-dark';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#2391d3');
                 break;
-            case Themes.light:
+            case Themes.sakuraLight:
+                elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-light';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#f25d8e');
+                break;
+            case Themes.sakuraDark:
+                elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-dark';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#f25d8e');
+                break;
+            case Themes.kahlaLight:
             default:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#2391d3');
                 break;
         }
     }
@@ -41,7 +55,7 @@ export class ThemeService {
         const themeSet = localStorage.getItem('setting-theme');
         let theme: Themes;
         if (themeSet == null) {
-            theme = Themes.light;
+            theme = Themes.kahlaLight;
         } else {
             theme = parseInt(themeSet, 10) as Themes;
         }

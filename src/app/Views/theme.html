@@ -1,17 +1,32 @@
 <app-header></app-header>
 <div class="menu-button" (click)="changeTheme(0)">
-    <div class="text" i18n="@@Light">Light</div>
+    <div class="text" i18n="@@Light">Kahla Light</div>
     <div class="img checked"
     [style.visibility]="currentTheme === 0 ? 'visible' : 'hidden'"
     >
         <i class="fa fa-check"></i>
     </div>
 </div>
-<div class="menu-button" (click)="changeTheme(1)"
->
-    <div class="text" i18n="@@Dark">Dark</div>
+<div class="menu-button" (click)="changeTheme(1)">
+    <div class="text" i18n="@@Dark">Kahla Dark</div>
     <div class="img checked"
     [style.visibility]="currentTheme === 1 ? 'visible':'hidden'"
+    >
+        <i class="fa fa-check"></i>
+    </div>
+</div>
+<div class="menu-button" (click)="changeTheme(2)">
+    <div class="text" i18n="@@Dark">Sakura Light</div>
+    <div class="img checked"
+    [style.visibility]="currentTheme === 2 ? 'visible':'hidden'"
+    >
+        <i class="fa fa-check"></i>
+    </div>
+</div>
+<div class="menu-button" (click)="changeTheme(3)">
+    <div class="text" i18n="@@Dark">Sakura Dark</div>
+    <div class="img checked"
+    [style.visibility]="currentTheme === 3 ? 'visible':'hidden'"
     >
         <i class="fa fa-check"></i>
     </div>
