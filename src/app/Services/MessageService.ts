@@ -292,8 +292,8 @@ export class MessageService {
     }
 
     private getUserInfoArray(user: KahlaUser) {
-        return [user.id, [user.nickName, Values.fileAddress + user.headImgFileKey,
-            this.colors[Math.floor(Math.random() * this.colors.length)]]];
+        return [user.nickName, Values.fileAddress + user.headImgFileKey,
+            this.colors[Math.floor(Math.random() * this.colors.length)]];
     }
 
     public getUser(id: number): Array<string> {
