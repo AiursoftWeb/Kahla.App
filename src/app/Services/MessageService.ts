@@ -34,6 +34,9 @@ export class MessageService {
     public me: KahlaUser;
     private timer;
     public currentTime = Date.now();
+    private users = new Map();
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -51,6 +54,9 @@ export class MessageService {
             case EventType.NewMessage:
                 evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
+                    if (this.conversation.discriminator === 'GroupConversation' && !this.users.has(evt.sender.id)) {
+                        this.users.set(evt.sender.id, this.getUserInfoArray(evt.sender));
+                    }
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
@@ -275,5 +281,26 @@ export class MessageService {
 
     public clearTimer(): void {
         clearInterval(this.timer);
+    }
+
+    public setUsers(): void {
+        if (this.conversation && this.conversation.discriminator === 'GroupConversation') {
+            this.conversation.users.forEach(userGroupRelation => {
+                this.users.set(userGroupRelation.user.id, this.getUserInfoArray(userGroupRelation.user));
+            });
+        }
+    }
+
+    private getUserInfoArray(user: KahlaUser) {
+        return [user.nickName, Values.fileAddress + user.headImgFileKey,
+            this.colors[Math.floor(Math.random() * this.colors.length)]];
+    }
+
+    public getUser(id: number): Array<string> {
+        if (this.users.has(id)) {
+            return this.users.get(id);
+        } else {
+            return ['New user', Values.loadingImgURL, 'aqua'];
+        }
     }
 }
