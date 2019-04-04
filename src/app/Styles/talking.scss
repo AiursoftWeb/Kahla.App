@@ -16,22 +16,7 @@
   font-size: 13px;
   text-align: center;
   min-height: calc(100vh - 130px);
-}
 
-.active-button {
-  bottom: 185px !important;
-}
-
-.active-list {
-  margin-bottom: 161px;
-}
-
-.load-more {
-  width: 240px;
-  margin-bottom: 20px;
-}
-
-.message-list {
   li {
     margin-bottom: 25px;
     clear: both;
@@ -44,6 +29,13 @@
     display: inline-block;
     text-align: center;
     cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      user-select: none;
+    }
   }
 
   .left .chat-avatar {
@@ -54,24 +46,15 @@
     float: right;
   }
 
-  .chat-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    user-select: none;
-  }
-}
-
-.chat-avatar:focus {
-  outline: none;
-}
-
-.message-list {
   .chat-text {
     display: block;
     font-size: 12px;
     width: 70%;
     margin-bottom: 1.5%;
+    
+    span {
+      color: #aaa;
+    }
   }
 
   .left .chat-text {
@@ -93,18 +76,16 @@
     position: relative;
     display: inline-block;
     min-height: 17px;
-  }
-}
 
-.message-list {
-  .chat-content {
     p {
       text-align: left;
       word-break: break-all;
+      margin: 0;
+      white-space: pre-wrap;
     }
 
     .loading {
-      color: #EEEEEE;
+      color: #eeeeee;
     }
 
     &:after {
@@ -117,44 +98,21 @@
       border-width: 5px;
       margin-top: -5px;
     }
+
+    span {
+      font-weight: bold;
+    }
   }
 
   .left .chat-content:after {
     right: 100%;
     top: 20px;
   }
-}
 
-.message-list {
   .right .chat-content:after {
     left: 100%;
     top: 20px;
     border-color: rgba(238, 238, 242, 0);
-    border-left-color: #18A4F9;
-  }
-
-  .chat-content p {
-    margin: 0;
-    white-space: pre-wrap;
-  }
-}
-
-.image-container {
-  height: 0;
-  position: relative;
-}
-
-.message-list .chat-content video {
-  width: 100%;
-}
-
-.message-list {
-  .right .chat-content {
-    background-color: #18A4F9;
-  }
-
-  .chat-text span {
-    color: #AAA;
   }
 
   .left .sendTime {
@@ -164,10 +122,32 @@
   .right .sendTime {
     margin: 0.5% 1% 0 0;
   }
+}
 
-  .chat-content span {
-    font-weight: bold;
-  }
+.active-button {
+  bottom: 185px !important;
+}
+
+.active-list {
+  margin-bottom: 161px;
+}
+
+.load-more {
+  width: 240px;
+  margin-bottom: 20px;
+}
+
+.chat-avatar:focus {
+  outline: none;
+}
+
+.image-container {
+  height: 0;
+  position: relative;
+}
+
+.message-list .chat-content video {
+  width: 100%;
 }
 
 .chat-action {
@@ -185,13 +165,7 @@
 .chat-part {
   margin-right: 90px;
   transition: all 0.15s ease-in-out;
-}
 
-.chat-part-extented {
-  margin-right: 0px;
-}
-
-.chat-part {
   textarea {
     width: 100%;
     float: left;
@@ -212,9 +186,7 @@
     width: 75%;
     border-radius: 6px 0 0 6px;
   }
-}
 
-.chat-part {
   button {
     visibility: hidden;
     padding: 0px;
@@ -234,6 +206,10 @@
   }
 }
 
+.chat-part-extented {
+  margin-right: 0px;
+}
+
 .button-part {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -248,7 +224,7 @@
 
 .button-part i {
   cursor: pointer;
-  color: #BBB;
+  color: #bbb;
   font-size: 2.5em;
   outline: none;
 }
@@ -314,13 +290,15 @@ progress {
 }
 
 .left {
-  .chat-text a, .chat-content .voicemsg span {
+  .chat-text a,
+  .chat-content .voicemsg span {
     color: #9baec8;
   }
 }
 
 .right {
-  .chat-text a, .chat-content .voicemsg span {
+  .chat-text a,
+  .chat-content .voicemsg span {
     color: #d9e1e8;
   }
 }

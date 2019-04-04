@@ -1,10 +1,12 @@
+@import "themes";
+
 /******************
  *    Header
  ******************** */
 
 .header {
+  @extend %header;
   position: fixed;
-  background: linear-gradient(to bottom, #2391d3, #43b1f3);
 
   /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
   height: 40px;

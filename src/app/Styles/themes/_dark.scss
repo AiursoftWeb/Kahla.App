@@ -26,7 +26,12 @@
     talking-chat-color: white,
     talking-chat-bg: #707e8a,
     talking-action-bg: #2f3640,
-    tgl-btn-bg: #888
+    tgl-btn-bg: #888,
+    header-bg: linear-gradient(to bottom, #2391d3, #43b1f3),
+    primary-btn-bg:#4075d5,
+    primary-btn-hover-bg:#0d47a1,
+    primary-btn-active-bg:#48a3dd,
+    talking-chat-right-bg:#18a4f9,
   );
 
   @include theme-shared($colors);

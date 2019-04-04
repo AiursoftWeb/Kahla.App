@@ -3,6 +3,10 @@
     color: map-get($colors, default-textcolor);
   }
 
+  %header {
+    background: map-get($colors, header-bg);
+  }
+
   %menu-item {
     background-color: map-get($colors, menuitem-bg);
     border-color: map-get($colors, menuitem-border-color);
@@ -69,6 +73,14 @@
         border-right-color: map-get($colors, talking-chat-border-color);
       }
     }
+
+    .right .chat-content {
+      background-color: map-get($colors, talking-chat-right-bg );
+      
+      &::after{
+        border-left-color: map-get($colors, talking-chat-right-bg );
+      }
+    }
   }
 
   %chat-action {
@@ -89,6 +101,20 @@
 
   %tgl-btn {
     background-color: map-get($colors, tgl-btn-bg);
+  }
+
+  %button {
+    &.primary {
+      background-color: map-get($colors, primary-btn-bg);
+
+      &:hover:enabled {
+        background-color: map-get($colors, primary-btn-hover-bg);
+      }
+
+      &:active {
+        background-color: map-get($colors, primary-btn-active-bg);
+      }
+    }
   }
 }
 
