@@ -27,9 +27,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
-    public users = new Map();
     public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
@@ -114,13 +111,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroyed) {
-                    if (conversation.discriminator === 'GroupConversation') {
-                        conversation.users.forEach(user => {
-                            this.users.set(user.user.id, [user.user.nickName, Values.fileAddress + user.user.headImgFileKey,
-                                this.colors[Math.floor(Math.random() * this.colors.length)]]);
-                        });
-                    }
                     this.messageService.conversation = conversation;
+                    this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.setTimer();
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
@@ -351,8 +343,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
-        this.colors = null;
-        this.users = null;
         this.conversationID = null;
         clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;

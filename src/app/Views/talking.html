@@ -5,13 +5,13 @@
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
         <div *ngIf="message.local || message.timeStamp > messageService.currentTime">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-                <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{users.get(message.senderId)[1] ? users.get(message.senderId)[1] : loadingImgURL}}?w=80&h=80">
+                <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{messageService.getUser(message.senderId)[1]}}?w=80&h=80">
                 <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id && messageService.conversation.requestUser.id != messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
                 <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.targetUser.headImgFileKey }}?w=80&h=80">
             </div>
             <div class="chat-text">
                 <div class="chat-content">
-                    <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': users.get(message.senderId)[2]}">{{ users.get(message.senderId)[0] }}<br></span>
+                    <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.getUser(message.senderId)[2]}">{{ messageService.getUser(message.senderId)[0] }}<br></span>
                     <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5, message.content.indexOf('?')) }}">
                         <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.padding-bottom.%]="message.content.split('-')[2]">
                             <img src="{{ message.content.substring(5).split('-')[0] }}" [ngClass]="message.content.split('-')[3]">
