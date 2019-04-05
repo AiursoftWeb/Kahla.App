@@ -2,7 +2,7 @@
 //
 // Light Theme
 //
-:host-context(.theme-light) {
+:host-context(.theme-sakura-light) {
   $colors: (
     default-background: #efeff4,
     default-textcolor: #333,
@@ -11,13 +11,13 @@
     menuitem-bg: #fff,
     menuitem-border-color: #e8e8e8,
     menuitem-hover-bg: #f6f6f6,
-    menuitem-img-color:#18a4f9,
+    menuitem-img-color:#f25d8e,
     nav-bg: #fff,
     nav-border-color: #d6d6d6,
     nav-color: #bbbbbb,
     nav-item-hover-bg: #f8f8f8,
-    nav-item-hover-color: rgb(131, 182, 211),
-    nav-item-current-color: #18a4f9,
+    nav-item-hover-color: #f8bbd0,
+    nav-item-current-color: #f25d8e,
     text-input-color: #808080,
     text-input-border-color: #e2e2e4,
     text-input-bg: #fff,
@@ -28,23 +28,23 @@
     talking-chat-bg: white,
     talking-action-bg: #e4e4e4,
     tgl-btn-bg: #f0f0f0,
-    header-bg: linear-gradient(to bottom, #2391d3, #43b1f3),
-    primary-btn-bg:#4075d5,
-    primary-btn-hover-bg:#0d47a1,
-    primary-btn-active-bg:#48a3dd,
-    talking-chat-right-bg:#18a4f9,
+    header-bg: linear-gradient(to bottom, #f25d8e, #B33771),
+    primary-btn-bg:#f25d8e,
+    primary-btn-hover-bg:#B33771,
+    primary-btn-active-bg:#B33771,
+    talking-chat-right-bg:#B33771,
   );
   @include theme-shared($colors);
 }
 
-%body.theme-light {
+%body.theme-sakura-light {
   $colors: (
     text-color: #333,
     bg: #efeff4,
     a-color: #1e3799,
     left-a-color: #1e3799,
     alert-bg: #fff,
-    btn-bg:#4075d5,
+    btn-bg:#f25d8e,
   );
 
   @include body-shared($colors);

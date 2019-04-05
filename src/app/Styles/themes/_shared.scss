@@ -3,9 +3,17 @@
     color: map-get($colors, default-textcolor);
   }
 
+  %header {
+    background: map-get($colors, header-bg);
+  }
+
   %menu-item {
     background-color: map-get($colors, menuitem-bg);
     border-color: map-get($colors, menuitem-border-color);
+
+    .img {
+      color: map-get($colors, menuitem-img-color);
+    }
   }
 
   %menu-item-clickable {
@@ -69,6 +77,14 @@
         border-right-color: map-get($colors, talking-chat-border-color);
       }
     }
+
+    .right .chat-content {
+      background-color: map-get($colors, talking-chat-right-bg );
+
+      &::after{
+        border-left-color: map-get($colors, talking-chat-right-bg );
+      }
+    }
   }
 
   %chat-action {
@@ -90,6 +106,18 @@
   %tgl-btn {
     background-color: map-get($colors, tgl-btn-bg);
   }
+
+    %primary-button {
+      background-color: map-get($colors, primary-btn-bg);
+
+      &:hover:enabled {
+        background-color: map-get($colors, primary-btn-hover-bg);
+      }
+
+      &:active {
+        background-color: map-get($colors, primary-btn-active-bg);
+      }
+    }
 }
 
 @mixin body-shared($colors) {
@@ -110,5 +138,10 @@
     .swal2-title {
       color: map-get($colors, text-color);
     }
+
+    .swal2-styled.swal2-confirm{
+      background-color: map-get($colors, btn-bg );
+    }
+
   }
 }

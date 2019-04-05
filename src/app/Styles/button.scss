@@ -1,13 +1,15 @@
+@import "themes";
 .buttons {
   padding: 10px;
   text-align: center;
 }
 
-button, .button {
+button,
+.button {
   border: none;
   outline: none;
   border-radius: 4px;
-  color: #FFF;
+  color: #fff;
   transition: all 0.2s ease;
   width: 100%;
   max-width: 540px;
@@ -41,35 +43,9 @@ button, .button {
   }
 
   &.primary {
-    background-color: #4075d5;
-
-    &:hover:enabled {
-      background-color: #0D47A1;
-    }
-  }
-}
-
-.inputButton:hover {
-  background-color: #0D47A1;
-}
-
-.button {
-  &.primary:focus:enabled {
-    background-color: #48A3DD;
+    @extend %primary-button;
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    background-color: #7c7c7c;
-  }
-}
-
-button:disabled {
-  cursor: not-allowed;
-  background-color: #7c7c7c;
-}
-
-.button {
   &.warning {
     background-color: #d9534f;
 
@@ -78,12 +54,12 @@ button:disabled {
     }
 
     &:active {
-      background-color: #B12824;
+      background-color: #b12824;
     }
   }
 
   &.white {
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     color: black;
 
     &:hover:enabled {
@@ -91,9 +67,23 @@ button:disabled {
     }
 
     &:focus:enabled {
-      background-color: #BBB;
+      background-color: #bbb;
     }
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #7c7c7c !important;
+  }
+}
+
+.inputButton:hover {
+  background-color: #0d47a1;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background-color: #7c7c7c !important;
 }
 
 .inputButton {
@@ -102,7 +92,7 @@ button:disabled {
 }
 
 .alert {
-  color: #C62828;
+  color: #c62828;
   margin-bottom: 5%;
   font-size: 0.8rem;
   text-align: center;
