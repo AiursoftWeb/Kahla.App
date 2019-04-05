@@ -124,13 +124,7 @@ export class MessageService {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             const ratio = imageHeight / imageWidth * 100;
-                            // if the image longer than 9:16 will be saw as a long image,
-                            // and the width will be limited at 300.
-                            const realMaxWidth = imageWidth >= imageHeight ?
-                                Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight))) :
-                                (imageWidth * 1.8 >= imageHeight ?
-                                    Math.min(this.maxImageWidth, 500) :
-                                    Math.min(this.maxImageWidth, 300));
+                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight)));
 
                             if (realMaxWidth < imageWidth) {
                                 imageWidth = realMaxWidth;
