@@ -67,7 +67,7 @@
 </div>
 
 <div class="buttons">
-    <button class="button success" *ngIf="info && messageService.me && !areFriends && messageService.me.emailConfirmed && !sentRequest" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
-    <button class="button success" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
-    <button class="button success" *ngIf="!areFriends && sentRequest" disabled>Request was sent</button>
+    <button class="button primary" *ngIf="info && messageService.me && !areFriends && messageService.me.emailConfirmed && !sentRequest" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
+    <button class="button primary" *ngIf="!areFriends && sentRequest" disabled>Request was sent</button>
 </div>
