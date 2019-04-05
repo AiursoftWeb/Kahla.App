@@ -28,11 +28,11 @@
     talking-chat-bg: #707e8a,
     talking-action-bg: #2f3640,
     tgl-btn-bg: #888,
-    header-bg: linear-gradient(to bottom, #f25d8e, #B33771),
+    header-bg: linear-gradient(to bottom, #f25d8e, #CE3050),
     primary-btn-bg:#f25d8e,
     primary-btn-hover-bg:#B33771,
     primary-btn-active-bg:#B33771,
-    talking-chat-right-bg:#B33771,
+    talking-chat-right-bg:#f25d8e,
   );
 
   @include theme-shared($colors);
