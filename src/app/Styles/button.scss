@@ -34,16 +34,28 @@ button,
 }
 
 .button {
+  &:disabled{
+    cursor: not-allowed;
+  }
+  
   &.success {
     background-color: #5cb85c;
 
     &:hover:enabled {
       background-color: #3c983c;
     }
+
+    &:disabled {
+      background-color: #7c7c7c !important;
+    }
   }
 
   &.primary {
     @extend %primary-button;
+
+    &:disabled {
+      background-color: #7c7c7c !important;
+    }
   }
 
   &.warning {
@@ -71,19 +83,10 @@ button,
     }
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    background-color: #7c7c7c !important;
-  }
 }
 
 .inputButton:hover {
   background-color: #0d47a1;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  background-color: #7c7c7c !important;
 }
 
 .inputButton {
