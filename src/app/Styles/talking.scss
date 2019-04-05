@@ -142,8 +142,9 @@
 }
 
 .image-container {
-  height: 0;
   position: relative;
+  max-height: 1000px;
+  overflow: hidden;
 }
 
 .message-list .chat-content video {
