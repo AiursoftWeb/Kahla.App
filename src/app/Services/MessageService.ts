@@ -218,7 +218,7 @@ export class MessageService {
     }
 
     public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
+        this.maxImageWidth = Math.min(Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2), 300);
     }
 
     public resetVariables(): void {
