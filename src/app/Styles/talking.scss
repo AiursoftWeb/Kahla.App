@@ -142,8 +142,9 @@
 }
 
 .image-container {
-  height: 0;
   position: relative;
+  max-height: 1000px;
+  overflow: hidden;
 }
 
 .message-list .chat-content video {
@@ -183,7 +184,7 @@
   }
 
   .chatinput-shorten {
-    width: 75%;
+    width: calc(100% - 100px);
     border-radius: 6px 0 0 6px;
   }
 
@@ -201,7 +202,7 @@
   .sendbtn-shown {
     visibility: visible;
     padding: 0 16px;
-    width: 25%;
+    width: 100px;
     opacity: 1;
   }
 }

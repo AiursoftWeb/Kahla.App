@@ -124,17 +124,20 @@ export class MessageService {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             const ratio = imageHeight / imageWidth * 100;
-                            if (this.maxImageWidth < imageWidth) {
-                                imageWidth = this.maxImageWidth;
-                                imageHeight = Math.floor(this.maxImageWidth * ratio / 100);
+                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight)));
+
+                            if (realMaxWidth < imageWidth) {
+                                imageWidth = realMaxWidth;
+                                imageHeight = Math.floor(realMaxWidth * ratio / 100);
                             }
                             const displayWidth = imageWidth;
+                            const displayHeight = Math.min(imageHeight, 900);
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
-                                '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
+                                '&h=' + imageHeight + '-' + displayWidth + '-' + displayHeight + '-' +
                                 this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
@@ -218,7 +221,7 @@ export class MessageService {
     }
 
     public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.min(Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2), 300);
+        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
     }
 
     public resetVariables(): void {
