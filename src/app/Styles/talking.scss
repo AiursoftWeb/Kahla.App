@@ -1,0 +1,397 @@
+@import "themes";
+
+/******************
+ *    Talking
+ ******************** */
+
+.message-list {
+  @extend %message-list;
+  list-style: none;
+  overflow-x: hidden;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 0;
+  margin-bottom: 56px;
+  font-size: 13px;
+  text-align: center;
+  min-height: calc(100vh - 130px);
+
+  li {
+    margin-bottom: 25px;
+    clear: both;
+    box-sizing: border-box;
+  }
+
+  .chat-avatar {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      user-select: none;
+    }
+  }
+
+  .left .chat-avatar {
+    float: left;
+  }
+
+  .right .chat-avatar {
+    float: right;
+  }
+
+  .chat-text {
+    display: block;
+    font-size: 12px;
+    width: 70%;
+    margin-bottom: 1.5%;
+    
+    span {
+      color: #aaa;
+    }
+  }
+
+  .left .chat-text {
+    float: left;
+    text-align: left;
+    margin-left: 12px;
+  }
+
+  .right .chat-text {
+    float: right;
+    text-align: right;
+    margin-right: 12px;
+  }
+
+  .chat-content {
+    border-radius: 8px;
+    color: white;
+    padding: 10px;
+    position: relative;
+    display: inline-block;
+    min-height: 17px;
+
+    p {
+      text-align: left;
+      word-break: break-all;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .loading {
+      color: #eeeeee;
+    }
+
+    &:after {
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-width: 5px;
+      margin-top: -5px;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .left .chat-content:after {
+    right: 100%;
+    top: 20px;
+  }
+
+  .right .chat-content:after {
+    left: 100%;
+    top: 20px;
+    border-color: rgba(238, 238, 242, 0);
+  }
+
+  .left .sendTime {
+    margin: 0.5% 0 0 1%;
+  }
+
+  .right .sendTime {
+    margin: 0.5% 1% 0 0;
+  }
+}
+
+.active-button {
+  bottom: 185px !important;
+}
+
+.active-list {
+  margin-bottom: 161px;
+}
+
+.load-more {
+  width: 240px;
+  margin-bottom: 20px;
+}
+
+.chat-avatar:focus {
+  outline: none;
+}
+
+.image-container {
+  position: relative;
+  max-height: 1000px;
+  overflow: hidden;
+}
+
+.message-list .chat-content video {
+  width: 100%;
+}
+
+.chat-action {
+  @extend %chat-action;
+  padding: 10px;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  z-index: 99;
+  bottom: 0;
+  box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
+}
+
+.chat-part {
+  margin-right: 90px;
+  transition: all 0.15s ease-in-out;
+
+  textarea {
+    width: 100%;
+    float: left;
+    border: none;
+    border-radius: 6px;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, width ease-in-out 0.15s;
+    box-shadow: none;
+    min-height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    resize: none;
+    overflow-x: hidden;
+  }
+
+  .chatinput-shorten {
+    width: calc(100% - 100px);
+    border-radius: 6px 0 0 6px;
+  }
+
+  button {
+    visibility: hidden;
+    padding: 0px;
+    width: 0%;
+    opacity: 0;
+    float: left;
+    border-radius: 0 6px 6px 0;
+    height: 34px;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .sendbtn-shown {
+    visibility: visible;
+    padding: 0 16px;
+    width: 100px;
+    opacity: 1;
+  }
+}
+
+.chat-part-extented {
+  margin-right: 0px;
+}
+
+.button-part {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+}
+
+.button-part-invisible {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.button-part i {
+  cursor: pointer;
+  color: #bbb;
+  font-size: 2.5em;
+  outline: none;
+}
+
+.more-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+}
+
+.of4 {
+  text-align: center;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+
+  + label {
+    text-align: center;
+    padding: 10px;
+    margin-top: 15px;
+    height: 70px;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+    width: 80px;
+    transition: all 0.15s ease-out;
+  }
+}
+
+i {
+  font-size: 1.5rem;
+}
+
+.of4 .text {
+  margin-top: 15px;
+  color: #727272;
+  user-select: none;
+}
+
+progress {
+  position: fixed;
+  width: 100%;
+  height: 5px;
+  top: 40px;
+  z-index: 100;
+}
+
+#scrollDown {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+}
+
+.chat-text a {
+  text-decoration: none;
+}
+
+.left {
+  .chat-text a,
+  .chat-content .voicemsg span {
+    color: #9baec8;
+  }
+}
+
+.right {
+  .chat-text a,
+  .chat-content .voicemsg span {
+    color: #d9e1e8;
+  }
+}
+
+a h5 {
+  margin: 0;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.right .chat-content span {
+  color: #fff;
+}
+
+.file {
+  display: grid;
+  grid-template-columns: 40px 2fr;
+  align-items: center;
+
+  div {
+    grid-row-start: 1;
+    grid-row-end: 3;
+    text-align: center;
+  }
+
+  span {
+    grid-column-start: 2;
+    text-align: right;
+    word-break: break-all;
+  }
+}
+
+.message-list .chat-content .voicemsg {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 40px 2fr;
+  grid-template-rows: auto;
+
+  .fa {
+    text-align: center;
+  }
+
+  span {
+    font-size: 16px;
+    grid-column-start: 2;
+  }
+}
+
+.red {
+  color: red !important;
+}
+
+#scrollDown {
+  @extend %primary-button;
+}
+
+.bottom_right {
+  transform: rotate(180deg);
+}
+
+.right_top {
+  transform: rotate(90deg);
+  position: absolute;
+  transform-origin: top left;
+  left: 100%;
+}
+
+.left_bottom {
+  transform: rotate(-90deg);
+  transform-origin: top right;
+  position: absolute;
+  right: 100%;
+}
+
+.flip_bottom_right {
+  transform: scaleX(-1) rotate(180deg);
+}
+
+.flip_right_top {
+  transform: scaleX(-1) rotate(90deg);
+  position: absolute;
+  transform-origin: top left;
+  left: 0;
+}
+
+.flip_left_bottom {
+  transform: scaleX(-1) rotate(-90deg);
+  position: absolute;
+  transform-origin: top right;
+  right: 0;
+}
+
+.flip {
+  transform: scaleX(-1);
+}

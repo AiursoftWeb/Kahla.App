@@ -1,43 +1,36 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { HeaderService } from '../Services/HeaderService';
 import { Themes } from '../Models/Themes';
+import { ThemeService } from '../Services/ThemeService';
 
 @Component({
     templateUrl: '../Views/theme.html',
-    styleUrls: ['../Styles/menu.css'],
+    styleUrls: ['../Styles/menu.scss'],
 })
 export class ThemeComponent implements OnInit {
     constructor(
         private headerService: HeaderService,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private themeService: ThemeService
     ) {
         this.headerService.title = 'Theme';
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
-    currentTheme: Themes = Themes.light;
+    currentTheme: Themes = Themes.kahlaLight;
 
     ngOnInit(): void {
-         const localSet = localStorage.getItem('setting-theme');
-         if (localSet != null) {
-             this.currentTheme = parseInt(localSet, 10) as Themes;
-         }
+        this.currentTheme = this.themeService.LocalThemeSetting;
     }
 
-    changeTheme(themeId: Number) {
-        const theme = themeId as Themes;
-        if (this.currentTheme === theme) { return; }
+    changeTheme(theme: Themes) {
+        if (this.currentTheme === theme) {return; }
         this.currentTheme = theme;
-        localStorage.setItem('setting-theme', this.currentTheme.toString());
-        switch (theme) {
-            case Themes.light:
-            this.elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
-            break;
-            case Themes.dark:
-            this.elementRef.nativeElement.ownerDocument.body.className = 'theme-dark';
-            break;
-        }
+        this.themeService.LocalThemeSetting = theme;
+        this.themeService.SetRemoteThemeSetting(theme);
+        this.themeService.ApplyTheme(this.elementRef, theme);
     }
 }

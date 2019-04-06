@@ -1,0 +1,16 @@
+<app-header></app-header>
+<div class="search-part">
+    <input placeholder="Enter your friend's nickname" type="text" #searchBar (keyup)="search(searchBar.value)" />
+</div>
+<div class="search-holder"></div>
+
+<h3 *ngIf="noResult">
+    No result.
+</h3>
+
+<div class="result" *ngFor="let result of results | async" routerLink="/talking/{{ result.conversationId }}">
+    <img class="user-img" src="{{result.avatarURL ? result.avatarURL : loadingImgURL}}?w=80&h=80" />
+    <div class="sender">
+        {{result.displayName}}
+    </div>
+</div>

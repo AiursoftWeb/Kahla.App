@@ -1,0 +1,102 @@
+@import "themes";
+.buttons {
+  padding: 10px;
+  text-align: center;
+}
+
+button,
+.button {
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  color: #fff;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 540px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button--fab {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  line-height: normal;
+}
+
+.button {
+  &:disabled{
+    cursor: not-allowed;
+  }
+  
+  &.success {
+    background-color: #5cb85c;
+
+    &:hover:enabled {
+      background-color: #3c983c;
+    }
+
+    &:disabled {
+      background-color: #7c7c7c !important;
+    }
+  }
+
+  &.primary {
+    @extend %primary-button;
+
+    &:disabled {
+      background-color: #7c7c7c !important;
+    }
+  }
+
+  &.warning {
+    background-color: #d9534f;
+
+    &:hover {
+      background-color: #ee4643;
+    }
+
+    &:active {
+      background-color: #b12824;
+    }
+  }
+
+  &.white {
+    background-color: #f5f5f5;
+    color: black;
+
+    &:hover:enabled {
+      background-color: white;
+    }
+
+    &:focus:enabled {
+      background-color: #bbb;
+    }
+  }
+
+}
+
+.inputButton:hover {
+  background-color: #0d47a1;
+}
+
+.inputButton {
+  width: auto !important;
+  margin: 0 auto !important;
+}
+
+.alert {
+  color: #c62828;
+  margin-bottom: 5%;
+  font-size: 0.8rem;
+  text-align: center;
+}

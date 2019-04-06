@@ -51,6 +51,12 @@ export class AuthApiService {
         });
     }
 
+    public UpdateClientSetting(themeId: number) {
+        return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
+            ThemeId: themeId
+        });
+    }
+
     public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/ChangePassword', {
             OldPassword: oldPassword,

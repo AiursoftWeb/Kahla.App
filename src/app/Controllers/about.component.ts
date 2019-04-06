@@ -6,9 +6,9 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
     templateUrl: '../Views/about.html',
     styleUrls: [
-        '../Styles/about.css',
-        '../Styles/menu.css',
-        '../Styles/button.css']
+        '../Styles/about.scss',
+        '../Styles/menu.scss',
+        '../Styles/button.scss']
 })
 
 export class AboutComponent {
@@ -21,6 +21,7 @@ export class AboutComponent {
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     public check(): void {

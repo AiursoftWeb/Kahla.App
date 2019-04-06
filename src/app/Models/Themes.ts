@@ -1,3 +1,6 @@
 export enum Themes {
-    light, dark
+    kahlaLight,
+    kahlaDark,
+    sakuraLight,
+    sakuraDark
 }

@@ -10,4 +10,5 @@ export class Conversation {
     public aesKey: string;
     public users: UserGroupRelation[];
     public avatarURL: string;
+    public maxLiveSeconds: number;
 }

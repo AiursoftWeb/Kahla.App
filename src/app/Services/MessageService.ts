@@ -15,6 +15,8 @@ import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
 import { ElectronService } from 'ngx-electron';
+import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
+import { TimerService } from './TimerService';
 
 @Injectable({
     providedIn: 'root'
@@ -30,40 +32,67 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
+    private timer;
+    public currentTime = Date.now();
+    private users = new Map();
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
+        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
         private cacheService: CacheService,
-        private _electronService: ElectronService
+        private _electronService: ElectronService,
+        private timerService: TimerService
     ) {}
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
+        const fireAlert = localStorage.getItem('deviceID');
+        let evt: NewMessageEvent | TimerUpdatedEvent;
         switch (ev.type) {
             case EventType.NewMessage:
-                const evt = ev as NewMessageEvent;
+                evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
+                    if (this.conversation.discriminator === 'GroupConversation' && !this.users.has(evt.sender.id)) {
+                        this.users.set(evt.sender.id, this.getUserInfoArray(evt.sender));
+                    }
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
                 } else {
-                    this.cacheService.autoUpdateConversation();
                     this.showNotification(evt);
                 }
                 break;
             case EventType.NewFriendRequest:
-                Swal.fire('Friend request', 'You have got a new friend request!', 'info');
+                if (fireAlert) {
+                    Swal.fire('Friend request', 'You have got a new friend request!', 'info');
+                }
                 this.cacheService.autoUpdateRequests();
                 break;
             case EventType.WereDeletedEvent:
-                Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
-                this.cacheService.autoUpdateConversation();
+                if (fireAlert) {
+                    Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                }
+                this.cacheService.UpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
-                Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
-                this.cacheService.autoUpdateConversation();
+                if (fireAlert) {
+                    Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
+                }
+                this.cacheService.UpdateConversation();
+                break;
+            case EventType.TimerUpdatedEvent:
+                evt = ev as TimerUpdatedEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversation.maxLiveSeconds = evt.newTimer;
+                    this.timerService.updateDestructTime(evt.newTimer);
+                    Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
+                        this.timerService.destructTime, 'info');
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -83,6 +112,7 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
+                    t.timeStamp = new Date(t.sendTime).getTime() + this.conversation.maxLiveSeconds * 1000;
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
                         if (fileKey === -1 || isNaN(fileKey)) {
@@ -94,17 +124,20 @@ export class MessageService {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             const ratio = imageHeight / imageWidth * 100;
-                            if (this.maxImageWidth < imageWidth) {
-                                imageWidth = this.maxImageWidth;
-                                imageHeight = Math.floor(this.maxImageWidth * ratio / 100);
+                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight)));
+
+                            if (realMaxWidth < imageWidth) {
+                                imageWidth = realMaxWidth;
+                                imageHeight = Math.floor(realMaxWidth * ratio / 100);
                             }
                             const displayWidth = imageWidth;
+                            const displayHeight = Math.min(imageHeight, 900);
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
                             t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
-                                '&h=' + imageHeight + '-' + displayWidth + '-' + ratio + '-' +
+                                '&h=' + imageHeight + '-' + displayWidth + '-' + displayHeight + '-' +
                                 this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
@@ -183,7 +216,7 @@ export class MessageService {
     }
 
     public updateFriends(): void {
-        this.cacheService.autoUpdateFriends();
+        this.cacheService.UpdateConversation();
         this.cacheService.autoUpdateRequests();
     }
 
@@ -238,6 +271,39 @@ export class MessageService {
                 clickEvent.preventDefault();
                 window.focus();
             };
+        }
+    }
+
+    public setTimer(): void {
+        if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
+            this.timer = setInterval(() => {
+                this.currentTime = Date.now();
+            }, this.conversation.maxLiveSeconds * 1000);
+        }
+    }
+
+    public clearTimer(): void {
+        clearInterval(this.timer);
+    }
+
+    public setUsers(): void {
+        if (this.conversation && this.conversation.discriminator === 'GroupConversation') {
+            this.conversation.users.forEach(userGroupRelation => {
+                this.users.set(userGroupRelation.user.id, this.getUserInfoArray(userGroupRelation.user));
+            });
+        }
+    }
+
+    private getUserInfoArray(user: KahlaUser) {
+        return [user.nickName, Values.fileAddress + user.headImgFileKey,
+            this.colors[Math.floor(Math.random() * this.colors.length)]];
+    }
+
+    public getUser(id: number): Array<string> {
+        if (this.users.has(id)) {
+            return this.users.get(id);
+        } else {
+            return ['New user', Values.loadingImgURL, 'aqua'];
         }
     }
 }

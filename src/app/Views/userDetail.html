@@ -3,7 +3,7 @@
   <div class="profile avatar">
       <label>Avatar</label>
       <a class="user-img" href="{{user ? user.avatarURL : loadingImgURL}}" target="_blank">
-        <img src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=140&h=140">
+        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=140&h=140">
       </a>
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
@@ -17,11 +17,15 @@
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
 
-  <div class="profile avatar">
+  <div class="profile hide-email">
     <div class="text">Hide email</div>
     <div class="email">{{ this.user.email }}</div>
     <input id="toggleHideEmail" class="tgl" type="checkbox" [checked]="!user.makeEmailPublic"/>
     <label for="toggleHideEmail" class="tgl-btn"></label>
+  </div>
+  <div class="profile">
+    <label>Change email</label>
+    <a class="button primary inputButton" href="https://account.aiursoft.com/Account/Email" target="_blank" rel="noopener noreferrer">Open Aiursoft account page</a>
   </div>
   <div class="buttons">
     <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>

@@ -26,4 +26,11 @@ export class ConversationApiService {
     public ConversationDetail(id: number): Observable<AiurValue<Conversation>> {
         return this.apiService.Get(ConversationApiService.serverPath + `/ConversationDetail/${id}`);
     }
+
+    public UpdateMessageLifeTime(id: number, newLifeTime: number): Observable<AiurProtocal> {
+        return this.apiService.Post(ConversationApiService.serverPath + `/UpdateMessageLifeTime/`, {
+            Id: id,
+            NewLifeTime: newLifeTime
+        });
+    }
 }

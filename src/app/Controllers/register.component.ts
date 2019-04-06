@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -8,8 +8,8 @@ import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/register.html',
-    styleUrls: ['../Styles/signin.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/signin.scss',
+                '../Styles/button.scss']
 })
 export class RegisterComponent {
     public email = '';
@@ -21,7 +21,8 @@ export class RegisterComponent {
     constructor(
         private authApiService: AuthApiService,
         private router: Router,
-        private initService: InitService) { }
+        private initService: InitService,
+        private elementRef: ElementRef) { }
 
     public register(): void {
         if (this.connecting) {
@@ -40,7 +41,7 @@ export class RegisterComponent {
                         .subscribe(p => {
                             if (p.code === 0) {
                                 this.router.navigate(['/conversations'], {replaceUrl: true});
-                                this.initService.init();
+                                this.initService.init(this.elementRef);
                             } else {
                                 Swal.fire('Sign in failed', 'An error occured while signing in.', 'error');
                             }

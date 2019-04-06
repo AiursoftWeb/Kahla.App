@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
 import { FriendsApiService } from './FriendsApiService';
-import { ContactInfo } from '../Models/ContactInfo';
 import { Request } from '../Models/Request';
 import { Values } from '../values';
 import { map } from 'rxjs/operators';
@@ -23,21 +22,12 @@ export class CacheService {
         this.cachedData = new CacheModel();
     }
 
-    public UpdateFriendList(data: ContactInfo[]): void {
-        this.cachedData.friendList = data;
-    }
-
     public UpdateFriendRequests(data: Request[]): void {
         this.cachedData.requests = data;
         this.totalRequests = data.filter(t => !t.completed).length;
     }
 
-    public UpdateConversations(data: ContactInfo[]): void {
-        this.cachedData.conversations = data;
-        this.totalUnread = data.filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
-    }
-
-    public autoUpdateConversation(): void {
+    public UpdateConversation(): void {
         this.friendsApiService.MyFriends(false)
             .pipe(map(t => t.items))
             .subscribe(info => {
@@ -52,17 +42,9 @@ export class CacheService {
                     }
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
-                this.UpdateConversations(info);
+                this.cachedData.conversations = info;
+                this.totalUnread = info.filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
             });
-    }
-
-    public autoUpdateFriends(): void {
-        this.friendsApiService.MyFriends(true).subscribe(response => {
-            response.items.forEach(item => {
-                item.avatarURL = Values.fileAddress + item.displayImageKey;
-            });
-            this.cachedData.friendList = response.items;
-        });
     }
 
     public autoUpdateRequests(): void {
@@ -114,7 +96,7 @@ export class CacheService {
                         deviceName.push('Safari');
                     } else if (item.name.includes('Opera') || item.name.includes('OPR')) {
                         deviceName.push('Opera');
-                    } else if (item.name.includes('MSIE')) {
+                    } else if (item.name.match(/MSIE|Trident/)) {
                         deviceName.push('Internet Explorer');
                     } else {
                         deviceName.push('Unknown browser');

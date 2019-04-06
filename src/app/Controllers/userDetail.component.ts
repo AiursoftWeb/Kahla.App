@@ -12,9 +12,9 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
-    '../Styles/userDetail.css',
-    '../Styles/button.css',
-    '../Styles/toggleButton.css'
+    '../Styles/userDetail.scss',
+    '../Styles/button.scss',
+    '../Styles/toggleButton.scss'
   ]
 })
 
@@ -33,6 +33,7 @@ export class UserDetailComponent implements OnInit {
     this.headerService.returnButton = true;
     this.headerService.button = false;
     this.headerService.shadow = false;
+    this.headerService.timer = false;
 }
 
   public ngOnInit(): void {
@@ -59,6 +60,7 @@ export class UserDetailComponent implements OnInit {
     const saveButton =  document.querySelector('#save');
     saveButton.textContent = 'Saving...';
     const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
+    this.user.makeEmailPublic = !hideEmail;
     this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.headImgFileKey, hideEmail)
       .subscribe((response) => {
         if (response.code === 0) {

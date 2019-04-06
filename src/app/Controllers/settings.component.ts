@@ -10,9 +10,9 @@ import { ElectronService } from 'ngx-electron';
 
 @Component({
     templateUrl: '../Views/settings.html',
-    styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css',
-                '../Styles/badge.css']
+    styleUrls: ['../Styles/menu.scss',
+                '../Styles/button.scss',
+                '../Styles/badge.scss']
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
@@ -27,15 +27,18 @@ export class SettingsComponent implements OnInit {
             this.headerService.returnButton = false;
             this.headerService.button = false;
             this.headerService.shadow = false;
+            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {
-        this.authApiService.Me().subscribe(p => {
-            if (p.code === 0) {
-                this.messageService.me = p.value;
-                this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
-            }
-        });
+        if (!this.messageService.me) {
+            this.authApiService.Me().subscribe(p => {
+                if (p.code === 0) {
+                    this.messageService.me = p.value;
+                    this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                }
+            });
+        }
     }
 
     public SignOut(): void {

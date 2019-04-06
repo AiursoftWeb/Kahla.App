@@ -7,8 +7,8 @@ import { DeviesApiService } from '../Services/DevicesApiService';
 
 @Component({
     templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.css',
-        '../Styles/button.css']
+    styleUrls: ['../Styles/menu.scss',
+        '../Styles/button.scss']
 })
 export class DevicesComponent implements OnInit {
     constructor(
@@ -20,6 +20,7 @@ export class DevicesComponent implements OnInit {
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {

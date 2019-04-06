@@ -7,8 +7,8 @@ import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
-    styleUrls: ['../Styles/friendrequests.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/friendrequests.scss',
+                '../Styles/button.scss']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
@@ -22,6 +22,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {

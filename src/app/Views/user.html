@@ -25,6 +25,12 @@
 </div>
 
 <div class="menu-holder"></div>
+<div class="menu-button" *ngIf="info && areFriends" (click)="timerService.setTimer(conversationId)">
+    <div class="img">
+        <i class="fa fa-clock-o"></i>
+    </div>
+    <div class="text">Self-destruct Timer</div>
+</div>
 <div class="menu-button" *ngIf="info && areFriends">
     <div class="img">
         <i class="fa fa-history"></i>
@@ -51,7 +57,7 @@
 </div>
 <div class="menu-holder"></div>
 
-<div class="menu-button" *ngIf="info && !areFriends && !messageService.me.emailConfirmed">
+<div class="menu-button" *ngIf="info && messageService.me && !areFriends && !messageService.me.emailConfirmed">
     <div class="img warning">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
@@ -61,6 +67,7 @@
 </div>
 
 <div class="buttons">
-    <button class="button success" *ngIf="info && !areFriends && messageService.me.emailConfirmed" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
-    <button class="button success" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
+    <button class="button primary" *ngIf="info && messageService.me && !areFriends && messageService.me.emailConfirmed && !sentRequest" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
+    <button class="button primary" *ngIf="!areFriends && sentRequest" disabled>Request was sent</button>
 </div>

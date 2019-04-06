@@ -1,0 +1,128 @@
+@import "themes";
+
+.search-part {
+  @extend %search-part;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+
+  .search-input {
+    padding: 7px;
+    input {
+      @extend %text-input;
+      border-radius: 6px 0 0 6px;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      box-shadow: none;
+      width: 80%;
+      height: 35px;
+      padding: 6px 12px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      margin-bottom: 15px;
+      float: left;
+    }
+
+    button {
+      float: left;
+      border-radius: 0 6px 6px 0;
+      width: 20%;
+      height: 35px;
+    }
+  }
+
+  .search-type {
+    width: 100%;
+    font-size: 18px;
+    height: 40px;
+
+    div {
+      width: 50%;
+      vertical-align: middle;
+      overflow: hidden;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color ease-out 0.2s;
+      border-radius: 6px 6px 0 0;
+
+      .dot {
+        border-radius: 50%;
+        width: unset;
+      }
+
+      span {
+        line-height: 40px;
+      }
+    }
+  }
+}
+
+.search-holder {
+  height: 97px;
+}
+
+.result {
+  @extend %menu-item-clickable;
+  height: 60px;
+  border-width: 1px;
+  border-bottom-style: solid;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  outline: none;
+  user-select: none;
+  transition: all ease-out 0.2s;
+
+  .user-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .sender {
+    font-size: 15px;
+    font-weight: 400;
+    position: relative;
+    word-break: break-all;
+  }
+
+  i {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    font-size: medium;
+  }
+
+  > * {
+    margin: auto;
+  }
+}
+
+h3 {
+  text-align: center;
+}
+
+.searchGroupIamge {
+  position: relative;
+}
+
+.discoverUsers {
+  grid-template-columns: 20% 20% 20% 40%;
+
+  button {
+    width: 80%;
+  }
+}
+
+.dot {
+  position: unset !important;
+}
+
+.empty-result-notice {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+}

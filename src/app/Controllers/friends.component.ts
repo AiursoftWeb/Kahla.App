@@ -11,9 +11,9 @@ import { GroupsApiService } from '../Services/GroupsApiService';
 @Component({
     templateUrl: '../Views/friends.html',
     styleUrls: [
-        '../Styles/friends.css',
-        '../Styles/menu.css',
-        '../Styles/reddot.css']
+        '../Styles/friends.scss',
+        '../Styles/menu.scss',
+        '../Styles/reddot.scss']
 
 })
 export class FriendsComponent implements OnInit, OnDestroy {
@@ -31,9 +31,12 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.routerLink = '/discover';
             this.headerService.buttonIcon = 'plus';
             this.headerService.shadow = false;
+            this.headerService.timer = false;
     }
     public ngOnInit(): void {
-        this.messageService.updateFriends();
+        if (this.messageService.me && !this.cacheService.cachedData.conversations) {
+            this.messageService.updateFriends();
+        }
     }
 
     public detail(info: ContactInfo): void {
@@ -99,6 +102,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     private createPrivateGroup(groupName: string, password: string): void {
         this.groupsApiService.CreateGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
+                this.cacheService.UpdateConversation();
                 this.router.navigate(['/talking', response.value]);
             } else {
                 Swal.fire('Can\'t create group', response.message, 'error');

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DeviesApiService } from './DevicesApiService';
+import { ThemeService } from './ThemeService';
+import Swal from 'sweetalert2';
 
 @Injectable({
     providedIn: 'root'
@@ -35,14 +37,24 @@ export class InitService {
         private cacheService: CacheService,
         private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
+        private themeService: ThemeService,
         private devicesApiService: DeviesApiService) {
     }
 
-    public init(): void {
+    public init(elementRef: ElementRef): void {
         this.online = navigator.onLine;
         this.connecting = true;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
+        if (navigator.userAgent.match(/MSIE|Trident/)) {
+            Swal.fire(
+                'Oops, it seems that you are opening Kahla in IE.',
+                'Please note that Kahla doesn\'t support IE :(<br/>' +
+                'We recommend upgrading to the latest <a href="https://mozilla.org/firefox/">Firefox</a>, ' +
+                '<a href="https://chrome.google.com">Google Chrome, </a>' +
+                'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
+            );
+        }
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/signin'], {replaceUrl: true});
@@ -51,12 +63,13 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        this.themeService.ApplyThemeFromRemote(elementRef, p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
                             this.updateSubscription();
                         }
                         this.loadPusher();
-                        this.cacheService.autoUpdateConversation();
+                        this.cacheService.UpdateConversation();
                         this.cacheService.autoUpdateRequests();
                     }
                 });

@@ -8,28 +8,29 @@ import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/conversations.html',
-    styleUrls: ['../Styles/conversations.css',
-                '../Styles/reddot.css',
-                '../Styles/button.css']
+    styleUrls: ['../Styles/conversations.scss',
+                '../Styles/reddot.scss',
+                '../Styles/button.scss']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
-        public router: Router,
+        private router: Router,
         public cacheService: CacheService,
-        public messaageService: MessageService,
+        private messageService: MessageService,
         private headerService: HeaderService) {
             this.headerService.title = 'Kahla';
             this.headerService.returnButton = false;
             this.headerService.button = true;
-            this.headerService.routerLink = '/addfriend';
+            this.headerService.routerLink = '/localsearch';
             this.headerService.buttonIcon = 'search';
             this.headerService.shadow = false;
+            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {
-        if (this.messaageService.me) {
-            this.cacheService.autoUpdateConversation();
+        if (this.messageService.me) {
+            this.cacheService.UpdateConversation();
         }
         setTimeout(() => {
             window.scroll(0, 0);

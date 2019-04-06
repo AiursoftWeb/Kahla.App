@@ -1,0 +1,67 @@
+@import "themes";
+
+/******************
+ *    Header
+ ******************** */
+
+.header {
+  @extend %header;
+  position: fixed;
+
+  /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
+  height: 40px;
+  width: 100%;
+  top: 0;
+  overflow: auto;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+  text-align: center;
+  user-select: none;
+
+  &.shadow {
+    box-shadow: 0 0px 74px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.header-holder {
+  height: 40px;
+}
+
+.header {
+  .headerButton:hover {
+    background-color: rgba(230, 230, 230, 0.4);
+  }
+
+  .text {
+    font-size: 20px;
+    color: white;
+    margin: auto;
+  }
+}
+
+.headerButton {
+  cursor: pointer;
+  width: 35px;
+  color: #FFF;
+  text-align: center;
+  font-size: 1.7em;
+  outline: none;
+  border-radius: 5px;
+  margin: auto;
+  transition: all 0.2s ease-out;
+  position: relative;
+}
+
+.macOSReturnButton {
+  margin: auto auto auto 70px !important;
+}
+
+.showTimer {
+  grid-template-columns: 10% 70% 10% 10%;
+}
+
+.dot {
+  top: (-4px) !important;
+  right: (-4px) !important;
+}

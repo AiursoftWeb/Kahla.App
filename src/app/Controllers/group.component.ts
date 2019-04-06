@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, filter } from 'rxjs/operators';
 import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -10,12 +10,13 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
+import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/group.html',
-    styleUrls: ['../Styles/menu.css',
-                '../Styles/button.css',
-                '../Styles/toggleButton.css']
+    styleUrls: ['../Styles/menu.scss',
+                '../Styles/button.scss',
+                '../Styles/toggleButton.scss']
 })
 
 export class GroupComponent implements OnInit {
@@ -32,18 +33,21 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cache: CacheService,
         private headerService: HeaderService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        public timerService: TimerService
     ) {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {
         this.route.params
             .pipe(
                 switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                filter(t => t.code === 0),
                 map(t => t.value)
             )
             .subscribe(conversation => {
@@ -84,7 +88,7 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal.fire('Success', response.message, 'success');
-                            this.cache.autoUpdateConversation();
+                            this.cache.UpdateConversation();
                             this.router.navigate(['/friends']);
                         } else {
                             Swal.fire('Error', response.message, 'error');

@@ -7,8 +7,8 @@ import { HeaderService } from '../Services/HeaderService';
 @Component({
     templateUrl: '../Views/changePassword.html',
     styleUrls: [
-      '../Styles/userDetail.css',
-      '../Styles/button.css'
+      '../Styles/userDetail.scss',
+      '../Styles/button.scss'
     ]
 })
 export class ChangePasswordComponent {
@@ -26,6 +26,7 @@ export class ChangePasswordComponent {
         this.headerService.returnButton = true;
         this.headerService.button = false;
         this.headerService.shadow = false;
+        this.headerService.timer = false;
     }
 
     public checkValid(): void {

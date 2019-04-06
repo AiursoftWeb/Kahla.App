@@ -1,0 +1,9 @@
+@import "themes";
+
+body {
+  @extend %body;
+}
+
+.right .chat-inline-link {
+  color: white;
+}

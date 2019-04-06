@@ -1,0 +1,147 @@
+@mixin theme-shared($colors) {
+  %text {
+    color: map-get($colors, default-textcolor);
+  }
+
+  %header {
+    background: map-get($colors, header-bg);
+  }
+
+  %menu-item {
+    background-color: map-get($colors, menuitem-bg);
+    border-color: map-get($colors, menuitem-border-color);
+
+    .img {
+      color: map-get($colors, menuitem-img-color);
+    }
+  }
+
+  %menu-item-clickable {
+    @extend %menu-item;
+
+    &:hover {
+      background-color: map-get($colors, menuitem-hover-bg);
+    }
+  }
+
+  %nav-bar {
+    background-color: map-get($colors, menuitem-bg);
+    border-color: map-get($colors, nav-border-color);
+
+    .nav-item {
+      color: map-get($colors, nav-color);
+
+      &:hover {
+        background-color: map-get($colors, nav-item-hover-bg);
+        color: map-get($colors, nav-item-hover-color);
+      }
+
+      &.current {
+        color: map-get($colors, nav-item-current-color);
+      }
+    }
+  }
+
+  %text-input {
+    border: 1px solid map-get($colors, text-input-border-color);
+    color: map-get($colors, text-input-color);
+    background-color: map-get($colors, text-input-bg);
+  }
+
+  %search-part {
+    background-color: map-get($colors, search-part-bg);
+
+    &::after {
+      background-color: map-get($colors, search-part-tab-selected-bg);
+    }
+
+    .search-type .selected {
+      background-color: map-get($colors, search-part-tab-selected-bg);
+    }
+  }
+
+  %message-list {
+    background-color: map-get($colors, default-background);
+
+    .load-more {
+      background-color: map-get($colors, load-more-button-bg);
+      color: map-get($colors, load-more-button-color);
+    }
+
+    .left .chat-content {
+      border-color: map-get($colors, talking-chat-border-color);
+      color: map-get($colors, talking-chat-color);
+      background-color: map-get($colors, talking-chat-bg);
+
+      &::after {
+        border-right-color: map-get($colors, talking-chat-border-color);
+      }
+    }
+
+    .right .chat-content {
+      background-color: map-get($colors, talking-chat-right-bg );
+
+      &::after{
+        border-left-color: map-get($colors, talking-chat-right-bg );
+      }
+    }
+  }
+
+  %chat-action {
+    background-color: map-get($colors, talking-action-bg);
+
+    .chat-part textarea {
+      background-color: map-get($colors, text-input-bg);
+      color: map-get($colors, text-input-color);
+    }
+
+    .input-file {
+      &:focus + label,
+      + label:hover {
+        background-color: map-get($colors, menuitem-hover-bg);
+      }
+    }
+  }
+
+  %tgl-btn {
+    background-color: map-get($colors, tgl-btn-bg);
+  }
+
+    %primary-button {
+      background-color: map-get($colors, primary-btn-bg);
+
+      &:hover:enabled {
+        background-color: map-get($colors, primary-btn-hover-bg);
+      }
+
+      &:active {
+        background-color: map-get($colors, primary-btn-active-bg);
+      }
+    }
+}
+
+@mixin body-shared($colors) {
+  color: map-get($colors, text-color);
+  background-color: map-get($colors, bg);
+  a {
+    color: map-get($colors, a-color);
+  }
+
+  .left .chat-inline-link {
+    color: map-get($colors, left-a-color);
+  }
+
+  .swal2-popup {
+    background-color: map-get($colors, alert-bg);
+
+    .swal2-content,
+    .swal2-title {
+      color: map-get($colors, text-color);
+    }
+
+    .swal2-styled.swal2-confirm{
+      background-color: map-get($colors, btn-bg );
+    }
+
+  }
+}

@@ -1,0 +1,76 @@
+@import "themes";
+
+/**********************
+ *    friendrequests
+ ************************ */
+
+.friendrequests {
+  @extend %menu-item;
+  height: 70px;
+  border-width: 1px;
+  border-bottom-style: solid;
+  position: relative;
+  display: grid;
+  grid-template-columns: 20% 40% 40%;
+  text-align: center;
+  user-select: none;
+
+  .user-img {
+    margin: 10px auto;
+    width: 50px;
+    height: 50px;
+    float: left;
+    border-radius: 10px;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    grid-row-end: 2;
+  }
+
+  .name {
+    margin-top: 15px;
+    font-size: 15px;
+    font-weight: 400;
+    grid-row-start: 1;
+    grid-column-start: 2;
+  }
+
+  .time {
+    margin-top: 40px;
+    font-size: 13px;
+    color: #999999;
+    max-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    grid-row-start: 1;
+    grid-column-start: 2;
+    width: 100%;
+  }
+
+  .decision {
+    .Completed {
+      text-align: center;
+      color: #e8e8e8;
+      font-size: 14px;
+      font-weight: 400;
+      margin-top: 25px;
+      grid-column-start: 2;
+      padding-right: 20%;
+    }
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h3 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    margin: auto;
+  }
+}
+
+.button {
+  padding: unset !important;
+  margin: 17px auto;
+  width: 90% !important;
+}

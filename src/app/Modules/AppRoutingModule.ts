@@ -11,12 +11,12 @@ import { RegisterComponent } from '../Controllers/register.component';
 import { UserComponent } from '../Controllers/user.component';
 import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
-import { JoinGroupComponent } from '../Controllers/join-group.component';
 import { GroupComponent } from '../Controllers/group.component';
 import { ChangePasswordComponent } from '../Controllers/changePassword.component';
 import { DiscoverComponent } from '../Controllers/discover.component';
 import { DevicesComponent } from '../Controllers/devices.component';
 import { ThemeComponent } from '../Controllers/theme.component';
+import { LocalSearchComponent } from '../Controllers/localSearch.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -32,12 +32,12 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
-    { path: 'join-group', component: JoinGroupComponent },
     { path: 'group/:id', component: GroupComponent },
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },
     { path: 'devices', component: DevicesComponent },
-    { path: 'theme' , component: ThemeComponent},
+    { path: 'theme', component: ThemeComponent},
+    { path: 'localsearch', component: LocalSearchComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

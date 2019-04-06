@@ -21,11 +21,11 @@ import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
 import { UserDetailComponent } from './Controllers/userDetail.component';
-import { JoinGroupComponent } from './Controllers/join-group.component';
 import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
 import { DevicesComponent } from './Controllers/devices.component';
 import { ThemeComponent } from './Controllers/theme.component';
+import { LocalSearchComponent } from './Controllers/localSearch.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -41,6 +41,8 @@ import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
 import { HeaderService } from './Services/HeaderService';
 import { DeviesApiService } from './Services/DevicesApiService';
+import { ThemeService } from './Services/ThemeService';
+import { TimerService } from './Services/TimerService';
 
 @NgModule({
     imports: [
@@ -66,11 +68,11 @@ import { DeviesApiService } from './Services/DevicesApiService';
         HeaderComponent,
         UserComponent,
         UserDetailComponent,
-        JoinGroupComponent,
         GroupComponent,
         ChangePasswordComponent,
         DevicesComponent,
-        ThemeComponent
+        ThemeComponent,
+        LocalSearchComponent
     ],
     providers: [
         ApiService,
@@ -86,7 +88,9 @@ import { DeviesApiService } from './Services/DevicesApiService';
         MessageService,
         InitService,
         HeaderService,
-        DeviesApiService
+        DeviesApiService,
+        ThemeService,
+        TimerService
     ],
     bootstrap: [AppComponent]
 })
