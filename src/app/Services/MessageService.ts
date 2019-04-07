@@ -17,6 +17,9 @@ import { Values } from '../values';
 import { ElectronService } from 'ngx-electron';
 import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
 import { TimerService } from './TimerService';
+import { WereDeletedEvent } from '../Models/WereDeletedEvent';
+import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
+import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
 
 @Injectable({
     providedIn: 'root'
@@ -48,7 +51,7 @@ export class MessageService {
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
-        const fireAlert = localStorage.getItem('deviceID');
+        const fireAlert = !localStorage.getItem('deviceID');
         let evt: NewMessageEvent | TimerUpdatedEvent;
         switch (ev.type) {
             case EventType.NewMessage:
@@ -68,19 +71,20 @@ export class MessageService {
                 break;
             case EventType.NewFriendRequest:
                 if (fireAlert) {
-                    Swal.fire('Friend request', 'You have got a new friend request!', 'info');
+                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
                 }
                 this.cacheService.autoUpdateRequests();
                 break;
             case EventType.WereDeletedEvent:
                 if (fireAlert) {
-                    Swal.fire('Were deleted', 'You were deleted by one of your friends from his friend list.', 'info');
+                    Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.UpdateConversation();
                 break;
             case EventType.FriendAcceptedEvent:
                 if (fireAlert) {
-                    Swal.fire('Friend request', 'Your friend request was accepted!', 'success');
+                    Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
+                        ' are now friends!', 'success');
                 }
                 this.cacheService.UpdateConversation();
                 break;
