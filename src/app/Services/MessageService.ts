@@ -63,6 +63,7 @@ export class MessageService {
                     }
                 } else {
                     this.showNotification(evt);
+                    this.cacheService.UpdateConversation();
                 }
                 break;
             case EventType.NewFriendRequest:
