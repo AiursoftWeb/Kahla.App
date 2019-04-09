@@ -97,6 +97,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.headerService.returnButton = true;
         this.headerService.shadow = true;
         this.headerService.timer = true;
+        this.headerService.button = false;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
