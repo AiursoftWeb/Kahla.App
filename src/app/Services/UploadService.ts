@@ -225,6 +225,7 @@ export class UploadService {
                 if (response.code === 0) {
                     target.style.display = 'none';
                     const audioElement = document.createElement('audio');
+                    audioElement.style.maxWidth = '100%';
                     audioElement.src = response.downloadPath;
                     audioElement.controls = true;
                     target.parentElement.appendChild(audioElement);
