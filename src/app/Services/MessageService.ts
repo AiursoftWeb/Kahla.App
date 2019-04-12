@@ -283,7 +283,7 @@ export class MessageService {
         if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
             this.timer = setInterval(() => {
                 this.currentTime = Date.now();
-            }, this.conversation.maxLiveSeconds * 1000);
+            }, 1 * 1000);
         }
     }
 
