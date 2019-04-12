@@ -31,14 +31,7 @@ export class TimerService {
             if (selected.value) {
                 this.conversationApiService.UpdateMessageLifeTime(conversationId, selected.value)
                     .subscribe(result => {
-                        if (result.code === 0) {
-                            Swal.fire({
-                                title: 'Success!',
-                                type: 'success',
-                                text: result.message
-                            });
-                            this.updateDestructTime(selected.value);
-                        } else {
+                        if (result.code !== 0) {
                             Swal.fire({
                                 title: 'Error!',
                                 type: 'error',
