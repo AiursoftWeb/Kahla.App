@@ -35,6 +35,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private forceStopTimeout;
     private oldContent: string;
     private unread = 15;
+    public Math = Math;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;

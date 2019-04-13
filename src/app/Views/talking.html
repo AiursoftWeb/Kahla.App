@@ -12,9 +12,12 @@
             <div class="chat-text">
                 <div class="chat-content">
                     <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.getUser(message.senderId)[2]}">{{ messageService.getUser(message.senderId)[0] }}<br></span>
-                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5, message.content.indexOf('?')) }}">
+                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5).split('-')[0] }}">
                         <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.height.px]="message.content.split('-')[2]">
-                            <img src="{{ message.content.substring(5).split('-')[0] }}" [ngClass]="message.content.split('-')[3]">
+                            <img src="{{ message.content.substring(5).split('-')[0] }}"
+                                srcset="{{ message.content.substring(5).split('-')[0] }}?w={{ message.content.split('-')[1] }}&h={{ message.content.split('-')[2] }},
+                                {{ message.content.substring(5).split('-')[0] }}?w={{ Math.floor(message.content.split('-')[1] * 1.5) }}&h={{ Math.floor(message.content.split('-')[2] * 1.5) }} 1.5x,
+                                {{ message.content.substring(5).split('-')[0] }}?w={{ Math.floor(message.content.split('-')[1] * 2) }}&h={{ Math.floor(message.content.split('-')[2] * 2) }} 2x" [ngClass]="message.content.split('-')[3]">
                         </div>
                     </a>
                     <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3"  target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">

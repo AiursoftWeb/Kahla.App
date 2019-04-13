@@ -128,21 +128,20 @@ export class MessageService {
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
-                            const ratio = imageHeight / imageWidth * 100;
-                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight)));
+                            const ratio = imageHeight / imageWidth;
+                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
 
                             if (realMaxWidth < imageWidth) {
                                 imageWidth = realMaxWidth;
-                                imageHeight = Math.floor(realMaxWidth * ratio / 100);
+                                imageHeight = Math.floor(realMaxWidth * ratio);
                             }
-                            const displayWidth = imageWidth;
-                            const displayHeight = Math.min(imageHeight, 900);
+
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
-                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + displayWidth +
-                                '-' + displayHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
+                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + imageWidth +
+                                '-' + imageHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
