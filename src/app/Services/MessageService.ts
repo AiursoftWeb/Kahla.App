@@ -35,7 +35,6 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
-    private timer;
     public currentTime = Date.now();
     private users = new Map();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
@@ -275,18 +274,6 @@ export class MessageService {
                 window.focus();
             };
         }
-    }
-
-    public setTimer(): void {
-        if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
-            this.timer = setInterval(() => {
-                this.currentTime = Date.now();
-            }, 1 * 1000);
-        }
-    }
-
-    public clearTimer(): void {
-        clearInterval(this.timer);
     }
 
     public setUsers(): void {

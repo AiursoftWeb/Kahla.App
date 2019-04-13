@@ -3,7 +3,7 @@
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
-        <div *ngIf="message.local || message.timeStamp > messageService.currentTime">
+        <div *ngIf="message.local || message.timeStamp > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
                 <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation'" src="{{messageService.getUser(message.senderId)[1]}}?w=80&h=80">
                 <img *ngIf="messageService.conversation && messageService.conversation.discriminator === 'PrivateConversation' && message.senderId === messageService.conversation.requestUser.id && messageService.conversation.requestUser.id != messageService.conversation.targetUser.id" src="{{ fileAddress + messageService.conversation.requestUser.headImgFileKey }}?w=80&h=80">
