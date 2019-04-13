@@ -35,7 +35,6 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
-    private timer;
     public currentTime = Date.now();
     private users = new Map();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
@@ -128,21 +127,20 @@ export class MessageService {
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
-                            const ratio = imageHeight / imageWidth * 100;
-                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 * (imageWidth / imageHeight)));
+                            const ratio = imageHeight / imageWidth;
+                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
 
                             if (realMaxWidth < imageWidth) {
                                 imageWidth = realMaxWidth;
-                                imageHeight = Math.floor(realMaxWidth * ratio / 100);
+                                imageHeight = Math.floor(realMaxWidth * ratio);
                             }
-                            const displayWidth = imageWidth;
-                            const displayHeight = Math.min(imageHeight, 900);
+
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
-                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + displayWidth +
-                                '-' + displayHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
+                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + imageWidth +
+                                '-' + imageHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
@@ -276,18 +274,6 @@ export class MessageService {
                 window.focus();
             };
         }
-    }
-
-    public setTimer(): void {
-        if (this.conversation && this.conversation.maxLiveSeconds < 3600) {
-            this.timer = setInterval(() => {
-                this.currentTime = Date.now();
-            }, 1 * 1000);
-        }
-    }
-
-    public clearTimer(): void {
-        clearInterval(this.timer);
     }
 
     public setUsers(): void {

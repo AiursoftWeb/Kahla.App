@@ -35,6 +35,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private forceStopTimeout;
     private oldContent: string;
     private unread = 15;
+    public Math = Math;
+    public Date = Date;
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -115,7 +117,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.messageService.conversation = conversation;
                     this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.setTimer();
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
                     this.headerService.button = true;
@@ -347,6 +348,5 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.conversationID = null;
         clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;
-        this.messageService.clearTimer();
     }
 }
