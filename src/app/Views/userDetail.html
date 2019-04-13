@@ -27,6 +27,11 @@
     <label>Change email</label>
     <a class="button primary inputButton" href="https://account.aiursoft.com/Account/Email" target="_blank" rel="noopener noreferrer">Open Aiursoft account page</a>
   </div>
+  <div class="profile">
+    <label>Email notification</label>
+    <input id="toggleEmailNotif" class="tgl" type="checkbox" [checked]="user.enableEmailNotification" (change)="updateEmailNotif()"/>
+    <label for="toggleEmailNotif" class="tgl-btn"></label>
+  </div>
   <div class="buttons">
     <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>
   </div>
