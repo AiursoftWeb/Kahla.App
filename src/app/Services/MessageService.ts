@@ -141,8 +141,9 @@ export class MessageService {
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
                             }
-                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + displayWidth +
-                                '-' + displayHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
+                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '?w=' + imageWidth +
+                                '&h=' + imageHeight + '-' + displayWidth + '-' + displayHeight + '-' +
+                                this.getOrientationClassName(t.content.substring(5).split('-')[3]);
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
