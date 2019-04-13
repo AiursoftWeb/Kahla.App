@@ -56,7 +56,7 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
-  public save() {
+  public save(): void {
     const saveButton =  document.querySelector('#save');
     saveButton.textContent = 'Saving...';
     const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
@@ -71,5 +71,18 @@ export class UserDetailComponent implements OnInit {
         }
         saveButton.textContent = 'Save';
     });
+  }
+
+  public updateEmailNotif(): void {
+    this.user.enableEmailNotification = !this.user.enableEmailNotification;
+    this.authApiService.UpdateClientSetting(null, this.user.enableEmailNotification)
+      .subscribe(response => {
+        if (response.code === 0) {
+          Swal.fire('Success', response.message, 'success');
+          this.messageService.me = Object.assign({}, this.user);
+        } else {
+          Swal.fire('Error', response.message, 'error');
+        }
+      });
   }
 }
