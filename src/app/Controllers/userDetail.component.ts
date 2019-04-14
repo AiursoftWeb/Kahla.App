@@ -79,7 +79,7 @@ export class UserDetailComponent implements OnInit {
       .subscribe(response => {
         if (response.code === 0) {
           Swal.fire('Success', response.message, 'success');
-          this.messageService.me = Object.assign({}, this.user);
+          this.messageService.me.enableEmailNotification = this.user.enableEmailNotification;
         } else {
           Swal.fire('Error', response.message, 'error');
         }
