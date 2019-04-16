@@ -43,6 +43,7 @@ import { HeaderService } from './Services/HeaderService';
 import { DeviesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
+import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
 
 @NgModule({
     imports: [
@@ -72,7 +73,8 @@ import { TimerService } from './Services/TimerService';
         ChangePasswordComponent,
         DevicesComponent,
         ThemeComponent,
-        LocalSearchComponent
+        LocalSearchComponent,
+        AdvancedSettingComponent,
     ],
     providers: [
         ApiService,
