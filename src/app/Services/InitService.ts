@@ -8,7 +8,7 @@ import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
-import { DeviesApiService } from './DevicesApiService';
+import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 
@@ -38,7 +38,7 @@ export class InitService {
         private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
         private themeService: ThemeService,
-        private devicesApiService: DeviesApiService) {
+        private devicesApiService: DevicesApiService) {
     }
 
     public init(elementRef: ElementRef): void {

@@ -7,7 +7,7 @@ import { Device } from '../Models/Device';
 import { Observable } from 'rxjs/';
 
 @Injectable()
-export class DeviesApiService {
+export class DevicesApiService {
     private static serverPath = '/devices';
 
     constructor(
@@ -15,7 +15,7 @@ export class DeviesApiService {
     ) {}
 
     public AddDevice(userAgent: string, PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(DeviesApiService.serverPath + '/AddDevice', {
+        return this.apiService.Post(DevicesApiService.serverPath + '/AddDevice', {
             Name: userAgent,
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
@@ -25,7 +25,7 @@ export class DeviesApiService {
 
     public UpdateDevice(deviceID: number, userAgent: string, PushEndpoint: string,
         PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(DeviesApiService.serverPath + '/UpdateDevice', {
+        return this.apiService.Post(DevicesApiService.serverPath + '/UpdateDevice', {
             DeviceId: deviceID,
             Name: userAgent,
             PushEndpoint: PushEndpoint,
@@ -35,10 +35,10 @@ export class DeviesApiService {
     }
 
     public MyDevices(): Observable<AiurCollection<Device>> {
-        return this.apiService.Get(DeviesApiService.serverPath + '/MyDevices');
+        return this.apiService.Get(DevicesApiService.serverPath + '/MyDevices');
     }
 
     public PushTestMessage(): Observable<AiurProtocal> {
-        return this.apiService.Post(DeviesApiService.serverPath + '/PushTestMessage', {});
+        return this.apiService.Post(DevicesApiService.serverPath + '/PushTestMessage', {});
     }
 }

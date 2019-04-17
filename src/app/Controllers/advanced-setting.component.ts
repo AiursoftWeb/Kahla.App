@@ -4,6 +4,7 @@ import { AuthApiService } from '../Services/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { MessageService } from '../Services/MessageService';
+import { DevicesApiService } from '../Services/DevicesApiService';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -19,7 +20,8 @@ export class AdvancedSettingComponent implements OnInit {
     constructor(
         private headerService: HeaderService,
         private authApiService: AuthApiService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private devicesApiService: DevicesApiService
     ) {
         this.headerService.returnButton = true;
         this.headerService.shadow = true;
@@ -45,5 +47,21 @@ export class AdvancedSettingComponent implements OnInit {
                   }
             });
         }
+    }
+
+    public testPush(): void {
+        this.devicesApiService.PushTestMessage().subscribe(t => {
+            if (t.code === 0) {
+                Swal.fire(
+                    'Successfully sent!',
+                    t.message,
+                    'info'
+                );
+            }
+        });
+    }
+
+    public todo(): void {
+        Swal.fire('Under developing', 'This features is still under developing ^_^.', 'info');
     }
 }

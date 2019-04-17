@@ -72,17 +72,4 @@ export class UserDetailComponent implements OnInit {
         saveButton.textContent = 'Save';
     });
   }
-
-  public updateEmailNotif(): void {
-    this.user.enableEmailNotification = !this.user.enableEmailNotification;
-    this.authApiService.UpdateClientSetting(null, this.user.enableEmailNotification)
-      .subscribe(response => {
-        if (response.code === 0) {
-          Swal.fire('Success', response.message, 'success');
-          this.messageService.me.enableEmailNotification = this.user.enableEmailNotification;
-        } else {
-          Swal.fire('Error', response.message, 'error');
-        }
-      });
-  }
 }
