@@ -3,18 +3,15 @@ import { CacheService } from '../Services/CacheService';
 import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
-import { DeviesApiService } from '../Services/DevicesApiService';
 
 @Component({
     templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.scss',
-        '../Styles/button.scss']
+    styleUrls: ['../Styles/menu.scss']
 })
 export class DevicesComponent implements OnInit {
     constructor(
         public cacheService: CacheService,
-        private headerService: HeaderService,
-        private devicesApiService: DeviesApiService
+        private headerService: HeaderService
     ) {
         this.headerService.title = 'Devices';
         this.headerService.returnButton = true;
@@ -38,17 +35,5 @@ export class DevicesComponent implements OnInit {
                     '</td></tr></table>'
             });
         }
-    }
-
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
     }
 }
