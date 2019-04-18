@@ -132,6 +132,7 @@ a {
 
 .menu-header{
   @extend %menu-header;
-  font-size: 20px;
-  margin: 10px 0 2px 15px;
+  font-size: 15px;
+  margin: 10px 5px 10px 15px;
+  font-weight: 500;
 }
