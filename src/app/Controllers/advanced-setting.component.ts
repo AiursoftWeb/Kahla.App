@@ -29,6 +29,7 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.me = this.messageService.me;
         this.authApiService.Me().subscribe(result => {
             this.me = result.value;
         });
