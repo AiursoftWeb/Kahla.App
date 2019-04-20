@@ -5,7 +5,7 @@ import { Request } from '../Models/Request';
 import { Values } from '../values';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
-import { DeviesApiService } from './DevicesApiService';
+import { DevicesApiService } from './DevicesApiService';
 
 @Injectable()
 export class CacheService {
@@ -15,7 +15,7 @@ export class CacheService {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private devicesApiService: DeviesApiService
+        private devicesApiService: DevicesApiService
     ) { }
 
     public reset() {

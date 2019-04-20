@@ -40,9 +40,10 @@ import { GroupsApiService } from './Services/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
 import { HeaderService } from './Services/HeaderService';
-import { DeviesApiService } from './Services/DevicesApiService';
+import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
+import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
 
 @NgModule({
     imports: [
@@ -72,7 +73,8 @@ import { TimerService } from './Services/TimerService';
         ChangePasswordComponent,
         DevicesComponent,
         ThemeComponent,
-        LocalSearchComponent
+        LocalSearchComponent,
+        AdvancedSettingComponent,
     ],
     providers: [
         ApiService,
@@ -88,7 +90,7 @@ import { TimerService } from './Services/TimerService';
         MessageService,
         InitService,
         HeaderService,
-        DeviesApiService,
+        DevicesApiService,
         ThemeService,
         TimerService
     ],

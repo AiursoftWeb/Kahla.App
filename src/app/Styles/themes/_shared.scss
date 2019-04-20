@@ -24,6 +24,10 @@
     }
   }
 
+  %menu-header {
+    color: map-get($colors, menuitem-img-color);
+  }
+
   %nav-bar {
     background-color: map-get($colors, menuitem-bg);
     border-color: map-get($colors, nav-border-color);

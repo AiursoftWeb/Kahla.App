@@ -56,7 +56,7 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
-  public save() {
+  public save(): void {
     const saveButton =  document.querySelector('#save');
     saveButton.textContent = 'Saving...';
     const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;

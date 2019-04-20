@@ -51,9 +51,10 @@ export class AuthApiService {
         });
     }
 
-    public UpdateClientSetting(themeId: number) {
+    public UpdateClientSetting(themeId: number, enableEmailNotification: boolean): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
-            ThemeId: themeId
+            ThemeId: themeId,
+            EnableEmailNotification: enableEmailNotification
         });
     }
 

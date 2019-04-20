@@ -1,0 +1,54 @@
+<app-header title="Advanced Settings" returnButton="true" RouterLink="/"></app-header>
+<div class="menu-header">
+    General
+</div>
+<div class="menu-button" (click)="todo()">
+    <div class="img">
+        <i class="fa fa-language"></i>
+    </div>
+    <div class="text" i18n="@@Language">Language</div>
+</div>
+<div class="menu-header">
+    Notification
+</div>
+<div class="menu-button notification" (click)="updateEmailNotify()" *ngIf="this.me && me.emailConfirmed">
+    <div class="img">
+        <i class="fa fa-envelope"></i>
+    </div>
+    <div class="text" i18n="@@Notification">Email Notification</div>
+    <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification" />
+    <label for="toggleMute" class="tgl-btn"></label>
+</div>
+<div class="menu-button" routerLink="/devices">
+    <div class="img">
+        <i class="fa fa-laptop" aria-hidden="true"></i>
+    </div>
+    <div class="text">My Devices</div>
+</div>
+<div class="menu-button" (click)="testPush()">
+    <div class="img">
+        <i class="fa fa-flask" aria-hidden="true"></i>
+    </div>
+    <div class="text">Send Test Notification</div>
+</div>
+<div class="menu-header">
+    Account
+</div>
+<div class="menu-button" routerLink="/changepassword">
+    <div class="img">
+        <i class="fa fa-lock" aria-hidden="true"></i>
+    </div>
+    <div class="text">Change Password</div>
+</div>
+<a class="menu-button" href="https://account.aiursoft.com/Account/Email" target="_blank">
+    <div class="img">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+    </div>
+    <div class="text">Advanced Email Settings</div>
+</a>
+<a class="menu-button" href="https://account.aiursoft.com/Account" target="_blank">
+    <div class="img">
+        <i class="fa fa-cogs" aria-hidden="true"></i>
+    </div>
+    <div class="text">Advanced Account Settings</div>
+</a>
