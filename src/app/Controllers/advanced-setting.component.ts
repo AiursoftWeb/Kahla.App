@@ -63,6 +63,6 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     public todo(): void {
-        Swal.fire('Under developing', 'This features is still under developing ^_^.', 'info');
+        Swal.fire('Under development', 'This features is still under development ^_^.', 'info');
     }
 }
