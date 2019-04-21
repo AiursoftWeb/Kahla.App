@@ -98,7 +98,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.headerService.shadow = true;
-        this.headerService.timer = true;
+        this.headerService.timer = false;
         this.headerService.button = false;
         this.route.params
             .pipe(
@@ -128,9 +128,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.headerService.routerLink = `/group/${conversation.id}`;
                     }
                     this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-                    if (this.timerService.destructTime === 'off') {
-                        this.headerService.timer = false;
-                    }
+                    this.headerService.timer = this.timerService.destructTime !== 'off';
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
 
