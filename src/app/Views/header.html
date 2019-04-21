@@ -2,6 +2,7 @@
     <div class="returnButton headerButton" *ngIf="headerService.returnButton" (click)="goBack()" [ngClass]="{ 'macOSReturnButton': macOSElectron }">
         <i class="fa fa-caret-left"></i>
     </div>
+    <div *ngIf="headerService.timer"></div>
     <div *ngIf="!headerService.returnButton"></div>
     <div class="text">{{headerService.title}}</div>
     <div *ngIf="headerService.timer && messageService.conversation" class="user-button headerButton" (click)="timerService.setTimer(messageService.conversation.id)">
