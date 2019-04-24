@@ -38,11 +38,10 @@ export class AdvancedSettingComponent implements OnInit {
     updateEmailNotify(): void {
         if (!this.updatingSetting) {
             this.updatingSetting = true;
-            this.me.enableEmailNotification = !this.me.enableEmailNotification;
-            this.authApiService.UpdateClientSetting(null, this.me.enableEmailNotification).subscribe(res => {
+            this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
                 this.updatingSetting = false;
                 if (res.code === 0) {
-                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification;
+                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
                   } else {
                     Swal.fire('Error', res.message, 'error');
                   }
