@@ -29,20 +29,16 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.me = this.messageService.me;
-        this.authApiService.Me().subscribe(result => {
-            this.me = result.value;
-        });
+        this.me = Object.assign({}, this.messageService.me);
     }
 
     updateEmailNotify(): void {
         if (!this.updatingSetting) {
             this.updatingSetting = true;
-            this.me.enableEmailNotification = !this.me.enableEmailNotification;
-            this.authApiService.UpdateClientSetting(null, this.me.enableEmailNotification).subscribe(res => {
+            this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
                 this.updatingSetting = false;
                 if (res.code === 0) {
-                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification;
+                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
                   } else {
                     Swal.fire('Error', res.message, 'error');
                   }
