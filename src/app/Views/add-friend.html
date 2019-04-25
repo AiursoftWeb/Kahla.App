@@ -1,7 +1,7 @@
 ﻿<app-header title="Add Friend" i18n-title="@@AddFriend" returnButton="true"></app-header>
 <div class="search-part">
     <div class="search-input">
-        <input placeholder="Enter the name of the user or group..." type="text" #friendSearch (keyup)="SearchBoxKeyUp($event,$event.currentTarget)"/>
+        <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #friendSearch (keyup)="SearchBoxKeyUp($event,$event.currentTarget)"/>
         <button class="button primary" (click)="search(friendSearch.value, 0)" [disabled]="searching || friendSearch.value.length === 0"><i class="fa fa-search"></i></button>
     </div>
     <div class="search-type" *ngIf="results">

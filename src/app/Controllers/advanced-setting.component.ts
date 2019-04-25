@@ -5,6 +5,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { MessageService } from '../Services/MessageService';
 import { DevicesApiService } from '../Services/DevicesApiService';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -29,7 +30,14 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.me = Object.assign({}, this.messageService.me);
+        if (this.messageService.me) {
+            this.me = Object.assign({}, this.messageService.me);
+        } else {
+            this.authApiService.Me().subscribe(p => {
+                this.me = p.value;
+                this.me.avatarURL = Values.fileAddress + this.me.headImgFileKey;
+            });
+        }
     }
 
     updateEmailNotify(): void {
