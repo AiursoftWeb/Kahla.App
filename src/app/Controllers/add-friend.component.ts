@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
@@ -16,7 +16,7 @@ import { GroupsResult } from '../Models/GroupsResults';
                 '../Styles/reddot.scss']
 
 })
-export class AddFriendComponent {
+export class AddFriendComponent implements OnInit {
     public results: SearchResult;
     public loadingImgURL = Values.loadingImgURL;
     public searching = false;
@@ -36,6 +36,11 @@ export class AddFriendComponent {
             this.headerService.shadow = false;
             this.headerService.timer = false;
         }
+
+    public ngOnInit(): void {
+        const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+        searchBar.focus();
+    }
 
     public search(term: string, mode: number): void {
         this.searchMode = mode;

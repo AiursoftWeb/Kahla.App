@@ -48,6 +48,8 @@ export class LocalSearchComponent implements OnInit {
                 }
             })
         );
+        const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+        searchBar.focus();
     }
 
     public search(term: string): void {
