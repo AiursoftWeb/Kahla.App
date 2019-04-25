@@ -9,7 +9,7 @@
   position: fixed;
 
   /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
-  height: 40px;
+  height: 45px;
   width: 100%;
   top: 0;
   overflow: auto;
@@ -20,12 +20,12 @@
   user-select: none;
 
   &.shadow {
-    box-shadow: 0 0px 74px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0px 74px 0 rgba(0, 0, 0, 0.4);
   }
 }
 
 .header-holder {
-  height: 40px;
+  height: 45px;
 }
 
 .header {
@@ -55,6 +55,10 @@
 
 .macOSReturnButton {
   margin: auto auto auto 70px !important;
+}
+
+.macOSHeader {
+  height: 35px;
 }
 
 .showTimer {
