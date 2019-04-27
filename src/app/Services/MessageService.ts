@@ -116,7 +116,7 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
-                    t.timeStamp = new Date(t.sendTime).getTime() + this.conversation.maxLiveSeconds * 1000;
+                    t.timeStamp = new Date(t.sendTime).getTime();
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
                         if (fileKey === -1 || isNaN(fileKey)) {
