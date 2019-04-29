@@ -39,6 +39,7 @@ export class MessageService {
     private users = new Map();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    public groupConversation = false;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -56,7 +57,7 @@ export class MessageService {
             case EventType.NewMessage:
                 evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    if (this.conversation.discriminator === 'GroupConversation' && !this.users.has(evt.sender.id)) {
+                    if (this.groupConversation && !this.users.has(evt.sender.id)) {
                         this.users.set(evt.sender.id, this.getUserInfoArray(evt.sender));
                     }
                     this.getMessages(true, this.conversation.id, -1, 15);
@@ -277,7 +278,7 @@ export class MessageService {
     }
 
     public setUsers(): void {
-        if (this.conversation && this.conversation.discriminator === 'GroupConversation') {
+        if (this.conversation && this.groupConversation) {
             this.conversation.users.forEach(userGroupRelation => {
                 this.users.set(userGroupRelation.user.id, this.getUserInfoArray(userGroupRelation.user));
             });
@@ -294,6 +295,23 @@ export class MessageService {
             return this.users.get(id);
         } else {
             return ['New user', Values.loadingImgURL, 'aqua'];
+        }
+    }
+
+    public searchUser(nickName: string): Array<Array<string>> {
+        console.log(nickName);
+        if (nickName.length === 0) {
+            console.log(Array.from(this.users));
+            return Array.from(this.users);
+        } else {
+            const matchedUsers = [];
+            this.users.forEach((value, key) => {
+                if (value[0].toLowerCase().includes(nickName.toLowerCase())) {
+                    matchedUsers.push([key, value]);
+                }
+            });
+            console.log(matchedUsers);
+            return matchedUsers;
         }
     }
 }

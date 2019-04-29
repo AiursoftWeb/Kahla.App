@@ -37,6 +37,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 15;
     public Math = Math;
     public Date = Date;
+    public showUserList = false;
+    public matchedUsers = [];
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -89,6 +91,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (this.oldContent === this.content) {
                 this.send();
             }
+        } else if (this.content && this.content.includes('@') && this.messageService.groupConversation
+            && !this.content.slice(this.content.lastIndexOf('@')).includes(' ')) {
+            this.showUserList = true;
+            this.matchedUsers = this.messageService.searchUser(this.content.slice(this.content.lastIndexOf('@') + 1));
         }
     }
 
@@ -123,6 +129,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroyed) {
                     this.messageService.conversation = conversation;
+                    this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
                     this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);

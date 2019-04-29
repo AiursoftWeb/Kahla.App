@@ -2,6 +2,16 @@
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    
+    <ul *ngIf="showUserList">
+        <li *ngFor="let user of matchedUsers">
+            <div>
+                <img src="{{ user[1][1] }}">
+            </div>
+            <p>{{ user[1][0] }}</p>
+        </li>
+    </ul>
+    
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
         <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
@@ -11,7 +21,7 @@
             </div>
             <div class="chat-text">
                 <div class="chat-content">
-                    <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.getUser(message.senderId)[2]}">{{ messageService.getUser(message.senderId)[0] }}<br></span>
+                    <span *ngIf="messageService.conversation && messageService.conversation.discriminator === 'GroupConversation' && messageService.me && message.senderId != messageService.me.id" [ngStyle]="{'color': messageService.getUser(message.senderId)[2]}">{{ messageService.getUser(message.senderId)[0] }}<br></span>
                     <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 4" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5).split('-')[0] }}">
                         <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.height.px]="message.content.split('-')[2]">
                             <img src="{{ message.content.substring(5).split('-')[0] }}"
