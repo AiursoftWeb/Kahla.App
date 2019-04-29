@@ -108,6 +108,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (!this.unread || this.unread > 50 || this.unread < 15) {
                         this.unread = 15;
                     }
+
+                    this.content = localStorage.getItem('draft' + this.conversationID);
+                    this.autoSaveInterval = setInterval(() => {
+                        if (this.content != null) {
+                            localStorage.setItem('draft' + this.conversationID, this.content);
+                        }
+                    }, 1000);
+
                     return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
@@ -130,13 +138,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.timerService.updateDestructTime(conversation.maxLiveSeconds);
                     this.headerService.timer = this.timerService.destructTime !== 'off';
 
-                    this.content = localStorage.getItem('draft' + this.conversationID);
-
-                    this.autoSaveInterval = setInterval(() => {
-                        if (this.content != null) {
-                            localStorage.setItem('draft' + this.conversationID, this.content);
-                        }
-                    }, 1000);
 
                     const inputElement = <HTMLElement>document.querySelector('#chatInput');
 
