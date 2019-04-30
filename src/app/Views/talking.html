@@ -83,48 +83,61 @@
         <i class="fa fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="messageService.newMessages" class="dot reddot"></div>
     </button>
+
+</ul>
+
+<div class="chat-action">
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}">
         <li *ngFor="let user of matchedUsers" (click)="complete(user[1][0])" class="menu-button">
             <img class="img" src="{{ user[1][1] }}">
             <div class="text">{{ user[1][0] }}</div>
         </li>
     </ul>
-</ul>
+    <div class="chat-box">
+        <div class="chat-part" [ngClass]="{'chat-part-extented': !(content==undefined || content.trim().length === 0)}">
+            <textarea id="chatInput"
+                      [ngClass]="{'chatinput-shorten': !(content==undefined || content.trim().length === 0)}"
+                      [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500"
+                      (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
+            <button class="button primary"
+                    [ngClass]="{'sendbtn-shown':!(content==undefined || content.trim().length === 0)}" (click)="send()"
+                    i18n="@@Send">Send
+            </button>
+        </div>
+        <div class="button-part"
+             [ngClass]="{'button-part-invisible': !(content==undefined || content.trim().length === 0)}">
+            <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>
+            <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
+        </div>
+        <div *ngIf="showPanel" class="more-panel">
+            <div class="of4">
+                <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)"
+                       accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml"/>
+                <label for="image"><i style="color: #FF9800;" class="fa fa-file-image-o"></i>
+                    <div class="text">
+                        Send Image
+                    </div>
+                </label>
+            </div>
+            <div class="of4">
+                <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)"
+                       accept="video/mp4, video/x-m4v, video/*"/>
+                <label for="video"><i style="color: #00CC9C;" class="fa fa-file-video-o"></i>
+                    <div class="text">
+                        Send Video
+                    </div>
+                </label>
+            </div>
+            <div class="of4">
+                <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)"/>
+                <label for="file"><i style="color: #4694F6;" class="fa fa-file-text"></i>
+                    <div class="text">
+                        Send File
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
 
-<div class="chat-action">
-    <div class="chat-part" [ngClass]="{'chat-part-extented': !(content==undefined || content.trim().length === 0)}">
-        <textarea id="chatInput" [ngClass]="{'chatinput-shorten': !(content==undefined || content.trim().length === 0)}" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
-        <button class="button primary" [ngClass]="{'sendbtn-shown':!(content==undefined || content.trim().length === 0)}" (click)="send()" i18n="@@Send">Send</button>
-    </div>
-    <div class="button-part" [ngClass]="{'button-part-invisible': !(content==undefined || content.trim().length === 0)}">
-        <i class="fa fa-microphone" aria-hidden="true" (click)="record()" [ngClass]="{'red': recording}"></i>
-        <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
-    </div>
-    <div *ngIf="showPanel" class="more-panel">
-        <div class="of4">
-            <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)" accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml" />
-            <label for="image"><i style="color: #FF9800;" class="fa fa-file-image-o"></i>
-                <div class="text">
-                Send Image
-            </div>
-            </label>
-        </div>
-        <div class="of4">
-            <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)" accept="video/mp4, video/x-m4v, video/*" />
-            <label for="video"><i style="color: #00CC9C;" class="fa fa-file-video-o"></i>
-                <div class="text">
-                Send Video
-            </div>
-            </label>
-        </div>
-        <div class="of4">
-            <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)" />
-            <label for="file"><i style="color: #4694F6;" class="fa fa-file-text"></i>
-                <div class="text">
-                    Send File
-                </div>
-            </label>
-        </div>
-    </div>
 </div>
 <progress *ngIf="uploadService.uploading" max="100" value={{uploadService.progress}}></progress>

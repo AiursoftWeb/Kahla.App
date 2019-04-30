@@ -83,15 +83,15 @@
     }
 
     .right .chat-content {
-      background-color: map-get($colors, talking-chat-right-bg );
+      background-color: map-get($colors, talking-chat-right-bg);
 
-      &::after{
-        border-left-color: map-get($colors, talking-chat-right-bg );
+      &::after {
+        border-left-color: map-get($colors, talking-chat-right-bg);
       }
     }
   }
 
-  %chat-action {
+  %chat-box {
     background-color: map-get($colors, talking-action-bg);
 
     .chat-part textarea {
@@ -107,21 +107,30 @@
     }
   }
 
+  //%talking-overlay {
+  //  //due to the bug of chrome......
+  //  //add the blur effect later
+  //  //background-color: transparentize(map-get($colors,menuitem-bg),0.8);
+  //  //backdrop-filter: blur(30px);
+  //  //-webkit-backdrop-filter: blur(30px);
+  //  background-color: map_get($colors,menuitem-bg);
+  //}
+
   %tgl-btn {
     background-color: map-get($colors, tgl-btn-bg);
   }
 
-    %primary-button {
-      background-color: map-get($colors, primary-btn-bg);
+  %primary-button {
+    background-color: map-get($colors, primary-btn-bg);
 
-      &:hover:enabled {
-        background-color: map-get($colors, primary-btn-hover-bg);
-      }
-
-      &:active {
-        background-color: map-get($colors, primary-btn-active-bg);
-      }
+    &:hover:enabled {
+      background-color: map-get($colors, primary-btn-hover-bg);
     }
+
+    &:active {
+      background-color: map-get($colors, primary-btn-active-bg);
+    }
+  }
 }
 
 @mixin body-shared($colors) {
@@ -143,8 +152,8 @@
       color: map-get($colors, text-color);
     }
 
-    .swal2-styled.swal2-confirm{
-      background-color: map-get($colors, btn-bg );
+    .swal2-styled.swal2-confirm {
+      background-color: map-get($colors, btn-bg);
     }
 
   }
