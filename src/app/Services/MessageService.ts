@@ -154,6 +154,7 @@ export class MessageService {
                             stripPrefix: false,
                             className : 'chat-inline-link'
                         });
+                        t.content = this.getAtIDs(t.content)[0];
                     }
                 });
                 if (messages.length < take) {
@@ -236,6 +237,8 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
+        this.users.clear();
+        this.groupConversation = false;
     }
 
     private getOrientationClassName(exifValue: string): string {
@@ -314,14 +317,18 @@ export class MessageService {
 
     public getAtIDs(message: string): Array<string> {
         const atUsers = [];
-        message.split(' ').forEach(s => {
+        const newMessageArry = message.split(' ');
+        message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
                 const searchResults = this.searchUser(s.slice(1));
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0][0]);
+                    newMessageArry[index] = '<a class="chat-inline-link" href="/user/' + searchResults[0][0] +
+                        '">' + newMessageArry[index] + '</a>';
                 }
             }
         });
+        atUsers.unshift(newMessageArry.join(' '));
         return atUsers;
     }
 }

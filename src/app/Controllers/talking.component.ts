@@ -182,6 +182,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             stripPrefix: false,
             className : 'chat-inline-link'
         });
+        const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
+        tempMessage.content = messageIDArry[0];
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
@@ -190,8 +192,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }, 0);
         const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage,
-            this.messageService.getAtIDs(tempMessage.content))
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
             .subscribe({
                 error(e) {
                     if (e.status === 0 || e.status === 503) {
