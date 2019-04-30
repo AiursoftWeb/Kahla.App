@@ -344,6 +344,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public complete(nickname: string): void {
+        this.content = this.content.slice(0, this.content.lastIndexOf('@') + 1) + nickname.replace(' ', '') + ' ';
+        this.showUserList = false;
+    }
+
+    public hideUserList(): void {
+        this.showUserList = false;
+    }
+
     public ngOnDestroy(): void {
         this.uploadService.talkingDestroyed = true;
         window.onscroll = null;

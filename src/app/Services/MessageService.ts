@@ -299,9 +299,7 @@ export class MessageService {
     }
 
     public searchUser(nickName: string): Array<Array<string>> {
-        console.log(nickName);
         if (nickName.length === 0) {
-            console.log(Array.from(this.users));
             return Array.from(this.users);
         } else {
             const matchedUsers = [];
@@ -310,7 +308,6 @@ export class MessageService {
                     matchedUsers.push([key, value]);
                 }
             });
-            console.log(matchedUsers);
             return matchedUsers;
         }
     }

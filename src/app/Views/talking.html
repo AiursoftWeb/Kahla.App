@@ -1,10 +1,10 @@
 ﻿<app-header title="Loading..." i18n-title="@@Loading" returnButton="true" Button="true" ButtonIcon="user" #header></app-header>
-<ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)">
+<ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     
     <ul *ngIf="showUserList">
-        <li *ngFor="let user of matchedUsers">
+        <li *ngFor="let user of matchedUsers" (click)="complete(user[1][0])">
             <div>
                 <img src="{{ user[1][1] }}">
             </div>
