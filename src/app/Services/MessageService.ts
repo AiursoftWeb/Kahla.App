@@ -1,25 +1,26 @@
-import { Injectable } from '@angular/core';
-import { EventType } from '../Models/EventType';
-import { AiurEvent } from '../Models/AiurEvent';
+import {Injectable} from '@angular/core';
+import {EventType} from '../Models/EventType';
+import {AiurEvent} from '../Models/AiurEvent';
 import Swal from 'sweetalert2';
-import { NewMessageEvent } from '../Models/NewMessageEvent';
-import { Conversation } from '../Models/Conversation';
-import { Message } from '../Models/Message';
-import { ConversationApiService } from './ConversationApiService';
-import { map } from 'rxjs/operators';
-import { UploadService } from './UploadService';
-import { KahlaUser } from '../Models/KahlaUser';
-import { AES, enc } from 'crypto-js';
-import { CacheService } from './CacheService';
+import {NewMessageEvent} from '../Models/NewMessageEvent';
+import {Conversation} from '../Models/Conversation';
+import {Message} from '../Models/Message';
+import {ConversationApiService} from './ConversationApiService';
+import {map} from 'rxjs/operators';
+import {UploadService} from './UploadService';
+import {KahlaUser} from '../Models/KahlaUser';
+import {AES, enc} from 'crypto-js';
+import {CacheService} from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
-import { Values } from '../values';
-import { ElectronService } from 'ngx-electron';
-import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
-import { TimerService } from './TimerService';
-import { WereDeletedEvent } from '../Models/WereDeletedEvent';
-import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
-import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
+import {Values} from '../values';
+import {ElectronService} from 'ngx-electron';
+import {TimerUpdatedEvent} from '../Models/TimerUpdatedEvent';
+import {TimerService} from './TimerService';
+import {WereDeletedEvent} from '../Models/WereDeletedEvent';
+import {NewFriendRequestEvent} from '../Models/NewFriendRequestEvent';
+import {FriendAcceptedEvent} from '../Models/FriendAcceptedEvent';
+import {Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -46,8 +47,10 @@ export class MessageService {
         private uploadService: UploadService,
         private cacheService: CacheService,
         private _electronService: ElectronService,
-        private timerService: TimerService
-    ) {}
+        private timerService: TimerService,
+        private router: Router,
+    ) {
+    }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -123,7 +126,8 @@ export class MessageService {
                         if (fileKey === -1 || isNaN(fileKey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
+                            let imageWidth = Number(t.content.split('-')[2]),
+                                imageHeight = Number(t.content.split('-')[1]);
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
@@ -152,7 +156,7 @@ export class MessageService {
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
                             stripPrefix: false,
-                            className : 'chat-inline-link'
+                            className: 'chat-inline-link'
                         });
                         t.content = this.getAtIDs(t.content)[0];
                     }
@@ -203,6 +207,17 @@ export class MessageService {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
+                setTimeout(() => {
+                    const links = document.getElementsByClassName('atLink');
+                    for (let i = 0; i < links.length; i++) {
+                        (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                            ev.preventDefault();
+                            // noinspection JSIgnoredPromiseFromCall
+                            this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                        };
+                    }
+                }, 1);
+
             });
     }
 
@@ -273,7 +288,7 @@ export class MessageService {
                 body: event.content,
                 icon: Values.fileAddress + event.sender.headImgFileKey
             });
-            notify.onclick = function(clickEvent) {
+            notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
                 window.focus();
             };
@@ -323,8 +338,8 @@ export class MessageService {
                 const searchResults = this.searchUser(s.slice(1));
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0][0]);
-                    newMessageArry[index] = '<a class="chat-inline-link" href="/user/' + searchResults[0][0] +
-                        '">' + newMessageArry[index] + '</a>';
+                    newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0][0]}"
+href="/user/${searchResults[0][0]}">${newMessageArry[index]}</a>`;
                 }
             }
         });
