@@ -83,12 +83,10 @@
         <i class="fa fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="messageService.newMessages" class="dot reddot"></div>
     </button>
-    <ul *ngIf="showUserList">
-        <li *ngFor="let user of matchedUsers" (click)="complete(user[1][0])">
-            <div>
-                <img src="{{ user[1][1] }}">
-            </div>
-            <p>{{ user[1][0] }}</p>
+    <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}">
+        <li *ngFor="let user of matchedUsers" (click)="complete(user[1][0])" class="menu-button">
+            <img class="img" src="{{ user[1][1] }}">
+            <div class="text">{{ user[1][0] }}</div>
         </li>
     </ul>
 </ul>

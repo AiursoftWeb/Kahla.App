@@ -16,6 +16,7 @@
   font-size: 13px;
   text-align: center;
   min-height: calc(100vh - 130px);
+  position: relative;
 
   li {
     margin-bottom: 25px;
@@ -398,4 +399,19 @@ a h5 {
 
 .flip {
   transform: scaleX(-1);
+}
+
+.userList {
+  position: absolute;
+  left: 0;
+  bottom: -25px;
+  width: 100%;
+  padding: 0;
+  li {
+    margin: 0;
+  }
+}
+
+.oneResult {
+  bottom: 0;
 }
