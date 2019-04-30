@@ -66,7 +66,7 @@
                             <span>Voice Message</span>
                         </a>
                     </div>
-                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
+                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p> 
                 </div>
                 <p class="sendTime">
                     <span *ngIf="message.local" i18n="@@Sending">
