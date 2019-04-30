@@ -52,7 +52,7 @@
     font-size: 12px;
     width: 70%;
     margin-bottom: 1.5%;
-    
+
     span {
       color: #aaa;
     }
@@ -157,15 +157,37 @@
 }
 
 .chat-action {
-  @extend %chat-action;
-  padding: 10px;
+
   display: inline-block;
-  box-sizing: border-box;
   width: 100%;
   position: fixed;
   z-index: 99;
   bottom: 0;
-  box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
+
+  .userList {
+    //@extend %talking-overlay;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin: 0;
+      //background-color: transparent;
+    }
+  }
+
+  .chat-box {
+    @extend %chat-box;
+    padding: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 99;
+    bottom: 0;
+    box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
+  }
 }
 
 .chat-part {
@@ -401,16 +423,6 @@ a h5 {
   transform: scaleX(-1);
 }
 
-.userList {
-  position: absolute;
-  left: 0;
-  bottom: -25px;
-  width: 100%;
-  padding: 0;
-  li {
-    margin: 0;
-  }
-}
 
 .oneResult {
   bottom: 0;
