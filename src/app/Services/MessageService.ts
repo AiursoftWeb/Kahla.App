@@ -39,6 +39,7 @@ export class MessageService {
     private users = new Map();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    public groupConversation = false;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -56,7 +57,7 @@ export class MessageService {
             case EventType.NewMessage:
                 evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    if (this.conversation.discriminator === 'GroupConversation' && !this.users.has(evt.sender.id)) {
+                    if (this.groupConversation && !this.users.has(evt.sender.id)) {
                         this.users.set(evt.sender.id, this.getUserInfoArray(evt.sender));
                     }
                     this.getMessages(true, this.conversation.id, -1, 15);
@@ -153,6 +154,7 @@ export class MessageService {
                             stripPrefix: false,
                             className : 'chat-inline-link'
                         });
+                        t.content = this.getAtIDs(t.content)[0];
                     }
                 });
                 if (messages.length < take) {
@@ -235,6 +237,8 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
+        this.users.clear();
+        this.groupConversation = false;
     }
 
     private getOrientationClassName(exifValue: string): string {
@@ -277,7 +281,7 @@ export class MessageService {
     }
 
     public setUsers(): void {
-        if (this.conversation && this.conversation.discriminator === 'GroupConversation') {
+        if (this.conversation && this.groupConversation) {
             this.conversation.users.forEach(userGroupRelation => {
                 this.users.set(userGroupRelation.user.id, this.getUserInfoArray(userGroupRelation.user));
             });
@@ -295,5 +299,36 @@ export class MessageService {
         } else {
             return ['New user', Values.loadingImgURL, 'aqua'];
         }
+    }
+
+    public searchUser(nickName: string): Array<Array<string>> {
+        if (nickName.length === 0) {
+            return Array.from(this.users);
+        } else {
+            const matchedUsers = [];
+            this.users.forEach((value, key) => {
+                if (value[0].toLowerCase().replace(' ', '').includes(nickName.toLowerCase().replace(' ', ''))) {
+                    matchedUsers.push([key, value]);
+                }
+            });
+            return matchedUsers;
+        }
+    }
+
+    public getAtIDs(message: string): Array<string> {
+        const atUsers = [];
+        const newMessageArry = message.split(' ');
+        message.split(' ').forEach((s, index) => {
+            if (s.length > 0 && s[0] === '@') {
+                const searchResults = this.searchUser(s.slice(1));
+                if (searchResults.length > 0) {
+                    atUsers.push(searchResults[0][0]);
+                    newMessageArry[index] = '<a class="chat-inline-link" href="/user/' + searchResults[0][0] +
+                        '">' + newMessageArry[index] + '</a>';
+                }
+            }
+        });
+        atUsers.unshift(newMessageArry.join(' '));
+        return atUsers;
     }
 }

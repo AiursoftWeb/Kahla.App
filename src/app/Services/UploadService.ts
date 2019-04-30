@@ -111,7 +111,7 @@ export class UploadService {
     }
 
     private sendMessage(message: string, conversationID: number): void {
-        this.conversationApiService.SendMessage(conversationID, message)
+        this.conversationApiService.SendMessage(conversationID, message, [])
             .subscribe(() => {
                 this.finishUpload();
                 this.scrollBottom(true);

@@ -18,7 +18,8 @@ declare var MediaRecorder: any;
     templateUrl: '../Views/talking.html',
     styleUrls: ['../Styles/talking.scss',
                 '../Styles/button.scss',
-                '../Styles/reddot.scss']
+                '../Styles/reddot.scss',
+                '../Styles/menu.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
@@ -37,6 +38,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 15;
     public Math = Math;
     public Date = Date;
+    public showUserList = false;
+    public matchedUsers = [];
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -89,6 +92,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (this.oldContent === this.content) {
                 this.send();
             }
+        } else if (this.content && this.content.includes('@') && this.messageService.groupConversation
+            && !this.content.slice(this.content.lastIndexOf('@')).includes(' ')) {
+            this.showUserList = true;
+            this.matchedUsers = this.messageService.searchUser(this.content.slice(this.content.lastIndexOf('@') + 1));
         }
     }
 
@@ -123,6 +130,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroyed) {
                     this.messageService.conversation = conversation;
+                    this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
                     this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
@@ -175,6 +183,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             stripPrefix: false,
             className : 'chat-inline-link'
         });
+        const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
+        tempMessage.content = messageIDArry[0];
         tempMessage.senderId = this.messageService.me.id;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
@@ -183,7 +193,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }, 0);
         const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
             .subscribe({
                 error(e) {
                     if (e.status === 0 || e.status === 503) {
@@ -335,6 +345,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 return;
             });
         }
+    }
+
+    public complete(nickname: string): void {
+        this.content = this.content.slice(0, this.content.lastIndexOf('@') + 1) + nickname.replace(' ', '') + ' ';
+        this.showUserList = false;
+    }
+
+    public hideUserList(): void {
+        this.showUserList = false;
     }
 
     public ngOnDestroy(): void {
