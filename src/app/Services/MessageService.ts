@@ -304,11 +304,24 @@ export class MessageService {
         } else {
             const matchedUsers = [];
             this.users.forEach((value, key) => {
-                if (value[0].toLowerCase().includes(nickName.toLowerCase())) {
+                if (value[0].toLowerCase().replace(' ', '').includes(nickName.toLowerCase().replace(' ', ''))) {
                     matchedUsers.push([key, value]);
                 }
             });
             return matchedUsers;
         }
+    }
+
+    public getAtIDs(message: string): Array<string> {
+        const atUsers = [];
+        message.split(' ').forEach(s => {
+            if (s.length > 0 && s[0] === '@') {
+                const searchResults = this.searchUser(s.slice(1));
+                if (searchResults.length > 0) {
+                    atUsers.push(searchResults[0][0]);
+                }
+            }
+        });
+        return atUsers;
     }
 }
