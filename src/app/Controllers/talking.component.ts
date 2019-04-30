@@ -91,11 +91,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
             e.preventDefault();
             if (this.oldContent === this.content) {
                 this.send();
+                this.showUserList = false;
             }
         } else if (this.content && this.content.includes('@') && this.messageService.groupConversation
             && !this.content.slice(this.content.lastIndexOf('@')).includes(' ')) {
             this.showUserList = true;
             this.matchedUsers = this.messageService.searchUser(this.content.slice(this.content.lastIndexOf('@') + 1));
+        } else {
+            this.showUserList = false;
         }
     }
 
