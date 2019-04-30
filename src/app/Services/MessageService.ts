@@ -328,6 +328,22 @@ export class MessageService {
             });
             return matchedUsers;
         }
+
+    }
+
+    public getIndexUser(nickName: string): Array<Array<string>> {
+        if (nickName.length === 0) {
+            return Array.from(this.users);
+        } else {
+            const matchedUsers = [];
+            this.users.forEach((value, key) => {
+               if (value[0].toLowerCase().replace(' ', '') === nickName.toLowerCase().replace(' ', '')) {
+                   matchedUsers.push([key, value]);
+               }
+            });
+
+            return matchedUsers;
+        }
     }
 
     public getAtIDs(message: string): Array<string> {
@@ -335,7 +351,7 @@ export class MessageService {
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
-                const searchResults = this.searchUser(s.slice(1));
+                const searchResults = this.getIndexUser(s.slice(1));
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0][0]);
                     newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0][0]}"
