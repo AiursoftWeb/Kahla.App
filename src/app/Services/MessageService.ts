@@ -316,13 +316,15 @@ export class MessageService {
         }
     }
 
-    public searchUser(nickName: string): Array<Array<string>> {
-        if (nickName.length === 0) {
+    public searchUser(nickName: string, getMessage: boolean): Array<Array<string>> {
+        if (nickName.length === 0 && !getMessage) {
             return Array.from(this.users);
         } else {
             const matchedUsers = [];
             this.users.forEach((value, key) => {
-                if (value[0].toLowerCase().replace(' ', '').includes(nickName.toLowerCase().replace(' ', ''))) {
+                if (!getMessage && value[0].toLowerCase().replace(' ', '').includes(nickName.toLowerCase())) {
+                    matchedUsers.push([key, value]);
+                } else if (getMessage && value[0].toLowerCase().replace(' ', '') === nickName.toLowerCase()) {
                     matchedUsers.push([key, value]);
                 }
             });
@@ -335,7 +337,7 @@ export class MessageService {
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
-                const searchResults = this.searchUser(s.slice(1));
+                const searchResults = this.searchUser(s.slice(1), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0][0]);
                     newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0][0]}"

@@ -93,10 +93,27 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.send();
                 this.showUserList = false;
             }
-        } else if (this.content && this.content.includes('@') && this.messageService.groupConversation
-            && !this.content.slice(this.content.lastIndexOf('@')).includes(' ')) {
-            this.showUserList = true;
-            this.matchedUsers = this.messageService.searchUser(this.content.slice(this.content.lastIndexOf('@') + 1));
+        } else if (this.content) {
+            const splitArray = this.content.split(' ');
+            for (let i = 0; i < splitArray.length; i++) {
+                if (splitArray[i].includes('@')) {
+                    const atIndex = splitArray[i].indexOf('@');
+                    const searchName = splitArray[i].slice(atIndex + 1).toLowerCase();
+                    const searchResults = this.messageService.searchUser(searchName, false);
+                    if (searchResults.length === 1) {
+                        const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
+                        if (nickname !== searchName) {
+                            splitArray[i] = `${splitArray[i].slice(0, atIndex + 1)}${nickname} `;
+                            this.showUserList = false;
+                        }
+                    } else if (searchResults.length > 0) {
+                        this.matchedUsers = searchResults;
+                        this.showUserList = true;
+                        break;
+                    }
+                }
+            }
+            this.content = splitArray.join(' ');
         } else {
             this.showUserList = false;
         }
