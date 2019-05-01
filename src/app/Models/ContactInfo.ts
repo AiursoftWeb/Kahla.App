@@ -11,4 +11,5 @@ export class ContactInfo {
     public aesKey: string;
     public avatarURL: string;
     public muted: boolean;
+    public someoneAtMe: boolean;
 }

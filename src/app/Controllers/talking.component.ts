@@ -104,8 +104,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
                         if (nickname !== searchName) {
                             splitArray[i] = `${splitArray[i].slice(0, atIndex + 1)}${nickname} `;
-                            this.showUserList = false;
                         }
+                        this.showUserList = false;
                     } else if (searchResults.length > 0) {
                         this.matchedUsers = searchResults;
                         this.showUserList = true;
