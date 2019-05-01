@@ -165,11 +165,9 @@ export class MessageService {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
-                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && take === 1 && this.belowWindowPercent > 0) {
-                        this.newMessages = true;
-                    } else {
-                        this.newMessages = false;
-                    }
+                    this.newMessages = this.me &&
+                        messages[messages.length - 1].senderId !== this.me.id &&
+                        take === 1 && this.belowWindowPercent > 0;
                 }
                 if (this.localMessages.length > 1000) {
                     this.localMessages.splice(0, 500);

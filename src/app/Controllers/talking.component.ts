@@ -107,9 +107,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
                     if (nickname !== searchName) {
                         const before = this.content.slice(0, input.selectionStart - typingWord.length + atIndex);
-                        const after = this.content.slice(input.selectionStart);
-                        this.content = `${before}@${nickname} ${after}`;
+                        this.content = `${before}@${nickname} ${this.content.slice(input.selectionStart)}`;
+                        const pointerPos = before.length + nickname.length + 2;
                         this.showUserList = false;
+                        setTimeout(() => {
+                            input.setSelectionRange(pointerPos, pointerPos);
+                        }, 0);
                     }
                 } else if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
@@ -378,9 +381,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const typingWords = this.content.slice(0, input.selectionStart).split(' ');
         const typingWord = typingWords[typingWords.length - 1];
         const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
-        const after = this.content.slice(input.selectionStart);
-        this.content = `${before}@${nickname.replace(' ', '')} ${after}`;
+        this.content =
+            `${before}@${nickname.replace(' ', '')} ${this.content.slice(input.selectionStart)}`;
         this.showUserList = false;
+        const pointerPos = before.length + nickname.replace(' ', '').length + 2;
+        setTimeout(() => {
+            input.setSelectionRange(pointerPos, pointerPos);
+            input.focus();
+        }, 0);
     }
 
     public hideUserList(): void {
