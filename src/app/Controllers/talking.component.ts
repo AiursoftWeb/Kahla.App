@@ -1,25 +1,26 @@
-﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { ConversationApiService } from '../Services/ConversationApiService';
-import { Message } from '../Models/Message';
-import { switchMap, map } from 'rxjs/operators';
-import { AES } from 'crypto-js';
+﻿import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
+import {ConversationApiService} from '../Services/ConversationApiService';
+import {Message} from '../Models/Message';
+import {switchMap, map} from 'rxjs/operators';
+import {AES} from 'crypto-js';
 import Swal from 'sweetalert2';
-import { Values } from '../values';
-import { UploadService } from '../Services/UploadService';
-import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
+import {Values} from '../values';
+import {UploadService} from '../Services/UploadService';
+import {MessageService} from '../Services/MessageService';
+import {HeaderService} from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
-import { TimerService } from '../Services/TimerService';
+import {TimerService} from '../Services/TimerService';
+
 declare var MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
     styleUrls: ['../Styles/talking.scss',
-                '../Styles/button.scss',
-                '../Styles/reddot.scss',
-                '../Styles/menu.scss']
+        '../Styles/button.scss',
+        '../Styles/reddot.scss',
+        '../Styles/menu.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
@@ -53,7 +54,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public messageService: MessageService,
         private headerService: HeaderService,
         private timerService: TimerService
-    ) {}
+    ) {
+    }
 
     @HostListener('window:scroll', [])
     onScroll() {
@@ -93,27 +95,31 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.send();
                 this.showUserList = false;
             }
-        } else if (this.content) {
-            const splitArray = this.content.split(' ');
-            for (let i = 0; i < splitArray.length; i++) {
-                if (splitArray[i].includes('@')) {
-                    const atIndex = splitArray[i].indexOf('@');
-                    const searchName = splitArray[i].slice(atIndex + 1).toLowerCase();
-                    const searchResults = this.messageService.searchUser(searchName, false);
-                    if (searchResults.length === 1) {
-                        const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
-                        if (nickname !== searchName) {
-                            splitArray[i] = `${splitArray[i].slice(0, atIndex + 1)}${nickname} `;
-                        }
+        } else if (this.content && e.key !== 'Backspace') {
+            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+            const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+            const typingWord = typingWords[typingWords.length - 1];
+            if (typingWord.includes('@')) {
+                const atIndex = typingWord.indexOf('@');
+                const searchName = typingWord.slice(atIndex + 1).toLowerCase();
+                const searchResults = this.messageService.searchUser(searchName, false);
+                if (searchResults.length === 1) {
+                    const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
+                    if (nickname !== searchName) {
+                        const before = this.content.slice(0, input.selectionStart - typingWord.length + atIndex);
+                        const after = this.content.slice(input.selectionStart);
+                        this.content = `${before}@${nickname} ${after}`;
                         this.showUserList = false;
-                    } else if (searchResults.length > 0) {
-                        this.matchedUsers = searchResults;
-                        this.showUserList = true;
-                        break;
                     }
+                } else if (searchResults.length > 0) {
+                    this.matchedUsers = searchResults;
+                    this.showUserList = true;
+                } else {
+                    this.showUserList = false;
                 }
+            } else {
+                this.showUserList = false;
             }
-            this.content = splitArray.join(' ');
         } else {
             this.showUserList = false;
         }
@@ -201,7 +207,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.content = he.encode(this.content);
         tempMessage.content = Autolinker.link(tempMessage.content, {
             stripPrefix: false,
-            className : 'chat-inline-link'
+            className: 'chat-inline-link'
         });
         const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
         tempMessage.content = messageIDArry[0];
@@ -342,33 +348,38 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                this.recording = true;
-                this.mediaRecorder = new MediaRecorder(stream);
-                this.mediaRecorder.start();
-                const audioChunks = [];
-                this.mediaRecorder.addEventListener('dataavailable', event => {
-                    audioChunks.push(event.data);
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    this.recording = true;
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    this.mediaRecorder.start();
+                    const audioChunks = [];
+                    this.mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+                    this.mediaRecorder.addEventListener('stop', () => {
+                        this.recording = false;
+                        const audioBlob = new File(audioChunks, 'audio');
+                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                        clearTimeout(this.forceStopTimeout);
+                        stream.getTracks().forEach(track => track.stop());
+                    });
+                    this.forceStopTimeout = setTimeout(() => {
+                        this.mediaRecorder.stop();
+                    }, 1000 * 60 * 5);
+                }, () => {
+                    return;
                 });
-                this.mediaRecorder.addEventListener('stop', () => {
-                    this.recording = false;
-                    const audioBlob = new File(audioChunks, 'audio');
-                    this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
-                    clearTimeout(this.forceStopTimeout);
-                    stream.getTracks().forEach(track => track.stop());
-                });
-                this.forceStopTimeout = setTimeout(() => {
-                    this.mediaRecorder.stop();
-                }, 1000 * 60 * 5);
-            }, () => {
-                return;
-            });
         }
     }
 
     public complete(nickname: string): void {
-        this.content = this.content.slice(0, this.content.lastIndexOf('@') + 1) + nickname.replace(' ', '') + ' ';
+        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+        const typingWord = typingWords[typingWords.length - 1];
+        const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
+        const after = this.content.slice(input.selectionStart);
+        this.content = `${before}@${nickname.replace(' ', '')} ${after}`;
         this.showUserList = false;
     }
 
