@@ -21,6 +21,7 @@ import {WereDeletedEvent} from '../Models/WereDeletedEvent';
 import {NewFriendRequestEvent} from '../Models/NewFriendRequestEvent';
 import {FriendAcceptedEvent} from '../Models/FriendAcceptedEvent';
 import {Router} from '@angular/router';
+import { UserGroupRelation } from '../Models/KahlaUsers';
 
 @Injectable({
     providedIn: 'root'
@@ -302,16 +303,20 @@ export class MessageService {
         return this.users.get(message.senderId);
     }
 
-    public searchUser(nickName: string, getMessage: boolean): [string, Array<string>][] {
+    public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
         if (nickName.length === 0 && !getMessage) {
-            return Array.from(this.users);
+            const users = [];
+            this.conversation.users.forEach((item) => {
+                users.push(item.user);
+            });
+            return users;
         } else {
             const matchedUsers = [];
-            this.users.forEach((value, key) => {
-                if (!getMessage && value[0].toLowerCase().replace(' ', '').includes(nickName.toLowerCase())) {
-                    matchedUsers.push([key, value]);
-                } else if (getMessage && value[0].toLowerCase().replace(' ', '') === nickName.toLowerCase()) {
-                    matchedUsers.push([key, value]);
+            this.conversation.users.forEach((value: UserGroupRelation) => {
+                if (!getMessage && value.user.nickName.toLowerCase().replace(' ', '').includes(nickName.toLowerCase())) {
+                    matchedUsers.push(value.user);
+                } else if (getMessage && value.user.nickName.toLowerCase().replace(' ', '') === nickName.toLowerCase()) {
+                    matchedUsers.push(value.user);
                 }
             });
             return matchedUsers;
@@ -325,9 +330,9 @@ export class MessageService {
             if (s.length > 0 && s[0] === '@') {
                 const searchResults = this.searchUser(s.slice(1), true);
                 if (searchResults.length > 0) {
-                    atUsers.push(searchResults[0][0]);
-                    newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0][0]}"
-href="/user/${searchResults[0][0]}">${newMessageArry[index]}</a>`;
+                    atUsers.push(searchResults[0].id);
+                    newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0].id}"
+href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
                 }
             }
         });

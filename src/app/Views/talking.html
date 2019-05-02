@@ -89,9 +89,9 @@
 
 <div class="chat-action">
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}">
-        <li *ngFor="let user of matchedUsers" (click)="complete(user[1][0])" class="menu-button">
-            <img class="img" src="{{ user[1][1] }}">
-            <div class="text">{{ user[1][0] }}</div>
+        <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button">
+            <img class="img" src="{{ Values.fileAddress + user.headImgFileKey }}">
+            <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>
     <div class="chat-box">
