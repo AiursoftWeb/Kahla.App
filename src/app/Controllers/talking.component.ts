@@ -12,6 +12,7 @@ import {HeaderService} from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import {TimerService} from '../Services/TimerService';
+import { KahlaUser } from '../Models/KahlaUser';
 
 declare var MediaRecorder: any;
 
@@ -39,8 +40,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 15;
     public Math = Math;
     public Date = Date;
+    public Values = Values;
     public showUserList = false;
-    public matchedUsers = [];
+    public matchedUsers: Array<KahlaUser> = [];
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -104,7 +106,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 const searchName = typingWord.slice(atIndex + 1).toLowerCase();
                 const searchResults = this.messageService.searchUser(searchName, false);
                 if (searchResults.length === 1) {
-                    const nickname = searchResults[0][1][0].replace(' ', '').toLowerCase();
+                    const nickname = searchResults[0].nickName.replace(' ', '').toLowerCase();
                     if (nickname !== searchName) {
                         const before = this.content.slice(0, input.selectionStart - typingWord.length + atIndex);
                         this.content = `${before}@${nickname} ${this.content.slice(input.selectionStart)}`;
@@ -160,7 +162,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (!this.uploadService.talkingDestroyed) {
                     this.messageService.conversation = conversation;
                     this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
-                    this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
