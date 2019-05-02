@@ -160,7 +160,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (!this.uploadService.talkingDestroyed) {
                     this.messageService.conversation = conversation;
                     this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
-                    this.messageService.setUsers();
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
                     this.headerService.title = conversation.displayName;
