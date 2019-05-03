@@ -37,7 +37,6 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
-    public currentTime = Date.now();
     private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
