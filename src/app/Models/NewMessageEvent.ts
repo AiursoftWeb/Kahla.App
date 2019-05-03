@@ -7,4 +7,5 @@ export class NewMessageEvent extends AiurEvent {
     public content: string;
     public aesKey: string;
     public muted: boolean;
+    public mentioned: boolean;
 }
