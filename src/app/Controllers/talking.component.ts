@@ -215,6 +215,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
         tempMessage.content = messageIDArry[0];
         tempMessage.senderId = this.messageService.me.id;
+        tempMessage.sender = this.messageService.me;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {

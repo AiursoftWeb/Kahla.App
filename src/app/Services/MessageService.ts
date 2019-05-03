@@ -1,27 +1,29 @@
-import {Injectable} from '@angular/core';
-import {EventType} from '../Models/EventType';
-import {AiurEvent} from '../Models/AiurEvent';
+import { Injectable } from '@angular/core';
+import { EventType } from '../Models/EventType';
+import { AiurEvent } from '../Models/AiurEvent';
 import Swal from 'sweetalert2';
-import {NewMessageEvent} from '../Models/NewMessageEvent';
-import {Conversation} from '../Models/Conversation';
-import {Message} from '../Models/Message';
-import {ConversationApiService} from './ConversationApiService';
-import {map} from 'rxjs/operators';
-import {UploadService} from './UploadService';
-import {KahlaUser} from '../Models/KahlaUser';
-import {AES, enc} from 'crypto-js';
-import {CacheService} from './CacheService';
+import { NewMessageEvent } from '../Models/NewMessageEvent';
+import { Conversation } from '../Models/Conversation';
+import { Message } from '../Models/Message';
+import { ConversationApiService } from './ConversationApiService';
+import { map } from 'rxjs/operators';
+import { UploadService } from './UploadService';
+import { KahlaUser } from '../Models/KahlaUser';
+import { AES, enc } from 'crypto-js';
+import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
-import {Values} from '../values';
-import {ElectronService} from 'ngx-electron';
-import {TimerUpdatedEvent} from '../Models/TimerUpdatedEvent';
-import {TimerService} from './TimerService';
-import {WereDeletedEvent} from '../Models/WereDeletedEvent';
-import {NewFriendRequestEvent} from '../Models/NewFriendRequestEvent';
-import {FriendAcceptedEvent} from '../Models/FriendAcceptedEvent';
-import {Router} from '@angular/router';
+import { Values } from '../values';
+import { ElectronService } from 'ngx-electron';
+import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
+import { TimerService } from './TimerService';
+import { WereDeletedEvent } from '../Models/WereDeletedEvent';
+import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
+import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
+import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/KahlaUsers';
+import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
+import { NewMemberEvent } from '../Models/NewMemberEvent';
 
 @Injectable({
     providedIn: 'root'
@@ -49,13 +51,12 @@ export class MessageService {
         private _electronService: ElectronService,
         private timerService: TimerService,
         private router: Router,
-    ) {
-    }
+    ) { }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         const fireAlert = !localStorage.getItem('deviceID');
-        let evt: NewMessageEvent | TimerUpdatedEvent;
+        let evt: NewMessageEvent | TimerUpdatedEvent | NewMemberEvent | SomeoneLeftEvent;
         switch (ev.type) {
             case EventType.NewMessage:
                 evt = ev as NewMessageEvent;
@@ -96,6 +97,26 @@ export class MessageService {
                     Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
                         this.timerService.destructTime, 'info');
                 }
+                break;
+            case EventType.NewMemberEvent:
+                evt = ev as NewMemberEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversationApiService.ConversationDetail(evt.conversationId)
+                        .subscribe(updated => {
+                            this.conversation = updated.value;
+                        });
+                }
+                // todo display a System Message in the conversation
+                break;
+            case EventType.SomeoneLeftLevent:
+                evt = ev as SomeoneLeftEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversationApiService.ConversationDetail(evt.conversationId)
+                        .subscribe(updated => {
+                            this.conversation = updated.value;
+                        });
+                }
+                // todo display a System Message in the conversation
                 break;
             default:
                 break;
