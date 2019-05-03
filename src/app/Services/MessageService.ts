@@ -38,7 +38,7 @@ export class MessageService {
     public maxImageWidth = 0;
     public me: KahlaUser;
     public currentTime = Date.now();
-    private users = new Map<string, Array<string>>();
+    private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public groupConversation = false;
@@ -248,7 +248,7 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
-        this.users.clear();
+        this.userColors.clear();
         this.groupConversation = false;
     }
 
@@ -291,25 +291,16 @@ export class MessageService {
         }
     }
 
-    private getUserInfoArray(user: KahlaUser) {
-        return [user.nickName, Values.fileAddress + user.headImgFileKey,
-            this.colors[Math.floor(Math.random() * this.colors.length)]];
-    }
-
-    public getUser(message: Message): Array<string> {
-        if (!this.users.has(message.senderId)) {
-            this.users.set(message.senderId, this.getUserInfoArray(message.sender));
+    public getGroupColor(message: Message): string {
+        if (!this.userColors.has(message.senderId)) {
+            this.userColors.set(message.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
         }
-        return this.users.get(message.senderId);
+        return this.userColors.get(message.senderId);
     }
 
     public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
         if (nickName.length === 0 && !getMessage) {
-            const users = [];
-            this.conversation.users.forEach((item) => {
-                users.push(item.user);
-            });
-            return users;
+            return this.conversation.users.map(x => x.user);
         } else {
             const matchedUsers = [];
             this.conversation.users.forEach((value: UserGroupRelation) => {
