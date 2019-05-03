@@ -164,6 +164,22 @@
   z-index: 99;
   bottom: 0;
 
+  .sys-notify {
+    @extend %sys-notify;
+    height: 25px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    visibility: collapse;
+
+    &.sys-notify-shown {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
   .userList {
     //@extend %talking-overlay;
     left: 0;

@@ -88,6 +88,10 @@
 </ul>
 
 <div class="chat-action">
+    <div class="sys-notify" [class.sys-notify-shown]="messageService.sysNotifyShown">
+        <i class="fa fa-info-circle"></i>
+        {{messageService.sysNotifyText}}
+    </div>
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button">
             <img class="img" src="{{ getHeadImgUrl(user.headImgFileKey) }}">
