@@ -40,7 +40,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 15;
     public Math = Math;
     public Date = Date;
-    public Values = Values;
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
@@ -394,6 +393,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public hideUserList(): void {
         this.showUserList = false;
+    }
+
+    public getHeadImgUrl(fileKey: number): string {
+        return Values.fileAddress + fileKey;
     }
 
     public ngOnDestroy(): void {
