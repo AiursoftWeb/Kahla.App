@@ -91,6 +91,11 @@
     }
   }
 
+  %sys-notify {
+    background-color: transparentize(map-get($colors, primary-btn-bg), 0.2);
+    color: map-get($colors, default-textcolor);
+  }
+
   %chat-box {
     background-color: map-get($colors, talking-action-bg);
 

@@ -43,6 +43,8 @@ export class MessageService {
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
     public groupConversation = false;
+    public sysNotifyText: string;
+    public sysNotifyShown: boolean;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -56,10 +58,9 @@ export class MessageService {
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         const fireAlert = !localStorage.getItem('deviceID');
-        let evt: NewMessageEvent | TimerUpdatedEvent | NewMemberEvent | SomeoneLeftEvent;
         switch (ev.type) {
-            case EventType.NewMessage:
-                evt = ev as NewMessageEvent;
+            case EventType.NewMessage: {
+                const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
@@ -70,27 +71,31 @@ export class MessageService {
                     this.cacheService.UpdateConversation();
                 }
                 break;
-            case EventType.NewFriendRequest:
+            }
+            case EventType.NewFriendRequest: {
                 if (fireAlert) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
                 }
                 this.cacheService.autoUpdateRequests();
                 break;
-            case EventType.WereDeletedEvent:
+            }
+            case EventType.WereDeletedEvent: {
                 if (fireAlert) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.UpdateConversation();
                 break;
-            case EventType.FriendAcceptedEvent:
+            }
+            case EventType.FriendAcceptedEvent: {
                 if (fireAlert) {
                     Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
                         ' are now friends!', 'success');
                 }
                 this.cacheService.UpdateConversation();
                 break;
-            case EventType.TimerUpdatedEvent:
-                evt = ev as TimerUpdatedEvent;
+            }
+            case EventType.TimerUpdatedEvent: {
+                const evt = ev as TimerUpdatedEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.conversation.maxLiveSeconds = evt.newTimer;
                     this.timerService.updateDestructTime(evt.newTimer);
@@ -98,28 +103,38 @@ export class MessageService {
                         this.timerService.destructTime, 'info');
                 }
                 break;
-            case EventType.NewMemberEvent:
-                evt = ev as NewMemberEvent;
+            }
+            case EventType.NewMemberEvent: {
+                const evt = ev as NewMemberEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.conversationApiService.ConversationDetail(evt.conversationId)
                         .subscribe(updated => {
                             this.conversation = updated.value;
                         });
                 }
-                // todo display a System Message in the conversation
+                this.displaySysNotify(`${evt.newMember.nickName} joined the group.`);
                 break;
-            case EventType.SomeoneLeftLevent:
-                evt = ev as SomeoneLeftEvent;
+            }
+            case EventType.SomeoneLeftLevent: {
+                const evt = ev as SomeoneLeftEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.conversationApiService.ConversationDetail(evt.conversationId)
-                        .subscribe(updated => {
-                            this.conversation = updated.value;
-                        });
+                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
                 }
-                // todo display a System Message in the conversation
+                this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
                 break;
+            }
             default:
                 break;
+        }
+    }
+
+    public displaySysNotify(message: string) {
+        this.sysNotifyText = message;
+        if (!this.sysNotifyShown) {
+            this.sysNotifyShown = true;
+            setTimeout(() => {
+                this.sysNotifyShown = false;
+            }, 10000);
         }
     }
 
