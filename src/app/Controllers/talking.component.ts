@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
+﻿import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {ConversationApiService} from '../Services/ConversationApiService';
 import {Message} from '../Models/Message';
@@ -104,9 +104,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const input = <HTMLTextAreaElement>document.getElementById('chatInput');
             const typingWords = this.content.slice(0, input.selectionStart).split(' ');
             const typingWord = typingWords[typingWords.length - 1];
-            if (typingWord.includes('@')) {
-                const atIndex = typingWord.indexOf('@');
-                const searchName = typingWord.slice(atIndex + 1).toLowerCase();
+            if (typingWord.charAt(0) === '@') {
+                const searchName = typingWord.slice(1).toLowerCase();
                 const searchResults = this.messageService.searchUser(searchName, false);
                 if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
