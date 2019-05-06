@@ -92,6 +92,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     onKeyup(e: KeyboardEvent) {
         if (e.key === 'Enter') {
             e.preventDefault();
+            if (this.showUserList) {
+                // accept default suggestion
+                this.complete(this.matchedUsers[0].nickName);
+            }
             if (this.oldContent === this.content) {
                 this.send();
                 this.showUserList = false;
@@ -100,22 +104,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const input = <HTMLTextAreaElement>document.getElementById('chatInput');
             const typingWords = this.content.slice(0, input.selectionStart).split(' ');
             const typingWord = typingWords[typingWords.length - 1];
-            if (typingWord.includes('@')) {
-                const atIndex = typingWord.indexOf('@');
-                const searchName = typingWord.slice(atIndex + 1).toLowerCase();
+            if (typingWord.charAt(0) === '@') {
+                const searchName = typingWord.slice(1).toLowerCase();
                 const searchResults = this.messageService.searchUser(searchName, false);
-                if (searchResults.length === 1) {
-                    const nickname = searchResults[0].nickName.replace(' ', '').toLowerCase();
-                    if (nickname !== searchName) {
-                        const before = this.content.slice(0, input.selectionStart - typingWord.length + atIndex);
-                        this.content = `${before}@${nickname} ${this.content.slice(input.selectionStart)}`;
-                        const pointerPos = before.length + nickname.length + 2;
-                        this.showUserList = false;
-                        setTimeout(() => {
-                            input.setSelectionRange(pointerPos, pointerPos);
-                        }, 0);
-                    }
-                } else if (searchResults.length > 0) {
+                if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
                     this.showUserList = true;
                 } else {
