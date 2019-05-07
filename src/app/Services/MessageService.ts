@@ -235,7 +235,7 @@ export class MessageService {
                         (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
                             ev.preventDefault();
                             // noinspection JSIgnoredPromiseFromCall
-                            this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                            this.router.navigateByUrl((<HTMLAnchorElement>links.item(i)).dataset.userid);
                         };
                     }
                 }, 1);
@@ -348,8 +348,8 @@ export class MessageService {
                 const searchResults = this.searchUser(s.slice(1), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0].id);
-                    newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0].id}"
-href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
+                    newMessageArry[index] = `<a class="chat-inline-link atLink"
+                        href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
                 }
             }
         });
