@@ -207,11 +207,16 @@ export class MessageService {
                 }
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
+                        let findSameID = false;
                         for (let index = 0; index < this.localMessages.length; index++) {
                             if (this.localMessages[index].id === messages[0].id) {
+                                findSameID = true;
                                 this.localMessages.splice(index, messages.length, ...messages);
                                 break;
                             }
+                        }
+                        if (!findSameID) {
+                            this.localMessages = messages;
                         }
                     } else {
                         this.localMessages = messages;
