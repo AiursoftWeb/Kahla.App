@@ -68,7 +68,7 @@ export class InitService {
                             this.subscribeUser();
                             this.updateSubscription();
                         }
-                        this.loadPusher();
+                        this.loadPusher(false);
                         this.cacheService.UpdateConversation();
                         this.cacheService.autoUpdateRequests();
                     }
@@ -77,7 +77,7 @@ export class InitService {
         });
     }
 
-    private loadPusher(): void {
+    private loadPusher(reconnect: boolean): void {
         this.connecting = true;
         this.authApiService.InitPusher().subscribe(model => {
             if (this.ws) {
@@ -97,6 +97,9 @@ export class InitService {
             this.ws.onerror = () => this.errorOrClosedFunc();
             this.ws.onclose = () => this.errorOrClosedFunc();
             this.resend();
+            if (this.messageService.conversation && reconnect) {
+                this.messageService.getMessages(true, this.messageService.conversation.id, -1, 15);
+            }
         }, () => {
                 this.errorOrClosedFunc();
         });
@@ -113,7 +116,7 @@ export class InitService {
     }
 
     private checkNetwork(): void {
-    if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
+        if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
             this.autoReconnect();
         }
         this.online = navigator.onLine;
@@ -136,7 +139,7 @@ export class InitService {
 
     private autoReconnect(): void {
         this.timeout = setTimeout(() => {
-            this.loadPusher();
+            this.loadPusher(true);
             if (this.timeoutNumber < 10000 && this.timeoutNumber > 1000) {
                 this.timeoutNumber += 1000;
             }
