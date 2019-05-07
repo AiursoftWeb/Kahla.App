@@ -207,20 +207,16 @@ export class MessageService {
                 }
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
-                        let firstLocalIndex = 0;
-                        let firstLocalID = Number.MAX_SAFE_INTEGER;
+                        let findSameID = false;
                         for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].local && this.localMessages[index].id < firstLocalID) {
-                                firstLocalIndex = index;
-                                firstLocalID = this.localMessages[index].id;
-                            }
                             if (this.localMessages[index].id === messages[0].id) {
+                                findSameID = true;
                                 this.localMessages.splice(index, messages.length, ...messages);
                                 break;
                             }
                         }
-                        if (this.localMessages[this.localMessages.length - 1].local) {
-                            this.localMessages.splice(firstLocalIndex, this.localMessages.length - firstLocalIndex, ...messages);
+                        if (!findSameID) {
+                            this.localMessages = messages;
                         }
                     } else {
                         this.localMessages = messages;
@@ -248,7 +244,6 @@ export class MessageService {
                         };
                     }
                 }, 1);
-
             });
     }
 
@@ -357,8 +352,8 @@ export class MessageService {
                 const searchResults = this.searchUser(s.slice(1), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0].id);
-                    newMessageArry[index] = `<a class="chat-inline-link atLink" data-userid="${searchResults[0].id}"
-href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
+                    newMessageArry[index] = `<a class="chat-inline-link atLink"
+                        href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
                 }
             }
         });
