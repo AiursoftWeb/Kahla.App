@@ -145,6 +145,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     }, 1000);
 
+                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
+
+                    setTimeout(() => {
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                    }, 0);
+
+                    inputElement.addEventListener('input', () => {
+                        inputElement.style.height = 'auto';
+                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                        if (document.querySelector('#scrollDown')) {
+                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+                        }
+                    });
+
+                    if ( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        inputElement.focus();
+                    }
+
                     return this.conversationApiService.ConversationDetail(this.conversationID);
                 }),
                 map(t => t.value)
@@ -166,21 +184,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                     this.timerService.updateDestructTime(conversation.maxLiveSeconds);
                     this.headerService.timer = this.timerService.destructTime !== 'off';
-
-
-                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
-
-                    setTimeout(() => {
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                    }, 0);
-
-                    inputElement.addEventListener('input', () => {
-                        inputElement.style.height = 'auto';
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                        if (document.querySelector('#scrollDown')) {
-                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
-                        }
-                    });
                 }
             });
         this.windowInnerHeight = window.innerHeight;
