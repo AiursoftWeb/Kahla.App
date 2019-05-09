@@ -14,7 +14,8 @@ import { HeaderService } from '../Services/HeaderService';
   styleUrls: [
     '../Styles/userDetail.scss',
     '../Styles/button.scss',
-    '../Styles/toggleButton.scss'
+    '../Styles/toggleButton.scss',
+    '../Styles/progress.scss'
   ]
 })
 

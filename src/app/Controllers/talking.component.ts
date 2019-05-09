@@ -13,6 +13,7 @@ import * as he from 'he';
 import Autolinker from 'autolinker';
 import {TimerService} from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
+import { ElectronService } from 'ngx-electron';
 
 declare var MediaRecorder: any;
 
@@ -21,7 +22,8 @@ declare var MediaRecorder: any;
     styleUrls: ['../Styles/talking.scss',
         '../Styles/button.scss',
         '../Styles/reddot.scss',
-        '../Styles/menu.scss']
+        '../Styles/menu.scss',
+        '../Styles/progress.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
@@ -54,7 +56,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public uploadService: UploadService,
         public messageService: MessageService,
         private headerService: HeaderService,
-        private timerService: TimerService
+        private timerService: TimerService,
+        public _electronService: ElectronService
     ) {
     }
 
