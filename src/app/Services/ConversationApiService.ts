@@ -19,8 +19,12 @@ export class ConversationApiService {
         return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipTill=${skipTill}&take=${take}`);
     }
 
-    public SendMessage(id: number, content: string): Observable<AiurProtocal> {
-        return this.apiService.Post(ConversationApiService.serverPath + `/SendMessage/${id}`, { content: content });
+    public SendMessage(conversationID: number, content: string, userIDs: Array<string>): Observable<AiurProtocal> {
+        const form = {content: content};
+        userIDs.forEach((id, index) => {
+            form[`at[${index}]`] = id;
+        });
+        return this.apiService.Post(ConversationApiService.serverPath + `/SendMessage/${conversationID}`, form);
     }
 
     public ConversationDetail(id: number): Observable<AiurValue<Conversation>> {

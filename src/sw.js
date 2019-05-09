@@ -78,7 +78,7 @@ self.addEventListener('push', function(event) {
     const imageLink = fileLink + '4251';
     if (data.type == 0 && !data.muted) {
         // new message
-        const title = data.sender.nickName;
+        const title = (data.mentioned ? '[Mentioned you] ' : '') + data.sender.nickName;
         let message = data.content;
         const aesKey = data.aesKey;
         

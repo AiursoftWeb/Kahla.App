@@ -32,10 +32,8 @@ export class LocalSearchComponent implements OnInit {
         this.results = this.searchTerms.pipe(
             distinctUntilChanged(),
             filter(term => {
-                if (term.trim().length > 0) {
-                    return true;
-                }
-                return false;
+                return term.trim().length > 0;
+
             }),
             map(t => {
                 if (this.cacheService.cachedData.conversations) {
@@ -48,6 +46,8 @@ export class LocalSearchComponent implements OnInit {
                 }
             })
         );
+        const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+        searchBar.focus();
     }
 
     public search(term: string): void {

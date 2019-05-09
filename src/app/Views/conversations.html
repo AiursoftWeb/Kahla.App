@@ -8,6 +8,9 @@
         <div *ngIf="inf.unReadAmount > 99" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
             99+
         </div>
+        <div *ngIf="inf.someoneAtMe" class="dot at-dot">
+            @
+        </div>
         <div class="sender">
             {{inf.displayName}}
         </div>

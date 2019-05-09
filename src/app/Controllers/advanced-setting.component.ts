@@ -5,6 +5,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { MessageService } from '../Services/MessageService';
 import { DevicesApiService } from '../Services/DevicesApiService';
+import { Values } from '../values';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -29,20 +30,23 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.me = this.messageService.me;
-        this.authApiService.Me().subscribe(result => {
-            this.me = result.value;
-        });
+        if (this.messageService.me) {
+            this.me = Object.assign({}, this.messageService.me);
+        } else {
+            this.authApiService.Me().subscribe(p => {
+                this.me = p.value;
+                this.me.avatarURL = Values.fileAddress + this.me.headImgFileKey;
+            });
+        }
     }
 
     updateEmailNotify(): void {
         if (!this.updatingSetting) {
             this.updatingSetting = true;
-            this.me.enableEmailNotification = !this.me.enableEmailNotification;
-            this.authApiService.UpdateClientSetting(null, this.me.enableEmailNotification).subscribe(res => {
+            this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
                 this.updatingSetting = false;
                 if (res.code === 0) {
-                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification;
+                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
                   } else {
                     Swal.fire('Error', res.message, 'error');
                   }

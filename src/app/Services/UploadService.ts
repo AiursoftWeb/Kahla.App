@@ -111,7 +111,7 @@ export class UploadService {
     }
 
     private sendMessage(message: string, conversationID: number): void {
-        this.conversationApiService.SendMessage(conversationID, message)
+        this.conversationApiService.SendMessage(conversationID, message, [])
             .subscribe(() => {
                 this.finishUpload();
                 this.scrollBottom(true);
@@ -133,10 +133,7 @@ export class UploadService {
         if (file === null || file === undefined) {
             return false;
         }
-        if (file.size >= 0.125 && file.size <= 1000000000) {
-            return true;
-        }
-        return false;
+        return file.size >= 0.125 && file.size <= 1000000000;
     }
 
     private finishUpload() {

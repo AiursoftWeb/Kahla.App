@@ -30,7 +30,7 @@ export class ChangePasswordComponent {
     }
 
     public checkValid(): void {
-        this.samePassword = this.newPassword === this.confirmPassword ? true : false;
+        this.samePassword = this.newPassword === this.confirmPassword;
         if (this.oldPassword.length >= 6 && this.oldPassword.length <= 32 && this.newPassword.length >= 6 &&
             this.newPassword.length <= 32 && this.samePassword) {
                 this.valid = true;

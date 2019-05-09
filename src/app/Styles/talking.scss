@@ -16,6 +16,7 @@
   font-size: 13px;
   text-align: center;
   min-height: calc(100vh - 130px);
+  position: relative;
 
   li {
     margin-bottom: 25px;
@@ -51,7 +52,7 @@
     font-size: 12px;
     width: 70%;
     margin-bottom: 1.5%;
-    
+
     span {
       color: #aaa;
     }
@@ -79,7 +80,7 @@
 
     p {
       text-align: left;
-      word-break: break-all;
+      word-break: break-word;
       margin: 0;
       white-space: pre-wrap;
     }
@@ -156,15 +157,53 @@
 }
 
 .chat-action {
-  @extend %chat-action;
-  padding: 10px;
+
   display: inline-block;
-  box-sizing: border-box;
   width: 100%;
   position: fixed;
   z-index: 99;
   bottom: 0;
-  box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
+
+  .sys-notify {
+    @extend %sys-notify;
+    height: 25px;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    visibility: collapse;
+
+    &.sys-notify-shown {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .userList {
+    //@extend %talking-overlay;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin: 0;
+      //background-color: transparent;
+    }
+  }
+
+  .chat-box {
+    @extend %chat-box;
+    padding: 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 99;
+    bottom: 0;
+    box-shadow: 0px 23px 50px 10px rgba(0, 0, 0, 0.37);
+  }
 }
 
 .chat-part {
@@ -274,14 +313,6 @@ i {
   margin-top: 15px;
   color: #727272;
   user-select: none;
-}
-
-progress {
-  position: fixed;
-  width: 100%;
-  height: 5px;
-  top: 40px;
-  z-index: 100;
 }
 
 #scrollDown {
@@ -398,4 +429,9 @@ a h5 {
 
 .flip {
   transform: scaleX(-1);
+}
+
+
+.oneResult {
+  bottom: 0;
 }

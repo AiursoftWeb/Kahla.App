@@ -20,6 +20,10 @@ import { TimerService } from './TimerService';
 import { WereDeletedEvent } from '../Models/WereDeletedEvent';
 import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
 import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
+import { Router } from '@angular/router';
+import { UserGroupRelation } from '../Models/KahlaUsers';
+import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
+import { NewMemberEvent } from '../Models/NewMemberEvent';
 
 @Injectable({
     providedIn: 'root'
@@ -35,30 +39,29 @@ export class MessageService {
     private oldOffsetHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
-    public currentTime = Date.now();
-    private users = new Map();
+    private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    public groupConversation = false;
+    public sysNotifyText: string;
+    public sysNotifyShown: boolean;
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
         private cacheService: CacheService,
         private _electronService: ElectronService,
-        private timerService: TimerService
-    ) {}
+        private timerService: TimerService,
+        private router: Router,
+    ) { }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         const fireAlert = !localStorage.getItem('deviceID');
-        let evt: NewMessageEvent | TimerUpdatedEvent;
         switch (ev.type) {
-            case EventType.NewMessage:
-                evt = ev as NewMessageEvent;
+            case EventType.NewMessage: {
+                const evt = ev as NewMessageEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    if (this.conversation.discriminator === 'GroupConversation' && !this.users.has(evt.sender.id)) {
-                        this.users.set(evt.sender.id, this.getUserInfoArray(evt.sender));
-                    }
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
@@ -68,27 +71,31 @@ export class MessageService {
                     this.cacheService.UpdateConversation();
                 }
                 break;
-            case EventType.NewFriendRequest:
+            }
+            case EventType.NewFriendRequest: {
                 if (fireAlert) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
                 }
                 this.cacheService.autoUpdateRequests();
                 break;
-            case EventType.WereDeletedEvent:
+            }
+            case EventType.WereDeletedEvent: {
                 if (fireAlert) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.UpdateConversation();
                 break;
-            case EventType.FriendAcceptedEvent:
+            }
+            case EventType.FriendAcceptedEvent: {
                 if (fireAlert) {
                     Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
                         ' are now friends!', 'success');
                 }
                 this.cacheService.UpdateConversation();
                 break;
-            case EventType.TimerUpdatedEvent:
-                evt = ev as TimerUpdatedEvent;
+            }
+            case EventType.TimerUpdatedEvent: {
+                const evt = ev as TimerUpdatedEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.conversation.maxLiveSeconds = evt.newTimer;
                     this.timerService.updateDestructTime(evt.newTimer);
@@ -96,8 +103,38 @@ export class MessageService {
                         this.timerService.destructTime, 'info');
                 }
                 break;
+            }
+            case EventType.NewMemberEvent: {
+                const evt = ev as NewMemberEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversationApiService.ConversationDetail(evt.conversationId)
+                        .subscribe(updated => {
+                            this.conversation = updated.value;
+                        });
+                }
+                this.displaySysNotify(`${evt.newMember.nickName} joined the group.`);
+                break;
+            }
+            case EventType.SomeoneLeftLevent: {
+                const evt = ev as SomeoneLeftEvent;
+                if (this.conversation && this.conversation.id === evt.conversationId) {
+                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                }
+                this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                break;
+            }
             default:
                 break;
+        }
+    }
+
+    public displaySysNotify(message: string) {
+        this.sysNotifyText = message;
+        if (!this.sysNotifyShown) {
+            this.sysNotifyShown = true;
+            setTimeout(() => {
+                this.sysNotifyShown = false;
+            }, 10000);
         }
     }
 
@@ -116,13 +153,14 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
-                    t.timeStamp = new Date(t.sendTime).getTime() + this.conversation.maxLiveSeconds * 1000;
+                    t.timeStamp = new Date(t.sendTime).getTime();
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
                         if (fileKey === -1 || isNaN(fileKey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('-')[2]), imageHeight = Number(t.content.split('-')[1]);
+                            let imageWidth = Number(t.content.split('-')[2]),
+                                imageHeight = Number(t.content.split('-')[1]);
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
@@ -151,39 +189,34 @@ export class MessageService {
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
                             stripPrefix: false,
-                            className : 'chat-inline-link'
+                            className: 'chat-inline-link'
                         });
+                        t.content = this.getAtIDs(t.content)[0];
                     }
                 });
                 if (messages.length < take) {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
-                    if (this.me && messages[messages.length - 1].senderId !== this.me.id && take === 1 && this.belowWindowPercent > 0) {
-                        this.newMessages = true;
-                    } else {
-                        this.newMessages = false;
-                    }
+                    this.newMessages = this.me &&
+                        messages[messages.length - 1].senderId !== this.me.id &&
+                        take === 1 && this.belowWindowPercent > 0;
                 }
                 if (this.localMessages.length > 1000) {
                     this.localMessages.splice(0, 500);
                 }
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
-                        let firstLocalIndex = 0;
-                        let firstLocalID = Number.MAX_SAFE_INTEGER;
+                        let findSameID = false;
                         for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].local && this.localMessages[index].id < firstLocalID) {
-                                firstLocalIndex = index;
-                                firstLocalID = this.localMessages[index].id;
-                            }
                             if (this.localMessages[index].id === messages[0].id) {
+                                findSameID = true;
                                 this.localMessages.splice(index, messages.length, ...messages);
                                 break;
                             }
                         }
-                        if (this.localMessages[this.localMessages.length - 1].local) {
-                            this.localMessages.splice(firstLocalIndex, this.localMessages.length - firstLocalIndex, ...messages);
+                        if (!findSameID) {
+                            this.localMessages = messages;
                         }
                     } else {
                         this.localMessages = messages;
@@ -201,6 +234,16 @@ export class MessageService {
                         window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
+                setTimeout(() => {
+                    const links = document.getElementsByClassName('atLink');
+                    for (let i = 0; i < links.length; i++) {
+                        (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                            ev.preventDefault();
+                            // noinspection JSIgnoredPromiseFromCall
+                            this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                        };
+                    }
+                }, 1);
             });
     }
 
@@ -235,6 +278,8 @@ export class MessageService {
         this.newMessages = false;
         this.oldOffsetHeight = 0;
         this.maxImageWidth = 0;
+        this.userColors.clear();
+        this.groupConversation = false;
     }
 
     private getOrientationClassName(exifValue: string): string {
@@ -269,31 +314,50 @@ export class MessageService {
                 body: event.content,
                 icon: Values.fileAddress + event.sender.headImgFileKey
             });
-            notify.onclick = function(clickEvent) {
+            notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
                 window.focus();
             };
         }
     }
 
-    public setUsers(): void {
-        if (this.conversation && this.conversation.discriminator === 'GroupConversation') {
-            this.conversation.users.forEach(userGroupRelation => {
-                this.users.set(userGroupRelation.user.id, this.getUserInfoArray(userGroupRelation.user));
-            });
+    public getGroupColor(message: Message): string {
+        if (!this.userColors.has(message.senderId)) {
+            this.userColors.set(message.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
         }
+        return this.userColors.get(message.senderId);
     }
 
-    private getUserInfoArray(user: KahlaUser) {
-        return [user.nickName, Values.fileAddress + user.headImgFileKey,
-            this.colors[Math.floor(Math.random() * this.colors.length)]];
-    }
-
-    public getUser(id: number): Array<string> {
-        if (this.users.has(id)) {
-            return this.users.get(id);
+    public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
+        if (nickName.length === 0 && !getMessage) {
+            return this.conversation.users.map(x => x.user);
         } else {
-            return ['New user', Values.loadingImgURL, 'aqua'];
+            const matchedUsers = [];
+            this.conversation.users.forEach((value: UserGroupRelation) => {
+                if (!getMessage && value.user.nickName.toLowerCase().replace(' ', '').includes(nickName.toLowerCase())) {
+                    matchedUsers.push(value.user);
+                } else if (getMessage && value.user.nickName.toLowerCase().replace(' ', '') === nickName.toLowerCase()) {
+                    matchedUsers.push(value.user);
+                }
+            });
+            return matchedUsers;
         }
+    }
+
+    public getAtIDs(message: string): Array<string> {
+        const atUsers = [];
+        const newMessageArry = message.split(' ');
+        message.split(' ').forEach((s, index) => {
+            if (s.length > 0 && s[0] === '@') {
+                const searchResults = this.searchUser(s.slice(1), true);
+                if (searchResults.length > 0) {
+                    atUsers.push(searchResults[0].id);
+                    newMessageArry[index] = `<a class="chat-inline-link atLink"
+                        href="/user/${searchResults[0].id}">${newMessageArry[index]}</a>`;
+                }
+            }
+        });
+        atUsers.unshift(newMessageArry.join(' '));
+        return atUsers;
     }
 }

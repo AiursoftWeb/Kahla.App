@@ -1,24 +1,29 @@
-﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { ConversationApiService } from '../Services/ConversationApiService';
-import { Message } from '../Models/Message';
-import { switchMap, map } from 'rxjs/operators';
-import { AES } from 'crypto-js';
+﻿import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
+import {ConversationApiService} from '../Services/ConversationApiService';
+import {Message} from '../Models/Message';
+import {switchMap, map} from 'rxjs/operators';
+import {AES} from 'crypto-js';
 import Swal from 'sweetalert2';
-import { Values } from '../values';
-import { UploadService } from '../Services/UploadService';
-import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
+import {Values} from '../values';
+import {UploadService} from '../Services/UploadService';
+import {MessageService} from '../Services/MessageService';
+import {HeaderService} from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
-import { TimerService } from '../Services/TimerService';
+import {TimerService} from '../Services/TimerService';
+import { KahlaUser } from '../Models/KahlaUser';
+import { ElectronService } from 'ngx-electron';
+
 declare var MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
     styleUrls: ['../Styles/talking.scss',
-                '../Styles/button.scss',
-                '../Styles/reddot.scss']
+        '../Styles/button.scss',
+        '../Styles/reddot.scss',
+        '../Styles/menu.scss',
+        '../Styles/progress.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
@@ -37,6 +42,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 15;
     public Math = Math;
     public Date = Date;
+    public showUserList = false;
+    public matchedUsers: Array<KahlaUser> = [];
 
     @ViewChild('mainList') public mainList: ElementRef;
     @ViewChild('imageInput') public imageInput;
@@ -49,8 +56,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public uploadService: UploadService,
         public messageService: MessageService,
         private headerService: HeaderService,
-        private timerService: TimerService
-    ) {}
+        private timerService: TimerService,
+        public _electronService: ElectronService
+    ) {
+    }
 
     @HostListener('window:scroll', [])
     onScroll() {
@@ -86,9 +95,32 @@ export class TalkingComponent implements OnInit, OnDestroy {
     onKeyup(e: KeyboardEvent) {
         if (e.key === 'Enter') {
             e.preventDefault();
+            if (this.showUserList) {
+                // accept default suggestion
+                this.complete(this.matchedUsers[0].nickName);
+            }
             if (this.oldContent === this.content) {
                 this.send();
+                this.showUserList = false;
             }
+        } else if (this.content && e.key !== 'Backspace') {
+            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+            const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+            const typingWord = typingWords[typingWords.length - 1];
+            if (typingWord.charAt(0) === '@') {
+                const searchName = typingWord.slice(1).toLowerCase();
+                const searchResults = this.messageService.searchUser(searchName, false);
+                if (searchResults.length > 0) {
+                    this.matchedUsers = searchResults;
+                    this.showUserList = true;
+                } else {
+                    this.showUserList = false;
+                }
+            } else {
+                this.showUserList = false;
+            }
+        } else {
+            this.showUserList = false;
         }
     }
 
@@ -98,7 +130,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.headerService.title = 'Loading...';
         this.headerService.returnButton = true;
         this.headerService.shadow = true;
-        this.headerService.timer = true;
+        this.headerService.timer = false;
         this.headerService.button = false;
         this.route.params
             .pipe(
@@ -108,32 +140,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (!this.unread || this.unread > 50 || this.unread < 15) {
                         this.unread = 15;
                     }
-                    return this.conversationApiService.ConversationDetail(this.conversationID);
-                }),
-                map(t => t.value)
-            )
-            .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroyed) {
-                    this.messageService.conversation = conversation;
-                    this.messageService.setUsers();
-                    document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, this.conversationID, -1, this.unread);
-                    this.headerService.title = conversation.displayName;
-                    this.headerService.button = true;
-                    if (conversation.anotherUserId) {
-                        this.headerService.buttonIcon = 'user';
-                        this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
-                    } else {
-                        this.headerService.buttonIcon = `users`;
-                        this.headerService.routerLink = `/group/${conversation.id}`;
-                    }
-                    this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-                    if (this.timerService.destructTime === 'off') {
-                        this.headerService.timer = false;
-                    }
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
-
                     this.autoSaveInterval = setInterval(() => {
                         if (this.content != null) {
                             localStorage.setItem('draft' + this.conversationID, this.content);
@@ -153,6 +161,32 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
                         }
                     });
+
+                    if ( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        inputElement.focus();
+                    }
+
+                    return this.conversationApiService.ConversationDetail(this.conversationID);
+                }),
+                map(t => t.value)
+            )
+            .subscribe(conversation => {
+                if (!this.uploadService.talkingDestroyed) {
+                    this.messageService.conversation = conversation;
+                    this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
+                    document.querySelector('app-header').setAttribute('title', conversation.displayName);
+                    this.messageService.getMessages(true, this.conversationID, -1, this.unread);
+                    this.headerService.title = conversation.displayName;
+                    this.headerService.button = true;
+                    if (conversation.anotherUserId) {
+                        this.headerService.buttonIcon = 'user';
+                        this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
+                    } else {
+                        this.headerService.buttonIcon = `users`;
+                        this.headerService.routerLink = `/group/${conversation.id}`;
+                    }
+                    this.timerService.updateDestructTime(conversation.maxLiveSeconds);
+                    this.headerService.timer = this.timerService.destructTime !== 'off';
                 }
             });
         this.windowInnerHeight = window.innerHeight;
@@ -174,9 +208,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.content = he.encode(this.content);
         tempMessage.content = Autolinker.link(tempMessage.content, {
             stripPrefix: false,
-            className : 'chat-inline-link'
+            className: 'chat-inline-link'
         });
+        const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
+        tempMessage.content = messageIDArry[0];
         tempMessage.senderId = this.messageService.me.id;
+        tempMessage.sender = this.messageService.me;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
@@ -184,7 +221,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }, 0);
         const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage)
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
             .subscribe({
                 error(e) {
                     if (e.status === 0 || e.status === 503) {
@@ -313,29 +350,52 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                this.recording = true;
-                this.mediaRecorder = new MediaRecorder(stream);
-                this.mediaRecorder.start();
-                const audioChunks = [];
-                this.mediaRecorder.addEventListener('dataavailable', event => {
-                    audioChunks.push(event.data);
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    this.recording = true;
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    this.mediaRecorder.start();
+                    const audioChunks = [];
+                    this.mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+                    this.mediaRecorder.addEventListener('stop', () => {
+                        this.recording = false;
+                        const audioBlob = new File(audioChunks, 'audio');
+                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                        clearTimeout(this.forceStopTimeout);
+                        stream.getTracks().forEach(track => track.stop());
+                    });
+                    this.forceStopTimeout = setTimeout(() => {
+                        this.mediaRecorder.stop();
+                    }, 1000 * 60 * 5);
+                }, () => {
+                    return;
                 });
-                this.mediaRecorder.addEventListener('stop', () => {
-                    this.recording = false;
-                    const audioBlob = new File(audioChunks, 'audio');
-                    this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
-                    clearTimeout(this.forceStopTimeout);
-                    stream.getTracks().forEach(track => track.stop());
-                });
-                this.forceStopTimeout = setTimeout(() => {
-                    this.mediaRecorder.stop();
-                }, 1000 * 60 * 5);
-            }, () => {
-                return;
-            });
         }
+    }
+
+    public complete(nickname: string): void {
+        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+        const typingWord = typingWords[typingWords.length - 1];
+        const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
+        this.content =
+            `${before}@${nickname.replace(' ', '')} ${this.content.slice(input.selectionStart)}`;
+        this.showUserList = false;
+        const pointerPos = before.length + nickname.replace(' ', '').length + 2;
+        setTimeout(() => {
+            input.setSelectionRange(pointerPos, pointerPos);
+            input.focus();
+        }, 0);
+    }
+
+    public hideUserList(): void {
+        this.showUserList = false;
+    }
+
+    public getHeadImgUrl(fileKey: number): string {
+        return Values.fileAddress + fileKey;
     }
 
     public ngOnDestroy(): void {
