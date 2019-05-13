@@ -40,6 +40,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private forceStopTimeout;
     private oldContent: string;
     private unread = 15;
+    private chatInputHeight: number;
     public Math = Math;
     public Date = Date;
     public showUserList = false;
@@ -152,11 +153,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
                     setTimeout(() => {
                         inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                        this.chatInputHeight = inputElement.scrollHeight;
                     }, 0);
 
                     inputElement.addEventListener('input', () => {
                         inputElement.style.height = 'auto';
                         inputElement.style.height = (inputElement.scrollHeight) + 'px';
+                        this.chatInputHeight = inputElement.scrollHeight;
                         if (document.querySelector('#scrollDown')) {
                             (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
                         }
@@ -408,5 +411,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.conversationID = null;
         clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;
+    }
+
+    public getAtListMaxHeight(): number {
+        return window.innerHeight - this.chatInputHeight - 106;
     }
 }
