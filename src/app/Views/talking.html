@@ -92,7 +92,8 @@
         <i class="fa fa-info-circle"></i>
         {{messageService.sysNotifyText}}
     </div>
-    <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}">
+    <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
+        [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button">
             <img class="img" src="{{ getHeadImgUrl(user.headImgFileKey) }}">
             <div class="text">{{ user.nickName }}</div>
