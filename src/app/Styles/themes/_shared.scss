@@ -12,7 +12,7 @@
     border-color: map-get($colors, menuitem-border-color);
 
     .img {
-      color: map-get($colors, menuitem-img-color);
+      color: map-get($colors, primary-color-depth3);
     }
   }
 
@@ -25,7 +25,7 @@
   }
 
   %menu-header {
-    color: map-get($colors, menuitem-img-color);
+    color: map-get($colors, primary-color-depth3);
   }
 
   %nav-bar {
@@ -37,11 +37,11 @@
 
       &:hover {
         background-color: map-get($colors, nav-item-hover-bg);
-        color: map-get($colors, nav-item-hover-color);
+        color: map-get($colors, primary-color-depth1);
       }
 
       &.current {
-        color: map-get($colors, nav-item-current-color);
+        color: map-get($colors, primary-color-depth2);
       }
     }
   }
@@ -83,16 +83,16 @@
     }
 
     .right .chat-content {
-      background-color: map-get($colors, talking-chat-right-bg);
+      background-color: map-get($colors, primary-color-depth3);
 
       &::after {
-        border-left-color: map-get($colors, talking-chat-right-bg);
+        border-left-color: map-get($colors, primary-color-depth3);
       }
     }
   }
 
   %sys-notify {
-    background-color: transparentize(map-get($colors, primary-btn-bg), 0.2);
+    background-color: transparentize(map-get($colors, primary-color-depth2), 0.2);
     color: map-get($colors, default-textcolor);
   }
 
@@ -126,14 +126,14 @@
   }
 
   %primary-button {
-    background-color: map-get($colors, primary-btn-bg);
+    background-color: map-get($colors, primary-color-depth2);
 
     &:hover:enabled {
-      background-color: map-get($colors, primary-btn-hover-bg);
+      background-color: map-get($colors, primary-color-depth3);
     }
 
     &:active {
-      background-color: map-get($colors, primary-btn-active-bg);
+      background-color: map-get($colors, primary-color-depth3);
     }
   }
 }
