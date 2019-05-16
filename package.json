@@ -91,7 +91,7 @@
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.1",
+    "@angular-devkit/build-angular": "^0.13.9",
     "@angular-devkit/build-optimizer": "^0.13.1",
     "@angular-devkit/core": "^7.3.1",
     "@angular/cli": "7.3.1",
@@ -102,7 +102,7 @@
     "@types/node": "^11.9.3",
     "codelyzer": "^4.5.0",
     "electron": "^4.0.4",
-    "electron-builder": "^20.39.0",
+    "electron-builder": "^20.41.0",
     "jasmine-core": "^3.3.0",
     "jasmine-spec-reporter": "~4.2.1",
     "node": "^11.15.0",
