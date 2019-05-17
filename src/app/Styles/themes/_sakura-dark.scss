@@ -2,39 +2,28 @@
 //
 // Dark Theme
 //
+$primary-color-depth1: #f8bbd0;
+$primary-color-depth2: #f25d8e;
+$primary-color-depth3: #cf4c78;
+
 :host-context(.theme-sakura-dark) {
   $colors: (
     default-background: #2c3e50,
+    primary-color-depth1: $primary-color-depth1,
+    primary-color-depth2: $primary-color-depth2,
+    primary-color-depth3: $primary-color-depth3,
     default-textcolor: #fff,
-    load-more-button-bg: #2f3640,
-    load-more-button-color: #aaaaaa,
-    menuitem-bg: #2f3640,
-    menuitem-border-color: #353b48,
-    menuitem-hover-bg: #374554,
-    menuitem-img-color:#f25d8e,
-    nav-bg: #2f3640,
-    nav-border-color: #34495e,
-    nav-color: #bbbbbb,
-    nav-item-hover-bg: #374554,
-    nav-item-hover-color: #f8bbd0,
-    nav-item-current-color: #f25d8e,
-    text-input-color: white,
+    minor-textcolor: #999,
+    selectable-bg: #2f3640,
+    selectable-hover-bg: #374554,
+    selectable-border-color: #353b48,
+    talking-action-bg: #2f3640,
     text-input-border-color: #e2e2e4,
     text-input-bg: #1e272e,
-    search-part-bg: #222,
-    search-part-tab-selected-bg: #2f3640,
-    talking-chat-border-color: #718093,
-    talking-chat-color: white,
     talking-chat-bg: #707e8a,
-    talking-action-bg: #2f3640,
     tgl-btn-bg: #888,
-    header-bg: linear-gradient(to bottom, #f25d8e, #CE3050),
-    primary-btn-bg:#f25d8e,
-    primary-btn-hover-bg:#B33771,
-    primary-btn-active-bg:#B33771,
-    talking-chat-right-bg:#f25d8e,
+    header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2)
   );
-
   @include theme-shared($colors);
 }
 
@@ -45,7 +34,7 @@
     a-color: #3498db,
     left-a-color: #74b9ff,
     alert-bg: #2f3640,
-    btn-bg:#f25d8e,
+    btn-bg: $primary-color-depth3
   );
 
   @include body-shared($colors);

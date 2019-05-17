@@ -35,9 +35,9 @@
   }
 
   .time {
+    @extend %minor-text;
     margin-top: 40px;
     font-size: 13px;
-    color: #999999;
     max-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -49,8 +49,8 @@
 
   .decision {
     .Completed {
+      @extend %minor-text;
       text-align: center;
-      color: #e8e8e8;
       font-size: 14px;
       font-weight: 400;
       margin-top: 25px;
