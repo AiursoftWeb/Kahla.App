@@ -12,6 +12,8 @@
                     <span
                         *ngIf="messageService.groupConversation && messageService.me && message.senderId != messageService.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
+                        <label class="badge badge-primary"
+                               *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Kahla Staff</label>
                         <br></span>
                     <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 5" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5).split('-')[0] }}">
                         <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.height.px]="message.content.split('-')[2]">
