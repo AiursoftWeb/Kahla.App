@@ -40,15 +40,15 @@
   }
 
   .bio {
+    @extend %minor-text;
     font-size: 13px;
-    color: #999999;
     grid-row: 2;
     grid-column: 2 / 3;
   }
 
   .email {
+    @extend %minor-text;
     font-size: 13px;
-    color: #999999;
     grid-row: 2;
     grid-column: 2 / 3;
     word-break: break-all;

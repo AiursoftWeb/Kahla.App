@@ -8,31 +8,21 @@ $primary-color-depth3: #cf4c78;
 
 :host-context(.theme-sakura-dark) {
   $colors: (
+    default-background: #2c3e50,
     primary-color-depth1: $primary-color-depth1,
     primary-color-depth2: $primary-color-depth2,
     primary-color-depth3: $primary-color-depth3,
-    default-background: #2c3e50,
     default-textcolor: #fff,
-    load-more-button-bg: #2f3640,
-    load-more-button-color: #aaaaaa,
-    menuitem-bg: #2f3640,
-    menuitem-border-color: #353b48,
-    menuitem-hover-bg: #374554,
-    nav-bg: #2f3640,
-    nav-border-color: #34495e,
-    nav-color: #bbbbbb,
-    nav-item-hover-bg: #374554,
-    text-input-color: white,
+    minor-textcolor: #999,
+    selectable-bg: #2f3640,
+    selectable-hover-bg: #374554,
+    selectable-border-color: #353b48,
+    talking-action-bg: #2f3640,
     text-input-border-color: #e2e2e4,
     text-input-bg: #1e272e,
-    search-part-bg: #222,
-    search-part-tab-selected-bg: #2f3640,
-    talking-chat-border-color: #718093,
-    talking-chat-color: white,
     talking-chat-bg: #707e8a,
-    talking-action-bg: #2f3640,
     tgl-btn-bg: #888,
-    header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2),
+    header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2)
   );
   @include theme-shared($colors);
 }
@@ -44,7 +34,7 @@ $primary-color-depth3: #cf4c78;
     a-color: #3498db,
     left-a-color: #74b9ff,
     alert-bg: #2f3640,
-    btn-bg:$primary-color-depth3,
+    btn-bg: $primary-color-depth3
   );
 
   @include body-shared($colors);
