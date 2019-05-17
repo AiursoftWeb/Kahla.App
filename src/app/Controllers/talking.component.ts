@@ -23,7 +23,8 @@ declare var MediaRecorder: any;
         '../Styles/button.scss',
         '../Styles/reddot.scss',
         '../Styles/menu.scss',
-        '../Styles/progress.scss']
+        '../Styles/progress.scss',
+        '../Styles/badge.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     public content: string;
