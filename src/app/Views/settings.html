@@ -4,9 +4,10 @@
     <img class="user-img" src="{{ messageService.me.avatarURL}}?w=100&h=100 ">
     <div class="name">
         {{ messageService.me.nickName }}
-        <label class="badge badge-primary"
-               *ngIf="messageService.me.emailConfirmed && messageService.me.email && messageService.me.email.endsWith('@aiursoft.com')">Kahla
-            Staff</label>
+        <label class="badge badge-secondary"
+               *ngIf="messageService.me.emailConfirmed && messageService.me.email && messageService.me.email.endsWith('@aiursoft.com')">
+            Staff
+        </label>
     </div>
     <div class="bio">
         {{ messageService.me.bio }}
