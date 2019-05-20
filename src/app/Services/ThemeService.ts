@@ -31,7 +31,7 @@ export class ThemeService {
             case Themes.sakuraLight:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-light';
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#f25d8e');
+                    .setAttribute('content', '#cf4c78');
                 break;
             case Themes.sakuraDark:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-dark';
