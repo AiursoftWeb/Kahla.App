@@ -85,31 +85,38 @@ export class SettingsComponent implements OnInit {
     }
 
     public sendEmail(): void {
-        Swal.fire({
-            title: 'Please verify your email.',
-            text: 'Please confirm your email as soon as possible! Or you may lose access \
-                to your account in a few days! Without confirming your email, you won\'t receive \
-                any important notifications and cannot reset your password!',
-            type: 'warning',
-            confirmButtonText: 'Send Email',
-            showCancelButton: true
-        }).then((sendEmail) => {
-            if (sendEmail.value && this.messageService.me) {
-                this.authApiService.SendMail(this.messageService.me.email).subscribe((result) => {
-                    if (result.code === 0) {
-                        Swal.fire({
-                            title: 'Please check your inbox.',
-                            text: 'Email was send to ' + this.messageService.me.email,
-                            type: 'success'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: result.message,
-                            type: 'error'
-                        });
-                    }
-                });
+        this.authApiService.Me().subscribe(p => {
+            if (p.code === 0) {
+                this.messageService.me.emailConfirmed = p.value.emailConfirmed;
+                if (!this.messageService.me.emailConfirmed) {
+                    Swal.fire({
+                        title: 'Please verify your email.',
+                        text: 'Please confirm your email as soon as possible! Or you may lose access \
+                            to your account in a few days! Without confirming your email, you won\'t receive \
+                            any important notifications and cannot reset your password!',
+                        type: 'warning',
+                        confirmButtonText: 'Send Email',
+                        showCancelButton: true
+                    }).then((sendEmail) => {
+                        if (sendEmail.value && this.messageService.me) {
+                            this.authApiService.SendMail(this.messageService.me.email).subscribe((result) => {
+                                if (result.code === 0) {
+                                    Swal.fire({
+                                        title: 'Please check your inbox.',
+                                        text: 'Email was send to ' + this.messageService.me.email,
+                                        type: 'success'
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: result.message,
+                                        type: 'error'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     }
