@@ -278,6 +278,11 @@
 
 .of4 {
   text-align: center;
+
+  label {
+    @extend %clickable;
+    transition: all 0.15s ease-in-out;
+  }
 }
 
 .inputfile {

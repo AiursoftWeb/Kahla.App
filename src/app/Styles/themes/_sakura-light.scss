@@ -8,21 +8,22 @@ $primary-color-depth3: #cf4c78;
 
 :host-context(.theme-sakura-light) {
   $colors: (
-  default-background: #efeff4,
-  primary-color-depth1: $primary-color-depth1,
-  primary-color-depth2: $primary-color-depth2,
-  primary-color-depth3: $primary-color-depth3,
-  default-textcolor: #333,
-  minor-textcolor: #999,
-  selectable-bg: #fff,
-  selectable-hover-bg: #f6f6f6,
-  selectable-border-color: #e8e8e8,
-  talking-action-bg: #e4e4e4,
-  text-input-border-color: #e2e2e4,
-  text-input-bg: #fff,
-  talking-chat-bg: white,
-  tgl-btn-bg: #f0f0f0,
-  header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2)
+    default-background: #efeff4,
+    primary-color-depth1: $primary-color-depth1,
+    primary-color-depth2: $primary-color-depth2,
+    primary-color-depth3: $primary-color-depth3,
+    default-textcolor: #333,
+    minor-textcolor: #999,
+    selectable-bg: #fff,
+    selectable-hover-bg: #f6f6f6,
+    selectable-border-color: #e8e8e8,
+    talking-action-bg: #e4e4e4,
+    header-action-bg: #e4e4e4,
+    text-input-border-color: #e2e2e4,
+    text-input-bg: #fff,
+    talking-chat-bg: white,
+    tgl-btn-bg: #f0f0f0,
+    header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2)
   );
   @include theme-shared($colors);
 }
