@@ -20,12 +20,15 @@
     }
   }
 
-  %menu-item-clickable {
-    @extend %menu-item;
-
+  %clickable {
     &:hover {
       background-color: map-get($colors, selectable-hover-bg);
     }
+  }
+
+  %menu-item-clickable {
+    @extend %menu-item;
+    @extend %clickable;
   }
 
   %friends-button {
@@ -62,7 +65,7 @@
   }
 
   %search-part {
-    background-color: map-get($colors, talking-action-bg);
+    background-color: map-get($colors, header-action-bg);
 
     &::after {
       background-color: map-get($colors, selectable-bg);
