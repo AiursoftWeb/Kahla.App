@@ -101,6 +101,7 @@
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^11.9.3",
     "codelyzer": "^4.5.0",
+    "cordova": "^9.0.0",
     "electron": "^4.0.4",
     "electron-builder": "^20.41.0",
     "jasmine-core": "^3.3.0",
