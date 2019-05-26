@@ -63,17 +63,11 @@ Currently we are using [Apache Cordova](https://cordova.apache.org/) to target A
 
 Before running, please [prepare](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) your Android development environment and an Android device.
 
-Run the following command to install Apache Cordova.
+Run the following commands to run on a Android device.
 
 ```bash
-npm i -g cordova
-cordova platform add android
-```
-
-Run the following command to run on a Android device.
-
-```bash
-cordova run android
+npx cordova platform add android
+npx cordova run android
 ```
 
 ## How to publish
