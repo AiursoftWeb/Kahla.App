@@ -18,8 +18,8 @@ export class FriendsApiService {
         private apiService: ApiService
     ) {}
 
-    public MyFriends(orderByName: boolean): Observable<AiurCollection<ContactInfo>> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/MyFriends?orderByName=${orderByName}`);
+    public MyFriends(orderByName: boolean, take: number = 65535): Observable<AiurCollection<ContactInfo>> {
+        return this.apiService.Get(FriendsApiService.serverPath + `/MyFriends?orderByName=${orderByName}&Take=${take}`);
     }
 
     public DeleteFriend(id: string): Observable<AiurProtocal> {
