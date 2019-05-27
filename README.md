@@ -63,7 +63,7 @@ Currently we are using [Apache Cordova](https://cordova.apache.org/) to target A
 
 Before running, please [prepare](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) your Android development environment and an Android device.
 
-Run the following commands to run on a Android device.
+Run the following commands to run on an Android device.
 
 ```bash
 npx cordova platform add android
