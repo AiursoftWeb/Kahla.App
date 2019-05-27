@@ -67,8 +67,8 @@
 }
 
 .email {
+  @extend %minor-text;
   font-size: 13px;
-  color: #999999;
 }
 
 a {

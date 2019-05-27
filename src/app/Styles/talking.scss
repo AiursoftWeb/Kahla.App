@@ -146,10 +146,6 @@
   position: relative;
   max-height: 1000px;
   overflow: hidden;
-
-  img {
-    width: 100%;
-  }
 }
 
 .message-list .chat-content video {
@@ -187,6 +183,7 @@
     width: 100%;
     padding: 0;
     margin: 0;
+    overflow-y: scroll;
 
     li {
       margin: 0;
@@ -281,6 +278,11 @@
 
 .of4 {
   text-align: center;
+
+  label {
+    @extend %clickable;
+    transition: all 0.15s ease-in-out;
+  }
 }
 
 .inputfile {

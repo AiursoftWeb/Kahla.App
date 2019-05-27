@@ -9,7 +9,7 @@
   height: 80px;
 
   .friends-button {
-    @extend %menu-item-clickable;
+    @extend %friends-button;
     width: 25%;
     float: left;
     height: 80px;

@@ -161,9 +161,11 @@ export class MessageService {
                         } else if (t.content.startsWith('[img]')) {
                             let imageWidth = Number(t.content.split('-')[2]),
                                 imageHeight = Number(t.content.split('-')[1]);
+                            let swap = 0;
                             if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
                                 t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
                                 [imageWidth, imageHeight] = [imageHeight, imageWidth];
+                                swap = 1;
                             }
                             const ratio = imageHeight / imageWidth;
                             const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
@@ -173,12 +175,8 @@ export class MessageService {
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
 
-                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
-                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
-                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
-                            }
-                            t.content = '[img]' + Values.fileAddress + t.content.substring(5).split('-')[0] + '-' + imageWidth +
-                                '-' + imageHeight + '-' + this.getOrientationClassName(t.content.substring(5).split('-')[3]);
+                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('-')[0]}-${
+                                imageWidth}-${imageHeight}-${this.getOrientationClassName(t.content.substring(5).split('-')[3])}-${swap}`;
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);

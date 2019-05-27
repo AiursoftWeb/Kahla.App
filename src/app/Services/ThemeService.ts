@@ -26,23 +26,23 @@ export class ThemeService {
             case Themes.kahlaDark:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-dark';
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#2391d3');
+                    .setAttribute('content', '#18a4f9');
                 break;
             case Themes.sakuraLight:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-light';
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#f25d8e');
+                    .setAttribute('content', '#cf4c78');
                 break;
             case Themes.sakuraDark:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-sakura-dark';
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#f25d8e');
+                    .setAttribute('content', '#cf4c78');
                 break;
             case Themes.kahlaLight:
             default:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#2391d3');
+                    .setAttribute('content', '#18a4f9');
                 break;
         }
     }

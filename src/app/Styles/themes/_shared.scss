@@ -3,64 +3,76 @@
     color: map-get($colors, default-textcolor);
   }
 
+  %minor-text {
+    color: map-get($colors, minor-textcolor);
+  }
+
   %header {
     background: map-get($colors, header-bg);
   }
 
   %menu-item {
-    background-color: map-get($colors, menuitem-bg);
-    border-color: map-get($colors, menuitem-border-color);
+    background-color: map-get($colors, selectable-bg);
+    border-color: map-get($colors, selectable-border-color);
 
     .img {
-      color: map-get($colors, menuitem-img-color);
+      color: map-get($colors, primary-color-depth2);
+    }
+  }
+
+  %clickable {
+    &:hover {
+      background-color: map-get($colors, selectable-hover-bg);
     }
   }
 
   %menu-item-clickable {
     @extend %menu-item;
+    @extend %clickable;
+  }
 
-    &:hover {
-      background-color: map-get($colors, menuitem-hover-bg);
-    }
+  %friends-button {
+    @extend %menu-item-clickable;
+    color: map-get($colors, primary-color-depth2);
   }
 
   %menu-header {
-    color: map-get($colors, menuitem-img-color);
+    color: map-get($colors, primary-color-depth3);
   }
 
   %nav-bar {
-    background-color: map-get($colors, menuitem-bg);
-    border-color: map-get($colors, nav-border-color);
+    background-color: map-get($colors, selectable-bg);
+    border-color: map-get($colors, selectable-border-color);
 
     .nav-item {
-      color: map-get($colors, nav-color);
+      color: map-get($colors, minor-textcolor);
 
       &:hover {
-        background-color: map-get($colors, nav-item-hover-bg);
-        color: map-get($colors, nav-item-hover-color);
+        background-color: map-get($colors, selectable-hover-bg);
+        color: map-get($colors, primary-color-depth1);
       }
 
       &.current {
-        color: map-get($colors, nav-item-current-color);
+        color: map-get($colors, primary-color-depth2);
       }
     }
   }
 
   %text-input {
     border: 1px solid map-get($colors, text-input-border-color);
-    color: map-get($colors, text-input-color);
+    color: map-get($colors, default-textcolor);
     background-color: map-get($colors, text-input-bg);
   }
 
   %search-part {
-    background-color: map-get($colors, search-part-bg);
+    background-color: map-get($colors, header-action-bg);
 
     &::after {
-      background-color: map-get($colors, search-part-tab-selected-bg);
+      background-color: map-get($colors, selectable-bg);
     }
 
     .search-type .selected {
-      background-color: map-get($colors, search-part-tab-selected-bg);
+      background-color: map-get($colors, selectable-bg);
     }
   }
 
@@ -68,31 +80,31 @@
     background-color: map-get($colors, default-background);
 
     .load-more {
-      background-color: map-get($colors, load-more-button-bg);
-      color: map-get($colors, load-more-button-color);
+      background-color: map-get($colors, selectable-bg);
+      color: map-get($colors, minor-textcolor);
     }
 
     .left .chat-content {
-      border-color: map-get($colors, talking-chat-border-color);
-      color: map-get($colors, talking-chat-color);
+      border-color: map-get($colors, talking-chat-bg);
+      color: map-get($colors, default-textcolor);
       background-color: map-get($colors, talking-chat-bg);
 
       &::after {
-        border-right-color: map-get($colors, talking-chat-border-color);
+        border-right-color: map-get($colors, talking-chat-bg);
       }
     }
 
     .right .chat-content {
-      background-color: map-get($colors, talking-chat-right-bg);
+      background-color: map-get($colors, primary-color-depth3);
 
       &::after {
-        border-left-color: map-get($colors, talking-chat-right-bg);
+        border-left-color: map-get($colors, primary-color-depth3);
       }
     }
   }
 
   %sys-notify {
-    background-color: transparentize(map-get($colors, primary-btn-bg), 0.2);
+    background-color: transparentize(map-get($colors, primary-color-depth2), 0.2);
     color: map-get($colors, default-textcolor);
   }
 
@@ -101,13 +113,13 @@
 
     .chat-part textarea {
       background-color: map-get($colors, text-input-bg);
-      color: map-get($colors, text-input-color);
+      color: map-get($colors, default-textcolor);
     }
 
     .input-file {
       &:focus + label,
       + label:hover {
-        background-color: map-get($colors, menuitem-hover-bg);
+        background-color: map-get($colors, selectable-hover-bg);
       }
     }
   }
@@ -115,10 +127,10 @@
   //%talking-overlay {
   //  //due to the bug of chrome......
   //  //add the blur effect later
-  //  //background-color: transparentize(map-get($colors,menuitem-bg),0.8);
+  //  //background-color: transparentize(map-get($colors,selectable-bg),0.8);
   //  //backdrop-filter: blur(30px);
   //  //-webkit-backdrop-filter: blur(30px);
-  //  background-color: map_get($colors,menuitem-bg);
+  //  background-color: map_get($colors,selectable-bg);
   //}
 
   %tgl-btn {
@@ -126,14 +138,14 @@
   }
 
   %primary-button {
-    background-color: map-get($colors, primary-btn-bg);
+    background-color: map-get($colors, primary-color-depth2);
 
     &:hover:enabled {
-      background-color: map-get($colors, primary-btn-hover-bg);
+      background-color: map-get($colors, primary-color-depth3);
     }
 
     &:active {
-      background-color: map-get($colors, primary-btn-active-bg);
+      background-color: map-get($colors, primary-color-depth3);
     }
   }
 }

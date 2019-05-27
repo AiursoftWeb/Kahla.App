@@ -5,6 +5,8 @@
     </a>
     <div class="name">
         {{ info.nickName }}
+        <label class="badge badge-secondary"
+               *ngIf="info.emailConfirmed && info.email && info.email.endsWith('@aiursoft.com')">Staff</label>
     </div>
     <div class="bio">
         {{ info.bio }}

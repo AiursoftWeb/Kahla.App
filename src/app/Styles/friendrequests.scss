@@ -5,7 +5,7 @@
  ************************ */
 
 .friendrequests {
-  @extend %menu-item;
+  @extend %menu-item-clickable;
   height: 70px;
   border-width: 1px;
   border-bottom-style: solid;
@@ -14,6 +14,8 @@
   grid-template-columns: 20% 40% 40%;
   text-align: center;
   user-select: none;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
 
   .user-img {
     margin: 10px auto;
@@ -35,9 +37,9 @@
   }
 
   .time {
+    @extend %minor-text;
     margin-top: 40px;
     font-size: 13px;
-    color: #999999;
     max-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -49,8 +51,8 @@
 
   .decision {
     .Completed {
+      @extend %minor-text;
       text-align: center;
-      color: #e8e8e8;
       font-size: 14px;
       font-weight: 400;
       margin-top: 25px;

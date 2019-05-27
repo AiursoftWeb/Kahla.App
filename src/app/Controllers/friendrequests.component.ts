@@ -4,6 +4,7 @@ import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
+import { Router } from '@angular/router';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
@@ -16,7 +17,8 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     constructor(
         private friendsApiService: FriendsApiService,
         public cacheService: CacheService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        public router: Router
     ) {
         this.headerService.title = 'Friend Requests';
         this.headerService.returnButton = true;

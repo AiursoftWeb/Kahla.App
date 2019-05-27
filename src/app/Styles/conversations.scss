@@ -31,11 +31,11 @@
   }
 
   .last-message {
+    @extend %minor-text;
     position: absolute;
     margin-left: 85px;
     margin-top: 40px;
     font-size: 13px;
-    color: #999999;
     max-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
