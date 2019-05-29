@@ -22,7 +22,7 @@ import { HeaderService } from '../Services/HeaderService';
 export class UserDetailComponent implements OnInit {
   public user: KahlaUser;
   public loadingImgURL = Values.loadingImgURL;
-  @ViewChild('imageInput') public imageInput;
+    @ViewChild('imageInput', {static: false}) public imageInput;
   constructor(
     private authApiService: AuthApiService,
     private router: Router,
