@@ -83,6 +83,10 @@ export class UploadService {
                                 let orientation = 0;
                                 if (data.exif) {
                                     orientation = data.exif.get('Orientation');
+                                    let width = img.width, height = img.height;
+                                    if (orientation >= 5 && orientation <= 8) {
+                                        [width, height] = [height, width];
+                                    }
                                 }
                                 encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${img.height}-${
                                     img.width}-${orientation}`, aesKey).toString();

@@ -74,7 +74,7 @@
     "@angular/platform-browser-dynamic": "7.2.4",
     "@angular/router": "7.2.4",
     "autolinker": "^3.0.0",
-    "blueimp-load-image": "^2.20.1",
+    "blueimp-load-image": "^2.21.0",
     "cordova-android": "^7.1.4",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.0.0",
