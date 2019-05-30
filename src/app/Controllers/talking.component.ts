@@ -47,10 +47,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('mainList') public mainList: ElementRef;
-    @ViewChild('imageInput') public imageInput;
-    @ViewChild('videoInput') public videoInput;
-    @ViewChild('fileInput') public fileInput;
+    @ViewChild('mainList', {static: false}) public mainList: ElementRef;
+    @ViewChild('imageInput', {static: false}) public imageInput;
+    @ViewChild('videoInput', {static: false}) public videoInput;
+    @ViewChild('fileInput', {static: false}) public fileInput;
 
     constructor(
         private route: ActivatedRoute,
