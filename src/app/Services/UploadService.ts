@@ -80,16 +80,15 @@ export class UploadService {
                         loadImage(
                             file,
                             function (img, data) {
-                                let orientation = 0;
+                                let orientation = 0, width = img.width, height = img.height;
                                 if (data.exif) {
                                     orientation = data.exif.get('Orientation');
-                                    let width = img.width, height = img.height;
                                     if (orientation >= 5 && orientation <= 8) {
                                         [width, height] = [height, width];
                                     }
                                 }
-                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${img.height}-${
-                                    img.width}-${orientation}`, aesKey).toString();
+                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${width}-${
+                                    height}-${orientation}`, aesKey).toString();
                                 this.sendMessage(encedMessages, conversationID);
                             }.bind(this),
                             {meta: true}
