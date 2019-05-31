@@ -8,7 +8,7 @@
                 <img src="{{getHeadImgUrl(message.sender.headImgFileKey)}}?w=80&h=80">
             </div>
             <div class="chat-text">
-                <div class="chat-content">
+                <div class="chat-content" [class.single-emoji]="message.isEmoji">
                     <span
                         *ngIf="messageService.groupConversation && messageService.me && message.senderId != messageService.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
