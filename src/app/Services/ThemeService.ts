@@ -38,6 +38,16 @@ export class ThemeService {
                 elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#cf4c78');
                 break;
+            case Themes.violetLight:
+                elementRef.nativeElement.ownerDocument.body.className = 'theme-violet-light';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#5F4B8B');
+                break;
+            case Themes.violetDark:
+                elementRef.nativeElement.ownerDocument.body.className = 'theme-violet-dark';
+                elementRef.nativeElement.ownerDocument.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#5F4B8B');
+                break;
             case Themes.kahlaLight:
             default:
                 elementRef.nativeElement.ownerDocument.body.className = 'theme-light';
