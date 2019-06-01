@@ -31,3 +31,19 @@
         <i class="fa fa-check"></i>
     </div>
 </div>
+<div class="menu-button" (click)="changeTheme(4)">
+    <div class="text" i18n="@@Dark">Violet Light</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 4 ? 'visible':'hidden'"
+    >
+        <i class="fa fa-check"></i>
+    </div>
+</div>
+<div class="menu-button" (click)="changeTheme(5)">
+    <div class="text" i18n="@@Dark">Violet Dark</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 5 ? 'visible':'hidden'"
+    >
+        <i class="fa fa-check"></i>
+    </div>
+</div>
