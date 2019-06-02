@@ -159,14 +159,8 @@ export class MessageService {
                         if (fileKey === -1 || isNaN(fileKey)) {
                             t.content = '';
                         } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('-')[2]),
-                                imageHeight = Number(t.content.split('-')[1]);
-                            let swap = 0;
-                            if (t.content.substring(5).split('-')[3] === '6' || t.content.substring(5).split('-')[3] === '8' ||
-                                t.content.substring(5).split('-')[3] === '5' || t.content.substring(5).split('-')[3] === '7') {
-                                [imageWidth, imageHeight] = [imageHeight, imageWidth];
-                                swap = 1;
-                            }
+                            let imageWidth = Number(t.content.split('-')[1]),
+                                imageHeight = Number(t.content.split('-')[2]);
                             const ratio = imageHeight / imageWidth;
                             const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
 
@@ -175,8 +169,7 @@ export class MessageService {
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
 
-                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('-')[0]}-${
-                                imageWidth}-${imageHeight}-${this.getOrientationClassName(t.content.substring(5).split('-')[3])}-${swap}`;
+                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('-')[0]}-${imageWidth}-${imageHeight}`;
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
@@ -184,6 +177,7 @@ export class MessageService {
                             t.content = '';
                         }
                     } else {
+                        t.isEmoji = this.checkEmoji(t.content);
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
                             stripPrefix: false,
@@ -280,30 +274,6 @@ export class MessageService {
         this.groupConversation = false;
     }
 
-    private getOrientationClassName(exifValue: string): string {
-        switch (exifValue) {
-            case '0':
-            case '1':
-                return '';
-            case '2':
-                return 'flip';
-            case '3':
-                return 'bottom_right';
-            case '4':
-                return 'flip_bottom_right';
-            case '5':
-                return 'flip_right_top';
-            case '6':
-                return 'right_top';
-            case '7':
-                return 'flip_left_bottom';
-            case '8':
-                return 'left_bottom';
-            default:
-                return '';
-        }
-    }
-
     private showNotification(event: NewMessageEvent): void {
         if (!event.muted && event.sender.id !== this.me.id && this._electronService.isElectronApp) {
             event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
@@ -357,5 +327,13 @@ export class MessageService {
         });
         atUsers.unshift(newMessageArry.join(' '));
         return atUsers;
+    }
+
+    public checkEmoji(text: string): boolean {
+        if (text.length > 2) {
+            return false;
+        }
+        const regex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
+        return regex.test(text);
     }
 }

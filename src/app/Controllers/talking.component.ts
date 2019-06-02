@@ -1,17 +1,17 @@
-﻿import {Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
-import {ConversationApiService} from '../Services/ConversationApiService';
-import {Message} from '../Models/Message';
-import {switchMap, map} from 'rxjs/operators';
-import {AES} from 'crypto-js';
+﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { ConversationApiService } from '../Services/ConversationApiService';
+import { Message } from '../Models/Message';
+import { switchMap, map } from 'rxjs/operators';
+import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
-import {Values} from '../values';
-import {UploadService} from '../Services/UploadService';
-import {MessageService} from '../Services/MessageService';
-import {HeaderService} from '../Services/HeaderService';
+import { Values } from '../values';
+import { UploadService } from '../Services/UploadService';
+import { MessageService } from '../Services/MessageService';
+import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
-import {TimerService} from '../Services/TimerService';
+import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
 
@@ -47,10 +47,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('mainList') public mainList: ElementRef;
-    @ViewChild('imageInput') public imageInput;
-    @ViewChild('videoInput') public videoInput;
-    @ViewChild('fileInput') public fileInput;
+    @ViewChild('mainList', {static: false}) public mainList: ElementRef;
+    @ViewChild('imageInput', {static: false}) public imageInput;
+    @ViewChild('videoInput', {static: false}) public videoInput;
+    @ViewChild('fileInput', {static: false}) public fileInput;
 
     constructor(
         private route: ActivatedRoute,
@@ -166,7 +166,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     });
 
-                    if ( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                         inputElement.focus();
                     }
 
@@ -209,6 +209,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
+        tempMessage.isEmoji = this.messageService.checkEmoji(this.content);
         tempMessage.content = he.encode(this.content);
         tempMessage.content = Autolinker.link(tempMessage.content, {
             stripPrefix: false,
