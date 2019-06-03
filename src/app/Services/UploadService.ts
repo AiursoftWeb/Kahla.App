@@ -168,10 +168,9 @@ export class UploadService {
                 if (Number(response)) {
                     this.progress = <number>response;
                 } else if (response != null && (<UploadFile>response).code === 0) {
-                    this.progress = 0;
                     user.headImgFileKey = (<UploadFile>response).fileKey;
                     user.avatarURL = (<UploadFile>response).downloadPath;
-                    this.uploading = false;
+                    this.finishUpload();
                     uploadButton.textContent = 'Upload new avatar';
                 }
             });
