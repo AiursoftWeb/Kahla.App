@@ -61,7 +61,7 @@
         <div *ngIf="cacheService.cachedData.friends.users.length === 0" class="empty-result-notice">No result.</div>
     </div>
     <div *ngIf="!showUsers && cacheService.cachedData.friends">
-        <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" (click)="joinGroup(group)">
+        <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" routerLink="/group/{{ group.id }}">
             <div class="searchGroupIamge">
                 <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
             </div>
