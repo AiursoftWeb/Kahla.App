@@ -62,7 +62,7 @@
     </div>
     <div *ngIf="!showUsers && cacheService.cachedData.friends">
         <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" routerLink="/group/{{ group.id }}">
-            <div class="searchGroupIamge">
+            <div class="searchGroupImage">
                 <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
             </div>
             <div class="sender">

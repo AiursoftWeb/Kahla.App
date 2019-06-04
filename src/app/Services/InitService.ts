@@ -70,6 +70,7 @@ export class InitService {
                         }
                         this.loadPusher(false);
                         this.cacheService.updateConversation();
+                        this.cacheService.updateFriends();
                         this.cacheService.updateRequests();
                     }
                 });
