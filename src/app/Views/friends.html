@@ -1,44 +1,44 @@
 ﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/addfriend"></app-header>
 
-<div class="friends-header" id="main">
-    <a class="friends-button" routerLink="/addfriend">
-        <div class="icon">
-            <i class="fa fa-user-plus"></i>
-        </div>
-        <div class="words" i18n="@@GlobalSearch">
-            Add New
-        </div>
-    </a>
-    <a class="friends-button" routerLink="/friendrequests">
-        <div class="icon">
-            <i class="fa fa-check-square-o"></i>
-            <div class="dot reddot" *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100">
-                {{cacheService.totalRequests}}
-            </div>
-            <div class="dot reddot" *ngIf="cacheService.totalRequests > 99">
-                99+
-            </div>
-        </div>
-        <div class="words" i18n="@@Requests">
-            Requests
-        </div>
-    </a>
-    <a class="friends-button" routerLink="/discover">
-        <div class="icon">
-            <i class="fa fa fa-magic"></i>
-        </div>
-        <div class="words" i18n="@@Discover">Discover Friends</div>
-    </a>
-    <a class="friends-button" (click)="createGroup()">
-        <div class="icon">
-            <i class="fa fa-users"></i>
-        </div>
-        <div class="words" i18n="@@CreateGroup">
-            Create Group
-        </div>
-    </a>
-</div>
 <div class="search-part">
+    <div class="friends-header" id="main">
+        <a class="friends-button" routerLink="/addfriend">
+            <div class="icon">
+                <i class="fa fa-user-plus"></i>
+            </div>
+            <div class="words" i18n="@@GlobalSearch">
+                Add New
+            </div>
+        </a>
+        <a class="friends-button" routerLink="/friendrequests">
+            <div class="icon">
+                <i class="fa fa-check-square-o"></i>
+                <div class="dot reddot" *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100">
+                    {{cacheService.totalRequests}}
+                </div>
+                <div class="dot reddot" *ngIf="cacheService.totalRequests > 99">
+                    99+
+                </div>
+            </div>
+            <div class="words" i18n="@@Requests">
+                Requests
+            </div>
+        </a>
+        <a class="friends-button" routerLink="/discover">
+            <div class="icon">
+                <i class="fa fa fa-magic"></i>
+            </div>
+            <div class="words" i18n="@@Discover">Discover Friends</div>
+        </a>
+        <a class="friends-button" (click)="createGroup()">
+            <div class="icon">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="words" i18n="@@CreateGroup">
+                Create Group
+            </div>
+        </a>
+    </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
             <span><i class="fa fa-user"></i>
@@ -52,6 +52,7 @@
         </div>
     </div>
 </div>
+<div class="header-space"></div>
 <div *ngIf="showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let user of cacheService.cachedData.friends.users" routerLink="/user/{{ user.id }}">
         <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
