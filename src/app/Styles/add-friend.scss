@@ -2,8 +2,6 @@
 
 .search-part {
   @extend %search-part;
-  display: inline-block;
-  box-sizing: border-box;
   width: 100%;
   position: fixed;
   z-index: 1;
