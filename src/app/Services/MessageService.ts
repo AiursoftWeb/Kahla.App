@@ -68,7 +68,7 @@ export class MessageService {
                     }
                 } else {
                     this.showNotification(evt);
-                    this.cacheService.UpdateConversation();
+                    this.cacheService.updateConversation();
                 }
                 break;
             }
@@ -76,14 +76,14 @@ export class MessageService {
                 if (fireAlert) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
                 }
-                this.cacheService.autoUpdateRequests();
+                this.cacheService.updateRequests();
                 break;
             }
             case EventType.WereDeletedEvent: {
                 if (fireAlert) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
                 break;
             }
             case EventType.FriendAcceptedEvent: {
@@ -91,7 +91,7 @@ export class MessageService {
                     Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
                         ' are now friends!', 'success');
                 }
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
                 break;
             }
             case EventType.TimerUpdatedEvent: {
@@ -253,8 +253,13 @@ export class MessageService {
     }
 
     public updateFriends(): void {
-        this.cacheService.UpdateConversation();
-        this.cacheService.autoUpdateRequests();
+        this.cacheService.updateFriends();
+        this.cacheService.updateRequests();
+    }
+
+    public updateConversation(): void {
+        this.cacheService.updateConversation();
+        this.cacheService.updateRequests();
     }
 
     public updateMaxImageWidth(): void {

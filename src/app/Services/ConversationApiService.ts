@@ -6,6 +6,7 @@ import { Message } from '../Models/Message';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurValue } from '../Models/AiurValue';
 import { Conversation } from '../Models/Conversation';
+import { ContactInfo } from '../Models/ContactInfo';
 
 @Injectable()
 export class ConversationApiService {
@@ -14,6 +15,10 @@ export class ConversationApiService {
     constructor(
         private apiService: ApiService
     ) {}
+
+    public All(): Observable<AiurCollection<ContactInfo>> {
+        return this.apiService.Get(ConversationApiService.serverPath + '/All');
+    }
 
     public GetMessage(id: number, skipTill: number, take: number): Observable<AiurCollection<Message>> {
         return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipTill=${skipTill}&take=${take}`);

@@ -104,7 +104,7 @@ export class AddFriendComponent implements OnInit {
     private joinGroupWithPassword(groupName: string, password: string, id: number) {
         this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
                 this.router.navigate(['/talking/' + id]);
             } else {
                 Swal.fire('Error', response.message, 'error');

@@ -69,8 +69,8 @@ export class InitService {
                             this.updateSubscription();
                         }
                         this.loadPusher(false);
-                        this.cacheService.UpdateConversation();
-                        this.cacheService.autoUpdateRequests();
+                        this.cacheService.updateConversation();
+                        this.cacheService.updateRequests();
                     }
                 });
             }
