@@ -6,6 +6,7 @@ import { Values } from '../values';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './DevicesApiService';
+import { ConversationApiService } from './ConversationApiService';
 
 @Injectable()
 export class CacheService {
@@ -15,20 +16,21 @@ export class CacheService {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private devicesApiService: DevicesApiService
+        private devicesApiService: DevicesApiService,
+        private conversationApiService: ConversationApiService
     ) { }
 
     public reset() {
         this.cachedData = new CacheModel();
     }
 
-    public UpdateFriendRequests(data: Request[]): void {
+    public updateFriendRequests(data: Request[]): void {
         this.cachedData.requests = data;
         this.totalRequests = data.filter(t => !t.completed).length;
     }
 
-    public UpdateConversation(): void {
-        this.friendsApiService.MyFriends(false)
+    public updateConversation(): void {
+        this.conversationApiService.All()
             .pipe(map(t => t.items))
             .subscribe(info => {
                 info.forEach(e => {
@@ -47,7 +49,23 @@ export class CacheService {
             });
     }
 
-    public autoUpdateRequests(): void {
+    public updateFriends(): void {
+        this.friendsApiService.Mine()
+            .subscribe(result => {
+                if (result.code === 0) {
+                    result.users.forEach(user => {
+                        user.avatarURL = Values.fileAddress + user.headImgFileKey;
+                    });
+                    result.groups.forEach(group => {
+                        group.avatarURL = Values.fileAddress + group.imageKey;
+                    });
+
+                    this.cachedData.friends = result;
+                }
+            });
+    }
+
+    public updateRequests(): void {
         this.friendsApiService.MyRequests().subscribe(response => {
             this.cachedData.requests = response.items;
             response.items.forEach(item => {

@@ -38,13 +38,38 @@
         </div>
     </a>
 </div>
-<div class="holder"></div>
-<div *ngFor="let info of cacheService.cachedData.conversations" class="friend" (click)="detail(info)">
-    <img class="user-img" src="{{info.avatarURL ? info.avatarURL : loadingImgURL}}?w=72&h=72">
-    <div class="name">
-        {{info.displayName}}
+<div class="search-part">
+    <div class="search-type">
+        <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
+            <span><i class="fa fa-user"></i>
+                Users
+            </span>
+        </div>
+        <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
+            <span><i class="fa fa-users"></i>
+                Groups
+            </span>
+        </div>
+    </div>
+    <div *ngIf="showUsers && cacheService.cachedData.friends">
+        <div class="result" *ngFor="let user of cacheService.cachedData.friends.users" routerLink="/user/{{ user.id }}">
+            <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
+            <div class="sender">
+                {{user.nickName}}
+            </div>
+        </div>
+        <div *ngIf="cacheService.cachedData.friends.users.length === 0" class="empty-result-notice">No result.</div>
+    </div>
+    <div *ngIf="!showUsers && cacheService.cachedData.friends">
+        <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" (click)="joinGroup(group)">
+            <div class="searchGroupIamge">
+                <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
+            </div>
+            <div class="sender">
+                {{group.name}}
+            </div>
+        </div>
+        <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
     </div>
 </div>
-<div class="holder"></div>
-
 <app-nav></app-nav>

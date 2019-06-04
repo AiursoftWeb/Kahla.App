@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Values } from '../values';
@@ -13,11 +13,13 @@ import { GroupsApiService } from '../Services/GroupsApiService';
     styleUrls: [
         '../Styles/friends.scss',
         '../Styles/menu.scss',
-        '../Styles/reddot.scss']
+        '../Styles/reddot.scss',
+        '../Styles/add-friend.scss']
 
 })
-export class FriendsComponent implements OnInit, OnDestroy {
+export class FriendsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
+    public showUsers = true;
 
     constructor(
         private groupsApiService: GroupsApiService,
@@ -34,7 +36,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
             this.headerService.timer = false;
     }
     public ngOnInit(): void {
-        if (this.messageService.me && !this.cacheService.cachedData.conversations) {
+        if (this.messageService.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
         }
     }
@@ -102,7 +104,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
     private createPrivateGroup(groupName: string, password: string): void {
         this.groupsApiService.CreateGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
                 this.router.navigate(['/talking', response.value]);
             } else {
                 Swal.fire('Can\'t create group', response.message, 'error');
@@ -110,6 +112,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
+    public showUsersResults(selectUsers: boolean): void {
+        this.showUsers = selectUsers;
     }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurCollection } from '../Models/AiurCollection';
-import { ContactInfo } from '../Models/ContactInfo';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurValue } from '../Models/AiurValue';
 import { Request } from '../Models/Request';
@@ -18,8 +17,8 @@ export class FriendsApiService {
         private apiService: ApiService
     ) {}
 
-    public MyFriends(orderByName: boolean, take: number = 65535): Observable<AiurCollection<ContactInfo>> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/MyFriends?orderByName=${orderByName}&Take=${take}`);
+    public Mine(): Observable<SearchResult> {
+        return this.apiService.Get(FriendsApiService.serverPath + '/Mine');
     }
 
     public DeleteFriend(id: string): Observable<AiurProtocal> {

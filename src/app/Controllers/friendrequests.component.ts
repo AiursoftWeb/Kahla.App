@@ -29,7 +29,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         if (!this.cacheService.cachedData.requests) {
-            this.cacheService.autoUpdateRequests();
+            this.cacheService.updateRequests();
         }
     }
 
@@ -37,7 +37,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
                 Swal.fire('Success', r.message, 'success');
-                this.cacheService.autoUpdateRequests();
+                this.cacheService.updateRequests();
             });
     }
 
@@ -45,7 +45,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
         this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
                 Swal.fire('Success', r.message, 'success');
-                this.cacheService.autoUpdateRequests();
+                this.cacheService.updateRequests();
             });
     }
 
