@@ -11,10 +11,10 @@ import { GroupsApiService } from '../Services/GroupsApiService';
 @Component({
     templateUrl: '../Views/friends.html',
     styleUrls: [
-        '../Styles/friends.scss',
         '../Styles/menu.scss',
         '../Styles/reddot.scss',
-        '../Styles/add-friend.scss']
+        '../Styles/add-friend.scss',
+        '../Styles/friends.scss']
 
 })
 export class FriendsComponent implements OnInit {
