@@ -80,9 +80,7 @@ export class AddFriendComponent implements OnInit {
     }
 
     public joinGroup(group: GroupsResult) {
-        if (group.joined) {
-            this.router.navigate(['/group/' + group.id]);
-        } else if (group.hasPassword) {
+        if (group.hasPassword) {
             Swal.fire({
                 title: 'Enter group password.',
                 input: 'text',

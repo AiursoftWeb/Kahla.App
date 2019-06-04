@@ -51,7 +51,6 @@
             </span>
         </div>
     </div>
-    
     <div *ngIf="showUsers && cacheService.cachedData.friends">
         <div class="result" *ngFor="let user of cacheService.cachedData.friends.users" routerLink="/user/{{ user.id }}">
             <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
@@ -61,19 +60,16 @@
         </div>
         <div *ngIf="cacheService.cachedData.friends.users.length === 0" class="empty-result-notice">No result.</div>
     </div>
-</div>
-
-<div *ngIf="!showUsers && cacheService.cachedData.friends">
-    <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" (click)="joinGroup(group)">
-        <div class="searchGroupIamge">
-            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
+    <div *ngIf="!showUsers && cacheService.cachedData.friends">
+        <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" (click)="joinGroup(group)">
+            <div class="searchGroupIamge">
+                <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
+            </div>
+            <div class="sender">
+                {{group.name}}
+            </div>
         </div>
-        <div class="sender">
-            {{group.name}}
-        </div>
+        <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
     </div>
-    <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
 </div>
-<div class="holder"></div>
-
 <app-nav></app-nav>
