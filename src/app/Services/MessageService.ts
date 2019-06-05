@@ -84,6 +84,7 @@ export class MessageService {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
                 break;
             }
             case EventType.FriendAcceptedEvent: {
@@ -92,6 +93,7 @@ export class MessageService {
                         ' are now friends!', 'success');
                 }
                 this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
                 break;
             }
             case EventType.TimerUpdatedEvent: {
@@ -254,11 +256,6 @@ export class MessageService {
 
     public updateFriends(): void {
         this.cacheService.updateFriends();
-        this.cacheService.updateRequests();
-    }
-
-    public updateConversation(): void {
-        this.cacheService.updateConversation();
         this.cacheService.updateRequests();
     }
 

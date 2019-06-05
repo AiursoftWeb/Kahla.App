@@ -105,6 +105,8 @@ export class FriendsComponent implements OnInit {
         this.groupsApiService.CreateGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
                 this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
+                this.messageService.resetVariables();
                 this.router.navigate(['/talking', response.value]);
             } else {
                 Swal.fire('Can\'t create group', response.message, 'error');

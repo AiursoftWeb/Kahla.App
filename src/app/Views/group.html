@@ -33,11 +33,11 @@
     <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()"/>
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
-<div class="menu-button">
+<div class="menu-button" *ngIf="messageService.me && conversation && conversation.ownerId == messageService.me.id" (click)="transferOwner()">
     <div class="img">
-        <i class="fa fa-history"></i>
+        <i class="fa fa-exchange"></i>
     </div>
-    <div class="text" i18n="@@FileHistory">File History</div>
+    <div class="text">Transfer Owner</div>
 </div>
 <div class="menu-holder"></div>
 <div *ngIf="conversation">
