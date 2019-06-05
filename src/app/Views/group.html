@@ -52,6 +52,7 @@
         <div class="text">
             {{e.user.nickName}}
         </div>
+        <label class="badge badge-primary" *ngIf="conversation.ownerId == e.userId">Owner</label>
     </div>
 </div>
 <div class="menu-holder"></div>

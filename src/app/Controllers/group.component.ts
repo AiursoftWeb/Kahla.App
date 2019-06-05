@@ -15,7 +15,8 @@ import { TimerService } from '../Services/TimerService';
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
-                '../Styles/toggleButton.scss']
+                '../Styles/toggleButton.scss',
+                '../Styles/badge.scss']
 })
 
 export class GroupComponent implements OnInit {
