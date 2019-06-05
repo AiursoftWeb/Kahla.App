@@ -49,6 +49,7 @@
       .dot {
         border-radius: 50%;
         width: unset;
+        position: unset;
       }
 
       span {
@@ -130,10 +131,6 @@ h3 {
   p:last-of-type {
     grid-row: 2;
   }
-}
-
-.dot {
-  position: unset !important;
 }
 
 .empty-result-notice {

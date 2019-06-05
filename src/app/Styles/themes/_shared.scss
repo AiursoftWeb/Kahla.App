@@ -173,5 +173,10 @@
       background-color: map-get($colors, btn-bg);
     }
 
+    .swal2-select {
+      background-color: map-get($colors, alert-bg) !important;
+      color: map-get($colors, text-color) !important;
+    }
+
   }
 }
