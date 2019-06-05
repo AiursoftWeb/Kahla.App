@@ -3,7 +3,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
 import { switchMap, map, filter } from 'rxjs/operators';
-import { Conversation } from '../Models/Conversation';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
@@ -16,15 +15,17 @@ import { TimerService } from '../Services/TimerService';
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
-                '../Styles/toggleButton.scss']
+                '../Styles/toggleButton.scss',
+                '../Styles/badge.scss']
 })
 
 export class GroupComponent implements OnInit {
-    public conversation: Conversation;
+    public conversation: GroupConversation;
     public groupMembers: number;
     public loadingImgURL = Values.loadingImgURL;
     public muted: boolean;
     public muting = false;
+    private inputOptions = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -33,7 +34,7 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cache: CacheService,
         private headerService: HeaderService,
-        private messageService: MessageService,
+        public messageService: MessageService,
         public timerService: TimerService
     ) {
         this.headerService.title = 'Group Info';
@@ -44,31 +45,39 @@ export class GroupComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.route.params
-            .pipe(
-                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
-                filter(t => t.code === 0),
-                map(t => t.value)
-            )
-            .subscribe(conversation => {
-                this.conversation = conversation;
-                this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
-                this.conversation.users.forEach(user => {
-                    user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
-                    try {
-                        if (user.userId === this.messageService.me.id) {
-                            this.muted = user.muted;
-                        }
-                    } catch (error) {
-                        setTimeout(() => {
+        if (!this.messageService.conversation) {
+            this.route.params
+                .pipe(
+                    switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                    filter(t => t.code === 0),
+                    map(t => t.value)
+                )
+                .subscribe(conversation => {
+                    this.messageService.conversation = conversation;
+                    this.conversation = <GroupConversation>conversation;
+                    this.groupMembers = conversation.users.length;
+                    this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
+                    this.conversation.users.forEach(user => {
+                        user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
+                        try {
                             if (user.userId === this.messageService.me.id) {
                                 this.muted = user.muted;
                             }
-                        }, 1000);
-                    }
+                        } catch (error) {
+                            setTimeout(() => {
+                                if (user.userId === this.messageService.me.id) {
+                                    this.muted = user.muted;
+                                }
+                            }, 1000);
+                        }
+                    });
+                    this.messageService.searchUser('', false).forEach(user => {
+                        this.inputOptions[user.id] = user.nickName;
+                    });
                 });
-            });
+        } else {
+            this.conversation = <GroupConversation>this.messageService.conversation;
+        }
     }
 
     public leaveGroup(groupName: string): void {
@@ -112,5 +121,25 @@ export class GroupComponent implements OnInit {
                 }
             );
         }
+    }
+
+    public transferOwner(): void {
+        Swal.fire({
+            title: 'Transfer owner to',
+            input: 'select',
+            inputOptions: this.inputOptions,
+            showCancelButton: true
+        }).then((willTransfer) => {
+            if (willTransfer.value) {
+                this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
+                    .subscribe(response => {
+                        if (response.code === 0) {
+                            Swal.fire('Success', response.message, 'success');
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    });
+            }
+        });
     }
 }

@@ -38,4 +38,11 @@ export class GroupsApiService {
             setMuted: setMuted
         });
     }
+
+    public TransferOwner(groupName: string, targetUserId: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/TransferGroupOwner', {
+            groupName:    groupName,
+            targetUserId: targetUserId
+        });
+    }
 }

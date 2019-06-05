@@ -62,6 +62,7 @@ export class UserComponent implements OnInit {
                     .subscribe(response => {
                         Swal.fire('Success', response.message, 'success');
                         this.cacheService.updateConversation();
+                        this.cacheService.updateFriends();
                         this.router.navigate(['/friends']);
                     });
             }
