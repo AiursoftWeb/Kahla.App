@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/KahlaUsers';
 import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
+import { GroupConversation } from '../Models/GroupConversation';
 
 @Injectable({
     providedIn: 'root'
@@ -337,5 +338,16 @@ export class MessageService {
         }
         const regex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
         return regex.test(text);
+    }
+
+    public checkOwner(id?: string): boolean {
+        if (this.conversation && this.me) {
+            if (this.conversation.discriminator === 'GroupConversation') {
+                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.me.id);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 }
