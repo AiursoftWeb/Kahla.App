@@ -45,39 +45,35 @@ export class GroupComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        if (!this.messageService.conversation) {
-            this.route.params
-                .pipe(
-                    switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
-                    filter(t => t.code === 0),
-                    map(t => t.value)
-                )
-                .subscribe(conversation => {
-                    this.messageService.conversation = conversation;
-                    this.conversation = <GroupConversation>conversation;
-                    this.groupMembers = conversation.users.length;
-                    this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
-                    this.conversation.users.forEach(user => {
-                        user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
-                        try {
+        this.route.params
+            .pipe(
+                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                filter(t => t.code === 0),
+                map(t => t.value)
+            )
+            .subscribe(conversation => {
+                this.messageService.conversation = conversation;
+                this.conversation = <GroupConversation>conversation;
+                this.groupMembers = conversation.users.length;
+                this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
+                this.conversation.users.forEach(user => {
+                    user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
+                    try {
+                        if (user.userId === this.messageService.me.id) {
+                            this.muted = user.muted;
+                        }
+                    } catch (error) {
+                        setTimeout(() => {
                             if (user.userId === this.messageService.me.id) {
                                 this.muted = user.muted;
                             }
-                        } catch (error) {
-                            setTimeout(() => {
-                                if (user.userId === this.messageService.me.id) {
-                                    this.muted = user.muted;
-                                }
-                            }, 1000);
-                        }
-                    });
-                    this.messageService.searchUser('', false).forEach(user => {
-                        this.inputOptions[user.id] = user.nickName;
-                    });
+                        }, 1000);
+                    }
                 });
-        } else {
-            this.conversation = <GroupConversation>this.messageService.conversation;
-        }
+                this.messageService.searchUser('', false).forEach(user => {
+                    this.inputOptions[user.id] = user.nickName;
+                });
+            });
     }
 
     public leaveGroup(groupName: string): void {
@@ -98,6 +94,7 @@ export class GroupComponent implements OnInit {
                         if (response.code === 0) {
                             Swal.fire('Success', response.message, 'success');
                             this.cache.updateConversation();
+                            this.cache.updateFriends();
                             this.router.navigate(['/friends']);
                         } else {
                             Swal.fire('Error', response.message, 'error');
@@ -134,6 +131,7 @@ export class GroupComponent implements OnInit {
                 this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
                     .subscribe(response => {
                         if (response.code === 0) {
+                            (<GroupConversation>this.messageService.conversation).ownerId = willTransfer.value;
                             Swal.fire('Success', response.message, 'success');
                         } else {
                             Swal.fire('Error', response.message, 'error');

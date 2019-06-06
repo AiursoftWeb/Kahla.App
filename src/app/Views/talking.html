@@ -12,7 +12,7 @@
                     <span
                         *ngIf="messageService.groupConversation && messageService.me && message.senderId != messageService.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
-                        <label class="badge badge-primary" *ngIf="messageService.conversation.ownerId == message.senderId">Owner</label>
+                        <label class="badge badge-primary" *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
                         <label class="badge badge-secondary"
                                *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>

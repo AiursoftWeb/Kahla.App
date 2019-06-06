@@ -31,6 +31,7 @@ export class TimerService {
             if (selected.value) {
                 this.conversationApiService.UpdateMessageLifeTime(conversationId, selected.value)
                     .subscribe(result => {
+                        this.updateDestructTime(selected.value);
                         if (result.code !== 0) {
                             Swal.fire({
                                 title: 'Error!',
