@@ -46,10 +46,16 @@ export class GroupsApiService {
         });
     }
 
-    public UpdateGroupInfo(groupName: string, avatarKey: number = null, newJoinPassword: string = null) {
+    public UpdateGroupInfo(groupName: string, avatarKey?: number): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarKey: avatarKey,
+        });
+    }
+
+    public UpdateGroupPassword(groupName: string, newJoinPassword?: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupPassword', {
+            GroupName: groupName,
             NewJoinPassword: newJoinPassword
         });
     }

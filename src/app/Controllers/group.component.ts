@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
-import { switchMap, map, filter } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
@@ -118,26 +118,5 @@ export class GroupComponent implements OnInit {
                 }
             );
         }
-    }
-
-    public transferOwner(): void {
-        Swal.fire({
-            title: 'Transfer owner to',
-            input: 'select',
-            inputOptions: this.inputOptions,
-            showCancelButton: true
-        }).then((willTransfer) => {
-            if (willTransfer.value) {
-                this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
-                    .subscribe(response => {
-                        if (response.code === 0) {
-                            (<GroupConversation>this.messageService.conversation).ownerId = willTransfer.value;
-                            Swal.fire('Success', response.message, 'success');
-                        } else {
-                            Swal.fire('Error', response.message, 'error');
-                        }
-                    });
-            }
-        });
     }
 }

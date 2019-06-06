@@ -44,6 +44,7 @@ import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
 import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
+import { ManageGroupComponent } from './Controllers/manageGroup.component';
 
 @NgModule({
     imports: [
@@ -75,6 +76,7 @@ import { AdvancedSettingComponent } from './Controllers/advanced-setting.compone
         ThemeComponent,
         LocalSearchComponent,
         AdvancedSettingComponent,
+        ManageGroupComponent
     ],
     providers: [
         ApiService,
