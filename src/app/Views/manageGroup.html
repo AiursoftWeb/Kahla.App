@@ -13,6 +13,10 @@
         <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()"
                accept="image/png, image/jpeg, image/bmp"/>
     </div>
+    <div class="profile">
+        <label>Group Name</label>
+        <input [(ngModel)]="newGroupName" placeholder="Enter the group name" type="text" (keyup.enter)="saveInfo()"/>
+    </div>
     <div class="buttons">
         <button id="save" class="button primary" (click)="saveInfo()" i18n="@@save">Save</button>
     </div>
