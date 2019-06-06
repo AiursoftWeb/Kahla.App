@@ -45,4 +45,12 @@ export class GroupsApiService {
             targetUserId: targetUserId
         });
     }
+
+    public UpdateGroupInfo(groupName: string, avatarKey: number = null, newJoinPassword: string = null) {
+        return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
+            GroupName: groupName,
+            AvatarKey: avatarKey,
+            NewJoinPassword: newJoinPassword
+        });
+    }
 }
