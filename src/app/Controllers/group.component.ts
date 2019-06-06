@@ -9,7 +9,6 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
-import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -25,7 +24,6 @@ export class GroupComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     public muted: boolean;
     public muting = false;
-    private inputOptions = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -34,9 +32,7 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cache: CacheService,
         private headerService: HeaderService,
-        public messageService: MessageService,
-        public timerService: TimerService
-    ) {
+        public messageService: MessageService) {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
         this.headerService.button = false;
@@ -69,9 +65,6 @@ export class GroupComponent implements OnInit {
                             }
                         }, 1000);
                     }
-                });
-                this.messageService.searchUser('', false).forEach(user => {
-                    this.inputOptions[user.id] = user.nickName;
                 });
             });
     }
