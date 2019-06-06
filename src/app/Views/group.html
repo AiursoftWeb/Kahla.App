@@ -12,7 +12,7 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="conversation && conversation.discriminator == 'PrivateConversation' && conversation.ownerId == messageService.me.id" (click)="timerService.setTimer(conversation.id)">
+<div class="menu-button" *ngIf="conversation && conversation.discriminator == 'PrivateConversation' || conversation.ownerId == messageService.me.id" (click)="timerService.setTimer(conversation.id)">
     <div class="img">
         <i class="fa fa-clock-o"></i>
     </div>
