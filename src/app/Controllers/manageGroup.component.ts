@@ -57,7 +57,11 @@ export class ManageGroupComponent implements OnInit {
 
     public transferOwner(): void {
         const inputOptions = {};
-        this.conversation.users.forEach(val => inputOptions[val.user.id] = val.user.nickName);
+        this.conversation.users.forEach(val => {
+            if (val.user.id !== this.messageService.me.id) {
+                inputOptions[val.user.id] = val.user.nickName;
+            }
+        });
 
         Swal.fire({
             title: 'Transfer owner to',
@@ -66,16 +70,28 @@ export class ManageGroupComponent implements OnInit {
             showCancelButton: true
         }).then((willTransfer) => {
             if (willTransfer.value) {
-                this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
-                    .subscribe(response => {
-                        if (response.code === 0) {
-                            (<GroupConversation>this.messageService.conversation).ownerId = willTransfer.value;
-                            Swal.fire('Success', response.message, 'success');
-                            this.router.navigate(['/group', this.conversation.id]);
-                        } else {
-                            Swal.fire('Error', response.message, 'error');
-                        }
-                    });
+                Swal.fire({
+                    title: 'Transfer ownership?',
+                    html: 'You are transferring your ownership to <br/> ' +
+                        `<b>${inputOptions[willTransfer.value]}(id:${willTransfer.value})</b> <br/> ` +
+                        'This operation CANNOT be undone! are you sure to continue?',
+                    showCancelButton: true,
+                    type: 'warning'
+                }).then(res => {
+                    if (!res.dismiss) {
+                        this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
+                            .subscribe(response => {
+                                if (response.code === 0) {
+                                    (<GroupConversation>this.messageService.conversation).ownerId = willTransfer.value;
+                                    Swal.fire('Success', response.message, 'success');
+                                    this.router.navigate(['/group', this.conversation.id]);
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            });
+                    }
+                });
+
             }
         });
     }
