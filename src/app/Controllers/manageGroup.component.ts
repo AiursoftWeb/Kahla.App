@@ -136,6 +136,7 @@ export class ManageGroupComponent implements OnInit {
             .subscribe(res => {
             if (res.code === 0) {
                 Swal.fire('Success', res.message, 'success');
+                this.conversation.groupName = this.newGroupName;
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
