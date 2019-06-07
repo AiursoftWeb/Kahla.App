@@ -136,6 +136,18 @@ export class ManageGroupComponent implements OnInit {
             .subscribe(res => {
             if (res.code === 0) {
                 Swal.fire('Success', res.message, 'success');
+                this.route.params
+                    .pipe(
+                        switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                        filter(t => t.code === 0),
+                        map(t => t.value)
+                    )
+                    .subscribe(conversation => {
+                        this.messageService.conversation = conversation;
+                        this.conversation = <GroupConversation>conversation;
+                        this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImageKey;
+                        this.newGroupName = this.conversation.groupName;
+                    });
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
