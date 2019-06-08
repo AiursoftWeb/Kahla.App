@@ -21,6 +21,15 @@
         <button id="save" class="button primary" (click)="saveInfo()" i18n="@@save">Save</button>
     </div>
     <div class="menu-header">
+        Member Management
+    </div>
+    <div class="menu-button" (click)="kickMember()">
+        <div class="img">
+            <i class="fa fa-user-times"></i>
+        </div>
+        <div class="text">Kick member</div>
+    </div>
+    <div class="menu-header">
         Security
     </div>
     <div class="menu-button" (click)="timerService.setTimer(conversation.id)">
@@ -29,17 +38,26 @@
         </div>
         <div class="text">Self-destruct Timer</div>
     </div>
+    <div class="menu-button" (click)="changePasswd()">
+        <div class="img">
+            <i class="fa fa-lock"></i>
+        </div>
+        <div class="text">Change Join Password</div>
+    </div>
+    <div class="menu-header">
+        Danger Zone
+    </div>
     <div class="menu-button" (click)="transferOwner()">
         <div class="img">
             <i class="fa fa-exchange"></i>
         </div>
         <div class="text">Transfer Owner</div>
     </div>
-    <div class="menu-button" (click)="changePasswd()">
+    <div class="menu-button" (click)="dissolveGroup()">
         <div class="img">
-            <i class="fa fa-lock"></i>
+            <i class="fa fa-trash"></i>
         </div>
-        <div class="text">Change Join Password</div>
+        <div class="text">Dissolve Group</div>
     </div>
 </div>
 <div *ngIf="conversation && !messageService.checkOwner()">
