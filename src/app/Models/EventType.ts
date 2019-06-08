@@ -6,4 +6,5 @@
     TimerUpdatedEvent = 4,
     NewMemberEvent = 5,
     SomeoneLeftLevent = 6,
+    DissolveEvent = 7,
 }

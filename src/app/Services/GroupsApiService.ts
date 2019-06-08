@@ -60,4 +60,17 @@ export class GroupsApiService {
             NewJoinPassword: newJoinPassword
         });
     }
+
+    public KickMember(groupName: string, targetUserId: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/KickMember', {
+            groupName: groupName,
+            targetUserId: targetUserId
+        });
+    }
+
+    public DissolveGroup(groupName: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/DissolveGroup', {
+            groupName: groupName
+        });
+    }
 }

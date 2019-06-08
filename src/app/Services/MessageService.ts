@@ -25,6 +25,7 @@ import { UserGroupRelation } from '../Models/KahlaUsers';
 import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
+import { DissolveEvent } from '../Models/DissolveEvent';
 
 @Injectable({
     providedIn: 'root'
@@ -121,9 +122,25 @@ export class MessageService {
             case EventType.SomeoneLeftLevent: {
                 const evt = ev as SomeoneLeftEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                    if (evt.leftUser.id === this.me.id) {
+                        Swal.fire('Oops, you have been kicked.',
+                            `You have been kicked by the owner of group ${this.conversation.displayName}.`,
+                            'warning');
+                        this.router.navigate(['/conversations']);
+                    } else {
+                        this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                        this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                    }
                 }
-                this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                break;
+            }
+            case EventType.DissolveEvent: {
+                if (this.conversation && this.conversation.id === (<DissolveEvent>ev).conversationId) {
+                    Swal.fire('The group has been dissolved!',
+                        `Group ${this.conversation.displayName} has been dissolved by the owner!`,
+                        'warning');
+                    this.router.navigate(['/conversations']);
+                }
                 break;
             }
             default:

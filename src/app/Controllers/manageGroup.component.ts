@@ -142,4 +142,63 @@ export class ManageGroupComponent implements OnInit {
             }
         });
     }
+
+    public kickMember() {
+        const inputOptions = {};
+        this.conversation.users.forEach(val => {
+            if (val.user.id !== this.messageService.me.id) {
+                inputOptions[val.user.id] = val.user.nickName;
+            }
+        });
+
+        Swal.fire({
+            title: 'Kick member',
+            input: 'select',
+            inputOptions: inputOptions,
+            showCancelButton: true
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Kick member?',
+                    html: 'Are you sure to kick out ' +
+                        `<b>${inputOptions[result.value]}(id:${result.value})</b>?`,
+                    showCancelButton: true,
+                    type: 'warning'
+                }).then(confirmAlert => {
+                    if (!confirmAlert.dismiss) {
+                        this.groupsApiService.KickMember(this.conversation.groupName, result.value)
+                            .subscribe(response => {
+                                if (response.code === 0) {
+                                    Swal.fire('Success', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            });
+                    }
+                });
+
+            }
+        });
+    }
+
+    public dissolveGroup() {
+        Swal.fire({
+            title: 'Dissolve Group?',
+            type: 'warning',
+            html: `Are you sure to dissolve group <b>${this.conversation.groupName}?</b><br>This Operation CANNOT be undone!`,
+            showCancelButton: true,
+            focusCancel: true,
+        }).then(alertConfirm => {
+            if (!alertConfirm.dismiss) {
+                this.groupsApiService.DissolveGroup(this.conversation.groupName).subscribe(result => {
+                    if (result.code === 0) {
+                        Swal.fire('Success', result.message, 'success');
+                        this.router.navigate(['/conversations']);
+                    } else {
+                        Swal.fire('Error', result.message, 'error');
+                    }
+                });
+            }
+        });
+    }
 }
