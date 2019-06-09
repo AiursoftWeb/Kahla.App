@@ -24,6 +24,8 @@ import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/KahlaUsers';
 import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
+import { GroupConversation } from '../Models/GroupConversation';
+import { DissolveEvent } from '../Models/DissolveEvent';
 
 @Injectable({
     providedIn: 'root'
@@ -68,7 +70,7 @@ export class MessageService {
                     }
                 } else {
                     this.showNotification(evt);
-                    this.cacheService.UpdateConversation();
+                    this.cacheService.updateConversation();
                 }
                 break;
             }
@@ -76,14 +78,15 @@ export class MessageService {
                 if (fireAlert) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
                 }
-                this.cacheService.autoUpdateRequests();
+                this.cacheService.updateRequests();
                 break;
             }
             case EventType.WereDeletedEvent: {
                 if (fireAlert) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
                 }
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
                 break;
             }
             case EventType.FriendAcceptedEvent: {
@@ -91,7 +94,8 @@ export class MessageService {
                     Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
                         ' are now friends!', 'success');
                 }
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
                 break;
             }
             case EventType.TimerUpdatedEvent: {
@@ -118,9 +122,25 @@ export class MessageService {
             case EventType.SomeoneLeftLevent: {
                 const evt = ev as SomeoneLeftEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                    if (evt.leftUser.id === this.me.id) {
+                        Swal.fire('Oops, you have been kicked.',
+                            `You have been kicked by the owner of group ${this.conversation.displayName}.`,
+                            'warning');
+                        this.router.navigate(['/conversations']);
+                    } else {
+                        this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                        this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                    }
                 }
-                this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                break;
+            }
+            case EventType.DissolveEvent: {
+                if (this.conversation && this.conversation.id === (<DissolveEvent>ev).conversationId) {
+                    Swal.fire('The group has been dissolved!',
+                        `Group ${this.conversation.displayName} has been dissolved by the owner!`,
+                        'warning');
+                    this.router.navigate(['/conversations']);
+                }
                 break;
             }
             default:
@@ -253,8 +273,8 @@ export class MessageService {
     }
 
     public updateFriends(): void {
-        this.cacheService.UpdateConversation();
-        this.cacheService.autoUpdateRequests();
+        this.cacheService.updateFriends();
+        this.cacheService.updateRequests();
     }
 
     public updateMaxImageWidth(): void {
@@ -335,5 +355,16 @@ export class MessageService {
         }
         const regex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
         return regex.test(text);
+    }
+
+    public checkOwner(id?: string): boolean {
+        if (this.conversation && this.me) {
+            if (this.conversation.discriminator === 'GroupConversation') {
+                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.me.id);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 }

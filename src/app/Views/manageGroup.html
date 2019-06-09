@@ -1,0 +1,67 @@
+<app-header></app-header>
+
+<div *ngIf="conversation && messageService.checkOwner()">
+    <div class="menu-header">
+        Information
+    </div>
+    <div class="profile avatar">
+        <label>Group Avatar</label>
+        <a class="user-img" href="{{conversation.avatarURL}}" target="_blank">
+            <img class="user-img" src="{{conversation.avatarURL}}?w=140&h=140">
+        </a>
+        <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
+        <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()"
+               accept="image/png, image/jpeg, image/bmp"/>
+    </div>
+    <div class="profile">
+        <label>Group Name</label>
+        <input [(ngModel)]="newGroupName" placeholder="Enter the group name" type="text" (keyup.enter)="saveInfo()"/>
+    </div>
+    <div class="buttons">
+        <button id="save" class="button primary" (click)="saveInfo()" i18n="@@save">Save</button>
+    </div>
+    <div class="menu-header">
+        Member Management
+    </div>
+    <div class="menu-button" (click)="kickMember()">
+        <div class="img">
+            <i class="fa fa-user-times"></i>
+        </div>
+        <div class="text">Kick member</div>
+    </div>
+    <div class="menu-header">
+        Security
+    </div>
+    <div class="menu-button" (click)="timerService.setTimer(conversation.id)">
+        <div class="img">
+            <i class="fa fa-clock-o"></i>
+        </div>
+        <div class="text">Self-destruct Timer</div>
+    </div>
+    <div class="menu-button" (click)="changePasswd()">
+        <div class="img">
+            <i class="fa fa-lock"></i>
+        </div>
+        <div class="text">Change Join Password</div>
+    </div>
+    <div class="menu-header">
+        Danger Zone
+    </div>
+    <div class="menu-button" (click)="transferOwner()">
+        <div class="img">
+            <i class="fa fa-exchange"></i>
+        </div>
+        <div class="text">Transfer Owner</div>
+    </div>
+    <div class="menu-button" (click)="dissolveGroup()">
+        <div class="img">
+            <i class="fa fa-trash"></i>
+        </div>
+        <div class="text">Dissolve Group</div>
+    </div>
+</div>
+<div *ngIf="conversation && !messageService.checkOwner()">
+    You don't have the permission to manage the group.
+</div>
+<progress *ngIf="uploadService.uploading" max="100" value={{uploadService.progress}}
+          [ngClass]="{ 'macOS-electron': _electronService.isElectronApp && _electronService.isMacOS }"></progress>

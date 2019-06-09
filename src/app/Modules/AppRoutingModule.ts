@@ -18,6 +18,7 @@ import { DevicesComponent } from '../Controllers/devices.component';
 import { ThemeComponent } from '../Controllers/theme.component';
 import { LocalSearchComponent } from '../Controllers/localSearch.component';
 import { AdvancedSettingComponent } from '../Controllers/advanced-setting.component';
+import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/conversations', pathMatch: 'full' },
@@ -34,6 +35,7 @@ const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
     { path: 'group/:id', component: GroupComponent },
+    {path: 'managegroup/:id', component: ManageGroupComponent},
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },
     { path: 'devices', component: DevicesComponent },

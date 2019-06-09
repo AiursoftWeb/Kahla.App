@@ -6,6 +6,8 @@ import { UploadFile } from '../Models/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
+import { GroupConversation } from '../Models/GroupConversation';
+import { Values } from '../values';
 
 @Injectable({
     providedIn: 'root'
@@ -168,10 +170,9 @@ export class UploadService {
                 if (Number(response)) {
                     this.progress = <number>response;
                 } else if (response != null && (<UploadFile>response).code === 0) {
-                    this.progress = 0;
                     user.headImgFileKey = (<UploadFile>response).fileKey;
                     user.avatarURL = (<UploadFile>response).downloadPath;
-                    this.uploading = false;
+                    this.finishUpload();
                     uploadButton.textContent = 'Upload new avatar';
                 }
             });
@@ -180,7 +181,29 @@ export class UploadService {
         }
     }
 
-    private validImageType(file: File, avatar: boolean): boolean {
+    public uploadGroupAvater(group: GroupConversation, file: File): void {
+        if (this.validImageType(file, true)) {
+            const formData = new FormData();
+            formData.append('image', file);
+            this.uploading = true;
+            const uploadButton = document.querySelector('#upload');
+            uploadButton.textContent = 'Uploading';
+            this.filesApiService.UploadIcon(formData).subscribe(response => {
+                if (Number(response)) {
+                    this.progress = <number>response;
+                } else if (response != null && (<UploadFile>response).code === 0) {
+                    group.groupImageKey = (<UploadFile>response).fileKey;
+                    group.avatarURL = Values.fileAddress + group.groupImageKey;
+                    this.finishUpload();
+                    uploadButton.textContent = 'Upload new avatar';
+                }
+            });
+        } else {
+            Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
+        }
+    }
+
+    public validImageType(file: File, avatar: boolean): boolean {
         const validAvatarTypes = ['png', 'jpg', 'bmp', 'jpeg'];
         const validChatTypes = ['png', 'jpg', 'bmp', 'jpeg', 'gif', 'svg'];
         const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();

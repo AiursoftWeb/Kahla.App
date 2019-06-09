@@ -30,7 +30,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         if (this.messageService.me) {
-            this.cacheService.UpdateConversation();
+            this.cacheService.updateConversation();
         }
         setTimeout(() => {
             window.scroll(0, 0);

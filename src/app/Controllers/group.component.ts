@@ -2,25 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
-import { switchMap, map, filter } from 'rxjs/operators';
-import { Conversation } from '../Models/Conversation';
+import { filter, map, switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
-import { TimerService } from '../Services/TimerService';
 
 @Component({
     templateUrl: '../Views/group.html',
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
-                '../Styles/toggleButton.scss']
+                '../Styles/toggleButton.scss',
+                '../Styles/badge.scss']
 })
 
 export class GroupComponent implements OnInit {
-    public conversation: Conversation;
+    public conversation: GroupConversation;
     public groupMembers: number;
     public loadingImgURL = Values.loadingImgURL;
     public muted: boolean;
@@ -33,9 +32,7 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cache: CacheService,
         private headerService: HeaderService,
-        private messageService: MessageService,
-        public timerService: TimerService
-    ) {
+        public messageService: MessageService) {
         this.headerService.title = 'Group Info';
         this.headerService.returnButton = true;
         this.headerService.button = false;
@@ -51,7 +48,8 @@ export class GroupComponent implements OnInit {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                this.conversation = conversation;
+                this.messageService.conversation = conversation;
+                this.conversation = <GroupConversation>conversation;
                 this.groupMembers = conversation.users.length;
                 this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
                 this.conversation.users.forEach(user => {
@@ -88,7 +86,8 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal.fire('Success', response.message, 'success');
-                            this.cache.UpdateConversation();
+                            this.cache.updateConversation();
+                            this.cache.updateFriends();
                             this.router.navigate(['/friends']);
                         } else {
                             Swal.fire('Error', response.message, 'error');

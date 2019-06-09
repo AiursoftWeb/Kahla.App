@@ -21,8 +21,7 @@
       width: 70px;
       position: relative;
       text-align: center;
-      margin: auto;
-      margin-top: 7px;
+      margin: 7px auto auto;
       font-size: 2.4em;
     }
 
@@ -62,4 +61,13 @@
     font-size: 15px;
     font-weight: 400;
   }
+}
+
+.search-type {
+  margin-top: 5px;
+}
+
+.header-space {
+  height: 125px;
+  width: 100%;
 }

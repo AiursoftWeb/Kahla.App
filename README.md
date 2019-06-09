@@ -6,7 +6,7 @@
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
-<img src="https://www.kahla.app/images/screen.png" alt="screenshot" width="500"/>
+<img src="https://ui.cdn.aiursoft.com/images/kahla-demo.png" alt="screenshot" width="500"/>
 
 Try it here: [web.kahla.app](https://web.kahla.app)
 

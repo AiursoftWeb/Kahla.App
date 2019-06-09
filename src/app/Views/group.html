@@ -12,12 +12,6 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="conversation" (click)="timerService.setTimer(conversation.id)">
-    <div class="img">
-        <i class="fa fa-clock-o"></i>
-    </div>
-    <div class="text">Self-destruct Timer</div>
-</div>
 <div class="menu-button" routerLink="/talking/{{ conversation ? conversation.id : 0 }}">
     <div class="img">
         <i class="fa fa-comments"></i>
@@ -33,11 +27,11 @@
     <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()"/>
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
-<div class="menu-button">
+<div class="menu-button" *ngIf="messageService.checkOwner()" routerLink="/managegroup/{{conversation.id}}">
     <div class="img">
-        <i class="fa fa-history"></i>
+        <i class="fa fa-cogs"></i>
     </div>
-    <div class="text" i18n="@@FileHistory">File History</div>
+    <div class="text">Manage Group</div>
 </div>
 <div class="menu-holder"></div>
 <div *ngIf="conversation">
@@ -52,6 +46,7 @@
         <div class="text">
             {{e.user.nickName}}
         </div>
+        <label class="badge badge-primary" *ngIf="messageService.checkOwner(e.userId)">Owner</label>
     </div>
 </div>
 <div class="menu-holder"></div>

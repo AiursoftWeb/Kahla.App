@@ -4,4 +4,5 @@ export class GroupConversation extends Conversation {
     public groupName: string;
     public groupImageKey: number;
     public hasPassword: boolean;
+    public ownerId: string;
 }

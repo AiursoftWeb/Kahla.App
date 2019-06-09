@@ -38,4 +38,39 @@ export class GroupsApiService {
             setMuted: setMuted
         });
     }
+
+    public TransferOwner(groupName: string, targetUserId: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/TransferGroupOwner', {
+            groupName:    groupName,
+            targetUserId: targetUserId
+        });
+    }
+
+    public UpdateGroupInfo(groupName: string, avatarKey?: number, newName?: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
+            GroupName: groupName,
+            AvatarKey: avatarKey,
+            NewName: newName
+        });
+    }
+
+    public UpdateGroupPassword(groupName: string, newJoinPassword?: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupPassword', {
+            GroupName: groupName,
+            NewJoinPassword: newJoinPassword
+        });
+    }
+
+    public KickMember(groupName: string, targetUserId: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/KickMember', {
+            groupName: groupName,
+            targetUserId: targetUserId
+        });
+    }
+
+    public DissolveGroup(groupName: string): Observable<AiurProtocal> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/DissolveGroup', {
+            groupName: groupName
+        });
+    }
 }

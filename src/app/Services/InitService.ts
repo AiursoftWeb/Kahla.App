@@ -69,8 +69,9 @@ export class InitService {
                             this.updateSubscription();
                         }
                         this.loadPusher(false);
-                        this.cacheService.UpdateConversation();
-                        this.cacheService.autoUpdateRequests();
+                        this.cacheService.updateConversation();
+                        this.cacheService.updateFriends();
+                        this.cacheService.updateRequests();
                     }
                 });
             }
@@ -154,7 +155,7 @@ export class InitService {
                 for (let i = 0; i < (<Array<string>>messages).length; i++) {
                     setTimeout(() => {
                         const message = (<Array<string>>messages)[i];
-                        this.conversationApiService.SendMessage(Number(id), message, this.messageService.getAtIDs(message))
+                        this.conversationApiService.SendMessage(Number(id), message, null)
                             .subscribe({
                                 error(e) {
                                     if (e.status === 0 || e.status === 503) {

@@ -80,9 +80,7 @@ export class AddFriendComponent implements OnInit {
     }
 
     public joinGroup(group: GroupsResult) {
-        if (group.joined) {
-            this.router.navigate(['/group/' + group.id]);
-        } else if (group.hasPassword) {
+        if (group.hasPassword) {
             Swal.fire({
                 title: 'Enter group password.',
                 input: 'text',
@@ -104,7 +102,8 @@ export class AddFriendComponent implements OnInit {
     private joinGroupWithPassword(groupName: string, password: string, id: number) {
         this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
             if (response.code === 0) {
-                this.cacheService.UpdateConversation();
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
                 this.router.navigate(['/talking/' + id]);
             } else {
                 Swal.fire('Error', response.message, 'error');

@@ -5,7 +5,7 @@
     <div *ngIf="headerService.timer"></div>
     <div *ngIf="!headerService.returnButton"></div>
     <div class="text">{{headerService.title}}</div>
-    <div *ngIf="headerService.timer && messageService.conversation" class="user-button headerButton" (click)="timerService.setTimer(messageService.conversation.id)">
+    <div *ngIf="headerService.timer && messageService.conversation" class="user-button headerButton" (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
         <i class="fa fa-clock-o"></i>
         <div class="dot reddot">
             {{timerService.destructTime}}
