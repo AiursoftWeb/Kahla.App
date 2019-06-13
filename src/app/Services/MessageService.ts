@@ -115,22 +115,27 @@ export class MessageService {
                         .subscribe(updated => {
                             this.conversation = updated.value;
                         });
+                    this.displaySysNotify(`${evt.newMember.nickName} joined the group.`);
                 }
-                this.displaySysNotify(`${evt.newMember.nickName} joined the group.`);
                 break;
             }
             case EventType.SomeoneLeftLevent: {
                 const evt = ev as SomeoneLeftEvent;
-                if (this.conversation && this.conversation.id === evt.conversationId) {
-                    if (evt.leftUser.id === this.me.id) {
-                        Swal.fire('Oops, you have been kicked.',
-                            `You have been kicked by the owner of group ${this.conversation.displayName}.`,
-                            'warning');
+                const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
+                if (evt.leftUser.id === this.me.id) {
+                    Swal.fire('Oops, you have been kicked.',
+                        `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
+                            .find(x => x.conversationId === evt.conversationId).displayName}.`,
+                        'warning');
+                    this.cacheService.updateFriends();
+                    if (current) {
                         this.router.navigate(['/conversations']);
                     } else {
-                        this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
-                        this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                        this.cacheService.updateConversation();
                     }
+                } else if (current) {
+                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                    this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
                 }
                 break;
             }
@@ -141,6 +146,7 @@ export class MessageService {
                         'warning');
                     this.router.navigate(['/conversations']);
                 }
+                this.cacheService.updateFriends();
                 break;
             }
             default:
