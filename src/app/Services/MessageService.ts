@@ -123,14 +123,18 @@ export class MessageService {
                 const evt = ev as SomeoneLeftEvent;
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     if (evt.leftUser.id === this.me.id) {
-                        Swal.fire('Oops, you have been kicked.',
-                            `You have been kicked by the owner of group ${this.conversation.displayName}.`,
-                            'warning');
                         this.router.navigate(['/conversations']);
                     } else {
                         this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
                         this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
                     }
+                }
+
+                if (evt.leftUser.id === this.me.id) {
+                    Swal.fire('Oops, you have been kicked.',
+                        `You have been kicked by the owner of group ${this.conversation.displayName}.`,
+                        'warning');
+                    this.cacheService.updateFriends();
                 }
                 break;
             }
@@ -141,6 +145,7 @@ export class MessageService {
                         'warning');
                     this.router.navigate(['/conversations']);
                 }
+                this.cacheService.updateFriends();
                 break;
             }
             default:
