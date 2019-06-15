@@ -35,11 +35,21 @@ export class LocalSearchComponent implements OnInit {
             this.results.users = this.results.users.filter(user => {
                 const regex = RegExp(term, 'i');
                 return regex.test(user.nickName);
-            });
+            }).concat(this.results.users.filter(user => {
+                if (user.email) {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.email);
+                }
+            }));
             this.results.groups = this.results.groups.filter(group => {
                 const regex = RegExp(term, 'i');
                 return regex.test(group.name);
             });
+            if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                this.showUsers = false;
+            } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                this.showUsers = true;
+            }
             this.noResult = this.results.users.length + this.results.groups.length === 0;
             const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
             searchBar.focus();
