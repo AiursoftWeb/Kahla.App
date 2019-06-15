@@ -35,7 +35,12 @@ export class LocalSearchComponent implements OnInit {
             this.results.users = this.results.users.filter(user => {
                 const regex = RegExp(term, 'i');
                 return regex.test(user.nickName);
-            });
+            }).concat(this.results.users.filter(user => {
+                if (user.email) {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.email);
+                }
+            }));
             this.results.groups = this.results.groups.filter(group => {
                 const regex = RegExp(term, 'i');
                 return regex.test(group.name);
