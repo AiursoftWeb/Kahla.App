@@ -7,7 +7,7 @@ import { SearchResult } from '../Models/SearchResult';
 @Component({
     templateUrl: '../Views/localSearch.html',
     styleUrls: ['../Styles/add-friend.scss',
-                '../Styles/button.scss']
+        '../Styles/button.scss']
 
 })
 export class LocalSearchComponent implements OnInit {
@@ -19,12 +19,12 @@ export class LocalSearchComponent implements OnInit {
     constructor(
         private cacheService: CacheService,
         private headerService: HeaderService) {
-            this.headerService.title = 'Local Search';
-            this.headerService.returnButton = true;
-            this.headerService.button = false;
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
-        }
+        this.headerService.title = 'Local Search';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+        this.headerService.shadow = false;
+        this.headerService.timer = false;
+    }
 
     public ngOnInit(): void {
     }
@@ -34,13 +34,8 @@ export class LocalSearchComponent implements OnInit {
             this.results = Object.assign({}, this.cacheService.cachedData.friends);
             this.results.users = this.results.users.filter(user => {
                 const regex = RegExp(term, 'i');
-                return regex.test(user.nickName);
-            }).concat(this.results.users.filter(user => {
-                if (user.email) {
-                    const regex = RegExp(term, 'i');
-                    return regex.test(user.email);
-                }
-            }));
+                return regex.test(user.nickName) || (user.email && regex.test(user.email));
+            });
             this.results.groups = this.results.groups.filter(group => {
                 const regex = RegExp(term, 'i');
                 return regex.test(group.name);
