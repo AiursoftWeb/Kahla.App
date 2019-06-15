@@ -10,10 +10,10 @@
     padding: 7px;
     input {
       @extend %text-input;
-      border-radius: 6px 0 0 6px;
+      border-radius: 6px;
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
       box-shadow: none;
-      width: 80%;
+      width: 100%;
       height: 35px;
       padding: 6px 12px;
       font-size: 14px;
@@ -23,11 +23,18 @@
       float: left;
     }
 
-    button {
-      float: left;
-      border-radius: 0 6px 6px 0;
-      width: 20%;
-      height: 35px;
+    &.search-input-with-button {
+      button {
+        float: left;
+        border-radius: 0 6px 6px 0;
+        width: 20%;
+        height: 35px;
+      }
+
+      input {
+        width: 80%;
+        border-radius: 6px 0 0 6px;
+      }
     }
   }
 

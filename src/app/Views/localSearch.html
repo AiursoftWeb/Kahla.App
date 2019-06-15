@@ -1,8 +1,8 @@
 <app-header></app-header>
-<div class="search-part">
+<div class="search-part" [class.search-holder]="results">
     <div class="search-input">
-        <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #searchBar/>
-        <button class="button primary" (click)="search(searchBar.value)"><i class="fa fa-search"></i></button>
+        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchBar
+               (input)="search(searchBar.value)"/>
     </div>
     <div class="search-type" *ngIf="results">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
