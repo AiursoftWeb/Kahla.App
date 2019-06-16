@@ -42,7 +42,7 @@ export class SignInComponent {
             }))
             .subscribe(t => {
                 if (t.code === 0) {
-                    this.router.navigate(['/conversations'], {replaceUrl: true});
+                    this.router.navigate(['/home'], {replaceUrl: true});
                     this.initService.init(this.elementRef);
                 } else if (t.code === -10) {
                     Swal.fire('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');

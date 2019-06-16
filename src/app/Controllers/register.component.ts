@@ -40,7 +40,7 @@ export class RegisterComponent {
                     this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                this.router.navigate(['/conversations'], {replaceUrl: true});
+                                this.router.navigate(['/home'], {replaceUrl: true});
                                 this.initService.init(this.elementRef);
                             } else {
                                 Swal.fire('Sign in failed', 'An error occured while signing in.', 'error');

@@ -1,7 +1,7 @@
 
 <div class="nav-bar-holder"></div>
 <div class="nav-bar">
-    <a class="nav-item" routerLink="/conversations" replaceUrl routerLinkActive="current">
+    <div class="nav-item" (click)="homeService.currentPage = 0" [class.current]="homeService.currentPage === 0">
         <div class="icon">
             <i class="fa fa-comment-o"></i>
             <div *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100" class="dot reddot">
@@ -14,8 +14,8 @@
         <div class="words" i18n="@@Kahla">
             Kahla
         </div>
-    </a>
-    <a class="nav-item" routerLink="/friends" replaceUrl routerLinkActive="current">
+    </div>
+    <div class="nav-item" (click)="homeService.currentPage = 1" [class.current]="homeService.currentPage === 1">
         <div class="icon">
             <i class="fa fa-address-book-o"></i>
             <div *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100" class="dot reddot">
@@ -28,13 +28,13 @@
         <div class="words" i18n="@@Friends">
             Friends
         </div>
-    </a>
-    <a class="nav-item" routerLink="/settings" replaceUrl routerLinkActive="current">
+    </div>
+    <div class="nav-item" (click)="homeService.currentPage = 2" [class.current]="homeService.currentPage === 2">
         <div class="icon">
             <i class="fa fa-user-o"></i>
         </div>
         <div class="words" i18n="@@Me">
             Me
         </div>
-    </a>
+    </div>
 </div>

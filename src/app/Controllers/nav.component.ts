@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     selector: 'app-nav',
@@ -11,6 +12,7 @@ import { CacheService } from '../Services/CacheService';
 })
 export class NavComponent {
     constructor(
-        public cacheService: CacheService
+        public cacheService: CacheService,
+        public homeService: HomeService
     ) { }
 }

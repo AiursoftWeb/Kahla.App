@@ -26,7 +26,7 @@ export class HeaderComponent {
 
     public goBack(): void {
         if (history.length === 1 || history.state.navigationId === 1) {
-            this.router.navigate(['/conversations']);
+            this.router.navigate(['/home']);
         } else {
             history.back();
         }

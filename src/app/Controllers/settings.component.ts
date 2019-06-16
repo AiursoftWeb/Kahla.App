@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
+    selector: 'app-settings',
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',

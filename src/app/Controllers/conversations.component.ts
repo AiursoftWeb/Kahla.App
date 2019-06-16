@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
@@ -7,6 +7,7 @@ import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 
 @Component({
+    selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
     styleUrls: ['../Styles/conversations.scss',
                 '../Styles/reddot.scss',

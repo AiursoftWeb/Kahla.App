@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 
 @Component({
+    selector: 'app-friends',
     templateUrl: '../Views/friends.html',
     styleUrls: [
         '../Styles/menu.scss',

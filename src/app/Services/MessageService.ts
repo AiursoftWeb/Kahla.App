@@ -129,7 +129,7 @@ export class MessageService {
                         'warning');
                     this.cacheService.updateFriends();
                     if (current) {
-                        this.router.navigate(['/conversations']);
+                        this.router.navigate(['/home']);
                     } else {
                         this.cacheService.updateConversation();
                     }
@@ -144,7 +144,7 @@ export class MessageService {
                     Swal.fire('The group has been dissolved!',
                         `Group ${this.conversation.displayName} has been dissolved by the owner!`,
                         'warning');
-                    this.router.navigate(['/conversations']);
+                    this.router.navigate(['/home']);
                 }
                 this.cacheService.updateFriends();
                 break;

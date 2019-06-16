@@ -10,6 +10,7 @@ import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
 import { ElectronService } from 'ngx-electron';
+
 @Component({
   templateUrl: '../Views/userDetail.html',
   styleUrls: [
@@ -68,7 +69,7 @@ export class UserDetailComponent implements OnInit {
       .subscribe((response) => {
         if (response.code === 0) {
           this.messageService.me = Object.assign({}, this.user);
-          this.router.navigate(['/settings']);
+            this.router.navigate(['/home']);
         } else {
           Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
         }
