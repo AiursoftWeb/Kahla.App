@@ -27,6 +27,8 @@ export class LocalSearchComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+        searchBar.focus();
     }
 
     public search(term: string): void {
