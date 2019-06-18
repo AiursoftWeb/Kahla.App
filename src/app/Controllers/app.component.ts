@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 }, function (err) {
                     // registration failed :(
-                    console.log('ServiceWorker registration failed: ', err);
+                    console.error('ServiceWorker registration failed: ', err);
                 });
             }
 
