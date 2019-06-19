@@ -1,56 +1,59 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs/';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Values } from '../values';
 import { HeaderService } from '../Services/HeaderService';
 import { CacheService } from '../Services/CacheService';
-import { ContactInfo } from '../Models/ContactInfo';
+import { SearchResult } from '../Models/SearchResult';
 
 @Component({
     templateUrl: '../Views/localSearch.html',
-    styleUrls: ['../Styles/local-search.scss',
-                '../Styles/button.scss']
+    styleUrls: ['../Styles/add-friend.scss',
+        '../Styles/button.scss']
 
 })
 export class LocalSearchComponent implements OnInit {
-    public results: Observable<ContactInfo[]> = new Observable<ContactInfo[]>();
+    public results: SearchResult;
     public loadingImgURL = Values.loadingImgURL;
-    private searchTerms = new BehaviorSubject<string>('');
     public noResult = false;
+    public showUsers = true;
 
     constructor(
         private cacheService: CacheService,
         private headerService: HeaderService) {
-            this.headerService.title = 'Local Search';
-            this.headerService.returnButton = true;
-            this.headerService.button = false;
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
-        }
+        this.headerService.title = 'Local Search';
+        this.headerService.returnButton = true;
+        this.headerService.button = false;
+        this.headerService.shadow = false;
+        this.headerService.timer = false;
+    }
 
     public ngOnInit(): void {
-        this.results = this.searchTerms.pipe(
-            distinctUntilChanged(),
-            filter(term => {
-                return term.trim().length > 0;
-
-            }),
-            map(t => {
-                if (this.cacheService.cachedData.conversations) {
-                    const result = this.cacheService.cachedData.conversations.filter(conversation => {
-                        const regex = RegExp(t, 'i');
-                        return regex.test(conversation.displayName);
-                    });
-                    this.noResult = result.length === 0;
-                    return result;
-                }
-            })
-        );
         const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
         searchBar.focus();
     }
 
     public search(term: string): void {
-        this.searchTerms.next(term.trim());
+        if (this.cacheService.cachedData.conversations) {
+            this.results = Object.assign({}, this.cacheService.cachedData.friends);
+            this.results.users = this.results.users.filter(user => {
+                const regex = RegExp(term, 'i');
+                return regex.test(user.nickName) || (user.email && regex.test(user.email));
+            });
+            this.results.groups = this.results.groups.filter(group => {
+                const regex = RegExp(term, 'i');
+                return regex.test(group.name);
+            });
+            if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                this.showUsers = false;
+            } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                this.showUsers = true;
+            }
+            this.noResult = this.results.users.length + this.results.groups.length === 0;
+            const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+            searchBar.focus();
+        }
+    }
+
+    public showUsersResults(selectUsers: boolean): void {
+        this.showUsers = selectUsers;
     }
 }

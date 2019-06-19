@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
@@ -38,6 +38,7 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
             .subscribe(r => {
                 Swal.fire('Success', r.message, 'success');
                 this.cacheService.updateRequests();
+                this.cacheService.updateFriends();
             });
     }
 
