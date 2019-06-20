@@ -1,4 +1,4 @@
-﻿<app-header title="Loading..." returnButton="true" shadow="true" #header></app-header>
+﻿<app-header title="Loading..." returnButton="true" shadow="true" #header closeDirectly="true"></app-header>
 <ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button> 
