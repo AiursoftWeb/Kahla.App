@@ -9,4 +9,13 @@ export class HomeService {
     public get wideScreenEnabled(): boolean {
         return window.innerWidth > 1000 && window.innerHeight < window.innerWidth;
     }
+
+    public get contentWrapper(): HTMLDivElement {
+        return document.querySelector('#contentWrapper');
+    }
+
+    // Nullable
+    public get floatingHomeWrapper(): HTMLDivElement {
+        return document.querySelector('#homeWrapper');
+    }
 }

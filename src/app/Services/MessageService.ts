@@ -26,6 +26,7 @@ import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/DissolveEvent';
+import { HomeService } from './HomeService';
 
 @Injectable({
     providedIn: 'root'
@@ -55,6 +56,7 @@ export class MessageService {
         private _electronService: ElectronService,
         private timerService: TimerService,
         private router: Router,
+        private homeService: HomeService,
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -249,7 +251,7 @@ export class MessageService {
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
-                        window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
+                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
                 setTimeout(() => {
@@ -266,14 +268,14 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+        this.belowWindowPercent = (this.homeService.contentWrapper.offsetHeight - this.homeService.contentWrapper.scrollTop
             - window.innerHeight) / window.innerHeight;
     }
 
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldOffsetHeight = document.documentElement.offsetHeight;
+            this.oldOffsetHeight = this.homeService.contentWrapper.offsetHeight;
             this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
@@ -284,7 +286,7 @@ export class MessageService {
     }
 
     public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
+        this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
     }
 
     public resetVariables(): void {

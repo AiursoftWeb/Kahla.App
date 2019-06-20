@@ -5,10 +5,12 @@
         Connecting...
     </div>
 </div>
-<div class="floating-home-wrapper" *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled">
+<div id="homeWrapper" class="floating-home-wrapper"
+     *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled">
     <app-home></app-home>
 </div>
-<div class="content-wrapper" [class.in-widescreen]="!route.isActive('/home', false) && homeService.wideScreenEnabled">
+<div id="contentWrapper" class="content-wrapper"
+     [class.in-widescreen]="!route.isActive('/home', false) && homeService.wideScreenEnabled">
     <router-outlet></router-outlet>
 </div>
 

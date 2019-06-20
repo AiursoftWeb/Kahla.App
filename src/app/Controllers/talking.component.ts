@@ -1,8 +1,8 @@
-﻿import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
+﻿import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
-import { switchMap, map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -14,6 +14,7 @@ import Autolinker from 'autolinker';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
+import { HomeService } from '../Services/HomeService';
 
 declare var MediaRecorder: any;
 
@@ -59,7 +60,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public messageService: MessageService,
         private headerService: HeaderService,
         private timerService: TimerService,
-        public _electronService: ElectronService
+        public _electronService: ElectronService,
+        private homeService: HomeService,
     ) {
     }
 
@@ -76,11 +78,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
+            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
-            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
+            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            window.scroll(0, document.documentElement.scrollTop);
+            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop);
         }
         this.formerWindowInnerHeight = window.innerHeight;
     }
@@ -254,7 +256,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent > 0) {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
             }
         }
     }
@@ -263,13 +265,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             document.querySelector('.message-list').classList.add('active-list');
-            window.scroll(0, document.documentElement.scrollTop + 105);
+            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
             }
         }
     }

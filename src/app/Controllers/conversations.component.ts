@@ -5,6 +5,7 @@ import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { HeaderService } from '../Services/HeaderService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     selector: 'app-conversations',
@@ -19,7 +20,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         private router: Router,
         public cacheService: CacheService,
         private messageService: MessageService,
-        private headerService: HeaderService) {
+        private headerService: HeaderService,
+        private homeService: HomeService,
+    ) {
             this.headerService.title = 'Kahla';
             this.headerService.returnButton = false;
             this.headerService.button = true;
@@ -34,7 +37,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.cacheService.updateConversation();
         }
         setTimeout(() => {
-            window.scroll(0, 0);
+            this.homeService.floatingHomeWrapper.scroll(0, 0);
         }, 0);
     }
 
