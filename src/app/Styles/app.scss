@@ -20,3 +20,16 @@
 .macOS-electron-alert {
   margin-top: 35px;
 }
+
+.floating-home-wrapper {
+  float: left;
+  width: 450px;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.content-wrapper {
+  height: 100vh;
+  overflow-y: scroll;
+  width: auto;
+}

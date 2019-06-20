@@ -4,4 +4,10 @@
         Connecting...
     </div>
 </div>
-<router-outlet></router-outlet>
+<div class="floating-home-wrapper">
+    <app-home *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled"></app-home>
+</div>
+<div class="content-wrapper">
+    <router-outlet></router-outlet>
+</div>
+
