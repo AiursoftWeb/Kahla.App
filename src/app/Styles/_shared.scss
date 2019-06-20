@@ -1,0 +1,15 @@
+%full-fixed-width {
+  width: 100%;
+}
+
+:host-context(.floating-home-wrapper) {
+  %full-fixed-width {
+    width: 450px;
+  }
+}
+
+:host-context(.content-wrapper.in-widescreen) {
+  %full-fixed-width {
+    width: calc(100% - 450px);
+  }
+}

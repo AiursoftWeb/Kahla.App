@@ -1,17 +1,18 @@
 @import "themes";
+@import "shared";
 /******************
  *    Nav bar
  ******************** */
 
 .nav-bar {
   @extend %nav-bar;
+  @extend %full-fixed-width;
   position: fixed;
   bottom: 0;
   height: 55px;
-  width: 100%;
   border-width: 1px;
   border-top-style: solid;
-  box-shadow: 0px 22px 50px 10px rgba(0, 0, 0, 0.37);
+  box-shadow: 0 22px 50px 10px rgba(0, 0, 0, 0.37);
   user-select: none;
 
   .nav-item {
@@ -27,8 +28,7 @@
       width: 40px;
       position: relative;
       text-align: center;
-      margin: auto;
-      margin-top: 5px;
+      margin: 5px auto auto;
       font-size: 1.7em;
     }
   

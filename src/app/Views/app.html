@@ -1,13 +1,14 @@
-﻿<div class="header-alert" *ngIf="initService.connecting" [ngClass]="{ 'macOS-electron-alert': _electronService.isElectronApp && _electronService.isMacOS }">
+﻿<div class="header-alert" *ngIf="initService.connecting"
+     [ngClass]="{ 'macOS-electron-alert': _electronService.isElectronApp && _electronService.isMacOS }">
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fa fa-refresh fa-spin"></i>
         Connecting...
     </div>
 </div>
-<div class="floating-home-wrapper">
-    <app-home *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled"></app-home>
+<div class="floating-home-wrapper" *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled">
+    <app-home></app-home>
 </div>
-<div class="content-wrapper">
+<div class="content-wrapper" [class.in-widescreen]="!route.isActive('/home', false) && homeService.wideScreenEnabled">
     <router-outlet></router-outlet>
 </div>
 

@@ -49,11 +49,9 @@
   .email {
     @extend %minor-text;
     font-size: 13px;
-    grid-row: 2;
     grid-column: 2 / 3;
     word-break: break-all;
     grid-row: 3;
-    grid-column: 2 / 3;
   }
 }
 
@@ -69,7 +67,6 @@
   border-bottom-style: solid;
   cursor: pointer;
   outline: none;
-  display: block;
   user-select: none;
   display: grid;
   grid-template-columns: 15% auto 15%;

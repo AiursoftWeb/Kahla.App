@@ -46,6 +46,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
     }
 
+    public current(info: ContactInfo): boolean {
+        return new RegExp(`^.+\/${info.conversationId}(\/.*)*$`, 'g').test(this.router.url);
+    }
+
     public talk(id: number, unread: number): void {
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
