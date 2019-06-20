@@ -4,7 +4,6 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
-import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 
@@ -26,15 +25,7 @@ export class FriendsComponent implements OnInit {
         private groupsApiService: GroupsApiService,
         private router: Router,
         private messageService: MessageService,
-        public cacheService: CacheService,
-        private headerService: HeaderService) {
-            this.headerService.title = 'Friends';
-            this.headerService.returnButton = false;
-            this.headerService.button = true;
-            this.headerService.routerLink = '/discover';
-            this.headerService.buttonIcon = 'plus';
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
+        public cacheService: CacheService) {
     }
     public ngOnInit(): void {
         if (this.messageService.me && !this.cacheService.cachedData.friends) {

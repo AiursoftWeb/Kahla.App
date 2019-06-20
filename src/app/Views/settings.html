@@ -1,4 +1,4 @@
-<app-header title="Me" i18n-title="@@Me"></app-header>
+<app-header title="Me" [returnButton]="false"></app-header>
 
 <div class="user" routerLink="/userInfo" *ngIf="messageService.me">
     <img class="user-img" src="{{ messageService.me.avatarURL}}?w=100&h=100 ">

@@ -8,7 +8,6 @@ import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
@@ -30,14 +29,8 @@ export class UserDetailComponent implements OnInit {
     private router: Router,
     public uploadService: UploadService,
     public messageService: MessageService,
-    private headerService: HeaderService,
     public _electronService: ElectronService
   ) {
-    this.headerService.title = 'Edit Profile';
-    this.headerService.returnButton = true;
-    this.headerService.button = false;
-    this.headerService.shadow = false;
-    this.headerService.timer = false;
 }
 
   public ngOnInit(): void {

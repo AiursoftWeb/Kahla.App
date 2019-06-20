@@ -1,18 +1,20 @@
-<div class="header" [ngClass]="{'shadow': headerService.shadow, 'showTimer': headerService.timer, 'macOSHeader': macOSElectron }">
-    <div class="returnButton headerButton" *ngIf="headerService.returnButton" (click)="goBack()" [ngClass]="{ 'macOSReturnButton': macOSElectron }">
+<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': macOSElectron }">
+    <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()"
+         [ngClass]="{ 'macOSReturnButton': macOSElectron }">
         <i class="fa fa-caret-left"></i>
     </div>
-    <div *ngIf="headerService.timer"></div>
-    <div *ngIf="!headerService.returnButton"></div>
-    <div class="text">{{headerService.title}}</div>
-    <div *ngIf="headerService.timer && messageService.conversation" class="user-button headerButton" (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
+    <div *ngIf="timer"></div>
+    <div *ngIf="!returnButton"></div>
+    <div class="text">{{title}}</div>
+    <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
+         (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
         <i class="fa fa-clock-o"></i>
         <div class="dot reddot">
             {{timerService.destructTime}}
         </div>
     </div>
-    <div *ngIf="headerService.button" class="user-button headerButton" routerLink="{{headerService.routerLink}}">
-        <i class="fa fa-{{headerService.buttonIcon}}"></i>
+    <div *ngIf="button" class="user-button headerButton" routerLink="{{buttonLink}}">
+        <i class="fa fa-{{buttonIcon}}"></i>
     </div>
 </div>
 

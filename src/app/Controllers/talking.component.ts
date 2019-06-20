@@ -8,13 +8,13 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
 import { HomeService } from '../Services/HomeService';
+import { HeaderComponent } from './header.component';
 
 declare var MediaRecorder: any;
 
@@ -52,13 +52,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
     @ViewChild('fileInput', {static: false}) public fileInput;
+    @ViewChild('header', {static: false}) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
         private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
-        private headerService: HeaderService,
         private timerService: TimerService,
         public _electronService: ElectronService,
         private homeService: HomeService,
@@ -131,11 +131,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.uploadService.talkingDestroyed = false;
         this.messageService.updateMaxImageWidth();
-        this.headerService.title = 'Loading...';
-        this.headerService.returnButton = true;
-        this.headerService.shadow = true;
-        this.headerService.timer = false;
-        this.headerService.button = false;
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -182,17 +177,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
                     this.messageService.getMessages(true, this.conversationID, -1, this.unread);
-                    this.headerService.title = conversation.displayName;
-                    this.headerService.button = true;
+                    this.header.title = conversation.displayName;
+                    this.header.button = true;
                     if (conversation.anotherUserId) {
-                        this.headerService.buttonIcon = 'user';
-                        this.headerService.routerLink = `/user/${conversation.anotherUserId}`;
+                        this.header.buttonIcon = 'user';
+                        this.header.buttonLink = `/user/${conversation.anotherUserId}`;
                     } else {
-                        this.headerService.buttonIcon = `users`;
-                        this.headerService.routerLink = `/group/${conversation.id}`;
+                        this.header.buttonIcon = `users`;
+                        this.header.buttonLink = `/group/${conversation.id}`;
                     }
                     this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-                    this.headerService.timer = this.timerService.destructTime !== 'off';
+                    this.header.timer = this.timerService.destructTime !== 'off';
                 }
             });
         this.windowInnerHeight = window.innerHeight;

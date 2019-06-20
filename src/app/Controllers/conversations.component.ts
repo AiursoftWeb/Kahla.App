@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
 import { HomeService } from '../Services/HomeService';
 
 @Component({
@@ -20,16 +19,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         private router: Router,
         public cacheService: CacheService,
         private messageService: MessageService,
-        private headerService: HeaderService,
         private homeService: HomeService,
     ) {
-            this.headerService.title = 'Kahla';
-            this.headerService.returnButton = false;
-            this.headerService.button = true;
-            this.headerService.routerLink = '/localsearch';
-            this.headerService.buttonIcon = 'search';
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {

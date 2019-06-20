@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { HeaderService } from '../Services/HeaderService';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
@@ -13,8 +12,15 @@ import { TimerService } from '../Services/TimerService';
 export class HeaderComponent {
     public macOSElectron = false;
 
+    @Input() public title = 'Kahla';
+    @Input() public returnButton = true;
+    @Input() public button = false;
+    @Input() public buttonLink = '';
+    @Input() public buttonIcon = '';
+    @Input() public shadow = false;
+    @Input() public timer = false;
+
     constructor(
-        public headerService: HeaderService,
         private router: Router,
         public timerService: TimerService,
         public messageService: MessageService) {

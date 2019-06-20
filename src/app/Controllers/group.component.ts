@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
-import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
 
 @Component({
@@ -31,13 +30,7 @@ export class GroupComponent implements OnInit {
         private conversationApiService: ConversationApiService,
         private router: Router,
         private cache: CacheService,
-        private headerService: HeaderService,
         public messageService: MessageService) {
-        this.headerService.title = 'Group Info';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {

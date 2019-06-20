@@ -42,7 +42,6 @@ import { FriendsApiService } from './Services/FriendsApiService';
 import { GroupsApiService } from './Services/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
-import { HeaderService } from './Services/HeaderService';
 import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
@@ -94,7 +93,6 @@ import { HomeService } from './Services/HomeService';
         GroupsApiService,
         MessageService,
         InitService,
-        HeaderService,
         DevicesApiService,
         ThemeService,
         TimerService,

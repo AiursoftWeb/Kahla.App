@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header title="Discover Friend"></app-header>
 <div class="discoverUsers result" *ngFor="let user of users" routerLink="/user/{{ user.targetUser.id }}">
     <img class="user-img" src="{{user.targetUser.avatarURL ? user.targetUser.avatarURL : loadingImgURL}}?w=80&h=80" />
     <div class="sender">

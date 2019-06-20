@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import Swal from 'sweetalert2';
 import { catchError } from 'rxjs/operators';
-import { HeaderService } from '../Services/HeaderService';
 
 @Component({
     templateUrl: '../Views/changePassword.html',
@@ -20,13 +19,7 @@ export class ChangePasswordComponent {
 
     constructor(
         private authApiServer: AuthApiService,
-        private headerService: HeaderService
     ) {
-        this.headerService.title = 'Change Password';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
     }
 
     public checkValid(): void {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { HeaderService } from '../Services/HeaderService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
 import Swal from 'sweetalert2';
@@ -18,13 +17,7 @@ export class DiscoverComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private friendsApiService: FriendsApiService,
-        private headerService: HeaderService) {
-            this.headerService.title = 'Discover Friend';
-            this.headerService.returnButton = true;
-            this.headerService.button = false;
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
+        private friendsApiService: FriendsApiService) {
         }
 
     public ngOnInit(): void {
