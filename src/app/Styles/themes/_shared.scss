@@ -24,7 +24,7 @@
     }
 
     &.w-current {
-      background-color: map-get($colors, primary-color-depth2) !important;
+      background-color: map-get($colors, selectable-hover-bg) !important;
     }
   }
 
