@@ -49,6 +49,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public talk(id: number, unread: number): void {
+        this.cacheService.cachedData.conversations.find(x => x.conversationId === id).unReadAmount = 0;
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
         } else {
