@@ -28,7 +28,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
             this.cacheService.updateConversation();
         }
         setTimeout(() => {
-            this.homeService.floatingHomeWrapper.scroll(0, 0);
+            if (this.homeService.floatingHomeWrapper === null){
+                this.homeService.contentWrapper.scroll(0,0);
+            } else {
+                this.homeService.floatingHomeWrapper.scroll(0, 0);
+            }
         }, 0);
     }
 

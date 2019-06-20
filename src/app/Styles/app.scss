@@ -33,3 +33,22 @@
   overflow-y: scroll;
   width: auto;
 }
+
+.content-empty {
+  height: 100vh;
+  overflow-y: hidden;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  *{
+    margin: 10px;
+  }
+
+  img{
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}

@@ -6,11 +6,17 @@
     </div>
 </div>
 <div id="homeWrapper" class="floating-home-wrapper"
-     *ngIf="!route.isActive('/home', false) && homeService.wideScreenEnabled">
+     *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false) && !route.isActive('/register',false)">
     <app-home></app-home>
 </div>
-<div id="contentWrapper" class="content-wrapper"
-     [class.in-widescreen]="!route.isActive('/home', false) && homeService.wideScreenEnabled">
+<div id="contentWrapper" class="content-wrapper" *ngIf="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
+     [class.in-widescreen]="homeService.wideScreenEnabled">
     <router-outlet></router-outlet>
+</div>
+<!-- Show an empty component when no reasonable component to show. -->
+<div class="content-empty" *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && messageService.me">
+    <h2>Welcome back, {{ messageService.me.nickName }}.</h2>
+    <img src="{{ messageService.me.avatarURL}}?w=100&h=100" (click)="homeService.currentPage = 2">
+    <h3>Start talking now!</h3>
 </div>
 
