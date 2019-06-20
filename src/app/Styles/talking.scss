@@ -171,6 +171,8 @@
   position: fixed;
   z-index: 99;
   bottom: 0;
+  padding-top: 30px;
+  overflow-x: hidden;
 
   .sys-notify {
     @extend %sys-notify;

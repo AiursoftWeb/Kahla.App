@@ -4,38 +4,44 @@
  *    Nav bar
  ******************** */
 
-.nav-bar {
-  @extend %nav-bar;
+.nav-bar-wrapper {
   @extend %full-fixed-width;
   position: fixed;
   bottom: 0;
   height: 55px;
-  border-width: 1px;
-  border-top-style: solid;
-  box-shadow: 0 22px 50px 10px rgba(0, 0, 0, 0.37);
-  user-select: none;
+  padding-top: 50px;
+  overflow-x: hidden;
 
-  .nav-item {
-    outline: none;
-    float: left;
-    width: 33.33333%;
-    height: 100%;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: all 0.2s ease-out;
-  
-    .icon {
-      width: 40px;
-      position: relative;
-      text-align: center;
-      margin: 5px auto auto;
-      font-size: 1.7em;
-    }
-  
-    .words {
-      text-align: center;
-      margin: auto;
-      font-size: 13px;
+  .nav-bar {
+    @extend %nav-bar;
+    height: 55px;
+    border-width: 1px;
+    border-top-style: solid;
+    box-shadow: 0 22px 50px 10px rgba(0, 0, 0, 0.37);
+    user-select: none;
+
+    .nav-item {
+      outline: none;
+      float: left;
+      width: 33.33333%;
+      height: 100%;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.2s ease-out;
+
+      .icon {
+        width: 40px;
+        position: relative;
+        text-align: center;
+        margin: 5px auto auto;
+        font-size: 1.7em;
+      }
+
+      .words {
+        text-align: center;
+        margin: auto;
+        font-size: 13px;
+      }
     }
   }
 }
