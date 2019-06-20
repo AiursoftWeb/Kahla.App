@@ -63,7 +63,7 @@ export class AddFriendComponent implements OnInit {
                 } else if (!this.showUsers && result.groupsCount === 0 && result.usersCount !== 0) {
                     this.showUsers = true;
                 }
-                document.querySelector('.search-part').classList.add('search-holder');
+                document.querySelector('#search-part').classList.add('search-holder');
             }
         });
     }
