@@ -4,12 +4,14 @@
 
 :host-context(.floating-home-wrapper) {
   %full-fixed-width {
-    width: 450px;
+    width: 35%;
+    max-width: 550px;
   }
 }
 
 :host-context(.content-wrapper.in-widescreen) {
   %full-fixed-width {
-    width: calc(100% - 450px);
+    width: 65%;
+    min-width: calc(100% - 550px);
   }
 }

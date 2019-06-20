@@ -26,8 +26,8 @@
 .floating-home-wrapper {
   @extend %floating-home;
   float: left;
-  width: 450px;
-  height: 100vh;
+  width: 35%;
+  max-width: 550px;
   overflow-y: scroll;
   border-right-width: 1px;
   border-right-style: solid;
