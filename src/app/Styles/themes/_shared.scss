@@ -18,6 +18,10 @@
     .img {
       color: map-get($colors, primary-color-depth2);
     }
+
+    &.w-current {
+      background-color: map-get($colors, primary-color-depth2) !important;
+    }
   }
 
   %clickable {
