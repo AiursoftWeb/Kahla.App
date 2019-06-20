@@ -1,3 +1,5 @@
+@import "themes";
+
 .header-alert {
   display: inline-block;
   background-color: #fbe876;
@@ -22,10 +24,13 @@
 }
 
 .floating-home-wrapper {
+  @extend %floating-home;
   float: left;
   width: 450px;
   height: 100vh;
   overflow-y: scroll;
+  border-right-width: 1px;
+  border-right-style: solid;
 }
 
 .content-wrapper {

@@ -11,6 +11,10 @@
     background: map-get($colors, header-bg);
   }
 
+  %floating-home {
+    border-color: map-get($colors, primary-color-depth3);
+  }
+
   %menu-item {
     background-color: map-get($colors, selectable-bg);
     border-color: map-get($colors, selectable-border-color);
