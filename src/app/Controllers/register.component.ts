@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 import { catchError } from 'rxjs/operators';
 import { InitService } from '../Services/InitService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     templateUrl: '../Views/register.html',
@@ -22,7 +23,9 @@ export class RegisterComponent {
         private authApiService: AuthApiService,
         private router: Router,
         private initService: InitService,
-        private elementRef: ElementRef) { }
+        private elementRef: ElementRef,
+        private homeService: HomeService,
+        ) { }
 
     public register(): void {
         if (this.connecting) {
@@ -40,7 +43,8 @@ export class RegisterComponent {
                     this.authApiService.AuthByPassword(this.email, this.password)
                         .subscribe(p => {
                             if (p.code === 0) {
-                                this.router.navigate(['/conversations'], {replaceUrl: true});
+                                this.router.navigate(['/home'], {replaceUrl: true});
+                                this.homeService.currentPage = 0;
                                 this.initService.init(this.elementRef);
                             } else {
                                 Swal.fire('Sign in failed', 'An error occured while signing in.', 'error');

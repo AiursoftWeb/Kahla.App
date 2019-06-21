@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Values } from '../values';
-import { HeaderService } from '../Services/HeaderService';
 import { CacheService } from '../Services/CacheService';
 import { SearchResult } from '../Models/SearchResult';
 
@@ -17,13 +16,7 @@ export class LocalSearchComponent implements OnInit {
     public showUsers = true;
 
     constructor(
-        private cacheService: CacheService,
-        private headerService: HeaderService) {
-        this.headerService.title = 'Local Search';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
+        private cacheService: CacheService) {
     }
 
     public ngOnInit(): void {

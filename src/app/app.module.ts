@@ -26,6 +26,9 @@ import { ChangePasswordComponent } from './Controllers/changePassword.component'
 import { DevicesComponent } from './Controllers/devices.component';
 import { ThemeComponent } from './Controllers/theme.component';
 import { LocalSearchComponent } from './Controllers/localSearch.component';
+import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
+import { ManageGroupComponent } from './Controllers/manageGroup.component';
+import { HomeComponent } from './Controllers/home.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -39,12 +42,10 @@ import { FriendsApiService } from './Services/FriendsApiService';
 import { GroupsApiService } from './Services/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
-import { HeaderService } from './Services/HeaderService';
 import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
-import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
-import { ManageGroupComponent } from './Controllers/manageGroup.component';
+import { HomeService } from './Services/HomeService';
 
 @NgModule({
     imports: [
@@ -76,7 +77,8 @@ import { ManageGroupComponent } from './Controllers/manageGroup.component';
         ThemeComponent,
         LocalSearchComponent,
         AdvancedSettingComponent,
-        ManageGroupComponent
+        ManageGroupComponent,
+        HomeComponent
     ],
     providers: [
         ApiService,
@@ -91,10 +93,10 @@ import { ManageGroupComponent } from './Controllers/manageGroup.component';
         GroupsApiService,
         MessageService,
         InitService,
-        HeaderService,
         DevicesApiService,
         ThemeService,
-        TimerService
+        TimerService,
+        HomeService
     ],
     bootstrap: [AppComponent]
 })

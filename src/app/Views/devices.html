@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header title="Devices"></app-header>
 <div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices" (click)="detail(device)">
     <div class="img device-img">
         <i *ngIf="device.name.includes('Windows')" class="fa fa-windows" aria-hidden="true"></i>

@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { Values } from '../values';
 import { InitService } from '../Services/InitService';
 import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
+    selector: 'app-settings',
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
@@ -21,13 +21,7 @@ export class SettingsComponent implements OnInit {
         private router: Router,
         private initSerivce: InitService,
         public messageService: MessageService,
-        private headerService: HeaderService,
         private _electronService: ElectronService) {
-            this.headerService.title = 'Me';
-            this.headerService.returnButton = false;
-            this.headerService.button = false;
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
         }
 
     public ngOnInit(): void {

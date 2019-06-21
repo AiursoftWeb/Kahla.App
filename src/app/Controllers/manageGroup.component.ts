@@ -193,7 +193,7 @@ export class ManageGroupComponent implements OnInit {
                 this.groupsApiService.DissolveGroup(this.conversation.groupName).subscribe(result => {
                     if (result.code === 0) {
                         Swal.fire('Success', result.message, 'success');
-                        this.router.navigate(['/conversations']);
+                        this.router.navigate(['/home']);
                     } else {
                         Swal.fire('Error', result.message, 'error');
                     }

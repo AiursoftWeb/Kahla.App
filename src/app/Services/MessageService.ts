@@ -26,6 +26,7 @@ import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/DissolveEvent';
+import { HomeService } from './HomeService';
 
 @Injectable({
     providedIn: 'root'
@@ -55,6 +56,7 @@ export class MessageService {
         private _electronService: ElectronService,
         private timerService: TimerService,
         private router: Router,
+        private homeService: HomeService,
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -63,6 +65,18 @@ export class MessageService {
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
+                const conversationCacheIndex = this.cacheService.cachedData.conversations
+                    .findIndex(x => x.conversationId === evt.conversationId);
+                if (conversationCacheIndex !== -1) {
+                    const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
+                    conversationCache.latestMessage = AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8);
+                    if (!this.conversation || this.conversation.id !== evt.conversationId) {
+                        conversationCache.unReadAmount++;
+                    }
+                    // move the new conversation to the top
+                    this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
+                    this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
+                }
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
@@ -70,7 +84,6 @@ export class MessageService {
                     }
                 } else {
                     this.showNotification(evt);
-                    this.cacheService.updateConversation();
                 }
                 break;
             }
@@ -129,7 +142,7 @@ export class MessageService {
                         'warning');
                     this.cacheService.updateFriends();
                     if (current) {
-                        this.router.navigate(['/conversations']);
+                        this.router.navigate(['/home']);
                     } else {
                         this.cacheService.updateConversation();
                     }
@@ -144,7 +157,7 @@ export class MessageService {
                     Swal.fire('The group has been dissolved!',
                         `Group ${this.conversation.displayName} has been dissolved by the owner!`,
                         'warning');
-                    this.router.navigate(['/conversations']);
+                    this.router.navigate(['/home']);
                 }
                 this.cacheService.updateFriends();
                 break;
@@ -249,7 +262,7 @@ export class MessageService {
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
-                        window.scroll(0, document.documentElement.offsetHeight - this.oldOffsetHeight);
+                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.offsetHeight - this.oldOffsetHeight);
                     }, 0);
                 }
                 setTimeout(() => {
@@ -266,14 +279,14 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (document.documentElement.offsetHeight - document.documentElement.scrollTop
+        this.belowWindowPercent = (this.homeService.contentWrapper.offsetHeight - this.homeService.contentWrapper.scrollTop
             - window.innerHeight) / window.innerHeight;
     }
 
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldOffsetHeight = document.documentElement.offsetHeight;
+            this.oldOffsetHeight = this.homeService.contentWrapper.offsetHeight;
             this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
@@ -284,7 +297,7 @@ export class MessageService {
     }
 
     public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((window.innerWidth - 40) * 0.7 - 20 - 2);
+        this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
     }
 
     public resetVariables(): void {

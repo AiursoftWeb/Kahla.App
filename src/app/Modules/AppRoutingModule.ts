@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConversationsComponent } from '../Controllers/conversations.component';
-import { FriendsComponent } from '../Controllers/friends.component';
 import { AddFriendComponent } from '../Controllers/add-friend.component';
-import { SettingsComponent } from '../Controllers/settings.component';
 import { FriendRequestsComponent } from '../Controllers/friendrequests.component';
 import { TalkingComponent } from '../Controllers/talking.component';
 import { SignInComponent } from '../Controllers/signin.component';
@@ -19,13 +16,12 @@ import { ThemeComponent } from '../Controllers/theme.component';
 import { LocalSearchComponent } from '../Controllers/localSearch.component';
 import { AdvancedSettingComponent } from '../Controllers/advanced-setting.component';
 import { ManageGroupComponent } from '../Controllers/manageGroup.component';
+import { HomeComponent } from '../Controllers/home.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/conversations', pathMatch: 'full' },
-    { path: 'conversations', component: ConversationsComponent },
-    { path: 'friends', component: FriendsComponent },
+    {path: '', redirectTo: '/home', pathMatch: 'full'},
+    {path: 'home', component: HomeComponent},
     { path: 'addfriend', component: AddFriendComponent },
-    { path: 'settings', component: SettingsComponent },
     { path: 'friendrequests', component: FriendRequestsComponent },
     { path: 'talking/:id', component: TalkingComponent },
     { path: 'talking/:id/:unread', component: TalkingComponent },
@@ -41,7 +37,7 @@ const routes: Routes = [
     { path: 'devices', component: DevicesComponent },
     { path: 'theme', component: ThemeComponent},
     { path: 'localsearch', component: LocalSearchComponent },
-    { path: 'advanced-setting', component: AdvancedSettingComponent}
+    {path: 'advanced-setting', component: AdvancedSettingComponent},
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

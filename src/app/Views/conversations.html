@@ -1,6 +1,8 @@
-<app-header title="Kahla" i18n-title="@@Kahla" Button="true" ButtonIcon="search" RouterLink="/addfriend"></app-header>
+<app-header title="Kahla" button="true" buttonIcon="search" buttonLink="/localsearch"
+            [returnButton]="false"></app-header>
 <div id="main">
-    <div class="conversation" *ngFor="let inf of cacheService.cachedData.conversations" (click)="talk(inf.conversationId, inf.unReadAmount)">
+    <div class="conversation" *ngFor="let inf of cacheService.cachedData.conversations"
+         (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
         <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100" (click)="detail(inf)"/>
         <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
             {{inf.unReadAmount}}
@@ -34,4 +36,3 @@
     </div>
 </div>
 <div class="holder"></div>
-<app-nav></app-nav>

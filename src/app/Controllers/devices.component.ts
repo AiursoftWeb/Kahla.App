@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
-import { HeaderService } from '../Services/HeaderService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
 
@@ -11,13 +10,7 @@ import { Device } from '../Models/Device';
 export class DevicesComponent implements OnInit {
     constructor(
         public cacheService: CacheService,
-        private headerService: HeaderService
     ) {
-        this.headerService.title = 'Devices';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {

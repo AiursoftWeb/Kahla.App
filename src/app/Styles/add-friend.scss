@@ -1,8 +1,9 @@
 @import "themes";
+@import "shared";
 
 .search-part {
   @extend %search-part;
-  width: 100%;
+  @extend %full-fixed-width;
   position: fixed;
   z-index: 1;
 

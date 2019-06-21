@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { Values } from '../values';
-import { HeaderService } from '../Services/HeaderService';
 import { SearchResult } from '../Models/SearchResult';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
@@ -28,13 +27,7 @@ export class AddFriendComponent implements OnInit {
         private friendsApiService: FriendsApiService,
         private groupsApiService: GroupsApiService,
         private router: Router,
-        private cacheService: CacheService,
-        private headerService: HeaderService) {
-            this.headerService.title = 'Add New';
-            this.headerService.returnButton = true;
-            this.headerService.button = false;
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
+        private cacheService: CacheService) {
         }
 
     public ngOnInit(): void {
@@ -70,7 +63,7 @@ export class AddFriendComponent implements OnInit {
                 } else if (!this.showUsers && result.groupsCount === 0 && result.usersCount !== 0) {
                     this.showUsers = true;
                 }
-                document.querySelector('.search-part').classList.add('search-holder');
+                document.querySelector('#search-part').classList.add('search-holder');
             }
         });
     }
