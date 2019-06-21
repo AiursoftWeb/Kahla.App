@@ -3,8 +3,7 @@
 .header-alert {
   display: inline-block;
   background-color: #fbe876;
-  width: 35%;
-  max-width: 550px;
+  width: 100%;
   margin-top: 40px;
   overflow: auto;
   padding-top: 1px;
@@ -17,6 +16,11 @@
     text-align: center;
     margin: 0;
     font-size: 12px;
+  }
+
+  &.in-widescreen {
+    width: 35%;
+    max-width: 550px;
   }
 }
 

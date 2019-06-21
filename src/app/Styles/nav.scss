@@ -10,7 +10,7 @@
   bottom: 0;
   height: 55px;
   padding-top: 50px;
-  overflow-x: hidden;
+  overflow: hidden;
 
   .nav-bar {
     @extend %nav-bar;

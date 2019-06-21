@@ -1,4 +1,4 @@
-﻿<div class="header-alert" *ngIf="initService.connecting"
+﻿<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled" *ngIf="initService.connecting"
      [ngClass]="{ 'macOS-electron-alert': _electronService.isElectronApp && _electronService.isMacOS }">
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fa fa-refresh fa-spin"></i>
