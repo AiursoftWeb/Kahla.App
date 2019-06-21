@@ -6,6 +6,7 @@
     </div>
 </div>
 <div id="homeWrapper" class="floating-home-wrapper"
+     [class.in-widescreen]="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
      *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false) && !route.isActive('/register',false)">
     <app-home></app-home>
 </div>
