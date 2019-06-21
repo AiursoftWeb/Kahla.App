@@ -18,15 +18,12 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private messageService: MessageService,
+        public messageService: MessageService,
         private homeService: HomeService,
     ) {
         }
 
     public ngOnInit(): void {
-        if (this.messageService.me) {
-            this.cacheService.updateConversation();
-        }
         setTimeout(() => {
             if (this.homeService.floatingHomeWrapper === null) {
                 this.homeService.contentWrapper.scroll(0, 0);
@@ -50,6 +47,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     public talk(id: number, unread: number): void {
         this.cacheService.cachedData.conversations.find(x => x.conversationId === id).unReadAmount = 0;
+        this.cacheService.updateTotalUnread();
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
         } else {
