@@ -69,13 +69,17 @@ export class MessageService {
                     .findIndex(x => x.conversationId === evt.conversationId);
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    conversationCache.latestMessage = AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8);
+                    conversationCache.latestMessage = this.cacheService.modifyMessage(
+                        AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8));
                     if (!this.conversation || this.conversation.id !== evt.conversationId) {
                         conversationCache.unReadAmount++;
                     }
                     // move the new conversation to the top
                     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
                     this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
+                    this.cacheService.updateTotalUnread();
+                } else {
+                    this.cacheService.updateConversation();
                 }
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
@@ -141,10 +145,9 @@ export class MessageService {
                             .find(x => x.conversationId === evt.conversationId).displayName}.`,
                         'warning');
                     this.cacheService.updateFriends();
+                    this.cacheService.updateConversation();
                     if (current) {
                         this.router.navigate(['/home']);
-                    } else {
-                        this.cacheService.updateConversation();
                     }
                 } else if (current) {
                     this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
