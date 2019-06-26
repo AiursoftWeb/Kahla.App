@@ -38,16 +38,14 @@
   border-right-width: 1px;
   border-right-style: solid;
   transition: all 0.2s ease-in-out;
-
-  &.in-widescreen {
-    box-shadow: inset -10px 0px 50px 0px rgba(0, 0, 0, 0.2);
-  }
 }
 
 .content-wrapper {
   height: 100vh;
   overflow-y: scroll;
   width: auto;
+  position: relative;
+  box-shadow: -4px 0px 8px 0px rgba(0,0,0,0.2);
 }
 
 .content-empty {
