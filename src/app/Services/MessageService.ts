@@ -65,22 +65,24 @@ export class MessageService {
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
-                const conversationCacheIndex = this.cacheService.cachedData.conversations
-                    .findIndex(x => x.conversationId === evt.conversationId);
-                if (conversationCacheIndex !== -1) {
-                    const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    conversationCache.latestMessage = this.cacheService.modifyMessage(
-                        AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8));
-                    if (!this.conversation || this.conversation.id !== evt.conversationId) {
-                        conversationCache.unReadAmount++;
-                    }
-                    // move the new conversation to the top
-                    this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
-                    this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
-                    this.cacheService.updateTotalUnread();
-                } else {
-                    this.cacheService.updateConversation();
+                // const conversationCacheIndex = this.cacheService.cachedData.conversations
+                //     .findIndex(x => x.conversationId === evt.conversationId);
+                // if (conversationCacheIndex !== -1) {
+                //     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
+                //     conversationCache.latestMessage = this.cacheService.modifyMessage(
+                //         AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8));
+                //     if (!this.conversation || this.conversation.id !== evt.conversationId) {
+                //         conversationCache.unReadAmount++;
+                //     }
+                //     // move the new conversation to the top
+                //     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
+                //     this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
+                //     this.cacheService.updateTotalUnread();
+                // } else {
+                if (this.homeService.wideScreenEnabled) {
+                    setTimeout(() => this.cacheService.updateConversation(), 1000);
                 }
+                // }
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {

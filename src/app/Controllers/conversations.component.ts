@@ -10,8 +10,8 @@ import { HomeService } from '../Services/HomeService';
     selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
     styleUrls: ['../Styles/conversations.scss',
-                '../Styles/reddot.scss',
-                '../Styles/button.scss']
+        '../Styles/reddot.scss',
+        '../Styles/button.scss']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
@@ -21,9 +21,12 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         public messageService: MessageService,
         private homeService: HomeService,
     ) {
-        }
+    }
 
     public ngOnInit(): void {
+        if (this.messageService.me) {
+            this.cacheService.updateConversation();
+        }
         setTimeout(() => {
             if (this.homeService.floatingHomeWrapper === null) {
                 this.homeService.contentWrapper.scroll(0, 0);
@@ -46,7 +49,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public talk(id: number, unread: number): void {
-        this.cacheService.cachedData.conversations.find(x => x.conversationId === id).unReadAmount = 0;
+        const conversation = this.cacheService.cachedData.conversations.find(x => x.conversationId === id);
+        conversation.unReadAmount = 0;
+        conversation.someoneAtMe = false;
         this.cacheService.updateTotalUnread();
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
