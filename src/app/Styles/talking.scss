@@ -173,6 +173,11 @@
   bottom: 0;
   padding-top: 30px;
   overflow-x: hidden;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
 
   .sys-notify {
     @extend %sys-notify;
