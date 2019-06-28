@@ -11,6 +11,11 @@
   height: 55px;
   padding-top: 50px;
   overflow: hidden;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
 
   .nav-bar {
     @extend %nav-bar;
