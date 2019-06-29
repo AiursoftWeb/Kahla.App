@@ -138,7 +138,13 @@ export class ManageGroupComponent implements OnInit {
                 Swal.fire('Success', res.message, 'success');
                 this.conversation.groupName = this.newGroupName;
             } else {
-                Swal.fire('Error', res.message, 'error');
+                let errormessage: string = "";
+
+                res.items.forEach((message: string) => {
+                    errormessage = errormessage + message + "<br />";
+                });
+
+                Swal.fire('Error', errormessage, 'error');
             }
         });
     }
