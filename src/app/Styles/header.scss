@@ -19,8 +19,7 @@
   grid-template-columns: 10% 80% 10%;
   text-align: center;
   user-select: none;
-  border-right-width: 1px;
-  border-right-style: solid;
+  padding-right: 1px;
 
   &.shadow {
     box-shadow: 0 0 74px 0 rgba(0, 0, 0, 0.4);

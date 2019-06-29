@@ -9,8 +9,6 @@
 
   %header {
     background: map-get($colors, header-bg);
-    -webkit-border-image: map-get($colors, header-bg);
-    border-right-color: map-get($colors, primary-color-depth3);
   }
 
   %floating-home {
