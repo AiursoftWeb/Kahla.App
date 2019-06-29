@@ -10,6 +10,8 @@ import { TimerService } from '../Services/TimerService';
 import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { ElectronService } from 'ngx-electron';
+import { AiurProtocal } from '../Models/AiurProtocal';
+import { AiurCollection } from '../Models/AiurCollection';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',
@@ -138,15 +140,7 @@ export class ManageGroupComponent implements OnInit {
                 Swal.fire('Success', res.message, 'success');
                 this.conversation.groupName = this.newGroupName;
             } else {
-                let errormessage = '';
-                if (res.items != null) {
-                    res.items.forEach((message: string) => {
-                        errormessage = errormessage + message + '<br />';
-                    });
-                    Swal.fire('Error', errormessage, 'error');
-                } else {
-                    Swal.fire('Error', res.message, 'error');
-                }
+                Swal.fire('Error', (res as AiurProtocal as AiurCollection<string>).items[0], 'error');
             }
         });
     }

@@ -47,7 +47,7 @@ export class GroupsApiService {
         });
     }
 
-    public UpdateGroupInfo(groupName: string, avatarKey?: number, newName?: string): Observable<AiurCollection<string>> {
+    public UpdateGroupInfo(groupName: string, avatarKey?: number, newName?: string): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarKey: avatarKey,
