@@ -139,6 +139,11 @@ export class ManageGroupComponent implements OnInit {
                 this.conversation.groupName = this.newGroupName;
             } else {
                 let errormessage = '';
+                
+                if (res.items == null) {
+                    Swal.fire('Error', res.message, 'error');
+                }
+                
                 res.items.forEach((message: string) => {
                     errormessage = errormessage + message + '<br />';
                 });
