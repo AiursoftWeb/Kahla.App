@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurValue } from '../Models/AiurValue';
 import { AiurProtocal } from '../Models/AiurProtocal';
-import { UpdateGroup } from '../Models/UpdateGroup';
+import { AiurCollection } from '../Models/AiurCollection';
 
 @Injectable()
 export class GroupsApiService {
@@ -47,7 +47,7 @@ export class GroupsApiService {
         });
     }
 
-    public UpdateGroupInfo(groupName: string, avatarKey?: number, newName?: string): Observable<UpdateGroup> {
+    public UpdateGroupInfo(groupName: string, avatarKey?: number, newName?: string): Observable<AiurCollection<string>> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarKey: avatarKey,
