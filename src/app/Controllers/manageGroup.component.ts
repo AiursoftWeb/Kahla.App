@@ -140,14 +140,15 @@ export class ManageGroupComponent implements OnInit {
             } else {
                 let errormessage = '';
                 
-                if (res.items == null) {
+                if (res.items != null) {
+                    res.items.forEach((message: string) => {
+                        errormessage = errormessage + message + '<br />';
+                    });
+                    Swal.fire('Error', errormessage, 'error');
+                } else {
                     Swal.fire('Error', res.message, 'error');
-                }
+                }               
                 
-                res.items.forEach((message: string) => {
-                    errormessage = errormessage + message + '<br />';
-                });
-                Swal.fire('Error', errormessage, 'error');
             }
         });
     }
