@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurValue } from '../Models/AiurValue';
 import { AiurProtocal } from '../Models/AiurProtocal';
-import { AiurCollection } from '../Models/AiurCollection';
 
 @Injectable()
 export class GroupsApiService {
