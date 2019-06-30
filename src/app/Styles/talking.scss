@@ -169,7 +169,7 @@
   @extend %full-fixed-width;
   display: inline-block;
   position: fixed;
-  z-index: 99;
+  z-index: 50;
   bottom: 0;
   padding-top: 30px;
   overflow-x: hidden;
@@ -216,7 +216,7 @@
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    z-index: 99;
+    z-index: 50;
     bottom: 0;
     box-shadow: 0 23px 50px 10px rgba(0, 0, 0, 0.37);
   }
