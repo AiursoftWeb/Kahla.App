@@ -1,4 +1,4 @@
-﻿<app-header title="Friends" i18n-title="@@Friends" Button="true" ButtonIcon="plus" RouterLink="/addfriend"></app-header>
+﻿<app-header title="Friends" [returnButton]="false"></app-header>
 
 <div class="search-part">
     <div class="friends-header" id="main">
@@ -73,4 +73,3 @@
     </div>
     <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
 </div>
-<app-nav></app-nav>

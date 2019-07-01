@@ -1,4 +1,4 @@
-﻿<app-header title="Friend Requests" i18n-title="@@FriendRequests" returnButton="true"></app-header>
+﻿<app-header title="Friend Requests" closeDirectly="true"></app-header>
 <div *ngIf="cacheService.cachedData.requests && cacheService.cachedData.requests.length === 0; else hasRequests" class="friendrequests">
     <h3>No requests for now.</h3>
 </div>

@@ -45,7 +45,7 @@ export class CacheService {
                     e.avatarURL = Values.fileAddress + e.displayImageKey;
                 });
                 this.cachedData.conversations = info;
-                this.totalUnread = info.filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
+                this.updateTotalUnread();
             });
     }
 
@@ -139,5 +139,10 @@ export class CacheService {
             returnString = 'Audio';
         }
         return returnString;
+    }
+
+    public updateTotalUnread(): void {
+        this.totalUnread = this.cachedData.conversations
+            .filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
     }
 }

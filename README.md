@@ -10,9 +10,9 @@ Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also a
 
 Try it here: [web.kahla.app](https://web.kahla.app)
 
-Kahla currently targets Windows, Linux, macOS, Android, iOS, and Windows Mobile.
+Kahla currently targets Windows, Linux, macOS, Android, and iOS.
 
-Kahla is built with Angular 7 and typescript. And [Kahla Server](https://github.com/AiursoftWeb/Kahla) is built with .NET Core.
+Kahla is built with Angular 8 and typescript. And [Kahla Server](https://github.com/AiursoftWeb/Kahla) is built with .NET Core.
 
 For more document about Kahla project and Kahla API, please view document [here](https://wiki.aiursoft.com/ReadDoc/Kahla/What%20is%20Kahla.md).
 
@@ -84,7 +84,7 @@ If you want to create Chinese version, please use the following command instead.
 ng build --prod --local zh --i18n-file ./src/message.zh.xlf
 ```
 
-### How to publish as Electron production version
+### How to publish for electron production version
 
 Please view [here](https://electron.atom.io/docs/tutorial/application-distribution/) for Electron distribution document.
 
@@ -98,7 +98,13 @@ Run:
 
 And you will publish the distributable version of Kahla desktop.
 
-### How to publish as Cordova production version
+### How to publish for Android production version
+
+Run:
+
+```bash
+cordova build android --release -- --keystore=./android.jks --storePassword={KEY} --alias=key0 --password={PASSWORD}
+```
 
 Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
 

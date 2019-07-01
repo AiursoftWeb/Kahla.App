@@ -1,9 +1,9 @@
+@import "shared";
 .big-logo {
   text-align: center;
-  margin: auto;
   width: 100px;
   height: 100px;
-  margin-top: 20px;
+  margin: 20px auto auto;
 
   img {
     width: 100%;
@@ -13,10 +13,9 @@
 
 .version {
   text-align: center;
-  margin: auto;
   font-size: 25px;
   color: #AAA;
-  margin-top: 10px;
+  margin: 10px auto auto;
 
   p {
     font-size: 15px;
@@ -26,8 +25,8 @@
 }
 
 .foot-text {
+  @extend %full-fixed-width;
   position: fixed;
-  width: 100%;
   margin: auto;
   bottom: 30px;
   text-align: center;

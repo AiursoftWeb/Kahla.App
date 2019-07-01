@@ -3,10 +3,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
-import { switchMap,  } from 'rxjs/operators';
+import { switchMap, } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
-import { HeaderService } from '../Services/HeaderService';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 
@@ -28,15 +27,9 @@ export class UserComponent implements OnInit {
         private friendsApiService: FriendsApiService,
         private router: Router,
         private cacheService: CacheService,
-        private headerService: HeaderService,
         public messageService: MessageService,
         public timerService: TimerService
     ) {
-        this.headerService.title = 'Profile';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
     }
 
     public ngOnInit(): void {
@@ -63,7 +56,7 @@ export class UserComponent implements OnInit {
                         Swal.fire('Success', response.message, 'success');
                         this.cacheService.updateConversation();
                         this.cacheService.updateFriends();
-                        this.router.navigate(['/friends']);
+                        this.router.navigate(['/home']);
                     });
             }
         });

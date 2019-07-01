@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { HeaderService } from '../Services/HeaderService';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Themes } from '../Models/Themes';
 import { ThemeService } from '../Services/ThemeService';
 
@@ -9,15 +8,9 @@ import { ThemeService } from '../Services/ThemeService';
 })
 export class ThemeComponent implements OnInit {
     constructor(
-        private headerService: HeaderService,
         private elementRef: ElementRef,
         private themeService: ThemeService
     ) {
-        this.headerService.title = 'Theme';
-        this.headerService.returnButton = true;
-        this.headerService.button = false;
-        this.headerService.shadow = false;
-        this.headerService.timer = false;
     }
 
     currentTheme: Themes = Themes.kahlaLight;

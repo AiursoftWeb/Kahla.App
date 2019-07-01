@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderService } from '../Services/HeaderService';
 import { AuthApiService } from '../Services/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
@@ -19,14 +18,10 @@ export class AdvancedSettingComponent implements OnInit {
     private updatingSetting = false;
 
     constructor(
-        private headerService: HeaderService,
         private authApiService: AuthApiService,
         private messageService: MessageService,
         private devicesApiService: DevicesApiService
     ) {
-        this.headerService.returnButton = true;
-        this.headerService.shadow = true;
-        this.headerService.title = 'Advanced Setting';
     }
 
     ngOnInit(): void {

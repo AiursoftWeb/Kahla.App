@@ -16,26 +16,15 @@ if (!singleLock) {
 }
 
 function createWindow() {
-    if (platform === 'darwin') {
-        mainWindow = new BrowserWindow(
-            {
-                width: 512,
-                height: 768,
-                icon: __dirname + '/assets/144x144.png',
-                titleBarStyle: 'hiddenInset',
-                minWidth: 200,
-                minHeight: 300
-            })
-    } else {
-        mainWindow = new BrowserWindow(
-            {
-                width: 512,
-                height: 768,
-                icon: __dirname + '/assets/144x144.png',
-                minWidth: 200,
-                minHeight: 300
-            })
-    }
+    mainWindow = new BrowserWindow(
+        {
+            width: 1242,
+            height: 768,
+            icon: __dirname + '/assets/144x144.png',
+            titleBarStyle: platform === 'darwin' ? 'hiddenInset' : 'default',
+            minWidth: 200,
+            minHeight: 300
+        })
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({

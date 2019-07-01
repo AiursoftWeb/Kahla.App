@@ -1,39 +1,38 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
-import { HeaderService } from '../Services/HeaderService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
+    selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
     styleUrls: ['../Styles/conversations.scss',
-                '../Styles/reddot.scss',
-                '../Styles/button.scss']
+        '../Styles/reddot.scss',
+        '../Styles/button.scss']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private messageService: MessageService,
-        private headerService: HeaderService) {
-            this.headerService.title = 'Kahla';
-            this.headerService.returnButton = false;
-            this.headerService.button = true;
-            this.headerService.routerLink = '/localsearch';
-            this.headerService.buttonIcon = 'search';
-            this.headerService.shadow = false;
-            this.headerService.timer = false;
-        }
+        public messageService: MessageService,
+        private homeService: HomeService,
+    ) {
+    }
 
     public ngOnInit(): void {
         if (this.messageService.me) {
             this.cacheService.updateConversation();
         }
         setTimeout(() => {
-            window.scroll(0, 0);
+            if (this.homeService.floatingHomeWrapper === null) {
+                this.homeService.contentWrapper.scroll(0, 0);
+            } else {
+                this.homeService.floatingHomeWrapper.scroll(0, 0);
+            }
         }, 0);
     }
 
@@ -45,7 +44,15 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
     }
 
+    public current(info: ContactInfo): boolean {
+        return new RegExp(`^.+\/${info.conversationId}(\/.*)*$`, 'g').test(this.router.url);
+    }
+
     public talk(id: number, unread: number): void {
+        const conversation = this.cacheService.cachedData.conversations.find(x => x.conversationId === id);
+        conversation.unReadAmount = 0;
+        conversation.someoneAtMe = false;
+        this.cacheService.updateTotalUnread();
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
         } else {

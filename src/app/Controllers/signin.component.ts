@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { InitService } from '../Services/InitService';
 import { ApiService } from '../Services/ApiService';
 import { ElectronService } from 'ngx-electron';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -25,7 +26,9 @@ export class SignInComponent {
         private router: Router,
         private initService: InitService,
         private elementRef: ElementRef,
-        public _electronService: ElectronService) {
+        public _electronService: ElectronService,
+        private homeService: HomeService,
+        ) {
             this.OAuthURL = ApiService.serverAddress + '/Auth/Oauth';
         }
 
@@ -42,7 +45,8 @@ export class SignInComponent {
             }))
             .subscribe(t => {
                 if (t.code === 0) {
-                    this.router.navigate(['/conversations'], {replaceUrl: true});
+                    this.router.navigate(['/home'], {replaceUrl: true});
+                    this.homeService.currentPage = 0;
                     this.initService.init(this.elementRef);
                 } else if (t.code === -10) {
                     Swal.fire('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');

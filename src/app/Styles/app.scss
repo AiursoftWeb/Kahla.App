@@ -1,3 +1,5 @@
+@import "themes";
+
 .header-alert {
   display: inline-block;
   background-color: #fbe876;
@@ -15,8 +17,53 @@
     margin: 0;
     font-size: 12px;
   }
+
+  &.in-widescreen {
+    width: 35%;
+    max-width: 550px;
+  }
 }
 
 .macOS-electron-alert {
   margin-top: 35px;
+}
+
+.floating-home-wrapper {
+  @extend %floating-home;
+  float: left;
+  width: 35%;
+  max-width: 550px;
+  height: 100vh;
+  overflow-y: scroll;
+  border-right-width: 1px;
+  border-right-style: solid;
+  transition: all 0.2s ease-in-out;
+}
+
+.content-wrapper {
+  height: 100vh;
+  overflow-y: scroll;
+  width: auto;
+  position: relative;
+  box-shadow: -4px 0px 8px 0px rgba(0,0,0,0.2);
+  z-index: 11;
+}
+
+.content-empty {
+  height: 100vh;
+  overflow-y: hidden;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  * {
+    margin: 10px;
+  }
+
+  img {
+    border-radius: 8px;
+    cursor: pointer;
+  }
 }

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { HeaderService } from '../Services/HeaderService';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     selector: 'app-header',
@@ -13,11 +13,21 @@ import { TimerService } from '../Services/TimerService';
 export class HeaderComponent {
     public macOSElectron = false;
 
+    @Input() public title = 'Kahla';
+    @Input() public returnButton = true;
+    @Input() public closeDirectly = false;
+    @Input() public button = false;
+    @Input() public buttonLink = '';
+    @Input() public buttonIcon = '';
+    @Input() public shadow = false;
+    @Input() public timer = false;
+
     constructor(
-        public headerService: HeaderService,
         private router: Router,
         public timerService: TimerService,
-        public messageService: MessageService) {
+        public messageService: MessageService,
+        public homeService: HomeService,
+    ) {
             const userAgent = navigator.userAgent.toLowerCase();
             if (userAgent.includes('electron') && userAgent.includes('macintosh')) {
                 this.macOSElectron = true;
@@ -25,8 +35,8 @@ export class HeaderComponent {
     }
 
     public goBack(): void {
-        if (history.length === 1 || history.state.navigationId === 1) {
-            this.router.navigate(['/conversations']);
+        if (history.length === 1 || history.state.navigationId === 1 || (this.homeService.wideScreenEnabled && this.closeDirectly)) {
+            this.router.navigate(['/home']);
         } else {
             history.back();
         }
