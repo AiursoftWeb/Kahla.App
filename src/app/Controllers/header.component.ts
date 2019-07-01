@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { HomeService } from '../Services/HomeService';
+import { ElectronService } from 'ngx-electron';
+import { InitService } from '../Services/InitService';
 
 @Component({
     selector: 'app-header',
@@ -11,8 +13,6 @@ import { HomeService } from '../Services/HomeService';
                 '../Styles/reddot.scss']
 })
 export class HeaderComponent {
-    public macOSElectron = false;
-
     @Input() public title = 'Kahla';
     @Input() public returnButton = true;
     @Input() public closeDirectly = false;
@@ -27,12 +27,9 @@ export class HeaderComponent {
         public timerService: TimerService,
         public messageService: MessageService,
         public homeService: HomeService,
-    ) {
-            const userAgent = navigator.userAgent.toLowerCase();
-            if (userAgent.includes('electron') && userAgent.includes('macintosh')) {
-                this.macOSElectron = true;
-            }
-    }
+        public _electronService: ElectronService,
+        public initService: InitService
+    ) {}
 
     public goBack(): void {
         if (history.length === 1 || history.state.navigationId === 1 || (this.homeService.wideScreenEnabled && this.closeDirectly)) {
