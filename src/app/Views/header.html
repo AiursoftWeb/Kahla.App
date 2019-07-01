@@ -1,4 +1,4 @@
-<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': macOSElectron }">
+<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()"
          [ngClass]="{ 'macOSReturnButton': macOSElectron }">
         <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fa fa-times"></i>
@@ -19,4 +19,12 @@
     </div>
 </div>
 
-<div class="header-holder" [ngClass]="{ 'macOSHeader': macOSElectron }"></div>
+<div class="header-holder" [ngClass]="{ 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }"></div>
+
+<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
+    *ngIf="(!this.closeDirectly || !homeService.wideScreenEnabled) && initService.connecting">
+    <div class="words" i18n="@@Disconnectedfromserver">
+        <i class="fa fa-refresh fa-spin"></i>
+        Connecting...
+    </div>
+</div>
