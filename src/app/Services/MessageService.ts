@@ -267,7 +267,7 @@ export class MessageService {
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
-                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.offsetHeight - this.oldOffsetHeight);
+                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldOffsetHeight);
                     }, 0);
                 }
                 setTimeout(() => {
@@ -291,7 +291,7 @@ export class MessageService {
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldOffsetHeight = this.homeService.contentWrapper.offsetHeight;
+            this.oldOffsetHeight = this.homeService.contentWrapper.scrollHeight;
             this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
