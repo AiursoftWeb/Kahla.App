@@ -63,5 +63,3 @@
 <div *ngIf="conversation && !messageService.checkOwner()">
     You don't have the permission to manage the group.
 </div>
-<progress *ngIf="uploadService.uploading" max="100" value={{uploadService.progress}}
-          [ngClass]="{ 'macOS-electron': _electronService.isElectronApp && _electronService.isMacOS }"></progress>
