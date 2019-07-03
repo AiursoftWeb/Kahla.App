@@ -7,7 +7,6 @@
   max-width: 550px;
   height: 100vh;
   overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
   border-right-width: 1px;
   border-right-style: solid;
   transition: all 0.2s ease-in-out;
@@ -18,7 +17,6 @@
   overflow-y: scroll;
   width: auto;
   position: relative;
-  -webkit-overflow-scrolling: touch;
 
   box-shadow: -4px 47px 8px 0 rgba(0,0,0,.2);
   z-index: 11;
