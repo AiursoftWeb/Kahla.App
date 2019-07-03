@@ -22,6 +22,11 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+    // bypass upload request
+    if (event.request.url.includes('Upload')) {
+        return;
+    }
+    
     event.respondWith(
         caches.match(event.request).then(function(response) {
             return response || fetch(event.request);
