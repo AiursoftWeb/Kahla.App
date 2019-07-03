@@ -15,8 +15,7 @@ import { ElectronService } from 'ngx-electron';
   styleUrls: [
     '../Styles/userDetail.scss',
     '../Styles/button.scss',
-    '../Styles/toggleButton.scss',
-    '../Styles/progress.scss'
+      '../Styles/toggleButton.scss'
   ]
 })
 
