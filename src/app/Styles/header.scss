@@ -22,7 +22,7 @@
   padding-right: 1px;
 
   &.shadow {
-    box-shadow: 0 0 74px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 20px 29px -13px rgba(0,0,0,0.41)
   }
 }
 
@@ -70,4 +70,23 @@
 .dot {
   top: (-4px) !important;
   right: (-4px) !important;
+}
+
+.header-alert {
+  background-color: #fbe876;
+  width: 100%;
+  color: red;
+  z-index: 1000;
+  position: fixed;
+
+  .words {
+    text-align: center;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  &.in-widescreen {
+    width: 35%;
+    max-width: 550px;
+  }
 }

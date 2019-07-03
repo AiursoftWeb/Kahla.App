@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AES } from 'crypto-js';
 import { FilesApiService } from './FilesApiService';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
@@ -14,9 +14,8 @@ import { HomeService } from './HomeService';
     providedIn: 'root'
 })
 export class UploadService {
-    public progress = 0;
-    public uploading = false;
     public talkingDestroyed = false;
+
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService,
@@ -35,16 +34,27 @@ export class UploadService {
             return;
         }
         if (fileType === 0 || fileType === 1) {
-            this.uploading = true;
-            this.filesApiService.UploadMedia(formData).subscribe(response => {
-                this.encryptThenSend(response, fileType, conversationID, aesKey, file);
+            const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'Image' : 'Video'}...`);
+            const mission = this.filesApiService.UploadMedia(formData).subscribe(response => {
+                if (Number(response)) {
+                    this.getAlertProgressBar().value = Number(response);
+                } else if (response) {
+                    // Done!
+                    Swal.close();
+                    this.encryptThenSend(response, fileType, conversationID, aesKey, file);
+                }
             }, () => {
+                Swal.close();
                 Swal.fire('Error', 'Upload failed', 'error');
-                this.finishUpload();
+            });
+            alert.then(result => {
+                if (result.dismiss) {
+                    mission.unsubscribe();
+                }
             });
         } else if (fileType === 3) {
             const audioSrc = URL.createObjectURL(file);
-            const audioHTMLString = `<audio controls src="${ audioSrc }"></audio>`;
+            const audioHTMLString = `<audio controls src="${audioSrc}"></audio>`;
             Swal.fire({
                 title: 'Are you sure to send this message?',
                 html: audioHTMLString,
@@ -52,31 +62,54 @@ export class UploadService {
                 showCancelButton: true
             }).then(result => {
                 if (result.value) {
-                    this.uploading = true;
                     this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                         this.encryptThenSend(response, fileType, conversationID, aesKey, file);
                     }, () => {
+                        Swal.close();
                         Swal.fire('Error', 'Upload failed', 'error');
-                        this.finishUpload();
                     });
                 }
                 URL.revokeObjectURL(audioSrc);
             });
         } else {
-            this.uploading = true;
-            this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
+            const alert = this.fireUploadingAlert('Uploading your file...');
+            const mission = this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
+                if (Number(response)) {
+                    this.getAlertProgressBar().value = Number(response);
+                } else if (response) {
+                    Swal.close();
                     this.encryptThenSend(response, fileType, conversationID, aesKey, file);
+                }
             }, () => {
+                Swal.close();
                 Swal.fire('Error', 'Upload failed', 'error');
-                this.finishUpload();
+            });
+            alert.then(result => {
+                if (result.dismiss) {
+                    mission.unsubscribe();
+                }
             });
         }
     }
 
+    private fireUploadingAlert(title: string): Promise<SweetAlertResult> {
+        const result = Swal.fire({
+            title: title,
+            html: `<progress id="uploadProgress" max="100"></progress>`,
+            showCancelButton: true,
+            showConfirmButton: false,
+        });
+        Swal.showLoading();
+        Swal.enableButtons();
+        return result;
+    }
+
+    private getAlertProgressBar(): HTMLProgressElement {
+        return Swal.getContent().querySelector('#uploadProgress');
+    }
+
     private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string, file: File): void {
-        if (Number(response)) {
-            this.progress = <number>response;
-        } else if (response != null) {
+        if (response && !Number(response)) {
             if ((<UploadFile>response).code === 0) {
                 let encedMessages;
                 switch (fileType) {
@@ -120,7 +153,6 @@ export class UploadService {
     private sendMessage(message: string, conversationID: number): void {
         this.conversationApiService.SendMessage(conversationID, message, [])
             .subscribe(() => {
-                this.finishUpload();
                 this.scrollBottom(true);
             }, () => {
                 const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
@@ -132,7 +164,6 @@ export class UploadService {
                     unsentMessages.set(conversationID, [message]);
                 }
                 localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-                this.finishUpload();
             });
     }
 
@@ -141,11 +172,6 @@ export class UploadService {
             return false;
         }
         return file.size >= 0.125 && file.size <= 1000000000;
-    }
-
-    private finishUpload() {
-        this.uploading = false;
-        this.progress = 0;
     }
 
     public scrollBottom(smooth: boolean): void {
@@ -165,17 +191,19 @@ export class UploadService {
         if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
-            this.uploading = true;
-            const uploadButton = document.querySelector('#upload');
-            uploadButton.textContent = 'Uploading';
-            this.filesApiService.UploadIcon(formData).subscribe(response => {
+            const alert = this.fireUploadingAlert('Uploading your avatar...');
+            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
                 if (Number(response)) {
-                    this.progress = <number>response;
+                    this.getAlertProgressBar().value = Number(response);
                 } else if (response != null && (<UploadFile>response).code === 0) {
+                    Swal.close();
                     user.headImgFileKey = (<UploadFile>response).fileKey;
                     user.avatarURL = (<UploadFile>response).downloadPath;
-                    this.finishUpload();
-                    uploadButton.textContent = 'Upload new avatar';
+                }
+            });
+            alert.then(result => {
+                if (result.dismiss) {
+                    mission.unsubscribe();
                 }
             });
         } else {
@@ -187,17 +215,19 @@ export class UploadService {
         if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
-            this.uploading = true;
-            const uploadButton = document.querySelector('#upload');
-            uploadButton.textContent = 'Uploading';
-            this.filesApiService.UploadIcon(formData).subscribe(response => {
+            const alert = this.fireUploadingAlert('Uploading group avatar...');
+            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
                 if (Number(response)) {
-                    this.progress = <number>response;
+                    this.getAlertProgressBar().value = Number(response);
                 } else if (response != null && (<UploadFile>response).code === 0) {
+                    Swal.close();
                     group.groupImageKey = (<UploadFile>response).fileKey;
                     group.avatarURL = Values.fileAddress + group.groupImageKey;
-                    this.finishUpload();
-                    uploadButton.textContent = 'Upload new avatar';
+                }
+            });
+            alert.then(result => {
+                if (result.dismiss) {
+                    mission.unsubscribe();
                 }
             });
         } else {

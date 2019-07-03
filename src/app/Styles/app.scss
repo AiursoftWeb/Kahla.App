@@ -1,33 +1,5 @@
 @import "themes";
 
-.header-alert {
-  display: inline-block;
-  background-color: #fbe876;
-  width: 100%;
-  margin-top: 40px;
-  overflow: auto;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  color: red;
-  z-index: 1000;
-  position: fixed;
-
-  .words {
-    text-align: center;
-    margin: 0;
-    font-size: 12px;
-  }
-
-  &.in-widescreen {
-    width: 35%;
-    max-width: 550px;
-  }
-}
-
-.macOS-electron-alert {
-  margin-top: 35px;
-}
-
 .floating-home-wrapper {
   @extend %floating-home;
   float: left;
@@ -45,7 +17,9 @@
   overflow-y: scroll;
   width: auto;
   position: relative;
-  box-shadow: -4px 0px 8px 0px rgba(0,0,0,0.2);
+
+  box-shadow: -4px 47px 8px 0 rgba(0,0,0,.2);
+  z-index: 11;
 }
 
 .content-empty {

@@ -43,7 +43,6 @@ export class InitService {
 
     public init(elementRef: ElementRef): void {
         this.online = navigator.onLine;
-        this.connecting = true;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
         if (navigator.userAgent.match(/MSIE|Trident/)) {

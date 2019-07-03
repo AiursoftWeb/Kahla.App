@@ -1,11 +1,4 @@
-﻿<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled" *ngIf="initService.connecting"
-     [ngClass]="{ 'macOS-electron-alert': _electronService.isElectronApp && _electronService.isMacOS }">
-    <div class="words" i18n="@@Disconnectedfromserver">
-        <i class="fa fa-refresh fa-spin"></i>
-        Connecting...
-    </div>
-</div>
-<div id="homeWrapper" class="floating-home-wrapper"
+﻿<div id="homeWrapper" class="floating-home-wrapper"
      [class.in-widescreen]="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
      *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false) && !route.isActive('/register',false)">
     <app-home></app-home>
@@ -20,4 +13,3 @@
     <img src="{{ messageService.me.avatarURL}}?w=100&h=100" (click)="homeService.currentPage = 2">
     <h3>Start talking now!</h3>
 </div>
-

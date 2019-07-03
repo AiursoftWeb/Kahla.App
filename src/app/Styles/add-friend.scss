@@ -5,7 +5,7 @@
   @extend %search-part;
   @extend %full-fixed-width;
   position: fixed;
-  z-index: 1;
+  z-index: 50;
 
   .search-input {
     padding: 7px;
