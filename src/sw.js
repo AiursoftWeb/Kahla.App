@@ -23,7 +23,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
     // bypass upload request
-    if (event.request.url.includes('Upload')) {
+    if (event.request.method != 'GET') {
         return;
     }
     
