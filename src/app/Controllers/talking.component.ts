@@ -64,14 +64,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    @HostListener('window:scroll', [])
-    onScroll() {
-        this.messageService.updateBelowWindowPercent();
-        if (this.messageService.belowWindowPercent <= 0) {
-            this.messageService.newMessages = false;
-        }
-    }
-
     @HostListener('window:resize', [])
     onResize() {
         this.messageService.updateMaxImageWidth();
@@ -128,6 +120,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.homeService.contentWrapper.addEventListener('scroll', () => {
+            this.messageService.updateBelowWindowPercent();
+            if (this.messageService.belowWindowPercent <= 0) {
+                this.messageService.newMessages = false;
+            }
+        });
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -404,7 +402,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.destroyCurrent();
-        window.onscroll = null;
+        this.homeService.contentWrapper.onscroll = null;
         window.onresize = null;
     }
 

@@ -39,7 +39,7 @@ export class MessageService {
     public loadingMore = false;
     public belowWindowPercent = 0;
     public newMessages = false;
-    private oldOffsetHeight: number;
+    private oldScrollHeight: number;
     public maxImageWidth = 0;
     public me: KahlaUser;
     private userColors = new Map<string, string>();
@@ -267,7 +267,7 @@ export class MessageService {
                 } else if (!getDown) {
                     this.loadingMore = false;
                     setTimeout(() => {
-                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldOffsetHeight);
+                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldScrollHeight);
                     }, 0);
                 }
                 setTimeout(() => {
@@ -284,14 +284,14 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (this.homeService.contentWrapper.offsetHeight - this.homeService.contentWrapper.scrollTop
-            - window.innerHeight) / window.innerHeight;
+        this.belowWindowPercent = (this.homeService.contentWrapper.scrollHeight - this.homeService.contentWrapper.scrollTop
+            - this.homeService.contentWrapper.clientHeight) / this.homeService.contentWrapper.clientHeight;
     }
 
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldOffsetHeight = this.homeService.contentWrapper.scrollHeight;
+            this.oldScrollHeight = this.homeService.contentWrapper.scrollHeight;
             this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
@@ -312,7 +312,7 @@ export class MessageService {
         this.loadingMore = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
-        this.oldOffsetHeight = 0;
+        this.oldScrollHeight = 0;
         this.maxImageWidth = 0;
         this.userColors.clear();
         this.groupConversation = false;
