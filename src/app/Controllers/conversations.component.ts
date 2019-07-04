@@ -53,7 +53,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         conversation.unReadAmount = 0;
         conversation.someoneAtMe = false;
         this.cacheService.updateTotalUnread();
-        this.messageService.resetVariables();
+        if (this.router.isActive(`/talking/${id}`, false)) {
+            return;
+        }
         if (unread > 0 && unread <= 50) {
             this.router.navigate(['/talking', id, unread]);
         } else {
