@@ -16,8 +16,7 @@ import { AiurCollection } from '../Models/AiurCollection';
     templateUrl: '../Views/manageGroup.html',
     styleUrls: ['../Styles/menu.scss',
         '../Styles/userDetail.scss',
-        '../Styles/button.scss',
-        '../Styles/progress.scss'
+        '../Styles/button.scss'
     ]
 })
 export class ManageGroupComponent implements OnInit {

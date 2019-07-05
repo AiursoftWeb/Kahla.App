@@ -24,7 +24,6 @@ declare var MediaRecorder: any;
         '../Styles/button.scss',
         '../Styles/reddot.scss',
         '../Styles/menu.scss',
-        '../Styles/progress.scss',
         '../Styles/badge.scss']
 })
 export class TalkingComponent implements OnInit, OnDestroy {
@@ -63,14 +62,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public _electronService: ElectronService,
         private homeService: HomeService,
     ) {
-    }
-
-    @HostListener('window:scroll', [])
-    onScroll() {
-        this.messageService.updateBelowWindowPercent();
-        if (this.messageService.belowWindowPercent <= 0) {
-            this.messageService.newMessages = false;
-        }
     }
 
     @HostListener('window:resize', [])
@@ -129,11 +120,20 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.uploadService.talkingDestroyed = false;
-        this.messageService.updateMaxImageWidth();
+        this.homeService.contentWrapper.addEventListener('scroll', () => {
+            this.messageService.updateBelowWindowPercent();
+            if (this.messageService.belowWindowPercent <= 0) {
+                this.messageService.newMessages = false;
+            }
+        });
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
+                    if (!this.uploadService.talkingDestroyed) {
+                        this.destroyCurrent();
+                    }
+                    this.uploadService.talkingDestroyed = false;
+                    this.messageService.updateMaxImageWidth();
                     this.conversationID = params.id;
                     this.unread = params.unread;
                     if (!this.unread || this.unread > 50 || this.unread < 15) {
@@ -401,9 +401,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.uploadService.talkingDestroyed = true;
-        window.onscroll = null;
+        this.destroyCurrent();
+        this.homeService.contentWrapper.onscroll = null;
         window.onresize = null;
+    }
+
+    public destroyCurrent() {
+        this.uploadService.talkingDestroyed = true;
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
