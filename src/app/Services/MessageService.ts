@@ -346,9 +346,9 @@ export class MessageService {
         } else {
             const matchedUsers = [];
             this.conversation.users.forEach((value: UserGroupRelation) => {
-                if (!getMessage && value.user.nickName.toLowerCase().replace(' ', '').includes(nickName.toLowerCase())) {
+                if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
                     matchedUsers.push(value.user);
-                } else if (getMessage && value.user.nickName.toLowerCase().replace(' ', '') === nickName.toLowerCase()) {
+                } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
                     matchedUsers.push(value.user);
                 }
             });

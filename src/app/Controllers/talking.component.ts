@@ -383,9 +383,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const typingWord = typingWords[typingWords.length - 1];
         const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
         this.content =
-            `${before}@${nickname.replace(' ', '')} ${this.content.slice(input.selectionStart)}`;
+            `${before}@${nickname.replace(/ /g, '')} ${this.content.slice(input.selectionStart)}`;
         this.showUserList = false;
-        const pointerPos = before.length + nickname.replace(' ', '').length + 2;
+        const pointerPos = before.length + nickname.replace(/ /g, '').length + 2;
         setTimeout(() => {
             input.setSelectionRange(pointerPos, pointerPos);
             input.focus();
