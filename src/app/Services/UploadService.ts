@@ -37,7 +37,7 @@ export class UploadService {
             const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'Image' : 'Video'}...`);
             const mission = this.filesApiService.UploadMedia(formData).subscribe(response => {
                 if (Number(response)) {
-                    this.getAlertProgressBar().value = Number(response);
+                    this.updateAlertProgress(Number(response));
                 } else if (response) {
                     // Done!
                     Swal.close();
@@ -75,7 +75,7 @@ export class UploadService {
             const alert = this.fireUploadingAlert('Uploading your file...');
             const mission = this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                 if (Number(response)) {
-                    this.getAlertProgressBar().value = Number(response);
+                    this.updateAlertProgress(Number(response));
                 } else if (response) {
                     Swal.close();
                     this.encryptThenSend(response, fileType, conversationID, aesKey, file);
@@ -95,7 +95,7 @@ export class UploadService {
     private fireUploadingAlert(title: string): Promise<SweetAlertResult> {
         const result = Swal.fire({
             title: title,
-            html: `<progress id="uploadProgress" max="100"></progress>`,
+            html: '<div id="progressText">0%</div><progress id="uploadProgress" max="100"></progress>',
             showCancelButton: true,
             showConfirmButton: false,
         });
@@ -104,8 +104,9 @@ export class UploadService {
         return result;
     }
 
-    private getAlertProgressBar(): HTMLProgressElement {
-        return Swal.getContent().querySelector('#uploadProgress');
+    private updateAlertProgress(progress: number): void {
+        (<HTMLProgressElement>Swal.getContent().querySelector('#uploadProgress')).value = progress;
+        (<HTMLDivElement>Swal.getContent().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
     private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string, file: File): void {
@@ -194,7 +195,7 @@ export class UploadService {
             const alert = this.fireUploadingAlert('Uploading your avatar...');
             const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
                 if (Number(response)) {
-                    this.getAlertProgressBar().value = Number(response);
+                    this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
                     user.headImgFileKey = (<UploadFile>response).fileKey;
@@ -218,7 +219,7 @@ export class UploadService {
             const alert = this.fireUploadingAlert('Uploading group avatar...');
             const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
                 if (Number(response)) {
-                    this.getAlertProgressBar().value = Number(response);
+                    this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
                     group.groupImageKey = (<UploadFile>response).fileKey;
