@@ -1,6 +1,6 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js');
 
-const CACHE = 'v2';
+const CACHE = 'v3';
 
 self.addEventListener('install', function(event) {
     event.waitUntil(
