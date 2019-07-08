@@ -15,7 +15,8 @@ self.addEventListener('install', function(event) {
                 '/vendor.js',
                 '/favicon.ico',
                 '/fontawesome-webfont.woff2',
-                '/assets/144x144.png'
+                '/assets/144x144.png',
+                '/assets/notify.mp3'
             ]);
         })
     );
@@ -111,7 +112,7 @@ self.addEventListener('push', function(event) {
                             talkingPage = true;
                         }
                     }
-                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused && talkingPage) {
+                    if (!isNaN(URLId) && URLId == data.conversationId && talkingPage) {
                         showNotification = false;
                     }
                 });
