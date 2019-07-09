@@ -1,6 +1,6 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js');
 
-const CACHE = 'v3';
+const CACHE = 'v2';
 
 self.addEventListener('install', function(event) {
     event.waitUntil(
@@ -15,8 +15,7 @@ self.addEventListener('install', function(event) {
                 '/vendor.js',
                 '/favicon.ico',
                 '/fontawesome-webfont.woff2',
-                '/assets/144x144.png',
-                '/assets/notify.mp3'
+                '/assets/144x144.png'
             ]);
         })
     );
@@ -112,7 +111,7 @@ self.addEventListener('push', function(event) {
                             talkingPage = true;
                         }
                     }
-                    if (!isNaN(URLId) && URLId == data.conversationId && talkingPage) {
+                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused && talkingPage) {
                         showNotification = false;
                     }
                 });
