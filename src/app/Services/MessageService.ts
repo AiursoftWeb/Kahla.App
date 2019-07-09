@@ -85,9 +85,6 @@ export class MessageService {
                 // }
                 if (this.conversation && this.conversation.id === evt.conversationId) {
                     this.getMessages(true, this.conversation.id, -1, 15);
-                    if (evt.sender.id !== this.me.id) {
-                        new Audio('/assets/notify.mp3').play();
-                    }
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
