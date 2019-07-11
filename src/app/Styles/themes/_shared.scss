@@ -7,6 +7,10 @@
     color: map-get($colors, minor-textcolor);
   }
 
+  %text-theme {
+    color: map-get($colors, primary-color-depth2);
+  }
+
   %header {
     background: map-get($colors, header-bg);
   }
