@@ -56,7 +56,7 @@
     "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "npm run prebuild && ng serve --open",
-    "prebuild": "ts-node version.ts",
+    "prebuild": "ts-node version.ts && ./copy-assetlinks.sh",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
     "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
