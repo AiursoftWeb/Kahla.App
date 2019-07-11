@@ -3,8 +3,7 @@
 FILEDIR="./www/.well-known/"
 FILENAME="assetlinks.json"
 
-if [ ! -d $FILEDIR ]; then
-    mkdir $FILEDIR
+if [ ! -f $FILEDIR$FILENAME ]; then
+    mkdir -p $FILEDIR
+    cp $FILENAME $FILEDIR
 fi
-
-cp $FILENAME $FILEDIR
