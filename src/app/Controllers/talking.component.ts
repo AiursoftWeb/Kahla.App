@@ -40,7 +40,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private mediaRecorder;
     private forceStopTimeout;
     private oldContent: string;
-    private unread = 15;
+    private unread = 0;
+    private load = 15;
     private chatInputHeight: number;
     public Math = Math;
     public Date = Date;
@@ -135,10 +136,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.uploadService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
                     this.conversationID = params.id;
-                    this.unread = params.unread;
-                    if (!this.unread || this.unread > 50 || this.unread < 15) {
-                        this.unread = 15;
-                    }
+                    this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
+                    this.load = this.unread < 15 ? 15 : this.unread;
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
                     this.autoSaveInterval = setInterval(() => {
@@ -176,7 +175,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.messageService.conversation = conversation;
                     this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
                     document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(true, this.conversationID, -1, this.unread);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                     this.header.title = conversation.displayName;
                     this.header.button = true;
                     if (conversation.anotherUserId) {

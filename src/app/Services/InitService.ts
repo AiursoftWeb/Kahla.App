@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
@@ -98,7 +98,7 @@ export class InitService {
             this.ws.onclose = () => this.errorOrClosedFunc();
             this.resend();
             if (this.messageService.conversation && reconnect) {
-                this.messageService.getMessages(true, this.messageService.conversation.id, -1, 15);
+                this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
             }
         }, () => {
                 this.errorOrClosedFunc();

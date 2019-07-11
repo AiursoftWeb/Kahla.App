@@ -84,7 +84,7 @@ export class MessageService {
                 }
                 // }
                 if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(true, this.conversation.id, -1, 15);
+                    this.getMessages(0, this.conversation.id, -1, 15);
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -182,7 +182,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(getDown: boolean, id: number, skipTill: number, take: number): void {
+    public getMessages(unread: number, id: number, skipTill: number, take: number) {
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
                 map(t => t.items)
@@ -260,14 +260,27 @@ export class MessageService {
                 } else {
                     this.localMessages.unshift(...messages);
                 }
-                if (getDown && this.belowWindowPercent <= 0.2) {
+                if (unread === 0 && this.belowWindowPercent <= 0.2) {
                     setTimeout(() => {
                         this.uploadService.scrollBottom(true);
                     }, 0);
-                } else if (!getDown) {
+                } else if (unread === -1) { // load more
                     this.loadingMore = false;
                     setTimeout(() => {
                         this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldScrollHeight);
+                    }, 0);
+                } else {
+                    if (unread > 1) {
+                        // add a last read bar
+                        messages[messages.length - unread].lastRead = true;
+                    }
+                    setTimeout(() => {
+                        const lis = document.querySelector('#messageList').querySelectorAll('li');
+                        this.homeService.contentWrapper.scrollTo({
+                            top: lis[lis.length - unread].offsetTop,
+                            left: 0,
+                            behavior: 'smooth'
+                        });
                     }, 0);
                 }
                 setTimeout(() => {
@@ -292,7 +305,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldScrollHeight = this.homeService.contentWrapper.scrollHeight;
-            this.getMessages(false, this.conversation.id, this.localMessages[0].id, 15);
+            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
 

@@ -12,4 +12,5 @@ export class Message {
     public local = false;
     public avatarURL: string;
     public timeStamp: number;
+    public lastRead = false;
 }
