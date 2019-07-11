@@ -260,10 +260,12 @@ export class MessageService {
                 } else {
                     this.localMessages.unshift(...messages);
                 }
-                if (unread === 0 && this.belowWindowPercent <= 0.2) {
-                    setTimeout(() => {
-                        this.uploadService.scrollBottom(true);
-                    }, 0);
+                if (unread === 0) {
+                    if (this.belowWindowPercent <= 0.2) {
+                        setTimeout(() => {
+                            this.uploadService.scrollBottom(true);
+                        }, 0);
+                    }
                 } else if (unread === -1) { // load more
                     this.loadingMore = false;
                     setTimeout(() => {
