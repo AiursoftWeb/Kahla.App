@@ -71,5 +71,16 @@
 <div class="buttons">
     <button class="button primary" *ngIf="info && messageService.me && !areFriends && messageService.me.emailConfirmed && !sentRequest" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
     <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
-    <button class="button primary" *ngIf="!areFriends && sentRequest" disabled>Request was sent</button>
+    <button class="button primary"
+            *ngIf="!areFriends && sentRequest && !(pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id)"
+            disabled>Request was sent
+    </button>
+    <button class="button success"
+            *ngIf="sentRequest && pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id"
+            (click)="accept(pendingRequest.id)">Accept
+    </button>
+    <button class="button warning"
+            *ngIf="sentRequest && pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id"
+            (click)="decline(pendingRequest.id)">Decline
+    </button>
 </div>
