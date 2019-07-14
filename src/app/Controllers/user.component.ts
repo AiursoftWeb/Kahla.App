@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
+import { Request } from '../Models/Request';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -22,6 +23,8 @@ export class UserComponent implements OnInit {
     public areFriends: boolean;
     public loadingImgURL = Values.loadingImgURL;
     public sentRequest: boolean;
+    public pendingRequest: Request;
+
     constructor(
         private route: ActivatedRoute,
         private friendsApiService: FriendsApiService,
@@ -40,6 +43,7 @@ export class UserComponent implements OnInit {
                 this.areFriends = response.areFriends;
                 this.conversationId = response.conversationId;
                 this.sentRequest = response.sentRequest;
+                this.pendingRequest = response.pendingRequest;
                 this.info.avatarURL = Values.fileAddress + this.info.headImgFileKey;
             });
     }
@@ -102,5 +106,27 @@ export class UserComponent implements OnInit {
                 }
             }
           });
+    }
+
+    public accept(id: number): void {
+        this.friendsApiService.CompleteRequest(id, true)
+            .subscribe(r => {
+                Swal.fire('Success', r.message, 'success');
+                this.cacheService.updateRequests();
+                this.cacheService.updateFriends();
+                this.areFriends = true;
+                this.pendingRequest = null;
+                this.sentRequest = false;
+            });
+    }
+
+    public decline(id: number): void {
+        this.friendsApiService.CompleteRequest(id, false)
+            .subscribe(r => {
+                Swal.fire('Success', r.message, 'success');
+                this.cacheService.updateRequests();
+                this.sentRequest = false;
+                this.pendingRequest = null;
+            });
     }
 }
