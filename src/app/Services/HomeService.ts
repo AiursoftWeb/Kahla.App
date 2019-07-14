@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 
 @Injectable({
     providedIn: 'root'
@@ -17,5 +18,15 @@ export class HomeService {
     // Nullable
     public get floatingHomeWrapper(): HTMLDivElement {
         return document.querySelector('#homeWrapper');
+    }
+
+    public updateIosDisableScroll(): void {
+        clearAllBodyScrollLocks();
+        if (this.contentWrapper) {
+            disableBodyScroll(this.contentWrapper);
+        }
+        if (this.floatingHomeWrapper) {
+            disableBodyScroll(this.floatingHomeWrapper);
+        }
     }
 }
