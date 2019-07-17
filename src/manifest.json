@@ -2,6 +2,7 @@
     "short_name": "Kahla",
     "name": "Kahla",
     "start_url": "/",
+    "description": "As a cross-platform business messaging app, Kahla can encrypt communications at any location, on any device. And it is completely open source and free.",
     "icons": [
         {
             "src": "/assets/144x144.png",
