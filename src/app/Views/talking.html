@@ -1,8 +1,10 @@
 ﻿<app-header title="Loading..." returnButton="true" shadow="true" #header closeDirectly="true"></app-header>
-<ul class="message-list" (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)" (click)="hideUserList()">
+<ul id="messageList" class="message-list" (paste)="paste($event)" (drop)="drop($event)"
+    (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button> 
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
+        <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
                 <img src="{{getHeadImgUrl(message.sender.headImgFileKey)}}?w=80&h=80">

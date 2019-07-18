@@ -71,6 +71,14 @@
     margin-right: 12px;
   }
 
+  .last-read-bar {
+    @extend %text-theme;
+    clear: both;
+    font-weight: 800;
+    font-size: 14px;
+    user-select: none;
+  }
+
   .chat-content {
     border-radius: 8px;
     color: white;
