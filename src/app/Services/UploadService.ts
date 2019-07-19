@@ -98,6 +98,7 @@ export class UploadService {
             html: '<div id="progressText">0%</div><progress id="uploadProgress" max="100"></progress>',
             showCancelButton: true,
             showConfirmButton: false,
+            allowOutsideClick: false
         });
         Swal.showLoading();
         Swal.enableButtons();
