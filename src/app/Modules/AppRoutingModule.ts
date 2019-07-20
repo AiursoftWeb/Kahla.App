@@ -17,7 +17,7 @@ import { LocalSearchComponent } from '../Controllers/localSearch.component';
 import { AdvancedSettingComponent } from '../Controllers/advanced-setting.component';
 import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 import { HomeComponent } from '../Controllers/home.component';
-import { ShareComponent } from '../Controllers/share.component'
+import { ShareComponent } from '../Controllers/share.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},

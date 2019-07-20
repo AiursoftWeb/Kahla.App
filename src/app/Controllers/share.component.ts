@@ -42,18 +42,18 @@ export class ShareComponent implements OnInit {
         if (!group) {
             this.friendsApiService.UserDetail((<KahlaUser>user).id)
                 .subscribe(result => {
-                    if (result.code == 0) {
+                    if (result.code === 0) {
                         conversationID = result.conversationId;
                     } else {
                         return;
                     }
-                })
+                });
         }
         const name = group ? (<GroupsResult>user).name : (<KahlaUser>user).nickName;
         const parsedUrl = new URL(location.href);
         const text = parsedUrl.searchParams.get('text');
         const url = parsedUrl.searchParams.get('url');
-        const message = `${text ? text : ""} ${url ? url : ""}`;
+        const message = `${text ? text : ''} ${url ? url : ''}`;
         Swal.fire({
             title: 'Share message to',
             text: `Are you sure to send this message to ${name}?`,
@@ -62,8 +62,8 @@ export class ShareComponent implements OnInit {
             showCancelButton: true,
         }).then(input => {
             if (input.value) {
-                if (this.messageService.conversation && 
-                    this.messageService.conversation.id == conversationID) {
+                if (this.messageService.conversation &&
+                    this.messageService.conversation.id === conversationID) {
                     this.sendMessage(input.value);
                 } else {
                     this.conversationApiService.ConversationDetail(conversationID)
@@ -81,10 +81,10 @@ export class ShareComponent implements OnInit {
             conversation.aesKey).toString();
         const messageIDArry = this.messageService.getAtIDs(content);
         content = messageIDArry[0];
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, 
+        this.conversationApiService.SendMessage(this.messageService.conversation.id,
             encryptedMessage, messageIDArry.slice(1))
             .subscribe(result => {
-                if (result.code == 0) {
+                if (result.code === 0) {
                     this.router.navigate(['/home'], {replaceUrl: true});
                     Swal.fire(
                         'Send success',
