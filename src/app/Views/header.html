@@ -22,7 +22,7 @@
 <div class="header-holder" [ngClass]="{ 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }"></div>
 
 <div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
-    *ngIf="((!this.closeDirectly && !this.returnButton) || !homeService.wideScreenEnabled)">
+    *ngIf="(((!this.closeDirectly && !this.returnButton) || !homeService.wideScreenEnabled) && initService.connecting)">
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fa fa-refresh fa-spin"></i>
         Connecting...
