@@ -1,6 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContactInfo } from '../Models/ContactInfo';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
@@ -30,14 +29,6 @@ export class FriendsComponent implements OnInit {
     public ngOnInit(): void {
         if (this.messageService.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
-        }
-    }
-
-    public detail(info: ContactInfo): void {
-        if (info.userId == null) {
-            this.router.navigate(['/group', info.conversationId]);
-        } else {
-            this.router.navigate(['/user', info.userId]);
         }
     }
 
