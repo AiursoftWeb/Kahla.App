@@ -14,7 +14,7 @@
             {{timerService.destructTime}}
         </div>
     </div>
-    <div *ngIf="button" class="user-button headerButton" routerLink="{{buttonLink}}">
+    <div *ngIf="button" class="user-button headerButton" (click)="linkClicked()">
         <i class="fa fa-{{buttonIcon}}"></i>
     </div>
 </div>
