@@ -1,6 +1,6 @@
 <div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()"
-         [ngClass]="{ 'macOSReturnButton': macOSElectron }">
+         [ngClass]="{ 'macOSReturnButton': _electronService.isElectronApp && _electronService.isMacOS }">
         <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fa fa-times"></i>
         <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fa fa-caret-left"></i>
     </div>
