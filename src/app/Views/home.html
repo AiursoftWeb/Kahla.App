@@ -1,4 +1,5 @@
 <app-conversations *ngIf="homeService.currentPage === 0"></app-conversations>
 <app-friends *ngIf="homeService.currentPage === 1"></app-friends>
 <app-settings *ngIf="homeService.currentPage === 2"></app-settings>
-<app-nav></app-nav>
+<app-localsearch *ngIf="homeService.currentPage === 3"></app-localsearch>
+<app-nav *ngIf="homeService.currentPage <= 2"></app-nav>

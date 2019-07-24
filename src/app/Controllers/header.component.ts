@@ -10,14 +10,15 @@ import { InitService } from '../Services/InitService';
     selector: 'app-header',
     templateUrl: '../Views/header.html',
     styleUrls: ['../Styles/header.scss',
-                '../Styles/reddot.scss']
+        '../Styles/reddot.scss']
 })
 export class HeaderComponent {
     @Input() public title = 'Kahla';
     @Input() public returnButton = true;
+    @Input() public floatingHome = -1;
     @Input() public closeDirectly = false;
     @Input() public button = false;
-    @Input() public buttonLink = '';
+    @Input() public buttonLink: string | number = '';
     @Input() public buttonIcon = '';
     @Input() public shadow = false;
     @Input() public timer = false;
@@ -32,10 +33,22 @@ export class HeaderComponent {
     ) {}
 
     public goBack(): void {
+        if (this.floatingHome !== -1) {
+            this.homeService.currentPage = this.floatingHome;
+            return;
+        }
         if (history.length === 1 || history.state.navigationId === 1 || (this.homeService.wideScreenEnabled && this.closeDirectly)) {
             this.router.navigate(['/home']);
         } else {
             history.back();
+        }
+    }
+
+    public linkClicked() {
+        if (Number(this.buttonLink)) {
+            this.homeService.currentPage = Number(this.buttonLink);
+        } else {
+            this.router.navigateByUrl(<string>this.buttonLink);
         }
     }
 }
