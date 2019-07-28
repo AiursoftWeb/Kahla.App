@@ -1,5 +1,5 @@
 ﻿import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
 import { map, switchMap } from 'rxjs/operators';
@@ -15,6 +15,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
 import { HomeService } from '../Services/HomeService';
 import { HeaderComponent } from './header.component';
+import { ShareService } from '../Services/ShareService';
 
 declare var MediaRecorder: any;
 
@@ -56,12 +57,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
         private timerService: TimerService,
         public _electronService: ElectronService,
         private homeService: HomeService,
+        private shareService: ShareService
     ) {
     }
 
@@ -413,6 +416,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.conversationID = null;
         clearInterval(this.autoSaveInterval);
         this.autoSaveInterval = null;
+    }
+
+
+    public shareToOther(message: string): void {
+        this.shareService.share = true;
+        this.shareService.content = message;
+        this.router.navigate(['share-target']);
     }
 
     public getAtListMaxHeight(): number {

@@ -47,6 +47,7 @@ import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
 import { HomeService } from './Services/HomeService';
+import { ShareService } from './Services/ShareService';
 
 @NgModule({
     imports: [
@@ -98,7 +99,8 @@ import { HomeService } from './Services/HomeService';
         DevicesApiService,
         ThemeService,
         TimerService,
-        HomeService
+        HomeService,
+        ShareService
     ],
     bootstrap: [AppComponent]
 })
