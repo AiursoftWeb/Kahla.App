@@ -2,7 +2,7 @@
 <ul id="messageList" class="message-list" (paste)="paste($event)" (drop)="drop($event)"
     (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
-    <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button> 
+    <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
@@ -73,6 +73,11 @@
                         </a>
                     </div>
                     <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
+                    <div
+                        *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
+                        <i (click)="shareToOther(message.contentRaw)" class="share fa fa-share-alt"
+                           aria-hidden="true"></i>
+                    </div>
                 </div>
                 <p class="sendTime">
                     <span *ngIf="message.local" i18n="@@Sending">
