@@ -23,6 +23,7 @@ export class ShareComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     public message: string;
+    public inApp = false;
 
     constructor(
         private router: Router,
@@ -37,6 +38,7 @@ export class ShareComponent implements OnInit {
         if (this.shareService.share) {
             this.shareService.share = false;
             this.message = this.shareService.content;
+            this.inApp = true;
         } else {
             const parsedUrl = new URL(location.href);
             const text = parsedUrl.searchParams.get('text');
