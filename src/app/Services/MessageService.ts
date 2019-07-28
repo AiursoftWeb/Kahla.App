@@ -79,7 +79,7 @@ export class MessageService {
                 //     this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
                 //     this.cacheService.updateTotalUnread();
                 // } else {
-                if (this.homeService.wideScreenEnabled) {
+                if (this.homeService.wideScreenEnabled || this.router.isActive('home', false)) {
                     setTimeout(() => this.cacheService.updateConversation(), 1000);
                 }
                 // }
