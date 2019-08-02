@@ -79,7 +79,7 @@ export class MessageService {
                 //     this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
                 //     this.cacheService.updateTotalUnread();
                 // } else {
-                if (this.homeService.wideScreenEnabled) {
+                if (this.homeService.wideScreenEnabled || this.router.isActive('home', false)) {
                     setTimeout(() => this.cacheService.updateConversation(), 1000);
                 }
                 // }
@@ -197,6 +197,7 @@ export class MessageService {
                     } catch (error) {
                         t.content = '';
                     }
+                    t.contentRaw = t.content;
                     t.timeStamp = new Date(t.sendTime).getTime();
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         const fileKey = this.uploadService.getFileKey(t.content);
@@ -212,7 +213,6 @@ export class MessageService {
                                 imageWidth = realMaxWidth;
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
-
                             t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('-')[0]}-${imageWidth}-${imageHeight}`;
                         }
                     } else if (t.content.match(/^\[(file|audio)\].*/)) {

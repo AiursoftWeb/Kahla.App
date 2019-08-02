@@ -1,0 +1,36 @@
+<app-header title="Choose to share" [returnButton]="inApp"></app-header>
+<div class="search-part">
+    <div class="search-type">
+        <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
+            <span><i class="fa fa-user"></i>
+                Users
+            </span>
+        </div>
+        <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
+            <span><i class="fa fa-users"></i>
+                Groups
+            </span>
+        </div>
+    </div>
+</div>
+<div class="share-header-space"></div>
+<div *ngIf="showUsers && cacheService.cachedData.friends">
+    <div class="result" *ngFor="let user of cacheService.cachedData.friends.users" (click)="share(user, 0)">
+        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
+        <div class="sender">
+            {{user.nickName}}
+        </div>
+    </div>
+    <div *ngIf="cacheService.cachedData.friends.users.length === 0" class="empty-result-notice">No result.</div>
+</div>
+<div *ngIf="!showUsers && cacheService.cachedData.friends">
+    <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" (click)="share(group, 1)">
+        <div class="searchGroupImage">
+            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
+        </div>
+        <div class="sender">
+            {{group.name}}
+        </div>
+    </div>
+    <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
+</div>

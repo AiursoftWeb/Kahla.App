@@ -29,6 +29,7 @@ import { LocalSearchComponent } from './Controllers/localSearch.component';
 import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
 import { ManageGroupComponent } from './Controllers/manageGroup.component';
 import { HomeComponent } from './Controllers/home.component';
+import { ShareComponent } from './Controllers/share.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -46,6 +47,7 @@ import { DevicesApiService } from './Services/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { TimerService } from './Services/TimerService';
 import { HomeService } from './Services/HomeService';
+import { ShareService } from './Services/ShareService';
 
 @NgModule({
     imports: [
@@ -78,7 +80,8 @@ import { HomeService } from './Services/HomeService';
         LocalSearchComponent,
         AdvancedSettingComponent,
         ManageGroupComponent,
-        HomeComponent
+        HomeComponent,
+        ShareComponent
     ],
     providers: [
         ApiService,
@@ -96,7 +99,8 @@ import { HomeService } from './Services/HomeService';
         DevicesApiService,
         ThemeService,
         TimerService,
-        HomeService
+        HomeService,
+        ShareService
     ],
     bootstrap: [AppComponent]
 })

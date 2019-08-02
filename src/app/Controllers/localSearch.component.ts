@@ -4,6 +4,7 @@ import { CacheService } from '../Services/CacheService';
 import { SearchResult } from '../Models/SearchResult';
 
 @Component({
+    selector: 'app-localsearch',
     templateUrl: '../Views/localSearch.html',
     styleUrls: ['../Styles/add-friend.scss',
         '../Styles/button.scss']

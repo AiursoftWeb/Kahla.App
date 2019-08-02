@@ -98,6 +98,7 @@ export class UploadService {
             html: '<div id="progressText">0%</div><progress id="uploadProgress" max="100"></progress>',
             showCancelButton: true,
             showConfirmButton: false,
+            allowOutsideClick: false
         });
         Swal.showLoading();
         Swal.enableButtons();
@@ -268,7 +269,11 @@ export class UploadService {
         if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
             this.filesApiService.GetFileURL(filekey).subscribe(response => {
                 if (response.code === 0) {
-                    window.location.href = response.downloadPath;
+                    const link = document.createElement('a');
+                    link.href = response.downloadPath;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                 }
             });
         }
