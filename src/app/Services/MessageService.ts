@@ -124,6 +124,8 @@ export class MessageService {
                     this.timerService.updateDestructTime(evt.newTimer);
                     Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
                         this.timerService.destructTime, 'info');
+                    this.localMessages = [];
+                    this.getMessages(0, this.conversation.id, -1, 15);
                 }
                 break;
             }
