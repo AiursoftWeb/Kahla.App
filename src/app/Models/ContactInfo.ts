@@ -1,7 +1,7 @@
 ﻿
 export class ContactInfo {
     public displayName: string;
-    public displayImagePath: number;
+    public displayImagePath: string;
     public latestMessage: string;
     public latestMessageTime: Date;
     public unReadAmount: number;

@@ -1,5 +1,5 @@
 export class GroupsResult {
-    public imagePath: number;
+    public imagePath: string;
     public name: string;
     public hasPassword: boolean;
     public ownerId: string;
