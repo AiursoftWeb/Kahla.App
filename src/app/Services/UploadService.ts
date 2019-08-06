@@ -199,7 +199,8 @@ export class UploadService {
                     this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
-                    user.avatarURL = Values.fileAddress + (<UploadFile>response).filePath;
+                    user.iconFilePath = (<UploadFile>response).filePath;
+                    user.avatarURL = Values.fileAddress + user.iconFilePath;
                 }
             });
             alert.then(result => {
@@ -222,7 +223,8 @@ export class UploadService {
                     this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
-                    group.avatarURL = Values.fileAddress + (<UploadFile>response).filePath;
+                    group.groupImagePath = (<UploadFile>response).filePath;
+                    group.avatarURL = Values.fileAddress + group.groupImagePath;
                 }
             });
             alert.then(result => {
