@@ -8,7 +8,7 @@ import { FilePath } from '../Models/FilePath';
 
 @Injectable()
 export class FilesApiService {
-    private static serverPath = '/files';
+    private static serverPath = '/Storage';
 
     constructor(
         private apiService: ApiService,

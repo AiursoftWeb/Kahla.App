@@ -4,7 +4,7 @@
     public bio: string;
     public email: string;
     public emailConfirmed: boolean;
-    public headImgFileKey: number;
+    public iconFilePath: string;
     public id: string;
     public nickName: string;
     public preferedLanguage: string;

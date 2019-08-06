@@ -61,7 +61,7 @@ export class InitService {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
-                        this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        this.messageService.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
                         this.themeService.ApplyThemeFromRemote(elementRef, p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();

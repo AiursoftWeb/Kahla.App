@@ -42,11 +42,11 @@ export class AuthApiService {
         return this.apiService.Get(AuthApiService.serverPath + '/Me');
     }
 
-    public UpdateInfo(nickName: string, bio: string, headImgKey: number, hideMyEmail: boolean): Observable<AiurProtocal> {
+    public UpdateInfo(nickName: string, bio: string, headIconPath: string, hideMyEmail: boolean): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateInfo', {
             nickName: nickName,
             bio: bio,
-            headImgKey: headImgKey,
+            headIconPath: headIconPath,
             hideMyEmail: hideMyEmail
         });
     }

@@ -398,10 +398,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showUserList = false;
     }
 
-    public getHeadImgUrl(fileKey: number): string {
-        return Values.fileAddress + fileKey;
-    }
-
     public ngOnDestroy(): void {
         this.destroyCurrent();
         this.homeService.contentWrapper.onscroll = null;

@@ -42,7 +42,7 @@ export class CacheService {
                         }
                         e.latestMessage = this.modifyMessage(e.latestMessage);
                     }
-                    e.avatarURL = Values.fileAddress + e.displayImageKey;
+                    e.avatarURL = Values.fileAddress + e.displayImagePath;
                 });
                 this.cachedData.conversations = info;
                 this.updateTotalUnread();
@@ -54,10 +54,10 @@ export class CacheService {
             .subscribe(result => {
                 if (result.code === 0) {
                     result.users.forEach(user => {
-                        user.avatarURL = Values.fileAddress + user.headImgFileKey;
+                        user.avatarURL = Values.fileAddress + user.iconFilePath;
                     });
                     result.groups.forEach(group => {
-                        group.avatarURL = Values.fileAddress + group.imageKey;
+                        group.avatarURL = Values.fileAddress + group.imagePath;
                     });
 
                     this.cachedData.friends = result;
@@ -69,7 +69,7 @@ export class CacheService {
         this.friendsApiService.MyRequests().subscribe(response => {
             this.cachedData.requests = response.items;
             response.items.forEach(item => {
-                item.creator.avatarURL = Values.fileAddress + item.creator.headImgFileKey;
+                item.creator.avatarURL = Values.fileAddress + item.creator.iconFilePath;
             });
             this.totalRequests = response.items.filter(t => !t.completed).length;
         });

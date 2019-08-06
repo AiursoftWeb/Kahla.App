@@ -44,9 +44,9 @@ export class GroupComponent implements OnInit {
                 this.messageService.conversation = conversation;
                 this.conversation = <GroupConversation>conversation;
                 this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImageKey;
+                this.conversation.avatarURL = Values.fileAddress + (<GroupConversation>this.conversation).groupImagePath;
                 this.conversation.users.forEach(user => {
-                    user.user.avatarURL = Values.fileAddress + user.user.headImgFileKey;
+                    user.user.avatarURL = Values.fileAddress + user.user.iconFilePath;
                     try {
                         if (user.userId === this.messageService.me.id) {
                             this.muted = user.muted;
