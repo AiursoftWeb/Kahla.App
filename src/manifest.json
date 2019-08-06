@@ -24,9 +24,10 @@
     "theme_color": "#fff",
     "display": "standalone",
     "orientation": "portrait-primary",
+    "prefer_related_applications": true,
     "related_applications": [{
         "platform": "play",
-        "url": "https://play.google.com/store/apps/details?id=com.aiursoft.kahla"
+        "id": "com.aiursoft.kahla"
     }],
     "share_target": {
         "action": "/share-target/",
