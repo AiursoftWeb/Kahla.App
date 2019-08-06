@@ -5,7 +5,7 @@ export class Conversation {
     public discriminator: string;
     public conversationCreateTime: Date;
     public displayName: string;
-    public displayImageKey: number;
+    public displayImagePath: string;
     public anotherUserId: string;
     public aesKey: string;
     public users: UserGroupRelation[];

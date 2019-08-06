@@ -7,7 +7,7 @@
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-                <img src="{{getHeadImgUrl(message.sender.headImgFileKey)}}?w=80&h=80">
+                <img src="{{fileAddress + message.sender.iconFilePath}}?w=80&h=80">
             </div>
             <div class="chat-text">
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
@@ -105,7 +105,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button">
-            <img class="img" src="{{ getHeadImgUrl(user.headImgFileKey) }}">
+            <img class="img" src="{{ fileAddress + user.iconFilePath }}">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>

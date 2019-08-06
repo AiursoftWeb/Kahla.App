@@ -119,7 +119,7 @@ self.addEventListener('push', function(event) {
                 if (showNotification) {
                     return self.registration.showNotification(title, {
                         body: message,
-                        icon: fileLink + data.sender.headImgFileKey,
+                        icon: fileLink + data.sender.iconFilePath,
                         renotify: true,
                         tag: data.conversationId.toString()
                     });

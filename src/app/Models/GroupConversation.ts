@@ -2,7 +2,7 @@ import { Conversation } from './Conversation';
 
 export class GroupConversation extends Conversation {
     public groupName: string;
-    public groupImageKey: number;
+    public groupImagePath: string;
     public hasPassword: boolean;
     public ownerId: string;
 }

@@ -341,7 +341,7 @@ export class MessageService {
             event.content = this.cacheService.modifyMessage(event.content);
             const notify = new Notification(event.sender.nickName, {
                 body: event.content,
-                icon: Values.fileAddress + event.sender.headImgFileKey
+                icon: Values.fileAddress + event.sender.iconFilePath
             });
             notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();

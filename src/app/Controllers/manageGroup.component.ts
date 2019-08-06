@@ -48,12 +48,12 @@ export class ManageGroupComponent implements OnInit {
                 .subscribe(conversation => {
                     this.messageService.conversation = conversation;
                     this.conversation = <GroupConversation>conversation;
-                    this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImageKey;
+                    this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImagePath;
                     this.newGroupName = this.conversation.groupName;
                 });
         } else {
             this.conversation = <GroupConversation>this.messageService.conversation;
-            this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImageKey;
+            this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImagePath;
             this.newGroupName = this.conversation.groupName;
         }
     }
@@ -132,7 +132,7 @@ export class ManageGroupComponent implements OnInit {
     }
 
     public saveInfo() {
-        this.groupsApiService.UpdateGroupInfo(this.conversation.groupName, this.conversation.groupImageKey, this.newGroupName)
+        this.groupsApiService.UpdateGroupInfo(this.conversation.groupName, this.conversation.groupImagePath, this.newGroupName)
             .subscribe(res => {
             if (res.code === 0) {
                 Swal.fire('Success', res.message, 'success');

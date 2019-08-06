@@ -30,7 +30,7 @@ export class DiscoverComponent implements OnInit {
         this.loading = true;
         this.friendsApiService.Discover(this.amount).subscribe(users => {
             users.items.forEach(item => {
-                item.targetUser.avatarURL = Values.fileAddress + item.targetUser.headImgFileKey;
+                item.targetUser.avatarURL = Values.fileAddress + item.targetUser.iconFilePath;
             });
             const top = this.homeService.contentWrapper.scrollTop;
             this.users = users.items;

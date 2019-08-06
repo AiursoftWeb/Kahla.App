@@ -126,7 +126,7 @@ export class UploadService {
                                         [width, height] = [height, width];
                                     }
                                 }
-                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).fileKey}-${width}-${
+                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).filePath}-${width}-${
                                     height}-${orientation}`, aesKey).toString();
                                 this.sendMessage(encedMessages, conversationID);
                             }.bind(this),
@@ -134,7 +134,7 @@ export class UploadService {
                         );
                         break;
                     case 1:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).filePath}`, aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     case 2:
@@ -142,7 +142,7 @@ export class UploadService {
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     case 3:
-                        encedMessages = AES.encrypt(`[audio]${(<UploadFile>response).fileKey}`, aesKey).toString();
+                        encedMessages = AES.encrypt(`[audio]${(<UploadFile>response).filePath}`, aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     default:
@@ -199,8 +199,7 @@ export class UploadService {
                     this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
-                    user.headImgFileKey = (<UploadFile>response).fileKey;
-                    user.avatarURL = (<UploadFile>response).downloadPath;
+                    user.avatarURL = Values.fileAddress + (<UploadFile>response).filePath;
                 }
             });
             alert.then(result => {
@@ -223,8 +222,7 @@ export class UploadService {
                     this.updateAlertProgress(Number(response));
                 } else if (response != null && (<UploadFile>response).code === 0) {
                     Swal.close();
-                    group.groupImageKey = (<UploadFile>response).fileKey;
-                    group.avatarURL = Values.fileAddress + group.groupImageKey;
+                    group.avatarURL = Values.fileAddress + (<UploadFile>response).filePath;
                 }
             });
             alert.then(result => {
@@ -300,7 +298,7 @@ export class UploadService {
         let message = '[file]';
         const units = ['kB', 'MB', 'GB'];
         const thresh = 1000;
-        message += response.fileKey + '-';
+        message += response.filePath + '-';
         message += response.savedFileName.replace(/-/g, '') + '-';
         if (response.fileSize < thresh) {
             message += response.fileSize + ' B';
