@@ -200,7 +200,6 @@ export class MessageService {
                         t.content = '';
                     }
                     t.contentRaw = t.content;
-                    console.log(t.contentRaw);
                     t.timeStamp = new Date(t.sendTime).getTime();
                     if (t.content.match(/^\[(video|img)\].*/)) {
                         if (t.content.startsWith('[img]')) {
@@ -214,7 +213,6 @@ export class MessageService {
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
                             t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('|')[0]}|${imageWidth}|${imageHeight}`;
-                            console.log('!!!!!!' + t.content);
                         }
                     } else if (!t.content.match(/^\[(file|audio)\].*/)) {
                         t.isEmoji = this.checkEmoji(t.content);
