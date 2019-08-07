@@ -50,6 +50,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
     }
 
+    @HostListener('window:beforeinstallprompt', ['$event'])
+    onbeforeinstallprompt(e: any) {
+        this.homeService.pwaHomeScreenPrompt = e;
+    }
+
     public ngOnInit(): void {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal(this.elementRef);

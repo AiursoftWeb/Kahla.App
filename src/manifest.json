@@ -10,6 +10,11 @@
             "type": "image/png"
         },
         {
+            "src": "/assets/192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
             "src": "/assets/240x240.png",
             "sizes": "240x240",
             "type": "image/png"
@@ -37,5 +42,5 @@
           "text": "text",
           "url": "url"
         }
-    }      
+    }
 }
