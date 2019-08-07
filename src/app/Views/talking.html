@@ -18,16 +18,23 @@
                         <label class="badge badge-secondary"
                                *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>
-                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('-').length === 3" target="_blank" rel="noopener noreferrer" href="{{ message.content.substring(5).split('-')[0] }}">
-                        <div class="image-container" [style.width.px]="message.content.split('-')[1]" [style.height.px]="message.content.split('-')[2]">
-                            <img src="{{ message.content.substring(5).split('-')[0] }}"
-                                srcset="{{ message.content.substring(5).split('-')[0] }}?w={{ message.content.split('-')[1] }}&h={{ message.content.split('-')[2] }},
-                                {{ message.content.substring(5).split('-')[0] }}?w={{ Math.floor(message.content.split('-')[1] * 1.5) }}&h={{ Math.floor(message.content.split('-')[2] * 1.5) }} 1.5x,
-                                {{ message.content.substring(5).split('-')[0] }}?w={{ Math.floor(message.content.split('-')[1] * 2) }}&h={{ Math.floor(message.content.split('-')[2] * 2) }} 2x">
+                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('|').length === 3"
+                       target="_blank" rel="noopener noreferrer"
+                       href="{{ message.content.substring(5).split('|')[0] }}">
+                        <div class="image-container" [style.width.px]="message.content.split('|')[1]"
+                             [style.height.px]="message.content.split('|')[2]">
+                            <img src="{{ message.content.substring(5).split('|')[0] }}"
+                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }}&h={{ message.content.split('|')[2] }},
+                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }}&h={{ Math.floor(message.content.split('|')[2] * 1.5) }} 1.5x,
+                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }}&h={{ Math.floor(message.content.split('|')[2] * 2) }} 2x">
                         </div>
                     </a>
-                    <a class="file" *ngIf="message.content.startsWith('[file]') && message.content.split('-').length == 3"  target="_blank" rel="noopener noreferrer" href="" (click)="uploadService.getFileURL($event, message.content)">
-                        <div [ngSwitch]="message.content.split('-')[1].substring(message.content.split('-')[1].indexOf('.') + 1)">
+                    <a class="file"
+                       *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
+                       target="_blank" rel="noopener noreferrer" href=""
+                       (click)="uploadService.getFileURL($event, message.content)">
+                        <div
+                            [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
                             <i *ngSwitchCase="'jpg'" class="fa fa-file-image-o" aria-hidden="true"></i>
                             <i *ngSwitchCase="'png'" class="fa fa-file-image-o" aria-hidden="true"></i>
@@ -60,8 +67,8 @@
                             <i *ngSwitchCase="'key'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
                             <i *ngSwitchDefault class="fa fa-file" aria-hidden="true"></i>
                         </div>
-                        <h5>{{message.content.split('-')[1]}}</h5>
-                        <span>{{message.content.split('-')[2]}}</span>
+                        <h5>{{message.content.split('|')[1]}}</h5>
+                        <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')" >
                         <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>

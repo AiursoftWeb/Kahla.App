@@ -202,12 +202,9 @@ export class MessageService {
                     t.contentRaw = t.content;
                     t.timeStamp = new Date(t.sendTime).getTime();
                     if (t.content.match(/^\[(video|img)\].*/)) {
-                        const fileKey = this.uploadService.getFileKey(t.content);
-                        if (fileKey === -1 || isNaN(fileKey)) {
-                            t.content = '';
-                        } else if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('-')[1]),
-                                imageHeight = Number(t.content.split('-')[2]);
+                        if (t.content.startsWith('[img]')) {
+                            let imageWidth = Number(t.content.split('|')[1]),
+                                imageHeight = Number(t.content.split('|')[2]);
                             const ratio = imageHeight / imageWidth;
                             const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
 
@@ -215,14 +212,9 @@ export class MessageService {
                                 imageWidth = realMaxWidth;
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
-                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('-')[0]}-${imageWidth}-${imageHeight}`;
+                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('|')[0]}|${imageWidth}|${imageHeight}`;
                         }
-                    } else if (t.content.match(/^\[(file|audio)\].*/)) {
-                        const fileKey = this.uploadService.getFileKey(t.content);
-                        if (fileKey === -1 || isNaN(fileKey)) {
-                            t.content = '';
-                        }
-                    } else {
+                    } else if (!t.content.match(/^\[(file|audio)\].*/)) {
                         t.isEmoji = this.checkEmoji(t.content);
                         t.content = he.encode(t.content);
                         t.content = Autolinker.link(t.content, {
