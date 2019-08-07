@@ -1,9 +1,9 @@
 import { ApiService } from './ApiService';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpClient, HttpEventType, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/';
 import { UploadFile } from '../Models/UploadFile';
-import { map, catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { FilePath } from '../Models/FilePath';
 
 @Injectable()
@@ -14,18 +14,6 @@ export class FilesApiService {
         private apiService: ApiService,
         private http: HttpClient,
     ) {}
-
-    public UploadMedia(formData: FormData): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', `${ApiService.serverAddress + FilesApiService.serverPath}/UploadMedia`, formData, {
-            reportProgress: true,
-            withCredentials: true
-        });
-
-        return this.http.request(req).pipe(
-            map(event => this.getProgress(event)),
-            catchError(this.apiService.handleError)
-        );
-    }
 
     public UploadFile(formData: FormData, conversationID: number): Observable<number | UploadFile> {
         const req = new HttpRequest('POST', `${ApiService.serverAddress +

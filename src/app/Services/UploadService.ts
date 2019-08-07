@@ -33,26 +33,7 @@ export class UploadService {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
             return;
         }
-        if (fileType === 0 || fileType === 1) {
-            const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'Image' : 'Video'}...`);
-            const mission = this.filesApiService.UploadMedia(formData).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response) {
-                    // Done!
-                    Swal.close();
-                    this.encryptThenSend(response, fileType, conversationID, aesKey, file);
-                }
-            }, () => {
-                Swal.close();
-                Swal.fire('Error', 'Upload failed', 'error');
-            });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
-                }
-            });
-        } else if (fileType === 3) {
+        if (fileType === 3) {
             const audioSrc = URL.createObjectURL(file);
             const audioHTMLString = `<audio controls src="${audioSrc}"></audio>`;
             Swal.fire({
@@ -72,7 +53,7 @@ export class UploadService {
                 URL.revokeObjectURL(audioSrc);
             });
         } else {
-            const alert = this.fireUploadingAlert('Uploading your file...');
+            const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'image' : (fileType === 1 ? 'video' : 'file')}...`);
             const mission = this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
                 if (Number(response)) {
                     this.updateAlertProgress(Number(response));
@@ -126,8 +107,8 @@ export class UploadService {
                                         [width, height] = [height, width];
                                     }
                                 }
-                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).filePath}-${width}-${
-                                    height}-${orientation}`, aesKey).toString();
+                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).filePath}|${width}|${
+                                    height}|${orientation}`, aesKey).toString();
                                 this.sendMessage(encedMessages, conversationID);
                             }.bind(this),
                             {meta: true}
@@ -138,7 +119,7 @@ export class UploadService {
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     case 2:
-                        encedMessages = AES.encrypt(this.formatFileMessage(<UploadFile>response), aesKey).toString();
+                        encedMessages = AES.encrypt(this.formatFileMessage(<UploadFile>response, file.name), aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
                     case 3:
@@ -248,60 +229,29 @@ export class UploadService {
         }
     }
 
-    public getFileKey(message: string): number {
-        if (message === null || message.length < 5) {
-            return -1;
-        }
-        if (message.startsWith('[img]')) {
-            return Number(message.substring(5, message.indexOf('-')));
-        } else if (message.startsWith('[file]')) {
-            return Number(message.substring(6, message.indexOf('-')));
-        } else if (message.startsWith('[video]') || message.startsWith('[audio]')) {
-            return Number(message.substring(7));
-        } else {
-            return -1;
-        }
-    }
-
     public getFileURL(event: MouseEvent, message: string): void {
         event.preventDefault();
-        const filekey = this.getFileKey(message);
-        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-            this.filesApiService.GetFileURL(filekey).subscribe(response => {
-                if (response.code === 0) {
-                    const link = document.createElement('a');
-                    link.href = response.downloadPath;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            });
-        }
+        const link = document.createElement('a');
+        link.href = message.substring(6).split('|')[0];
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     public getAudio(target: HTMLElement, message: string): void {
-        const filekey = this.getFileKey(message);
-        if (filekey !== -1 && !isNaN(filekey) && filekey !== 0) {
-            this.filesApiService.GetFileURL(filekey).subscribe(response => {
-                if (response.code === 0) {
-                    target.style.display = 'none';
-                    const audioElement = document.createElement('audio');
-                    audioElement.style.maxWidth = '100%';
-                    audioElement.src = response.downloadPath;
-                    audioElement.controls = true;
-                    target.parentElement.appendChild(audioElement);
-                    audioElement.play();
-                }
-            });
-        }
+        target.style.display = 'none';
+        const audioElement = document.createElement('audio');
+        audioElement.style.maxWidth = '100%';
+        audioElement.src = message.substring(7).split('|')[0];
+        audioElement.controls = true;
+        target.parentElement.appendChild(audioElement);
+        audioElement.play();
     }
 
-    private formatFileMessage(response: UploadFile): string {
-        let message = '[file]';
+    private formatFileMessage(response: UploadFile, fileName: string): string {
+        let message = `[file]${response.filePath}|${fileName}|`;
         const units = ['kB', 'MB', 'GB'];
         const thresh = 1000;
-        message += response.filePath + '-';
-        message += response.savedFileName.replace(/-/g, '') + '-';
         if (response.fileSize < thresh) {
             message += response.fileSize + ' B';
         } else {
