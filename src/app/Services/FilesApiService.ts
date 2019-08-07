@@ -4,7 +4,6 @@ import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/comm
 import { Observable } from 'rxjs/';
 import { UploadFile } from '../Models/UploadFile';
 import { catchError, map } from 'rxjs/operators';
-import { FilePath } from '../Models/FilePath';
 
 @Injectable()
 export class FilesApiService {
@@ -37,10 +36,6 @@ export class FilesApiService {
             default:
                 return null;
         }
-    }
-
-    public GetFileURL(fileKey: number): Observable<FilePath> {
-        return this.apiService.Post(FilesApiService.serverPath + '/FileDownloadAddress', {FileKey: fileKey});
     }
 
     public UploadIcon(formData: FormData): Observable<number | UploadFile> {
