@@ -212,7 +212,9 @@ export class MessageService {
                                 imageWidth = realMaxWidth;
                                 imageHeight = Math.floor(realMaxWidth * ratio);
                             }
-                            t.content = `[img]${Values.fileAddress}${t.content.substring(5).split('|')[0]}|${imageWidth}|${imageHeight}`;
+                            t.content =
+                                `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
+                                    .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
                         }
                     } else if (!t.content.match(/^\[(file|audio)\].*/)) {
                         t.isEmoji = this.checkEmoji(t.content);

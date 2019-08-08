@@ -232,7 +232,7 @@ export class UploadService {
     public getFileURL(event: MouseEvent, message: string): void {
         event.preventDefault();
         const link = document.createElement('a');
-        link.href = Values.fileAddress + message.substring(6).split('|')[0];
+        link.href = Values.fileAddress + encodeURIComponent(message.substring(6).split('|')[0]).replace(/%2F/g, '/');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -242,7 +242,7 @@ export class UploadService {
         target.style.display = 'none';
         const audioElement = document.createElement('audio');
         audioElement.style.maxWidth = '100%';
-        audioElement.src = Values.fileAddress + message.substring(7).split('|')[0];
+        audioElement.src = Values.fileAddress + encodeURIComponent(message.substring(7).split('|')[0]).replace(/%2F/g, '/');
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();
