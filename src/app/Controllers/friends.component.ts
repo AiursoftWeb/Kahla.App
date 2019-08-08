@@ -48,10 +48,6 @@ export class FriendsComponent implements OnInit {
             showCancelButton: true,
         }).then(input => {
             if (input.value) {
-                if (input.value.includes(' ')) {
-                    Swal.fire('Try again', 'Group name can\'t contain whitespaces.', 'error');
-                    return;
-                }
                 if (input.value.length < 3 || input.value.length > 25) {
                     Swal.fire('Try again', 'Group name length must between three and twenty five.', 'error');
                     return;
