@@ -5,7 +5,9 @@
 </div>
 <div id="contentWrapper" class="content-wrapper" *ngIf="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
      [class.in-widescreen]="homeService.wideScreenEnabled">
+    <div style="height: 50px" *ngIf="iosHeightFix"></div>
     <router-outlet></router-outlet>
+    <div style="height: 50px" *ngIf="iosHeightFix"></div>
 </div>
 <!-- Show an empty component when no reasonable component to show. -->
 <div class="content-empty" *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && messageService.me">

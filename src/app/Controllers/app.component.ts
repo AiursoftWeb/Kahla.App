@@ -16,6 +16,8 @@ import { MessageService } from '../Services/MessageService';
 
 export class AppComponent implements OnInit, AfterViewInit {
 
+    public iosHeightFix = false;
+
     constructor(
         private initService: InitService,
         private elementRef: ElementRef,
@@ -29,6 +31,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     @HostListener('window:popstate', [])
     onPopstate() {
         Swal.close();
+    }
+
+    @HostListener('window:resize')
+    onResize() {
+        // in safari and the address bar is shown...
+        this.iosHeightFix = window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform) &&
+            document.body.scrollHeight - window.innerHeight >= 50;
     }
 
     @HostListener('window:load', [])
@@ -65,7 +74,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         // disable body scroll for ios
         if (window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform)) {
             this.homeService.updateIosDisableScroll();
-
             new MutationObserver(() => {
                 this.homeService.updateIosDisableScroll();
             })
