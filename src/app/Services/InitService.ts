@@ -97,6 +97,10 @@ export class InitService {
             this.ws.onerror = () => this.errorOrClosedFunc();
             this.ws.onclose = () => this.errorOrClosedFunc();
             this.resend();
+            if (reconnect) {
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
+            }
             if (this.messageService.conversation && reconnect) {
                 this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
             }
