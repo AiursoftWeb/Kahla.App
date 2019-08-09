@@ -30,7 +30,7 @@ export class AdvancedSettingComponent implements OnInit {
         } else {
             this.authApiService.Me().subscribe(p => {
                 this.me = p.value;
-                this.me.avatarURL = Values.fileAddress + this.me.headImgFileKey;
+                this.me.avatarURL = Values.fileAddress + this.me.iconFilePath;
             });
         }
     }

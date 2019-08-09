@@ -52,10 +52,10 @@ export class AddFriendComponent implements OnInit {
         this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
             if (result.code === 0) {
                 result.users.forEach(user => {
-                    user.avatarURL = Values.fileAddress + user.headImgFileKey;
+                    user.avatarURL = Values.fileAddress + user.iconFilePath;
                 });
                 result.groups.forEach(group => {
-                    group.avatarURL = Values.fileAddress + group.imageKey;
+                    group.avatarURL = Values.fileAddress + group.imagePath;
                 });
                 this.results = result;
                 if (this.showUsers && result.usersCount === 0 && result.groupsCount !== 0) {

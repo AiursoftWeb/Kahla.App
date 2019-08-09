@@ -61,7 +61,7 @@ export class InitService {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
-                        this.messageService.me.avatarURL = Values.fileAddress + p.value.headImgFileKey;
+                        this.messageService.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
                         this.themeService.ApplyThemeFromRemote(elementRef, p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
@@ -97,6 +97,10 @@ export class InitService {
             this.ws.onerror = () => this.errorOrClosedFunc();
             this.ws.onclose = () => this.errorOrClosedFunc();
             this.resend();
+            if (reconnect) {
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
+            }
             if (this.messageService.conversation && reconnect) {
                 this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
             }

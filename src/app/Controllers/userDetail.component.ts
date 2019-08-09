@@ -36,7 +36,7 @@ export class UserDetailComponent implements OnInit {
     if (!this.messageService.me) {
       this.authApiService.Me().subscribe(p => {
         this.user = p.value;
-        this.user.avatarURL = Values.fileAddress + this.user.headImgFileKey;
+        this.user.avatarURL = Values.fileAddress + this.user.iconFilePath;
       });
     } else {
       this.user = Object.assign({}, this.messageService.me);
@@ -57,7 +57,7 @@ export class UserDetailComponent implements OnInit {
     saveButton.textContent = 'Saving...';
     const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
     this.user.makeEmailPublic = !hideEmail;
-    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.headImgFileKey, hideEmail)
+    this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath, hideEmail)
       .subscribe((response) => {
         if (response.code === 0) {
           this.messageService.me = Object.assign({}, this.user);

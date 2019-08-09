@@ -6,6 +6,8 @@ import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 })
 export class HomeService {
     public currentPage = 0;
+    public pwaHomeScreenPrompt: any;
+    public pwaHomeScreenSuccess = false;
 
     public get wideScreenEnabled(): boolean {
         return window.innerWidth > 730 && window.innerHeight < window.innerWidth;

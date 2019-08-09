@@ -296,7 +296,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         for (let i = 0; i < items.length; i++) {
             if (items[i].kind === 'file') {
                 this.preventDefault(event);
-                const blob = items[i].getAsFile();
+                const originalFile = items[i].getAsFile();
+                const blob = new File([originalFile],
+                    `clipboardImg_${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`);
                 if (blob != null) {
                     const urlString = URL.createObjectURL(blob);
                     Swal.fire({
@@ -365,7 +367,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     });
                     this.mediaRecorder.addEventListener('stop', () => {
                         this.recording = false;
-                        const audioBlob = new File(audioChunks, 'audio');
+                        const audioBlob = new File(audioChunks, `voiceMsg_${new Date().getTime()}.opus`);
                         this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
                         clearTimeout(this.forceStopTimeout);
                         stream.getTracks().forEach(track => track.stop());
@@ -396,10 +398,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public hideUserList(): void {
         this.showUserList = false;
-    }
-
-    public getHeadImgUrl(fileKey: number): string {
-        return Values.fileAddress + fileKey;
     }
 
     public ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import { FriendsApiService } from '../Services/FriendsApiService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
 import Swal from 'sweetalert2';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     templateUrl: '../Views/discover.html',
@@ -17,7 +18,8 @@ export class DiscoverComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private friendsApiService: FriendsApiService) {
+        private friendsApiService: FriendsApiService,
+        private homeService: HomeService) {
         }
 
     public ngOnInit(): void {
@@ -28,13 +30,15 @@ export class DiscoverComponent implements OnInit {
         this.loading = true;
         this.friendsApiService.Discover(this.amount).subscribe(users => {
             users.items.forEach(item => {
-                item.targetUser.avatarURL = Values.fileAddress + item.targetUser.headImgFileKey;
+                item.targetUser.avatarURL = Values.fileAddress + item.targetUser.iconFilePath;
             });
+            const top = this.homeService.contentWrapper.scrollTop;
             this.users = users.items;
             if (this.users.length < this.amount) {
                 this.noMoreUsers = true;
             }
             this.loading = false;
+            setTimeout(() => this.homeService.contentWrapper.scrollTo(0, top), 0);
             this.amount += 15;
         }, () => {
             this.loading = false;
