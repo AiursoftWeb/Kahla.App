@@ -265,7 +265,7 @@ export class MessageService {
                 } else if (unread === -1) { // load more
                     this.loadingMore = false;
                     setTimeout(() => {
-                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldScrollHeight);
+                        window.scroll(0, document.documentElement.scrollHeight - this.oldScrollHeight);
                     }, 0);
                 } else {
                     if (unread > 1) {
@@ -274,7 +274,7 @@ export class MessageService {
                     }
                     setTimeout(() => {
                         const lis = document.querySelector('#messageList').querySelectorAll('li');
-                        this.homeService.contentWrapper.scrollTo({
+                        window.scrollTo({
                             top: lis[lis.length - unread].offsetTop,
                             left: 0,
                             behavior: 'smooth'
@@ -295,14 +295,14 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (this.homeService.contentWrapper.scrollHeight - this.homeService.contentWrapper.scrollTop
-            - this.homeService.contentWrapper.clientHeight) / this.homeService.contentWrapper.clientHeight;
+        this.belowWindowPercent = (document.documentElement.scrollHeight - document.documentElement.scrollTop
+            - document.documentElement.clientHeight) / document.documentElement.clientHeight;
     }
 
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldScrollHeight = this.homeService.contentWrapper.scrollHeight;
+            this.oldScrollHeight = document.documentElement.scrollHeight;
             this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
         }
     }

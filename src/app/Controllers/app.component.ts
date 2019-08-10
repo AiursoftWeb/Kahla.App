@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
@@ -14,9 +14,7 @@ import { MessageService } from '../Services/MessageService';
 })
 
 
-export class AppComponent implements OnInit, AfterViewInit {
-
-    public iosHeightFix = false;
+export class AppComponent implements OnInit {
 
     constructor(
         private initService: InitService,
@@ -31,13 +29,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     @HostListener('window:popstate', [])
     onPopstate() {
         Swal.close();
-    }
-
-    @HostListener('window:resize')
-    onResize() {
-        // in safari and the address bar is shown...
-        this.iosHeightFix = window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform) &&
-            document.body.scrollHeight - window.innerHeight >= 50;
     }
 
     @HostListener('window:load', [])
@@ -68,19 +59,5 @@ export class AppComponent implements OnInit, AfterViewInit {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal(this.elementRef);
         this.initService.init(this.elementRef);
-    }
-
-    ngAfterViewInit(): void {
-        // disable body scroll for ios
-        if (window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform)) {
-            this.homeService.updateIosDisableScroll();
-            new MutationObserver(() => {
-                this.homeService.updateIosDisableScroll();
-            })
-                .observe(document.querySelector('#-app-kahla'), {
-                    childList: true
-                });
-        }
-
     }
 }

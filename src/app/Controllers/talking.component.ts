@@ -13,7 +13,6 @@ import Autolinker from 'autolinker';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
-import { HomeService } from '../Services/HomeService';
 import { HeaderComponent } from './header.component';
 import { ShareService } from '../Services/ShareService';
 
@@ -63,7 +62,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public messageService: MessageService,
         private timerService: TimerService,
         public _electronService: ElectronService,
-        private homeService: HomeService,
         private shareService: ShareService
     ) {
     }
@@ -73,11 +71,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + this.keyBoardHeight);
+            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - this.keyBoardHeight);
+            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop);
+            window.scroll(0, document.documentElement.scrollTop);
         }
         this.formerWindowInnerHeight = window.innerHeight;
     }
@@ -124,7 +122,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.homeService.contentWrapper.addEventListener('scroll', () => {
+        window.addEventListener('scroll', () => {
             this.messageService.updateBelowWindowPercent();
             if (this.messageService.belowWindowPercent <= 0) {
                 this.messageService.newMessages = false;
@@ -253,7 +251,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent > 0) {
-                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
+                window.scroll(0, document.documentElement.scrollTop - 105);
             }
         }
     }
@@ -262,13 +260,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             document.querySelector('.message-list').classList.add('active-list');
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + 105);
+            window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
-                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
+                window.scroll(0, document.documentElement.scrollTop - 105);
             }
         }
     }
@@ -402,7 +400,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.destroyCurrent();
-        this.homeService.contentWrapper.onscroll = null;
+        window.onscroll = null;
         window.onresize = null;
     }
 

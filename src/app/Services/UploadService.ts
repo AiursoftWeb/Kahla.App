@@ -8,7 +8,6 @@ import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
-import { HomeService } from './HomeService';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +18,6 @@ export class UploadService {
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService,
-        private homeService: HomeService,
     ) {}
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: number): void {
@@ -159,13 +157,13 @@ export class UploadService {
 
     public scrollBottom(smooth: boolean): void {
         if (!this.talkingDestroyed) {
-            const h = this.homeService.contentWrapper.scrollHeight;
+            const h = document.documentElement.scrollHeight;
             if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
-                this.homeService.contentWrapper.scroll(0, 0);
+                window.scroll(0, 0);
             } else if (smooth) {
-                this.homeService.contentWrapper.scroll({top: h, behavior: 'smooth'});
+                window.scroll({top: h, behavior: 'smooth'});
             } else {
-                this.homeService.contentWrapper.scroll(0, h);
+                window.scroll(0, h);
             }
         }
     }
