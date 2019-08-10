@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
@@ -14,7 +14,7 @@ import { MessageService } from '../Services/MessageService';
 })
 
 
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
     constructor(
         private initService: InitService,
@@ -59,19 +59,5 @@ export class AppComponent implements OnInit, AfterViewInit {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal(this.elementRef);
         this.initService.init(this.elementRef);
-    }
-
-    ngAfterViewInit(): void {
-        // disable body scroll for ios
-        if (window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform)) {
-            this.homeService.updateIosDisableScroll();
-            new MutationObserver(() => {
-                this.homeService.updateIosDisableScroll();
-            })
-                .observe(document.querySelector('#-app-kahla'), {
-                    childList: true
-                });
-        }
-
     }
 }
