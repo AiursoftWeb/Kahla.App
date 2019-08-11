@@ -27,11 +27,16 @@
 }
 
 .content-wrapper {
-  width: auto;
+  width: 100%;
   position: relative;
   flex: auto;
   box-shadow: -4px 0px 8px 0 rgba(0, 0, 0, .2);
   z-index: 11;
+
+  &.in-widescreen {
+    width: 65%;
+    min-width: calc(100% - 550px);
+  }
 }
 
 .content-empty {
