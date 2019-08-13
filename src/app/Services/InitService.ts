@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
@@ -41,7 +41,7 @@ export class InitService {
         private devicesApiService: DevicesApiService) {
     }
 
-    public init(elementRef: ElementRef): void {
+    public init(): void {
         this.online = navigator.onLine;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
@@ -62,7 +62,7 @@ export class InitService {
                     if (p.code === 0) {
                         this.messageService.me = p.value;
                         this.messageService.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
-                        this.themeService.ApplyThemeFromRemote(elementRef, p.value);
+                        this.themeService.ApplyThemeFromRemote(p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
                             this.updateSubscription();

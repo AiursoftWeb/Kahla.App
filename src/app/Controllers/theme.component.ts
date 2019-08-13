@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Themes } from '../Models/Themes';
 import { ThemeService } from '../Services/ThemeService';
 
@@ -8,7 +8,6 @@ import { ThemeService } from '../Services/ThemeService';
 })
 export class ThemeComponent implements OnInit {
     constructor(
-        private elementRef: ElementRef,
         private themeService: ThemeService
     ) {
     }
@@ -24,6 +23,6 @@ export class ThemeComponent implements OnInit {
         this.currentTheme = theme;
         this.themeService.LocalThemeSetting = theme;
         this.themeService.SetRemoteThemeSetting(theme);
-        this.themeService.ApplyTheme(this.elementRef, theme);
+        this.themeService.ApplyTheme(theme);
     }
 }

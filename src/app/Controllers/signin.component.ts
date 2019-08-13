@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -25,7 +25,6 @@ export class SignInComponent {
         private authApiService: AuthApiService,
         private router: Router,
         private initService: InitService,
-        private elementRef: ElementRef,
         public _electronService: ElectronService,
         private homeService: HomeService,
         ) {
@@ -47,7 +46,7 @@ export class SignInComponent {
                 if (t.code === 0) {
                     this.router.navigate(['/home'], {replaceUrl: true});
                     this.homeService.currentPage = 0;
-                    this.initService.init(this.elementRef);
+                    this.initService.init();
                 } else if (t.code === -10) {
                     Swal.fire('Sign in failed', (t as AiurProtocal as AiurCollection<string>).items[0], 'error');
                 } else {
