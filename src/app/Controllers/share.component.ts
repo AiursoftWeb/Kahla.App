@@ -27,7 +27,7 @@ export class ShareComponent implements OnInit {
     public showUsers = true;
     public message: string;
     public inApp = false;
-    private results: SearchResult;
+    public results: SearchResult;
 
     constructor(
         private router: Router,
