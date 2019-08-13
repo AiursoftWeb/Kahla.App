@@ -10,13 +10,16 @@ import { ConversationApiService } from '../Services/ConversationApiService';
 import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { ShareService } from '../Services/ShareService';
+import { SearchResult } from '../Models/SearchResult';
 
 @Component({
     templateUrl: '../Views/share.html',
     styleUrls: [
         '../Styles/menu.scss',
         '../Styles/add-friend.scss',
-        '../Styles/friends.scss']
+        '../Styles/friends.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 
 })
 export class ShareComponent implements OnInit {
@@ -24,6 +27,7 @@ export class ShareComponent implements OnInit {
     public showUsers = true;
     public message: string;
     public inApp = false;
+    private results: SearchResult;
 
     constructor(
         private router: Router,
@@ -45,7 +49,7 @@ export class ShareComponent implements OnInit {
             const url = parsedUrl.searchParams.get('url');
             this.message = `${text ? text : ''} ${url ? url : ''}`;
         }
-
+        this.search('');
     }
 
     public showUsersResults(selectUsers: boolean): void {
@@ -119,5 +123,43 @@ export class ShareComponent implements OnInit {
                         'error');
                 }
             });
+    }
+
+    public search(term: string, keydown: boolean = false): void {
+        if (this.cacheService.cachedData.friends) {
+            this.results = Object.assign({}, this.cacheService.cachedData.friends);
+            if (term) {
+                this.results.users = this.results.users.filter(user => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.nickName) || (user.email && regex.test(user.email));
+                });
+                this.results.groups = this.results.groups.filter(group => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(group.name);
+                });
+            }
+            if (keydown) {
+                if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                    this.showUsers = false;
+                } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                    this.showUsers = true;
+                }
+            }
+        }
+    }
+
+    public goSingleSearch(): void {
+        setTimeout(() => {
+            if (this.showUsers) {
+                if (this.results.users.length === 1) {
+                    this.share(this.results.users[0], false);
+                }
+            } else {
+                if (this.results.groups.length === 1) {
+                    this.share(this.results.groups[0], true);
+                }
+            }
+        }, 0);
+
     }
 }
