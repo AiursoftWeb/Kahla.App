@@ -1,10 +1,11 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, DoCheck, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
+import { SearchResult } from '../Models/SearchResult';
 
 @Component({
     selector: 'app-friends',
@@ -13,12 +14,15 @@ import { GroupsApiService } from '../Services/GroupsApiService';
         '../Styles/menu.scss',
         '../Styles/reddot.scss',
         '../Styles/add-friend.scss',
-        '../Styles/friends.scss']
+        '../Styles/friends.scss',
+        '../Styles/button.scss']
 
 })
-export class FriendsComponent implements OnInit {
+export class FriendsComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
+    private results: SearchResult;
+    public searchTxt = '';
 
     constructor(
         private groupsApiService: GroupsApiService,
@@ -95,5 +99,30 @@ export class FriendsComponent implements OnInit {
 
     public showUsersResults(selectUsers: boolean): void {
         this.showUsers = selectUsers;
+    }
+
+    public search(term: string): void {
+        if (this.cacheService.cachedData.friends) {
+            this.results = Object.assign({}, this.cacheService.cachedData.friends);
+            if (term) {
+                this.results.users = this.results.users.filter(user => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.nickName) || (user.email && regex.test(user.email));
+                });
+                this.results.groups = this.results.groups.filter(group => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(group.name);
+                });
+            }
+            if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                this.showUsers = false;
+            } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                this.showUsers = true;
+            }
+        }
+    }
+
+    ngDoCheck(): void {
+        this.search(this.searchTxt);
     }
 }

@@ -25,7 +25,6 @@ import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
 import { DevicesComponent } from './Controllers/devices.component';
 import { ThemeComponent } from './Controllers/theme.component';
-import { LocalSearchComponent } from './Controllers/localSearch.component';
 import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
 import { ManageGroupComponent } from './Controllers/manageGroup.component';
 import { HomeComponent } from './Controllers/home.component';
@@ -77,7 +76,6 @@ import { ShareService } from './Services/ShareService';
         ChangePasswordComponent,
         DevicesComponent,
         ThemeComponent,
-        LocalSearchComponent,
         AdvancedSettingComponent,
         ManageGroupComponent,
         HomeComponent,
