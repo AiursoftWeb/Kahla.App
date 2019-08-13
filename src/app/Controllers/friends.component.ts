@@ -15,7 +15,8 @@ import { SearchResult } from '../Models/SearchResult';
         '../Styles/reddot.scss',
         '../Styles/add-friend.scss',
         '../Styles/friends.scss',
-        '../Styles/button.scss']
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 
 })
 export class FriendsComponent implements OnInit, DoCheck {
@@ -30,6 +31,7 @@ export class FriendsComponent implements OnInit, DoCheck {
         private messageService: MessageService,
         public cacheService: CacheService) {
     }
+
     public ngOnInit(): void {
         if (this.messageService.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
@@ -101,7 +103,7 @@ export class FriendsComponent implements OnInit, DoCheck {
         this.showUsers = selectUsers;
     }
 
-    public search(term: string): void {
+    public search(term: string, keydown: boolean = false): void {
         if (this.cacheService.cachedData.friends) {
             this.results = Object.assign({}, this.cacheService.cachedData.friends);
             if (term) {
@@ -114,15 +116,29 @@ export class FriendsComponent implements OnInit, DoCheck {
                     return regex.test(group.name);
                 });
             }
-            if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
-                this.showUsers = false;
-            } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
-                this.showUsers = true;
+            if (keydown) {
+                if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                    this.showUsers = false;
+                } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                    this.showUsers = true;
+                }
             }
         }
     }
 
     ngDoCheck(): void {
         this.search(this.searchTxt);
+    }
+
+    public goSingleSearch(): void {
+        if (this.showUsers) {
+            if (this.results.users.length === 1) {
+                this.router.navigate(['/user', this.results.users[0].id]);
+            }
+        } else {
+            if (this.results.groups.length === 1) {
+                this.router.navigate(['/group', this.results.groups[0].id]);
+            }
+        }
     }
 }

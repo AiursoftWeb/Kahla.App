@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
 
     constructor(
         private initService: InitService,
-        private elementRef: ElementRef,
         private themeService: ThemeService,
         public messageService: MessageService,
         private _electronService: ElectronService,
@@ -57,7 +56,7 @@ export class AppComponent implements OnInit {
 
     public ngOnInit(): void {
         // Temporary apply the local theme setting
-        this.themeService.ApplyThemeFromLocal(this.elementRef);
-        this.initService.init(this.elementRef);
+        this.themeService.ApplyThemeFromLocal();
+        this.initService.init();
     }
 }

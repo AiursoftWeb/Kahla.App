@@ -230,7 +230,7 @@ export class UploadService {
     public getFileURL(event: MouseEvent, message: string): void {
         event.preventDefault();
         const link = document.createElement('a');
-        link.href = Values.fileAddress + encodeURIComponent(message.substring(6).split('|')[0]).replace(/%2F/g, '/');
+        link.href = Values.fileDownloadAddress + encodeURIComponent(message.substring(6).split('|')[0]).replace(/%2F/g, '/');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
