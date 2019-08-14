@@ -79,8 +79,8 @@ self.addEventListener('push', function(event) {
     }
     let data = event.data.json();
     const pushTitle = 'Aiursoft Push System';
-    const fileLink = 'https://oss.cdn.aiursoft.com/download/fromkey/';
-    const imageLink = fileLink + '4251';
+    const imageLink = `https://probe.aiursoft.com/Download/Open/${encodeURIComponent(data.sender.iconFilePath).replace(/%2F/g, '/')}`;
+
     if (data.type == 0 && !data.muted) {
         // new message
         const title = (data.mentioned ? '[Mentioned you] ' : '') + data.sender.nickName;
@@ -119,7 +119,7 @@ self.addEventListener('push', function(event) {
                 if (showNotification) {
                     return self.registration.showNotification(title, {
                         body: message,
-                        icon: fileLink + data.sender.iconFilePath,
+                        icon: imageLink,
                         renotify: true,
                         tag: data.conversationId.toString()
                     });
