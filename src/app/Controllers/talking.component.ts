@@ -14,6 +14,8 @@ import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
 import { HeaderComponent } from './header.component';
+import { GroupsResult } from '../Models/GroupsResults';
+import { FriendshipService } from '../Services/FriendshipService';
 
 declare var MediaRecorder: any;
 
@@ -60,6 +62,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public uploadService: UploadService,
         public messageService: MessageService,
         private timerService: TimerService,
+        private friendshipService: FriendshipService,
         public _electronService: ElectronService,
     ) {
     }
@@ -419,5 +422,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public getAtListMaxHeight(): number {
         return window.innerHeight - this.chatInputHeight - 106;
+    }
+
+    public shareClick(msg: Message): void {
+        if (msg.contentRaw.startsWith('[user]') && msg.relatedData) {
+            this.router.navigate(['user', (<KahlaUser>msg.relatedData).id]);
+        } else if (msg.contentRaw.startsWith('[group]') && msg.relatedData) {
+            const group = <GroupsResult>msg.relatedData;
+            this.friendshipService.joinGroup(group, true);
+        }
     }
 }

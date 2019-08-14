@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurValue } from '../Models/AiurValue';
 import { AiurProtocal } from '../Models/AiurProtocal';
+import { GroupsResult } from '../Models/GroupsResults';
 
 @Injectable()
 export class GroupsApiService {
@@ -71,6 +72,12 @@ export class GroupsApiService {
     public DissolveGroup(groupName: string): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/DissolveGroup', {
             groupName: groupName
+        });
+    }
+
+    public GroupSummary(id: number): Observable<AiurValue<GroupsResult>> {
+        return this.apiService.Post(GroupsApiService.serverPath + '/GroupSummary', {
+            id: id
         });
     }
 }
