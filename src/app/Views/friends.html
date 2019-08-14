@@ -28,7 +28,9 @@
             <div class="icon">
                 <i class="fa fa fa-magic"></i>
             </div>
-            <div class="words" i18n="@@Discover">Discover Friends</div>
+            <div class="words" i18n="@@Discover">
+                Discover Friends
+            </div>
         </a>
         <a class="friends-button" (click)="createGroup()">
             <div class="icon">
@@ -39,10 +41,10 @@
             </div>
         </a>
     </div>
-    <div class="search-input search-input-with-button">
+    <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt !== ''}">
         <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
                (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch()" [(ngModel)]="searchTxt"/>
-        <button class="button compact primary" [disabled]="searchTxt === ''" (click)="searchTxt = ''"><i
+        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''"><i
             class="fa fa-close"></i></button>
     </div>
     <div class="search-type">
