@@ -79,7 +79,7 @@ self.addEventListener('push', function(event) {
     }
     let data = event.data.json();
     const pushTitle = 'Aiursoft Push System';
-    const imageLink = `https://probe.aiursoft.com/Download/Open/${data.sender.iconFilePath}`;
+    const imageLink = `https://probe.aiursoft.com/Download/Open/${encodeURIComponent(data.sender.iconFilePath).replace(/%2F/g, '/')}`;
 
     if (data.type == 0 && !data.muted) {
         // new message
