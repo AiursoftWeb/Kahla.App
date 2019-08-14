@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
@@ -9,7 +9,6 @@ import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { ShareService } from '../Services/ShareService';
 import { SearchResult } from '../Models/SearchResult';
 
 @Component({
@@ -22,33 +21,35 @@ import { SearchResult } from '../Models/SearchResult';
         '../Styles/badge.scss']
 
 })
-export class ShareComponent implements OnInit {
+export class ShareComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     public message: string;
     public inApp = false;
     public results: SearchResult;
+    public searchTxt = '';
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private messageService: MessageService,
         public cacheService: CacheService,
         private conversationApiService: ConversationApiService,
-        private friendsApiService: FriendsApiService,
-        private shareService: ShareService) {
+        private friendsApiService: FriendsApiService) {
     }
 
     public ngOnInit(): void {
-        if (this.shareService.share) {
-            this.shareService.share = false;
-            this.message = this.shareService.content;
-            this.inApp = true;
-        } else {
-            const parsedUrl = new URL(location.href);
-            const text = parsedUrl.searchParams.get('text');
-            const url = parsedUrl.searchParams.get('url');
-            this.message = `${text ? text : ''} ${url ? url : ''}`;
-        }
+        this.route.params.subscribe(param => {
+            if (param.message) {
+                this.message = param.message;
+                this.inApp = true;
+            } else {
+                const parsedUrl = new URL(location.href);
+                const text = parsedUrl.searchParams.get('text');
+                const url = parsedUrl.searchParams.get('url');
+                this.message = `${text ? text : ''} ${url ? url : ''}`;
+            }
+        });
         this.search('');
     }
 
@@ -70,13 +71,13 @@ export class ShareComponent implements OnInit {
         }
         const name = group ? (<GroupsResult>user).name : (<KahlaUser>user).nickName;
         let dialog: Promise<SweetAlertResult>;
-        const isResource = this.message.startsWith('[img]') || this.message.startsWith('[video]') || this.message.startsWith('[file]');
-        if (isResource) {
-            const msgType = this.message.startsWith('[img]') ? 'image' : (this.message.startsWith('[video]') ? 'video' : 'file');
+        const msgType = this.cacheService.modifyMessage(this.message, true);
+        if (msgType !== 'Text') {
             dialog = Swal.fire({
                 title: `Share ${msgType}?`,
                 text: `Are you sure to send this ${msgType} to ${name}?`,
                 showCancelButton: true,
+                type: 'question',
             });
         } else {
             dialog = Swal.fire({
@@ -88,7 +89,7 @@ export class ShareComponent implements OnInit {
             });
         }
         dialog.then(input => {
-            const msg = isResource ? this.message : input.value;
+            const msg = msgType !== 'Text' ? this.message : input.value;
             if (!input.dismiss && msg) {
                 if (this.messageService.conversation &&
                     this.messageService.conversation.id === conversationID) {
@@ -161,5 +162,9 @@ export class ShareComponent implements OnInit {
             }
         }, 0);
 
+    }
+
+    ngDoCheck(): void {
+        this.search(this.searchTxt);
     }
 }

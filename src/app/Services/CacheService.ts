@@ -127,18 +127,23 @@ export class CacheService {
         });
     }
 
-    public modifyMessage(content: string): string {
-        let returnString = content;
+    public modifyMessage(content: string, modifyText: boolean = false): string {
         if (content.startsWith('[img]')) {
-            returnString = 'Photo';
+            return 'Photo';
         } else if (content.startsWith('[video]')) {
-            returnString = 'Video';
+            return 'Video';
         } else if (content.startsWith('[file]')) {
-            returnString = 'File';
+            return 'File';
         } else if (content.startsWith('[audio]')) {
-            returnString = 'Audio';
+            return 'Audio';
+        } else if (content.startsWith('[group]')) {
+            return 'Group Invitation';
+        } else if (content.startsWith('[user]')) {
+            return 'Contact card';
+        } else if (modifyText) {
+            return 'Text';
         }
-        return returnString;
+        return content;
     }
 
     public updateTotalUnread(): void {

@@ -27,6 +27,8 @@ import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/DissolveEvent';
 import { HomeService } from './HomeService';
+import { GroupsApiService } from './GroupsApiService';
+import { FriendsApiService } from './FriendsApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -57,6 +59,8 @@ export class MessageService {
         private timerService: TimerService,
         private router: Router,
         private homeService: HomeService,
+        private groupsApiService: GroupsApiService,
+        private friendsApiService: FriendsApiService
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -216,6 +220,31 @@ export class MessageService {
                                 `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
                                     .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
                         }
+                    } else if (t.content.startsWith('[group]')) {
+                        const groupId = Number(t.content.substring(7));
+                        t.content = 'Loading...';
+                        this.groupsApiService.GroupSummary(groupId).subscribe(p => {
+                            if (p.value) {
+                                t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
+                                    `${p.value.hasPassword ? 'Private' : 'Public'}|${Values.fileAddress}${p.value.imagePath}`;
+                                t.relatedData = p.value;
+                            } else {
+                                t.content = 'Invalid Group';
+                            }
+                        });
+
+                    } else if (t.content.startsWith('[user]')) {
+                        const userId = t.content.substring(6);
+                        t.content = 'Loading...';
+                        this.friendsApiService.UserDetail(userId).subscribe(p => {
+                            if (p.user) {
+                                t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
+                                    `${p.user.bio.replace(/\|/g, '')}|${Values.fileAddress}${p.user.iconFilePath}`;
+                                t.relatedData = p.user;
+                            } else {
+                                t.content = 'Invalid User';
+                            }
+                        });
                     } else if (!t.content.match(/^\[(file|audio)\].*/)) {
                         t.isEmoji = this.checkEmoji(t.content);
                         t.content = he.encode(t.content);

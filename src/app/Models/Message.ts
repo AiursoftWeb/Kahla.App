@@ -14,4 +14,5 @@ export class Message {
     public avatarURL: string;
     public timeStamp: number;
     public lastRead = false;
+    public relatedData: any;
 }

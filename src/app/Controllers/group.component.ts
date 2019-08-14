@@ -105,4 +105,9 @@ export class GroupComponent implements OnInit {
             );
         }
     }
+
+    public shareGroup(): void {
+        this.router.navigate(['/share-target', {message: `[group]${this.conversation.id}`}]);
+    }
+
 }
