@@ -1,9 +1,9 @@
 <app-header title="Choose to share" [returnButton]="inApp"></app-header>
 <div class="search-part">
     <div class="search-input search-input-with-button">
-        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
-               (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch()"/>
-        <button class="button compact primary" [disabled]="searchInput.value === ''" (click)="searchInput.value = ''"><i
+        <input id="searchBar" placeholder="Search for your friends and groups" type="text" [(ngModel)]="searchTxt"
+               (input)="search(searchTxt, true)" (keydown.enter)="goSingleSearch()"/>
+        <button class="button compact primary" [disabled]="searchTxt === ''" (click)="searchTxt = ''"><i
             class="fa fa-close"></i></button>
     </div>
     <div class="search-type">

@@ -14,7 +14,6 @@ import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
 import { HeaderComponent } from './header.component';
-import { ShareService } from '../Services/ShareService';
 
 declare var MediaRecorder: any;
 
@@ -62,7 +61,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public messageService: MessageService,
         private timerService: TimerService,
         public _electronService: ElectronService,
-        private shareService: ShareService
     ) {
     }
 
@@ -416,9 +414,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
 
     public shareToOther(message: string): void {
-        this.shareService.share = true;
-        this.shareService.content = message;
-        this.router.navigate(['share-target']);
+        this.router.navigate(['share-target', {message: message}]);
     }
 
     public getAtListMaxHeight(): number {

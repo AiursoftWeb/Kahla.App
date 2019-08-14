@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
         private router: Router,
         private cacheService: CacheService,
         public messageService: MessageService,
-        public timerService: TimerService
+        public timerService: TimerService,
     ) {
     }
 
@@ -128,5 +128,8 @@ export class UserComponent implements OnInit {
                 this.sentRequest = false;
                 this.pendingRequest = null;
             });
+    }
+
+    public shareUser() {
     }
 }
