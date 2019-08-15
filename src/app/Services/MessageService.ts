@@ -222,7 +222,7 @@ export class MessageService {
                         }
                     } else if (t.content.startsWith('[group]')) {
                         const groupId = Number(t.content.substring(7));
-                        t.content = 'Loading...';
+                        t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
                         this.groupsApiService.GroupSummary(groupId).subscribe(p => {
                             if (p.value) {
                                 t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
@@ -235,11 +235,11 @@ export class MessageService {
 
                     } else if (t.content.startsWith('[user]')) {
                         const userId = t.content.substring(6);
-                        t.content = 'Loading...';
+                        t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
                         this.friendsApiService.UserDetail(userId).subscribe(p => {
                             if (p.user) {
                                 t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                                    `${p.user.bio.replace(/\|/g, '')}|${Values.fileAddress}${p.user.iconFilePath}`;
+                                    `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${Values.fileAddress}${p.user.iconFilePath}`;
                                 t.relatedData = p.user;
                             } else {
                                 t.content = 'Invalid User';
