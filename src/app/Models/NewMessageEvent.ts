@@ -1,10 +1,8 @@
 ﻿import { AiurEvent } from './AiurEvent';
-import { KahlaUser } from './KahlaUser';
+import { Message } from './Message';
 
 export class NewMessageEvent extends AiurEvent {
-    public conversationId: number;
-    public sender: KahlaUser;
-    public content: string;
+    public message: Message;
     public aesKey: string;
     public muted: boolean;
     public mentioned: boolean;

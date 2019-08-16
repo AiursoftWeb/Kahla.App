@@ -87,8 +87,18 @@ export class MessageService {
                     setTimeout(() => this.cacheService.updateConversation(), 1000);
                 }
                 // }
-                if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(0, this.conversation.id, -1, 15);
+                if (this.conversation && this.conversation.id === evt.message.conversationId) {
+                    // this.getMessages(0, this.conversation.id, -1, 15);
+                    this.localMessages.push(this.modifyMessage(evt.message));
+                    this.reorderLocalMessages();
+                    this.localMessages = this.localMessages.filter((t => !t.local));
+                    setTimeout(() => this.updateAtLink());
+                    if (this.belowWindowPercent <= 0.2) {
+                        setTimeout(() => {
+                            this.uploadService.scrollBottom(true);
+                        }, 0);
+                    }
+                    this.conversationApiService.GetMessage(this.conversation.id, -1, 0).subscribe();
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
@@ -197,64 +207,7 @@ export class MessageService {
                 if (!this.conversation) {
                     return;
                 }
-                messages.forEach(t => {
-                    try {
-                        t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    } catch (error) {
-                        t.content = '';
-                    }
-                    t.contentRaw = t.content;
-                    t.timeStamp = new Date(t.sendTime).getTime();
-                    if (t.content.match(/^\[(video|img)\].*/)) {
-                        if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('|')[1]),
-                                imageHeight = Number(t.content.split('|')[2]);
-                            const ratio = imageHeight / imageWidth;
-                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
-
-                            if (realMaxWidth < imageWidth) {
-                                imageWidth = realMaxWidth;
-                                imageHeight = Math.floor(realMaxWidth * ratio);
-                            }
-                            t.content =
-                                `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
-                                    .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
-                        }
-                    } else if (t.content.startsWith('[group]')) {
-                        const groupId = Number(t.content.substring(7));
-                        t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-                        this.groupsApiService.GroupSummary(groupId).subscribe(p => {
-                            if (p.value) {
-                                t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
-                                    `${p.value.hasPassword ? 'Private' : 'Public'}|${Values.fileAddress}${p.value.imagePath}`;
-                                t.relatedData = p.value;
-                            } else {
-                                t.content = 'Invalid Group';
-                            }
-                        });
-
-                    } else if (t.content.startsWith('[user]')) {
-                        const userId = t.content.substring(6);
-                        t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-                        this.friendsApiService.UserDetail(userId).subscribe(p => {
-                            if (p.user) {
-                                t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                                    `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${Values.fileAddress}${p.user.iconFilePath}`;
-                                t.relatedData = p.user;
-                            } else {
-                                t.content = 'Invalid User';
-                            }
-                        });
-                    } else if (!t.content.match(/^\[(file|audio)\].*/)) {
-                        t.isEmoji = this.checkEmoji(t.content);
-                        t.content = he.encode(t.content);
-                        t.content = Autolinker.link(t.content, {
-                            stripPrefix: false,
-                            className: 'chat-inline-link'
-                        });
-                        t.content = this.getAtIDs(t.content)[0];
-                    }
-                });
+                messages.forEach(t => this.modifyMessage(t));
                 if (messages.length < take) {
                     this.noMoreMessages = true;
                 }
@@ -310,16 +263,7 @@ export class MessageService {
                         });
                     }, 0);
                 }
-                setTimeout(() => {
-                    const links = document.getElementsByClassName('atLink');
-                    for (let i = 0; i < links.length; i++) {
-                        (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
-                            ev.preventDefault();
-                            // noinspection JSIgnoredPromiseFromCall
-                            this.router.navigateByUrl(links.item(i).getAttribute('href'));
-                        };
-                    }
-                }, 1);
+                setTimeout(() => this.updateAtLink(), 0);
             });
     }
 
@@ -359,12 +303,12 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.sender.id !== this.me.id && this._electronService.isElectronApp) {
-            event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
-            event.content = this.cacheService.modifyMessage(event.content);
-            const notify = new Notification(event.sender.nickName, {
-                body: event.content,
-                icon: Values.fileAddress + event.sender.iconFilePath
+        if (!event.muted && event.message.sender.id !== this.me.id && this._electronService.isElectronApp) {
+            event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
+            event.message.content = this.cacheService.modifyMessage(event.message.content);
+            const notify = new Notification(event.message.sender.nickName, {
+                body: event.message.content,
+                icon: Values.fileAddress + event.message.sender.iconFilePath
             });
             notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
@@ -430,5 +374,80 @@ export class MessageService {
             }
         }
         return false;
+    }
+
+    public modifyMessage(t: Message): Message {
+        try {
+            t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+        } catch (error) {
+            t.content = '';
+        }
+        t.contentRaw = t.content;
+        t.timeStamp = new Date(t.sendTime).getTime();
+        if (t.content.match(/^\[(video|img)\].*/)) {
+            if (t.content.startsWith('[img]')) {
+                let imageWidth = Number(t.content.split('|')[1]),
+                    imageHeight = Number(t.content.split('|')[2]);
+                const ratio = imageHeight / imageWidth;
+                const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
+
+                if (realMaxWidth < imageWidth) {
+                    imageWidth = realMaxWidth;
+                    imageHeight = Math.floor(realMaxWidth * ratio);
+                }
+                t.content =
+                    `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
+                        .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
+            }
+        } else if (t.content.startsWith('[group]')) {
+            const groupId = Number(t.content.substring(7));
+            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            this.groupsApiService.GroupSummary(groupId).subscribe(p => {
+                if (p.value) {
+                    t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
+                        `${p.value.hasPassword ? 'Private' : 'Public'}|${Values.fileAddress}${p.value.imagePath}`;
+                    t.relatedData = p.value;
+                } else {
+                    t.content = 'Invalid Group';
+                }
+            });
+
+        } else if (t.content.startsWith('[user]')) {
+            const userId = t.content.substring(6);
+            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            this.friendsApiService.UserDetail(userId).subscribe(p => {
+                if (p.user) {
+                    t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
+                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${Values.fileAddress}${p.user.iconFilePath}`;
+                    t.relatedData = p.user;
+                } else {
+                    t.content = 'Invalid User';
+                }
+            });
+        } else if (!t.content.match(/^\[(file|audio)\].*/)) {
+            t.isEmoji = this.checkEmoji(t.content);
+            t.content = he.encode(t.content);
+            t.content = Autolinker.link(t.content, {
+                stripPrefix: false,
+                className: 'chat-inline-link'
+            });
+            t.content = this.getAtIDs(t.content)[0];
+        }
+        return t;
+    }
+
+    public reorderLocalMessages() {
+        this.localMessages.sort((a, b) => a.timeStamp - b.timeStamp);
+    }
+
+    public updateAtLink() {
+        const links = document.getElementsByClassName('atLink');
+        for (let i = 0; i < links.length; i++) {
+            (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                ev.preventDefault();
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl(links.item(i).getAttribute('href'));
+            };
+        }
     }
 }
