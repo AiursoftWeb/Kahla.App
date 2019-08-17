@@ -219,23 +219,19 @@ export class MessageService {
                 if (this.localMessages.length > 1000) {
                     this.localMessages.splice(0, 500);
                 }
+                // Load new
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
-                        let findSameID = false;
-                        for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].id === messages[0].id) {
-                                findSameID = true;
-                                this.localMessages.splice(index, messages.length, ...messages);
-                                break;
-                            }
-                        }
-                        if (!findSameID) {
+                        const index = this.localMessages.findIndex(t => t.id === messages[0].id);
+                        if (index === -1) {
                             this.localMessages = messages;
+                        } else {
+                            this.localMessages.splice(index, messages.length, ...messages);
                         }
                     } else {
                         this.localMessages = messages;
                     }
-                } else {
+                } else { // load more
                     this.localMessages.unshift(...messages);
                 }
                 if (unread === 0) {
