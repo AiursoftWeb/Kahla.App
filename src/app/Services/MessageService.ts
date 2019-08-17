@@ -43,7 +43,6 @@ export class MessageService {
     public newMessages = false;
     private oldScrollHeight: number;
     public maxImageWidth = 0;
-    public me: KahlaUser;
     private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
@@ -157,7 +156,7 @@ export class MessageService {
             case EventType.SomeoneLeftLevent: {
                 const evt = ev as SomeoneLeftEvent;
                 const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
-                if (evt.leftUser.id === this.me.id) {
+                if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
                     Swal.fire('Oops, you have been kicked.',
                         `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
                             .find(x => x.conversationId === evt.conversationId).displayName}.`,
@@ -212,8 +211,8 @@ export class MessageService {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
-                    this.newMessages = this.me &&
-                        messages[messages.length - 1].senderId !== this.me.id &&
+                    this.newMessages = this.cacheService.cachedData.me &&
+                        messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
                         take === 1 && this.belowWindowPercent > 0;
                 }
                 if (this.localMessages.length > 1000) {
@@ -299,7 +298,7 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.message.sender.id !== this.me.id && this._electronService.isElectronApp) {
+        if (!event.muted && event.message.sender.id !== this.cacheService.cachedData.me.id && this._electronService.isElectronApp) {
             event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
             event.message.content = this.cacheService.modifyMessage(event.message.content);
             const notify = new Notification(event.message.sender.nickName, {
@@ -362,9 +361,9 @@ export class MessageService {
     }
 
     public checkOwner(id?: string): boolean {
-        if (this.conversation && this.me) {
+        if (this.conversation && this.cacheService.cachedData.me) {
             if (this.conversation.discriminator === 'GroupConversation') {
-                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.me.id);
+                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.cacheService.cachedData.me.id);
             } else {
                 return true;
             }

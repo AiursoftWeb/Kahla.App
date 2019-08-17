@@ -13,9 +13,9 @@
     </div>
     <!-- Show an empty component when no reasonable component to show. -->
     <div class="content-empty"
-         *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && messageService.me">
-        <h2>Welcome back, {{ messageService.me.nickName }}.</h2>
-        <img style="width: 100px" src="{{ messageService.me.avatarURL}}?w=200&h=200"
+         *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && cacheService.cachedData.me">
+        <h2>Welcome back, {{ cacheService.cachedData.me.nickName }}.</h2>
+        <img style="width: 100px" src="{{ cacheService.cachedData.me.avatarURL}}?w=200&h=200"
              (click)="homeService.currentPage = 2">
         <h3>Start talking now!</h3>
     </div>

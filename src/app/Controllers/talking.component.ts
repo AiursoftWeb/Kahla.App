@@ -16,6 +16,7 @@ import { ElectronService } from 'ngx-electron';
 import { HeaderComponent } from './header.component';
 import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
+import { CacheService } from '../Services/CacheService';
 
 declare var MediaRecorder: any;
 
@@ -61,6 +62,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
+        public cacheService: CacheService,
         private timerService: TimerService,
         private friendshipService: FriendshipService,
         public _electronService: ElectronService,
@@ -215,8 +217,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         });
         const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
         tempMessage.content = messageIDArry[0];
-        tempMessage.senderId = this.messageService.me.id;
-        tempMessage.sender = this.messageService.me;
+        tempMessage.senderId = this.cacheService.cachedData.me.id;
+        tempMessage.sender = this.cacheService.cachedData.me;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
