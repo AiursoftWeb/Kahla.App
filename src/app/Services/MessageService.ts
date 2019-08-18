@@ -464,6 +464,6 @@ export class MessageService {
             this.rawMessages = JSON.parse(json);
         }
         this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
-        this.uploadService.scrollBottom(true);
+        setTimeout(() => this.uploadService.scrollBottom(false), 0);
     }
 }
