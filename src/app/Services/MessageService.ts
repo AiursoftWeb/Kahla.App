@@ -459,7 +459,7 @@ export class MessageService {
     }
 
     public initMessage(conversationId: number): void {
-        const json = localStorage.getItem(`cache-msg-${conversationId}`);
+        const json = localStorage.getItem(`cache-log-${conversationId}`);
         if (json) {
             this.rawMessages = JSON.parse(json);
         }
