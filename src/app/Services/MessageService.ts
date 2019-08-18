@@ -37,6 +37,7 @@ import { FriendsApiService } from './FriendsApiService';
 export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[] = [];
+    public rawMessages: Message[] = [];
     public noMoreMessages = false;
     public loadingMore = false;
     public belowWindowPercent = 0;
@@ -88,10 +89,11 @@ export class MessageService {
                 // }
                 if (this.conversation && this.conversation.id === evt.message.conversationId) {
                     // this.getMessages(0, this.conversation.id, -1, 15);
-                    this.localMessages.push(this.modifyMessage(evt.message));
+                    this.rawMessages.push(evt.message);
+                    this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
                     this.localMessages = this.localMessages.filter((t => !t.local));
-                    setTimeout(() => this.updateAtLink());
+                    this.updateAtLink();
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
@@ -101,6 +103,7 @@ export class MessageService {
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
+                    this.saveMessage();
                 } else {
                     this.showNotification(evt);
                 }
@@ -206,7 +209,7 @@ export class MessageService {
                 if (!this.conversation) {
                     return;
                 }
-                messages.forEach(t => this.modifyMessage(t));
+                const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
                 if (messages.length < take) {
                     this.noMoreMessages = true;
                 }
@@ -215,30 +218,32 @@ export class MessageService {
                         messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
                         take === 1 && this.belowWindowPercent > 0;
                 }
-                if (this.localMessages.length > 1000) {
-                    this.localMessages.splice(0, 500);
-                }
+                // if (this.localMessages.length > 1000) {
+                //     this.localMessages.splice(0, 500);
+                // }
                 // Load new
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
-                        const index = this.localMessages.findIndex(t => t.id === messages[0].id);
+                        const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
                         if (index === -1) {
-                            this.localMessages = messages;
+                            this.localMessages = modifiedMsg;
+                            this.rawMessages = messages;
                         } else {
-                            this.localMessages.splice(index, messages.length, ...messages);
+                            this.localMessages.splice(index, modifiedMsg.length, ...modifiedMsg);
+                            this.rawMessages.splice(index, messages.length, ...messages);
                         }
                     } else {
-                        this.localMessages = messages;
+                        this.localMessages = modifiedMsg;
+                        this.rawMessages = messages;
                     }
                 } else { // load more
-                    this.localMessages.unshift(...messages);
+                    this.localMessages.unshift(...modifiedMsg);
+                    this.rawMessages.unshift(...messages);
                 }
                 if (unread === 0) {
-                    if (this.belowWindowPercent <= 0.2) {
-                        setTimeout(() => {
-                            this.uploadService.scrollBottom(true);
-                        }, 0);
-                    }
+                    setTimeout(() => {
+                        this.uploadService.scrollBottom(true);
+                    }, 0);
                 } else if (unread === -1) { // load more
                     this.loadingMore = false;
                     setTimeout(() => {
@@ -247,7 +252,7 @@ export class MessageService {
                 } else {
                     if (unread > 1) {
                         // add a last read bar
-                        messages[messages.length - unread].lastRead = true;
+                        this.localMessages[this.localMessages.length - unread].lastRead = true;
                     }
                     setTimeout(() => {
                         const lis = document.querySelector('#messageList').querySelectorAll('li');
@@ -258,7 +263,8 @@ export class MessageService {
                         });
                     }, 0);
                 }
-                setTimeout(() => this.updateAtLink(), 0);
+                this.updateAtLink();
+                this.saveMessage();
             });
     }
 
@@ -436,13 +442,28 @@ export class MessageService {
     }
 
     public updateAtLink() {
-        const links = document.getElementsByClassName('atLink');
-        for (let i = 0; i < links.length; i++) {
-            (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
-                ev.preventDefault();
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl(links.item(i).getAttribute('href'));
-            };
+        setTimeout(() => {
+            const links = document.getElementsByClassName('atLink');
+            for (let i = 0; i < links.length; i++) {
+                (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                    ev.preventDefault();
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                };
+            }
+        }, 0);
+    }
+
+    public saveMessage(): void {
+        localStorage.setItem(`cache-log-${this.conversation.id}`, JSON.stringify(this.rawMessages));
+    }
+
+    public initMessage(conversationId: number): void {
+        const json = localStorage.getItem(`cache-msg-${conversationId}`);
+        if (json) {
+            this.rawMessages = JSON.parse(json);
         }
+        this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.uploadService.scrollBottom(true);
     }
 }

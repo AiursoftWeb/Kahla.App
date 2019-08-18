@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -17,6 +17,7 @@ import { HeaderComponent } from './header.component';
 import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
 import { CacheService } from '../Services/CacheService';
+import { Conversation } from '../Models/Conversation';
 
 declare var MediaRecorder: any;
 
@@ -28,7 +29,7 @@ declare var MediaRecorder: any;
         '../Styles/menu.scss',
         '../Styles/badge.scss']
 })
-export class TalkingComponent implements OnInit, OnDestroy {
+export class TalkingComponent implements OnDestroy, AfterViewInit {
     public content: string;
     public showPanel = false;
     public loadingImgURL = Values.loadingImgURL;
@@ -124,13 +125,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnInit(): void {
+    public ngAfterViewInit(): void {
         window.addEventListener('scroll', () => {
             this.messageService.updateBelowWindowPercent();
             if (this.messageService.belowWindowPercent <= 0) {
                 this.messageService.newMessages = false;
             }
         });
+
+        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        inputElement.addEventListener('input', () => {
+            inputElement.style.height = 'auto';
+            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+            this.chatInputHeight = inputElement.scrollHeight;
+            if (document.querySelector('#scrollDown')) {
+                (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+            }
+        });
+
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -142,6 +154,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.conversationID = params.id;
                     this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
                     this.load = this.unread < 15 ? 15 : this.unread;
+                    if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                        this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
+                        this.messageService.initMessage(this.conversationID);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                    }
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
                     this.autoSaveInterval = setInterval(() => {
@@ -150,21 +167,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     }, 1000);
 
-                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
-
                     setTimeout(() => {
                         inputElement.style.height = (inputElement.scrollHeight) + 'px';
                         this.chatInputHeight = inputElement.scrollHeight;
                     }, 0);
-
-                    inputElement.addEventListener('input', () => {
-                        inputElement.style.height = 'auto';
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                        this.chatInputHeight = inputElement.scrollHeight;
-                        if (document.querySelector('#scrollDown')) {
-                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
-                        }
-                    });
 
                     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                         inputElement.focus();
@@ -176,24 +182,32 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroyed) {
-                    this.messageService.conversation = conversation;
-                    this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
-                    document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
-                    this.header.title = conversation.displayName;
-                    this.header.button = true;
-                    if (conversation.anotherUserId) {
-                        this.header.buttonIcon = 'user';
-                        this.header.buttonLink = `/user/${conversation.anotherUserId}`;
-                    } else {
-                        this.header.buttonIcon = `users`;
-                        this.header.buttonLink = `/group/${conversation.id}`;
+                    this.updateConversation(conversation);
+                    if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                        this.messageService.initMessage(this.conversationID);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                     }
-                    this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-                    this.header.timer = this.timerService.destructTime !== 'off';
+                    this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+                    this.cacheService.saveCache();
                 }
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    public updateConversation(conversation: Conversation): void {
+        this.messageService.conversation = conversation;
+        this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
+        this.header.title = conversation.displayName;
+        this.header.button = true;
+        if (conversation.anotherUserId) {
+            this.header.buttonIcon = 'user';
+            this.header.buttonLink = `/user/${conversation.anotherUserId}`;
+        } else {
+            this.header.buttonIcon = `users`;
+            this.header.buttonLink = `/group/${conversation.id}`;
+        }
+        this.timerService.updateDestructTime(conversation.maxLiveSeconds);
+        this.header.timer = this.timerService.destructTime !== 'off';
     }
 
     public trackByMessages(_index: number, message: Message): number {

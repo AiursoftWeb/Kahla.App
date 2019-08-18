@@ -158,6 +158,10 @@ export class CacheService {
     public initCache(): void {
         if (localStorage.getItem('global-cache')) {
             this.cachedData = <CacheModel>JSON.parse(localStorage.getItem('global-cache'));
+            if (this.cachedData.version !== CacheModel.VERSION) {
+                this.cachedData = new CacheModel();
+                this.saveCache();
+            }
         } else {
             this.cachedData = new CacheModel();
         }
