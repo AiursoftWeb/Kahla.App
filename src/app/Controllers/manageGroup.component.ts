@@ -11,6 +11,7 @@ import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { ElectronService } from 'ngx-electron';
 import { AiurCollection } from '../Models/AiurCollection';
+import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',
@@ -27,6 +28,7 @@ export class ManageGroupComponent implements OnInit {
 
     constructor(public groupsApiService: GroupsApiService,
                 public messageService: MessageService,
+                public cacheService: CacheService,
                 public conversationApiService: ConversationApiService,
                 public route: ActivatedRoute,
                 private router: Router,
@@ -61,7 +63,7 @@ export class ManageGroupComponent implements OnInit {
     public transferOwner(): void {
         const inputOptions = {};
         this.conversation.users.forEach(val => {
-            if (val.user.id !== this.messageService.me.id) {
+            if (val.user.id !== this.cacheService.cachedData.me.id) {
                 inputOptions[val.user.id] = val.user.nickName;
             }
         });
@@ -148,7 +150,7 @@ export class ManageGroupComponent implements OnInit {
     public kickMember() {
         const inputOptions = {};
         this.conversation.users.forEach(val => {
-            if (val.user.id !== this.messageService.me.id) {
+            if (val.user.id !== this.cacheService.cachedData.me.id) {
                 inputOptions[val.user.id] = val.user.nickName;
             }
         });

@@ -33,13 +33,13 @@ export class FriendsComponent implements OnInit, DoCheck {
     }
 
     public ngOnInit(): void {
-        if (this.messageService.me && !this.cacheService.cachedData.friends) {
+        if (this.cacheService.cachedData.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
         }
     }
 
     public createGroup(): void {
-        if (!this.messageService.me.emailConfirmed) {
+        if (!this.cacheService.cachedData.me.emailConfirmed) {
             Swal.fire('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
             return;
         }

@@ -3,7 +3,8 @@
     (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages"
+        [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
@@ -12,7 +13,7 @@
             <div class="chat-text">
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
                     <span
-                        *ngIf="messageService.groupConversation && messageService.me && message.senderId != messageService.me.id"
+                        *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
                         <label class="badge badge-primary" *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
                         <label class="badge badge-secondary"

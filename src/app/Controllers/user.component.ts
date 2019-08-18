@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
         private route: ActivatedRoute,
         private friendsApiService: FriendsApiService,
         private router: Router,
-        private cacheService: CacheService,
+        public cacheService: CacheService,
         public messageService: MessageService,
         public timerService: TimerService,
     ) {
