@@ -8,7 +8,7 @@ import { Timers } from '../Models/Timers';
 })
 export class TimerService {
     public destructTime = 'off';
-    private formerTimer = Timers.off;
+    public formerTimer = Timers.off;
 
     constructor(
         private conversationApiService: ConversationApiService) {}
@@ -47,6 +47,7 @@ export class TimerService {
     }
 
     public updateDestructTime(time: number): void {
+        this.formerTimer = Timers[this.destructTime];
         this.destructTime = this.getDestructTime(time);
     }
 
