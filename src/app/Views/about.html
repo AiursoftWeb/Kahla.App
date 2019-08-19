@@ -12,18 +12,6 @@
 
 <div class="menu-holder"></div>
 
-<div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
-    <div class="img">
-        <i class="fa fa-plus-square" aria-hidden="true"></i>
-    </div>
-    <div class="text">Add to home screen</div>
-</div>
-<div class="menu-button" *ngIf="homeService.pwaHomeScreenSuccess">
-    <div class="img">
-        <i class="fa fa-check" aria-hidden="true"></i>
-    </div>
-    <div class="text">Success</div>
-</div>
 <div *ngIf="checkService.checking; then checkingButton else checkButton"></div>
 <ng-template #checkButton>
     <div class="menu-button" (click)="check()">

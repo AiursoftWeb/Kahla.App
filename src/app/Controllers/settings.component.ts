@@ -7,6 +7,7 @@ import { MessageService } from '../Services/MessageService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
+import { HomeService } from '../Services/HomeService';
 
 @Component({
     selector: 'app-settings',
@@ -23,7 +24,8 @@ export class SettingsComponent implements OnInit {
         private initSerivce: InitService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        private _electronService: ElectronService) {
+        private _electronService: ElectronService,
+        public homeService: HomeService) {
         }
 
     public ngOnInit(): void {
@@ -36,6 +38,17 @@ export class SettingsComponent implements OnInit {
                 }
             });
         }
+    }
+
+    public pwaAddHomeScreen(): void {
+        this.homeService.pwaHomeScreenPrompt.prompt();
+        this.homeService.pwaHomeScreenPrompt.userChoice
+            .then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    this.homeService.pwaHomeScreenSuccess = true;
+                }
+                this.homeService.pwaHomeScreenPrompt = null;
+            });
     }
 
     public SignOut(): void {
