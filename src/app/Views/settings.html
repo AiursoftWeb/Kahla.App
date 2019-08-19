@@ -19,7 +19,15 @@
         <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.makeEmailPublic">Hidden</label>
     </div>
 </div>
+
+<div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
+    <div class="img">
+        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+    </div>
+    <div class="text">Pin Kahla to home</div>
+</div>
 <div class="menu-holder"></div>
+
 <div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
      (click)="sendEmail()">
     <div class="img warning">
