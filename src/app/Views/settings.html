@@ -26,6 +26,12 @@
     </div>
     <div class="text">Pin Kahla to home</div>
 </div>
+<div class="menu-button" *ngIf="homeService.pwaHomeScreenSuccess">
+    <div class="img">
+        <i class="fa fa-check" aria-hidden="true"></i>
+    </div>
+    <div class="text">Success</div>
+</div>
 <div class="menu-holder"></div>
 
 <div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
