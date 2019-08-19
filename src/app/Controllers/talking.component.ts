@@ -64,7 +64,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        private timerService: TimerService,
+        public timerService: TimerService,
         private friendshipService: FriendshipService,
         public _electronService: ElectronService,
     ) {

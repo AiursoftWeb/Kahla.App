@@ -6,7 +6,7 @@
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages"
         [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
-        <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
+        <div *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
                 <img src="{{fileAddress + message.sender.iconFilePath}}?w=80&h=80">
             </div>
