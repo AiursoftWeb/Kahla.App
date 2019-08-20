@@ -5,7 +5,7 @@ export class Message {
     public conversationId: number;
     public senderId: string;
     public sender: KahlaUser;
-    public sendTime: Date;
+    public sendTime: string;
     public content: string;
 
     public contentRaw: string;

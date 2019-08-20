@@ -140,8 +140,7 @@ export class MessageService {
                     this.timerService.updateDestructTime(evt.newTimer);
                     Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
                         this.timerService.destructTime, 'info');
-                    this.localMessages = [];
-                    this.getMessages(0, this.conversation.id, -1, 15);
+                    this.cleanMessageByTimer();
                 }
                 break;
             }
@@ -293,6 +292,7 @@ export class MessageService {
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = [];
+        this.rawMessages = [];
         this.noMoreMessages = false;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
@@ -464,6 +464,29 @@ export class MessageService {
             this.rawMessages = JSON.parse(json);
         }
         this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.updateAtLink();
         setTimeout(() => this.uploadService.scrollBottom(false), 0);
+    }
+
+    public cleanMessageByTimer(): void {
+        if (!this.conversation) {
+            return;
+        }
+        const firstIndex = this.rawMessages.findIndex(t => {
+            const timeStamp = new Date(t.sendTime).getTime();
+            return timeStamp + this.conversation.maxLiveSeconds * 1000 >= Date.now();
+        });
+        if (firstIndex === 0) {
+            return;
+        } else if (firstIndex === -1) {
+            this.rawMessages = [];
+            this.localMessages = [];
+        } else {
+            if (this.localMessages.length === this.rawMessages.length) {
+                this.localMessages = this.localMessages.splice(0, firstIndex);
+            }
+            this.rawMessages = this.rawMessages.splice(0, firstIndex);
+        }
+        this.saveMessage();
     }
 }

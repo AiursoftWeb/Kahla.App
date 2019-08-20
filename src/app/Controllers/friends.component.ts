@@ -6,6 +6,9 @@ import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
 import { SearchResult } from '../Models/SearchResult';
+import { KahlaUser } from '../Models/KahlaUser';
+import { FriendsApiService } from '../Services/FriendsApiService';
+import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
     selector: 'app-friends',
@@ -24,9 +27,11 @@ export class FriendsComponent implements OnInit, DoCheck {
     public showUsers = true;
     private results: SearchResult;
     public searchTxt = '';
+    private detailLoading = false;
 
     constructor(
         private groupsApiService: GroupsApiService,
+        private friendsApiService: FriendsApiService,
         private router: Router,
         private messageService: MessageService,
         public cacheService: CacheService) {
@@ -130,15 +135,38 @@ export class FriendsComponent implements OnInit, DoCheck {
         this.search(this.searchTxt);
     }
 
-    public goSingleSearch(): void {
+    public goSingleSearch(ctrl: boolean): void {
         if (this.showUsers) {
             if (this.results.users.length === 1) {
-                this.router.navigate(['/user', this.results.users[0].id]);
+                this.userClick(this.results.users[0], ctrl);
             }
         } else {
             if (this.results.groups.length === 1) {
-                this.router.navigate(['/group', this.results.groups[0].id]);
+                this.groupClick(this.results.groups[0], ctrl);
             }
+        }
+    }
+
+    public userClick(user: KahlaUser, ctrl: boolean) {
+        if (ctrl) {
+            if (this.detailLoading) {
+                return;
+            }
+            this.detailLoading = true;
+            this.friendsApiService.UserDetail(user.id).subscribe(p => {
+                this.router.navigate(['/talking', p.conversationId]);
+                this.detailLoading = false;
+            });
+        } else {
+            this.router.navigate(['/user', user.id]);
+        }
+    }
+
+    public groupClick(group: GroupsResult, ctrl: boolean) {
+        if (ctrl) {
+            this.router.navigate(['/talking', group.id]);
+        } else {
+            this.router.navigate(['/group', group.id]);
         }
     }
 }

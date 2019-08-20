@@ -187,6 +187,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                         this.messageService.initMessage(this.conversationID);
                         this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                     }
+                    this.messageService.cleanMessageByTimer();
                     this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
                     this.cacheService.saveCache();
                 }
