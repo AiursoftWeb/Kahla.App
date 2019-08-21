@@ -1,4 +1,4 @@
-﻿import { Component, DoCheck, OnInit } from '@angular/core';
+﻿import { Component, DoCheck, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
@@ -22,7 +22,7 @@ import { GroupsResult } from '../Models/GroupsResults';
         '../Styles/badge.scss']
 
 })
-export class FriendsComponent implements OnInit, DoCheck {
+export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     private results: SearchResult;
@@ -40,6 +40,13 @@ export class FriendsComponent implements OnInit, DoCheck {
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
+        }
+    }
+
+    ngAfterViewInit(): void {
+        const inputElement = <HTMLElement>document.querySelector('#searchBar');
+        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            inputElement.focus();
         }
     }
 

@@ -29,7 +29,7 @@ To develope Kahla, you need to install the following components:
 * Git
 * Nodejs and npm
 
-We **strongly suggest** using [VSCodium](https://github.com/VSCodium/vscodium) to develope this project.
+We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com) to develope this project.
 
 Using VSCodium to open the directory directly.
 
