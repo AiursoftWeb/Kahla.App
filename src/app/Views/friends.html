@@ -70,11 +70,11 @@
         </div>
     </div>
     <div *ngIf="results.users.length === 0" class="empty-result-notice">No result.</div>
-    <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
+    <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
         class="badge badge-secondary">Ctrl</span> to start talking directly.
-    </div>
+    </div> -->
     <div *ngIf="results.users.length === 1" class="empty-result-notice">Press <span
-        class="badge badge-secondary">Enter</span> to select.
+        class="badge badge-secondary">Enter</span> to talk.
     </div>
 </div>
 <div *ngIf="!showUsers && cacheService.cachedData.friends">
@@ -87,10 +87,10 @@
         </div>
     </div>
     <div *ngIf="results.groups.length === 0" class="empty-result-notice">No result.</div>
-    <div *ngIf="results.groups.length !== 0" class="empty-result-notice">Hold <span
+    <!-- <div *ngIf="results.groups.length !== 0" class="empty-result-notice">Hold <span
         class="badge badge-secondary">Ctrl</span> to start talking directly.
-    </div>
+    </div> -->
     <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
-        class="badge badge-secondary">Enter</span> to select.
+        class="badge badge-secondary">Enter</span> to talk.
     </div>
 </div>
