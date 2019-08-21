@@ -156,6 +156,8 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
 
     public userClick(user: KahlaUser, ctrl: boolean) {
         if (ctrl) {
+            this.router.navigate(['/user', user.id]);
+        } else {
             if (this.detailLoading) {
                 return;
             }
@@ -164,16 +166,14 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                 this.router.navigate(['/talking', p.conversationId]);
                 this.detailLoading = false;
             });
-        } else {
-            this.router.navigate(['/user', user.id]);
         }
     }
 
     public groupClick(group: GroupsResult, ctrl: boolean) {
         if (ctrl) {
-            this.router.navigate(['/talking', group.id]);
-        } else {
             this.router.navigate(['/group', group.id]);
+        } else {
+            this.router.navigate(['/talking', group.id]);
         }
     }
 }
