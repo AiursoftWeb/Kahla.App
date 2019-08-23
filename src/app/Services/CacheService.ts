@@ -10,7 +10,7 @@ import { ConversationApiService } from './ConversationApiService';
 
 @Injectable()
 export class CacheService {
-    public cachedData: CacheModel = new CacheModel();
+    public cachedData: CacheModel;
     public totalUnread = 0;
     public totalRequests = 0;
 
@@ -46,6 +46,7 @@ export class CacheService {
                 });
                 this.cachedData.conversations = info;
                 this.updateTotalUnread();
+                this.saveCache();
             });
     }
 
@@ -61,6 +62,7 @@ export class CacheService {
                     });
 
                     this.cachedData.friends = result;
+                    this.saveCache();
                 }
             });
     }
@@ -72,6 +74,7 @@ export class CacheService {
                 item.creator.avatarURL = Values.fileAddress + item.creator.iconFilePath;
             });
             this.totalRequests = response.items.filter(t => !t.completed).length;
+            this.saveCache();
         });
     }
 
@@ -124,25 +127,47 @@ export class CacheService {
                 }
             });
             this.cachedData.devices = response.items;
+            this.saveCache();
         });
     }
 
-    public modifyMessage(content: string): string {
-        let returnString = content;
+    public modifyMessage(content: string, modifyText: boolean = false): string {
         if (content.startsWith('[img]')) {
-            returnString = 'Photo';
+            return 'Photo';
         } else if (content.startsWith('[video]')) {
-            returnString = 'Video';
+            return 'Video';
         } else if (content.startsWith('[file]')) {
-            returnString = 'File';
+            return 'File';
         } else if (content.startsWith('[audio]')) {
-            returnString = 'Audio';
+            return 'Audio';
+        } else if (content.startsWith('[group]')) {
+            return 'Group Invitation';
+        } else if (content.startsWith('[user]')) {
+            return 'Contact card';
+        } else if (modifyText) {
+            return 'Text';
         }
-        return returnString;
+        return content;
     }
 
     public updateTotalUnread(): void {
         this.totalUnread = this.cachedData.conversations
             .filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
+    }
+
+    public initCache(): void {
+        if (localStorage.getItem('global-cache')) {
+            this.cachedData = <CacheModel>JSON.parse(localStorage.getItem('global-cache'));
+            if (this.cachedData.version !== CacheModel.VERSION) {
+                this.cachedData = new CacheModel();
+                this.saveCache();
+            }
+        } else {
+            this.cachedData = new CacheModel();
+        }
+    }
+
+    public saveCache(): void {
+        localStorage.setItem('global-cache', JSON.stringify(this.cachedData));
     }
 }

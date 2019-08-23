@@ -29,7 +29,7 @@ export class GroupComponent implements OnInit {
         private groupsApiService: GroupsApiService,
         private conversationApiService: ConversationApiService,
         private router: Router,
-        private cache: CacheService,
+        private cacheService: CacheService,
         public messageService: MessageService) {
     }
 
@@ -48,12 +48,12 @@ export class GroupComponent implements OnInit {
                 this.conversation.users.forEach(user => {
                     user.user.avatarURL = Values.fileAddress + user.user.iconFilePath;
                     try {
-                        if (user.userId === this.messageService.me.id) {
+                        if (user.userId === this.cacheService.cachedData.me.id) {
                             this.muted = user.muted;
                         }
                     } catch (error) {
                         setTimeout(() => {
-                            if (user.userId === this.messageService.me.id) {
+                            if (user.userId === this.cacheService.cachedData.me.id) {
                                 this.muted = user.muted;
                             }
                         }, 1000);
@@ -79,8 +79,8 @@ export class GroupComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             Swal.fire('Success', response.message, 'success');
-                            this.cache.updateConversation();
-                            this.cache.updateFriends();
+                            this.cacheService.updateConversation();
+                            this.cacheService.updateFriends();
                             this.router.navigate(['/home']);
                         } else {
                             Swal.fire('Error', response.message, 'error');
@@ -105,4 +105,9 @@ export class GroupComponent implements OnInit {
             );
         }
     }
+
+    public shareGroup(): void {
+        this.router.navigate(['/share-target', {message: `[group]${this.conversation.id}`}]);
+    }
+
 }

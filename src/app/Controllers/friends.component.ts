@@ -1,10 +1,14 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, DoCheck, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { GroupsApiService } from '../Services/GroupsApiService';
+import { SearchResult } from '../Models/SearchResult';
+import { KahlaUser } from '../Models/KahlaUser';
+import { FriendsApiService } from '../Services/FriendsApiService';
+import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
     selector: 'app-friends',
@@ -13,27 +17,41 @@ import { GroupsApiService } from '../Services/GroupsApiService';
         '../Styles/menu.scss',
         '../Styles/reddot.scss',
         '../Styles/add-friend.scss',
-        '../Styles/friends.scss']
+        '../Styles/friends.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 
 })
-export class FriendsComponent implements OnInit {
+export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
+    private results: SearchResult;
+    public searchTxt = '';
+    private detailLoading = false;
 
     constructor(
         private groupsApiService: GroupsApiService,
+        private friendsApiService: FriendsApiService,
         private router: Router,
         private messageService: MessageService,
         public cacheService: CacheService) {
     }
+
     public ngOnInit(): void {
-        if (this.messageService.me && !this.cacheService.cachedData.friends) {
+        if (this.cacheService.cachedData.me && !this.cacheService.cachedData.friends) {
             this.messageService.updateFriends();
         }
     }
 
+    ngAfterViewInit(): void {
+        const inputElement = <HTMLElement>document.querySelector('#searchBar');
+        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            inputElement.focus();
+        }
+    }
+
     public createGroup(): void {
-        if (!this.messageService.me.emailConfirmed) {
+        if (!this.cacheService.cachedData.me.emailConfirmed) {
             Swal.fire('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
             return;
         }
@@ -95,5 +113,67 @@ export class FriendsComponent implements OnInit {
 
     public showUsersResults(selectUsers: boolean): void {
         this.showUsers = selectUsers;
+    }
+
+    public search(term: string, keydown: boolean = false): void {
+        if (this.cacheService.cachedData.friends) {
+            this.results = Object.assign({}, this.cacheService.cachedData.friends);
+            if (term) {
+                this.results.users = this.results.users.filter(user => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.nickName) || (user.email && regex.test(user.email));
+                });
+                this.results.groups = this.results.groups.filter(group => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(group.name);
+                });
+            }
+            if (keydown) {
+                if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                    this.showUsers = false;
+                } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                    this.showUsers = true;
+                }
+            }
+        }
+    }
+
+    ngDoCheck(): void {
+        this.search(this.searchTxt);
+    }
+
+    public goSingleSearch(ctrl: boolean): void {
+        if (this.showUsers) {
+            if (this.results.users.length === 1) {
+                this.userClick(this.results.users[0], ctrl);
+            }
+        } else {
+            if (this.results.groups.length === 1) {
+                this.groupClick(this.results.groups[0], ctrl);
+            }
+        }
+    }
+
+    public userClick(user: KahlaUser, ctrl: boolean) {
+        if (ctrl) {
+            this.router.navigate(['/user', user.id]);
+        } else {
+            if (this.detailLoading) {
+                return;
+            }
+            this.detailLoading = true;
+            this.friendsApiService.UserDetail(user.id).subscribe(p => {
+                this.router.navigate(['/talking', p.conversationId]);
+                this.detailLoading = false;
+            });
+        }
+    }
+
+    public groupClick(group: GroupsResult, ctrl: boolean) {
+        if (ctrl) {
+            this.router.navigate(['/group', group.id]);
+        } else {
+            this.router.navigate(['/talking', group.id]);
+        }
     }
 }

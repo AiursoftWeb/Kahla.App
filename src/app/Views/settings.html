@@ -1,26 +1,41 @@
 <app-header title="Me" [returnButton]="false"></app-header>
 
-<div class="user" routerLink="/userInfo" *ngIf="messageService.me">
-    <img class="user-img" src="{{ messageService.me.avatarURL}}?w=100&h=100 ">
+<div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
+    <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=100&h=100 ">
     <div class="name">
-        {{ messageService.me.nickName }}
+        {{ cacheService.cachedData.me.nickName }}
         <label class="badge badge-secondary"
-               *ngIf="messageService.me.emailConfirmed && messageService.me.email && messageService.me.email.endsWith('@aiursoft.com')">
+               *ngIf="cacheService.cachedData.me.emailConfirmed && cacheService.cachedData.me.email && cacheService.cachedData.me.email.endsWith('@aiursoft.com')">
             Staff
         </label>
     </div>
     <div class="bio">
-        {{ messageService.me.bio }}
+        {{ cacheService.cachedData.me.bio }}
     </div>
-    <div class="email" *ngIf="messageService.me.email">
-        {{ messageService.me.email }}
-        <label class="badge badge-success" *ngIf="messageService.me.emailConfirmed">Verified</label>
-        <label class="badge badge-primary" *ngIf="messageService.me.makeEmailPublic">Public</label>
-        <label class="badge badge-primary" *ngIf="!messageService.me.makeEmailPublic">Hidden</label>
+    <div class="email" *ngIf="cacheService.cachedData.me.email">
+        {{ cacheService.cachedData.me.email }}
+        <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed">Verified</label>
+        <label class="badge badge-primary" *ngIf="cacheService.cachedData.me.makeEmailPublic">Public</label>
+        <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.makeEmailPublic">Hidden</label>
     </div>
 </div>
+
+<div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
+    <div class="img">
+        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+    </div>
+    <div class="text">Pin Kahla to home</div>
+</div>
+<div class="menu-button" *ngIf="homeService.pwaHomeScreenSuccess">
+    <div class="img">
+        <i class="fa fa-check" aria-hidden="true"></i>
+    </div>
+    <div class="text">Success</div>
+</div>
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="messageService.me && !messageService.me.emailConfirmed" (click)="sendEmail()">
+
+<div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
+     (click)="sendEmail()">
     <div class="img warning">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     </div>

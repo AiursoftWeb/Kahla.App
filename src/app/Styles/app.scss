@@ -2,32 +2,47 @@
 
 .floating-home-wrapper {
   @extend %floating-home;
-  float: left;
-  width: 35%;
-  max-width: 550px;
+  width: calc(35% - 1px);
+  max-width: 549px;
   height: 100vh;
   overflow-y: scroll;
   border-right-width: 1px;
   border-right-style: solid;
   transition: all 0.2s ease-in-out;
   -webkit-overflow-scrolling: touch;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.window-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.home-holder {
+  width: 35%;
+  max-width: 550px;
+  flex: none;
 }
 
 .content-wrapper {
-  height: 100vh;
-  overflow-y: scroll;
-  width: auto;
+  width: 100%;
   position: relative;
-
-  box-shadow: -4px 47px 8px 0 rgba(0,0,0,.2);
+  flex: auto;
+  box-shadow: -4px 0px 8px 0 rgba(0, 0, 0, .2);
   z-index: 11;
-  -webkit-overflow-scrolling: touch;
+
+  &.in-widescreen {
+    width: 65%;
+    min-width: calc(100% - 550px);
+  }
 }
 
 .content-empty {
-  height: 100vh;
   overflow-y: hidden;
   width: auto;
+  flex: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

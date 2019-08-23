@@ -3,16 +3,17 @@
     (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages" [ngClass]="{'left': messageService.me && message.senderId != messageService.me.id, 'right': messageService.me && message.senderId == messageService.me.id}">
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages"
+        [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
-        <div *ngIf="message.local || message.timeStamp + messageService.conversation.maxLiveSeconds * 1000 > Date.now()">
+        <div *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
                 <img src="{{fileAddress + message.sender.iconFilePath}}?w=80&h=80">
             </div>
             <div class="chat-text">
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
                     <span
-                        *ngIf="messageService.groupConversation && messageService.me && message.senderId != messageService.me.id"
+                        *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
                         <label class="badge badge-primary" *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
                         <label class="badge badge-secondary"
@@ -29,7 +30,7 @@
                                 {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }}&h={{ Math.floor(message.content.split('|')[2] * 2) }} 2x">
                         </div>
                     </a>
-                    <a class="file"
+                    <a class="share-item file"
                        *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
                        target="_blank" rel="noopener noreferrer" href=""
                        (click)="uploadService.getFileURL($event, message.content)">
@@ -70,6 +71,14 @@
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
+                    <a class="share-item" href="javascript:void(0);" (click)="shareClick(message)"
+                       *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
+                        <div>
+                            <img src="{{message.content.split('|')[3]}}?w=40&h=40"/>
+                        </div>
+                        <h5>{{message.content.split('|')[1]}}</h5>
+                        <span>{{message.content.split('|')[2]}}</span>
+                    </a>
                     <div *ngIf="message.content.startsWith('[video]')" >
                         <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
                     </div>
@@ -79,7 +88,8 @@
                             <span>Voice Message</span>
                         </a>
                     </div>
-                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]')"  [innerHTML]="message.content"></p>
+                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]') && !message.content.startsWith('[share]')"
+                       [innerHTML]="message.content"></p>
                     <div
                         *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
                         <i (click)="shareToOther(message.contentRaw)" class="share fa fa-share-alt"

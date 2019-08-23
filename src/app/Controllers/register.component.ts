@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -23,7 +23,6 @@ export class RegisterComponent {
         private authApiService: AuthApiService,
         private router: Router,
         private initService: InitService,
-        private elementRef: ElementRef,
         private homeService: HomeService,
         ) { }
 
@@ -45,7 +44,7 @@ export class RegisterComponent {
                             if (p.code === 0) {
                                 this.router.navigate(['/home'], {replaceUrl: true});
                                 this.homeService.currentPage = 0;
-                                this.initService.init(this.elementRef);
+                                this.initService.init();
                             } else {
                                 Swal.fire('Sign in failed', 'An error occured while signing in.', 'error');
                             }

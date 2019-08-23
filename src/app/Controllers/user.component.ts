@@ -29,9 +29,9 @@ export class UserComponent implements OnInit {
         private route: ActivatedRoute,
         private friendsApiService: FriendsApiService,
         private router: Router,
-        private cacheService: CacheService,
+        public cacheService: CacheService,
         public messageService: MessageService,
-        public timerService: TimerService
+        public timerService: TimerService,
     ) {
     }
 
@@ -128,5 +128,9 @@ export class UserComponent implements OnInit {
                 this.sentRequest = false;
                 this.pendingRequest = null;
             });
+    }
+
+    public shareUser() {
+        this.router.navigate(['/share-target', {message: `[user]${this.info.id}`}]);
     }
 }

@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -13,9 +13,11 @@ import Autolinker from 'autolinker';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
-import { HomeService } from '../Services/HomeService';
 import { HeaderComponent } from './header.component';
-import { ShareService } from '../Services/ShareService';
+import { GroupsResult } from '../Models/GroupsResults';
+import { FriendshipService } from '../Services/FriendshipService';
+import { CacheService } from '../Services/CacheService';
+import { Conversation } from '../Models/Conversation';
 
 declare var MediaRecorder: any;
 
@@ -27,7 +29,7 @@ declare var MediaRecorder: any;
         '../Styles/menu.scss',
         '../Styles/badge.scss']
 })
-export class TalkingComponent implements OnInit, OnDestroy {
+export class TalkingComponent implements OnDestroy, AfterViewInit {
     public content: string;
     public showPanel = false;
     public loadingImgURL = Values.loadingImgURL;
@@ -61,10 +63,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
-        private timerService: TimerService,
+        public cacheService: CacheService,
+        public timerService: TimerService,
+        private friendshipService: FriendshipService,
         public _electronService: ElectronService,
-        private homeService: HomeService,
-        private shareService: ShareService
     ) {
     }
 
@@ -73,11 +75,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + this.keyBoardHeight);
+            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - this.keyBoardHeight);
+            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop);
+            window.scroll(0, document.documentElement.scrollTop);
         }
         this.formerWindowInnerHeight = window.innerHeight;
     }
@@ -123,13 +125,24 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnInit(): void {
-        this.homeService.contentWrapper.addEventListener('scroll', () => {
+    public ngAfterViewInit(): void {
+        window.addEventListener('scroll', () => {
             this.messageService.updateBelowWindowPercent();
             if (this.messageService.belowWindowPercent <= 0) {
                 this.messageService.newMessages = false;
             }
         });
+
+        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        inputElement.addEventListener('input', () => {
+            inputElement.style.height = 'auto';
+            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+            this.chatInputHeight = inputElement.scrollHeight;
+            if (document.querySelector('#scrollDown')) {
+                (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+            }
+        });
+
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
@@ -141,6 +154,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.conversationID = params.id;
                     this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
                     this.load = this.unread < 15 ? 15 : this.unread;
+                    if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                        this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
+                        this.messageService.initMessage(this.conversationID);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                    }
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
                     this.autoSaveInterval = setInterval(() => {
@@ -149,21 +167,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     }, 1000);
 
-                    const inputElement = <HTMLElement>document.querySelector('#chatInput');
-
                     setTimeout(() => {
                         inputElement.style.height = (inputElement.scrollHeight) + 'px';
                         this.chatInputHeight = inputElement.scrollHeight;
                     }, 0);
-
-                    inputElement.addEventListener('input', () => {
-                        inputElement.style.height = 'auto';
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                        this.chatInputHeight = inputElement.scrollHeight;
-                        if (document.querySelector('#scrollDown')) {
-                            (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
-                        }
-                    });
 
                     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                         inputElement.focus();
@@ -175,24 +182,33 @@ export class TalkingComponent implements OnInit, OnDestroy {
             )
             .subscribe(conversation => {
                 if (!this.uploadService.talkingDestroyed) {
-                    this.messageService.conversation = conversation;
-                    this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
-                    document.querySelector('app-header').setAttribute('title', conversation.displayName);
-                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
-                    this.header.title = conversation.displayName;
-                    this.header.button = true;
-                    if (conversation.anotherUserId) {
-                        this.header.buttonIcon = 'user';
-                        this.header.buttonLink = `/user/${conversation.anotherUserId}`;
-                    } else {
-                        this.header.buttonIcon = `users`;
-                        this.header.buttonLink = `/group/${conversation.id}`;
+                    this.updateConversation(conversation);
+                    if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                        this.messageService.initMessage(this.conversationID);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                     }
-                    this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-                    this.header.timer = this.timerService.destructTime !== 'off';
+                    this.messageService.cleanMessageByTimer();
+                    this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+                    this.cacheService.saveCache();
                 }
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    public updateConversation(conversation: Conversation): void {
+        this.messageService.conversation = conversation;
+        this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
+        this.header.title = conversation.displayName;
+        this.header.button = true;
+        if (conversation.anotherUserId) {
+            this.header.buttonIcon = 'user';
+            this.header.buttonLink = `/user/${conversation.anotherUserId}`;
+        } else {
+            this.header.buttonIcon = `users`;
+            this.header.buttonLink = `/group/${conversation.id}`;
+        }
+        this.timerService.updateDestructTime(conversation.maxLiveSeconds);
+        this.header.timer = this.timerService.destructTime !== 'off';
     }
 
     public trackByMessages(_index: number, message: Message): number {
@@ -216,8 +232,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         });
         const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
         tempMessage.content = messageIDArry[0];
-        tempMessage.senderId = this.messageService.me.id;
-        tempMessage.sender = this.messageService.me;
+        tempMessage.senderId = this.cacheService.cachedData.me.id;
+        tempMessage.sender = this.cacheService.cachedData.me;
         tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
@@ -253,7 +269,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent > 0) {
-                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
+                window.scroll(0, document.documentElement.scrollTop - 105);
             }
         }
     }
@@ -262,13 +278,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             document.querySelector('.message-list').classList.add('active-list');
-            this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop + 105);
+            window.scroll(0, document.documentElement.scrollTop + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
-                this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollTop - 105);
+                window.scroll(0, document.documentElement.scrollTop - 105);
             }
         }
     }
@@ -402,7 +418,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.destroyCurrent();
-        this.homeService.contentWrapper.onscroll = null;
+        window.onscroll = null;
         window.onresize = null;
     }
 
@@ -418,12 +434,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
 
     public shareToOther(message: string): void {
-        this.shareService.share = true;
-        this.shareService.content = message;
-        this.router.navigate(['share-target']);
+        this.router.navigate(['share-target', {message: message}]);
     }
 
     public getAtListMaxHeight(): number {
         return window.innerHeight - this.chatInputHeight - 106;
+    }
+
+    public shareClick(msg: Message): void {
+        if (msg.contentRaw.startsWith('[user]') && msg.relatedData) {
+            this.router.navigate(['user', (<KahlaUser>msg.relatedData).id]);
+        } else if (msg.contentRaw.startsWith('[group]') && msg.relatedData) {
+            const group = <GroupsResult>msg.relatedData;
+            this.friendshipService.joinGroup(group, true);
+        }
     }
 }

@@ -28,7 +28,9 @@
             <div class="icon">
                 <i class="fa fa fa-magic"></i>
             </div>
-            <div class="words" i18n="@@Discover">Discover Friends</div>
+            <div class="words" i18n="@@Discover">
+                Discover Friends
+            </div>
         </a>
         <a class="friends-button" (click)="createGroup()">
             <div class="icon">
@@ -38,6 +40,13 @@
                 Create Group
             </div>
         </a>
+    </div>
+    <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt !== ''}">
+        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
+               (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
+               (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt"/>
+        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''"><i
+            class="fa fa-close"></i></button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
@@ -54,16 +63,22 @@
 </div>
 <div class="header-space"></div>
 <div *ngIf="showUsers && cacheService.cachedData.friends">
-    <div class="result" *ngFor="let user of cacheService.cachedData.friends.users" routerLink="/user/{{ user.id }}">
+    <div class="result" *ngFor="let user of results.users" (click)="userClick(user, $event.ctrlKey)">
         <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
         <div class="sender">
             {{user.nickName}}
         </div>
     </div>
-    <div *ngIf="cacheService.cachedData.friends.users.length === 0" class="empty-result-notice">No result.</div>
+    <div *ngIf="results.users.length === 0" class="empty-result-notice">No result.</div>
+    <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
+        class="badge badge-secondary">Ctrl</span> to start talking directly.
+    </div> -->
+    <div *ngIf="results.users.length === 1" class="empty-result-notice">Press <span
+        class="badge badge-secondary">Enter</span> to talk.
+    </div>
 </div>
 <div *ngIf="!showUsers && cacheService.cachedData.friends">
-    <div class="result" *ngFor="let group of cacheService.cachedData.friends.groups" routerLink="/group/{{ group.id }}">
+    <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="searchGroupImage">
             <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
         </div>
@@ -71,5 +86,11 @@
             {{group.name}}
         </div>
     </div>
-    <div *ngIf="cacheService.cachedData.friends.groups.length === 0" class="empty-result-notice">No result.</div>
+    <div *ngIf="results.groups.length === 0" class="empty-result-notice">No result.</div>
+    <!-- <div *ngIf="results.groups.length !== 0" class="empty-result-notice">Hold <span
+        class="badge badge-secondary">Ctrl</span> to start talking directly.
+    </div> -->
+    <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
+        class="badge badge-secondary">Enter</span> to talk.
+    </div>
 </div>

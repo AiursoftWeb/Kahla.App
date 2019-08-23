@@ -5,8 +5,9 @@ export class Message {
     public conversationId: number;
     public senderId: string;
     public sender: KahlaUser;
-    public sendTime: Date;
+    public sendTime: string;
     public content: string;
+
     public contentRaw: string;
     public isEmoji = false;
     public read: boolean;
@@ -14,4 +15,5 @@ export class Message {
     public avatarURL: string;
     public timeStamp: number;
     public lastRead = false;
+    public relatedData: any;
 }

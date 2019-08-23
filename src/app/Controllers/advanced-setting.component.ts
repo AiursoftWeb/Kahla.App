@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
-import { MessageService } from '../Services/MessageService';
 import { DevicesApiService } from '../Services/DevicesApiService';
 import { Values } from '../values';
+import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -19,14 +19,14 @@ export class AdvancedSettingComponent implements OnInit {
 
     constructor(
         private authApiService: AuthApiService,
-        private messageService: MessageService,
-        private devicesApiService: DevicesApiService
+        private devicesApiService: DevicesApiService,
+        private cacheService: CacheService
     ) {
     }
 
     ngOnInit(): void {
-        if (this.messageService.me) {
-            this.me = Object.assign({}, this.messageService.me);
+        if (this.cacheService.cachedData.me) {
+            this.me = Object.assign({}, this.cacheService.cachedData.me);
         } else {
             this.authApiService.Me().subscribe(p => {
                 this.me = p.value;
@@ -41,7 +41,8 @@ export class AdvancedSettingComponent implements OnInit {
             this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
                 this.updatingSetting = false;
                 if (res.code === 0) {
-                    this.messageService.me.enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
+                    this.cacheService.cachedData.me
+                        .enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
                   } else {
                     Swal.fire('Error', res.message, 'error');
                   }

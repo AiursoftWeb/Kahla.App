@@ -13,7 +13,6 @@ import { ChangePasswordComponent } from '../Controllers/changePassword.component
 import { DiscoverComponent } from '../Controllers/discover.component';
 import { DevicesComponent } from '../Controllers/devices.component';
 import { ThemeComponent } from '../Controllers/theme.component';
-import { LocalSearchComponent } from '../Controllers/localSearch.component';
 import { AdvancedSettingComponent } from '../Controllers/advanced-setting.component';
 import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 import { HomeComponent } from '../Controllers/home.component';
@@ -37,7 +36,6 @@ const routes: Routes = [
     { path: 'discover', component: DiscoverComponent },
     { path: 'devices', component: DevicesComponent },
     { path: 'theme', component: ThemeComponent},
-    { path: 'localsearch', component: LocalSearchComponent },
     {path: 'advanced-setting', component: AdvancedSettingComponent},
     { path: 'share-target', component: ShareComponent }
 ];

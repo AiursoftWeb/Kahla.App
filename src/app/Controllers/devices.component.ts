@@ -14,9 +14,7 @@ export class DevicesComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        if (!this.cacheService.cachedData.devices) {
             this.cacheService.updateDevice();
-        }
     }
 
     public detail(device: Device): void {

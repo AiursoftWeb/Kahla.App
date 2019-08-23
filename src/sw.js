@@ -26,7 +26,7 @@ self.addEventListener('fetch', function(event) {
     if (event.request.method != 'GET') {
         return;
     }
-    
+
     event.respondWith(
         caches.match(event.request).then(function(response) {
             return response || fetch(event.request);
@@ -79,14 +79,14 @@ self.addEventListener('push', function(event) {
     }
     let data = event.data.json();
     const pushTitle = 'Aiursoft Push System';
-    const fileLink = 'https://oss.cdn.aiursoft.com/download/fromkey/';
-    const imageLink = fileLink + '4251';
+    const imageLink = `https://probe.aiursoft.com/Download/Open/${encodeURIComponent(data.message.sender.iconFilePath).replace(/%2F/g, '/')}`;
+
     if (data.type == 0 && !data.muted) {
         // new message
-        const title = (data.mentioned ? '[Mentioned you] ' : '') + data.sender.nickName;
-        let message = data.content;
+        const title = (data.mentioned ? '[Mentioned you] ' : '') + data.message.sender.nickName;
+        let message = data.message.content;
         const aesKey = data.aesKey;
-        
+
         message = CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8);
         if (message.startsWith('[img]')) {
             message = 'Photo';
@@ -96,6 +96,10 @@ self.addEventListener('push', function(event) {
             message = 'File';
         } else if (message.startsWith('[audio]')) {
             message = 'Audio';
+        } else if (message.startsWith('[group]')) {
+            message = 'Group Invitation'
+        } else if (message.startsWith('[user]')) {
+            message = 'Contact card';
         }
 
         let showNotification = true;
@@ -111,17 +115,17 @@ self.addEventListener('push', function(event) {
                             talkingPage = true;
                         }
                     }
-                    if (!isNaN(URLId) && URLId == data.conversationId && client.focused && talkingPage) {
+                    if (!isNaN(URLId) && URLId == data.message.conversationId && client.focused && talkingPage) {
                         showNotification = false;
                     }
                 });
-    
+
                 if (showNotification) {
                     return self.registration.showNotification(title, {
                         body: message,
-                        icon: fileLink + data.sender.iconFilePath,
+                        icon: imageLink,
                         renotify: true,
-                        tag: data.conversationId.toString()
+                        tag: data.message.conversationId.toString()
                     });
                 }
             })

@@ -27,6 +27,8 @@ import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/DissolveEvent';
 import { HomeService } from './HomeService';
+import { GroupsApiService } from './GroupsApiService';
+import { FriendsApiService } from './FriendsApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -35,13 +37,13 @@ import { HomeService } from './HomeService';
 export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[] = [];
+    public rawMessages: Message[] = [];
     public noMoreMessages = false;
     public loadingMore = false;
     public belowWindowPercent = 0;
     public newMessages = false;
     private oldScrollHeight: number;
     public maxImageWidth = 0;
-    public me: KahlaUser;
     private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
@@ -57,6 +59,8 @@ export class MessageService {
         private timerService: TimerService,
         private router: Router,
         private homeService: HomeService,
+        private groupsApiService: GroupsApiService,
+        private friendsApiService: FriendsApiService
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -83,11 +87,23 @@ export class MessageService {
                     setTimeout(() => this.cacheService.updateConversation(), 1000);
                 }
                 // }
-                if (this.conversation && this.conversation.id === evt.conversationId) {
-                    this.getMessages(0, this.conversation.id, -1, 15);
+                if (this.conversation && this.conversation.id === evt.message.conversationId) {
+                    // this.getMessages(0, this.conversation.id, -1, 15);
+                    this.rawMessages.push(evt.message);
+                    this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
+                    this.reorderLocalMessages();
+                    this.localMessages = this.localMessages.filter((t => !t.local));
+                    this.updateAtLink();
+                    if (this.belowWindowPercent <= 0.2) {
+                        setTimeout(() => {
+                            this.uploadService.scrollBottom(true);
+                        }, 0);
+                    }
+                    this.conversationApiService.GetMessage(this.conversation.id, -1, 0).subscribe();
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
+                    this.saveMessage();
                 } else {
                     this.showNotification(evt);
                 }
@@ -124,8 +140,7 @@ export class MessageService {
                     this.timerService.updateDestructTime(evt.newTimer);
                     Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
                         this.timerService.destructTime, 'info');
-                    this.localMessages = [];
-                    this.getMessages(0, this.conversation.id, -1, 15);
+                    this.cleanMessageByTimer();
                 }
                 break;
             }
@@ -143,7 +158,7 @@ export class MessageService {
             case EventType.SomeoneLeftLevent: {
                 const evt = ev as SomeoneLeftEvent;
                 const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
-                if (evt.leftUser.id === this.me.id) {
+                if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
                     Swal.fire('Oops, you have been kicked.',
                         `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
                             .find(x => x.conversationId === evt.conversationId).displayName}.`,
@@ -193,116 +208,74 @@ export class MessageService {
                 if (!this.conversation) {
                     return;
                 }
-                messages.forEach(t => {
-                    try {
-                        t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-                    } catch (error) {
-                        t.content = '';
-                    }
-                    t.contentRaw = t.content;
-                    t.timeStamp = new Date(t.sendTime).getTime();
-                    if (t.content.match(/^\[(video|img)\].*/)) {
-                        if (t.content.startsWith('[img]')) {
-                            let imageWidth = Number(t.content.split('|')[1]),
-                                imageHeight = Number(t.content.split('|')[2]);
-                            const ratio = imageHeight / imageWidth;
-                            const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
-
-                            if (realMaxWidth < imageWidth) {
-                                imageWidth = realMaxWidth;
-                                imageHeight = Math.floor(realMaxWidth * ratio);
-                            }
-                            t.content =
-                                `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
-                                    .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
-                        }
-                    } else if (!t.content.match(/^\[(file|audio)\].*/)) {
-                        t.isEmoji = this.checkEmoji(t.content);
-                        t.content = he.encode(t.content);
-                        t.content = Autolinker.link(t.content, {
-                            stripPrefix: false,
-                            className: 'chat-inline-link'
-                        });
-                        t.content = this.getAtIDs(t.content)[0];
-                    }
-                });
+                const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
                 if (messages.length < take) {
                     this.noMoreMessages = true;
                 }
                 if (this.localMessages.length > 0 && messages.length > 0) {
-                    this.newMessages = this.me &&
-                        messages[messages.length - 1].senderId !== this.me.id &&
+                    this.newMessages = this.cacheService.cachedData.me &&
+                        messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
                         take === 1 && this.belowWindowPercent > 0;
                 }
-                if (this.localMessages.length > 1000) {
-                    this.localMessages.splice(0, 500);
-                }
+                // if (this.localMessages.length > 1000) {
+                //     this.localMessages.splice(0, 500);
+                // }
+                // Load new
                 if (skipTill === -1) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
-                        let findSameID = false;
-                        for (let index = 0; index < this.localMessages.length; index++) {
-                            if (this.localMessages[index].id === messages[0].id) {
-                                findSameID = true;
-                                this.localMessages.splice(index, messages.length, ...messages);
-                                break;
-                            }
-                        }
-                        if (!findSameID) {
-                            this.localMessages = messages;
+                        const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
+                        if (index === -1) {
+                            this.localMessages = modifiedMsg;
+                            this.rawMessages = messages;
+                        } else {
+                            this.localMessages.splice(index, modifiedMsg.length, ...modifiedMsg);
+                            this.rawMessages.splice(index, messages.length, ...messages);
                         }
                     } else {
-                        this.localMessages = messages;
+                        this.localMessages = modifiedMsg;
+                        this.rawMessages = messages;
                     }
-                } else {
-                    this.localMessages.unshift(...messages);
+                } else { // load more
+                    this.localMessages.unshift(...modifiedMsg);
+                    this.rawMessages.unshift(...messages);
                 }
                 if (unread === 0) {
-                    if (this.belowWindowPercent <= 0.2) {
-                        setTimeout(() => {
-                            this.uploadService.scrollBottom(true);
-                        }, 0);
-                    }
+                    setTimeout(() => {
+                        this.uploadService.scrollBottom(true);
+                    }, 0);
                 } else if (unread === -1) { // load more
                     this.loadingMore = false;
                     setTimeout(() => {
-                        this.homeService.contentWrapper.scroll(0, this.homeService.contentWrapper.scrollHeight - this.oldScrollHeight);
+                        window.scroll(0, document.documentElement.scrollHeight - this.oldScrollHeight);
                     }, 0);
                 } else {
                     if (unread > 1) {
                         // add a last read bar
-                        messages[messages.length - unread].lastRead = true;
+                        this.localMessages[this.localMessages.length - unread].lastRead = true;
                     }
                     setTimeout(() => {
                         const lis = document.querySelector('#messageList').querySelectorAll('li');
-                        this.homeService.contentWrapper.scrollTo({
+                        window.scrollTo({
                             top: lis[lis.length - unread].offsetTop,
                             left: 0,
                             behavior: 'smooth'
                         });
                     }, 0);
                 }
-                setTimeout(() => {
-                    const links = document.getElementsByClassName('atLink');
-                    for (let i = 0; i < links.length; i++) {
-                        (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
-                            ev.preventDefault();
-                            // noinspection JSIgnoredPromiseFromCall
-                            this.router.navigateByUrl(links.item(i).getAttribute('href'));
-                        };
-                    }
-                }, 1);
+                this.updateAtLink();
+                this.saveMessage();
             });
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (this.homeService.contentWrapper.scrollHeight - this.homeService.contentWrapper.scrollTop
-            - this.homeService.contentWrapper.clientHeight) / this.homeService.contentWrapper.clientHeight;
+        this.belowWindowPercent = (document.documentElement.scrollHeight - document.documentElement.scrollTop
+            - document.documentElement.clientHeight) / document.documentElement.clientHeight;
     }
 
     public loadMore(): void {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
-            this.oldScrollHeight = this.homeService.contentWrapper.scrollHeight;
+            this.oldScrollHeight = document.documentElement.scrollHeight;
             this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
@@ -319,6 +292,7 @@ export class MessageService {
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = [];
+        this.rawMessages = [];
         this.noMoreMessages = false;
         this.loadingMore = false;
         this.belowWindowPercent = 0;
@@ -330,12 +304,12 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.sender.id !== this.me.id && this._electronService.isElectronApp) {
-            event.content = AES.decrypt(event.content, event.aesKey).toString(enc.Utf8);
-            event.content = this.cacheService.modifyMessage(event.content);
-            const notify = new Notification(event.sender.nickName, {
-                body: event.content,
-                icon: Values.fileAddress + event.sender.iconFilePath
+        if (!event.muted && event.message.sender.id !== this.cacheService.cachedData.me.id && this._electronService.isElectronApp) {
+            event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
+            event.message.content = this.cacheService.modifyMessage(event.message.content);
+            const notify = new Notification(event.message.sender.nickName, {
+                body: event.message.content,
+                icon: Values.fileAddress + event.message.sender.iconFilePath
             });
             notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
@@ -393,13 +367,126 @@ export class MessageService {
     }
 
     public checkOwner(id?: string): boolean {
-        if (this.conversation && this.me) {
+        if (this.conversation && this.cacheService.cachedData.me) {
             if (this.conversation.discriminator === 'GroupConversation') {
-                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.me.id);
+                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.cacheService.cachedData.me.id);
             } else {
                 return true;
             }
         }
         return false;
+    }
+
+    public modifyMessage(t: Message): Message {
+        try {
+            t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+        } catch (error) {
+            t.content = '';
+        }
+        t.contentRaw = t.content;
+        t.timeStamp = new Date(t.sendTime).getTime();
+        if (t.content.match(/^\[(video|img)\].*/)) {
+            if (t.content.startsWith('[img]')) {
+                let imageWidth = Number(t.content.split('|')[1]),
+                    imageHeight = Number(t.content.split('|')[2]);
+                const ratio = imageHeight / imageWidth;
+                const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
+
+                if (realMaxWidth < imageWidth) {
+                    imageWidth = realMaxWidth;
+                    imageHeight = Math.floor(realMaxWidth * ratio);
+                }
+                t.content =
+                    `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
+                        .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
+            }
+        } else if (t.content.startsWith('[group]')) {
+            const groupId = Number(t.content.substring(7));
+            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            this.groupsApiService.GroupSummary(groupId).subscribe(p => {
+                if (p.value) {
+                    t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
+                        `${p.value.hasPassword ? 'Private' : 'Public'}|${Values.fileAddress}${p.value.imagePath}`;
+                    t.relatedData = p.value;
+                } else {
+                    t.content = 'Invalid Group';
+                }
+            });
+
+        } else if (t.content.startsWith('[user]')) {
+            const userId = t.content.substring(6);
+            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            this.friendsApiService.UserDetail(userId).subscribe(p => {
+                if (p.user) {
+                    t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
+                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${Values.fileAddress}${p.user.iconFilePath}`;
+                    t.relatedData = p.user;
+                } else {
+                    t.content = 'Invalid User';
+                }
+            });
+        } else if (!t.content.match(/^\[(file|audio)\].*/)) {
+            t.isEmoji = this.checkEmoji(t.content);
+            t.content = he.encode(t.content);
+            t.content = Autolinker.link(t.content, {
+                stripPrefix: false,
+                className: 'chat-inline-link'
+            });
+            t.content = this.getAtIDs(t.content)[0];
+        }
+        return t;
+    }
+
+    public reorderLocalMessages() {
+        this.localMessages.sort((a, b) => a.timeStamp - b.timeStamp);
+    }
+
+    public updateAtLink() {
+        setTimeout(() => {
+            const links = document.getElementsByClassName('atLink');
+            for (let i = 0; i < links.length; i++) {
+                (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                    ev.preventDefault();
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                };
+            }
+        }, 0);
+    }
+
+    public saveMessage(): void {
+        localStorage.setItem(`cache-log-${this.conversation.id}`, JSON.stringify(this.rawMessages));
+    }
+
+    public initMessage(conversationId: number): void {
+        const json = localStorage.getItem(`cache-log-${conversationId}`);
+        if (json) {
+            this.rawMessages = JSON.parse(json);
+        }
+        this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.updateAtLink();
+        setTimeout(() => this.uploadService.scrollBottom(false), 0);
+    }
+
+    public cleanMessageByTimer(): void {
+        if (!this.conversation) {
+            return;
+        }
+        const firstIndex = this.rawMessages.findIndex(t => {
+            const timeStamp = new Date(t.sendTime).getTime();
+            return timeStamp + this.conversation.maxLiveSeconds * 1000 >= Date.now();
+        });
+        if (firstIndex === 0) {
+            return;
+        } else if (firstIndex === -1) {
+            this.rawMessages = [];
+            this.localMessages = [];
+        } else {
+            if (this.localMessages.length === this.rawMessages.length) {
+                this.localMessages = this.localMessages.splice(0, firstIndex);
+            }
+            this.rawMessages = this.rawMessages.splice(0, firstIndex);
+        }
+        this.saveMessage();
     }
 }

@@ -9,6 +9,8 @@
 
   .search-input {
     padding: 7px;
+    display: flex;
+    margin-bottom: 8px;
     input {
       @extend %text-input;
       border-radius: 6px;
@@ -20,20 +22,24 @@
       font-size: 14px;
       box-sizing: border-box;
       outline: none;
-      margin-bottom: 15px;
-      float: left;
+      flex: auto;
+      border-radius: 6px 6px 6px 6px;
     }
 
     &.search-input-with-button {
       button {
         float: left;
         border-radius: 0 6px 6px 0;
-        width: 20%;
+        width: 100px;
         height: 35px;
+        flex: none;
+
+        &.compact {
+          width: 50px;
+        }
       }
 
       input {
-        width: 80%;
         border-radius: 6px 0 0 6px;
       }
     }

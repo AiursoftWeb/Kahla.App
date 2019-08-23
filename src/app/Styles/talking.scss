@@ -372,30 +372,40 @@ i {
   }
 }
 
-a h5 {
-  margin: 0;
-  font-size: 14px;
-  word-break: break-all;
-}
-
 .right .chat-content span {
   color: #fff;
 }
 
-.file {
+.share-item {
   display: grid;
-  grid-template-columns: 40px 2fr;
+  grid-template-columns: 50px 2fr;
   align-items: center;
+
+  &.file {
+    grid-template-columns: 40px 2fr;
+  }
 
   div {
     grid-row-start: 1;
     grid-row-end: 3;
     text-align: center;
+
+    img {
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+    }
   }
 
   span {
     grid-column-start: 2;
     text-align: right;
+    word-break: break-all;
+  }
+
+  h5 {
+    margin: 0;
+    font-size: 14px;
     word-break: break-all;
   }
 }

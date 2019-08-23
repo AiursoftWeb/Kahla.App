@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
@@ -9,43 +9,48 @@ import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/FriendsApiService';
-import { ShareService } from '../Services/ShareService';
+import { SearchResult } from '../Models/SearchResult';
 
 @Component({
     templateUrl: '../Views/share.html',
     styleUrls: [
         '../Styles/menu.scss',
         '../Styles/add-friend.scss',
-        '../Styles/friends.scss']
+        '../Styles/friends.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 
 })
-export class ShareComponent implements OnInit {
+export class ShareComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     public message: string;
     public inApp = false;
+    public results: SearchResult;
+    public searchTxt = '';
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private messageService: MessageService,
         public cacheService: CacheService,
         private conversationApiService: ConversationApiService,
-        private friendsApiService: FriendsApiService,
-        private shareService: ShareService) {
+        private friendsApiService: FriendsApiService) {
     }
 
     public ngOnInit(): void {
-        if (this.shareService.share) {
-            this.shareService.share = false;
-            this.message = this.shareService.content;
-            this.inApp = true;
-        } else {
-            const parsedUrl = new URL(location.href);
-            const text = parsedUrl.searchParams.get('text');
-            const url = parsedUrl.searchParams.get('url');
-            this.message = `${text ? text : ''} ${url ? url : ''}`;
-        }
-
+        this.route.params.subscribe(param => {
+            if (param.message) {
+                this.message = param.message;
+                this.inApp = true;
+            } else {
+                const parsedUrl = new URL(location.href);
+                const text = parsedUrl.searchParams.get('text');
+                const url = parsedUrl.searchParams.get('url');
+                this.message = `${text ? text : ''} ${url ? url : ''}`;
+            }
+        });
+        this.search('');
     }
 
     public showUsersResults(selectUsers: boolean): void {
@@ -66,13 +71,13 @@ export class ShareComponent implements OnInit {
         }
         const name = group ? (<GroupsResult>user).name : (<KahlaUser>user).nickName;
         let dialog: Promise<SweetAlertResult>;
-        const isResource = this.message.startsWith('[img]') || this.message.startsWith('[video]') || this.message.startsWith('[file]');
-        if (isResource) {
-            const msgType = this.message.startsWith('[img]') ? 'image' : (this.message.startsWith('[video]') ? 'video' : 'file');
+        const msgType = this.cacheService.modifyMessage(this.message, true);
+        if (msgType !== 'Text') {
             dialog = Swal.fire({
                 title: `Share ${msgType}?`,
                 text: `Are you sure to send this ${msgType} to ${name}?`,
                 showCancelButton: true,
+                type: 'question',
             });
         } else {
             dialog = Swal.fire({
@@ -84,7 +89,7 @@ export class ShareComponent implements OnInit {
             });
         }
         dialog.then(input => {
-            const msg = isResource ? this.message : input.value;
+            const msg = msgType !== 'Text' ? this.message : input.value;
             if (!input.dismiss && msg) {
                 if (this.messageService.conversation &&
                     this.messageService.conversation.id === conversationID) {
@@ -119,5 +124,47 @@ export class ShareComponent implements OnInit {
                         'error');
                 }
             });
+    }
+
+    public search(term: string, keydown: boolean = false): void {
+        if (this.cacheService.cachedData.friends) {
+            this.results = Object.assign({}, this.cacheService.cachedData.friends);
+            if (term) {
+                this.results.users = this.results.users.filter(user => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(user.nickName) || (user.email && regex.test(user.email));
+                });
+                this.results.groups = this.results.groups.filter(group => {
+                    const regex = RegExp(term, 'i');
+                    return regex.test(group.name);
+                });
+            }
+            if (keydown) {
+                if (this.showUsers && this.results.users.length === 0 && this.results.groups.length !== 0) {
+                    this.showUsers = false;
+                } else if (!this.showUsers && this.results.groups.length === 0 && this.results.users.length !== 0) {
+                    this.showUsers = true;
+                }
+            }
+        }
+    }
+
+    public goSingleSearch(): void {
+        setTimeout(() => {
+            if (this.showUsers) {
+                if (this.results.users.length === 1) {
+                    this.share(this.results.users[0], false);
+                }
+            } else {
+                if (this.results.groups.length === 1) {
+                    this.share(this.results.groups[0], true);
+                }
+            }
+        }, 0);
+
+    }
+
+    ngDoCheck(): void {
+        this.search(this.searchTxt);
     }
 }

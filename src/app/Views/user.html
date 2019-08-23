@@ -39,19 +39,29 @@
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
 </div>
-<div class="menu-button" (click)="report()" *ngIf="info && messageService.me && info.id != messageService.me.id">
+<div class="menu-button" *ngIf="info" (click)="shareUser()">
+    <div class="img">
+        <i class="fa fa-share-alt"></i>
+    </div>
+    <div class="text">Share</div>
+</div>
+<div class="menu-button" (click)="report()"
+     *ngIf="info && cacheService.cachedData.me && info.id != cacheService.cachedData.me.id">
     <div class="img">
         <i class="fa fa-gavel "></i>
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
-<div class="menu-button" *ngIf="info && messageService.me && areFriends && info.id != messageService.me.id">
+<div class="menu-button"
+     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id">
     <div class="img">
         <i class="fa fa-ban"></i>
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
-<div class="menu-button" *ngIf="info && messageService.me && areFriends && info.id != messageService.me.id" (click)="delete(info.id)">
+<div class="menu-button"
+     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id"
+     (click)="delete(info.id)">
     <div class="img">
         <i class="fa fa-trash warning"></i>
     </div>
@@ -59,7 +69,8 @@
 </div>
 <div class="menu-holder"></div>
 
-<div class="menu-button" *ngIf="info && messageService.me && !areFriends && !messageService.me.emailConfirmed">
+<div class="menu-button"
+     *ngIf="info && cacheService.cachedData.me && !areFriends && !cacheService.cachedData.me.emailConfirmed">
     <div class="img warning">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
@@ -69,18 +80,21 @@
 </div>
 
 <div class="buttons">
-    <button class="button primary" *ngIf="info && messageService.me && !areFriends && messageService.me.emailConfirmed && !sentRequest" (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request</button>
+    <button class="button primary"
+            *ngIf="info && cacheService.cachedData.me && !areFriends && cacheService.cachedData.me.emailConfirmed && !sentRequest"
+            (click)="request(info.id)" i18n="@@SendFriendRequest">Send Friend Request
+    </button>
     <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
     <button class="button primary"
-            *ngIf="!areFriends && sentRequest && !(pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id)"
+            *ngIf="!areFriends && sentRequest && !(pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id)"
             disabled>Request was sent
     </button>
     <button class="button success"
-            *ngIf="sentRequest && pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id"
+            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
             (click)="accept(pendingRequest.id)">Accept
     </button>
     <button class="button warning"
-            *ngIf="sentRequest && pendingRequest && messageService.me && pendingRequest.targetId === messageService.me.id"
+            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
             (click)="decline(pendingRequest.id)">Decline
     </button>
 </div>

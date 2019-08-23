@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
@@ -41,7 +41,7 @@ export class InitService {
         private devicesApiService: DevicesApiService) {
     }
 
-    public init(elementRef: ElementRef): void {
+    public init(): void {
         this.online = navigator.onLine;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);
@@ -54,15 +54,16 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
+        this.cacheService.initCache();
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
                 this.router.navigate(['/signin'], {replaceUrl: true});
             } else {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
-                        this.messageService.me = p.value;
-                        this.messageService.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
-                        this.themeService.ApplyThemeFromRemote(elementRef, p.value);
+                        this.cacheService.cachedData.me = p.value;
+                        this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                        this.themeService.ApplyThemeFromRemote(p.value);
                         if (!this._electronService.isElectronApp) {
                             this.subscribeUser();
                             this.updateSubscription();
@@ -137,7 +138,6 @@ export class InitService {
         this.interval = null;
         this.messageService.resetVariables();
         this.cacheService.reset();
-        this.messageService.me = null;
         localStorage.clear();
     }
 
