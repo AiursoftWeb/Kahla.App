@@ -181,16 +181,17 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroyed) {
-                    this.updateConversation(conversation);
-                    if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                        this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
-                    }
-                    this.messageService.cleanMessageByTimer();
-                    this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-                    this.cacheService.saveCache();
+                if (this.conversationID !== conversation.id || this.uploadService.talkingDestroyed) {
+                    return;
                 }
+                this.updateConversation(conversation);
+                if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                    this.messageService.initMessage(this.conversationID);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                }
+                this.messageService.cleanMessageByTimer();
+                this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+                this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
     }

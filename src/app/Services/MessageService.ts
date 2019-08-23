@@ -205,7 +205,7 @@ export class MessageService {
                 map(t => t.items)
             )
             .subscribe(messages => {
-                if (!this.conversation) {
+                if (!this.conversation || this.conversation.id !== id) {
                     return;
                 }
                 const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
