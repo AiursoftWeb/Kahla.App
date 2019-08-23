@@ -151,8 +151,8 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                     }
                     this.uploadService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
-                    this.conversationID = params.id;
-                    this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
+                    this.conversationID = Number(params.id);
+                    this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
                     this.load = this.unread < 15 ? 15 : this.unread;
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
