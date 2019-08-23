@@ -151,8 +151,8 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                     }
                     this.uploadService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
-                    this.conversationID = params.id;
-                    this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
+                    this.conversationID = Number(params.id);
+                    this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
                     this.load = this.unread < 15 ? 15 : this.unread;
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
@@ -181,16 +181,17 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroyed) {
-                    this.updateConversation(conversation);
-                    if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                        this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
-                    }
-                    this.messageService.cleanMessageByTimer();
-                    this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-                    this.cacheService.saveCache();
+                if (this.conversationID !== conversation.id || this.uploadService.talkingDestroyed) {
+                    return;
                 }
+                this.updateConversation(conversation);
+                if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                    this.messageService.initMessage(this.conversationID);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                }
+                this.messageService.cleanMessageByTimer();
+                this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+                this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
     }

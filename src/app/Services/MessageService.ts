@@ -50,6 +50,7 @@ export class MessageService {
     public groupConversation = false;
     public sysNotifyText: string;
     public sysNotifyShown: boolean;
+    public messageLoading = false;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -200,12 +201,13 @@ export class MessageService {
     }
 
     public getMessages(unread: number, id: number, skipTill: number, take: number) {
+        this.messageLoading = true;
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
                 map(t => t.items)
             )
             .subscribe(messages => {
-                if (!this.conversation) {
+                if (!this.conversation || this.conversation.id !== id) {
                     return;
                 }
                 const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
@@ -264,6 +266,7 @@ export class MessageService {
                 }
                 this.updateAtLink();
                 this.saveMessage();
+                this.messageLoading = false;
             });
     }
 

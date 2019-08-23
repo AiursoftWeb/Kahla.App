@@ -6,7 +6,10 @@
     </div>
     <div *ngIf="timer"></div>
     <div *ngIf="!returnButton"></div>
-    <div class="text">{{title}}</div>
+    <div class="text">
+        <i class="fa fa-refresh fa-spin" *ngIf="processing"></i>
+        {{title}}
+    </div>
     <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
          (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
         <i class="fa fa-clock-o"></i>
