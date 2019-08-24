@@ -10,6 +10,12 @@
         Create Time: {{conversation.conversationCreateTime | date:'mediumDate'}}
     </div>
 </div>
+<div class="menu-button" *ngIf="conversation" (click)="shareGroup()">
+    <div class="img">
+        <i class="fa fa-share-alt"></i>
+    </div>
+    <div class="text">Share</div>
+</div>
 
 <div class="menu-holder"></div>
 <div class="menu-button" routerLink="/talking/{{ conversation ? conversation.id : 0 }}">
@@ -18,12 +24,7 @@
     </div>
     <div class="text" i18n="@@Message">Message</div>
 </div>
-<div class="menu-button" *ngIf="conversation" (click)="shareGroup()">
-    <div class="img">
-        <i class="fa fa-share-alt"></i>
-    </div>
-    <div class="text">Share</div>
-</div>
+
 <div class="menu-button notification" (click)="mute()">
     <div class="img">
         <i *ngIf="muted" class="fa fa-bell-slash"></i>
