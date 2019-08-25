@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/@angular-devkit/core/src/workspace/workspace-schema.json",
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -28,7 +28,8 @@
               "src/favicon.ico",
               "src/web.config",
               "src/sw.js",
-              "src/index.js"
+              "src/index.js",
+              { "glob": "assetlinks.json", "input": "src/", "output": "/.well-known" }
             ],
             "styles": [
               "node_modules/font-awesome/css/font-awesome.min.css",
