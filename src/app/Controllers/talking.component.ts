@@ -84,6 +84,18 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         this.formerWindowInnerHeight = window.innerHeight;
     }
 
+    @HostListener('window:scroll', [])
+    onScroll() {
+        this.messageService.updateBelowWindowPercent();
+        if (this.messageService.belowWindowPercent <= 0) {
+            this.messageService.newMessages = false;
+        }
+        if (document.documentElement.scrollTop <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
+            && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
+            this.messageService.loadMore();
+        }
+    }
+
     @HostListener('keydown', ['$event'])
     onKeydown(e: KeyboardEvent) {
         if (e.key === 'Enter') {
@@ -126,13 +138,6 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit(): void {
-        window.addEventListener('scroll', () => {
-            this.messageService.updateBelowWindowPercent();
-            if (this.messageService.belowWindowPercent <= 0) {
-                this.messageService.newMessages = false;
-            }
-        });
-
         const inputElement = <HTMLElement>document.querySelector('#chatInput');
         inputElement.addEventListener('input', () => {
             inputElement.style.height = 'auto';
@@ -419,8 +424,6 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
 
     public ngOnDestroy(): void {
         this.destroyCurrent();
-        window.onscroll = null;
-        window.onresize = null;
     }
 
     public destroyCurrent() {
