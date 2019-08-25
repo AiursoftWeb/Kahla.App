@@ -59,7 +59,7 @@
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none && ./copy-assetlinks.sh",
+    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
     "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
     "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
