@@ -271,7 +271,7 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (document.documentElement.scrollHeight - document.documentElement.scrollTop
+        this.belowWindowPercent = (document.documentElement.scrollHeight - window.scrollY
             - document.documentElement.clientHeight) / document.documentElement.clientHeight;
     }
 

@@ -75,11 +75,11 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
+            window.scroll(0, window.scrollY + this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
-            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
+            window.scroll(0, window.scrollY - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            window.scroll(0, document.documentElement.scrollTop);
+            window.scroll(0, window.scrollY);
         }
         this.formerWindowInnerHeight = window.innerHeight;
     }
@@ -90,7 +90,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         if (this.messageService.belowWindowPercent <= 0) {
             this.messageService.newMessages = false;
         }
-        if (document.documentElement.scrollTop <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
+        if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             this.messageService.loadMore();
         }
@@ -275,7 +275,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent > 0) {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                window.scroll(0, window.scrollY - 105);
             }
         }
     }
@@ -284,13 +284,13 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             document.querySelector('.message-list').classList.add('active-list');
-            window.scroll(0, document.documentElement.scrollTop + 105);
+            window.scroll(0, window.scrollY + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                window.scroll(0, window.scrollY - 105);
             }
         }
     }
