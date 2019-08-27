@@ -2,9 +2,9 @@ importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-j
 
 const CACHE = 'v2';
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
     event.waitUntil(
-        caches.open(CACHE).then(function(cache) {
+        caches.open(CACHE).then(function (cache) {
             return cache.addAll([
                 '/index.html',
                 '/main.js',
@@ -21,23 +21,23 @@ self.addEventListener('install', function(event) {
     );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
     // bypass upload request
     if (event.request.method != 'GET') {
         return;
     }
 
     event.respondWith(
-        caches.match(event.request).then(function(response) {
+        caches.match(event.request).then(function (response) {
             return response || fetch(event.request);
         })
     );
 
     event.waitUntil(
-        caches.match(event.request).then(function(response) {
+        caches.match(event.request).then(function (response) {
             if (response) {
-                caches.open(CACHE).then(function(cache) {
-                    fetch(event.request).then(function(resp) {
+                caches.open(CACHE).then(function (cache) {
+                    fetch(event.request).then(function (resp) {
                         cache.put(event.request, resp);
                     });
                 });
@@ -46,12 +46,12 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function (event) {
     const cacheKeeplist = [CACHE];
     event.waitUntil(
         self.clients.claim(),
-        caches.keys().then(function(keyList) {
-            return Promise.all(keyList.map(function(key) {
+        caches.keys().then(function (keyList) {
+            return Promise.all(keyList.map(function (key) {
                 if (cacheKeeplist.indexOf(key) === -1) {
                     return caches.delete(key);
                 }
@@ -60,14 +60,14 @@ self.addEventListener('activate', function(event) {
     );
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
     const data = event.notification.data.json();
     event.waitUntil(
-        self.clients.matchAll().then(function(clientList) {
+        self.clients.matchAll().then(function (clientList) {
             if (clientList.length > 0) {
                 return clientList[0].focus();
             } else {
-                if (data && data.message.conversationID !== -1) {
+                if (data && data.type === 0 && data.message.conversationID !== -1) {
                     return self.clients.openWindow(`/talking/${data.message.conversationID}`);
                 } else {
                     return self.clients.openWindow('/');
@@ -78,7 +78,7 @@ self.addEventListener('notificationclick', function(event) {
     event.notification.close();
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
     if (!event.data) {
         return;
     }
@@ -109,8 +109,8 @@ self.addEventListener('push', function(event) {
 
         let showNotification = true;
         event.waitUntil(
-            self.clients.matchAll().then(function(clientList) {
-                clientList.forEach(function(client) {
+            self.clients.matchAll().then(function (clientList) {
+                clientList.forEach(function (client) {
                     const URLArray = client.url.split('/');
                     let URLId = -1;
                     let talkingPage = false;
