@@ -61,12 +61,17 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('notificationclick', function(event) {
+    const data = event.notification.data.json();
     event.waitUntil(
         self.clients.matchAll().then(function(clientList) {
             if (clientList.length > 0) {
                 return clientList[0].focus();
             } else {
-                return self.clients.openWindow('/');
+                if (data && data.message.conversationID !== -1) {
+                    return self.clients.openWindow(`/talking/${data.message.conversationID}`);
+                } else {
+                    return self.clients.openWindow('/');
+                }
             }
         })
     );
