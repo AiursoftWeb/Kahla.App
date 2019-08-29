@@ -64,7 +64,8 @@
 <div class="header-space"></div>
 <div *ngIf="showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let user of results.users" (click)="userClick(user, $event.ctrlKey)">
-        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80" />
+        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80"
+             routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();"/>
         <div class="sender">
             {{user.nickName}}
         </div>
@@ -80,7 +81,8 @@
 <div *ngIf="!showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="searchGroupImage">
-            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80" />
+            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80"
+                 routerLink="/group/{{group.id}}" (click)="$event.stopPropagation();"/>
         </div>
         <div class="sender">
             {{group.name}}
