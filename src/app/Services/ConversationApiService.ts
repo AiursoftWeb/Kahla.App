@@ -26,9 +26,11 @@ export class ConversationApiService {
 
     public SendMessage(conversationID: number, content: string, userIDs: Array<string>): Observable<AiurProtocal> {
         const form = {content: content};
-        userIDs.forEach((id, index) => {
-            form[`at[${index}]`] = id;
-        });
+        if (userIDs) {
+            userIDs.forEach((id, index) => {
+                form[`at[${index}]`] = id;
+            });
+        }
         return this.apiService.Post(ConversationApiService.serverPath + `/SendMessage/${conversationID}`, form);
     }
 
