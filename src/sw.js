@@ -61,14 +61,14 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('notificationclick', function (event) {
-    const data = event.notification.data.json();
+    const data = event.notification.data;
     event.waitUntil(
         self.clients.matchAll().then(function (clientList) {
             if (clientList.length > 0) {
                 return clientList[0].focus();
             } else {
                 if (data && data.type === 0 && data.message.conversationID !== -1) {
-                    return self.clients.openWindow(`/talking/${data.message.conversationID}`);
+                    return self.clients.openWindow(`/talking/${data.message.conversationId}`);
                 } else {
                     return self.clients.openWindow('/');
                 }
@@ -130,7 +130,8 @@ self.addEventListener('push', function (event) {
                         body: message,
                         icon: imageLink,
                         renotify: true,
-                        tag: data.message.conversationId.toString()
+                        tag: data.message.conversationId.toString(),
+                        data: data
                     });
                 }
             })
@@ -141,7 +142,8 @@ self.addEventListener('push', function (event) {
             body: 'You have got a new friend request!',
             icon: imageLink,
             renotify: true,
-            tag: -1
+            tag: -1,
+            data: data
         });
     } else if (data.type == 2) {
         // were deleted event
@@ -149,7 +151,8 @@ self.addEventListener('push', function (event) {
             body: 'You were deleted by one of your friends from his friend list.',
             icon: imageLink,
             renotify: true,
-            tag: -1
+            tag: -1,
+            data: data
         });
     } else if (data.type == 3) {
         // friend accepted event
@@ -157,7 +160,8 @@ self.addEventListener('push', function (event) {
             body: 'Your friend request was accepted!',
             icon: imageLink,
             renotify: true,
-            tag: -1
+            tag: -1,
+            data: data
         });
     }
 });
