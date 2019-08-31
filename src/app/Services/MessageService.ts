@@ -70,24 +70,28 @@ export class MessageService {
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
-                // const conversationCacheIndex = this.cacheService.cachedData.conversations
-                //     .findIndex(x => x.conversationId === evt.conversationId);
-                // if (conversationCacheIndex !== -1) {
-                //     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                //     conversationCache.latestMessage = this.cacheService.modifyMessage(
-                //         AES.decrypt(evt.content, evt.aesKey).toString(enc.Utf8));
-                //     if (!this.conversation || this.conversation.id !== evt.conversationId) {
-                //         conversationCache.unReadAmount++;
-                //     }
-                //     // move the new conversation to the top
-                //     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
-                //     this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
-                //     this.cacheService.updateTotalUnread();
-                // } else {
-                if (this.homeService.wideScreenEnabled || this.router.isActive('home', false)) {
-                    setTimeout(() => this.cacheService.updateConversation(), 1000);
+                const conversationCacheIndex = this.cacheService.cachedData.conversations
+                    .findIndex(x => x.conversationId === evt.message.conversationId);
+                if (conversationCacheIndex !== -1) {
+                    const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
+                    conversationCache.latestMessage = this.cacheService.modifyMessage(
+                        AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
+                    if (!this.conversation || this.conversation.id !== evt.message.conversationId) {
+                        conversationCache.unReadAmount++;
+                        if (evt.mentioned) {
+                            conversationCache.someoneAtMe = true;
+                        }
+                    }
+                    // move the new conversation to the top
+                    this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
+                    this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
+                    this.cacheService.saveCache();
+                    this.cacheService.updateTotalUnread();
+                } else {
+                    if (this.homeService.wideScreenEnabled || this.router.isActive('home', false)) {
+                        setTimeout(() => this.cacheService.updateConversation(), 1000);
+                    }
                 }
-                // }
                 if (this.conversation && this.conversation.id === evt.message.conversationId) {
                     // this.getMessages(0, this.conversation.id, -1, 15);
                     this.rawMessages.push(evt.message);
