@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+﻿import { Component, HostListener, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -29,8 +29,8 @@ declare var MediaRecorder: any;
         '../Styles/menu.scss',
         '../Styles/badge.scss']
 })
-export class TalkingComponent implements OnDestroy, AfterViewInit {
-    public content: string;
+export class TalkingComponent implements OnInit, OnDestroy {
+    public content = '';
     public showPanel = false;
     public loadingImgURL = Values.loadingImgURL;
     private windowInnerHeight = 0;
@@ -51,11 +51,10 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('mainList', {static: false}) public mainList: ElementRef;
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
     @ViewChild('fileInput', {static: false}) public fileInput;
-    @ViewChild('header', {static: false}) public header: HeaderComponent;
+    @ViewChild('header', {static: true}) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -137,7 +136,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    public ngAfterViewInit(): void {
+    public ngOnInit(): void {
         const inputElement = <HTMLElement>document.querySelector('#chatInput');
         inputElement.addEventListener('input', () => {
             inputElement.style.height = 'auto';
