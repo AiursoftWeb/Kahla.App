@@ -110,8 +110,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (this.showUserList) {
                 // accept default suggestion
                 this.complete(this.matchedUsers[0].nickName);
-            }
-            if (this.oldContent === this.content) {
+            } else if (this.oldContent === this.content) {
                 this.send();
                 this.showUserList = false;
             }
