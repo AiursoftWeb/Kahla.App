@@ -52,7 +52,7 @@ function createWindow() {
     });
 
     mainWindow.webContents.on("new-window", (event, url) => {
-        if (url.match(/https:\/\/.*server\.kahla\.app\/Auth\/Oauth\/*/gi)) {
+        if (url.match(/https:\/\/.*server\.kahla\.app\/Auth\/(Oauth|GoRegister)\/*/gi)) {
             event.preventDefault();
             let oauth = new BrowserWindow(
                 {

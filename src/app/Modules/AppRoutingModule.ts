@@ -4,7 +4,6 @@ import { AddFriendComponent } from '../Controllers/add-friend.component';
 import { FriendRequestsComponent } from '../Controllers/friendrequests.component';
 import { TalkingComponent } from '../Controllers/talking.component';
 import { SignInComponent } from '../Controllers/signin.component';
-import { RegisterComponent } from '../Controllers/register.component';
 import { UserComponent } from '../Controllers/user.component';
 import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
@@ -27,7 +26,6 @@ const routes: Routes = [
     { path: 'talking/:id/:unread', component: TalkingComponent },
     { path: 'user/:id', component: UserComponent },
     { path: 'signin', component: SignInComponent },
-    { path: 'register', component: RegisterComponent },
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
     { path: 'group/:id', component: GroupComponent },

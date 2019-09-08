@@ -26,14 +26,6 @@ export class AuthApiService {
         });
     }
 
-    public RegisterKahla(email: string, password: string, confirmPassword: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/RegisterKahla', {
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword
-        });
-    }
-
     public SignInStatus(): Observable<AiurValue<boolean>> {
         return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');
     }
