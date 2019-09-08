@@ -28,7 +28,7 @@ export class SignInComponent {
         public _electronService: ElectronService,
         private homeService: HomeService,
         ) {
-            this.OAuthURL = ApiService.serverAddress + '/Auth/Oauth';
+        this.OAuthURL = ApiService.serverAddress;
         }
 
     public signin(): void {
