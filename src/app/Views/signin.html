@@ -3,16 +3,9 @@
         <div class="auth-header">
             <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
+            <h3 i18n="@@SignIn">Sign In</h3>
         </div>
         <div class="auth-content">
-            <div class="selector mode">
-                <div class="column">
-                    <a class="btn" routerLink="/signin" i18n="@@LogIn">Log in</a>
-                </div>
-                <div class="column">
-                    <a class="btn" routerLink="/register" i18n="@@Register">Register</a>
-                </div>
-            </div>
             <form (ngSubmit)="signin()" #loginForm="ngForm">
                 <input [(ngModel)]="email" name="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" required #emailInput="ngModel" email>
                 <div class="alert" [hidden]="emailInput.valid || emailInput.pristine">Invalid email!</div>
