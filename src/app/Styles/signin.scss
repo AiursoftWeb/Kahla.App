@@ -49,28 +49,6 @@
   margin: 50% auto 5% auto;
 }
 
-input {
-  border: 2px solid transparent;
-
-  /* box-shadow: 0 0 0 1000px #265f82 inset; */
-  border-radius: 4px;
-  box-sizing: border-box;
-  display: block;
-  height: 40px;
-  margin-bottom: 8%;
-  outline: none;
-  padding: 0 16px 0 16px;
-  width: 100%;
-  background-color: rgb(232, 240, 254);
-}
-
-::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
-  text-transform: uppercase;
-  font-size: 11px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.56);
-}
-
 .button.white {
   text-transform: uppercase;
   color: #2391D3 !important;
