@@ -64,7 +64,7 @@ export class InitService {
                         this.cacheService.cachedData.me = p.value;
                         this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
                         this.themeService.ApplyThemeFromRemote(p.value);
-                        if (!this._electronService.isElectronApp) {
+                        if (!this._electronService.isElectronApp && navigator.serviceWorker) {
                             this.subscribeUser();
                             this.updateSubscription();
                         }
