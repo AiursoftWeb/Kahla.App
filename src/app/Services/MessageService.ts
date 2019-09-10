@@ -187,6 +187,7 @@ export class MessageService {
                     this.router.navigate(['/home']);
                 }
                 this.cacheService.updateFriends();
+                this.cacheService.updateConversation();
                 break;
             }
             default:
