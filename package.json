@@ -74,11 +74,6 @@
     "@angular/router": "8.2.5",
     "autolinker": "^3.11.0",
     "blueimp-load-image": "^2.24.0",
-    "cordova-android": "^7.1.4",
-    "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.0.0",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-windows": "6.0.1",
     "core-js": "^2.6.4",
     "crypto-js": "^3.1.9-1",
     "font-awesome": "^4.7.0",
@@ -101,7 +96,6 @@
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.7.4",
     "codelyzer": "^5.1.0",
-    "cordova": "^9.0.0",
     "electron": "^6.0.7",
     "electron-builder": "^21.2.0",
     "jasmine-core": "^3.4.0",
@@ -111,17 +105,6 @@
     "tslint": "~5.19.0",
     "typescript": "~3.5.3",
     "webpack": "^4.39.3"
-  },
-  "cordova": {
-    "platforms": [
-      "android",
-      "browser",
-      "ios",
-      "windows"
-    ],
-    "plugins": {
-      "cordova-plugin-whitelist": {}
-    }
   },
   "main": "index.js",
   "repository": {
