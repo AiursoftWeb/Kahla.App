@@ -30,7 +30,7 @@ export class DiscoverComponent implements OnInit {
             users.items.forEach(item => {
                 item.targetUser.avatarURL = Values.fileAddress + item.targetUser.iconFilePath;
             });
-            const top = document.documentElement.scrollTop;
+            const top = window.scrollY;
             this.users = users.items;
             if (this.users.length < this.amount) {
                 this.noMoreUsers = true;

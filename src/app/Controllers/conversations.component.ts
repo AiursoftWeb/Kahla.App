@@ -37,7 +37,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
 
     public detail(info: ContactInfo): void {
-        if (info.userId == null) {
+        if (info.discriminator === 'GroupConversation') {
             this.router.navigate(['/group', info.conversationId]);
         } else {
             this.router.navigate(['/user', info.userId]);

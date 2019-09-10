@@ -15,7 +15,6 @@ import { FriendRequestsComponent } from './Controllers/friendrequests.component'
 import { TalkingComponent } from './Controllers/talking.component';
 import { DiscoverComponent } from './Controllers/discover.component';
 import { SignInComponent } from './Controllers/signin.component';
-import { RegisterComponent } from './Controllers/register.component';
 import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
@@ -67,7 +66,6 @@ import { FriendshipService } from './Services/FriendshipService';
         TalkingComponent,
         DiscoverComponent,
         SignInComponent,
-        RegisterComponent,
         NavComponent,
         HeaderComponent,
         UserComponent,

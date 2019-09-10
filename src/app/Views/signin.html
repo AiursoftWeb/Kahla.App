@@ -5,29 +5,16 @@
             <h1 i18n="@@Kahla">Kahla</h1>
         </div>
         <div class="auth-content">
-            <div class="selector mode">
-                <div class="column">
-                    <a class="btn" routerLink="/signin" i18n="@@LogIn">Log in</a>
-                </div>
-                <div class="column">
-                    <a class="btn" routerLink="/register" i18n="@@Register">Register</a>
-                </div>
-            </div>
-            <form (ngSubmit)="signin()" #loginForm="ngForm">
-                <input [(ngModel)]="email" name="email" type="email" i18n-placeholder="@@Email" placeholder="Email" autocomplete="email" required #emailInput="ngModel" email>
-                <div class="alert" [hidden]="emailInput.valid || emailInput.pristine">Invalid email!</div>
-                <input [(ngModel)]="password" name="password" type="password" minlength="6" maxlength="100" i18n-placeholder="@@Password" placeholder="Password" autocomplete="current-password" (keyup.enter)="signin()" required #passwordInput="ngModel">
-                <div class="alert" [hidden]="passwordInput.valid || passwordInput.pristine">Password length should between 6 and 100.</div>
-                <button *ngIf="!connecting" [disabled]="!loginForm.form.valid" class="button white" i18n="@@LogIn" type="submit">
-                    Log in
-                </button>
-                <button *ngIf="connecting" disabled="disabled" class="button white" i18n="@@Connecting" type="button">
-                    Connecting...
-                </button>
-                <a class="button white login" href="{{ OAuthURL }}" *ngIf="!_electronService.isElectronApp">
-                    Sign in with browser(OAuth)
+            <form>
+                <a class="button white login" href="{{ OAuthURL }}/Auth/Oauth"
+                   [target]="_electronService.isElectronApp ? '_blank' : ''">
+                    Sign in
                 </a>
-                <a class="forgetPassword" href="https://api.aiursoft.com/User/ForgotPasswordfor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
+                <a class="button white login" href="{{ OAuthURL }}/Auth/GoRegister"
+                   [target]="_electronService.isElectronApp ? '_blank' : ''">
+                    Register
+                </a>
+                <a class="forgetPassword" href="https://api.aiursoft.com/Password/ForgotpasswordFor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
             </form>
         </div>
     </div>

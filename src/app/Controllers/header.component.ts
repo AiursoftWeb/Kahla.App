@@ -22,6 +22,7 @@ export class HeaderComponent {
     @Input() public buttonIcon = '';
     @Input() public shadow = false;
     @Input() public timer = false;
+    @Input() public processing = false;
 
     constructor(
         private router: Router,

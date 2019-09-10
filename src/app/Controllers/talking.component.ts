@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+﻿import { Component, HostListener, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -29,8 +29,8 @@ declare var MediaRecorder: any;
         '../Styles/menu.scss',
         '../Styles/badge.scss']
 })
-export class TalkingComponent implements OnDestroy, AfterViewInit {
-    public content: string;
+export class TalkingComponent implements OnInit, OnDestroy {
+    public content = '';
     public showPanel = false;
     public loadingImgURL = Values.loadingImgURL;
     private windowInnerHeight = 0;
@@ -51,11 +51,10 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('mainList', {static: false}) public mainList: ElementRef;
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
     @ViewChild('fileInput', {static: false}) public fileInput;
-    @ViewChild('header', {static: false}) public header: HeaderComponent;
+    @ViewChild('header', {static: true}) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -75,13 +74,25 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            window.scroll(0, document.documentElement.scrollTop + this.keyBoardHeight);
+            window.scroll(0, window.scrollY + this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
-            window.scroll(0, document.documentElement.scrollTop - this.keyBoardHeight);
+            window.scroll(0, window.scrollY - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            window.scroll(0, document.documentElement.scrollTop);
+            window.scroll(0, window.scrollY);
         }
         this.formerWindowInnerHeight = window.innerHeight;
+    }
+
+    @HostListener('window:scroll', [])
+    onScroll() {
+        this.messageService.updateBelowWindowPercent();
+        if (this.messageService.belowWindowPercent <= 0) {
+            this.messageService.newMessages = false;
+        }
+        if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
+            && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
+            this.messageService.loadMore();
+        }
     }
 
     @HostListener('keydown', ['$event'])
@@ -99,8 +110,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
             if (this.showUserList) {
                 // accept default suggestion
                 this.complete(this.matchedUsers[0].nickName);
-            }
-            if (this.oldContent === this.content) {
+            } else if (this.oldContent === this.content) {
                 this.send();
                 this.showUserList = false;
             }
@@ -125,14 +135,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    public ngAfterViewInit(): void {
-        window.addEventListener('scroll', () => {
-            this.messageService.updateBelowWindowPercent();
-            if (this.messageService.belowWindowPercent <= 0) {
-                this.messageService.newMessages = false;
-            }
-        });
-
+    public ngOnInit(): void {
         const inputElement = <HTMLElement>document.querySelector('#chatInput');
         inputElement.addEventListener('input', () => {
             inputElement.style.height = 'auto';
@@ -151,8 +154,8 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                     }
                     this.uploadService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
-                    this.conversationID = params.id;
-                    this.unread = (params.unread && params.unread <= 50) ? params.unread : 0;
+                    this.conversationID = Number(params.id);
+                    this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
                     this.load = this.unread < 15 ? 15 : this.unread;
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
@@ -181,16 +184,17 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (!this.uploadService.talkingDestroyed) {
-                    this.updateConversation(conversation);
-                    if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                        this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
-                    }
-                    this.messageService.cleanMessageByTimer();
-                    this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-                    this.cacheService.saveCache();
+                if (this.conversationID !== conversation.id || this.uploadService.talkingDestroyed) {
+                    return;
                 }
+                this.updateConversation(conversation);
+                if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                    this.messageService.initMessage(this.conversationID);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                }
+                this.messageService.cleanMessageByTimer();
+                this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+                this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
     }
@@ -269,7 +273,7 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
             this.showPanel = false;
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent > 0) {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                window.scroll(0, window.scrollY - 105);
             }
         }
     }
@@ -278,13 +282,13 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
             document.querySelector('.message-list').classList.add('active-list');
-            window.scroll(0, document.documentElement.scrollTop + 105);
+            window.scroll(0, window.scrollY + 105);
         } else {
             document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
-                window.scroll(0, document.documentElement.scrollTop - 105);
+                window.scroll(0, window.scrollY - 105);
             }
         }
     }
@@ -418,8 +422,6 @@ export class TalkingComponent implements OnDestroy, AfterViewInit {
 
     public ngOnDestroy(): void {
         this.destroyCurrent();
-        window.onscroll = null;
-        window.onresize = null;
     }
 
     public destroyCurrent() {
