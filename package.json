@@ -55,13 +55,13 @@
   "scripts": {
     "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/index.js",
-    "start": "npm run prebuild && ng serve --open",
+    "start": "ng serve --open",
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
-    "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
-    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
+    "prod": "ng build --base-href / --prod --output-hashing none",
+    "prod-electron": "ng build --base-href ./ --prod",
+    "prod-zh": "ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
     "@angular/animations": "8.2.5",
