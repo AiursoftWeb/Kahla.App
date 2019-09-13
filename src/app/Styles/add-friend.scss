@@ -71,10 +71,10 @@
       span {
         line-height: 40px;
       }
-    }
 
-    &.selected {
-      background-color: var(--selectable-bg);
+      &.selected {
+        background-color: var(--selectable-bg);
+      }
     }
   }
 }
