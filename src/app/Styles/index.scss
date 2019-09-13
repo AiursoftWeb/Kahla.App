@@ -1,8 +1,8 @@
 @import "themes";
 
 body {
-  color: var(--text-color);
-  background-color: var(--bg);
+  color: var(--default-textcolor);
+  background-color: var(--default-background);
 
   a {
     color: var(--a-color);
@@ -17,7 +17,7 @@ body {
 
     .swal2-content,
     .swal2-title {
-      color: var(--text-color);
+      color: var(--default-textcolor);
 
       progress {
         width: 100%;
@@ -26,12 +26,12 @@ body {
     }
 
     .swal2-styled.swal2-confirm {
-      background-color: var(--btn-bg);
+      background-color: var(--primary-color-depth3);
     }
 
     .swal2-select {
       background-color: var(--alert-bg) !important;
-      color: var(--text-color) !important;
+      color: var(--default-textcolor) !important;
     }
 
   }
