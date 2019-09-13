@@ -1,5 +1,42 @@
 @import "themes";
 
+body {
+  color: var(--text-color);
+  background-color: var(--bg);
+
+  a {
+    color: var(--a-color);
+  }
+
+  .left .chat-inline-link {
+    color: var(--left-a-color);
+  }
+
+  .swal2-popup {
+    background-color: var(--alert-bg);
+
+    .swal2-content,
+    .swal2-title {
+      color: var(--text-color);
+
+      progress {
+        width: 100%;
+        height: 5px;
+      }
+    }
+
+    .swal2-styled.swal2-confirm {
+      background-color: var(--btn-bg);
+    }
+
+    .swal2-select {
+      background-color: var(--alert-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+  }
+}
+
 .right .chat-inline-link {
   color: white;
 }
