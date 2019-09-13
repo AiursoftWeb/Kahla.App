@@ -1,7 +1,5 @@
-@import "themes";
 
 .profile {
-  @extend %menu-item;
   padding: 7px;
   box-sizing: border-box;
   width: 100%;
@@ -11,6 +9,8 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   user-select: none;
+  background-color: var(--selectable-bg);
+  border-color: var(--selectable-border-color);
 }
 
 .profile {
@@ -20,7 +20,9 @@
   }
 
   input {
-    @extend %text-input;
+    border: 1px solid var(--text-input-border-color);
+    color: var(--default-textcolor);
+    background-color: var(--text-input-bg);
     border-radius: 6px;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     box-shadow: none;
@@ -67,7 +69,7 @@
 }
 
 .email {
-  @extend %minor-text;
+  color: var(--minor-textcolor);
   font-size: 13px;
 }
 

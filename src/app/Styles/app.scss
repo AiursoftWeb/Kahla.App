@@ -1,7 +1,6 @@
-@import "themes";
 
 .floating-home-wrapper {
-  @extend %floating-home;
+  border-color: var(--primary-color-depth3);
   width: calc(35% - 1px);
   max-width: 549px;
   height: 100vh;

@@ -1,5 +1,4 @@
-@import "themes";
-@import "shared";
+@import "fixed_widescreen";
 /******************
  *    Nav bar
  ******************** */
@@ -18,7 +17,8 @@
   }
 
   .nav-bar {
-    @extend %nav-bar;
+    background-color: var(--selectable-bg);
+    border-color: var(--selectable-border-color);
     height: 55px;
     border-width: 1px;
     border-top-style: solid;
@@ -26,6 +26,7 @@
     user-select: none;
 
     .nav-item {
+      color: var(--minor-textcolor);
       outline: none;
       float: left;
       width: 33.33333%;
@@ -46,6 +47,15 @@
         text-align: center;
         margin: auto;
         font-size: 13px;
+      }
+
+      &:hover {
+        background-color: var(--selectable-hover-bg);
+        color: var(--primary-color-depth1);
+      }
+
+      &.current {
+        color: var(--primary-color-depth2);
       }
     }
   }

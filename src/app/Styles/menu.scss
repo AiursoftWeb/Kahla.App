@@ -1,4 +1,4 @@
-@import "themes";
+@import "menus";
 
 /******************
  *    User
@@ -40,14 +40,14 @@
   }
 
   .bio {
-    @extend %minor-text;
+    color: var(--minor-textcolor);
     font-size: 13px;
     grid-row: 2;
     grid-column: 2 / 3;
   }
 
   .email {
-    @extend %minor-text;
+    color: var(--minor-textcolor);
     font-size: 13px;
     grid-column: 2 / 3;
     word-break: break-all;
@@ -59,18 +59,24 @@
   height: 20px;
 }
 
-.menu-button {
-  @extend %menu-item-clickable;
-
+.menu-button-transparent, .menu-button {
   min-height: 50px;
-  border-width: 1px;
-  border-bottom-style: solid;
   cursor: pointer;
   outline: none;
   user-select: none;
   display: grid;
   grid-template-columns: 15% auto 15%;
   transition: all 0.2s ease-out;
+
+  &.menu-button {
+    @extend %menu-item-clickable;
+    border-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  &.menu-button-transparent:hover {
+    background-color: var(--default-foreground-20);
+  }
 
   > * {
     margin: auto;
@@ -92,15 +98,13 @@
   }
 
   .text {
-    @extend %text;
+    color: var(--default-textcolor);
     font-size: 15px;
     font-weight: 400;
     grid-column: 2 / 3;
     margin-left: 0;
   }
-}
 
-.menu-button {
   .warning {
     color: #d9534f !important;
   }
@@ -127,8 +131,8 @@ a {
   text-decoration: none;
 }
 
-.menu-header{
-  @extend %menu-header;
+.menu-header {
+  color: var(--primary-color-depth3);
   font-size: 15px;
   margin: 10px 5px 10px 15px;
   font-weight: 500;

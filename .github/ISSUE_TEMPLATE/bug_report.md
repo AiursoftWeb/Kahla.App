@@ -13,7 +13,7 @@ assignees: 'Anduin2017'
 
 - Environment: `Staging(Pre-release)\Production`
 - Last git commit: `aaaaaa`
-- Platform: `Web Desktop\Web Mobile\Electron\Cordova\PWA`
+- Platform: `Web Desktop\Web Mobile\Electron\PWA\TWA`
 - Browser: `Chrome\Edge\Firefox\Safari\Others`
 
 ## How to repro
