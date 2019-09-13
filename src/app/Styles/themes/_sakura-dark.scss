@@ -11,11 +11,12 @@ body.theme-sakura-dark {
   --primary-color-depth2: #{$primary-color-depth2};
   --primary-color-depth3: #{$primary-color-depth3};
   --default-textcolor: #fff;
+  --default-foreground-20: #{transparentize(#fff, 0.8)};
   --minor-textcolor: #999;
   --selectable-bg: #2f3640;
   --selectable-hover-bg: #374554;
   --selectable-border-color: #353b48;
-  --talking-action-bg: #2f3640;
+  --talking-action-bg: #2f3640dd;
   --header-action-bg: #222;
   --text-input-border-color: #e2e2e4;
   --text-input-bg: #1e272e;

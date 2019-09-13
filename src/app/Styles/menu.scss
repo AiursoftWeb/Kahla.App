@@ -59,18 +59,24 @@
   height: 20px;
 }
 
-.menu-button {
-  @extend %menu-item-clickable;
-
+.menu-button-transparent, .menu-button {
   min-height: 50px;
-  border-width: 1px;
-  border-bottom-style: solid;
   cursor: pointer;
   outline: none;
   user-select: none;
   display: grid;
   grid-template-columns: 15% auto 15%;
   transition: all 0.2s ease-out;
+
+  &.menu-button {
+    @extend %menu-item-clickable;
+    border-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  &.menu-button-transparent:hover {
+    background-color: var(--default-foreground-20);
+  }
 
   > * {
     margin: auto;
@@ -98,9 +104,7 @@
     grid-column: 2 / 3;
     margin-left: 0;
   }
-}
 
-.menu-button {
   .warning {
     color: #d9534f !important;
   }

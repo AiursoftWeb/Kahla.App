@@ -221,17 +221,18 @@
   }
 
   .userList {
-    //@extend %talking-overlay;
     left: 0;
     bottom: 0;
     width: 100%;
     padding: 0;
     margin: 0;
     overflow-y: scroll;
+    background-color: var(--talking-action-bg);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
     li {
       margin: 0;
-      //background-color: transparent;
     }
   }
 
@@ -244,6 +245,8 @@
     bottom: 0;
     box-shadow: 0 23px 50px 10px rgba(0, 0, 0, 0.37);
     background-color: var(--talking-action-bg);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
     .chat-part {
       margin-right: 90px;

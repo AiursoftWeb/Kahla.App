@@ -11,11 +11,12 @@ body.theme-violet-light {
   --primary-color-depth2: #{$primary-color-depth2};
   --primary-color-depth3: #{$primary-color-depth3};
   --default-textcolor: #333;
+  --default-foreground-20: #{transparentize(#333, 0.8)};
   --minor-textcolor: #999;
   --selectable-bg: #fff;
   --selectable-hover-bg: #f6f6f6;
   --selectable-border-color: #e8e8e8;
-  --talking-action-bg: #e4e4e4;
+  --talking-action-bg: #e4e4e4dd;
   --header-action-bg: #e4e4e4;
   --text-input-border-color: #e2e2e4;
   --text-input-bg: #fff;
