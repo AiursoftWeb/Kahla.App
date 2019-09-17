@@ -1,4 +1,3 @@
-@import "shared";
 //
 // Dark Theme
 //
@@ -6,37 +5,25 @@ $primary-color-depth1: #f8bbd0;
 $primary-color-depth2: #f25d8e;
 $primary-color-depth3: #cf4c78;
 
-:host-context(.theme-sakura-dark) {
-  $colors: (
-    default-background: #2c3e50,
-    primary-color-depth1: $primary-color-depth1,
-    primary-color-depth2: $primary-color-depth2,
-    primary-color-depth3: $primary-color-depth3,
-    default-textcolor: #fff,
-    minor-textcolor: #999,
-    selectable-bg: #2f3640,
-    selectable-hover-bg: #374554,
-    selectable-border-color: #353b48,
-    talking-action-bg: #2f3640,
-    header-action-bg: #222,
-    text-input-border-color: #e2e2e4,
-    text-input-bg: #1e272e,
-    talking-chat-bg: #707e8a,
-    tgl-btn-bg: #888,
-    header-bg: linear-gradient(to bottom, $primary-color-depth3, $primary-color-depth2)
-  );
-  @include theme-shared($colors);
-}
-
-%body.theme-sakura-dark {
-  $colors: (
-    text-color: #fff,
-    bg: #2c3e50,
-    a-color: #3498db,
-    left-a-color: #74b9ff,
-    alert-bg: #2f3640,
-    btn-bg: $primary-color-depth3
-  );
-
-  @include body-shared($colors);
+body.theme-sakura-dark {
+  --default-background: #2c3e50;
+  --primary-color-depth1: #{$primary-color-depth1};
+  --primary-color-depth2: #{$primary-color-depth2};
+  --primary-color-depth3: #{$primary-color-depth3};
+  --default-textcolor: #fff;
+  --default-foreground-20: #{transparentize(#fff, 0.8)};
+  --minor-textcolor: #999;
+  --selectable-bg: #2f3640;
+  --selectable-hover-bg: #374554;
+  --selectable-border-color: #353b48;
+  --talking-action-bg: #2f3640dd;
+  --header-action-bg: #222;
+  --text-input-border-color: #e2e2e4;
+  --text-input-bg: #1e272e;
+  --talking-chat-bg: #707e8a;
+  --tgl-btn-bg: #888;
+  --header-bg: linear-gradient(to bottom, #{$primary-color-depth3}, #{$primary-color-depth2});
+  --a-color: #3498db;
+  --left-a-color: #74b9ff;
+  --alert-bg: #2f3640;
 }

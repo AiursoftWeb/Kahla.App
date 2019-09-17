@@ -1,0 +1,20 @@
+%menu-item {
+  background-color: var(--selectable-bg);
+  border-color: var(--selectable-border-color);
+
+  .img {
+    color: var(--primary-color-depth2);
+  }
+
+  &.w-current {
+    background-color: var(--selectable-hover-bg) !important;
+  }
+}
+
+%menu-item-clickable {
+  @extend %menu-item;
+
+  &:hover {
+    background-color: var(--selectable-hover-bg);
+  }
+}

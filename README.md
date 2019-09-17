@@ -59,19 +59,6 @@ Supports Windows 7+, Linux and macOS 10.9+.
 npm run electron
 ```
 
-### How to run as mobile app
-
-Currently we are using [Apache Cordova](https://cordova.apache.org/) to target Android and iOS platform.
-
-Before running, please [prepare](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) your Android development environment and an Android device.
-
-Run the following commands to run on an Android device.
-
-```bash
-npx cordova platform add android
-npx cordova run android
-```
-
 ## How to publish
 
 ### How to publish to a web server
@@ -99,16 +86,6 @@ Run:
 ```
 
 And you will publish the distributable version of Kahla desktop.
-
-### How to publish for Android production version
-
-Run:
-
-```bash
-cordova build android --release -- --keystore=./android.jks --storePassword={KEY} --alias=key0 --password={PASSWORD}
-```
-
-Please view [here](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for Cordova distribution document.
 
 ## Document
 

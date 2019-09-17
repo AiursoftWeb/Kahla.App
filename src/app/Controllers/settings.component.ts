@@ -58,25 +58,23 @@ export class SettingsComponent implements OnInit {
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
-                if (this._electronService.isElectronApp) {
-                    this.callLogOffAPI(-1);
-                    return;
+                let deviceID = localStorage.getItem('deviceID');
+                if (deviceID === null) {
+                    deviceID = '-1';
                 }
-                const _this = this;
-                navigator.serviceWorker.ready.then(function(reg) {
-                    return reg.pushManager.getSubscription().then(function(subscription) {
-                        let deviceID = localStorage.getItem('deviceID');
-                        if (deviceID === null) {
-                            deviceID = '-1';
-                        }
-                        if (subscription != null) {
-                            subscription.unsubscribe().then().catch(function(e) {
-                                console.log(e);
-                            });
-                        }
-                        _this.callLogOffAPI(Number(deviceID));
-                    });
-                }.bind(_this));
+                this.callLogOffAPI(Number(deviceID));
+                if (!(this._electronService.isElectronApp || !navigator.serviceWorker)) {
+                    const _this = this;
+                    navigator.serviceWorker.ready.then(function (reg) {
+                        return reg.pushManager.getSubscription().then(function (subscription) {
+                            if (subscription != null) {
+                                subscription.unsubscribe().then().catch(function (e) {
+                                    console.log(e);
+                                });
+                            }
+                        });
+                    }.bind(_this));
+                }
             }
         });
     }

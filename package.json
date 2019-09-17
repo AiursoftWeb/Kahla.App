@@ -1,6 +1,6 @@
 {
   "name": "kahla",
-  "version": "3.7.1",
+  "version": "3.8.0",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
@@ -12,7 +12,7 @@
     },
     "nsis": {
       "oneClick": false,
-      "perMachine": true,
+      "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "license": "LICENSE",
       "artifactName": "${productName}.Setup.${version}.${ext}"
@@ -55,13 +55,13 @@
   "scripts": {
     "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/index.js",
-    "start": "npm run prebuild && ng serve --open",
+    "start": "ng serve --open",
     "prebuild": "ts-node version.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
-    "prod-electron": "npm run prebuild && ng build --base-href ./ --prod",
-    "prod-zh": "npm run prebuild && ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
+    "prod": "ng build --base-href / --prod --output-hashing none",
+    "prod-electron": "ng build --base-href ./ --prod",
+    "prod-zh": "ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
     "@angular/animations": "8.2.5",
@@ -74,11 +74,6 @@
     "@angular/router": "8.2.5",
     "autolinker": "^3.11.0",
     "blueimp-load-image": "^2.24.0",
-    "cordova-android": "^7.1.4",
-    "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.0.0",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-windows": "6.0.1",
     "core-js": "^2.6.4",
     "crypto-js": "^3.1.9-1",
     "font-awesome": "^4.7.0",
@@ -101,7 +96,6 @@
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.7.4",
     "codelyzer": "^5.1.0",
-    "cordova": "^9.0.0",
     "electron": "^6.0.7",
     "electron-builder": "^21.2.0",
     "jasmine-core": "^3.4.0",
@@ -111,17 +105,6 @@
     "tslint": "~5.19.0",
     "typescript": "~3.5.3",
     "webpack": "^4.39.3"
-  },
-  "cordova": {
-    "platforms": [
-      "android",
-      "browser",
-      "ios",
-      "windows"
-    ],
-    "plugins": {
-      "cordova-plugin-whitelist": {}
-    }
   },
   "main": "index.js",
   "repository": {

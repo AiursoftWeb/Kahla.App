@@ -1,18 +1,20 @@
-@import "themes";
-@import "shared";
+@import "fixed_widescreen";
+@import "menus";
 
 .search-part {
-  @extend %search-part;
   @extend %full-fixed-width;
   position: fixed;
   z-index: 50;
+  background-color: var(--header-action-bg);
 
   .search-input {
     padding: 7px;
     display: flex;
     margin-bottom: 8px;
     input {
-      @extend %text-input;
+      border: 1px solid var(--text-input-border-color);
+      color: var(--default-textcolor);
+      background-color: var(--text-input-bg);
       border-radius: 6px;
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
       box-shadow: none;
@@ -68,6 +70,10 @@
 
       span {
         line-height: 40px;
+      }
+
+      &.selected {
+        background-color: var(--selectable-bg);
       }
     }
   }
