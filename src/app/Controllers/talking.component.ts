@@ -50,6 +50,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public Date = Date;
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
+    private pressedKeys = { 'Enter': false, 'Other': false };
 
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
@@ -100,6 +101,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (e.key === 'Enter') {
             e.preventDefault();
             this.oldContent = this.content;
+            this.pressedKeys.Enter = true;
+        } else {
+            this.pressedKeys.Other = true;
+        }
+
+        if (this.pressedKeys.Enter && this.pressedKeys.Other) {
+            this.content += '\n';
+            this.updateInputHeight();
         }
     }
 
@@ -115,8 +124,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.showUserList = false;
             }
         } else if (this.content && e.key !== 'Backspace') {
+            this.showUserList = false;
             const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-            const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+            const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
             const typingWord = typingWords[typingWords.length - 1];
             if (typingWord.charAt(0) === '@') {
                 const searchName = typingWord.slice(1).toLowerCase();
@@ -124,14 +134,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
                     this.showUserList = true;
-                } else {
-                    this.showUserList = false;
                 }
-            } else {
-                this.showUserList = false;
             }
         } else {
             this.showUserList = false;
+        }
+
+        if (e.key === 'Enter') {
+            this.pressedKeys.Enter = false;
+        } else {
+            this.pressedKeys.Other = false;
         }
     }
 
@@ -170,10 +182,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     }, 1000);
 
-                    setTimeout(() => {
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                        this.chatInputHeight = inputElement.scrollHeight;
-                    }, 0);
+                    this.updateInputHeight();
 
                     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                         inputElement.focus();
@@ -197,6 +206,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    private updateInputHeight(): void {
+        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        setTimeout(() => {
+            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+            this.chatInputHeight = inputElement.scrollHeight;
+        }, 0);
     }
 
     public updateConversation(conversation: Conversation): void {
@@ -403,7 +420,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public complete(nickname: string): void {
         const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-        const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+        const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
         const typingWord = typingWords[typingWords.length - 1];
         const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
         this.content =
