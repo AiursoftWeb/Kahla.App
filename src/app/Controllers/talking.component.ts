@@ -50,7 +50,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public Date = Date;
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
-    private pressedKeys = { 'Enter': false, 'Other': false };
+    private pressedKeys = { 'Enter': false, 'Shift': false, 'Control': false };
 
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
@@ -101,13 +101,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (e.key === 'Enter') {
             e.preventDefault();
             this.oldContent = this.content;
-            this.pressedKeys.Enter = true;
-        } else {
-            this.pressedKeys.Other = true;
         }
 
-        if (this.pressedKeys.Enter && this.pressedKeys.Other) {
-            this.content += '\n';
+        if (e.key in this.pressedKeys) {
+            this.pressedKeys[e.key] = true;
+        }
+
+        if (this.pressedKeys.Enter && (this.pressedKeys.Shift || this.pressedKeys.Control)) {
+            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+            this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
             this.updateInputHeight();
         }
     }
@@ -140,10 +142,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.showUserList = false;
         }
 
-        if (e.key === 'Enter') {
-            this.pressedKeys.Enter = false;
-        } else {
-            this.pressedKeys.Other = false;
+        if (e.key in this.pressedKeys) {
+            this.pressedKeys[e.key] = false;
         }
     }
 
