@@ -1,4 +1,4 @@
-﻿import { Component, HostListener, OnDestroy, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -50,7 +50,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public Date = Date;
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
-    private pressedKeys = { 'Enter': false, 'Shift': false, 'Control': false };
 
     @ViewChild('imageInput', {static: false}) public imageInput;
     @ViewChild('videoInput', {static: false}) public videoInput;
@@ -98,19 +97,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('keydown', ['$event'])
     onKeydown(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
-            this.oldContent = this.content;
-        }
-
-        if (e.key in this.pressedKeys) {
-            this.pressedKeys[e.key] = true;
-        }
-
-        if (this.pressedKeys.Enter && (this.pressedKeys.Shift || this.pressedKeys.Control)) {
-            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-            this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
-            this.updateInputHeight();
+            if (e.altKey || e.ctrlKey || e.shiftKey) {
+                const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+                this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
+                this.updateInputHeight();
+                this.oldContent = ''; // prevent send message on keyup
+            } else {
+                this.oldContent = this.content;
+            }
         }
     }
 
@@ -140,10 +136,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             }
         } else {
             this.showUserList = false;
-        }
-
-        if (e.key in this.pressedKeys) {
-            this.pressedKeys[e.key] = false;
         }
     }
 
