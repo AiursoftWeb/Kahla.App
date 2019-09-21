@@ -4,6 +4,7 @@ import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/comm
 import { Observable } from 'rxjs/';
 import { UploadFile } from '../Models/UploadFile';
 import { catchError, map } from 'rxjs/operators';
+import { AiurValue } from '../Models/AiurValue';
 
 @Injectable()
 export class FilesApiService {
@@ -14,11 +15,17 @@ export class FilesApiService {
         private http: HttpClient,
     ) {}
 
-    public UploadFile(formData: FormData, conversationID: number): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', `${ApiService.serverAddress +
-            FilesApiService.serverPath}/UploadFile?ConversationId=${conversationID}`, formData, {
-                reportProgress: true,
-                withCredentials: true
+    public InitIconUpload(): Observable<AiurValue<string>> {
+        return this.apiService.Get(FilesApiService.serverPath + '/InitIconUpload');
+    }
+
+    public InitFileUpload(conversationId: number): Observable<AiurValue<string>> {
+        return this.apiService.Get(`${FilesApiService.serverPath}/InitFileUpload?ConversationId=${conversationId}`);
+    }
+
+    public UploadFile(formData: FormData, uploadURL: string): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', uploadURL, formData, {
+            reportProgress: true
         });
 
         return this.http.request(req).pipe(

@@ -41,31 +41,40 @@ export class UploadService {
                 showCancelButton: true
             }).then(result => {
                 if (result.value) {
-                    this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                        this.encryptThenSend(response, fileType, conversationID, aesKey, file);
-                    }, () => {
-                        Swal.close();
-                        Swal.fire('Error', 'Upload failed', 'error');
+                    this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+                        if (response.code === 0) {
+                            this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                                this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                            }, () => {
+                                Swal.close();
+                                Swal.fire('Error', 'Upload failed', 'error');
+                            });
+                        }
                     });
                 }
                 URL.revokeObjectURL(audioSrc);
             });
         } else {
             const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'image' : (fileType === 1 ? 'video' : 'file')}...`);
-            const mission = this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response) {
-                    Swal.close();
-                    this.encryptThenSend(response, fileType, conversationID, aesKey, file);
-                }
-            }, () => {
-                Swal.close();
-                Swal.fire('Error', 'Upload failed', 'error');
-            });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
+
+            this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res) {
+                            Swal.close();
+                            this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                        }
+                    }, () => {
+                        Swal.close();
+                        Swal.fire('Error', 'Upload failed', 'error');
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
         }
