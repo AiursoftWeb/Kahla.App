@@ -182,18 +182,23 @@ export class UploadService {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading your avatar...');
-            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response != null && (<UploadFile>response).code === 0) {
-                    Swal.close();
-                    user.iconFilePath = (<UploadFile>response).filePath;
-                    user.avatarURL = Values.fileAddress + user.iconFilePath;
-                }
-            });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
+
+            this.filesApiService.InitIconUpload().subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadIcon(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res != null && (<UploadFile>res).code === 0) {
+                            Swal.close();
+                            user.iconFilePath = (<UploadFile>res).filePath;
+                            user.avatarURL = Values.fileAddress + user.iconFilePath;
+                        }
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
         } else {
@@ -206,20 +211,26 @@ export class UploadService {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading group avatar...');
-            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response != null && (<UploadFile>response).code === 0) {
-                    Swal.close();
-                    group.groupImagePath = (<UploadFile>response).filePath;
-                    group.avatarURL = Values.fileAddress + group.groupImagePath;
+
+            this.filesApiService.InitIconUpload().subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadIcon(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res != null && (<UploadFile>res).code === 0) {
+                            Swal.close();
+                            group.groupImagePath = (<UploadFile>res).filePath;
+                            group.avatarURL = Values.fileAddress + group.groupImagePath;
+                        }
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
-                }
-            });
+
         } else {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }

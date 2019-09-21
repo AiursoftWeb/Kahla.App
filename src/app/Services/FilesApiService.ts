@@ -45,10 +45,9 @@ export class FilesApiService {
         }
     }
 
-    public UploadIcon(formData: FormData): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', `${ApiService.serverAddress + FilesApiService.serverPath}/UploadIcon`, formData, {
-            reportProgress: true,
-            withCredentials: true
+    public UploadIcon(formData: FormData, uploadURL: string): Observable<number | UploadFile> {
+        const req = new HttpRequest('POST', uploadURL, formData, {
+            reportProgress: true
         });
 
         return this.http.request(req).pipe(
