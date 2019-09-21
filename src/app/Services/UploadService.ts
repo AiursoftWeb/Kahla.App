@@ -185,7 +185,7 @@ export class UploadService {
 
             this.filesApiService.InitIconUpload().subscribe(response => {
                 if (response.code === 0) {
-                    const mission = this.filesApiService.UploadIcon(formData, response.value).subscribe(res => {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
                         if (Number(res)) {
                             this.updateAlertProgress(Number(res));
                         } else if (res != null && (<UploadFile>res).code === 0) {
@@ -214,7 +214,7 @@ export class UploadService {
 
             this.filesApiService.InitIconUpload().subscribe(response => {
                 if (response.code === 0) {
-                    const mission = this.filesApiService.UploadIcon(formData, response.value).subscribe(res => {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
                         if (Number(res)) {
                             this.updateAlertProgress(Number(res));
                         } else if (res != null && (<UploadFile>res).code === 0) {

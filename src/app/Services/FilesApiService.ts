@@ -44,15 +44,4 @@ export class FilesApiService {
                 return null;
         }
     }
-
-    public UploadIcon(formData: FormData, uploadURL: string): Observable<number | UploadFile> {
-        const req = new HttpRequest('POST', uploadURL, formData, {
-            reportProgress: true
-        });
-
-        return this.http.request(req).pipe(
-            map(event => this.getProgress(event)),
-            catchError(this.apiService.handleError)
-        );
-    }
 }
