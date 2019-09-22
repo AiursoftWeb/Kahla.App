@@ -25,6 +25,12 @@
         {
           "target": "zip"
         }
+      ],
+      "extraFiles": [
+        {
+          "from": "build/windows",
+          "to": "./"
+        }
       ]
     },
     "mac": {
