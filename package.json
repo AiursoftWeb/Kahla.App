@@ -1,6 +1,6 @@
 {
   "name": "kahla",
-  "version": "3.7.1",
+  "version": "3.8.0",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
@@ -12,7 +12,7 @@
     },
     "nsis": {
       "oneClick": false,
-      "perMachine": true,
+      "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "license": "LICENSE",
       "artifactName": "${productName}.Setup.${version}.${ext}"
@@ -24,6 +24,12 @@
         },
         {
           "target": "zip"
+        }
+      ],
+      "extraFiles": [
+        {
+          "from": "build/windows",
+          "to": "./"
         }
       ]
     },

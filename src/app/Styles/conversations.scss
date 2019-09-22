@@ -1,4 +1,4 @@
-@import "themes";
+@import "menus";
 
 /******************
  *    Conversation
@@ -32,7 +32,7 @@
   }
 
   .last-message {
-    @extend %minor-text;
+    color: var(--minor-textcolor);
     position: absolute;
     margin-left: 85px;
     margin-top: 40px;

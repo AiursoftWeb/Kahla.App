@@ -21,3 +21,9 @@ echo '}' >> ./www/package.json
 
 # cp package.json so that release server could read version number.
 cp ./package.json ./dist/
+
+# remove additional useless files
+
+rm -rvf ./dist/win-unpacked
+rm -rvf ./dist/linux-unpacked
+rm -rvf ./dist/mac

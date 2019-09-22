@@ -1,4 +1,4 @@
-@import "themes";
+@import "menus";
 
 /**********************
  *    friendrequests
@@ -37,7 +37,7 @@
   }
 
   .time {
-    @extend %minor-text;
+    color: var(--minor-textcolor);
     margin-top: 40px;
     font-size: 13px;
     max-height: 20px;
@@ -51,7 +51,7 @@
 
   .decision {
     .Completed {
-      @extend %minor-text;
+      color: var(--minor-textcolor);
       text-align: center;
       font-size: 14px;
       font-weight: 400;

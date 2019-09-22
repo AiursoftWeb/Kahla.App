@@ -1,16 +1,15 @@
-@import "themes";
-@import "shared";
+@import "fixed_widescreen";
 
 /******************
  *    Header
  ******************** */
 
 .header {
-  @extend %header;
   @extend %full-fixed-width;
   position: fixed;
 
   /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
+  background: var(--header-bg);
   height: 45px;
   top: 0;
   overflow: auto;

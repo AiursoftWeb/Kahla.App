@@ -1,4 +1,4 @@
-﻿import { Component, HostListener, OnDestroy, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { Message } from '../Models/Message';
@@ -97,9 +97,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     @HostListener('keydown', ['$event'])
     onKeydown(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
-            this.oldContent = this.content;
+            if (e.altKey || e.ctrlKey || e.shiftKey) {
+                const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+                this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
+                this.updateInputHeight();
+                this.oldContent = ''; // prevent send message on keyup
+            } else {
+                this.oldContent = this.content;
+            }
         }
     }
 
@@ -115,8 +122,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.showUserList = false;
             }
         } else if (this.content && e.key !== 'Backspace') {
+            this.showUserList = false;
             const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-            const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+            const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
             const typingWord = typingWords[typingWords.length - 1];
             if (typingWord.charAt(0) === '@') {
                 const searchName = typingWord.slice(1).toLowerCase();
@@ -124,11 +132,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
                     this.showUserList = true;
-                } else {
-                    this.showUserList = false;
                 }
-            } else {
-                this.showUserList = false;
             }
         } else {
             this.showUserList = false;
@@ -170,10 +174,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         }
                     }, 1000);
 
-                    setTimeout(() => {
-                        inputElement.style.height = (inputElement.scrollHeight) + 'px';
-                        this.chatInputHeight = inputElement.scrollHeight;
-                    }, 0);
+                    this.updateInputHeight();
 
                     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                         inputElement.focus();
@@ -197,6 +198,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
+    }
+
+    private updateInputHeight(): void {
+        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        setTimeout(() => {
+            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+            this.chatInputHeight = inputElement.scrollHeight;
+        }, 0);
     }
 
     public updateConversation(conversation: Conversation): void {
@@ -403,7 +412,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public complete(nickname: string): void {
         const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-        const typingWords = this.content.slice(0, input.selectionStart).split(' ');
+        const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
         const typingWord = typingWords[typingWords.length - 1];
         const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
         this.content =

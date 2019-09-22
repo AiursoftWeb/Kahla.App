@@ -41,31 +41,40 @@ export class UploadService {
                 showCancelButton: true
             }).then(result => {
                 if (result.value) {
-                    this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                        this.encryptThenSend(response, fileType, conversationID, aesKey, file);
-                    }, () => {
-                        Swal.close();
-                        Swal.fire('Error', 'Upload failed', 'error');
+                    this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+                        if (response.code === 0) {
+                            this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                                this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                            }, () => {
+                                Swal.close();
+                                Swal.fire('Error', 'Upload failed', 'error');
+                            });
+                        }
                     });
                 }
                 URL.revokeObjectURL(audioSrc);
             });
         } else {
             const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'image' : (fileType === 1 ? 'video' : 'file')}...`);
-            const mission = this.filesApiService.UploadFile(formData, conversationID).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response) {
-                    Swal.close();
-                    this.encryptThenSend(response, fileType, conversationID, aesKey, file);
-                }
-            }, () => {
-                Swal.close();
-                Swal.fire('Error', 'Upload failed', 'error');
-            });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
+
+            this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res) {
+                            Swal.close();
+                            this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                        }
+                    }, () => {
+                        Swal.close();
+                        Swal.fire('Error', 'Upload failed', 'error');
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
         }
@@ -173,18 +182,23 @@ export class UploadService {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading your avatar...');
-            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response != null && (<UploadFile>response).code === 0) {
-                    Swal.close();
-                    user.iconFilePath = (<UploadFile>response).filePath;
-                    user.avatarURL = Values.fileAddress + user.iconFilePath;
-                }
-            });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
+
+            this.filesApiService.InitIconUpload().subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res != null && (<UploadFile>res).code === 0) {
+                            Swal.close();
+                            user.iconFilePath = (<UploadFile>res).filePath;
+                            user.avatarURL = Values.fileAddress + user.iconFilePath;
+                        }
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
         } else {
@@ -197,20 +211,26 @@ export class UploadService {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading group avatar...');
-            const mission = this.filesApiService.UploadIcon(formData).subscribe(response => {
-                if (Number(response)) {
-                    this.updateAlertProgress(Number(response));
-                } else if (response != null && (<UploadFile>response).code === 0) {
-                    Swal.close();
-                    group.groupImagePath = (<UploadFile>response).filePath;
-                    group.avatarURL = Values.fileAddress + group.groupImagePath;
+
+            this.filesApiService.InitIconUpload().subscribe(response => {
+                if (response.code === 0) {
+                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                        if (Number(res)) {
+                            this.updateAlertProgress(Number(res));
+                        } else if (res != null && (<UploadFile>res).code === 0) {
+                            Swal.close();
+                            group.groupImagePath = (<UploadFile>res).filePath;
+                            group.avatarURL = Values.fileAddress + group.groupImagePath;
+                        }
+                    });
+                    alert.then(result => {
+                        if (result.dismiss) {
+                            mission.unsubscribe();
+                        }
+                    });
                 }
             });
-            alert.then(result => {
-                if (result.dismiss) {
-                    mission.unsubscribe();
-                }
-            });
+
         } else {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }

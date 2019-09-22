@@ -1,4 +1,4 @@
-@import "themes";
+@import "menus";
 
 /******************
  *    Friends
@@ -9,13 +9,13 @@
   height: 80px;
 
   .friends-button {
-    @extend %friends-button;
+    @extend %menu-item-clickable;
+    color: var(--primary-color-depth2);
     width: 25%;
     float: left;
     height: 80px;
     text-decoration: none;
     transition: all 0.2s ease-out;
-    color: #cccccc;
 
     .icon {
       width: 70px;

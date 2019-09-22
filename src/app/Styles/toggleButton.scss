@@ -1,11 +1,10 @@
-@import "themes";
 
 .tgl {
   display: none;
 }
 
 .tgl-btn {
-  @extend %tgl-btn;
+  background-color: var(--tgl-btn-bg);
   cursor: pointer;
   width: 4em;
   height: 2em;
