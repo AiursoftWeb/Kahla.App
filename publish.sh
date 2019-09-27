@@ -17,7 +17,7 @@ echo '  "main": "index.js"' >> ./www/package.json
 echo '}' >> ./www/package.json
 
 # call electron builder without publishing anything.
-./node_modules/.bin/electron-builder -p never
+npx electron-builder -p never
 
 # cp package.json so that release server could read version number.
 cp ./package.json ./dist/
