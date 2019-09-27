@@ -7,7 +7,9 @@
     <div *ngIf="timer"></div>
     <div *ngIf="!returnButton"></div>
     <div class="text">
-        <i class="fa fa-refresh fa-spin" *ngIf="processing"></i>
+        <div class="processing" [class.processing-open]="processing">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
         {{title}}
     </div>
     <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
