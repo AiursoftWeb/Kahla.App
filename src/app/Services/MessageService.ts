@@ -81,6 +81,8 @@ export class MessageService {
                         if (evt.mentioned) {
                             conversationCache.someoneAtMe = true;
                         }
+                    } else {
+                        conversationCache.unReadAmount = 0; // clear red dot when something went wrong
                     }
                     // move the new conversation to the top
                     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
@@ -271,6 +273,12 @@ export class MessageService {
                 }
                 this.updateAtLink();
                 this.saveMessage();
+                // clear red dot if necessary
+                const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversation.id);
+                if (listItem) {
+                    listItem.unReadAmount = 0;
+                }
+                this.cacheService.updateTotalUnread();
                 this.messageLoading = false;
             });
     }
