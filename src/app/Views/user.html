@@ -25,6 +25,12 @@
         <strong>This user's email is not verified.</strong>
     </div>
 </div>
+<div class="menu-button" *ngIf="info" (click)="shareUser()">
+    <div class="img">
+        <i class="fa fa-share-alt"></i>
+    </div>
+    <div class="text">Share</div>
+</div>
 
 <div class="menu-holder"></div>
 <div class="menu-button" *ngIf="info && areFriends" (click)="timerService.setTimer(conversationId)">
@@ -38,12 +44,6 @@
         <i class="fa fa-history"></i>
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
-</div>
-<div class="menu-button" *ngIf="info" (click)="shareUser()">
-    <div class="img">
-        <i class="fa fa-share-alt"></i>
-    </div>
-    <div class="text">Share</div>
 </div>
 <div class="menu-button" (click)="report()"
      *ngIf="info && cacheService.cachedData.me && info.id != cacheService.cachedData.me.id">
