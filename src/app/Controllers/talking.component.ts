@@ -165,6 +165,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
                         this.messageService.initMessage(this.conversationID);
                         this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                    } else {
+                        const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
+                        if (listItem) {
+                            this.header.title = listItem.displayName;
+                        } else {
+                            this.header.title = 'Loading...';
+                        }
                     }
 
                     this.content = localStorage.getItem('draft' + this.conversationID);
