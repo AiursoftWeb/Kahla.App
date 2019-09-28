@@ -8,7 +8,7 @@
     <div *ngIf="!returnButton"></div>
     <div class="text">
         <div class="processing" [class.processing-open]="processing">
-            <i class="fa fa-refresh fa-spin"></i>
+            <i class="fa fa-spinner fa-spin"></i>
         </div>
         {{title}}
     </div>
@@ -29,7 +29,7 @@
 <div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
     *ngIf="(((!this.closeDirectly && !this.returnButton) || !homeService.wideScreenEnabled) && initService.connecting)">
     <div class="words" i18n="@@Disconnectedfromserver">
-        <i class="fa fa-refresh fa-spin"></i>
+        <i class="fa fa-spinner fa-spin"></i>
         Connecting...
     </div>
 </div>
