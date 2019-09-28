@@ -169,6 +169,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
                         if (listItem) {
                             this.header.title = listItem.displayName;
+                        } else {
+                            this.header.title = 'Loading...';
                         }
                     }
 
