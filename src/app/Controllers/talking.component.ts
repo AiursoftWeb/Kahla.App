@@ -250,7 +250,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             stripPrefix: false,
             className: 'chat-inline-link'
         });
-        const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
+        const messageIDArry = this.messageService.getAtIDs(this.content);
         tempMessage.content = messageIDArry[0];
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;
