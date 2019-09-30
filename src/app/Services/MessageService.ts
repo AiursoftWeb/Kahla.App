@@ -362,7 +362,7 @@ export class MessageService {
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
-                const searchResults = this.searchUser(s.slice(1), true);
+                const searchResults = this.searchUser(he.decode(s.slice(1)), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0].id);
                     newMessageArry[index] = `<a class="chat-inline-link atLink"
@@ -448,7 +448,7 @@ export class MessageService {
                 stripPrefix: false,
                 className: 'chat-inline-link'
             });
-            t.content = this.getAtIDs(t.contentRaw)[0];
+            t.content = this.getAtIDs(t.content)[0];
         }
         return t;
     }
