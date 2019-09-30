@@ -448,7 +448,7 @@ export class MessageService {
                 stripPrefix: false,
                 className: 'chat-inline-link'
             });
-            t.content = this.getAtIDs(t.contentRaw)[0];
+            t.content = this.getAtIDs(t.content)[0];
         }
         return t;
     }
