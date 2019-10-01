@@ -18,7 +18,7 @@ import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
 import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
-import { FileType } from "../Models/FileType";
+import { FileType } from '../Models/FileType';
 
 declare var MediaRecorder: any;
 
@@ -356,7 +356,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public drop(event: DragEvent): void {
         this.preventDefault(event);
-        let fileList: File[] = [];
+        const fileList: File[] = [];
         if (event.dataTransfer.items != null) {
             const items = event.dataTransfer.items;
             for (let i = 0; i < items.length; i++) {
@@ -377,7 +377,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 type: 'question',
                 showCancelButton: true,
             })).value) {
-                fileType = FileType.Image
+                fileType = FileType.Image;
             }
             if (this.uploadService.validVideoType(t) && (await Swal.fire({
                 title: `Send "${t.name}" as`,

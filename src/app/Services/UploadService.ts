@@ -8,7 +8,7 @@ import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
-import { FileType } from "../Models/FileType";
+import { FileType } from '../Models/FileType';
 
 @Injectable({
     providedIn: 'root'
