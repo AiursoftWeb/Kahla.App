@@ -8,6 +8,7 @@ import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
+import { FileType } from "../Models/FileType";
 
 @Injectable({
     providedIn: 'root'
@@ -20,18 +21,22 @@ export class UploadService {
         private conversationApiService: ConversationApiService,
     ) {}
 
-    public upload(file: File, conversationID: number, aesKey: string, fileType: number): void {
+    public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): void {
         if (!this.validateFileSize(file)) {
             Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
             return;
         }
         const formData = new FormData();
         formData.append('file', file);
-        if (fileType === 0 && !this.validImageType(file, false)) {
+        if (fileType === FileType.Image && !this.validImageType(file, false)) {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg, .svg, gif or .bmp file', 'error');
             return;
         }
-        if (fileType === 3) {
+        if (fileType === FileType.Video && !this.validVideoType(file)) {
+            Swal.fire('Try again', 'Only support .mp4, .webm or .ogg file', 'error');
+            return;
+        }
+        if (fileType === FileType.Audio) {
             const audioSrc = URL.createObjectURL(file);
             const audioHTMLString = `<audio controls src="${audioSrc}"></audio>`;
             Swal.fire({
@@ -55,7 +60,7 @@ export class UploadService {
                 URL.revokeObjectURL(audioSrc);
             });
         } else {
-            const alert = this.fireUploadingAlert(`Uploading your ${fileType === 0 ? 'image' : (fileType === 1 ? 'video' : 'file')}...`);
+            const alert = this.fireUploadingAlert(`Uploading your ${fileType === FileType.Image ? 'image' : (fileType === FileType.Video ? 'video' : 'file')}...`);
 
             this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
                 if (response.code === 0) {
@@ -98,12 +103,12 @@ export class UploadService {
         (<HTMLDivElement>Swal.getContent().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
-    private encryptThenSend(response: number | UploadFile, fileType: number, conversationID: number, aesKey: string, file: File): void {
+    private encryptThenSend(response: number | UploadFile, fileType: FileType, conversationID: number, aesKey: string, file: File): void {
         if (response && !Number(response)) {
             if ((<UploadFile>response).code === 0) {
                 let encedMessages;
                 switch (fileType) {
-                    case 0:
+                    case FileType.Image:
                         loadImage(
                             file,
                             function (img, data) {
@@ -121,15 +126,15 @@ export class UploadService {
                             {meta: true}
                         );
                         break;
-                    case 1:
+                    case FileType.Video:
                         encedMessages = AES.encrypt(`[video]${(<UploadFile>response).filePath}`, aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
-                    case 2:
+                    case FileType.File:
                         encedMessages = AES.encrypt(this.formatFileMessage(<UploadFile>response, file.name), aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
-                    case 3:
+                    case FileType.Audio:
                         encedMessages = AES.encrypt(`[audio]${(<UploadFile>response).filePath}`, aesKey).toString();
                         this.sendMessage(encedMessages, conversationID);
                         break;
@@ -245,6 +250,13 @@ export class UploadService {
         } else {
             return validChatTypes.includes(fileExtension);
         }
+    }
+
+    public validVideoType(file: File): boolean {
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats
+        const validVideoType = ['webm', 'mp4', 'ogg'];
+        const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
+        return validVideoType.includes(fileExtension);
     }
 
     public getFileURL(event: MouseEvent, message: string): void {

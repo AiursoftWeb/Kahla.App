@@ -18,6 +18,7 @@ import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
 import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
+import { FileType } from "../Models/FileType";
 
 declare var MediaRecorder: any;
 
@@ -309,7 +310,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public uploadInput(fileType: number): void {
+    public uploadInput(fileType: FileType): void {
         this.showPanel = false;
         document.querySelector('.message-list').classList.remove('active-list');
         let files;
@@ -344,7 +345,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }).then((send) => {
                         if (send.value) {
                             this.uploadService.upload(blob, this.messageService.conversation.id,
-                                this.messageService.conversation.aesKey, 0);
+                                this.messageService.conversation.aesKey, FileType.Image);
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -355,23 +356,41 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public drop(event: DragEvent): void {
         this.preventDefault(event);
+        let fileList: File[] = [];
         if (event.dataTransfer.items != null) {
             const items = event.dataTransfer.items;
             for (let i = 0; i < items.length; i++) {
-                const blob = items[i].getAsFile();
-                if (blob != null) {
-                    this.uploadService.upload(blob, this.messageService.conversation.id, this.messageService.conversation.aesKey, 2);
-                }
+                fileList.push(items[i].getAsFile());
             }
         } else {
             const files = event.dataTransfer.files;
             for (let i = 0; i < files.length; i++) {
-                const blob = files[i];
-                if (blob != null) {
-                    this.uploadService.upload(blob, this.messageService.conversation.id, this.messageService.conversation.aesKey, 2);
-                }
+                fileList.push(files[i]);
             }
         }
+        fileList.forEach(async t => {
+            let fileType = FileType.File;
+            if (this.uploadService.validImageType(t, false) && (await Swal.fire({
+                title: `Send "${t.name}" as`,
+                confirmButtonText: 'Image',
+                cancelButtonText: 'File',
+                type: 'question',
+                showCancelButton: true,
+            })).value) {
+                fileType = FileType.Image
+            }
+            if (this.uploadService.validVideoType(t) && (await Swal.fire({
+                title: `Send "${t.name}" as`,
+                confirmButtonText: 'Video',
+                cancelButtonText: 'File',
+                type: 'question',
+                showCancelButton: true,
+            })).value) {
+                fileType = FileType.Video;
+            }
+
+            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
+        });
         this.removeDragData(event);
     }
 
@@ -404,7 +423,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.mediaRecorder.addEventListener('stop', () => {
                         this.recording = false;
                         const audioBlob = new File(audioChunks, `voiceMsg_${new Date().getTime()}.opus`);
-                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, 3);
+                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio);
                         clearTimeout(this.forceStopTimeout);
                         stream.getTracks().forEach(track => track.stop());
                     });
