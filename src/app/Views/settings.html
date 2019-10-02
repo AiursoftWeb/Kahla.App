@@ -22,13 +22,13 @@
 
 <div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
     <div class="img">
-        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+        <i class="fas fa-thumbtack" aria-hidden="true"></i>
     </div>
     <div class="text">Pin Kahla to home</div>
 </div>
 <div class="menu-button" *ngIf="homeService.pwaHomeScreenSuccess">
     <div class="img">
-        <i class="fa fa-check" aria-hidden="true"></i>
+        <i class="fas fa-check" aria-hidden="true"></i>
     </div>
     <div class="text">Success</div>
 </div>
@@ -37,7 +37,7 @@
 <div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
      (click)="sendEmail()">
     <div class="img warning">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
     <div class="text warning">
         <strong>Your account email was not confirmed!</strong>
@@ -45,19 +45,19 @@
 </div>
 <div class="menu-button" routerLink="/theme">
     <div class="img">
-        <i class="fa fa-paint-brush"></i>
+        <i class="fas fa-paint-brush"></i>
     </div>
     <div class="text" i18n="@@Language">Theme</div>
 </div>
 <div class="menu-button" routerLink="/advanced-setting">
     <div class="img">
-        <i class="fa fa-cog" aria-hidden="true"></i>
+        <i class="fas fa-cog" aria-hidden="true"></i>
     </div>
     <div class="text">Advanced Setting</div>
 </div>
 <div class="menu-button" routerLink="/about">
     <div class="img">
-        <i class="fa fa-server "></i>
+        <i class="fas fa-server "></i>
     </div>
     <div class="text" i18n="@@AboutKahla">About Kahla</div>
 </div>

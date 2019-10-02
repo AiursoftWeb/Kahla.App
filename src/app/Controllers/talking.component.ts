@@ -100,7 +100,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     onKeydown(e: KeyboardEvent) {
         if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
-            if (e.altKey || e.ctrlKey || e.shiftKey) {
+            if ((e.altKey || e.ctrlKey || e.shiftKey) === this.cacheService.cachedData.me.enableEnterToSendMessage) {
                 const input = <HTMLTextAreaElement>document.getElementById('chatInput');
                 this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
                 this.updateInputHeight();

@@ -4,7 +4,7 @@
     <div class="friends-header" id="main">
         <a class="friends-button" routerLink="/addfriend">
             <div class="icon">
-                <i class="fa fa-user-plus"></i>
+                <i class="fas fa-user-plus"></i>
             </div>
             <div class="words" i18n="@@GlobalSearch">
                 Add New
@@ -12,7 +12,7 @@
         </a>
         <a class="friends-button" routerLink="/friendrequests">
             <div class="icon">
-                <i class="fa fa-check-square-o"></i>
+                <i class="far fa-check-square"></i>
                 <div class="dot reddot" *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100">
                     {{cacheService.totalRequests}}
                 </div>
@@ -26,7 +26,7 @@
         </a>
         <a class="friends-button" routerLink="/discover">
             <div class="icon">
-                <i class="fa fa fa-magic"></i>
+                <i class="fas fa fa-magic"></i>
             </div>
             <div class="words" i18n="@@Discover">
                 Discover Friends
@@ -34,7 +34,7 @@
         </a>
         <a class="friends-button" (click)="createGroup()">
             <div class="icon">
-                <i class="fa fa-users"></i>
+                <i class="fas fa-users"></i>
             </div>
             <div class="words" i18n="@@CreateGroup">
                 Create Group
@@ -46,16 +46,16 @@
                (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
                (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt"/>
         <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''"><i
-            class="fa fa-close"></i></button>
+            class="fas fa-times"></i></button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span><i class="fa fa-user"></i>
+            <span><i class="fas fa-user"></i>
                 Users
             </span>
         </div>
         <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span><i class="fa fa-users"></i>
+            <span><i class="fas fa-users"></i>
                 Groups
             </span>
         </div>

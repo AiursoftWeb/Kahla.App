@@ -32,7 +32,7 @@
               { "glob": "assetlinks.json", "input": "src/", "output": "/.well-known" }
             ],
             "styles": [
-              "node_modules/font-awesome/css/font-awesome.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/app/Styles/index.scss"
             ],
             "scripts": []

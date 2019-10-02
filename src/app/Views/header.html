@@ -1,26 +1,26 @@
 <div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()"
          [ngClass]="{ 'macOSReturnButton': _electronService.isElectronApp && _electronService.isMacOS }">
-        <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fa fa-times"></i>
-        <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fa fa-caret-left"></i>
+        <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fas fa-times"></i>
+        <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fas fa-caret-left"></i>
     </div>
     <div *ngIf="timer"></div>
     <div *ngIf="!returnButton"></div>
     <div class="text">
         <div class="processing" [class.processing-open]="processing">
-            <i class="fa fa-spinner fa-spin"></i>
+            <i class="fas fa-spinner fa-spin"></i>
         </div>
         {{title}}
     </div>
     <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
          (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
-        <i class="fa fa-clock-o"></i>
+        <i class="far fa-clock"></i>
         <div class="dot reddot">
             {{timerService.destructTime}}
         </div>
     </div>
     <div *ngIf="button" class="user-button headerButton" (click)="linkClicked()">
-        <i class="fa fa-{{buttonIcon}}"></i>
+        <i class="fas fa-{{buttonIcon}}"></i>
     </div>
 </div>
 
@@ -29,7 +29,7 @@
 <div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
     *ngIf="(((!this.closeDirectly && !this.returnButton) || !homeService.wideScreenEnabled) && initService.connecting)">
     <div class="words" i18n="@@Disconnectedfromserver">
-        <i class="fa fa-spinner fa-spin"></i>
+        <i class="fas fa-spinner fa-spin"></i>
         Connecting...
     </div>
 </div>
