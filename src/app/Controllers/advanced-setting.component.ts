@@ -15,7 +15,7 @@ import { CacheService } from '../Services/CacheService';
 export class AdvancedSettingComponent implements OnInit {
 
     public me: KahlaUser;
-    private updatingSetting = false;
+    public updatingSetting = false;
 
     constructor(
         private authApiService: AuthApiService,
