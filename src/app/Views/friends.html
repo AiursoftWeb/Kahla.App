@@ -46,7 +46,7 @@
                (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
                (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt"/>
         <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''"><i
-            class="fas fa-close"></i></button>
+            class="fas fa-times"></i></button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">

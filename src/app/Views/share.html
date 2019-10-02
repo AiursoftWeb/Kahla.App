@@ -4,7 +4,7 @@
         <input id="searchBar" placeholder="Search for your friends and groups" type="text" [(ngModel)]="searchTxt"
                (input)="search(searchTxt, true)" (keydown.enter)="goSingleSearch()"/>
         <button class="button compact primary" [disabled]="searchTxt === ''" (click)="searchTxt = ''"><i
-            class="fas fa-close"></i></button>
+            class="fas fa-times"></i></button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
