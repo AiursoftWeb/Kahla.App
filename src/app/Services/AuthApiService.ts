@@ -36,10 +36,13 @@ export class AuthApiService {
         });
     }
 
-    public UpdateClientSetting(themeId: number, enableEmailNotification: boolean): Observable<AiurProtocal> {
+    public UpdateClientSetting(themeId: number = null,
+                               enableEmailNotification: boolean = null,
+                               enableEnterToSendMessage: boolean = null): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
-            EnableEmailNotification: enableEmailNotification
+            EnableEmailNotification: enableEmailNotification,
+            EnableEnterToSendMessage: enableEnterToSendMessage,
         });
     }
 

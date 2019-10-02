@@ -1,4 +1,4 @@
-<app-header title="Advanced Settings" closeDirectly="true"></app-header>
+<app-header title="Advanced Settings" closeDirectly="true" [processing]="updatingSetting"></app-header>
 <div class="menu-header">
     General
 </div>
@@ -7,6 +7,17 @@
         <i class="fa fa-language"></i>
     </div>
     <div class="text" i18n="@@Language">Language</div>
+</div>
+<div class="menu-button notification" (click)="updateEnterSend()" *ngIf="this.me">
+    <div class="img">
+        <i class="fas fa-exchange-alt"></i>
+    </div>
+    <div class="text" i18n="@@Notification">Use Enter to send message</div>
+    <input id="toggleEnter" class="tgl" type="checkbox" [checked]="me.enableEnterToSendMessage"/>
+    <label for="toggleEnter" class="tgl-btn"></label>
+</div>
+<div class="menu-hint">
+    You can still use Ctrl+Enter to input an line break if you enabled it.
 </div>
 <div class="menu-header">
     Notification

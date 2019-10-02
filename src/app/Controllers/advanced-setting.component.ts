@@ -35,7 +35,7 @@ export class AdvancedSettingComponent implements OnInit {
         }
     }
 
-    updateEmailNotify(): void {
+    public updateEmailNotify(): void {
         if (!this.updatingSetting) {
             this.updatingSetting = true;
             this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
@@ -46,6 +46,21 @@ export class AdvancedSettingComponent implements OnInit {
                   } else {
                     Swal.fire('Error', res.message, 'error');
                   }
+            });
+        }
+    }
+
+    public updateEnterSend(): void {
+        if (!this.updatingSetting) {
+            this.updatingSetting = true;
+            this.authApiService.UpdateClientSetting(null, null, !this.me.enableEnterToSendMessage).subscribe(res => {
+                this.updatingSetting = false;
+                if (res.code === 0) {
+                    this.cacheService.cachedData.me
+                        .enableEnterToSendMessage = this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage;
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
             });
         }
     }
