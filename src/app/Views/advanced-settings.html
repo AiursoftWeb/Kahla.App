@@ -4,7 +4,7 @@
 </div>
 <div class="menu-button" (click)="todo()">
     <div class="img">
-        <i class="fa fa-language"></i>
+        <i class="fas fa-language"></i>
     </div>
     <div class="text" i18n="@@Language">Language</div>
 </div>
@@ -24,7 +24,7 @@
 </div>
 <div class="menu-button notification" (click)="updateEmailNotify()" *ngIf="this.me && me.emailConfirmed">
     <div class="img">
-        <i class="fa fa-envelope"></i>
+        <i class="fas fa-envelope"></i>
     </div>
     <div class="text" i18n="@@Notification">Email Notification</div>
     <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification" />
@@ -32,13 +32,13 @@
 </div>
 <div class="menu-button" routerLink="/devices">
     <div class="img">
-        <i class="fa fa-laptop" aria-hidden="true"></i>
+        <i class="fas fa-laptop" aria-hidden="true"></i>
     </div>
     <div class="text">My Devices</div>
 </div>
 <div class="menu-button" (click)="testPush()">
     <div class="img">
-        <i class="fa fa-flask" aria-hidden="true"></i>
+        <i class="fas fa-flask" aria-hidden="true"></i>
     </div>
     <div class="text">Send Test Notification</div>
 </div>
@@ -47,19 +47,19 @@
 </div>
 <div class="menu-button" routerLink="/changepassword">
     <div class="img">
-        <i class="fa fa-lock" aria-hidden="true"></i>
+        <i class="fas fa-lock" aria-hidden="true"></i>
     </div>
     <div class="text">Change Password</div>
 </div>
 <a class="menu-button" href="https://account.aiursoft.com/Account/Email" target="_blank">
     <div class="img">
-        <i class="fa fa-envelope" aria-hidden="true"></i>
+        <i class="fas fa-envelope" aria-hidden="true"></i>
     </div>
     <div class="text">Advanced Email Settings</div>
 </a>
 <a class="menu-button" href="https://account.aiursoft.com/Account" target="_blank">
     <div class="img">
-        <i class="fa fa-cogs" aria-hidden="true"></i>
+        <i class="fas fa-cogs" aria-hidden="true"></i>
     </div>
     <div class="text">Advanced Account Settings</div>
 </a>

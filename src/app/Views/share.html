@@ -4,16 +4,16 @@
         <input id="searchBar" placeholder="Search for your friends and groups" type="text" [(ngModel)]="searchTxt"
                (input)="search(searchTxt, true)" (keydown.enter)="goSingleSearch()"/>
         <button class="button compact primary" [disabled]="searchTxt === ''" (click)="searchTxt = ''"><i
-            class="fa fa-close"></i></button>
+            class="fas fa-close"></i></button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span><i class="fa fa-user"></i>
+            <span><i class="fas fa-user"></i>
                 Users
             </span>
         </div>
         <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span><i class="fa fa-users"></i>
+            <span><i class="fas fa-users"></i>
                 Groups
             </span>
         </div>

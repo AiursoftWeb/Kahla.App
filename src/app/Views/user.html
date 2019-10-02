@@ -19,7 +19,7 @@
 
 <div class="menu-button" *ngIf="info && !info.emailConfirmed">
     <div class="img warning">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
     <div class="text warning">
         <strong>This user's email is not verified.</strong>
@@ -27,7 +27,7 @@
 </div>
 <div class="menu-button" *ngIf="info" (click)="shareUser()">
     <div class="img">
-        <i class="fa fa-share-alt"></i>
+        <i class="fas fa-share-alt"></i>
     </div>
     <div class="text">Share</div>
 </div>
@@ -35,27 +35,27 @@
 <div class="menu-holder"></div>
 <div class="menu-button" *ngIf="info && areFriends" (click)="timerService.setTimer(conversationId)">
     <div class="img">
-        <i class="fa fa-clock-o"></i>
+        <i class="far fa-clock"></i>
     </div>
     <div class="text">Self-destruct Timer</div>
 </div>
 <div class="menu-button" *ngIf="info && areFriends">
     <div class="img">
-        <i class="fa fa-history"></i>
+        <i class="fas fa-history"></i>
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
 </div>
 <div class="menu-button" (click)="report()"
      *ngIf="info && cacheService.cachedData.me && info.id != cacheService.cachedData.me.id">
     <div class="img">
-        <i class="fa fa-gavel "></i>
+        <i class="fas fa-gavel "></i>
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
 <div class="menu-button"
      *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id">
     <div class="img">
-        <i class="fa fa-ban"></i>
+        <i class="fas fa-ban"></i>
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
@@ -63,7 +63,7 @@
      *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id"
      (click)="delete(info.id)">
     <div class="img">
-        <i class="fa fa-trash warning"></i>
+        <i class="fas fa-trash warning"></i>
     </div>
     <div class="text warning" i18n="@@Delete">Delete</div>
 </div>
@@ -72,7 +72,7 @@
 <div class="menu-button"
      *ngIf="info && cacheService.cachedData.me && !areFriends && !cacheService.cachedData.me.emailConfirmed">
     <div class="img warning">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
     <div class="text warning">
         <strong>You can't send friend requests until your email is verified.</strong>

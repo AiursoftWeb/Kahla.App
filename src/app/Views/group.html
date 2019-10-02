@@ -12,7 +12,7 @@
 </div>
 <div class="menu-button" *ngIf="conversation" (click)="shareGroup()">
     <div class="img">
-        <i class="fa fa-share-alt"></i>
+        <i class="fas fa-share-alt"></i>
     </div>
     <div class="text">Share</div>
 </div>
@@ -20,15 +20,15 @@
 <div class="menu-holder"></div>
 <div class="menu-button" routerLink="/talking/{{ conversation ? conversation.id : 0 }}">
     <div class="img">
-        <i class="fa fa-comments"></i>
+        <i class="fas fa-comments"></i>
     </div>
     <div class="text" i18n="@@Message">Message</div>
 </div>
 
 <div class="menu-button notification" (click)="mute()">
     <div class="img">
-        <i *ngIf="muted" class="fa fa-bell-slash"></i>
-        <i *ngIf="!muted" class="fa fa-bell"></i>
+        <i *ngIf="muted" class="fas fa-bell-slash"></i>
+        <i *ngIf="!muted" class="fas fa-bell"></i>
     </div>
     <div class="text" i18n="@@Notification">Notification</div>
     <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()"/>
@@ -37,7 +37,7 @@
 <div class="menu-button" *ngIf="messageService.checkOwner()"
      routerLink="/managegroup/{{ conversation ? conversation.id : 0 }}">
     <div class="img">
-        <i class="fa fa-cogs"></i>
+        <i class="fas fa-cogs"></i>
     </div>
     <div class="text">Manage Group</div>
 </div>
@@ -45,7 +45,7 @@
 <div *ngIf="conversation">
     <div class="menu-button">
         <div class="img">
-            <i class="fa fa-users"></i>
+            <i class="fas fa-users"></i>
         </div>
         <div class="text" i18n="@@GroupMembers">{{ groupMembers }} members</div>
     </div>
@@ -60,7 +60,7 @@
 <div class="menu-holder"></div>
 <div class="menu-button" (click)="leaveGroup(conversation.displayName)">
     <div class="img">
-        <i class="fa fa-sign-out warning"></i>
+        <i class="fas fa-sign-out warning"></i>
     </div>
     <div class="text warning" i18n="@@LeaveGroup">Leave Group</div>
 </div>
