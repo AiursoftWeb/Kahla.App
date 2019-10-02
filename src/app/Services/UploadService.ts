@@ -23,7 +23,7 @@ export class UploadService {
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): void {
         if (!this.validateFileSize(file)) {
-            Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 1000MB.', 'error');
+            Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 2047MB.', 'error');
             return;
         }
         const formData = new FormData();
@@ -166,7 +166,7 @@ export class UploadService {
         if (file === null || file === undefined) {
             return false;
         }
-        return file.size >= 0.125 && file.size <= 1000000000;
+        return file.size >= 0.125 && file.size <= 2146435072;
     }
 
     public scrollBottom(smooth: boolean): void {
