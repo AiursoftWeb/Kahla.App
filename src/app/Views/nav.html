@@ -4,8 +4,8 @@
     <div class="nav-bar">
         <div class="nav-item" (click)="homeService.currentPage = 0" [class.current]="homeService.currentPage === 0">
             <div class="icon">
-                <i class="fa fa-comment" *ngIf="homeService.currentPage === 0"></i>
-                <i class="fa fa-comment-o" *ngIf="homeService.currentPage !== 0"></i>
+                <i class="fas fa-comment" *ngIf="homeService.currentPage === 0"></i>
+                <i class="far fa-comment" *ngIf="homeService.currentPage !== 0"></i>
                 <div *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100" class="dot reddot">
                     {{cacheService.totalUnread}}
                 </div>
@@ -19,8 +19,8 @@
         </div>
         <div class="nav-item" (click)="homeService.currentPage = 1" [class.current]="homeService.currentPage === 1">
             <div class="icon">
-                <i class="fa fa-address-book" *ngIf="homeService.currentPage === 1"></i>
-                <i class="fa fa-address-book-o" *ngIf="homeService.currentPage !== 1"></i>
+                <i class="fas fa-address-book" *ngIf="homeService.currentPage === 1"></i>
+                <i class="far fa-address-book" *ngIf="homeService.currentPage !== 1"></i>
                 <div *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100" class="dot reddot">
                     {{cacheService.totalRequests}}
                 </div>
@@ -34,8 +34,8 @@
         </div>
         <div class="nav-item" (click)="homeService.currentPage = 2" [class.current]="homeService.currentPage === 2">
             <div class="icon">
-                <i class="fa fa-user" *ngIf="homeService.currentPage === 2"></i>
-                <i class="fa fa-user-o" *ngIf="homeService.currentPage !== 2"></i>
+                <i class="fas fa-user" *ngIf="homeService.currentPage === 2"></i>
+                <i class="far fa-user" *ngIf="homeService.currentPage !== 2"></i>
             </div>
             <div class="words" i18n="@@Me">
                 Me

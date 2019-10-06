@@ -81,6 +81,8 @@ export class MessageService {
                         if (evt.mentioned) {
                             conversationCache.someoneAtMe = true;
                         }
+                    } else {
+                        conversationCache.unReadAmount = 0; // clear red dot when something went wrong
                     }
                     // move the new conversation to the top
                     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
@@ -271,6 +273,12 @@ export class MessageService {
                 }
                 this.updateAtLink();
                 this.saveMessage();
+                // clear red dot if necessary
+                const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversation.id);
+                if (listItem) {
+                    listItem.unReadAmount = 0;
+                }
+                this.cacheService.updateTotalUnread();
                 this.messageLoading = false;
             });
     }
@@ -354,7 +362,7 @@ export class MessageService {
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
-                const searchResults = this.searchUser(s.slice(1), true);
+                const searchResults = this.searchUser(he.decode(s.slice(1)), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0].id);
                     newMessageArry[index] = `<a class="chat-inline-link atLink"

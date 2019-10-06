@@ -12,4 +12,5 @@
     public makeEmailPublic: boolean;
     public themeId: number;
     public enableEmailNotification: boolean;
+    public enableEnterToSendMessage: boolean;
 }
