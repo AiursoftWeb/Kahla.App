@@ -53,6 +53,6 @@ export class TimerService {
 
     private getDestructTime(time: number): string {
         time = Number(time);
-        return Timers[time];
+        return Timers[time] ? Timers[time] : 'off';
     }
 }
