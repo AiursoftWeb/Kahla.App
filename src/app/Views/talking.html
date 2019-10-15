@@ -123,7 +123,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ fileAddress + user.iconFilePath }}">
+            <img class="img" src="{{ fileAddress + user.iconFilePath }}?w=72&h=72">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>
