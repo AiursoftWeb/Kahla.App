@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
 import { FriendsApiService } from './FriendsApiService';
 import { Request } from '../Models/Request';
-import { Values } from '../values';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './DevicesApiService';
 import { ConversationApiService } from './ConversationApiService';
+import { MessageService } from './MessageService';
 
 @Injectable()
 export class CacheService {
@@ -17,7 +17,8 @@ export class CacheService {
     constructor(
         private friendsApiService: FriendsApiService,
         private devicesApiService: DevicesApiService,
-        private conversationApiService: ConversationApiService
+        private conversationApiService: ConversationApiService,
+        private messageService: MessageService,
     ) { }
 
     public reset() {
@@ -42,7 +43,7 @@ export class CacheService {
                         }
                         e.latestMessage = this.modifyMessage(e.latestMessage);
                     }
-                    e.avatarURL = Values.fileAddress + e.displayImagePath;
+                    e.avatarURL = this.messageService.encodeProbeFileUrl(e.displayImagePath);
                 });
                 this.cachedData.conversations = info;
                 this.updateTotalUnread();
@@ -55,10 +56,10 @@ export class CacheService {
             .subscribe(result => {
                 if (result.code === 0) {
                     result.users.forEach(user => {
-                        user.avatarURL = Values.fileAddress + user.iconFilePath;
+                        user.avatarURL = this.messageService.encodeProbeFileUrl(user.iconFilePath);
                     });
                     result.groups.forEach(group => {
-                        group.avatarURL = Values.fileAddress + group.imagePath;
+                        group.avatarURL = this.messageService.encodeProbeFileUrl(group.imagePath);
                     });
 
                     this.cachedData.friends = result;
@@ -71,7 +72,7 @@ export class CacheService {
         this.friendsApiService.MyRequests().subscribe(response => {
             this.cachedData.requests = response.items;
             response.items.forEach(item => {
-                item.creator.avatarURL = Values.fileAddress + item.creator.iconFilePath;
+                item.creator.avatarURL = this.messageService.encodeProbeFileUrl(item.creator.iconFilePath);
             });
             this.totalRequests = response.items.filter(t => !t.completed).length;
             this.saveCache();

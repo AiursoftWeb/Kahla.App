@@ -33,7 +33,7 @@ export class SettingsComponent implements OnInit {
             this.authApiService.Me().subscribe(p => {
                 if (p.code === 0) {
                     this.cacheService.cachedData.me = p.value;
-                    this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                    this.cacheService.cachedData.me.avatarURL = this.messageService.encodeProbeFileUrl(p.value.iconFilePath);
                     this.cacheService.saveCache();
                 }
             });

@@ -9,7 +9,7 @@
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-                <img src="{{fileAddress + message.sender.iconFilePath}}?w=80&h=80">
+                <img src="{{messageService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
             </div>
             <div class="chat-text">
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
@@ -81,7 +81,8 @@
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')" >
-                        <video src="{{ fileAddress + message.content.substring(7) }}" controls muted></video>
+                        <video src="{{ messageService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
+                               muted></video>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg" (click)="uploadService.getAudio($event.currentTarget, message.content)">
@@ -123,7 +124,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ fileAddress + user.iconFilePath }}?w=72&h=72">
+            <img class="img" src="{{ messageService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&h=72">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>

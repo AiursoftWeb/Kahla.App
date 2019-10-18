@@ -3,6 +3,7 @@ import { FriendsApiService } from '../Services/FriendsApiService';
 import { Values } from '../values';
 import { SearchResult } from '../Models/SearchResult';
 import { FriendshipService } from '../Services/FriendshipService';
+import { MessageService } from '../Services/MessageService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -21,7 +22,8 @@ export class AddFriendComponent implements OnInit {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        public friendshipService: FriendshipService
+        public friendshipService: FriendshipService,
+        private messageService: MessageService
     ) {
     }
 
@@ -47,10 +49,10 @@ export class AddFriendComponent implements OnInit {
         this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
             if (result.code === 0) {
                 result.users.forEach(user => {
-                    user.avatarURL = Values.fileAddress + user.iconFilePath;
+                    user.avatarURL = this.messageService.encodeProbeFileUrl(user.iconFilePath);
                 });
                 result.groups.forEach(group => {
-                    group.avatarURL = Values.fileAddress + group.imagePath;
+                    group.avatarURL = this.messageService.encodeProbeFileUrl(group.imagePath);
                 });
                 this.results = result;
                 if (this.showUsers && result.usersCount === 0 && result.groupsCount !== 0) {

@@ -3,7 +3,6 @@ import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
-import { Values } from '../values';
 import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
@@ -62,7 +61,7 @@ export class InitService {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
                         this.cacheService.cachedData.me = p.value;
-                        this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                        this.cacheService.cachedData.me.avatarURL = this.messageService.encodeProbeFileUrl(p.value.iconFilePath);
                         this.themeService.ApplyThemeFromRemote(p.value);
                         if (!this._electronService.isElectronApp && navigator.serviceWorker) {
                             this.subscribeUser();

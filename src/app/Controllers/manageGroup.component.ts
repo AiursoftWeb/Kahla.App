@@ -7,7 +7,6 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import Swal from 'sweetalert2';
 import { TimerService } from '../Services/TimerService';
-import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { ElectronService } from 'ngx-electron';
 import { AiurCollection } from '../Models/AiurCollection';
@@ -50,12 +49,12 @@ export class ManageGroupComponent implements OnInit {
                 .subscribe(conversation => {
                     this.messageService.conversation = conversation;
                     this.conversation = <GroupConversation>conversation;
-                    this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImagePath;
+                    this.conversation.avatarURL = this.messageService.encodeProbeFileUrl(this.conversation.groupImagePath);
                     this.newGroupName = this.conversation.groupName;
                 });
         } else {
             this.conversation = <GroupConversation>this.messageService.conversation;
-            this.conversation.avatarURL = Values.fileAddress + this.conversation.groupImagePath;
+            this.conversation.avatarURL = this.messageService.encodeProbeFileUrl(this.conversation.groupImagePath);
             this.newGroupName = this.conversation.groupName;
         }
     }

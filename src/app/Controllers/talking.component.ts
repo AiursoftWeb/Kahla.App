@@ -37,7 +37,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
     public recording = false;

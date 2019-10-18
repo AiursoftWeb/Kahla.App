@@ -44,7 +44,7 @@ export class UserComponent implements OnInit {
                 this.conversationId = response.conversationId;
                 this.sentRequest = response.sentRequest;
                 this.pendingRequest = response.pendingRequest;
-                this.info.avatarURL = Values.fileAddress + this.info.iconFilePath;
+                this.info.avatarURL = this.messageService.encodeProbeFileUrl(this.info.iconFilePath);
             });
     }
 

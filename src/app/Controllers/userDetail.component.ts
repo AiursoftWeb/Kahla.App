@@ -39,7 +39,7 @@ export class UserDetailComponent implements OnInit {
         if (!this.cacheService.cachedData.me) {
             this.authApiService.Me().subscribe(p => {
                 this.user = p.value;
-                this.user.avatarURL = Values.fileAddress + this.user.iconFilePath;
+                this.user.avatarURL = this.messageService.encodeProbeFileUrl(this.user.iconFilePath);
             });
         } else {
             this.user = Object.assign({}, this.cacheService.cachedData.me);
