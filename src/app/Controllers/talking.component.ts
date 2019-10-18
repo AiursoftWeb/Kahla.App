@@ -19,6 +19,7 @@ import { FriendshipService } from '../Services/FriendshipService';
 import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
+import { ProbeService } from '../Services/ProbeService';
 
 declare var MediaRecorder: any;
 
@@ -37,7 +38,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    public fileAddress = Values.fileAddress;
     private conversationID = 0;
     public autoSaveInterval;
     public recording = false;
@@ -67,6 +67,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private friendshipService: FriendshipService,
         public _electronService: ElectronService,
+        public probeService: ProbeService,
     ) {
     }
 

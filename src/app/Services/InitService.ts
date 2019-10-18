@@ -3,7 +3,6 @@ import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
-import { Values } from '../values';
 import { CacheService } from './CacheService';
 import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
@@ -11,6 +10,7 @@ import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
+import { ProbeService } from './ProbeService';
 
 @Injectable({
     providedIn: 'root'
@@ -38,7 +38,9 @@ export class InitService {
         private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
         private themeService: ThemeService,
-        private devicesApiService: DevicesApiService) {
+        private devicesApiService: DevicesApiService,
+        private probeService: ProbeService,
+    ) {
     }
 
     public init(): void {
@@ -62,7 +64,7 @@ export class InitService {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
                         this.cacheService.cachedData.me = p.value;
-                        this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                        this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                         this.themeService.ApplyThemeFromRemote(p.value);
                         if (!this._electronService.isElectronApp && navigator.serviceWorker) {
                             this.subscribeUser();
