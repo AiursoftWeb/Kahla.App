@@ -344,18 +344,20 @@ export class MessageService {
     }
 
     public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
-        if (nickName.length === 0 && !getMessage) {
-            return this.conversation.users.map(x => x.user);
-        } else {
-            const matchedUsers = [];
-            this.conversation.users.forEach((value: UserGroupRelation) => {
-                if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
-                    matchedUsers.push(value.user);
-                } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
-                    matchedUsers.push(value.user);
-                }
-            });
-            return matchedUsers;
+        if (typeof this.conversation.users !== 'undefined' ){
+            if (nickName.length === 0 && !getMessage) {
+                return this.conversation.users.map(x => x.user);
+            } else {
+                const matchedUsers = [];
+                this.conversation.users.forEach((value: UserGroupRelation) => {
+                    if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
+                        matchedUsers.push(value.user);
+                    } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
+                        matchedUsers.push(value.user);
+                    }
+                });
+                return matchedUsers;
+            }
         }
     }
 
