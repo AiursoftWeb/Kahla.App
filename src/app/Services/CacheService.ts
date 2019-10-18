@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './DevicesApiService';
 import { ConversationApiService } from './ConversationApiService';
-import { MessageService } from './MessageService';
+import { ProbeService } from './ProbeService';
 
 @Injectable()
 export class CacheService {
@@ -18,7 +18,7 @@ export class CacheService {
         private friendsApiService: FriendsApiService,
         private devicesApiService: DevicesApiService,
         private conversationApiService: ConversationApiService,
-        private messageService: MessageService,
+        private probeService: ProbeService,
     ) { }
 
     public reset() {
@@ -43,7 +43,7 @@ export class CacheService {
                         }
                         e.latestMessage = this.modifyMessage(e.latestMessage);
                     }
-                    e.avatarURL = this.messageService.encodeProbeFileUrl(e.displayImagePath);
+                    e.avatarURL = this.probeService.encodeProbeFileUrl(e.displayImagePath);
                 });
                 this.cachedData.conversations = info;
                 this.updateTotalUnread();
@@ -56,10 +56,10 @@ export class CacheService {
             .subscribe(result => {
                 if (result.code === 0) {
                     result.users.forEach(user => {
-                        user.avatarURL = this.messageService.encodeProbeFileUrl(user.iconFilePath);
+                        user.avatarURL = this.probeService.encodeProbeFileUrl(user.iconFilePath);
                     });
                     result.groups.forEach(group => {
-                        group.avatarURL = this.messageService.encodeProbeFileUrl(group.imagePath);
+                        group.avatarURL = this.probeService.encodeProbeFileUrl(group.imagePath);
                     });
 
                     this.cachedData.friends = result;
@@ -72,7 +72,7 @@ export class CacheService {
         this.friendsApiService.MyRequests().subscribe(response => {
             this.cachedData.requests = response.items;
             response.items.forEach(item => {
-                item.creator.avatarURL = this.messageService.encodeProbeFileUrl(item.creator.iconFilePath);
+                item.creator.avatarURL = this.probeService.encodeProbeFileUrl(item.creator.iconFilePath);
             });
             this.totalRequests = response.items.filter(t => !t.completed).length;
             this.saveCache();

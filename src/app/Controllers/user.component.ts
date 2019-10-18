@@ -3,18 +3,19 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
-import { switchMap, } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { Request } from '../Models/Request';
+import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/user.html',
     styleUrls: ['../Styles/menu.scss',
-                '../Styles/button.scss',
-                '../Styles/badge.scss']
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 })
 
 export class UserComponent implements OnInit {
@@ -32,6 +33,7 @@ export class UserComponent implements OnInit {
         public cacheService: CacheService,
         public messageService: MessageService,
         public timerService: TimerService,
+        private probeService: ProbeService,
     ) {
     }
 
@@ -44,7 +46,7 @@ export class UserComponent implements OnInit {
                 this.conversationId = response.conversationId;
                 this.sentRequest = response.sentRequest;
                 this.pendingRequest = response.pendingRequest;
-                this.info.avatarURL = this.messageService.encodeProbeFileUrl(this.info.iconFilePath);
+                this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
             });
     }
 
@@ -89,7 +91,7 @@ export class UserComponent implements OnInit {
             confirmButtonColor: 'red',
             showCancelButton: true,
             confirmButtonText: 'Report'
-          }).then((result) => {
+        }).then((result) => {
             if (result.value) {
                 if (result.value.length >= 5) {
                     this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
@@ -105,7 +107,7 @@ export class UserComponent implements OnInit {
                     Swal.fire('Error', 'The reason\'s length should between five and two hundreds.', 'error');
                 }
             }
-          });
+        });
     }
 
     public accept(id: number): void {

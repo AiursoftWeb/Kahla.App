@@ -29,6 +29,7 @@ import { DissolveEvent } from '../Models/DissolveEvent';
 import { HomeService } from './HomeService';
 import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
+import { ProbeService } from './ProbeService';
 
 @Injectable({
     providedIn: 'root'
@@ -61,7 +62,8 @@ export class MessageService {
         private router: Router,
         private homeService: HomeService,
         private groupsApiService: GroupsApiService,
-        private friendsApiService: FriendsApiService
+        private friendsApiService: FriendsApiService,
+        private probeService: ProbeService,
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -325,7 +327,7 @@ export class MessageService {
             event.message.content = this.cacheService.modifyMessage(event.message.content);
             const notify = new Notification(event.message.sender.nickName, {
                 body: event.message.content,
-                icon: this.encodeProbeFileUrl(event.message.sender.iconFilePath)
+                icon: this.probeService.encodeProbeFileUrl(event.message.sender.iconFilePath)
             });
             notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
@@ -412,7 +414,7 @@ export class MessageService {
                     imageWidth = realMaxWidth;
                     imageHeight = Math.floor(realMaxWidth * ratio);
                 }
-                t.content = `[img]${this.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}`;
+                t.content = `[img]${this.probeService.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}`;
             }
         } else if (t.content.startsWith('[group]')) {
             const groupId = Number(t.content.substring(7));
@@ -420,7 +422,7 @@ export class MessageService {
             this.groupsApiService.GroupSummary(groupId).subscribe(p => {
                 if (p.value) {
                     t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
-                        `${p.value.hasPassword ? 'Private' : 'Public'}|${this.encodeProbeFileUrl(p.value.imagePath)}`;
+                        `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
                     t.relatedData = p.value;
                 } else {
                     t.content = 'Invalid Group';
@@ -433,7 +435,7 @@ export class MessageService {
             this.friendsApiService.UserDetail(userId).subscribe(p => {
                 if (p.user) {
                     t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.encodeProbeFileUrl(p.user.iconFilePath)}`;
+                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.user.iconFilePath)}`;
                     t.relatedData = p.user;
                 } else {
                     t.content = 'Invalid User';
@@ -502,11 +504,5 @@ export class MessageService {
             this.rawMessages = this.rawMessages.splice(0, firstIndex);
         }
         this.saveMessage();
-    }
-
-    public encodeProbeFileUrl(filePath: string) {
-        const encoded = filePath = encodeURIComponent(filePath).replace(/%2F/g, '/');
-        const index = encoded.indexOf('/');
-        return Values.fileCompatAddress.replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
     }
 }

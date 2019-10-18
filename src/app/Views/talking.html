@@ -2,21 +2,25 @@
             [processing]="messageService.messageLoading"></app-header>
 <ul id="messageList" class="message-list" (paste)="paste($event)" (drop)="drop($event)"
     (dragover)="preventDefault($event)" (click)="hideUserList()">
-    <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()" i18n="@@ClickToLoadMore">Click to load more</button>
+    <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()"
+            i18n="@@ClickToLoadMore">Click to load more
+    </button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages"
         [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
-        <div *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
+        <div
+            *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-                <img src="{{messageService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
+                <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
             </div>
             <div class="chat-text">
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
                     <span
                         *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
-                        <label class="badge badge-primary" *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
+                        <label class="badge badge-primary"
+                               *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
                         <label class="badge badge-secondary"
                                *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>
@@ -80,12 +84,13 @@
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
-                    <div *ngIf="message.content.startsWith('[video]')" >
-                        <video src="{{ messageService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
+                    <div *ngIf="message.content.startsWith('[video]')">
+                        <video src="{{ probeService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
                                muted></video>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
-                        <a href="javascript:void(0)" class="voicemsg" (click)="uploadService.getAudio($event.currentTarget, message.content)">
+                        <a href="javascript:void(0)" class="voicemsg"
+                           (click)="uploadService.getAudio($event.currentTarget, message.content)">
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
                         </a>
@@ -109,7 +114,10 @@
             </div>
         </div>
     </li>
-    <button *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)" id="scrollDown" [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}" class="button button--fab" (click)="uploadService.scrollBottom(true)">
+    <button
+        *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)"
+        id="scrollDown" [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}"
+        class="button button--fab" (click)="uploadService.scrollBottom(true)">
         <i class="fas fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="messageService.newMessages" class="dot reddot"></div>
     </button>
@@ -124,7 +132,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ messageService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&h=72">
+            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&h=72">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>

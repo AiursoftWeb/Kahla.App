@@ -8,6 +8,7 @@ import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/ConversationApiService';
 import { MessageService } from '../Services/MessageService';
+import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -30,7 +31,9 @@ export class GroupComponent implements OnInit {
         private conversationApiService: ConversationApiService,
         private router: Router,
         private cacheService: CacheService,
-        public messageService: MessageService) {
+        public messageService: MessageService,
+        private probeService: ProbeService,
+    ) {
     }
 
     public ngOnInit(): void {
@@ -44,9 +47,9 @@ export class GroupComponent implements OnInit {
                 this.messageService.conversation = conversation;
                 this.conversation = <GroupConversation>conversation;
                 this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = this.messageService.encodeProbeFileUrl((<GroupConversation>this.conversation).groupImagePath);
+                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl((<GroupConversation>this.conversation).groupImagePath);
                 this.conversation.users.forEach(user => {
-                    user.user.avatarURL = this.messageService.encodeProbeFileUrl(user.user.iconFilePath);
+                    user.user.avatarURL = this.probeService.encodeProbeFileUrl(user.user.iconFilePath);
                     try {
                         if (user.userId === this.cacheService.cachedData.me.id) {
                             this.muted = user.muted;

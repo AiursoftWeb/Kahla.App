@@ -9,7 +9,7 @@ import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
 import { FileType } from '../Models/FileType';
-import { MessageService } from './MessageService';
+import { ProbeService } from './ProbeService';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +20,7 @@ export class UploadService {
     constructor(
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService,
-        private messageService: MessageService,
+        private probeService: ProbeService,
     ) {}
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): void {
@@ -198,7 +198,7 @@ export class UploadService {
                         } else if (res != null && (<UploadFile>res).code === 0) {
                             Swal.close();
                             user.iconFilePath = (<UploadFile>res).filePath;
-                            user.avatarURL = this.messageService.encodeProbeFileUrl(user.iconFilePath);
+                            user.avatarURL = this.probeService.encodeProbeFileUrl(user.iconFilePath);
                         }
                     });
                     alert.then(result => {
@@ -227,7 +227,7 @@ export class UploadService {
                         } else if (res != null && (<UploadFile>res).code === 0) {
                             Swal.close();
                             group.groupImagePath = (<UploadFile>res).filePath;
-                            group.avatarURL = this.messageService.encodeProbeFileUrl(group.groupImagePath);
+                            group.avatarURL = this.probeService.encodeProbeFileUrl(group.groupImagePath);
                         }
                     });
                     alert.then(result => {
@@ -274,7 +274,7 @@ export class UploadService {
         target.style.display = 'none';
         const audioElement = document.createElement('audio');
         audioElement.style.maxWidth = '100%';
-        audioElement.src = this.messageService.encodeProbeFileUrl(message.substring(7).split('|')[0]);
+        audioElement.src = this.probeService.encodeProbeFileUrl(message.substring(7).split('|')[0]);
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();

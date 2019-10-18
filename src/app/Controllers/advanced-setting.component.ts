@@ -4,7 +4,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { DevicesApiService } from '../Services/DevicesApiService';
 import { CacheService } from '../Services/CacheService';
-import { MessageService } from '../Services/MessageService';
+import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -21,7 +21,7 @@ export class AdvancedSettingComponent implements OnInit {
         private authApiService: AuthApiService,
         private devicesApiService: DevicesApiService,
         private cacheService: CacheService,
-        private messageService: MessageService,
+        private probeService: ProbeService,
     ) {
     }
 
@@ -31,7 +31,7 @@ export class AdvancedSettingComponent implements OnInit {
         } else {
             this.authApiService.Me().subscribe(p => {
                 this.me = p.value;
-                this.me.avatarURL = this.messageService.encodeProbeFileUrl(this.me.iconFilePath);
+                this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
             });
         }
     }

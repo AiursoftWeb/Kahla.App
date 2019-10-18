@@ -10,6 +10,7 @@ import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
+import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/userDetail.html',
@@ -31,7 +32,8 @@ export class UserDetailComponent implements OnInit {
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        public _electronService: ElectronService
+        public _electronService: ElectronService,
+        private probeService: ProbeService,
     ) {
     }
 
@@ -39,7 +41,7 @@ export class UserDetailComponent implements OnInit {
         if (!this.cacheService.cachedData.me) {
             this.authApiService.Me().subscribe(p => {
                 this.user = p.value;
-                this.user.avatarURL = this.messageService.encodeProbeFileUrl(this.user.iconFilePath);
+                this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
             });
         } else {
             this.user = Object.assign({}, this.cacheService.cachedData.me);
