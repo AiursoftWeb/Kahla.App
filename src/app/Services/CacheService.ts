@@ -110,6 +110,8 @@ export class CacheService {
                         deviceName.push('Seamonkey');
                     } else if (item.name.includes('Edge')) {
                         deviceName.push('Microsoft Edge');
+                    } else if (item.name.includes('Edg')) {
+                        deviceName.push('Edge Chromium');
                     } else if (item.name.includes('Chrome') && !item.name.includes('Chromium')) {
                         deviceName.push('Chrome');
                     } else if (item.name.includes('Chromium')) {
