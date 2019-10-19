@@ -16,7 +16,7 @@ self.addEventListener('install', function (event) {
                 '/favicon.ico',
                 '/fa-solid-900.woff2',
                 '/fa-regular-400.woff2',
-                'fa-brands-400.woff2',
+                '/fa-brands-400.woff2',
                 '/assets/144x144.png'
             ]);
         })
