@@ -104,7 +104,7 @@ export class InitService {
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
             }
-            if (this.messageService.conversation && reconnect) {
+            if (this.messageService.conversation) {
                 this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
             }
         }, () => {
