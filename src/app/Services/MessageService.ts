@@ -344,7 +344,7 @@ export class MessageService {
     }
 
     public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
-        if (typeof this.conversation.users !== 'undefined' ){
+        if (typeof this.conversation.users !== 'undefined') {
             if (nickName.length === 0 && !getMessage) {
                 return this.conversation.users.map(x => x.user);
             } else {
