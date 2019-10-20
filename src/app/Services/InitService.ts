@@ -119,6 +119,8 @@ export class InitService {
             clearTimeout(this.timeout);
             clearInterval(this.interval);
             this.interval = setInterval(this.checkNetwork.bind(this), 3000);
+            Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
+                'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
         }
     }
 
