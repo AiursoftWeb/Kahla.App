@@ -1,4 +1,6 @@
-![KahlaLogo](./src/assets/144x144.png)
+<p align="center">
+<a href="https://www.kahla.app/"><img src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/dev/src/assets/144x144.png"></a>
+</p>
 
 # Kahla
 
@@ -6,7 +8,9 @@
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
+<p align="center">
 <img src="https://ui.aiursoft.com/images/kahla-demo.png" alt="screenshot" width="500"/>
+</p>
 
 Try it here: [web.kahla.app](https://web.kahla.app)
 
