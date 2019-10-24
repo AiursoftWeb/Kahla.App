@@ -359,6 +359,7 @@ export class MessageService {
                 return matchedUsers;
             }
         }
+        return [];
     }
 
     public getAtIDs(message: string): Array<string> {
