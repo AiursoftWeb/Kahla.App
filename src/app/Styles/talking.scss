@@ -142,7 +142,7 @@
   }
 
   .right .chat-content {
-    background-color: var(--primary-color-depth3);
+    background: linear-gradient(120deg, var(--primary-color-depth3) 0%, var(--primary-color-depth2) 100%);
 
     &::after {
       border-left-color: var(--primary-color-depth3);
