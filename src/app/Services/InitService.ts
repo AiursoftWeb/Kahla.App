@@ -21,8 +21,8 @@ export class InitService {
     private timeoutNumber = 1000;
     private interval;
     private timeout;
-    private online;
-    private errorOrClose;
+    public online: boolean;
+    private errorOrClose: boolean;
     private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
@@ -97,7 +97,10 @@ export class InitService {
                 this.interval = setInterval(this.checkNetwork.bind(this), 3000);
             };
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = () => this.errorOrClosedFunc();
+            this.ws.onerror = () => {
+                this.errorOrClosedFunc();
+                this.fireNetworkAlert();
+            };
             this.ws.onclose = () => this.errorOrClosedFunc();
             this.resend();
             if (reconnect) {
@@ -108,7 +111,8 @@ export class InitService {
                 this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
             }
         }, () => {
-                this.errorOrClosedFunc();
+            this.fireNetworkAlert();
+            this.errorOrClosedFunc();
         });
     }
 
@@ -119,9 +123,12 @@ export class InitService {
             clearTimeout(this.timeout);
             clearInterval(this.interval);
             this.interval = setInterval(this.checkNetwork.bind(this), 3000);
-            Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
-                'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
         }
+    }
+
+    public fireNetworkAlert(): void {
+        Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
+            'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
     }
 
     private checkNetwork(): void {
@@ -181,14 +188,14 @@ export class InitService {
     private subscribeUser(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function(registration) {
-                return registration.pushManager.getSubscription().then(function(sub) {
+            navigator.serviceWorker.ready.then(function (registration) {
+                return registration.pushManager.getSubscription().then(function (sub) {
                     if (sub === null) {
                         return registration.pushManager.subscribe(_this.options)
-                            .then(function(pushSubscription) {
+                            .then(function (pushSubscription) {
                                 return _this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
                                     pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                    .subscribe(function(result) {
+                                    .subscribe(function (result) {
                                         localStorage.setItem('deviceID', result.value.toString());
                                     });
                             });
@@ -201,10 +208,10 @@ export class InitService {
     private updateSubscription(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function(registration) {
-                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+            navigator.serviceWorker.ready.then(function (registration) {
+                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function () {
                     registration.pushManager.subscribe(_this.options)
-                        .then(function(pushSubscription) {
+                        .then(function (pushSubscription) {
                             return _this.devicesApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
                                 pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();
