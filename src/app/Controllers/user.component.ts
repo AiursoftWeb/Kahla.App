@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
-import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
@@ -38,16 +37,20 @@ export class UserComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.route.params
-            .pipe(switchMap((params: Params) => this.friendsApiService.UserDetail(params['id'])))
-            .subscribe(response => {
-                this.info = response.user;
-                this.areFriends = response.areFriends;
-                this.conversationId = response.conversationId;
-                this.sentRequest = response.sentRequest;
-                this.pendingRequest = response.pendingRequest;
-                this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
-            });
+        this.route.params.subscribe(t => {
+            this.updateFriendInfo(t.id);
+        });
+    }
+
+    public updateFriendInfo(userId: string) {
+        this.friendsApiService.UserDetail(userId).subscribe(response => {
+            this.info = response.user;
+            this.areFriends = response.areFriends;
+            this.conversationId = response.conversationId;
+            this.sentRequest = response.sentRequest;
+            this.pendingRequest = response.pendingRequest;
+            this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
+        });
     }
 
     public delete(id: string): void {
@@ -114,6 +117,7 @@ export class UserComponent implements OnInit {
         this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
                 Swal.fire('Success', r.message, 'success');
+                this.updateFriendInfo(this.info.id);
                 this.cacheService.updateRequests();
                 this.cacheService.updateFriends();
                 this.areFriends = true;
