@@ -53,6 +53,15 @@
     width: 70%;
     margin-bottom: 1.5%;
 
+    * {
+      vertical-align: middle;
+    }
+
+    .button {
+      margin-right: 0.5rem;
+      background-color: red;
+    }
+
     .share {
       cursor: pointer;
     }

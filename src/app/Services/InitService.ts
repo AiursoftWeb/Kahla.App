@@ -4,7 +4,6 @@ import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
-import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from './DevicesApiService';
@@ -35,7 +34,6 @@ export class InitService {
         private router: Router,
         private messageService: MessageService,
         private cacheService: CacheService,
-        private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
@@ -59,7 +57,7 @@ export class InitService {
         this.cacheService.initCache();
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], {replaceUrl: true});
+                this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
@@ -102,13 +100,12 @@ export class InitService {
                 this.fireNetworkAlert();
             };
             this.ws.onclose = () => this.errorOrClosedFunc();
-            this.resend();
             if (reconnect) {
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
-            }
-            if (this.messageService.conversation) {
-                this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
+                if (this.messageService.conversation) {
+                    this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15, true);
+                }
             }
         }, () => {
             this.fireNetworkAlert();
@@ -159,30 +156,6 @@ export class InitService {
                 this.timeoutNumber += 1000;
             }
         }, this.timeoutNumber);
-    }
-
-    private resend(): void {
-        if (navigator.onLine) {
-            const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-            unsentMessages.forEach((messages, id) => {
-                const sendFailMessages = [];
-                for (let i = 0; i < (<Array<string>>messages).length; i++) {
-                    setTimeout(() => {
-                        const message = (<Array<string>>messages)[i];
-                        this.conversationApiService.SendMessage(Number(id), message, null)
-                            .subscribe({
-                                error(e) {
-                                    if (e.status === 0 || e.status === 503) {
-                                        sendFailMessages.push(message);
-                                    }
-                                }
-                            });
-                    }, 500);
-                }
-                unsentMessages.set(id, sendFailMessages);
-                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-            });
-        }
     }
 
     private subscribeUser(): void {

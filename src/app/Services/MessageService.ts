@@ -97,22 +97,21 @@ export class MessageService {
                     }
                 }
                 if (this.conversation && this.conversation.id === evt.message.conversationId) {
-                    // this.getMessages(0, this.conversation.id, -1, 15);
                     this.rawMessages.push(evt.message);
                     this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
-                    this.localMessages = this.localMessages.filter((t => !t.local));
+                    this.localMessages = this.localMessages.filter(t => !t.local && !t.resend);
                     this.updateAtLink();
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
                         }, 0);
                     }
-                    this.conversationApiService.GetMessage(this.conversation.id, -1, 0).subscribe();
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
                     this.saveMessage();
+                    this.showFailedMessages();
                 } else {
                     this.showNotification(evt);
                 }
@@ -209,7 +208,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: number, take: number) {
+    public getMessages(unread: number, id: number, skipTill: number, take: number, reconnect: boolean) {
         this.messageLoading = true;
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
@@ -282,6 +281,9 @@ export class MessageService {
                 }
                 this.cacheService.updateTotalUnread();
                 this.messageLoading = false;
+                if (reconnect) {
+                    this.showFailedMessages();
+                }
             });
     }
 
@@ -294,7 +296,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldScrollHeight = document.documentElement.scrollHeight;
-            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
+            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15, false);
         }
     }
 
@@ -507,5 +509,21 @@ export class MessageService {
             this.rawMessages = this.rawMessages.splice(0, firstIndex);
         }
         this.saveMessage();
+    }
+
+    public showFailedMessages(): void {
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        this.localMessages = this.localMessages.filter(m => !m.local);
+        if (unsentMessages.has(this.conversation.id)) {
+            (<Array<string>>unsentMessages.get(this.conversation.id)).forEach(content => {
+                const message = new Message();
+                message.content = content;
+                message.resend = true;
+                message.senderId = this.cacheService.cachedData.me.id;
+                message.sender = this.cacheService.cachedData.me;
+                message.local = true;
+                this.localMessages.push(message);
+            }, this);
+        }
     }
 }
