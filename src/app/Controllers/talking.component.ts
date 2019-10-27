@@ -52,10 +52,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('imageInput', {static: false}) public imageInput;
-    @ViewChild('videoInput', {static: false}) public videoInput;
-    @ViewChild('fileInput', {static: false}) public fileInput;
-    @ViewChild('header', {static: true}) public header: HeaderComponent;
+    @ViewChild('imageInput', { static: false }) public imageInput;
+    @ViewChild('videoInput', { static: false }) public videoInput;
+    @ViewChild('fileInput', { static: false }) public fileInput;
+    @ViewChild('header', { static: true }) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -166,7 +166,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
                         this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load, false);
                     } else {
                         const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
                         if (listItem) {
@@ -200,11 +200,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.updateConversation(conversation);
                 if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                     this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load, false);
                 }
                 this.messageService.cleanMessageByTimer();
                 this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
                 this.cacheService.saveCache();
+                this.messageService.showFailedMessages();
             });
         this.windowInnerHeight = window.innerHeight;
     }
@@ -271,10 +272,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         if (unsentMessages.get(_this.conversationID) &&
                             (<Array<string>>unsentMessages.get(_this.conversationID)).length > 0) {
                             const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
-                            tempArray.push(encryptedMessage);
+                            tempArray.push(he.decode(tempMessage.content));
                             unsentMessages.set(_this.conversationID, tempArray);
                         } else {
-                            unsentMessages.set(_this.conversationID, [encryptedMessage]);
+                            unsentMessages.set(_this.conversationID, [he.decode(tempMessage.content)]);
                         }
                         localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
                     }
@@ -284,6 +285,32 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
         inputElement.focus();
         inputElement.style.height = 34 + 'px';
+    }
+
+    public resend(content: string): void {
+        const messageIDArry = this.messageService.getAtIDs(content);
+        const encryptedMessage = AES.encrypt(content, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
+            .subscribe(result => {
+                if (result.code === 0) {
+                    this.delete(content);
+                }
+            });
+    }
+
+    public delete(content: string): void {
+        for (let i = 0; i < this.messageService.localMessages.length; i++) {
+            if (this.messageService.localMessages[i].resend && this.messageService.localMessages[i].content === content) {
+                this.messageService.localMessages.splice(i, 1);
+                break;
+            }
+        }
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
+        const index = tempArray.indexOf(content);
+        tempArray.splice(index, 1);
+        unsentMessages.set(this.conversationID, tempArray);
+        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
     }
 
     public startInput(): void {
@@ -412,7 +439,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({audio: true})
+            navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
                     this.recording = true;
                     this.mediaRecorder = new MediaRecorder(stream);
@@ -472,7 +499,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
 
     public shareToOther(message: string): void {
-        this.router.navigate(['share-target', {message: message}]);
+        this.router.navigate(['share-target', { message: message }]);
     }
 
     public getAtListMaxHeight(): number {
