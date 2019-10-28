@@ -261,23 +261,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
-        const _this = this;
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
             .subscribe({
-                error(e) {
+                error: e => {
                     if (e.status === 0 || e.status === 503) {
                         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                        const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
+                        const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
                         if (tempArray && tempArray.length > 0) {
                             tempArray.push(he.decode(tempMessage.content));
-                            unsentMessages.set(_this.conversationID, tempArray);
+                            unsentMessages.set(this.conversationID, tempArray);
                         } else {
-                            unsentMessages.set(_this.conversationID, [he.decode(tempMessage.content)]);
+                            unsentMessages.set(this.conversationID, [he.decode(tempMessage.content)]);
                         }
                         localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-                        _this.messageService.showFailedMessages();
+                        this.messageService.showFailedMessages();
                     }
+                },
+                next: _p => {
+                    tempMessage.sent = true;
                 }
             });
         this.content = '';

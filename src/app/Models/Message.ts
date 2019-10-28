@@ -7,7 +7,9 @@ export class Message {
     public sender: KahlaUser;
     public sendTime: string;
     public content: string;
+
     public resend: boolean;
+    public sent: boolean;
     public contentRaw: string;
     public isEmoji = false;
     public read: boolean;

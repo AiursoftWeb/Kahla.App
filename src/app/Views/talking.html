@@ -109,8 +109,11 @@
                            aria-hidden="true"></i>
                     </div>
                 </div>
-                <p *ngIf="message.local && !message.resend" i18n="@@Sending" class="sendTime">
+                <p *ngIf="message.local && !message.resend && !message.sent" i18n="@@Sending" class="sendTime">
                     Sending...
+                </p>
+                <p *ngIf="message.sent" i18n="@@Sending" class="sendTime">
+                    Sent
                 </p>
                 <p *ngIf="message.sendTime" class="sendTime">
                     {{message.sendTime | date:'M/d/yy h:mm a'}}
