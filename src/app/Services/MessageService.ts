@@ -101,6 +101,7 @@ export class MessageService {
                     this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
                     this.localMessages = this.localMessages.filter(t => !t.local && !t.resend);
+                    this.showFailedMessages();
                     this.updateAtLink();
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
@@ -111,7 +112,6 @@ export class MessageService {
                         this.showNotification(evt);
                     }
                     this.saveMessage();
-                    this.showFailedMessages();
                 } else {
                     this.showNotification(evt);
                 }
@@ -208,7 +208,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: number, take: number, reconnect: boolean) {
+    public getMessages(unread: number, id: number, skipTill: number, take: number) {
         this.messageLoading = true;
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
@@ -280,10 +280,8 @@ export class MessageService {
                     listItem.unReadAmount = 0;
                 }
                 this.cacheService.updateTotalUnread();
+                this.showFailedMessages();
                 this.messageLoading = false;
-                if (reconnect) {
-                    this.showFailedMessages();
-                }
             });
     }
 
@@ -296,7 +294,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldScrollHeight = document.documentElement.scrollHeight;
-            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15, false);
+            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
         }
     }
 
@@ -485,6 +483,7 @@ export class MessageService {
             this.rawMessages = JSON.parse(json);
         }
         this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.showFailedMessages();
         this.updateAtLink();
         setTimeout(() => this.uploadService.scrollBottom(false), 0);
     }
@@ -515,7 +514,7 @@ export class MessageService {
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
         this.localMessages = this.localMessages.filter(m => !m.local);
         if (unsentMessages.has(this.conversation.id)) {
-            (<Array<string>>unsentMessages.get(this.conversation.id)).forEach(content => {
+            (<Array<string>>unsentMessages.get(this.conversation.id)).forEach((content) => {
                 const message = new Message();
                 message.content = content;
                 message.resend = true;
