@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
 import { HomeService } from '../Services/HomeService';
+import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     selector: 'app-settings',
@@ -25,7 +26,9 @@ export class SettingsComponent implements OnInit {
         public messageService: MessageService,
         public cacheService: CacheService,
         private _electronService: ElectronService,
-        public homeService: HomeService) {
+        public homeService: HomeService,
+        private probeService: ProbeService,
+    ) {
         }
 
     public ngOnInit(): void {
@@ -33,7 +36,7 @@ export class SettingsComponent implements OnInit {
             this.authApiService.Me().subscribe(p => {
                 if (p.code === 0) {
                     this.cacheService.cachedData.me = p.value;
-                    this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                     this.cacheService.saveCache();
                 }
             });

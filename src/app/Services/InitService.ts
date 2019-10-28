@@ -3,14 +3,13 @@ import { CheckService } from './CheckService';
 import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
-import { Values } from '../values';
 import { CacheService } from './CacheService';
-import { ConversationApiService } from './ConversationApiService';
 import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
+import { ProbeService } from './ProbeService';
 
 @Injectable({
     providedIn: 'root'
@@ -21,8 +20,8 @@ export class InitService {
     private timeoutNumber = 1000;
     private interval;
     private timeout;
-    private online;
-    private errorOrClose;
+    public online: boolean;
+    private errorOrClose: boolean;
     private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
@@ -35,10 +34,11 @@ export class InitService {
         private router: Router,
         private messageService: MessageService,
         private cacheService: CacheService,
-        private conversationApiService: ConversationApiService,
         private _electronService: ElectronService,
         private themeService: ThemeService,
-        private devicesApiService: DevicesApiService) {
+        private devicesApiService: DevicesApiService,
+        private probeService: ProbeService,
+    ) {
     }
 
     public init(): void {
@@ -57,12 +57,12 @@ export class InitService {
         this.cacheService.initCache();
         this.authApiService.SignInStatus().subscribe(signInStatus => {
             if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], {replaceUrl: true});
+                this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
                 this.authApiService.Me().subscribe(p => {
                     if (p.code === 0) {
                         this.cacheService.cachedData.me = p.value;
-                        this.cacheService.cachedData.me.avatarURL = Values.fileAddress + p.value.iconFilePath;
+                        this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                         this.themeService.ApplyThemeFromRemote(p.value);
                         if (!this._electronService.isElectronApp && navigator.serviceWorker) {
                             this.subscribeUser();
@@ -95,18 +95,21 @@ export class InitService {
                 this.interval = setInterval(this.checkNetwork.bind(this), 3000);
             };
             this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = () => this.errorOrClosedFunc();
+            this.ws.onerror = () => {
+                this.errorOrClosedFunc();
+                this.fireNetworkAlert();
+            };
             this.ws.onclose = () => this.errorOrClosedFunc();
-            this.resend();
             if (reconnect) {
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
-            }
-            if (this.messageService.conversation && reconnect) {
-                this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15);
+                if (this.messageService.conversation) {
+                    this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15, true);
+                }
             }
         }, () => {
-                this.errorOrClosedFunc();
+            this.fireNetworkAlert();
+            this.errorOrClosedFunc();
         });
     }
 
@@ -118,6 +121,11 @@ export class InitService {
             clearInterval(this.interval);
             this.interval = setInterval(this.checkNetwork.bind(this), 3000);
         }
+    }
+
+    public fireNetworkAlert(): void {
+        Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
+            'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
     }
 
     private checkNetwork(): void {
@@ -150,41 +158,17 @@ export class InitService {
         }, this.timeoutNumber);
     }
 
-    private resend(): void {
-        if (navigator.onLine) {
-            const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-            unsentMessages.forEach((messages, id) => {
-                const sendFailMessages = [];
-                for (let i = 0; i < (<Array<string>>messages).length; i++) {
-                    setTimeout(() => {
-                        const message = (<Array<string>>messages)[i];
-                        this.conversationApiService.SendMessage(Number(id), message, null)
-                            .subscribe({
-                                error(e) {
-                                    if (e.status === 0 || e.status === 503) {
-                                        sendFailMessages.push(message);
-                                    }
-                                }
-                            });
-                    }, 500);
-                }
-                unsentMessages.set(id, sendFailMessages);
-                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-            });
-        }
-    }
-
     private subscribeUser(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function(registration) {
-                return registration.pushManager.getSubscription().then(function(sub) {
+            navigator.serviceWorker.ready.then(function (registration) {
+                return registration.pushManager.getSubscription().then(function (sub) {
                     if (sub === null) {
                         return registration.pushManager.subscribe(_this.options)
-                            .then(function(pushSubscription) {
+                            .then(function (pushSubscription) {
                                 return _this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
                                     pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                    .subscribe(function(result) {
+                                    .subscribe(function (result) {
                                         localStorage.setItem('deviceID', result.value.toString());
                                     });
                             });
@@ -197,10 +181,10 @@ export class InitService {
     private updateSubscription(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function(registration) {
-                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function() {
+            navigator.serviceWorker.ready.then(function (registration) {
+                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function () {
                     registration.pushManager.subscribe(_this.options)
-                        .then(function(pushSubscription) {
+                        .then(function (pushSubscription) {
                             return _this.devicesApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
                                 pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
                                 .subscribe();

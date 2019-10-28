@@ -1,6 +1,6 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js');
 
-const CACHE = 'v3';
+const CACHE = 'v4';
 
 self.addEventListener('install', function (event) {
     event.waitUntil(
@@ -16,6 +16,7 @@ self.addEventListener('install', function (event) {
                 '/favicon.ico',
                 '/fa-solid-900.woff2',
                 '/fa-regular-400.woff2',
+                '/fa-brands-400.woff2',
                 '/assets/144x144.png'
             ]);
         })

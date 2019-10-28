@@ -11,7 +11,8 @@
 
     <div class="img device-img">
         <i *ngIf="device.name.includes('Firefox')" class="fab fa-firefox" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Chromium') || device.name.includes('Chrome')" class="fab fa-chrome"
+        <i *ngIf="(device.name.includes('Chromium') && !device.name.includes('Edge')) || device.name.includes('Chrome')"
+           class="fab fa-chrome"
            aria-hidden="true"></i>
         <i *ngIf="device.name.includes('Safari')" class="fab fa-safari" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('Opera')" class="fab fa-opera" aria-hidden="true"></i>

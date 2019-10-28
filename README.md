@@ -1,4 +1,6 @@
-![KahlaLogo](./src/assets/144x144.png)
+<p align="center">
+<a href="https://www.kahla.app/"><img src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/dev/src/assets/144x144.png"></a>
+</p>
 
 # Kahla
 
@@ -6,11 +8,14 @@
 
 Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
 
-<img src="https://ui.cdn.aiursoft.com/images/kahla-demo.png" alt="screenshot" width="500"/>
+<p align="center">
+<img src="https://ui.aiursoft.com/images/kahla-demo.png" alt="screenshot" width="500"/>
+</p>
 
 Try it here: [web.kahla.app](https://web.kahla.app)
 
-Or <a href='https://play.google.com/store/apps/details?id=com.aiursoft.kahla'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80"/></a>
+<a href='https://play.google.com/store/apps/details?id=com.aiursoft.kahla'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80" /></a><a href="//www.microsoft.com/store/apps/9PC6J2LZ180M?cid=storebadge&amp;ocid=badge">
+<img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="English badge" height="60"></a>
 
 Kahla currently targets Windows, Linux, macOS, Android, and iOS.
 

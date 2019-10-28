@@ -29,6 +29,7 @@ import { DissolveEvent } from '../Models/DissolveEvent';
 import { HomeService } from './HomeService';
 import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
+import { ProbeService } from './ProbeService';
 
 @Injectable({
     providedIn: 'root'
@@ -61,7 +62,8 @@ export class MessageService {
         private router: Router,
         private homeService: HomeService,
         private groupsApiService: GroupsApiService,
-        private friendsApiService: FriendsApiService
+        private friendsApiService: FriendsApiService,
+        private probeService: ProbeService,
     ) { }
 
     public OnMessage(data: MessageEvent) {
@@ -95,22 +97,21 @@ export class MessageService {
                     }
                 }
                 if (this.conversation && this.conversation.id === evt.message.conversationId) {
-                    // this.getMessages(0, this.conversation.id, -1, 15);
                     this.rawMessages.push(evt.message);
                     this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
-                    this.localMessages = this.localMessages.filter((t => !t.local));
+                    this.localMessages = this.localMessages.filter(t => !t.local && !t.resend);
                     this.updateAtLink();
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
                         }, 0);
                     }
-                    this.conversationApiService.GetMessage(this.conversation.id, -1, 0).subscribe();
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
                     this.saveMessage();
+                    this.showFailedMessages();
                 } else {
                     this.showNotification(evt);
                 }
@@ -207,7 +208,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: number, take: number) {
+    public getMessages(unread: number, id: number, skipTill: number, take: number, reconnect: boolean) {
         this.messageLoading = true;
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
@@ -280,6 +281,9 @@ export class MessageService {
                 }
                 this.cacheService.updateTotalUnread();
                 this.messageLoading = false;
+                if (reconnect) {
+                    this.showFailedMessages();
+                }
             });
     }
 
@@ -292,7 +296,7 @@ export class MessageService {
         if (!this.noMoreMessages) {
             this.loadingMore = true;
             this.oldScrollHeight = document.documentElement.scrollHeight;
-            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
+            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15, false);
         }
     }
 
@@ -325,7 +329,7 @@ export class MessageService {
             event.message.content = this.cacheService.modifyMessage(event.message.content);
             const notify = new Notification(event.message.sender.nickName, {
                 body: event.message.content,
-                icon: Values.fileAddress + event.message.sender.iconFilePath
+                icon: this.probeService.encodeProbeFileUrl(event.message.sender.iconFilePath)
             });
             notify.onclick = function (clickEvent) {
                 clickEvent.preventDefault();
@@ -342,19 +346,22 @@ export class MessageService {
     }
 
     public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
-        if (nickName.length === 0 && !getMessage) {
-            return this.conversation.users.map(x => x.user);
-        } else {
-            const matchedUsers = [];
-            this.conversation.users.forEach((value: UserGroupRelation) => {
-                if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
-                    matchedUsers.push(value.user);
-                } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
-                    matchedUsers.push(value.user);
-                }
-            });
-            return matchedUsers;
+        if (typeof this.conversation.users !== 'undefined') {
+            if (nickName.length === 0 && !getMessage) {
+                return this.conversation.users.map(x => x.user);
+            } else {
+                const matchedUsers = [];
+                this.conversation.users.forEach((value: UserGroupRelation) => {
+                    if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
+                        matchedUsers.push(value.user);
+                    } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
+                        matchedUsers.push(value.user);
+                    }
+                });
+                return matchedUsers;
+            }
         }
+        return [];
     }
 
     public getAtIDs(message: string): Array<string> {
@@ -412,9 +419,7 @@ export class MessageService {
                     imageWidth = realMaxWidth;
                     imageHeight = Math.floor(realMaxWidth * ratio);
                 }
-                t.content =
-                    `[img]${Values.fileAddress}${encodeURIComponent(t.content.substring(5).split('|')[0])
-                        .replace(/%2F/g, '/')}|${imageWidth}|${imageHeight}`;
+                t.content = `[img]${this.probeService.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}`;
             }
         } else if (t.content.startsWith('[group]')) {
             const groupId = Number(t.content.substring(7));
@@ -422,7 +427,7 @@ export class MessageService {
             this.groupsApiService.GroupSummary(groupId).subscribe(p => {
                 if (p.value) {
                     t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
-                        `${p.value.hasPassword ? 'Private' : 'Public'}|${Values.fileAddress}${p.value.imagePath}`;
+                        `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
                     t.relatedData = p.value;
                 } else {
                     t.content = 'Invalid Group';
@@ -435,7 +440,7 @@ export class MessageService {
             this.friendsApiService.UserDetail(userId).subscribe(p => {
                 if (p.user) {
                     t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${Values.fileAddress}${p.user.iconFilePath}`;
+                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.user.iconFilePath)}`;
                     t.relatedData = p.user;
                 } else {
                     t.content = 'Invalid User';
@@ -504,5 +509,21 @@ export class MessageService {
             this.rawMessages = this.rawMessages.splice(0, firstIndex);
         }
         this.saveMessage();
+    }
+
+    public showFailedMessages(): void {
+        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+        this.localMessages = this.localMessages.filter(m => !m.local);
+        if (unsentMessages.has(this.conversation.id)) {
+            (<Array<string>>unsentMessages.get(this.conversation.id)).forEach(content => {
+                const message = new Message();
+                message.content = content;
+                message.resend = true;
+                message.senderId = this.cacheService.cachedData.me.id;
+                message.sender = this.cacheService.cachedData.me;
+                message.local = true;
+                this.localMessages.push(message);
+            }, this);
+        }
     }
 }
