@@ -166,7 +166,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
                         this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load, false);
+                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                     } else {
                         const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
                         if (listItem) {
@@ -200,12 +200,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.updateConversation(conversation);
                 if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                     this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load, false);
+                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
                 }
                 this.messageService.cleanMessageByTimer();
                 this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
                 this.cacheService.saveCache();
-                this.messageService.showFailedMessages();
             });
         this.windowInnerHeight = window.innerHeight;
     }
@@ -269,15 +268,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 error(e) {
                     if (e.status === 0 || e.status === 503) {
                         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                        if (unsentMessages.get(_this.conversationID) &&
-                            (<Array<string>>unsentMessages.get(_this.conversationID)).length > 0) {
-                            const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
+                        const tempArray = <Array<string>>unsentMessages.get(_this.conversationID);
+                        if (tempArray && tempArray.length > 0) {
                             tempArray.push(he.decode(tempMessage.content));
                             unsentMessages.set(_this.conversationID, tempArray);
                         } else {
                             unsentMessages.set(_this.conversationID, [he.decode(tempMessage.content)]);
                         }
                         localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                        _this.messageService.showFailedMessages();
                     }
                 }
             });
