@@ -15,10 +15,10 @@
                 <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
             </div>
             <div class="chat-text">
-                <button class="button button--fab" *ngIf="message.resend" (click)="resend(message.content)">
+                <button class="button button--fab" *ngIf="message.resend" (click)="resend(message)">
                     <i class="fas fa-redo"></i>
                 </button>
-                <button class="button button--fab" *ngIf="message.resend" (click)="delete(message.content)">
+                <button class="button button--fab" *ngIf="message.resend" (click)="delete(message)">
                     <i class="fas fa-trash-alt"></i>
                 </button>
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">

@@ -8,8 +8,6 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
-import * as he from 'he';
-import Autolinker from 'autolinker';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ElectronService } from 'ngx-electron';
@@ -247,40 +245,46 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
+        tempMessage.id = uuid4();
         tempMessage.isEmoji = this.messageService.checkEmoji(this.content);
-        tempMessage.content = he.encode(this.content);
-        tempMessage.content = Autolinker.link(tempMessage.content, {
-            stripPrefix: false,
-            className: 'chat-inline-link'
-        });
-        const messageIDArry = this.messageService.getAtIDs(tempMessage.content);
-        tempMessage.content = messageIDArry[0];
+        tempMessage.content = this.content;
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;
+        tempMessage.sendTime = new Date().toISOString();
         tempMessage.local = true;
+        this.messageService.modifyMessage(tempMessage, false);
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.uploadService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, uuid4(), messageIDArry.slice(1))
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
+            this.messageService.getAtIDs(this.content).slice(1))
             .subscribe({
                 error: e => {
                     if (e.status === 0 || e.status === 503) {
                         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                        const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
+                        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
                         if (tempArray && tempArray.length > 0) {
-                            tempArray.push(he.decode(tempMessage.content));
+                            tempArray.push(tempMessage);
                             unsentMessages.set(this.conversationID, tempArray);
                         } else {
-                            unsentMessages.set(this.conversationID, [he.decode(tempMessage.content)]);
+                            unsentMessages.set(this.conversationID, [tempMessage]);
                         }
                         localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                        this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
                         this.messageService.showFailedMessages();
+                        this.messageService.reorderLocalMessages();
+                        this.uploadService.scrollBottom(false);
                     }
                 },
-                next: _p => {
-                    tempMessage.sent = true;
+                next: p => {
+                    this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
+                    this.messageService.rawMessages.push(p.value);
+                    this.messageService.localMessages.push(this.messageService.modifyMessage(Object.assign({}, p.value)));
+                    this.messageService.reorderLocalMessages();
+                    this.messageService.updateAtLink();
+                    this.messageService.saveMessage();
                 }
             });
         this.content = '';
@@ -289,27 +293,22 @@ export class TalkingComponent implements OnInit, OnDestroy {
         inputElement.style.height = 34 + 'px';
     }
 
-    public resend(content: string): void {
-        const messageIDArry = this.messageService.getAtIDs(content);
-        const encryptedMessage = AES.encrypt(content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, uuid4(), messageIDArry.slice(1))
+    public resend(message: Message): void {
+        const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
+        const encryptedMessage = AES.encrypt(message.contentRaw, this.messageService.conversation.aesKey).toString();
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id, messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
-                    this.delete(content);
+                    this.delete(message);
                 }
             });
     }
 
-    public delete(content: string): void {
-        for (let i = 0; i < this.messageService.localMessages.length; i++) {
-            if (this.messageService.localMessages[i].resend && this.messageService.localMessages[i].content === content) {
-                this.messageService.localMessages.splice(i, 1);
-                break;
-            }
-        }
+    public delete(message: Message): void {
+        this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(message), 1);
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        const tempArray = <Array<string>>unsentMessages.get(this.conversationID);
-        const index = tempArray.indexOf(content);
+        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
+        const index = tempArray.findIndex(t => t.id === message.id);
         tempArray.splice(index, 1);
         unsentMessages.set(this.conversationID, tempArray);
         localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));

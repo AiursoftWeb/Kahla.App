@@ -24,7 +24,7 @@ export class ConversationApiService {
         return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipTill=${skipTill}&take=${take}`);
     }
 
-    public SendMessage(conversationID: number, content: string, messageId: string, userIDs: Array<string>): Observable<AiurProtocal> {
+    public SendMessage(conversationID: number, content: string, messageId: string, userIDs: Array<string>): Observable<AiurValue<Message>> {
         const form = {
             Content: content,
             MessageId: messageId
