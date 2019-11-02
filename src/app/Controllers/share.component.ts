@@ -10,6 +10,7 @@ import { ConversationApiService } from '../Services/ConversationApiService';
 import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { SearchResult } from '../Models/SearchResult';
+import { uuid4 } from '../Helpers/Uuid';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -109,7 +110,7 @@ export class ShareComponent implements OnInit, DoCheck {
         const encryptedMessage = AES.encrypt(content, this.messageService.conversation.aesKey).toString();
         const messageIDArry = this.messageService.getAtIDs(content);
         this.conversationApiService.SendMessage(this.messageService.conversation.id,
-            encryptedMessage, messageIDArry.slice(1))
+            encryptedMessage, uuid4(), messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
                     this.router.navigate(['/home'], {replaceUrl: true});

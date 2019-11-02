@@ -96,12 +96,11 @@ export class MessageService {
                         setTimeout(() => this.cacheService.updateConversation(), 1000);
                     }
                 }
-                if (this.conversation && this.conversation.id === evt.message.conversationId) {
+                if (this.conversation && this.conversation.id === evt.message.conversationId
+                    && this.localMessages.findIndex(t => t.id === evt.message.id) === -1) {
                     this.rawMessages.push(evt.message);
                     this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
-                    this.localMessages = this.localMessages.filter(t => !t.local && !t.resend);
-                    this.showFailedMessages();
                     this.updateAtLink();
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
@@ -208,8 +207,9 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: number, take: number) {
+    public getMessages(unread: number, id: number, skipTill: string, take: number) {
         this.messageLoading = true;
+        this.localMessages = this.localMessages.filter(t => !t.local);
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
                 map(t => t.items)
@@ -231,7 +231,7 @@ export class MessageService {
                 //     this.localMessages.splice(0, 500);
                 // }
                 // Load new
-                if (skipTill === -1) {
+                if (!skipTill) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
                         const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
                         if (index === -1) {
@@ -281,6 +281,7 @@ export class MessageService {
                 }
                 this.cacheService.updateTotalUnread();
                 this.showFailedMessages();
+                this.reorderLocalMessages();
                 this.messageLoading = false;
             });
     }
@@ -398,11 +399,13 @@ export class MessageService {
         return false;
     }
 
-    public modifyMessage(t: Message): Message {
-        try {
-            t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-        } catch (error) {
-            t.content = '';
+    public modifyMessage(t: Message, decrypt: boolean = true): Message {
+        if (decrypt) {
+            try {
+                t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+            } catch (error) {
+                t.content = '';
+            }
         }
         t.contentRaw = t.content;
         t.timeStamp = new Date(t.sendTime).getTime();
@@ -484,6 +487,7 @@ export class MessageService {
         }
         this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
         this.showFailedMessages();
+        this.reorderLocalMessages();
         this.updateAtLink();
         setTimeout(() => this.uploadService.scrollBottom(false), 0);
     }
@@ -512,15 +516,10 @@ export class MessageService {
 
     public showFailedMessages(): void {
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        this.localMessages = this.localMessages.filter(m => !m.local);
+        this.localMessages = this.localMessages.filter(m => !m.resend);
         if (unsentMessages.has(this.conversation.id)) {
-            (<Array<string>>unsentMessages.get(this.conversation.id)).forEach((content) => {
-                const message = new Message();
-                message.content = content;
+            (<Array<Message>>(unsentMessages.get(this.conversation.id))).forEach((message) => {
                 message.resend = true;
-                message.senderId = this.cacheService.cachedData.me.id;
-                message.sender = this.cacheService.cachedData.me;
-                message.local = true;
                 this.localMessages.push(message);
             }, this);
         }
