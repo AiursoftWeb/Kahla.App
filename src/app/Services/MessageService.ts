@@ -207,10 +207,10 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: string, take: number) {
+    public getMessages(unread: number, id: number, skipFrom: string, take: number) {
         this.messageLoading = true;
         this.localMessages = this.localMessages.filter(t => !t.local);
-        this.conversationApiService.GetMessage(id, skipTill, take)
+        this.conversationApiService.GetMessage(id, skipFrom, take)
             .pipe(
                 map(t => t.items)
             )
@@ -231,7 +231,7 @@ export class MessageService {
                 //     this.localMessages.splice(0, 500);
                 // }
                 // Load new
-                if (!skipTill) {
+                if (!skipFrom) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
                         const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
                         if (index === -1) {

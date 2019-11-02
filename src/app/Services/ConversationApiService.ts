@@ -20,8 +20,12 @@ export class ConversationApiService {
         return this.apiService.Get(ConversationApiService.serverPath + '/All');
     }
 
-    public GetMessage(id: number, skipTill: string, take: number): Observable<AiurCollection<Message>> {
-        return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipTill=${skipTill}&take=${take}`);
+    public GetMessage(id: number, skipFrom: string, take: number): Observable<AiurCollection<Message>> {
+        if (skipFrom) {
+            return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipFrom=${skipFrom}&take=${take}`);
+        } else {
+            return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&take=${take}`);
+        }
     }
 
     public SendMessage(conversationID: number, content: string, messageId: string, userIDs: Array<string>): Observable<AiurValue<Message>> {
