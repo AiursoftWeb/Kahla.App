@@ -208,7 +208,7 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipTill: number, take: number) {
+    public getMessages(unread: number, id: number, skipTill: string, take: number) {
         this.messageLoading = true;
         this.conversationApiService.GetMessage(id, skipTill, take)
             .pipe(
@@ -231,7 +231,7 @@ export class MessageService {
                 //     this.localMessages.splice(0, 500);
                 // }
                 // Load new
-                if (skipTill === -1) {
+                if (!skipTill) {
                     if (this.localMessages.length > 0 && messages.length > 0) {
                         const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
                         if (index === -1) {

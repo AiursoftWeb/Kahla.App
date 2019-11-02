@@ -20,6 +20,7 @@ import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
+import { uuid4 } from '../Helpers/Uuid';
 
 declare var MediaRecorder: any;
 
@@ -166,7 +167,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                         this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
                         this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                        this.messageService.getMessages(this.unread, this.conversationID, null, this.load);
                     } else {
                         const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
                         if (listItem) {
@@ -200,7 +201,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.updateConversation(conversation);
                 if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                     this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(this.unread, this.conversationID, -1, this.load);
+                    this.messageService.getMessages(this.unread, this.conversationID, null, this.load);
                 }
                 this.messageService.cleanMessageByTimer();
                 this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
@@ -233,7 +234,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.header.timer = this.timerService.destructTime !== 'off';
     }
 
-    public trackByMessages(_index: number, message: Message): number {
+    public trackByMessages(_index: number, message: Message): string {
         return message.id;
     }
 
@@ -262,7 +263,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, uuid4(), messageIDArry.slice(1))
             .subscribe({
                 error: e => {
                     if (e.status === 0 || e.status === 503) {
@@ -291,7 +292,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public resend(content: string): void {
         const messageIDArry = this.messageService.getAtIDs(content);
         const encryptedMessage = AES.encrypt(content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, messageIDArry.slice(1))
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, uuid4(), messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
                     this.delete(content);
