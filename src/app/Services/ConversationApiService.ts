@@ -28,7 +28,8 @@ export class ConversationApiService {
         }
     }
 
-    public SendMessage(conversationID: number, content: string, messageId: string, recordTime: string, userIDs: Array<string>): Observable<AiurValue<Message>> {
+    public SendMessage(conversationID: number, content: string, messageId: string,
+        recordTime: string, userIDs: Array<string>): Observable<AiurValue<Message>> {
         const form = {
             Content: content,
             MessageId: messageId,
