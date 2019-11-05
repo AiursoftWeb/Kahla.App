@@ -258,7 +258,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id, tempMessage.sendTime,
             this.messageService.getAtIDs(this.content).slice(1))
             .subscribe({
                 error: e => {
