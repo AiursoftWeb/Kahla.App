@@ -109,11 +109,14 @@
                            aria-hidden="true"></i>
                     </div>
                 </div>
-                <p *ngIf="message.local && !message.resend" i18n="@@Sending" class="sendTime">
-                    Sending...
-                </p>
-                <p *ngIf="message.sendTime" class="sendTime">
-                    {{message.sendTime | date:'M/d/yy h:mm a'}}
+
+                <p class="sendTime">
+                    <label *ngIf="message.local && !message.resend" i18n="@@Sending" class="sendTime">
+                            Sending...
+                    </label>
+                    <label *ngIf="!message.local || message.resend">
+                        {{message.sendTime | date:'M/d/yy h:mm a'}}
+                    </label>
                 </p>
                 <p class="sendTime sendFail" [class.last]="isLast" *ngIf="message.resend">
                     <i class="fas fa-exclamation-triangle"></i>
