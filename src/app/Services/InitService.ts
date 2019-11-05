@@ -124,7 +124,7 @@ export class InitService {
     }
 
     public fireNetworkAlert(): void {
-        Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
+        console.error('Failed to connect to stargate channel.' + 'This might caused by the bad network you connected.<br/>' +
             'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
     }
 
