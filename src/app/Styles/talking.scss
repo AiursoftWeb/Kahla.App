@@ -103,7 +103,7 @@
     }
 
     &.single-emoji {
-      background-color: transparent !important;
+      background: transparent !important;
 
       &:after {
         border-left: unset !important;
@@ -137,7 +137,7 @@
   .left .chat-content {
     border-color: var(--talking-chat-bg);
     color: var(--default-textcolor);
-    background-color: var(--talking-chat-bg);
+    background: var(--talking-chat-bg);
 
     &::after {
       right: 100%;
