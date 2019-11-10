@@ -10,6 +10,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { Values } from '../values';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
+import { uuid4 } from '../Helpers/Uuid';
 
 @Injectable({
     providedIn: 'root'
@@ -148,7 +149,7 @@ export class UploadService {
     }
 
     private sendMessage(message: string, conversationID: number): void {
-        this.conversationApiService.SendMessage(conversationID, message, [])
+        this.conversationApiService.SendMessage(conversationID, message, uuid4(), new Date().toISOString(), [])
             .subscribe(() => {
                 this.scrollBottom(true);
             }, () => {

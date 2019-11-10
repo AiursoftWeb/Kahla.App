@@ -3,10 +3,10 @@
 <ul id="messageList" class="message-list" (paste)="paste($event)" (drop)="drop($event)"
     (dragover)="preventDefault($event)" (click)="hideUserList()">
     <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()"
-        i18n="@@ClickToLoadMore">Click to load more
+            i18n="@@ClickToLoadMore">Click to load more
     </button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages"
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages; last as isLast"
         [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
         <div
@@ -15,10 +15,10 @@
                 <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
             </div>
             <div class="chat-text">
-                <button class="button button--fab" *ngIf="message.resend" (click)="resend(message.content)">
+                <button class="button button--fab" *ngIf="message.resend" (click)="resend(message)">
                     <i class="fas fa-redo"></i>
                 </button>
-                <button class="button button--fab" *ngIf="message.resend" (click)="delete(message.content)">
+                <button class="button button--fab" *ngIf="message.resend" (click)="delete(message)">
                     <i class="fas fa-trash-alt"></i>
                 </button>
                 <div class="chat-content" [class.single-emoji]="message.isEmoji">
@@ -26,25 +26,25 @@
                         *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
                         <label class="badge badge-primary"
-                            *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
+                               *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
                         <label class="badge badge-secondary"
-                            *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
+                               *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>
                     <a *ngIf="message.content.startsWith('[img]') && message.content.split('|').length === 3"
-                        target="_blank" rel="noopener noreferrer"
-                        href="{{ message.content.substring(5).split('|')[0] }}">
+                       target="_blank" rel="noopener noreferrer"
+                       href="{{ message.content.substring(5).split('|')[0] }}">
                         <div class="image-container" [style.width.px]="message.content.split('|')[1]"
-                            [style.height.px]="message.content.split('|')[2]">
+                             [style.height.px]="message.content.split('|')[2]">
                             <img src="{{ message.content.substring(5).split('|')[0] }}"
-                                srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }}&h={{ message.content.split('|')[2] }},
+                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }}&h={{ message.content.split('|')[2] }},
                                 {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }}&h={{ Math.floor(message.content.split('|')[2] * 1.5) }} 1.5x,
                                 {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }}&h={{ Math.floor(message.content.split('|')[2] * 2) }} 2x">
                         </div>
                     </a>
                     <a class="share-item file"
-                        *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
-                        target="_blank" rel="noopener noreferrer" href=""
-                        (click)="uploadService.getFileURL($event, message.content)">
+                       *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
+                       target="_blank" rel="noopener noreferrer" href=""
+                       (click)="uploadService.getFileURL($event, message.content)">
                         <div
                             [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
@@ -83,39 +83,44 @@
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <a class="share-item" href="javascript:void(0);" (click)="shareClick(message)"
-                        *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
+                       *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
                         <div>
-                            <img src="{{message.content.split('|')[3]}}?w=40&h=40" />
+                            <img src="{{message.content.split('|')[3]}}?w=40&h=40"/>
                         </div>
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')">
                         <video src="{{ probeService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
-                            muted></video>
+                               muted></video>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
-                            (click)="uploadService.getAudio($event.currentTarget, message.content)">
+                           (click)="uploadService.getAudio($event.currentTarget, message.content)">
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
                         </a>
                     </div>
                     <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]') && !message.content.startsWith('[share]')"
-                        [innerHTML]="message.content"></p>
+                       [innerHTML]="message.content"></p>
                     <div
                         *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
                         <i (click)="shareToOther(message.contentRaw)" class="share fa fa-share-alt"
-                            aria-hidden="true"></i>
+                           aria-hidden="true"></i>
                     </div>
                 </div>
+
                 <p class="sendTime">
-                    <span *ngIf="message.local && !message.resend" i18n="@@Sending">
-                        Sending...
-                    </span>
-                    <span *ngIf="message.sendTime">
+                    <label *ngIf="message.local && !message.resend" i18n="@@Sending" class="sendTime">
+                            Sending...
+                    </label>
+                    <label *ngIf="!message.local || message.resend">
                         {{message.sendTime | date:'M/d/yy h:mm a'}}
-                    </span>
+                    </label>
+                </p>
+                <p class="sendTime sendFail" [class.last]="isLast" *ngIf="message.resend">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Send failed
                 </p>
             </div>
         </div>
@@ -145,7 +150,7 @@
     <div class="chat-box">
         <div class="chat-part" [class.empty]="content==undefined || content.trim().length === 0">
             <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500"
-                (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
+                      (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
             <button class="button primary" (click)="send()" i18n="@@Send">Send</button>
             <i class="fas fa-microphone" aria-hidden="true" (click)="record()" [class.active]="recording"></i>
             <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
@@ -153,7 +158,7 @@
         <div *ngIf="showPanel" class="more-panel">
             <div class="of4">
                 <input type="file" name="image" id="image" class="inputfile" #imageInput (change)="uploadInput(0)"
-                    accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml" />
+                       accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml"/>
                 <label for="image"><i style="color: #FF9800;" class="far fa-file-image"></i>
                     <div class="text">
                         Send Image
@@ -162,7 +167,7 @@
             </div>
             <div class="of4">
                 <input type="file" name="video" id="video" class="inputfile" #videoInput (change)="uploadInput(1)"
-                    accept="video/mp4, video/x-m4v, video/*" />
+                       accept="video/mp4, video/x-m4v, video/*"/>
                 <label for="video"><i style="color: #00CC9C;" class="far fa-file-video"></i>
                     <div class="text">
                         Send Video
@@ -170,7 +175,7 @@
                 </label>
             </div>
             <div class="of4">
-                <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)" />
+                <input type="file" name="file" id="file" class="inputfile" #fileInput (change)="uploadInput(2)"/>
                 <label for="file"><i style="color: #4694F6;" class="far fa-file-alt"></i>
                     <div class="text">
                         Send File

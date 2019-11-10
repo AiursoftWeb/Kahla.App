@@ -59,15 +59,11 @@
 
     .button {
       margin-right: 0.5rem;
-      background-color: red;
+      background-color: #d9534f;
     }
 
     .share {
       cursor: pointer;
-    }
-
-    span {
-      color: #aaa;
     }
   }
 
@@ -107,7 +103,7 @@
     }
 
     &.single-emoji {
-      background-color: transparent !important;
+      background: transparent !important;
 
       &:after {
         border-left: unset !important;
@@ -141,7 +137,7 @@
   .left .chat-content {
     border-color: var(--talking-chat-bg);
     color: var(--default-textcolor);
-    background-color: var(--talking-chat-bg);
+    background: var(--talking-chat-bg);
 
     &::after {
       right: 100%;
@@ -166,6 +162,19 @@
 
   .right .sendTime {
     margin: 0.5% 1% 0 0;
+  }
+
+  .sendTime {
+    color: #aaa;
+  }
+
+  .sendFail {
+    color: #d9534f;
+    font-size: 14px;
+
+    &.last {
+      animation: 0.25s shake;
+    }
   }
 }
 
@@ -465,4 +474,17 @@ i {
 
 .oneResult {
   bottom: 0;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  25%, 75% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+
 }

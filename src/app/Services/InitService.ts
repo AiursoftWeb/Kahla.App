@@ -104,7 +104,7 @@ export class InitService {
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
                 if (this.messageService.conversation) {
-                    this.messageService.getMessages(0, this.messageService.conversation.id, -1, 15, true);
+                    this.messageService.getMessages(0, this.messageService.conversation.id, null, 15);
                 }
             }
         }, () => {
@@ -124,7 +124,7 @@ export class InitService {
     }
 
     public fireNetworkAlert(): void {
-        Swal.fire('Failed to connect to stargate channel.', 'This might caused by the bad network you connected.<br/>' +
+        console.error('Failed to connect to stargate channel.' + 'This might caused by the bad network you connected.<br/>' +
             'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
     }
 
