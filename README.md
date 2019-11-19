@@ -14,7 +14,7 @@ Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also a
 
 Try it here: [web.kahla.app](https://web.kahla.app)
 
-<a href='https://play.google.com/store/apps/details?id=com.aiursoft.kahla'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80" /></a><a href="//www.microsoft.com/store/apps/9PC6J2LZ180M?cid=storebadge&amp;ocid=badge">
+<a href='https://play.google.com/store/apps/details?id=com.aiursoft.kahla'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80" /></a><a href="https://www.microsoft.com/en-us/p/kahla/9pc6j2lz180m">
 <img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="English badge" height="60"></a>
 
 Kahla currently targets Windows, Linux, macOS, Android, and iOS.
