@@ -115,7 +115,7 @@
                             Sending...
                     </label>
                     <label *ngIf="!message.local || message.resend">
-                        {{message.sendTime | date:'M/d/yy h:mm a'}}
+                        {{localDate(message.sendTime)}}
                     </label>
                 </p>
                 <p class="sendTime sendFail" [class.last]="isLast" *ngIf="message.resend">
