@@ -516,4 +516,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.friendshipService.joinGroup(group, true);
         }
     }
+
+    public localDate(date: string): string {
+        return new Date(date).toLocaleString();
+    }
 }
