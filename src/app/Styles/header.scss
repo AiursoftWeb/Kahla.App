@@ -10,6 +10,7 @@
 
   /* background-image:linear-gradient(90deg, #4075d5, #48A3DD); */
   background: var(--header-bg);
+  backdrop-filter: blur(8px);
   height: 45px;
   top: 0;
   overflow: auto;
