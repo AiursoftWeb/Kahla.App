@@ -22,7 +22,7 @@ body.theme-dark {
   --text-input-bg: #1e272e;
   --talking-chat-bg: #707e8a;
   --tgl-btn-bg: #888;
-  --header-bg: linear-gradient(to bottom, #{$primary-color-depth3}, #{$primary-color-depth2});
+  --header-bg: linear-gradient(to bottom, #{transparentize($primary-color-depth3, 0.2)}, #{transparentize($primary-color-depth2, 0.2)});
   --a-color: #3498db;
   --left-a-color: #74b9ff;
   --alert-bg: #2f3640;

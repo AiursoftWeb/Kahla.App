@@ -250,8 +250,8 @@
     margin: 0;
     overflow-y: scroll;
     background-color: var(--talking-action-bg);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 
     li {
       margin: 0;
@@ -267,8 +267,8 @@
     bottom: 0;
     box-shadow: 0 23px 50px 10px rgba(0, 0, 0, 0.37);
     background-color: var(--talking-action-bg);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 
     .chat-part {
       transition: all 0.15s ease-in-out;
