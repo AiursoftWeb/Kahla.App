@@ -22,7 +22,7 @@ body.theme-sakura-light {
   --text-input-bg: #fff;
   --talking-chat-bg: white;
   --tgl-btn-bg: #f0f0f0;
-  --header-bg: linear-gradient(to bottom, #{transparentize($primary-color-depth3, 0.2)}, #{transparentize($primary-color-depth2, 0.2)});
+  --header-bg: linear-gradient(to bottom, #{$primary-color-depth3}, #{transparentize($primary-color-depth2, 0.4)});
   --a-color: #1e3799;
   --left-a-color: #1e3799;
   --alert-bg: #fff;
