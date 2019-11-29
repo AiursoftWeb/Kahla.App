@@ -138,6 +138,11 @@ export class MessageService {
                 }
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
+                if (this.router.isActive(`/user/${(ev as FriendAcceptedEvent).target.id}`, false)) {
+                    this.friendsApiService.UserDetail((ev as FriendAcceptedEvent).target.id).subscribe(t => {
+                        this.router.navigate(['/talking', t.conversationId]);
+                    });
+                }
                 break;
             }
             case EventType.TimerUpdatedEvent: {
