@@ -4,5 +4,7 @@ export enum Themes {
     sakuraLight,
     sakuraDark,
     violetLight,
-    violetDark
+    violetDark,
+    communistLight,
+    communistDark
 }

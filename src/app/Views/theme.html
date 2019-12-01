@@ -47,3 +47,20 @@
         <i class="fas fa-check"></i>
     </div>
 </div>
+<div class="menu-button" (click)="changeTheme(6)">
+    <div class="text" i18n="@@Dark">Communist light</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 6 ? 'visible':'hidden'"
+    >
+        <i class="fas fa-check"></i>
+    </div>
+</div>
+
+<div class="menu-button" (click)="changeTheme(7)">
+    <div class="text" i18n="@@Dark">Communist dark</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 7 ? 'visible':'hidden'"
+    >
+        <i class="fas fa-check"></i>
+    </div>
+</div>
