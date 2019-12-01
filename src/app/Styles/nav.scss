@@ -17,13 +17,14 @@
   }
 
   .nav-bar {
-    background-color: var(--selectable-bg);
+    background-color: var(--talking-action-bg);
     border-color: var(--selectable-border-color);
     height: 55px;
     border-width: 1px;
     border-top-style: solid;
     box-shadow: 0 22px 50px 10px rgba(0, 0, 0, 0.37);
     user-select: none;
+    backdrop-filter: blur(8px);
 
     .nav-item {
       color: var(--minor-textcolor);

@@ -23,11 +23,6 @@ export class ThemeService {
 
     ApplyTheme(theme: Themes) {
         switch (theme) {
-            case Themes.kahlaDark:
-                document.body.className = 'theme-dark';
-                document.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#18a4f9');
-                break;
             case Themes.sakuraLight:
                 document.body.className = 'theme-sakura-light';
                 document.querySelector('meta[name=theme-color]')
@@ -47,6 +42,21 @@ export class ThemeService {
                 document.body.className = 'theme-violet-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#5F4B8B');
+                break;
+            case Themes.communistLight:
+                document.body.className = 'theme-communist-light';
+                document.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#df2710');
+                break;
+            case Themes.communistDark:
+                document.body.className = 'theme-communist-dark';
+                document.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#df2710');
+                break;
+            case Themes.kahlaDark:
+                document.body.className = 'theme-dark';
+                document.querySelector('meta[name=theme-color]')
+                    .setAttribute('content', '#18a4f9');
                 break;
             case Themes.kahlaLight:
             default:
