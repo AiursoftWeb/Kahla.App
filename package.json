@@ -2,11 +2,11 @@
   "name": "kahla",
   "version": "3.8.5",
   "description": "Kahla is a cross-platform business messaging app.",
-  "author": "Aiursoft <postmaster@aiursoft.com> (https://www.aiursoft.com/)",
+  "author": "Aiursoft <service@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
     "appId": "com.aiursoft.kahla",
     "productName": "Kahla",
-    "copyright": "Copyright © 2018 Aiursoft",
+    "copyright": "Copyright © 2019 Aiursoft",
     "directories": {
       "app": "www"
     },
