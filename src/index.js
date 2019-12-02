@@ -126,6 +126,9 @@ app.on('ready', () => {
         {
             label: 'Kahla', click: function () { mainWindow.show(); }
         },
+        {
+            label: 'Toggle developer tools', click: function () { mainWindow.toggleDevTools() }
+        },
         { type: 'separator' },
         {
             label: 'Exit', click: function () { app.isQuiting = true; app.quit(); }
