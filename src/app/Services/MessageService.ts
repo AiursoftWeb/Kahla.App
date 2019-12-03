@@ -102,6 +102,7 @@ export class MessageService {
                     this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                     this.reorderLocalMessages();
                     this.updateAtLink();
+                    this.conversationApiService.GetMessage(this.conversation.id, null, 0);
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
