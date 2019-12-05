@@ -6,5 +6,7 @@ export enum Themes {
     violetLight,
     violetDark,
     communistLight,
-    communistDark
+    communistDark,
+    grassLight,
+    grassDark
 }
