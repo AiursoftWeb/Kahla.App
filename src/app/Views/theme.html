@@ -64,3 +64,21 @@
         <i class="fas fa-check"></i>
     </div>
 </div>
+
+<div class="menu-button" (click)="changeTheme(8)">
+    <div class="text" i18n="@@Dark">Grass light</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 8 ? 'visible':'hidden'"
+    >
+        <i class="fas fa-check"></i>
+    </div>
+</div>
+
+<div class="menu-button" (click)="changeTheme(9)">
+    <div class="text" i18n="@@Dark">Grass dark</div>
+    <div class="img checked"
+         [style.visibility]="currentTheme === 9 ? 'visible':'hidden'"
+    >
+        <i class="fas fa-check"></i>
+    </div>
+</div>
