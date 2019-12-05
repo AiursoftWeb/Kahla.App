@@ -56,12 +56,12 @@ export class ThemeService {
             case Themes.grassLight:
                 document.body.className = 'theme-grass-light';
                 document.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#df2710');
+                    .setAttribute('content', '#409344');
                 break;
             case Themes.grassDark:
                 document.body.className = 'theme-grass-dark';
                 document.querySelector('meta[name=theme-color]')
-                    .setAttribute('content', '#df2710');
+                    .setAttribute('content', '#409344');
                 break;
             case Themes.kahlaDark:
                 document.body.className = 'theme-dark';
