@@ -82,7 +82,7 @@ export class ManageGroupComponent implements OnInit {
                         `<b>${inputOptions[willTransfer.value]}(id:${willTransfer.value})</b> <br/> ` +
                         'This operation CANNOT be undone! are you sure to continue?',
                     showCancelButton: true,
-                    type: 'warning'
+                    icon: 'warning'
                 }).then(res => {
                     if (!res.dismiss) {
                         this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
@@ -168,7 +168,7 @@ export class ManageGroupComponent implements OnInit {
                     html: 'Are you sure to kick out ' +
                         `<b>${inputOptions[result.value]}(id:${result.value})</b>?`,
                     showCancelButton: true,
-                    type: 'warning'
+                    icon: 'warning'
                 }).then(confirmAlert => {
                     if (!confirmAlert.dismiss) {
                         this.groupsApiService.KickMember(this.conversation.groupName, result.value)
@@ -189,7 +189,7 @@ export class ManageGroupComponent implements OnInit {
     public dissolveGroup() {
         Swal.fire({
             title: 'Dissolve Group?',
-            type: 'warning',
+            icon: 'warning',
             html: `Are you sure to dissolve group <b>${this.conversation.groupName}?</b><br>This Operation CANNOT be undone!`,
             showCancelButton: true,
             focusCancel: true,

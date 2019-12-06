@@ -56,7 +56,7 @@ export class UserComponent implements OnInit {
     public delete(id: string): void {
         Swal.fire({
             title: 'Are you sure to delete a friend?',
-            type: 'warning',
+            icon: 'warning',
             showCancelButton: true
         }).then((willDelete) => {
             if (willDelete.value) {

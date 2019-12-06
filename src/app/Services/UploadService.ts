@@ -45,7 +45,7 @@ export class UploadService {
             Swal.fire({
                 title: 'Are you sure to send this message?',
                 html: audioHTMLString,
-                type: 'question',
+                icon: 'question',
                 showCancelButton: true
             }).then(result => {
                 if (result.value) {

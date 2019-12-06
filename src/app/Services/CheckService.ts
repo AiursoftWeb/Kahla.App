@@ -45,7 +45,7 @@ export class CheckService {
             Swal.fire({
                 title: 'There is a new version of Kahla!',
                 text: 'Do you want to download the latest version of Kahla now?',
-                type: 'warning',
+                icon: 'warning',
                 confirmButtonText: 'Download now',
                 cancelButtonText: 'Remind me later',
                 showCancelButton: true
@@ -59,7 +59,7 @@ export class CheckService {
             Swal.fire({
                 title: 'There is a new version of Kahla!',
                 text: 'Please refresh then reopen the page to use the latest version.',
-                type: 'warning'
+                icon: 'warning'
             });
         }
     }
