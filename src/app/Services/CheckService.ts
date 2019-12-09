@@ -27,12 +27,12 @@ export class CheckService {
                 const latestAPIVersion: Array<string> = t.apiVersion.split('.');
                 const currentVersion: Array<string> = versions.version.split('.');
                 const downloadAddress: string = t.downloadAddress;
-                if (latestVersion[0] > currentVersion[0] || 
-                    latestVersion[1] > currentVersion[1] || 
+                if (latestVersion[0] > currentVersion[0] ||
+                    latestVersion[1] > currentVersion[1] ||
                     latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
-                } else if (latestAPIVersion[0] > currentVersion[0] || 
-                    latestAPIVersion[1] > currentVersion[1] || 
+                } else if (latestAPIVersion[0] > currentVersion[0] ||
+                    latestAPIVersion[1] > currentVersion[1] ||
                     latestAPIVersion[2] > currentVersion[2]) {
                     Swal.fire('API version mismatch', 'API Level mismatch!', 'warning');
                 } else if (showAlert) {
