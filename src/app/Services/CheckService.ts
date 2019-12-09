@@ -19,21 +19,23 @@ export class CheckService {
         private _electronService: ElectronService
     ) {}
 
-    public checkVersion(checkButton: boolean): void {
+    public checkVersion(showAlert: boolean): void {
         this.checking = true;
         this.authApiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
+                const latestAPIVersion: Array<string> = t.apiVersion.split('.');
                 const currentVersion: Array<string> = versions.version.split('.');
                 const downloadAddress: string = t.downloadAddress;
-                if (latestVersion[0] > currentVersion[0]) {
+                if (latestVersion[0] > currentVersion[0] || 
+                    latestVersion[1] > currentVersion[1] || 
+                    latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
-                } else if (latestVersion[0] === currentVersion[0] && latestVersion[1] > currentVersion[1]) {
-                    this.redirectToDownload(downloadAddress);
-                } else if (latestVersion[0] === currentVersion[0] && latestVersion[1] === currentVersion[1]
-                    && latestVersion[2] > currentVersion[2]) {
-                    this.redirectToDownload(downloadAddress);
-                } else if (checkButton) {
+                } else if (latestAPIVersion[0] > currentVersion[0] || 
+                    latestAPIVersion[1] > currentVersion[1] || 
+                    latestAPIVersion[2] > currentVersion[2]) {
+                    Swal.fire('API version mismatch', 'API Level mismatch!', 'warning');
+                } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
                 this.checking = false;
@@ -58,7 +60,7 @@ export class CheckService {
             // in a browser
             Swal.fire({
                 title: 'There is a new version of Kahla!',
-                text: 'Please refresh then reopen the page to use the latest version.',
+                text: 'Please refresh(Ctrl + F5) or reopen this page to use the latest version.',
                 icon: 'warning'
             });
         }
