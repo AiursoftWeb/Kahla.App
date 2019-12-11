@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
     public SignOut(): void {
         Swal.fire({
             title: 'Are you sure to sign out?',
-            type: 'warning',
+            icon: 'warning',
             showCancelButton: true
         }).then((willSignOut) => {
             if (willSignOut.value) {
@@ -105,7 +105,7 @@ export class SettingsComponent implements OnInit {
                         text: 'Please confirm your email as soon as possible! Or you may lose access \
                             to your account in a few days! Without confirming your email, you won\'t receive \
                             any important notifications and cannot reset your password!',
-                        type: 'warning',
+                        icon: 'warning',
                         confirmButtonText: 'Send Email',
                         showCancelButton: true
                     }).then((sendEmail) => {
@@ -115,13 +115,13 @@ export class SettingsComponent implements OnInit {
                                     Swal.fire({
                                         title: 'Please check your inbox.',
                                         text: 'Email was send to ' + this.cacheService.cachedData.me.email,
-                                        type: 'success'
+                                        icon: 'success'
                                     });
                                 } else {
                                     Swal.fire({
                                         title: 'Error',
                                         text: result.message,
-                                        type: 'error'
+                                        icon: 'error'
                                     });
                                 }
                             });

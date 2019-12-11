@@ -404,7 +404,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 title: `Send "${t.name}" as`,
                 confirmButtonText: 'Image',
                 cancelButtonText: 'File',
-                type: 'question',
+                icon: 'question',
                 showCancelButton: true,
             })).value) {
                 fileType = FileType.Image;
@@ -413,7 +413,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 title: `Send "${t.name}" as`,
                 confirmButtonText: 'Video',
                 cancelButtonText: 'File',
-                type: 'question',
+                icon: 'question',
                 showCancelButton: true,
             })).value) {
                 fileType = FileType.Video;

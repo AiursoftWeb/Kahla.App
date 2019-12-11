@@ -35,7 +35,7 @@ export class FriendshipService {
                 title: 'Are you sure to join the group?',
                 text: group.name,
                 showCancelButton: true,
-                type: 'question'
+                icon: 'question'
             }).then(result => {
                 if (!result.dismiss) {
                     this.joinGroupWithPassword(group.name, '', group.id);

@@ -78,7 +78,7 @@ export class ShareComponent implements OnInit, DoCheck {
                 title: `Share ${msgType}?`,
                 text: `Are you sure to send this ${msgType} to ${name}?`,
                 showCancelButton: true,
-                type: 'question',
+                icon: 'question',
             });
         } else {
             dialog = Swal.fire({

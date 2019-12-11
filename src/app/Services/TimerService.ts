@@ -37,7 +37,7 @@ export class TimerService {
                         if (result.code !== 0) {
                             Swal.fire({
                                 title: 'Error!',
-                                type: 'error',
+                                icon: 'error',
                                 text: result.message
                             });
                         }

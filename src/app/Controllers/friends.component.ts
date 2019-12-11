@@ -73,7 +73,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                 if (!(<HTMLInputElement>document.querySelector('#checkPrivate')).checked) {
                     Swal.fire({
                         title: 'Are you sure to create this group?',
-                        type: 'question',
+                        icon: 'question',
                         showCancelButton: true
                     }).then((result) => {
                         if (result.value) {

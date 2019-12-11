@@ -74,7 +74,7 @@ export class GroupComponent implements OnInit {
         }
         Swal.fire({
             title: alertTitle,
-            type: 'warning',
+            icon: 'warning',
             showCancelButton: true
         }).then((willDelete) => {
             if (willDelete.value) {
