@@ -1,84 +1,43 @@
 <app-header title="Theme" closeDirectly="true"></app-header>
-<div class="menu-button" (click)="changeTheme(0)">
-    <div class="text" i18n="@@Light">Kahla Light</div>
-    <div class="img checked"
-    [style.visibility]="currentTheme === 0 ? 'visible' : 'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(1)">
-    <div class="text" i18n="@@Dark">Kahla Dark</div>
-    <div class="img checked"
-    [style.visibility]="currentTheme === 1 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(2)">
-    <div class="text" i18n="@@Dark">Sakura Light</div>
-    <div class="img checked"
-    [style.visibility]="currentTheme === 2 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(3)">
-    <div class="text" i18n="@@Dark">Sakura Dark</div>
-    <div class="img checked"
-    [style.visibility]="currentTheme === 3 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(4)">
-    <div class="text" i18n="@@Dark">Violet Light</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 4 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(5)">
-    <div class="text" i18n="@@Dark">Violet Dark</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 5 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-<div class="menu-button" (click)="changeTheme(6)">
-    <div class="text" i18n="@@Dark">Communist light</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 6 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
+<div class="menu-header">Primary color</div>
+<div class="select-button-group">
+    <span class="select-button" [class.selected]="primaryColor === 0" (click)="primaryColor = 0;applyTheme();">
+        <span class="color-ellipse" style="background-color: #38cbf0"></span>
+        <span>Kahla</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="primaryColor === 1" (click)="primaryColor = 1;applyTheme();">
+        <span class="color-ellipse" style="background-color: #FB7299"></span>
+        <span>Sakura</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="primaryColor === 2" (click)="primaryColor = 2;applyTheme();">
+        <span class="color-ellipse" style="background-color: #8e44ad"></span>
+        <span>Violet</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="primaryColor === 3" (click)="primaryColor = 3;applyTheme();">
+        <span class="color-ellipse" style="background-color: #bd161e"></span>
+        <span>Communist</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="primaryColor === 4" (click)="primaryColor = 4;applyTheme();">
+        <span class="color-ellipse" style="background-color: #4ba950"></span>
+        <span>Grass</span>
+        <i class="fas fa-check checked"></i>
+    </span>
 </div>
 
-<div class="menu-button" (click)="changeTheme(7)">
-    <div class="text" i18n="@@Dark">Communist dark</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 7 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-
-<div class="menu-button" (click)="changeTheme(8)">
-    <div class="text" i18n="@@Dark">Grass light</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 8 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
-</div>
-
-<div class="menu-button" (click)="changeTheme(9)">
-    <div class="text" i18n="@@Dark">Grass dark</div>
-    <div class="img checked"
-         [style.visibility]="currentTheme === 9 ? 'visible':'hidden'"
-    >
-        <i class="fas fa-check"></i>
-    </div>
+<div class="menu-header">Accent color</div>
+<div class="select-button-group">
+    <span class="select-button" [class.selected]="accentColor === 0" (click)="accentColor = 0;applyTheme();">
+        <span class="color-ellipse" style="background-color: #efeff4"></span>
+        <span>Light</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="accentColor === 1" (click)="accentColor = 1;applyTheme();">
+        <span class="color-ellipse" style="background-color: #2c3e50"></span>
+        <span>Dark</span>
+        <i class="fas fa-check checked"></i>
+    </span>
 </div>
