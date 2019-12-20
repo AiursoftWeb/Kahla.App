@@ -6,7 +6,7 @@ import { Values } from '../values';
 })
 export class ProbeService {
     public encodeProbeFileUrl(filePath: string) {
-        const encoded = filePath = encodeURIComponent(filePath).replace(/%2F/g, '/');
+        const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
         return Values.fileCompatAddress.replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
     }
