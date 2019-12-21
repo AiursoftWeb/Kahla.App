@@ -9,6 +9,7 @@
   vertical-align: baseline;
   border-radius: 0.25rem;
   margin: 0 5px;
+  user-select: none;
 }
 
 .badge-success {
@@ -21,6 +22,11 @@
   background-color: #dc3545;
 }
 
+.badge-offline {
+  color: #fff;
+  background: #999;
+}
+
 .badge-primary {
   color: #fff;
   background-color: #17a2b8 !important;
@@ -28,5 +34,20 @@
 
 .badge-secondary {
   color: #fff;
-  background-color: #0366d6!important;
+  background-color: #0366d6 !important;
+}
+
+.status-badge {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.online {
+  background: #28a745;
+}
+
+.offline {
+  background: #999;
 }

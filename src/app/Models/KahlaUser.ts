@@ -13,4 +13,5 @@
     public themeId: number;
     public enableEmailNotification: boolean;
     public enableEnterToSendMessage: boolean;
+    public isOnline: boolean;
 }

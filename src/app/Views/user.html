@@ -4,6 +4,8 @@
         <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=100&h=100">
     </a>
     <div class="name">
+        <label class="badge badge-success" *ngIf="info.isOnline">Online</label>
+        <label class="badge badge-offline" *ngIf="!info.isOnline">Offline</label>
         {{ info.nickName }}
         <label class="badge badge-secondary"
                *ngIf="info.emailConfirmed && info.email && info.email.endsWith('@aiursoft.com')">Staff</label>
