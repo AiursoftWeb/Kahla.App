@@ -12,4 +12,5 @@ export class ContactInfo {
     public avatarURL: string;
     public muted: boolean;
     public someoneAtMe: boolean;
+    public online: boolean;
 }

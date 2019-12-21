@@ -8,9 +8,6 @@ import { ElectronService } from 'ngx-electron';
                 '../Styles/button.scss']
 })
 export class SignInComponent {
-    public email: string;
-    public password: string;
-    public connecting = false;
     public OAuthURL: string;
 
     constructor(
