@@ -13,6 +13,11 @@
             *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
             <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
                 <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
+                <div class="small-dot"
+                    style="top: -10px; right: -35px;"
+                    [class.greendot]="message.sender.isOnline"
+                    [class.graydot]="!message.sender.isOnline">
+                </div>
             </div>
             <div class="chat-text">
                 <button class="button button--fab" *ngIf="message.resend" (click)="resend(message)">
