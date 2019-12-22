@@ -15,6 +15,7 @@ import { ProbeService } from '../Services/ProbeService';
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
                 '../Styles/toggleButton.scss',
+                '../Styles/reddot.scss',
                 '../Styles/badge.scss']
 })
 

@@ -50,7 +50,14 @@
         <div class="text" i18n="@@GroupMembers">{{ groupMembers }} members</div>
     </div>
     <div class="menu-button" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
-        <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
+        <div>
+            <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
+            <div class="small-dot"
+                style="top:29px; right:-42px;"
+                [class.greendot]="e.user.isOnline"
+                [class.graydot]="!e.user.isOnline">
+            </div>
+        </div>
         <div class="text">
             {{e.user.nickName}}
         </div>
