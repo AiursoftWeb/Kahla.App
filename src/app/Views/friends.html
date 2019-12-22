@@ -64,8 +64,15 @@
 <div class="header-space"></div>
 <div *ngIf="showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let user of results.users" (click)="userClick(user, $event.ctrlKey)">
-        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80"
-             routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();"/>
+        <div>
+            <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80"
+                routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();">
+            <div class="small-dot"
+                style="top:32px; right:-43px;"
+                [class.greendot]="user.isOnline"
+                [class.graydot]="!user.isOnline">
+            </div>
+        </div>
         <div class="sender">
             {{user.nickName}}
         </div>
