@@ -5,6 +5,10 @@
          (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
         <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100"
              (click)="detail(inf); $event.stopPropagation();"/>
+        <div class="small-dot" *ngIf="inf.discriminator === 'PrivateConversation'" 
+            [class.greendot]="inf.online"
+            [class.graydot]="!inf.online">
+        </div>
         <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
             {{inf.unReadAmount}}
         </div>
@@ -26,8 +30,6 @@
         <div class="last-message" *ngIf="inf.latestMessage === null" i18n="@@NoMessage">
             No message. Start talking now!
         </div>
-        <div class="status-badge" *ngIf="inf.discriminator === 'PrivateConversation'" [class.online]="inf.online"
-             [class.offline]="!inf.online"></div>
     </div>
     <div *ngIf="cacheService.cachedData.conversations && cacheService.cachedData.conversations.length == 0">
         <div class="buttons">

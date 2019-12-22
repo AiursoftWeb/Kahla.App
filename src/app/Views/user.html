@@ -2,10 +2,12 @@
 <div *ngIf="info" class="user">
     <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank" rel="noopener noreferrer">
         <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=100&h=100">
+        <div class="small-dot greendot"
+            [class.greendot]="info.isOnline"
+            [class.graydot]="!info.isOnline"
+            style="top:-11px; right:-43px;"></div>
     </a>
     <div class="name">
-        <label class="badge badge-success" *ngIf="info.isOnline">Online</label>
-        <label class="badge badge-offline" *ngIf="!info.isOnline">Offline</label>
         {{ info.nickName }}
         <label class="badge badge-secondary"
                *ngIf="info.emailConfirmed && info.email && info.email.endsWith('@aiursoft.com')">Staff</label>
