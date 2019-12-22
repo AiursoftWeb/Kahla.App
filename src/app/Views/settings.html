@@ -1,7 +1,14 @@
 <app-header title="Me" [returnButton]="false"></app-header>
 
 <div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
-    <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=100&h=100 ">
+    <div class="user-img">
+        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=100&h=100 ">
+        <div class="small-dot greendot"
+            [class.greendot]="info.isOnline"
+            [class.graydot]="!info.isOnline"
+            style="top:-11px; right:-43px;">
+        </div>
+    </div>
     <div class="name">
         {{ cacheService.cachedData.me.nickName }}
         <label class="badge badge-secondary"
