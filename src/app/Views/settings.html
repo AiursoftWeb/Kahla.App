@@ -4,8 +4,8 @@
     <div class="user-img">
         <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=100&h=100 ">
         <div class="small-dot greendot"
-            [class.greendot]="info.isOnline"
-            [class.graydot]="!info.isOnline"
+            [class.greendot]="cacheService.cachedData.me.isOnline"
+            [class.graydot]="!cacheService.cachedData.me.isOnline"
             style="top:-11px; right:-43px;">
         </div>
     </div>
