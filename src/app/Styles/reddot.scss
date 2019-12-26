@@ -15,10 +15,30 @@
   text-overflow: ellipsis;
 }
 
+.small-dot {
+  top: 52px;
+  right: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  // margin-left: 45px;
+  // margin-top: -11px;
+  position: relative;
+  float: left;
+}
+
 .reddot {
   background-color: #E53935;
 }
 
 .bluedot {
   background-color: #17a2b8;
+}
+
+.graydot {
+  background-color: #999;
+}
+
+.greendot {
+  background-color: lightgreen;
 }

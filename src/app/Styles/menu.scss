@@ -146,3 +146,47 @@ a {
 .d-none {
   display: none !important;
 }
+
+.select-button-group {
+  margin: 4px 10px 4px 10px;
+}
+
+.select-button {
+  display: inline-flex;
+  align-items: center;
+  background: var(--selectable-bg);
+  border: var(--selectable-border-color) 2px solid;
+  border-radius: 16px;
+  margin: 4px;
+  padding: 8px;
+  user-select: none;
+  font-size: 15px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: var(--selectable-hover-bg);
+  }
+
+  .checked {
+    visibility: hidden;
+    margin-left: 6px;
+  }
+
+  &.selected {
+    background: var(--primary-color-depth3);
+    color: white;
+
+    .checked {
+      visibility: visible;
+    }
+  }
+}
+
+.color-ellipse {
+  width: 16px;
+  height: 16px;
+  border-radius: 16px;
+  display: inline-block;
+  border: white solid 2px;
+  margin-right: 4px;
+}

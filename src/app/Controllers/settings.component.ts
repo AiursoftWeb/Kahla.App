@@ -14,6 +14,7 @@ import { ProbeService } from '../Services/ProbeService';
     selector: 'app-settings',
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.scss',
+                '../Styles/reddot.scss',
                 '../Styles/button.scss',
                 '../Styles/badge.scss']
 })

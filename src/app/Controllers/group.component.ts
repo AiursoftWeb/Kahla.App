@@ -15,6 +15,7 @@ import { ProbeService } from '../Services/ProbeService';
     styleUrls: ['../Styles/menu.scss',
                 '../Styles/button.scss',
                 '../Styles/toggleButton.scss',
+                '../Styles/reddot.scss',
                 '../Styles/badge.scss']
 })
 
@@ -66,7 +67,7 @@ export class GroupComponent implements OnInit {
     }
 
     public leaveGroup(groupName: string): void {
-        let alertTitle = '';
+        let alertTitle: string;
         if (this.groupMembers === 1) {
             alertTitle = 'This group will be deleted, are you sure?';
         } else {

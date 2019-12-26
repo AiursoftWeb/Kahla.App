@@ -11,7 +11,8 @@ import { HomeService } from '../Services/HomeService';
     templateUrl: '../Views/conversations.html',
     styleUrls: ['../Styles/conversations.scss',
         '../Styles/reddot.scss',
-        '../Styles/button.scss']
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
