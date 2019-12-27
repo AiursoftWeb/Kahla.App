@@ -1,7 +1,9 @@
 <app-header title="Group Info"></app-header>
 <div *ngIf="conversation" class="user">
-    <a class="user-img groupGridRow" href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}" target="_blank" rel="noopener noreferrer">
-        <img class="user-img groupGridRow" src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
+    <a class="user-img groupGridRow" href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}"
+       target="_blank" rel="noopener noreferrer">
+        <img class="user-img groupGridRow"
+             src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
     </a>
     <div class="name">
         {{conversation.displayName}}
@@ -23,6 +25,12 @@
         <i class="fas fa-comments"></i>
     </div>
     <div class="text" i18n="@@Message">Message</div>
+</div>
+<div class="menu-button" routerLink="/file-history/{{ conversation ? conversation.id : 0 }}">
+    <div class="img">
+        <i class="fas fa-history"></i>
+    </div>
+    <div class="text" i18n="@@Message">File History</div>
 </div>
 
 <div class="menu-button notification" (click)="mute()">
@@ -53,9 +61,9 @@
         <div>
             <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
             <div class="small-dot"
-                style="top:29px; right:-42px;"
-                [class.greendot]="e.user.isOnline"
-                [class.graydot]="!e.user.isOnline">
+                 style="top:29px; right:-42px;"
+                 [class.greendot]="e.user.isOnline"
+                 [class.graydot]="!e.user.isOnline">
             </div>
         </div>
         <div class="text">
