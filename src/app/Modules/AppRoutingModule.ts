@@ -16,23 +16,25 @@ import { AdvancedSettingComponent } from '../Controllers/advanced-setting.compon
 import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 import { HomeComponent } from '../Controllers/home.component';
 import { ShareComponent } from '../Controllers/share.component';
+import { FileHistoryComponent } from '../Controllers/file-history.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
-    { path: 'addfriend', component: AddFriendComponent },
-    { path: 'friendrequests', component: FriendRequestsComponent },
-    { path: 'talking/:id', component: TalkingComponent },
-    { path: 'talking/:id/:unread', component: TalkingComponent },
-    { path: 'user/:id', component: UserComponent },
-    { path: 'signin', component: SignInComponent },
-    { path: 'about', component: AboutComponent },
-    { path: 'userInfo', component: UserDetailComponent },
-    { path: 'group/:id', component: GroupComponent },
+    {path: 'addfriend', component: AddFriendComponent},
+    {path: 'friendrequests', component: FriendRequestsComponent},
+    {path: 'talking/:id', component: TalkingComponent},
+    {path: 'file-history/:id', component: FileHistoryComponent},
+    {path: 'talking/:id/:unread', component: TalkingComponent},
+    {path: 'user/:id', component: UserComponent},
+    {path: 'signin', component: SignInComponent},
+    {path: 'about', component: AboutComponent},
+    {path: 'userInfo', component: UserDetailComponent},
+    {path: 'group/:id', component: GroupComponent},
     {path: 'managegroup/:id', component: ManageGroupComponent},
-    { path: 'changepassword', component: ChangePasswordComponent },
-    { path: 'discover', component: DiscoverComponent },
-    { path: 'devices', component: DevicesComponent },
+    {path: 'changepassword', component: ChangePasswordComponent},
+    {path: 'discover', component: DiscoverComponent},
+    {path: 'devices', component: DevicesComponent},
     { path: 'theme', component: ThemeComponent},
     {path: 'advanced-setting', component: AdvancedSettingComponent},
     { path: 'share-target', component: ShareComponent }

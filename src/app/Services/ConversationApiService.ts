@@ -7,6 +7,7 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurValue } from '../Models/AiurValue';
 import { Conversation } from '../Models/Conversation';
 import { ContactInfo } from '../Models/ContactInfo';
+import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
 
 @Injectable()
 export class ConversationApiService {
@@ -52,5 +53,9 @@ export class ConversationApiService {
             Id: id,
             NewLifeTime: newLifeTime
         });
+    }
+
+    public FileHistory(id: number): Observable<FileHistoryApiModel> {
+        return this.apiService.Get(ConversationApiService.serverPath + `/FileHistory/${id}`);
     }
 }

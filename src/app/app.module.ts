@@ -28,6 +28,7 @@ import { AdvancedSettingComponent } from './Controllers/advanced-setting.compone
 import { ManageGroupComponent } from './Controllers/manageGroup.component';
 import { HomeComponent } from './Controllers/home.component';
 import { ShareComponent } from './Controllers/share.component';
+import { FileHistoryComponent } from './Controllers/file-history.component';
 // Services
 import { ApiService } from './Services/ApiService';
 import { ParamService } from './Services/ParamService';
@@ -78,7 +79,8 @@ import { ProbeService } from './Services/ProbeService';
         AdvancedSettingComponent,
         ManageGroupComponent,
         HomeComponent,
-        ShareComponent
+        ShareComponent,
+        FileHistoryComponent,
     ],
     providers: [
         ApiService,
