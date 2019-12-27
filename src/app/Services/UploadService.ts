@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AES } from 'crypto-js';
 import { FilesApiService } from './FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import { UploadFile } from '../Models/UploadFile';
+import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
