@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AES } from 'crypto-js';
 import { FilesApiService } from './FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import { UploadFile } from '../Models/UploadFile';
+import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
@@ -282,19 +282,6 @@ export class UploadService {
     }
 
     private formatFileMessage(response: UploadFile, fileName: string): string {
-        let message = `[file]${response.filePath}|${fileName}|`;
-        const units = ['kB', 'MB', 'GB'];
-        const thresh = 1000;
-        if (response.fileSize < thresh) {
-            message += response.fileSize + ' B';
-        } else {
-            let index = -1;
-            do {
-                response.fileSize /= thresh;
-                index++;
-            } while (response.fileSize >= thresh && index < units.length - 1);
-            message += response.fileSize.toFixed(1) + ' ' + units[index];
-        }
-        return message;
+        return `[file]${response.filePath}|${fileName}|${this.probeService.getFileSizeText(response.fileSize)}`;
     }
 }
