@@ -19,7 +19,7 @@ export class CheckService {
         private _electronService: ElectronService
     ) {}
 
-    public checkVersion(showSuccessAlert: boolean): void {
+    public checkVersion(showAlert: boolean): void {
         this.checking = true;
         this.authApiService.Version()
             .subscribe(t => {
@@ -34,8 +34,8 @@ export class CheckService {
                 } else if (latestAPIVersion[0] > currentVersion[0] ||
                     latestAPIVersion[1] > currentVersion[1] ||
                     latestAPIVersion[2] > currentVersion[2]) {
-
-                } else if (showSuccessAlert) {
+                    Swal.fire('API version mismatch', 'API Level mismatch!', 'warning');
+                } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
                 this.checking = false;
