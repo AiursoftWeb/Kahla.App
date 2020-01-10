@@ -31,10 +31,11 @@ export class CheckService {
                     latestVersion[1] > currentVersion[1] ||
                     latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress);
-                } else if (latestAPIVersion[0] > currentVersion[0] ||
-                    latestAPIVersion[1] > currentVersion[1] ||
-                    latestAPIVersion[2] > currentVersion[2]) {
-                    Swal.fire('API version mismatch', 'API Level mismatch!', 'warning');
+                } else if (
+                    latestAPIVersion[0] > currentVersion[0] ||
+                    latestAPIVersion[1] > currentVersion[1]) {
+                    Swal.fire('API version mismatch', 'API level is too far from client! You have to upgrade now!', 'warning');
+                    this.redirectToDownload(downloadAddress);
                 } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
