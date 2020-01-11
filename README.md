@@ -1,8 +1,8 @@
 <p align="center">
-<a href="https://www.kahla.app/"><img src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/dev/src/assets/144x144.png"></a>
+    <a href="https://www.kahla.app/"><img src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/dev/src/assets/144x144.png"></a>
+    <h3 align="center">Kahla</h3>
+    <p align="center">Kahla is a cross-platform business messaging app.<p>
 </p>
-
-# Kahla
 
 [![Build status](https://aiursoft.visualstudio.com/Star/_apis/build/status/Kahla%20App%20Build)](https://aiursoft.visualstudio.com/Star/_build/latest?definitionId=4)
 [![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]() 
@@ -12,7 +12,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/AiursoftWeb/Kahla.App.svg?style=flat)](https://github.com/AiursoftWeb/Kahla.App/graphs/contributors)
 [![LICENSE](https://img.shields.io/github/license/AiursoftWeb/Kahla.App)](https://github.com/AiursoftWeb/Kahla.App/blob/dev/LICENSE)
 
-Welcome to Kahla. Kahla is a cross-platform business messaging app. Kahla also achieved one target to use one copy of code and target all platforms.
+------
 
 <p align="center">
 <img src="https://ui.aiursoft.com/images/kahla-demo.png" alt="screenshot" width="500"/>
