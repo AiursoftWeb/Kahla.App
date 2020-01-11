@@ -15,7 +15,7 @@
 ------
 
 <p align="center">
-<img src="https://ui.aiursoft.com/images/kahla-demo-wide.png" alt="screenshot" width="1000"/>
+<img src="http://ui.aiursoft.com/images/kahla-demo-wide2.png" alt="screenshot" width="1000"/>
 </p>
 
 Try it here: [web.kahla.app](https://web.kahla.app)
