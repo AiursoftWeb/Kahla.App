@@ -55,6 +55,11 @@
         color: var(--primary-color-depth1);
       }
 
+      &:active {
+        background-color: var(--selectable-active-bg);
+        color: var(--primary-color-depth1);
+      }
+
       &.current {
         color: var(--primary-color-depth2);
       }
