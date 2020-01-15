@@ -17,4 +17,8 @@
   &:hover {
     background-color: var(--selectable-hover-bg);
   }
+
+  &:active {
+    background-color: var(--selectable-active-bg);
+  }
 }
