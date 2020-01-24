@@ -38,11 +38,13 @@ export class AuthApiService {
 
     public UpdateClientSetting(themeId: number = null,
                                enableEmailNotification: boolean = null,
-                               enableEnterToSendMessage: boolean = null): Observable<AiurProtocal> {
+                               enableEnterToSendMessage: boolean = null,
+                               enableInvisiable: boolean = null): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,
+            EnableInvisiable: enableInvisiable,
         });
     }
 

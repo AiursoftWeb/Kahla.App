@@ -20,14 +20,37 @@
     You can still insert a line break with Ctrl+Enter if you enable it.
 </div>
 <div class="menu-header">
+    Privacy
+</div>
+<div class="menu-button notification" (click)="this.me.makeEmailPublic = !this.me.makeEmailPublic; updateSettings()"
+     *ngIf="this.me">
+    <div class="img">
+        <i class="fas fa-envelope"></i>
+    </div>
+    <div class="text" i18n="@@Notification">Make my email public</div>
+    <input id="toggleEmail" class="tgl" type="checkbox" [checked]="me.makeEmailPublic"/>
+    <label for="toggleEmail" class="tgl-btn"></label>
+</div>
+<div class="menu-button notification" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
+     *ngIf="this.me">
+    <div class="img">
+        <i class="fas fa-envelope"></i>
+    </div>
+    <div class="text" i18n="@@Notification">Always offline</div>
+    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="me.enableInvisiable"/>
+    <label for="toggleInvisible" class="tgl-btn"></label>
+</div>
+<div class="menu-header">
     Notification
 </div>
-<div class="menu-button notification" (click)="updateEmailNotify()" *ngIf="this.me && me.emailConfirmed">
+<div class="menu-button notification"
+     (click)="this.me.enableEmailNotification = !this.me.enableEmailNotification; updateSettings()"
+     *ngIf="this.me && me.emailConfirmed">
     <div class="img">
         <i class="fas fa-envelope"></i>
     </div>
     <div class="text" i18n="@@Notification">Email Notification</div>
-    <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification" />
+    <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification"/>
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
 <div class="menu-button" routerLink="/devices">
