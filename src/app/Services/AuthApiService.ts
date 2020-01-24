@@ -27,24 +27,25 @@ export class AuthApiService {
         return this.apiService.Get(AuthApiService.serverPath + '/Me');
     }
 
-    public UpdateInfo(nickName: string, bio: string, headIconPath: string, hideMyEmail: boolean): Observable<AiurProtocal> {
+    public UpdateInfo(nickName: string, bio: string, headIconPath: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateInfo', {
             nickName: nickName,
             bio: bio,
             headIconPath: headIconPath,
-            hideMyEmail: hideMyEmail
         });
     }
 
     public UpdateClientSetting(themeId: number = null,
                                enableEmailNotification: boolean = null,
                                enableEnterToSendMessage: boolean = null,
-                               enableInvisiable: boolean = null): Observable<AiurProtocal> {
+                               enableInvisiable: boolean = null,
+                               makeEmailPublic: boolean = null): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,
             EnableInvisiable: enableInvisiable,
+            MakeEmailPublic: makeEmailPublic,
         });
     }
 

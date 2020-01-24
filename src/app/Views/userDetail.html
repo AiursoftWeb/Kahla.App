@@ -16,13 +16,6 @@
     <label>Bio</label>
     <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
-
-  <div class="profile hide-email">
-    <div class="text">Hide email</div>
-    <div class="email">{{ this.user.email }}</div>
-    <input id="toggleHideEmail" class="tgl" type="checkbox" [checked]="!user.makeEmailPublic"/>
-    <label for="toggleHideEmail" class="tgl-btn"></label>
-  </div>
   <div class="buttons">
     <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>
   </div>

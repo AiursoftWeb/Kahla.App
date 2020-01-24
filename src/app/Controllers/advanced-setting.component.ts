@@ -46,7 +46,8 @@ export class AdvancedSettingComponent implements OnInit {
         this.updatingSetting = this.authApiService.UpdateClientSetting(null,
             this.me.enableEmailNotification,
             this.me.enableEnterToSendMessage,
-            this.me.enableInvisiable)
+            this.me.enableInvisiable,
+            this.me.makeEmailPublic)
             .subscribe(res => {
                 this.updatingSetting = null;
 

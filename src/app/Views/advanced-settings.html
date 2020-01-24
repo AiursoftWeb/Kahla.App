@@ -8,7 +8,8 @@
     </div>
     <div class="text" i18n="@@Language">Language</div>
 </div>
-<div class="menu-button notification" (click)="updateEnterSend()" *ngIf="this.me">
+<div class="menu-button notification"
+     (click)="this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage; updateSettings()" *ngIf="this.me">
     <div class="img">
         <i class="fas fa-exchange-alt"></i>
     </div>
@@ -28,7 +29,7 @@
         <i class="fas fa-envelope"></i>
     </div>
     <div class="text" i18n="@@Notification">Make my email public</div>
-    <input id="toggleEmail" class="tgl" type="checkbox" [checked]="me.makeEmailPublic"/>
+    <input id="toggleEmail" class="tgl" type="checkbox" [checked]="this.me.makeEmailPublic"/>
     <label for="toggleEmail" class="tgl-btn"></label>
 </div>
 <div class="menu-button notification" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
