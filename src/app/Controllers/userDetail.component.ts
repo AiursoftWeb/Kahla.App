@@ -60,9 +60,7 @@ export class UserDetailComponent implements OnInit {
     public save(): void {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        const hideEmail = (<HTMLInputElement>document.querySelector('#toggleHideEmail')).checked;
-        this.user.makeEmailPublic = !hideEmail;
-        this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath, hideEmail)
+        this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath)
             .subscribe((response) => {
                 if (response.code === 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.user);

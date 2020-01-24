@@ -5,17 +5,19 @@ import Swal from 'sweetalert2';
 import { DevicesApiService } from '../Services/DevicesApiService';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
+import { Subscription } from 'rxjs';
+
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
     styleUrls: ['../Styles/menu.scss',
-                '../Styles/button.scss',
-                '../Styles/toggleButton.scss']
+        '../Styles/button.scss',
+        '../Styles/toggleButton.scss']
 })
 export class AdvancedSettingComponent implements OnInit {
 
     public me: KahlaUser;
-    public updatingSetting = false;
+    public updatingSetting: Subscription;
 
     constructor(
         private authApiService: AuthApiService,
@@ -36,34 +38,26 @@ export class AdvancedSettingComponent implements OnInit {
         }
     }
 
-    public updateEmailNotify(): void {
-        if (!this.updatingSetting) {
-            this.updatingSetting = true;
-            this.authApiService.UpdateClientSetting(null, !this.me.enableEmailNotification).subscribe(res => {
-                this.updatingSetting = false;
-                if (res.code === 0) {
-                    this.cacheService.cachedData.me
-                        .enableEmailNotification = this.me.enableEmailNotification = !this.me.enableEmailNotification;
-                  } else {
-                    Swal.fire('Error', res.message, 'error');
-                  }
-            });
+    public updateSettings(): void {
+        if (this.updatingSetting && !this.updatingSetting.closed) {
+            this.updatingSetting.unsubscribe();
+            this.updatingSetting = null;
         }
-    }
+        this.updatingSetting = this.authApiService.UpdateClientSetting(null,
+            this.me.enableEmailNotification,
+            this.me.enableEnterToSendMessage,
+            this.me.enableInvisiable,
+            this.me.makeEmailPublic)
+            .subscribe(res => {
+                this.updatingSetting = null;
 
-    public updateEnterSend(): void {
-        if (!this.updatingSetting) {
-            this.updatingSetting = true;
-            this.authApiService.UpdateClientSetting(null, null, !this.me.enableEnterToSendMessage).subscribe(res => {
-                this.updatingSetting = false;
                 if (res.code === 0) {
-                    this.cacheService.cachedData.me
-                        .enableEnterToSendMessage = this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage;
+                    this.cacheService.cachedData.me = Object.assign({}, this.me);
+                    this.cacheService.saveCache();
                 } else {
                     Swal.fire('Error', res.message, 'error');
                 }
             });
-        }
     }
 
     public testPush(): void {
