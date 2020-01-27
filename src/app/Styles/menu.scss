@@ -77,6 +77,10 @@
     background-color: var(--default-foreground-20);
   }
 
+  &.menu-button-transparent:active {
+    background-color: var(--default-foreground-40);
+  }
+
   > * {
     margin: auto;
   }
@@ -109,7 +113,7 @@
   }
 
   &.notification {
-    grid-template-columns: 15% auto auto;
+    grid-template-columns: 15% auto 15%;
   }
 }
 
@@ -165,6 +169,10 @@ a {
 
   &:hover {
     background: var(--selectable-hover-bg);
+  }
+
+  &:active {
+    background: var(--selectable-active-bg);
   }
 
   .checked {

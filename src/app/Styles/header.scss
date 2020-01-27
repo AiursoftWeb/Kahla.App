@@ -32,7 +32,11 @@
 
 .header {
   .headerButton:hover {
-    background-color: rgba(230, 230, 230, 0.4);
+    background-color: transparentize(#fff, 0.8);
+  }
+
+  .headerButton:active {
+    background-color: transparentize(#fff, 0.6);
   }
 
   .text {

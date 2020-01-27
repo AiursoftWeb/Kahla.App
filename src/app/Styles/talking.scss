@@ -357,7 +357,11 @@
 
         label {
           &:hover {
-            background-color: var(--selectable-hover-bg);
+            background-color: var(--default-foreground-20);
+          }
+
+          &:active {
+            background-color: var(--default-foreground-40);
           }
 
           text-align: center;

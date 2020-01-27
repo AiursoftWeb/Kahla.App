@@ -1,31 +1,37 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js');
 
 const CACHE = 'v4';
+const UPDATE_REQUIRED = '__Update_Required__';
+const UPDATE_COMPLETED = '__Update_Completed__';
+
+//region cache-control
+
+function installCache() {
+    return caches.open(CACHE).then(function (cache) {
+        return cache.addAll([
+            '/index.html',
+            '/main.js',
+            '/manifest.json',
+            '/polyfills.js',
+            '/runtime.js',
+            '/styles.js',
+            '/vendor.js',
+            '/favicon.ico',
+            '/fa-solid-900.woff2',
+            '/fa-regular-400.woff2',
+            '/fa-brands-400.woff2',
+            '/assets/144x144.png'
+        ]);
+    });
+}
 
 self.addEventListener('install', function (event) {
-    event.waitUntil(
-        caches.open(CACHE).then(function (cache) {
-            return cache.addAll([
-                '/index.html',
-                '/main.js',
-                '/manifest.json',
-                '/polyfills.js',
-                '/runtime.js',
-                '/styles.js',
-                '/vendor.js',
-                '/favicon.ico',
-                '/fa-solid-900.woff2',
-                '/fa-regular-400.woff2',
-                '/fa-brands-400.woff2',
-                '/assets/144x144.png'
-            ]);
-        })
-    );
+    event.waitUntil(installCache());
 });
 
 self.addEventListener('fetch', function (event) {
     // bypass upload request
-    if (event.request.method != 'GET') {
+    if (event.request.method !== 'GET') {
         return;
     }
 
@@ -34,7 +40,6 @@ self.addEventListener('fetch', function (event) {
             return response || fetch(event.request);
         })
     );
-
     event.waitUntil(
         caches.match(event.request).then(function (response) {
             if (response) {
@@ -61,6 +66,26 @@ self.addEventListener('activate', function (event) {
         })
     );
 });
+
+self.addEventListener('message', function (event) {
+    if (event.data === UPDATE_REQUIRED) {
+        console.log('Force Cache Upgrade triggered.');
+        caches.delete(CACHE).then(() => {
+            return installCache();
+        }).then(() => {
+            self.clients.matchAll().then(clients => {
+                console.log(clients);
+                for (let i = 0; i < clients.length; i++) {
+                    clients[i].postMessage(UPDATE_COMPLETED);
+                }
+            })
+        })
+    }
+});
+
+//endregion
+
+//region Notifications
 
 self.addEventListener('notificationclick', function (event) {
     const data = event.notification.data;
@@ -167,3 +192,5 @@ self.addEventListener('push', function (event) {
         });
     }
 });
+
+//endregion Notifications

@@ -17,7 +17,28 @@ export class CheckService {
     constructor(
         private authApiService: AuthApiService,
         private _electronService: ElectronService
-    ) {}
+    ) {
+        if (this.checkSwCache()) {
+            navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
+                if (t.data === '__Update_Completed__') {
+                    Swal.fire('Update Completed', 'Refresh to apply your upgrade.', 'success');
+                    Swal.fire({
+                        title: 'Update Completed',
+                        html: 'Refresh to apply your upgrade.<br/>Do you want to refresh now?',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Refresh',
+                        showCancelButton: true,
+                        cancelButtonText: 'Later'
+                    }).then(t_ => {
+                        if (t_.value) {
+                            document.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    }
 
     public checkVersion(showAlert: boolean): void {
         this.checking = true;
@@ -30,11 +51,12 @@ export class CheckService {
                 if (latestVersion[0] > currentVersion[0] ||
                     latestVersion[1] > currentVersion[1] ||
                     latestVersion[2] > currentVersion[2]) {
-                    this.redirectToDownload(downloadAddress);
-                } else if (latestAPIVersion[0] > currentVersion[0] ||
-                    latestAPIVersion[1] > currentVersion[1] ||
-                    latestAPIVersion[2] > currentVersion[2]) {
-                    Swal.fire('API version mismatch', 'API Level mismatch!', 'warning');
+                    this.redirectToDownload(downloadAddress, showAlert);
+                } else if (
+                    latestAPIVersion[0] > currentVersion[0] ||
+                    latestAPIVersion[1] > currentVersion[1]) {
+                    Swal.fire('API version mismatch', 'API level is too far from client! You have to upgrade now!', 'warning');
+                    this.redirectToDownload(downloadAddress, true);
                 } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
@@ -42,8 +64,8 @@ export class CheckService {
             });
     }
 
-    private redirectToDownload(downloadAddress: string): void {
-        if (window.hasOwnProperty('cordova') || this._electronService.isElectronApp) {
+    private redirectToDownload(downloadAddress: string, showAlert: boolean = false): void {
+        if (this._electronService.isElectronApp) {
             Swal.fire({
                 title: 'There is a new version of Kahla!',
                 text: 'Do you want to download the latest version of Kahla now?',
@@ -56,14 +78,32 @@ export class CheckService {
                     this.openWebPage(downloadAddress);
                 }
             });
+        } else if (this.checkSwCache()) {
+            this.updateServiceWorkerCache();
+            if (showAlert) {
+                Swal.fire({
+                    title: 'There is a new version of Kahla!',
+                    text: 'We are upgrading automatically at the background.\n You will be notified when done.',
+                    icon: 'warning'
+                });
+            }
+
         } else {
-            // in a browser
+            // in a browser without serviceworker
             Swal.fire({
                 title: 'There is a new version of Kahla!',
                 text: 'Please refresh(Ctrl + F5) or reopen this page to use the latest version.',
                 icon: 'warning'
             });
         }
+    }
+
+    public updateServiceWorkerCache() {
+        navigator.serviceWorker.controller.postMessage('__Update_Required__');
+    }
+
+    public checkSwCache(): boolean {
+        return !this._electronService.isElectronApp && 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
     }
 
     public openWebPage(url: string): void {
