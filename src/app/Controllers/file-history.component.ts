@@ -16,6 +16,7 @@ import { ProbeService } from '../Services/ProbeService';
 export class FileHistoryComponent implements OnInit {
 
     public files: FileHistoryApiModel;
+    public loaded = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -26,11 +27,13 @@ export class FileHistoryComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loaded = false;
         this.route.params.pipe(switchMap(param => {
             return this.conversationApiService.FileHistory(param.id);
         })).subscribe(t => {
+            this.loaded = true;
             if (t.code === 0) {
-                t.items.reverse();
+                t.items = t.items.filter(x => (x.files && x.files.length > 0)).reverse();
                 this.files = t;
             }
         });
