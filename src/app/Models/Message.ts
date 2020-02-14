@@ -7,6 +7,7 @@ export class Message {
     public sender: KahlaUser;
     public sendTime: string;
     public content: string;
+    public groupWithPrevious: boolean;
 
     public resend: boolean;
     public contentRaw: string;

@@ -29,13 +29,17 @@
     height: 40px;
     display: inline-block;
     text-align: center;
-    cursor: pointer;
 
     img {
+      cursor: pointer;
       width: 100%;
       height: 100%;
       border-radius: 4px;
       user-select: none;
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 
@@ -47,11 +51,11 @@
     float: right;
   }
 
-  .chat-text {
+  .message-block {
     display: block;
     font-size: 12px;
     width: 70%;
-    margin-bottom: 1.5%;
+    margin-bottom: 8px;
 
     * {
       vertical-align: middle;
@@ -67,13 +71,13 @@
     }
   }
 
-  .left .chat-text {
+  .left .message-block {
     float: left;
     text-align: left;
     margin-left: 12px;
   }
 
-  .right .chat-text {
+  .right .message-block {
     float: right;
     text-align: right;
     margin-right: 12px;
@@ -87,7 +91,7 @@
     user-select: none;
   }
 
-  .chat-content {
+  .message-balloon {
     border-radius: 8px;
     color: white;
     padding: 10px;
@@ -102,13 +106,13 @@
       white-space: pre-wrap;
     }
 
+    &.balloon-grouped:after, &.single-emoji:after {
+      border-left: unset !important;
+      border-right: unset !important;
+    }
+
     &.single-emoji {
       background: transparent !important;
-
-      &:after {
-        border-left: unset !important;
-        border-right: unset !important;
-      }
 
       p {
         font-size: 64px;
@@ -134,7 +138,7 @@
     }
   }
 
-  .left .chat-content {
+  .left .message-balloon {
     border-color: var(--talking-chat-bg);
     color: var(--default-textcolor);
     background: var(--talking-chat-bg);
@@ -146,7 +150,7 @@
     }
   }
 
-  .right .chat-content {
+  .right .message-balloon {
     background: linear-gradient(120deg, var(--primary-color-depth3) 0%, var(--primary-color-depth2) 100%);
 
     &::after {
@@ -193,10 +197,6 @@
   color: var(--minor-textcolor);
 }
 
-.chat-avatar:focus {
-  outline: none;
-}
-
 .image-container {
   position: relative;
   max-height: 1000px;
@@ -207,7 +207,7 @@
   }
 }
 
-.message-list .chat-content video {
+.message-list .message-balloon video {
   width: 100%;
 }
 
@@ -396,25 +396,25 @@ i {
   right: 20px;
 }
 
-.chat-text a {
+.message-block a {
   text-decoration: none;
 }
 
 .left {
-  .chat-text a,
-  .chat-content .voicemsg span {
+  .message-block a,
+  .message-balloon .voicemsg span {
     color: #9baec8;
   }
 }
 
 .right {
-  .chat-text a,
-  .chat-content .voicemsg span {
+  .message-block a,
+  .message-balloon .voicemsg span {
     color: #d9e1e8;
   }
 }
 
-.right .chat-content span {
+.right .message-balloon span {
   color: #fff;
 }
 
@@ -452,7 +452,7 @@ i {
   }
 }
 
-.message-list .chat-content .voicemsg {
+.message-list .message-balloon .voicemsg {
   align-items: center;
   display: grid;
   grid-template-columns: 40px 2fr;
