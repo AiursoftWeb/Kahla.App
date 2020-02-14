@@ -19,12 +19,30 @@
   background-color: var(--default-background);
 
   li {
-    margin-bottom: 25px;
     clear: both;
     box-sizing: border-box;
   }
 
+  .message-line {
+    display: flex;
+    width: 100%;
+    margin-bottom: 8px;
+
+    &.grouped {
+      margin-bottom: 4px;
+    }
+  }
+
+  .left .message-line {
+    flex-direction: row;
+  }
+
+  .right .message-line {
+    flex-direction: row-reverse;
+  }
+
   .chat-avatar {
+    flex: 0 0 auto;
     width: 40px;
     height: 40px;
     display: inline-block;
@@ -43,19 +61,11 @@
     }
   }
 
-  .left .chat-avatar {
-    float: left;
-  }
-
-  .right .chat-avatar {
-    float: right;
-  }
-
   .message-block {
     display: block;
     font-size: 12px;
-    width: 70%;
-    margin-bottom: 8px;
+    flex: 0 1 auto;
+    max-width: 70%;
 
     * {
       vertical-align: middle;
@@ -72,23 +82,25 @@
   }
 
   .left .message-block {
-    float: left;
     text-align: left;
     margin-left: 12px;
   }
 
   .right .message-block {
-    float: right;
     text-align: right;
     margin-right: 12px;
   }
 
   .last-read-bar {
     color: var(--primary-color-depth2);
-    clear: both;
     font-weight: 800;
+  }
+
+  .last-read-bar, .date-bar {
+    clear: both;
     font-size: 14px;
     user-select: none;
+    margin: 6px 0 6px 0;
   }
 
   .message-balloon {
@@ -160,16 +172,27 @@
     }
   }
 
+  .sendTime {
+    color: #aaa;
+    flex: 0 1 auto;
+    align-self: center;
+    margin: 0 0 0 0;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+  }
+
   .left .sendTime {
-    margin: 0.5% 0 0 1%;
+    transform: translateX(-30px);
   }
 
   .right .sendTime {
-    margin: 0.5% 1% 0 0;
+    transform: translateX(30px);
   }
 
-  .sendTime {
-    color: #aaa;
+  .message-block:hover ~ .sendTime, .sendTime.show {
+    opacity: 1;
+    transform: translateX(0) !important;
+    flex: 0 0 auto;
   }
 
   .sendFail {

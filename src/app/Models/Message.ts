@@ -9,6 +9,7 @@ export class Message {
     public content: string;
     public groupWithPrevious: boolean;
 
+    public sendTimeDate: Date;
     public resend: boolean;
     public contentRaw: string;
     public isEmoji = false;
