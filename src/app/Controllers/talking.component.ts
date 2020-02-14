@@ -250,6 +250,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.content = this.content;
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;
+        tempMessage.groupWithPrevious = this.messageService.localMessages
+            [this.messageService.localMessages.length - 1].senderId === this.cacheService.cachedData.me.id;
         tempMessage.sendTime = new Date().toISOString();
         tempMessage.local = true;
         this.messageService.modifyMessage(tempMessage, false);
@@ -515,9 +517,5 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const group = <GroupsResult>msg.relatedData;
             this.friendshipService.joinGroup(group, true);
         }
-    }
-
-    public localDate(date: string): string {
-        return new Date(date).toLocaleString();
     }
 }
