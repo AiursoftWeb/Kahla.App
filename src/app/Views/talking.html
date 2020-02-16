@@ -6,29 +6,42 @@
             i18n="@@ClickToLoadMore">Click to load more
     </button>
     <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages; last as isLast"
-        [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id, 'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
-        <div class="last-read-bar" *ngIf="message.lastRead">--- LAST READ ---</div>
+    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages; last as isLast; let i = index"
+        [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id,
+         'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
+        <div *ngIf="message.lastRead">
+            <div class="last-read-bar">LAST READ</div>
+        </div>
         <div
-            *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
-            <div class="chat-avatar" routerLink="/user/{{message.senderId}}">
-                <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
-                <div class="small-dot"
-                    style="top: -10px; right: -35px;"
-                    [class.greendot]="message.sender.isOnline"
-                    [class.graydot]="!message.sender.isOnline">
+            *ngIf="i === 0 || messageService.localMessages[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()">
+            <div class="date-bar">
+                {{message.sendTimeDate.toLocaleDateString()}}
+            </div>
+        </div>
+        <div class="message-line" [class.grouped]="message.groupWithPrevious"
+             *ngIf="message.local || message.timeStamp + Math.min(timerService.formerTimer, messageService.conversation.maxLiveSeconds) * 1000 > Date.now()">
+            <div class="chat-avatar">
+                <div class="chart-avatar-wrapper" *ngIf="!message.groupWithPrevious"
+                     routerLink="/user/{{message.senderId}}">
+                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
+                    <div class="small-dot"
+                         style="top: -10px; right: -35px;"
+                         [class.greendot]="message.sender.isOnline"
+                         [class.graydot]="!message.sender.isOnline">
+                    </div>
                 </div>
             </div>
-            <div class="chat-text">
+            <div class="message-block">
                 <button class="button button--fab" *ngIf="message.resend" (click)="resend(message)">
                     <i class="fas fa-redo"></i>
                 </button>
                 <button class="button button--fab" *ngIf="message.resend" (click)="delete(message)">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                <div class="chat-content" [class.single-emoji]="message.isEmoji">
+                <div class="message-balloon" [class.single-emoji]="message.isEmoji"
+                     [class.balloon-grouped]="message.groupWithPrevious">
                     <span
-                        *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id"
+                        *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id && !message.groupWithPrevious"
                         [ngStyle]="{'color': messageService.getGroupColor(message)}">{{ message.sender.nickName }}
                         <label class="badge badge-primary"
                                *ngIf="messageService.checkOwner(message.senderId)">Owner</label>
@@ -101,7 +114,7 @@
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
-                           (click)="uploadService.getAudio($event.currentTarget, message.content)">
+                           (click)="uploadService.getAudio($event.currentTarget, message.content) //noinspection ValidateTypes">
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
                         </a>
@@ -114,20 +127,19 @@
                            aria-hidden="true"></i>
                     </div>
                 </div>
-
-                <p class="sendTime">
-                    <label *ngIf="message.local && !message.resend" i18n="@@Sending" class="sendTime">
-                            Sending...
-                    </label>
-                    <label *ngIf="!message.local || message.resend">
-                        {{localDate(message.sendTime)}}
-                    </label>
-                </p>
-                <p class="sendTime sendFail" [class.last]="isLast" *ngIf="message.resend">
+                <p class="sendFail" [class.last]="isLast" *ngIf="message.resend">
                     <i class="fas fa-exclamation-triangle"></i>
                     Send failed
                 </p>
             </div>
+            <p class="sendTime" [class.show]="message.local && !message.resend">
+                <label *ngIf="message.local && !message.resend" i18n="@@Sending">
+                    Sending...
+                </label>
+                <label *ngIf="!message.local || message.resend">
+                    {{message.sendTimeDate.toLocaleTimeString()}}
+                </label>
+            </p>
         </div>
     </li>
     <button

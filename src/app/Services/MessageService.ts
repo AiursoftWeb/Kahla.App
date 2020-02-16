@@ -268,6 +268,7 @@ export class MessageService {
                     if (unread > 1) {
                         // add a last read bar
                         this.localMessages[this.localMessages.length - unread].lastRead = true;
+                        this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
                     }
                     setTimeout(() => {
                         const lis = document.querySelector('#messageList').querySelectorAll('li');
@@ -414,7 +415,8 @@ export class MessageService {
             }
         }
         t.contentRaw = t.content;
-        t.timeStamp = new Date(t.sendTime).getTime();
+        t.sendTimeDate = new Date(t.sendTime);
+        t.timeStamp = t.sendTimeDate.getTime();
         if (t.content.match(/^\[(video|img)\].*/)) {
             if (t.content.startsWith('[img]')) {
                 let imageWidth = Number(t.content.split('|')[1]),
