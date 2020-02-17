@@ -528,6 +528,7 @@ export class MessageService {
         if (unsentMessages.has(this.conversation.id)) {
             (<Array<Message>>(unsentMessages.get(this.conversation.id))).forEach((message) => {
                 message.resend = true;
+                message.sendTimeDate = new Date(message.sendTime);
                 this.localMessages.push(message);
             }, this);
         }
