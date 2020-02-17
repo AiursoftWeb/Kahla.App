@@ -21,7 +21,6 @@ export class CheckService {
         if (this.checkSwCache()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
                 if (t.data === '__Update_Completed__') {
-                    Swal.fire('Update Completed', 'Refresh to apply your upgrade.', 'success');
                     Swal.fire({
                         title: 'Update Completed',
                         html: 'Refresh to apply your upgrade.<br/>Do you want to refresh now?',
