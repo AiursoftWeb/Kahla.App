@@ -251,8 +251,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;
         const prevMsg = this.messageService.localMessages[this.messageService.localMessages.length - 1];
-        tempMessage.groupWithPrevious = prevMsg.senderId === this.cacheService.cachedData.me.id
-            && new Date().getTime() - prevMsg.timeStamp <= 3600000;
+        tempMessage.groupWithPrevious = prevMsg ? prevMsg.senderId === this.cacheService.cachedData.me.id
+            && new Date().getTime() - prevMsg.timeStamp <= 3600000 : false;
         tempMessage.sendTime = new Date().toISOString();
         tempMessage.local = true;
         this.messageService.modifyMessage(tempMessage, false);
