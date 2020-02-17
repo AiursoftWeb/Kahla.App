@@ -300,7 +300,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
         const encryptedMessage = AES.encrypt(message.contentRaw, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id,
-            message.sendTime, messageIDArry.slice(1))
+            new Date().toISOString(), messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
                     this.delete(message);
