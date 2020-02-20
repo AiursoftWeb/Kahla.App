@@ -98,6 +98,7 @@
     margin: 6px 0 6px 0;
     position: relative;
     display: inline-block;
+    color: #bbb;
 
     &::before, &::after {
       content: ' ';
@@ -106,7 +107,7 @@
       top: 50%;
       left: -120px;
       width: 100px; // 100px line on either side
-      border-bottom: 1px solid #FFF;
+      border-bottom: 1px solid #aaa;
     }
 
     &::after {
