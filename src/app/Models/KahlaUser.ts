@@ -9,7 +9,7 @@
     public nickName: string;
     public preferedLanguage: string;
     public sex: string;
-    public makeEmailPublic: boolean;
+    public markEmailPublic: boolean;
     public themeId: number;
     public enableEmailNotification: boolean;
     public enableEnterToSendMessage: boolean;
