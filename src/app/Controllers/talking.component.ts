@@ -263,7 +263,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id, tempMessage.sendTime,
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
             this.messageService.getAtIDs(this.content).slice(1))
             .subscribe({
                 error: e => {
@@ -301,8 +301,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public resend(message: Message): void {
         const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
         const encryptedMessage = AES.encrypt(message.contentRaw, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id,
-            new Date().toISOString(), messageIDArry.slice(1))
+        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id, messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
                     this.delete(message);

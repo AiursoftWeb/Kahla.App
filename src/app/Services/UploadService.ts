@@ -149,7 +149,7 @@ export class UploadService {
     }
 
     private sendMessage(message: string, conversationID: number): void {
-        this.conversationApiService.SendMessage(conversationID, message, uuid4(), new Date().toISOString(), [])
+        this.conversationApiService.SendMessage(conversationID, message, uuid4(), [])
             .subscribe(() => {
                 this.scrollBottom(true);
             }, () => {
