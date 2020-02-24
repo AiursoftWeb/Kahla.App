@@ -14,5 +14,6 @@
     public enableEmailNotification: boolean;
     public enableEnterToSendMessage: boolean;
     public enableInvisiable: boolean;
+    public listInSearchResult: boolean;
     public isOnline: boolean;
 }
