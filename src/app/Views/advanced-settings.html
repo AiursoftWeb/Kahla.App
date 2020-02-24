@@ -41,6 +41,15 @@
     <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="me.enableInvisiable" disabled="disabled"/>
     <label for="toggleInvisible" class="tgl-btn"></label>
 </div>
+<div class="menu-button notification" (click)="this.me.listInSearchResult = !this.me.listInSearchResult; updateSettings()"
+     *ngIf="this.me">
+    <div class="img">
+        <i class="fas fa-plug"></i>
+    </div>
+    <div class="text" i18n="@@Notification">List me in search result</div>
+    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="me.listInSearchResult" disabled="disabled"/>
+    <label for="toggleInvisible" class="tgl-btn"></label>
+</div>
 <div class="menu-header">
     Notification
 </div>
