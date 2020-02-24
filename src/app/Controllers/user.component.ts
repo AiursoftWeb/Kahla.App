@@ -96,8 +96,8 @@ export class UserComponent implements OnInit {
             showCancelButton: true,
             confirmButtonText: 'Report'
         }).then((result) => {
-            if (result.value) {
-                if (result.value.length >= 5) {
+            if (!result.dismiss) {
+                if (result.value && result.value.length >= 5) {
                     this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
                         if (response.code === 0) {
                             Swal.fire('Success', response.message, 'success');
