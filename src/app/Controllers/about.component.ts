@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
+import { ApiService } from '../Services/ApiService';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -12,12 +13,18 @@ import { Values } from '../values';
 
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
+
     constructor(
-        public checkService: CheckService
+        public checkService: CheckService,
+        public apiService: ApiService
     ) {
     }
 
     public check(): void {
         this.checkService.checkVersion(true);
+    }
+
+    public getCurrentYear(): number {
+        return new Date().getFullYear();
     }
 }

@@ -10,6 +10,8 @@ import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
+import { ServerConfig } from '../Models/ServerConfig';
+import { ApiService } from './ApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -25,10 +27,11 @@ export class InitService {
     private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(environment.applicationServerKey)
+        applicationServerKey: null
     };
 
     constructor(
+        private apiService: ApiService,
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
@@ -42,6 +45,19 @@ export class InitService {
     }
 
     public init(): void {
+        // load server config
+        if (localStorage.getItem('serverConfig')) {
+            const communityServerConfig = JSON.parse(localStorage.getItem('serverConfig')) as ServerConfig;
+            this.apiService.serverConfig = communityServerConfig;
+            this.options.applicationServerKey = this.urlBase64ToUint8Array(communityServerConfig.vapidPublicKey);
+        } else {
+            const serv = new ServerConfig();
+            serv.serverUrl = environment.server;
+            serv.vapidPublicKey = environment.applicationServerKey;
+            serv.officialServer = true;
+            this.apiService.serverConfig = serv;
+            this.options.applicationServerKey = this.urlBase64ToUint8Array(serv.vapidPublicKey);
+        }
         this.online = navigator.onLine;
         this.closeWebSocket = false;
         this.checkService.checkVersion(false);

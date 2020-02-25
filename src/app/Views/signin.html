@@ -3,19 +3,47 @@
         <div class="auth-header">
             <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
+            <h3 *ngIf="changingServer">Select server</h3>
+            <h3 *ngIf="!changingServer">Login</h3>
         </div>
-        <div class="auth-content">
-            <form>
-                <a class="button white login" href="{{ OAuthURL }}/Auth/Oauth"
-                   [target]="_electronService.isElectronApp ? '_blank' : ''">
-                    Sign in
-                </a>
-                <a class="button white login" href="{{ OAuthURL }}/Auth/GoRegister"
-                   [target]="_electronService.isElectronApp ? '_blank' : ''">
-                    Register
-                </a>
-                <a class="forgetPassword" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor" target="_blank" rel="noopener noreferrer">Forgot password?</a>
-            </form>
+        <div class="auth-content" *ngIf="!changingServer">
+            <a class="button white login" href="{{ this.apiService.serverConfig.serverUrl }}/Auth/Oauth"
+               [target]="_electronService.isElectronApp ? '_blank' : ''">
+                Sign in
+            </a>
+            <a class="button white login" href="{{ this.apiService.serverConfig.serverUrl }}/Auth/GoRegister"
+               [target]="_electronService.isElectronApp ? '_blank' : ''">
+                Register
+            </a>
+            <a class="forgetPassword" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
+               target="_blank" rel="noopener noreferrer">Forgot password?</a>
+
+            <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
+                You are connecting to {{this.apiService.serverConfig.serverUrl}}
+                {{this.apiService.serverConfig.officialServer ? '(Aiursoft official server)' : '(Not an official server)'}}
+                .</p>
+
+            <div class="button white login" (click)="changingServer = true">
+                Change Server
+            </div>
+        </div>
+
+        <div class="auth-content" *ngIf="changingServer">
+            <div class="button white login" (click)="clearCommunityServerData()">
+                Aiursoft official server
+            </div>
+            <div class="split-bar">community server</div>
+            <div>
+                <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"/>
+                <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
+                    Connect
+                </button>
+            </div>
+            <div class="text-warn">
+                <p>Aiursoft CANNOT prove the community server is secure. You should NEVER connect to a server you don't
+                    trust.</p>
+                <p>Chat data in community server will never be synced with one in official server.</p>
+            </div>
         </div>
     </div>
 </div>
