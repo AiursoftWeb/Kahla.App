@@ -23,6 +23,11 @@ export class FriendshipService {
                 inputAttributes: {
                     maxlength: '100'
                 },
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter the join password.';
+                    }
+                },
                 showCancelButton: true,
                 confirmButtonText: 'Join'
             }).then((result) => {
