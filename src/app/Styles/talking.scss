@@ -27,6 +27,11 @@
     display: flex;
     width: 100%;
     margin-bottom: 4px;
+    &.grouped {
+      .chat-avatar{
+        height: 0;
+      }
+    }
   }
 
   .left .message-line {
