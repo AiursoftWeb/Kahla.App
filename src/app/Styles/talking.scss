@@ -27,10 +27,12 @@
     display: flex;
     width: 100%;
     margin-bottom: 4px;
+    margin-top: 18px;
     &.grouped {
       .chat-avatar{
         height: 0;
       }
+      margin-top: 0px;
     }
   }
 
@@ -48,6 +50,7 @@
     height: 40px;
     display: inline-block;
     text-align: center;
+    position: absolute;
 
     img {
       cursor: pointer;
@@ -84,12 +87,12 @@
 
   .left .message-block {
     text-align: left;
-    margin-left: 12px;
+    margin-left: 52px;
   }
 
   .right .message-block {
     text-align: right;
-    margin-right: 12px;
+    margin-right: 52px;
   }
 
   %split-bar {
