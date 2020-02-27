@@ -47,7 +47,8 @@ export class AdvancedSettingComponent implements OnInit {
             this.me.enableEmailNotification,
             this.me.enableEnterToSendMessage,
             this.me.enableInvisiable,
-            this.me.makeEmailPublic)
+            this.me.markEmailPublic,
+            this.me.listInSearchResult)
             .subscribe(res => {
                 this.updatingSetting = null;
 

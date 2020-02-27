@@ -94,22 +94,23 @@ export class UserComponent implements OnInit {
             },
             confirmButtonColor: 'red',
             showCancelButton: true,
-            confirmButtonText: 'Report'
-        }).then((result) => {
-            if (result.value) {
-                if (result.value.length >= 5) {
-                    this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
-                        if (response.code === 0) {
-                            Swal.fire('Success', response.message, 'success');
-                        } else {
-                            Swal.fire('Error', response.message, 'error');
-                        }
-                    }, () => {
-                        Swal.fire('Error', 'Report error.', 'error');
-                    });
-                } else {
-                    Swal.fire('Error', 'The reason\'s length should between five and two hundreds.', 'error');
+            confirmButtonText: 'Report',
+            inputValidator: inputValue => {
+                if (!inputValue || inputValue.length < 5) {
+                    return 'The reason\'s length should between five and two hundreds.';
                 }
+            }
+        }).then((result) => {
+            if (!result.dismiss) {
+                this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
+                    if (response.code === 0) {
+                        Swal.fire('Success', response.message, 'success');
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                }, () => {
+                    Swal.fire('Error', 'Report error.', 'error');
+                });
             }
         });
     }

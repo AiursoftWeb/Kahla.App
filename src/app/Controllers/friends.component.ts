@@ -1,4 +1,4 @@
-﻿import { Component, DoCheck, OnInit, AfterViewInit } from '@angular/core';
+﻿import { AfterViewInit, Component, DoCheck, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
@@ -60,16 +60,17 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
             title: 'Enter your group name:',
             input: 'text',
             inputAttributes: {
-                maxlength: '25'
+                maxlength: '25',
+            },
+            inputValidator: (value) => {
+                if (!value || value.length < 3 || value.length > 25) {
+                    return 'Group name length must between three and twenty five.';
+                }
             },
             html: '<input type="checkbox" id="checkPrivate"><label for="checkPrivate">Private group<label>',
             showCancelButton: true,
         }).then(input => {
             if (input.value) {
-                if (input.value.length < 3 || input.value.length > 25) {
-                    Swal.fire('Try again', 'Group name length must between three and twenty five.', 'error');
-                    return;
-                }
                 if (!(<HTMLInputElement>document.querySelector('#checkPrivate')).checked) {
                     Swal.fire({
                         title: 'Are you sure to create this group?',
@@ -86,6 +87,11 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                         input: 'text',
                         inputAttributes: {
                             maxlength: '100'
+                        },
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Please input a password.';
+                            }
                         },
                         showCancelButton: true
                     }).then((result) => {

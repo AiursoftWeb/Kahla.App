@@ -110,7 +110,7 @@ export class ShareComponent implements OnInit, DoCheck {
         const encryptedMessage = AES.encrypt(content, this.messageService.conversation.aesKey).toString();
         const messageIDArry = this.messageService.getAtIDs(content);
         this.conversationApiService.SendMessage(this.messageService.conversation.id,
-            encryptedMessage, uuid4(), new Date().toISOString(), messageIDArry.slice(1))
+            encryptedMessage, uuid4(), messageIDArry.slice(1))
             .subscribe(result => {
                 if (result.code === 0) {
                     this.router.navigate(['/home'], {replaceUrl: true});

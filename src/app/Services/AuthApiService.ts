@@ -39,13 +39,15 @@ export class AuthApiService {
                                enableEmailNotification: boolean = null,
                                enableEnterToSendMessage: boolean = null,
                                enableInvisiable: boolean = null,
-                               makeEmailPublic: boolean = null): Observable<AiurProtocal> {
+                               markEmailPublic: boolean = null,
+                               listInSearchResult: boolean = null): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,
             EnableInvisiable: enableInvisiable,
-            MakeEmailPublic: makeEmailPublic,
+            MarkEmailPublic: markEmailPublic,
+            ListInSearchResult: listInSearchResult
         });
     }
 

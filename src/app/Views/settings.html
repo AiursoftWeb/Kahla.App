@@ -22,8 +22,8 @@
     <div class="email" *ngIf="cacheService.cachedData.me.email">
         {{ cacheService.cachedData.me.email }}
         <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed">Verified</label>
-        <label class="badge badge-primary" *ngIf="cacheService.cachedData.me.makeEmailPublic">Public</label>
-        <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.makeEmailPublic">Hidden</label>
+        <label class="badge badge-primary" *ngIf="cacheService.cachedData.me.markEmailPublic">Public</label>
+        <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.markEmailPublic">Hidden</label>
     </div>
 </div>
 

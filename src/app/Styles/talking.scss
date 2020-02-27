@@ -26,10 +26,13 @@
   .message-line {
     display: flex;
     width: 100%;
-    margin-bottom: 8px;
-
+    margin-bottom: 4px;
+    margin-top: 18px;
     &.grouped {
-      margin-bottom: 4px;
+      .chat-avatar{
+        height: 0;
+      }
+      margin-top: 0px;
     }
   }
 
@@ -47,6 +50,7 @@
     height: 40px;
     display: inline-block;
     text-align: center;
+    position: absolute;
 
     img {
       cursor: pointer;
@@ -83,12 +87,12 @@
 
   .left .message-block {
     text-align: left;
-    margin-left: 12px;
+    margin-left: 52px;
   }
 
   .right .message-block {
     text-align: right;
-    margin-right: 12px;
+    margin-right: 52px;
   }
 
   %split-bar {
@@ -98,6 +102,7 @@
     margin: 6px 0 6px 0;
     position: relative;
     display: inline-block;
+    color: #bbb;
 
     &::before, &::after {
       content: ' ';
@@ -106,7 +111,7 @@
       top: 50%;
       left: -120px;
       width: 100px; // 100px line on either side
-      border-bottom: 1px solid #FFF;
+      border-bottom: 1px solid #aaa;
     }
 
     &::after {
