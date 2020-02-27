@@ -23,7 +23,7 @@ import { ProbeService } from '../Services/ProbeService';
 export class ManageGroupComponent implements OnInit {
 
     public conversation: GroupConversation;
-    @ViewChild('imageInput', {static: false}) public imageInput;
+    @ViewChild('imageInput') public imageInput;
     public newGroupName: string;
 
     constructor(public groupsApiService: GroupsApiService,
