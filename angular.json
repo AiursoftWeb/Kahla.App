@@ -97,5 +97,8 @@
       "projectType": "application"
     }
   },
-  "defaultProject": "kahla"
+  "defaultProject": "kahla",
+  "cli": {
+    "analytics": false
+  }
 }
