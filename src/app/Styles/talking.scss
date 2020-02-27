@@ -28,11 +28,14 @@
     width: 100%;
     margin-bottom: 4px;
     margin-top: 18px;
+    position: relative;
+
     &.grouped {
-      .chat-avatar{
+      .chat-avatar {
         height: 0;
       }
-      margin-top: 0px;
+
+      margin-top: 0;
     }
   }
 
@@ -63,6 +66,10 @@
     &:focus {
       outline: none;
     }
+  }
+
+  .right .chat-avatar {
+    right: 0;
   }
 
   .message-block {
