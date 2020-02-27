@@ -29,7 +29,11 @@
               "src/web.config",
               "src/sw.js",
               "src/index.js",
-              { "glob": "assetlinks.json", "input": "src/", "output": "/.well-known" }
+              {
+                "glob": "assetlinks.json",
+                "input": "src/",
+                "output": "/.well-known"
+              }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
