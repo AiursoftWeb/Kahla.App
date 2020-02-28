@@ -21,7 +21,7 @@ import { WereDeletedEvent } from '../Models/WereDeletedEvent';
 import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
 import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
 import { Router } from '@angular/router';
-import { UserGroupRelation } from '../Models/KahlaUsers';
+import { UserGroupRelation } from '../Models/UserGroupRelation';
 import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';

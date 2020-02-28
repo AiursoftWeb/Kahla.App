@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
 import { FriendsApiService } from './FriendsApiService';
-import { Request } from '../Models/Request';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './DevicesApiService';
@@ -23,11 +22,6 @@ export class CacheService {
 
     public reset() {
         this.cachedData = new CacheModel();
-    }
-
-    public updateFriendRequests(data: Request[]): void {
-        this.cachedData.requests = data;
-        this.totalRequests = data.filter(t => !t.completed).length;
     }
 
     public updateConversation(): void {
