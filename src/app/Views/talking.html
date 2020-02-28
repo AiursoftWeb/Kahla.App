@@ -142,6 +142,7 @@
             </p>
         </div>
     </li>
+    <div class="message-list-placeholder"></div>
     <button
         *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)"
         id="scrollDown" [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}"
