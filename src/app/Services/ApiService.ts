@@ -9,6 +9,7 @@ import { ServerConfig } from '../Models/ServerConfig';
     providedIn: 'root'
 })
 export class ApiService {
+    public readonly STORAGE_SERVER_CONFIG = 'serverConfig';
     public serverConfig: ServerConfig;
 
     private _headers: HttpHeaders =
@@ -22,14 +23,18 @@ export class ApiService {
     }
 
     public Get<T>(address: string): Observable<T> {
-        return this.http.get<T>(`${this.serverConfig.serverUrl}${address}`, {
+        return this.GetByFullUrl<T>(`${this.serverConfig.domain.server}${address}`);
+    }
+
+    public GetByFullUrl<T>(address: string, withCredentials = true): Observable<T> {
+        return this.http.get<T>(address, {
             headers: this._headers,
-            withCredentials: true
+            withCredentials: withCredentials
         }).pipe(catchError(this.handleError));
     }
 
     public Post<T>(address: string, data: any): Observable<T> {
-        return this.http.post<T>(`${this.serverConfig.serverUrl}${address}`, this.paramTool.param(data), {
+        return this.http.post<T>(`${this.serverConfig.domain.server}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true
         }).pipe(catchError(this.handleError));

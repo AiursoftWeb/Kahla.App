@@ -6,12 +6,12 @@
             <h3 *ngIf="changingServer">Select server</h3>
             <h3 *ngIf="!changingServer">Login</h3>
         </div>
-        <div class="auth-content" *ngIf="!changingServer">
-            <a class="button white login" href="{{ this.apiService.serverConfig.serverUrl }}/Auth/Oauth"
+        <div class="auth-content" *ngIf="!changingServer && apiService.serverConfig">
+            <a class="button white login" href="{{ this.apiService.serverConfig.domain.server }}/Auth/Oauth"
                [target]="_electronService.isElectronApp ? '_blank' : ''">
                 Sign in
             </a>
-            <a class="button white login" href="{{ this.apiService.serverConfig.serverUrl }}/Auth/GoRegister"
+            <a class="button white login" href="{{ this.apiService.serverConfig.domain.server }}/Auth/GoRegister"
                [target]="_electronService.isElectronApp ? '_blank' : ''">
                 Register
             </a>
@@ -19,7 +19,7 @@
                target="_blank" rel="noopener noreferrer">Forgot password?</a>
 
             <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
-                You are connecting to {{this.apiService.serverConfig.serverUrl}}
+                You are connecting to {{this.apiService.serverConfig.domain.server}}
                 {{this.apiService.serverConfig.officialServer ? '(Aiursoft official server)' : '(Not an official server)'}}
                 .</p>
 

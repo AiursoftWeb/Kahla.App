@@ -49,7 +49,7 @@
     <div class="text">{{electronService.isElectronApp ? 'Open Kahla official site' : 'Download Kahla App'}}</div>
 </a>
 <div class="foot-text">
-    <p>Server connected: {{apiService.serverConfig.serverName}} ({{apiService.serverConfig.serverUrl}})</p>
+    <p>Server connected: {{apiService.serverConfig.serverName}} ({{apiService.serverConfig.domain.server}})</p>
     <p *ngIf="apiService.serverConfig.officialServer">An aiursoft official server.</p>
     <p *ngIf="!apiService.serverConfig.officialServer">A community server.</p>
     <p>

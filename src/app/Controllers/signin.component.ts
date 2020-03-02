@@ -50,12 +50,11 @@ export class SignInComponent implements OnInit {
         this.http.get<ServerConfig>(this.serverAddr).subscribe({
             next: t => {
                 Swal.close();
-                if (t.code !== 0) {
+                if (t.code !== 0 || t.domain.server !== this.serverAddr) {
                     this.fireFailed();
                     return;
                 }
                 t.officialServer = false;
-                t.serverUrl = this.serverAddr;
                 localStorage.setItem('serverConfig', JSON.stringify(t));
                 this.changingServer = false;
                 this.initService.init();
