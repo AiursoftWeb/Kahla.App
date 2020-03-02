@@ -24,7 +24,7 @@ import { ProbeService } from '../Services/ProbeService';
 export class UserDetailComponent implements OnInit {
     public user: KahlaUser;
     public loadingImgURL = Values.loadingImgURL;
-    @ViewChild('imageInput', {static: false}) public imageInput;
+    @ViewChild('imageInput') public imageInput;
 
     constructor(
         private authApiService: AuthApiService,

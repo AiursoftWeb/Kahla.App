@@ -51,10 +51,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public matchedUsers: Array<KahlaUser> = [];
 
-    @ViewChild('imageInput', { static: false }) public imageInput;
-    @ViewChild('videoInput', { static: false }) public videoInput;
-    @ViewChild('fileInput', { static: false }) public fileInput;
-    @ViewChild('header', { static: true }) public header: HeaderComponent;
+    @ViewChild('imageInput') public imageInput;
+    @ViewChild('videoInput') public videoInput;
+    @ViewChild('fileInput') public fileInput;
+    @ViewChild('header', {static: true}) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
