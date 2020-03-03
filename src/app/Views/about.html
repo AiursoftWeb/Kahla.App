@@ -49,10 +49,15 @@
     <div class="text">{{electronService.isElectronApp ? 'Open Kahla official site' : 'Download Kahla App'}}</div>
 </a>
 <div class="foot-text">
-    <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
-    |
-    <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-    |
-    <a href="https://github.com/AiursoftWeb/Kahla.App/issues/new/choose" target="_blank" rel="noopener noreferrer">Feedback</a>
-    <p>Copyright &copy; 2018 Aiursoft Corporation</p>
+    <p>Server connected: {{apiService.serverConfig.serverName}} ({{apiService.serverConfig.domain.server}})</p>
+    <p *ngIf="apiService.serverConfig.officialServer">An aiursoft official server.</p>
+    <p *ngIf="!apiService.serverConfig.officialServer">A community server.</p>
+    <p>
+        <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
+        |
+        <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        |
+        <a href="https://github.com/AiursoftWeb/Kahla.App/issues/new/choose" target="_blank" rel="noopener noreferrer">Feedback</a>
+    </p>
+    <p>Copyright &copy; {{getCurrentYear()}} Aiursoft Corporation</p>
 </div>

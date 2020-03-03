@@ -10,6 +10,8 @@ import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
+import { ServerConfig } from '../Models/ServerConfig';
+import { ApiService } from './ApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -25,10 +27,11 @@ export class InitService {
     private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(environment.applicationServerKey)
+        applicationServerKey: null
     };
 
     constructor(
+        private apiService: ApiService,
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
@@ -42,9 +45,6 @@ export class InitService {
     }
 
     public init(): void {
-        this.online = navigator.onLine;
-        this.closeWebSocket = false;
-        this.checkService.checkVersion(false);
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
                 'Oops, it seems that you are opening Kahla in IE.',
@@ -54,28 +54,56 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
+
+        // load server config
+        if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
+            const communityServerConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
+            this.apiService.serverConfig = communityServerConfig;
+        } else {
+            this.router.navigate(['/signin'], {replaceUrl: true});
+            this.apiService.GetByFullUrl<Array<ServerConfig>>(environment.officialServerList, false).subscribe(servers => {
+                const target = servers.find(t => t.domain.client === window.location.origin);
+                if (target) {
+                    target.officialServer = true;
+                    this.apiService.serverConfig = target;
+                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
+                }
+                this.init();
+            });
+            return;
+        }
+
+        this.online = navigator.onLine;
+        this.closeWebSocket = false;
         this.cacheService.initCache();
-        this.authApiService.SignInStatus().subscribe(signInStatus => {
-            if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], { replaceUrl: true });
-            } else {
-                this.authApiService.Me().subscribe(p => {
-                    if (p.code === 0) {
-                        this.cacheService.cachedData.me = p.value;
-                        this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
-                        this.themeService.ApplyThemeFromRemote(p.value);
-                        if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                            this.subscribeUser();
-                            this.updateSubscription();
+
+        if (this.apiService.serverConfig) {
+            this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
+            this.checkService.checkVersion(false);
+            this.authApiService.SignInStatus().subscribe(signInStatus => {
+                if (signInStatus.value === false) {
+                    this.router.navigate(['/signin'], {replaceUrl: true});
+                } else {
+                    this.authApiService.Me().subscribe(p => {
+                        if (p.code === 0) {
+                            this.cacheService.cachedData.me = p.value;
+                            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
+                            this.themeService.ApplyThemeFromRemote(p.value);
+                            if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                                this.subscribeUser();
+                                this.updateSubscription();
+                            }
+                            this.loadPusher(false);
+                            this.cacheService.updateConversation();
+                            this.cacheService.updateFriends();
+                            this.cacheService.updateRequests();
                         }
-                        this.loadPusher(false);
-                        this.cacheService.updateConversation();
-                        this.cacheService.updateFriends();
-                        this.cacheService.updateRequests();
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        } else {
+            this.router.navigate(['/signin'], {replaceUrl: true});
+        }
     }
 
     private loadPusher(reconnect: boolean): void {
