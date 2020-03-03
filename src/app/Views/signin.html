@@ -19,13 +19,17 @@
                target="_blank" rel="noopener noreferrer">Forgot password?</a>
 
             <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
-                You are connecting to {{this.apiService.serverConfig.domain.server}}
+                <a href="javascript:" (click)="changingServer = true">Server
+                    connected: {{this.apiService.serverConfig.serverName}}
+                    ({{this.apiService.serverConfig.domain.server}})</a>
+            </p>
+            <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
                 {{this.apiService.serverConfig.officialServer ? '(Aiursoft official server)' : '(Not an official server)'}}
-                .</p>
+            </p>
 
-            <div class="button white login" (click)="changingServer = true">
-                Change Server
-            </div>
+            <!--            <div class="button white login" (click)="changingServer = true">
+                            Change Server
+                        </div>-->
         </div>
 
         <div class="auth-content" *ngIf="changingServer">
