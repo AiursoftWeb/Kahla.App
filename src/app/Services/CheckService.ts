@@ -3,6 +3,7 @@ import { AuthApiService } from './AuthApiService';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ElectronService } from 'ngx-electron';
+import { ApiService } from './ApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,8 @@ export class CheckService {
 
     constructor(
         private authApiService: AuthApiService,
-        private _electronService: ElectronService
+        private _electronService: ElectronService,
+        private apiService: ApiService
     ) {
         if (this.checkSwCache()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
@@ -56,6 +58,12 @@ export class CheckService {
                     latestAPIVersion[1] > currentVersion[1]) {
                     Swal.fire('API version mismatch', 'API level is too far from client! You have to upgrade now!', 'warning');
                     this.redirectToDownload(downloadAddress, true);
+                } else if (latestVersion[0] < currentVersion[0] ||
+                    latestVersion[1] < currentVersion[1] ||
+                    latestVersion[2] < currentVersion[2] ||
+                    !this.apiService.serverConfig.officialServer) {
+                    Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
+                        'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
                 } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
