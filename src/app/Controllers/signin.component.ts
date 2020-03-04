@@ -68,5 +68,8 @@ export class SignInComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (this.apiService.serverConfig && !this.apiService.serverConfig.officialServer) {
+            this.serverAddr = this.apiService.serverConfig.domain.server;
+        }
     }
 }

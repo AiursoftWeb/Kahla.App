@@ -4,7 +4,6 @@
             <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
             <h3 *ngIf="changingServer">Select server</h3>
-            <h3 *ngIf="!changingServer">Login</h3>
         </div>
         <div class="auth-content" *ngIf="!changingServer && apiService.serverConfig">
             <a class="button white login" href="{{ this.apiService.serverConfig.domain.server }}/Auth/Oauth"
@@ -15,17 +14,14 @@
                [target]="_electronService.isElectronApp ? '_blank' : ''">
                 Register
             </a>
-            <a class="forgetPassword" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
+            <a class="actionLink" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
                target="_blank" rel="noopener noreferrer">Forgot password?</a>
 
-            <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
-                You are connecting to {{this.apiService.serverConfig.domain.server}}
-                {{this.apiService.serverConfig.officialServer ? '(Aiursoft official server)' : '(Not an official server)'}}
-                .</p>
-
-            <div class="button white login" (click)="changingServer = true">
-                Change Server
-            </div>
+            <a class="actionLink" href="javascript:"
+               (click)="changingServer = true">Server: {{this.apiService.serverConfig.serverName}}</a>
+            <p *ngIf="!this.apiService.serverConfig.officialServer" class="text-warn">
+                (Not an official server)
+            </p>
         </div>
 
         <div class="auth-content" *ngIf="changingServer">
@@ -34,7 +30,8 @@
             </div>
             <div class="split-bar">community server</div>
             <div>
-                <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"/>
+                <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"
+                       (keyup.enter)="connectCommunity()"/>
                 <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
                     Connect
                 </button>

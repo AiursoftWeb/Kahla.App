@@ -58,9 +58,9 @@ export class CheckService {
                     latestAPIVersion[1] > currentVersion[1]) {
                     Swal.fire('API version mismatch', 'API level is too far from client! You have to upgrade now!', 'warning');
                     this.redirectToDownload(downloadAddress, true);
-                } else if (latestVersion[0] < currentVersion[0] ||
+                } else if ((latestVersion[0] < currentVersion[0] ||
                     latestVersion[1] < currentVersion[1] ||
-                    latestVersion[2] < currentVersion[2] ||
+                    latestVersion[2] < currentVersion[2]) &&
                     !this.apiService.serverConfig.officialServer) {
                     Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
                         'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
