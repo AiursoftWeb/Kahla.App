@@ -19,8 +19,8 @@
 
             <a class="actionLink" href="javascript:"
                (click)="changingServer = true">Server: {{this.apiService.serverConfig.serverName}}</a>
-            <p [ngClass]="{'text-warn':!this.apiService.serverConfig.officialServer, 'text-secure': this.apiService.serverConfig.officialServer}">
-                {{this.apiService.serverConfig.officialServer ? '(Aiursoft official server)' : '(Not an official server)'}}
+            <p *ngIf="!this.apiService.serverConfig.officialServer" class="text-warn">
+                (Not an official server)
             </p>
         </div>
 
