@@ -5,6 +5,7 @@ import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { ServerConfig } from '../Models/ServerConfig';
+import { environment } from '../../environments/environment';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -38,7 +39,6 @@ export class SignInComponent implements OnInit {
         if (!this.serverAddr.match(/^https?:\/\/.+/g)) {
             this.serverAddr = 'https://' + this.serverAddr;
         }
-
         Swal.fire({
             icon: 'info',
             title: 'Fetching manifest from your community server...',
@@ -48,16 +48,41 @@ export class SignInComponent implements OnInit {
         });
         Swal.showLoading();
         this.http.get<ServerConfig>(this.serverAddr).subscribe({
-            next: t => {
-                Swal.close();
-                if (t.code !== 0 || t.domain.server !== this.serverAddr) {
+            next: serverConfig => {
+                if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
+                    Swal.close();
                     this.fireFailed();
                     return;
                 }
-                t.officialServer = false;
-                localStorage.setItem('serverConfig', JSON.stringify(t));
-                this.changingServer = false;
-                this.initService.init();
+                this.apiService.GetByFullUrl<Array<ServerConfig>>(environment.officialServerList, false).subscribe(officialServer => {
+                    Swal.close();
+                    const last = () => {
+                        localStorage.setItem('serverConfig', JSON.stringify(serverConfig));
+                        this.changingServer = false;
+                        this.initService.init();
+                    };
+                    if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
+                        // an official server
+                        serverConfig.officialServer = true;
+                        last();
+                    } else {
+                        Swal.fire({
+                            title: 'Connecting to a community server...',
+                            text: 'Aiursoft CANNOT prove the community server is secure.\n' +
+                                ' You should NEVER connect to a server you don\'t trust.\n' +
+                                'Chat data in community server will never be synced with one in official server.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Continue'
+                        }).then(res => {
+                            if (res.dismiss) {
+                                return;
+                            }
+                            serverConfig.officialServer = false;
+                            last();
+                        });
+                    }
+                });
             },
             error: _t => this.fireFailed()
         });
