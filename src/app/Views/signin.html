@@ -29,18 +29,11 @@
                 Aiursoft official server
             </div>
             <div class="split-bar">community server</div>
-            <div>
-                <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"
-                       (keyup.enter)="connectCommunity()"/>
-                <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
-                    Connect
-                </button>
-            </div>
-            <div class="text-warn">
-                <p>Aiursoft CANNOT prove the community server is secure. You should NEVER connect to a server you don't
-                    trust.</p>
-                <p>Chat data in community server will never be synced with one in official server.</p>
-            </div>
+            <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"
+                   (keyup.enter)="connectCommunity()"/>
+            <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
+                Connect
+            </button>
         </div>
     </div>
 </div>
