@@ -12,18 +12,18 @@ export class ThemeComponent implements OnInit {
     ) {
     }
 
-    public currentTheme: Themes = Themes.kahlaLight;
+    public currentTheme: Themes = Themes.kahlaAuto;
     public primaryColor: number;
     public accentColor: number;
 
     ngOnInit(): void {
         this.currentTheme = this.themeService.LocalThemeSetting;
-        this.primaryColor = Math.floor(this.currentTheme / 2);
-        this.accentColor = this.currentTheme % 2;
+        this.primaryColor = Math.floor(this.currentTheme / 3);
+        this.accentColor = this.currentTheme % 3;
     }
 
     public applyTheme() {
-        this.changeTheme(this.primaryColor * 2 + this.accentColor);
+        this.changeTheme(this.primaryColor * 3 + this.accentColor);
     }
 
     public changeTheme(theme: Themes) {
