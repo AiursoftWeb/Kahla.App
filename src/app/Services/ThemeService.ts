@@ -22,7 +22,15 @@ export class ThemeService {
     }
 
     ApplyTheme(theme: Themes) {
-        switch (theme) {
+        let themeComputed = theme;
+        if (theme % 3 === 0) {
+            if (matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeComputed = theme + 2;
+            } else {
+                themeComputed = theme + 1;
+            }
+        }
+        switch (themeComputed) {
             case Themes.sakuraLight:
                 document.body.className = 'theme-sakura-light';
                 document.querySelector('meta[name=theme-color]')
