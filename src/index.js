@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {Menu, Tray, Notification, shell, session} = require('electron');
+const { Menu, Tray, Notification, shell, globalShortcut } = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
@@ -96,6 +96,11 @@ app.on('window-all-closed', function () {
     app.quit();
 });
 
+app.on('will-quit', () => {
+    globalShortcut.unregister('CommandOrControl+Alt+S')
+    globalShortcut.unregisterAll()
+})
+
 app.setAppUserModelId('com.example.kahla');
 
 app.on('activate', function () {
@@ -106,8 +111,8 @@ app.on('activate', function () {
     }
 });
 
-app.on("second-instance",(event, commandLine, workingDirectory) => {
-    if(mainWindow !== null){
+app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (mainWindow !== null) {
         mainWindow.show();
     }
 });
@@ -122,6 +127,13 @@ app.on('ready', () => {
     tray.addListener('double-click', function () {
         mainWindow.show();
     });
+    globalShortcut.register('CommandOrControl+Alt+S', () => {
+        if (mainWindow.isVisible() && mainWindow.isFocused()) {
+            mainWindow.hide();
+        } else {
+            mainWindow.show();
+        }
+    })
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Kahla', click: function () { mainWindow.show(); }
