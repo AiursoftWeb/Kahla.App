@@ -62,7 +62,13 @@ export class InitService {
         } else {
             this.router.navigate(['/signin'], {replaceUrl: true});
             this.apiService.GetByFullUrl<Array<ServerConfig>>(environment.officialServerList, false).subscribe(servers => {
-                const target = servers.find(t => t.domain.client === window.location.origin);
+                let target: ServerConfig;
+                if (this._electronService.isElectronApp) {
+                    target = servers[0];
+                } else {
+                    target = servers.find(t => t.domain.client === window.location.origin);
+                }
+
                 if (target) {
                     target.officialServer = true;
                     this.apiService.serverConfig = target;
