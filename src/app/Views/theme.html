@@ -31,7 +31,8 @@
 <div class="menu-header">Accent color</div>
 <div class="select-button-group">
     <span class="select-button" [class.selected]="accentColor === 0" (click)="accentColor = 0;applyTheme();">
-        <span>Browser default</span>
+        <span class="color-ellipse"></span>
+        <span>System</span>
         <i class="fas fa-check checked"></i>
     </span>
     <span class="select-button" [class.selected]="accentColor === 1" (click)="accentColor = 1;applyTheme();">
