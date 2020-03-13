@@ -41,7 +41,7 @@ function createWindow() {
             app.showExitNotif = false;
             new Notification({
                 title: 'Kahla',
-                body: 'Kahla is running in the background.'
+                body: 'Kahla is running in the background. Press Ctrl + Alt + S to open.'
             }).show();
             mainWindow.hide();
         }
