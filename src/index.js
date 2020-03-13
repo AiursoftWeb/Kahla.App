@@ -38,15 +38,13 @@ function createWindow() {
     mainWindow.on('close', function (event) {
         if (!app.isQuiting && app.showExitNotif) {
             event.preventDefault();
-            app.showExitNotif = false;
-            new Notification({
-                title: 'Kahla',
-                body: 'Kahla is running in the background. Press Ctrl + Alt + S to open.'
-            }).show();
-            mainWindow.hide();
-        }
-        if (!app.isQuiting) {
-            event.preventDefault();
+            if (app.showExitNotif) {
+                app.showExitNotif = false;
+                new Notification({
+                    title: 'Kahla',
+                    body: 'Kahla is running in the background. Press Ctrl + Alt + S to open.'
+                }).show();
+            }
             mainWindow.hide();
         }
     });
