@@ -24,10 +24,10 @@ export class ChangePasswordComponent {
 
     public checkValid(): void {
         this.samePassword = this.newPassword === this.confirmPassword;
-        if (this.oldPassword.length >= 6 && this.oldPassword.length <= 32 && this.newPassword.length >= 6 &&
-            this.newPassword.length <= 32 && this.samePassword) {
-                this.valid = true;
+        if(/^.{8,32}$/.test(this.oldPassword) && /^.{8,32}$/.test(this.newPassword)){
+            this.valid = true;
         }
+        
     }
 
     public onSubmit(): void {
