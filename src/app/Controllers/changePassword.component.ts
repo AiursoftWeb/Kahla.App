@@ -24,7 +24,7 @@ export class ChangePasswordComponent {
 
     public checkValid(): void {
         this.samePassword = this.newPassword === this.confirmPassword;
-        if(/^.{8,32}$/.test(this.oldPassword) && /^.{8,32}$/.test(this.newPassword)){
+        if(/^.{6,32}$/.test(this.oldPassword) && /^.{6,32}$/.test(this.newPassword)){
             this.valid = true;
         }
         
