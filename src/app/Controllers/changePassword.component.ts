@@ -37,7 +37,7 @@ export class ChangePasswordComponent {
         }
         if (!this.valid) {
             Swal.fire('Password length should between 6 and 32.');
-            return
+            return;
         }
         this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
             .pipe(catchError(error => {
