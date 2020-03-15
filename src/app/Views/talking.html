@@ -110,6 +110,7 @@
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')">
                         <video src="{{ probeService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
+                               [style.height.px]="messageService.videoHeight"
                                muted></video>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">

@@ -45,6 +45,7 @@ export class MessageService {
     public newMessages = false;
     private oldScrollHeight: number;
     public maxImageWidth = 0;
+    public videoHeight = 0;
     private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
@@ -313,6 +314,7 @@ export class MessageService {
 
     public updateMaxImageWidth(): void {
         this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
+        this.videoHeight = Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400));
     }
 
     public resetVariables(): void {
