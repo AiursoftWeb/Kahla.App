@@ -422,7 +422,8 @@ export class MessageService {
                 let imageWidth = Number(t.content.split('|')[1]),
                     imageHeight = Number(t.content.split('|')[2]);
                 const ratio = imageHeight / imageWidth;
-                const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
+                const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
+                    Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
 
                 if (realMaxWidth < imageWidth) {
                     imageWidth = realMaxWidth;
