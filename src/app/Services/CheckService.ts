@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AuthApiService } from './AuthApiService';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ElectronService } from 'ngx-electron';
-import { ApiService } from './ApiService';
+import { ServerListApiService } from './ServerListApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -16,9 +15,8 @@ export class CheckService {
     public buildTime = versions.buildTime;
 
     constructor(
-        private authApiService: AuthApiService,
         private _electronService: ElectronService,
-        private apiService: ApiService
+        private serverListApiService: ServerListApiService,
     ) {
         if (this.checkSwCache()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
@@ -43,27 +41,15 @@ export class CheckService {
 
     public checkVersion(showAlert: boolean): void {
         this.checking = true;
-        this.authApiService.Version()
+        this.serverListApiService.Version()
             .subscribe(t => {
                 const latestVersion: Array<string> = t.latestVersion.split('.');
-                const latestAPIVersion: Array<string> = t.apiVersion.split('.');
                 const currentVersion: Array<string> = versions.version.split('.');
                 const downloadAddress: string = t.downloadAddress;
                 if (latestVersion[0] > currentVersion[0] ||
                     latestVersion[1] > currentVersion[1] ||
                     latestVersion[2] > currentVersion[2]) {
                     this.redirectToDownload(downloadAddress, showAlert);
-                } else if (
-                    latestAPIVersion[0] > currentVersion[0] ||
-                    latestAPIVersion[1] > currentVersion[1]) {
-                    Swal.fire('API version mismatch', 'API level is too far from client! You have to upgrade now!', 'warning');
-                    this.redirectToDownload(downloadAddress, true);
-                } else if ((latestVersion[0] < currentVersion[0] ||
-                    latestVersion[1] < currentVersion[1] ||
-                    latestVersion[2] < currentVersion[2]) &&
-                    !this.apiService.serverConfig.officialServer) {
-                    Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
-                        'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
                 } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }

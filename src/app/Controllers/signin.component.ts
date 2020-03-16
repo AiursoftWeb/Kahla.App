@@ -5,7 +5,7 @@ import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { ServerConfig } from '../Models/ServerConfig';
-import { environment } from '../../environments/environment';
+import { ServerListApiService } from '../Services/ServerListApiService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -20,6 +20,7 @@ export class SignInComponent implements OnInit {
     constructor(
         public _electronService: ElectronService,
         public apiService: ApiService,
+        public serverListApiService: ServerListApiService,
         public initService: InitService,
         public http: HttpClient,
     ) {
@@ -47,14 +48,15 @@ export class SignInComponent implements OnInit {
             showCancelButton: false
         });
         Swal.showLoading();
-        this.http.get<ServerConfig>(this.serverAddr).subscribe({
+        const fireFailed = () => Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
+        this.apiService.GetByFullUrl<ServerConfig>(this.serverAddr, false).subscribe({
             next: serverConfig => {
                 if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
                     Swal.close();
-                    this.fireFailed();
+                    fireFailed();
                     return;
                 }
-                this.apiService.GetByFullUrl<Array<ServerConfig>>(environment.officialServerList, false).subscribe(officialServer => {
+                this.serverListApiService.Servers().subscribe(officialServer => {
                     Swal.close();
                     const last = () => {
                         localStorage.setItem('serverConfig', JSON.stringify(serverConfig));
@@ -84,12 +86,8 @@ export class SignInComponent implements OnInit {
                     }
                 });
             },
-            error: _t => this.fireFailed()
+            error: _t => fireFailed()
         });
-    }
-
-    fireFailed() {
-        Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
     }
 
     ngOnInit(): void {
