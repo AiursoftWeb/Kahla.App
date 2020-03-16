@@ -45,6 +45,7 @@ export class MessageService {
     public newMessages = false;
     private oldScrollHeight: number;
     public maxImageWidth = 0;
+    public videoHeight = 0;
     private userColors = new Map<string, string>();
     private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
         'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
@@ -313,6 +314,7 @@ export class MessageService {
 
     public updateMaxImageWidth(): void {
         this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
+        this.videoHeight = Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400));
     }
 
     public resetVariables(): void {
@@ -422,7 +424,8 @@ export class MessageService {
                 let imageWidth = Number(t.content.split('|')[1]),
                     imageHeight = Number(t.content.split('|')[2]);
                 const ratio = imageHeight / imageWidth;
-                const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
+                const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
+                    Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
 
                 if (realMaxWidth < imageWidth) {
                     imageWidth = realMaxWidth;
