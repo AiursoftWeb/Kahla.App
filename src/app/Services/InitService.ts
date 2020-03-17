@@ -4,7 +4,6 @@ import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
-import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
@@ -12,6 +11,7 @@ import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
 import { ServerConfig } from '../Models/ServerConfig';
 import { ApiService } from './ApiService';
+import { ServerListApiService } from './ServerListApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -41,6 +41,7 @@ export class InitService {
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
         private probeService: ProbeService,
+        private serverListApiService: ServerListApiService
     ) {
     }
 
@@ -54,14 +55,13 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
-
+        this.checkService.checkVersion(false);
         // load server config
         if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
-            const communityServerConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
-            this.apiService.serverConfig = communityServerConfig;
+            this.apiService.serverConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
         } else {
             this.router.navigate(['/signin'], {replaceUrl: true});
-            this.apiService.GetByFullUrl<Array<ServerConfig>>(environment.officialServerList, false).subscribe(servers => {
+            this.serverListApiService.Servers().subscribe(servers => {
                 let target: ServerConfig;
                 if (this._electronService.isElectronApp) {
                     target = servers[0];
@@ -85,7 +85,7 @@ export class InitService {
 
         if (this.apiService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
-            this.checkService.checkVersion(false);
+            this.checkService.checkApiVersion();
             this.authApiService.SignInStatus().subscribe(signInStatus => {
                 if (signInStatus.value === false) {
                     this.router.navigate(['/signin'], {replaceUrl: true});
