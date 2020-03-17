@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ElectronService } from 'ngx-electron';
 import { ServerListApiService } from './ServerListApiService';
+import { ApiService } from './ApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class CheckService {
     constructor(
         private _electronService: ElectronService,
         private serverListApiService: ServerListApiService,
+        private apiService: ApiService,
     ) {
         if (this.checkSwCache()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
@@ -43,18 +45,39 @@ export class CheckService {
         this.checking = true;
         this.serverListApiService.Version()
             .subscribe(t => {
-                const latestVersion: Array<string> = t.latestVersion.split('.');
-                const currentVersion: Array<string> = versions.version.split('.');
-                const downloadAddress: string = t.downloadAddress;
-                if (latestVersion[0] > currentVersion[0] ||
-                    latestVersion[1] > currentVersion[1] ||
-                    latestVersion[2] > currentVersion[2]) {
-                    this.redirectToDownload(downloadAddress, showAlert);
+                if (this.compareVersion(t.latestVersion, versions.version) > 0) {
+                    this.redirectToDownload(t.downloadAddress, showAlert);
                 } else if (showAlert) {
                     Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
                 }
                 this.checking = false;
             });
+    }
+
+    public checkApiVersion(): void {
+        this.serverListApiService.getServerConfig(this.apiService.serverConfig.domain.server).subscribe(t => {
+            const delta = this.compareVersion(t.apiVersion, versions.version);
+            if (delta === 1 || delta === 2) {
+                Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
+                    'Kahla might not work properly if you don\'t upgrade.', 'warning');
+            } else if (delta < 0 && !this.apiService.serverConfig.officialServer) {
+                Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
+                    'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
+            }
+        });
+    }
+
+    public compareVersion(a: string, b: string): number {
+        const verA = a.split('.').map(Number);
+        const verB = b.split('.').map(Number);
+
+        for (let i = 0; i < 3; i++) {
+            if (verA[i] === verB[i]) {
+                continue;
+            }
+            return Math.sign(verA[i] - verB[i]) * (i + 1);
+        }
+        return 0;
     }
 
     private redirectToDownload(downloadAddress: string, showAlert: boolean = false): void {

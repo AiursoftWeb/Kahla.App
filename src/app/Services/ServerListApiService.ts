@@ -20,4 +20,8 @@ export class ServerListApiService {
     public Version(): Observable<VersionViewModel> {
         return this.apiService.GetByFullUrl(`${environment.officialServerList}/version`, false);
     }
+
+    public getServerConfig(server: string): Observable<ServerConfig> {
+        return this.apiService.GetByFullUrl(server, false);
+    }
 }

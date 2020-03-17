@@ -85,6 +85,7 @@ export class InitService {
 
         if (this.apiService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
+            this.checkService.checkApiVersion();
             this.authApiService.SignInStatus().subscribe(signInStatus => {
                 if (signInStatus.value === false) {
                     this.router.navigate(['/signin'], {replaceUrl: true});

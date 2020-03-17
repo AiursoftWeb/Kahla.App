@@ -4,7 +4,6 @@ import { ApiService } from '../Services/ApiService';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { ServerConfig } from '../Models/ServerConfig';
 import { ServerListApiService } from '../Services/ServerListApiService';
 
 @Component({
@@ -49,7 +48,7 @@ export class SignInComponent implements OnInit {
         });
         Swal.showLoading();
         const fireFailed = () => Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
-        this.apiService.GetByFullUrl<ServerConfig>(this.serverAddr, false).subscribe({
+        this.serverListApiService.getServerConfig(this.serverAddr).subscribe({
             next: serverConfig => {
                 if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
                     Swal.close();
