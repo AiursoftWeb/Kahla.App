@@ -1,6 +1,6 @@
 import { AiurEvent } from './AiurEvent';
-import { KahlaUser } from './KahlaUser';
+import { Request } from './Request';
 
 export class NewFriendRequestEvent extends AiurEvent {
-    public requester: KahlaUser;
+    public request: Request;
 }

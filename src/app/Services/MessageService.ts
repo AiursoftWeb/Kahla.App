@@ -120,7 +120,7 @@ export class MessageService {
             }
             case EventType.NewFriendRequest: {
                 if (fireAlert) {
-                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
+                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
                 }
                 this.cacheService.updateRequests();
                 break;
