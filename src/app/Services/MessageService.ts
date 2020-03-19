@@ -77,8 +77,10 @@ export class MessageService {
                     .findIndex(x => x.conversationId === evt.message.conversationId);
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    conversationCache.latestMessage = this.cacheService.modifyMessage(
+                    const latestMsg = Object.assign({}, evt.message);
+                    latestMsg.content = this.cacheService.modifyMessage(
                         AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
+                    conversationCache.latestMessage = latestMsg;
                     if (!this.conversation || this.conversation.id !== evt.message.conversationId) {
                         conversationCache.unReadAmount++;
                         if (evt.mentioned) {
@@ -419,7 +421,7 @@ export class MessageService {
         t.contentRaw = t.content;
         t.sendTimeDate = new Date(t.sendTime);
         t.timeStamp = t.sendTimeDate.getTime();
-        if (t.content.match(/^\[(video|img)\].*/)) {
+        if (t.content.match(/^\[(video|img)].*/)) {
             if (t.content.startsWith('[img]')) {
                 let imageWidth = Number(t.content.split('|')[1]),
                     imageHeight = Number(t.content.split('|')[2]);
@@ -458,7 +460,7 @@ export class MessageService {
                     t.content = 'Invalid User';
                 }
             });
-        } else if (!t.content.match(/^\[(file|audio)\].*/)) {
+        } else if (!t.content.match(/^\[(file|audio)].*/)) {
             t.isEmoji = this.checkEmoji(t.content);
             t.content = he.encode(t.content);
             t.content = Autolinker.link(t.content, {

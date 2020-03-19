@@ -68,10 +68,10 @@ export class AddFriendComponent implements OnInit {
         this.showUsers = selectUsers;
     }
 
-    SearchBoxKeyUp(event: KeyboardEvent, element: HTMLInputElement) {
+    SearchBoxKeyUp(event: KeyboardEvent, value: string) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            this.search(element.value, 0);
+            this.search(value, 0);
         }
     }
 }
