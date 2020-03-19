@@ -101,11 +101,17 @@ export class MessageService {
                 }
                 if (this.conversation && this.conversation.id === evt.message.conversationId
                     && this.localMessages.findIndex(t => t.id === evt.message.id) === -1) {
-                    this.rawMessages.push(evt.message);
-                    this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
-                    this.reorderLocalMessages();
-                    this.updateAtLink();
-                    this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
+                    if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
+                        evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
+                        this.rawMessages.push(evt.message);
+                        this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
+                        this.reorderLocalMessages();
+                        this.updateAtLink();
+                        this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
+                        this.saveMessage();
+                    } else { // lost some message.
+                        this.getMessages(0, this.conversation.id, null, 15);
+                    }
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
@@ -114,7 +120,6 @@ export class MessageService {
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
-                    this.saveMessage();
                 } else {
                     this.showNotification(evt);
                 }

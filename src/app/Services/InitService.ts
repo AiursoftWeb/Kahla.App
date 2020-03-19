@@ -90,6 +90,9 @@ export class InitService {
                 if (signInStatus.value === false) {
                     this.router.navigate(['/signin'], {replaceUrl: true});
                 } else {
+                    if (this.router.isActive('/signin', false)) {
+                        this.router.navigate(['/home'], {replaceUrl: true});
+                    }
                     this.authApiService.Me().subscribe(p => {
                         if (p.code === 0) {
                             this.cacheService.cachedData.me = p.value;
