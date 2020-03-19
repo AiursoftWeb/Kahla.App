@@ -1,7 +1,8 @@
 ﻿<app-header title="Add New" closeDirectly="true"></app-header>
 <div class="search-part" id="search-part">
     <div class="search-input search-input-with-button">
-        <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #friendSearch (keyup)="SearchBoxKeyUp($event,$event.currentTarget)"/>
+        <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #friendSearch
+               (keyup)="SearchBoxKeyUp($event, friendSearch.value)"/>
         <button class="button primary" (click)="search(friendSearch.value, 0)"
                 [disabled]="searching || friendSearch.value.length === 0"><i class="fas fa-search"></i></button>
     </div>

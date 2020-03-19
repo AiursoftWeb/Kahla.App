@@ -421,7 +421,7 @@ export class MessageService {
         t.contentRaw = t.content;
         t.sendTimeDate = new Date(t.sendTime);
         t.timeStamp = t.sendTimeDate.getTime();
-        if (t.content.match(/^\[(video|img)\].*/)) {
+        if (t.content.match(/^\[(video|img)].*/)) {
             if (t.content.startsWith('[img]')) {
                 let imageWidth = Number(t.content.split('|')[1]),
                     imageHeight = Number(t.content.split('|')[2]);
@@ -460,7 +460,7 @@ export class MessageService {
                     t.content = 'Invalid User';
                 }
             });
-        } else if (!t.content.match(/^\[(file|audio)\].*/)) {
+        } else if (!t.content.match(/^\[(file|audio)].*/)) {
             t.isEmoji = this.checkEmoji(t.content);
             t.content = he.encode(t.content);
             t.content = Autolinker.link(t.content, {
