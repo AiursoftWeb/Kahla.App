@@ -6,7 +6,7 @@ import { KahlaUser } from './KahlaUser';
 import { Conversation } from './Conversation';
 
 export class CacheModel {
-    public static readonly VERSION = 2;
+    public static readonly VERSION = 3;
     public version = CacheModel.VERSION;
     public me: KahlaUser;
     public conversations: ContactInfo[];

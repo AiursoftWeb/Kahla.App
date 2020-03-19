@@ -31,11 +31,11 @@ export class CacheService {
                 info.forEach(e => {
                     if (e.latestMessage != null) {
                         try {
-                            e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                            e.latestMessage.content = AES.decrypt(e.latestMessage.content, e.aesKey).toString(enc.Utf8);
                         } catch (error) {
-                            e.latestMessage = '';
+                            e.latestMessage.content = '';
                         }
-                        e.latestMessage = this.modifyMessage(e.latestMessage);
+                        e.latestMessage.content = this.modifyMessage(e.latestMessage.content);
                     }
                     e.avatarURL = this.probeService.encodeProbeFileUrl(e.displayImagePath);
                 });

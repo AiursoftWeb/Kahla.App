@@ -77,8 +77,10 @@ export class MessageService {
                     .findIndex(x => x.conversationId === evt.message.conversationId);
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    conversationCache.latestMessage = this.cacheService.modifyMessage(
+                    const latestMsg = Object.assign({}, evt.message);
+                    latestMsg.content = this.cacheService.modifyMessage(
                         AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
+                    conversationCache.latestMessage = latestMsg;
                     if (!this.conversation || this.conversation.id !== evt.message.conversationId) {
                         conversationCache.unReadAmount++;
                         if (evt.mentioned) {
