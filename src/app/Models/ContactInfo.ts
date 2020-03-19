@@ -6,7 +6,7 @@ export class ContactInfo {
     public latestMessage: Message;
     public unReadAmount: number;
     public conversationId: number;
-    public discriminator: string;
+    public discriminator: 'GroupConversation' | 'PrivateConversation';
     public userId: string;
     public aesKey: string;
     public avatarURL: string;

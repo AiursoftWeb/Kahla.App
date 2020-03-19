@@ -73,16 +73,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         if (this.cacheService.cachedData.me && info.latestMessage.senderId === this.cacheService.cachedData.me.id) {
             return this.cacheService.cachedData.me.nickName + ': ';
         }
-        if (info.discriminator === 'PrivateConversation') {
-            if (info.userId === info.latestMessage.senderId) {
-                return info.displayName + ': ';
-            }
-        } else {
-            const groupDetail = this.cacheService.cachedData.conversationDetail[info.conversationId];
-            if (groupDetail) {
-                const usr = groupDetail.users.find(t => t.userId === info.latestMessage.senderId);
-                return usr ? usr.user.nickName + ': ' : '';
-            }
+        const groupDetail = this.cacheService.cachedData.conversationDetail[info.conversationId];
+        if (groupDetail) {
+            const usr = groupDetail.users.find(t => t.userId === info.latestMessage.senderId);
+            return usr ? usr.user.nickName + ': ' : '';
         }
 
         return '';

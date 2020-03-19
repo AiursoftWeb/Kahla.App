@@ -26,7 +26,12 @@
                 {{inf.latestMessage.sendTime | date:'shortTime'}}
             </div>
             <div class="last-message">
-                {{getLatestUserName(inf)}}{{inf.latestMessage.content}}
+                <i class="fas fa-angle-right"
+                   *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
+                <i class="fas fa-angle-left"
+                   *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId !== cacheService.cachedData.me.id"></i>
+                {{inf.discriminator === 'GroupConversation' ? getLatestUserName(inf) : ''}}
+                {{inf.latestMessage.content}}
             </div>
         </ng-container>
         <div class="last-message" *ngIf="inf.latestMessage === null" i18n="@@NoMessage">
