@@ -155,6 +155,7 @@ a {
 .select-button-group {
   margin: 4px 10px 4px 10px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .select-button {
@@ -199,4 +200,8 @@ a {
   display: inline-block;
   border: white solid 2px;
   margin-right: 4px;
+
+  &.fas {
+    border: none;
+  }
 }
