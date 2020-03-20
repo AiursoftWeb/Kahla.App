@@ -1,6 +1,7 @@
 import { AiurEvent } from './AiurEvent';
 import { KahlaUser } from '../KahlaUser';
 
-export class WereDeletedEvent extends AiurEvent {
+export class FriendDeletedEvent extends AiurEvent {
     public trigger: KahlaUser;
+    public conversationId: number;
 }
