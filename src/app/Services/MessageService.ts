@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EventType } from '../Models/EventType';
-import { AiurEvent } from '../Models/AiurEvent';
+import { EventType } from '../Models/Events/EventType';
+import { AiurEvent } from '../Models/Events/AiurEvent';
 import Swal from 'sweetalert2';
-import { NewMessageEvent } from '../Models/NewMessageEvent';
+import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './ConversationApiService';
@@ -15,17 +15,17 @@ import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
 import { ElectronService } from 'ngx-electron';
-import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
+import { TimerUpdatedEvent } from '../Models/Events/TimerUpdatedEvent';
 import { TimerService } from './TimerService';
-import { WereDeletedEvent } from '../Models/WereDeletedEvent';
-import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
-import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
+import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
+import { NewFriendRequestEvent } from '../Models/Events/NewFriendRequestEvent';
+import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
-import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
-import { NewMemberEvent } from '../Models/NewMemberEvent';
+import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
+import { NewMemberEvent } from '../Models/Events/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
-import { DissolveEvent } from '../Models/DissolveEvent';
+import { DissolveEvent } from '../Models/Events/DissolveEvent';
 import { HomeService } from './HomeService';
 import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
@@ -65,7 +65,8 @@ export class MessageService {
         private groupsApiService: GroupsApiService,
         private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
-    ) { }
+    ) {
+    }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -126,31 +127,37 @@ export class MessageService {
                 break;
             }
             case EventType.NewFriendRequest: {
-                if (fireAlert) {
+                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== this.cacheService.cachedData.me.id) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
                 }
                 this.cacheService.updateRequests();
                 break;
             }
-            case EventType.WereDeletedEvent: {
-                if (fireAlert) {
-                    Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
+            case EventType.FriendDeletedEvent: {
+                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
+                    Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
                 break;
             }
-            case EventType.FriendAcceptedEvent: {
-                if (fireAlert) {
-                    Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
-                        ' are now friends!', 'success');
-                }
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                if (this.router.isActive(`/user/${(ev as FriendAcceptedEvent).target.id}`, false)) {
-                    this.friendsApiService.UserDetail((ev as FriendAcceptedEvent).target.id).subscribe(t => {
-                        this.router.navigate(['/talking', t.conversationId]);
-                    });
+            case EventType.FriendsChangedEvent: {
+                const evt = <FriendsChangedEvent>ev;
+                this.cacheService.updateRequests();
+                if (evt.result) {
+                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                        Swal.fire('Friend request accepted', 'You and ' + evt.createdConversation.displayName +
+                            ' are now friends!', 'success');
+                    }
+                    this.cacheService.updateConversation();
+                    this.cacheService.updateFriends();
+                    if (this.router.isActive(`/user/${evt.request.targetId}`, false)) {
+                        this.router.navigate(['/talking', evt.createdConversation.id]);
+                    }
+                } else {
+                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                        Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
+                    }
                 }
                 break;
             }
@@ -176,7 +183,7 @@ export class MessageService {
                 }
                 break;
             }
-            case EventType.SomeoneLeftLevent: {
+            case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
                 const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
                 if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
@@ -202,6 +209,11 @@ export class MessageService {
                         'warning');
                     this.router.navigate(['/home']);
                 }
+                this.cacheService.updateFriends();
+                this.cacheService.updateConversation();
+                break;
+            }
+            case EventType.GroupJoinedEvent: {
                 this.cacheService.updateFriends();
                 this.cacheService.updateConversation();
                 break;

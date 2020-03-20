@@ -1,5 +1,5 @@
 ﻿import { AiurEvent } from './AiurEvent';
-import { Message } from './Message';
+import { Message } from '../Message';
 
 export class NewMessageEvent extends AiurEvent {
     public message: Message;

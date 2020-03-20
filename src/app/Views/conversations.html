@@ -30,7 +30,7 @@
                    *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
                 <i class="fas fa-angle-left"
                    *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId !== cacheService.cachedData.me.id"></i>
-                {{inf.discriminator === 'GroupConversation' ? inf.latestMessage.sender.nickName : ''}}
+                <b *ngIf="inf.discriminator === 'GroupConversation'">{{inf.latestMessage.sender.nickName}}: </b>
                 {{inf.latestMessage.content}}
             </div>
         </ng-container>
