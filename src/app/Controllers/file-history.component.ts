@@ -61,7 +61,9 @@ export class FileHistoryComponent implements OnInit {
     }
 
     public share(file: ProbeFile, dir: ProbeFolder) {
-        console.log(`[file]${this.files.rootPath}/${dir.folderName}/${file.fileName}|${file.fileName}|${this.probeService.getFileSizeText(file.fileSize)}`);
-        this.router.navigate(['share-target', {message: `[file]${this.files.siteName}/${this.files.rootPath}/${dir.folderName}/${file.fileName}|${file.fileName}|${this.probeService.getFileSizeText(file.fileSize)}`}]);
+        this.router.navigate(['share-target', {
+            message: `[file]${this.files.siteName}/${this.files.rootPath}/${
+                dir.folderName}/${file.fileName}|${file.fileName}|${this.probeService.getFileSizeText(file.fileSize)}`
+        }]);
     }
 }
