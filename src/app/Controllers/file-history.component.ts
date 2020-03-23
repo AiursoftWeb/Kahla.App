@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
 import { switchMap } from 'rxjs/operators';
 import { ConversationApiService } from '../Services/ConversationApiService';
@@ -22,6 +22,7 @@ export class FileHistoryComponent implements OnInit {
         private route: ActivatedRoute,
         private conversationApiService: ConversationApiService,
         public probeService: ProbeService,
+        public router: Router,
     ) {
 
     }
@@ -57,5 +58,12 @@ export class FileHistoryComponent implements OnInit {
             });
         });
         return `${count} files. Total Size:${this.probeService.getFileSizeText(totalSize)}`;
+    }
+
+    public share(file: ProbeFile, dir: ProbeFolder) {
+        this.router.navigate(['share-target', {
+            message: `[file]${this.files.siteName}/${this.files.rootPath}/${
+                dir.folderName}/${file.fileName}|${file.fileName}|${this.probeService.getFileSizeText(file.fileSize)}`
+        }]);
     }
 }
