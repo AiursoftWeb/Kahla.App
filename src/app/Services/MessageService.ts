@@ -47,8 +47,8 @@ export class MessageService {
     public maxImageWidth = 0;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'chocolate',
+        'coral', 'deepskyblue', 'darkturquoise', 'lightseagreen', 'indigo', 'lavenderblush', 'lawngreen', 'maroon'];
     public groupConversation = false;
     public sysNotifyText: string;
     public sysNotifyShown: boolean;
