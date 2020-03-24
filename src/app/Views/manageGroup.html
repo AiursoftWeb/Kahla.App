@@ -17,6 +17,16 @@
         <label>Group Name</label>
         <input [(ngModel)]="newGroupName" placeholder="Enter the group name" type="text" (keyup.enter)="saveInfo()"/>
     </div>
+    <div class="menu-button toggle-setting"
+         (click)="conversation.listInSearchResult = !conversation.listInSearchResult">
+        <div class="img">
+            <i class="fas fa-stream"></i>
+        </div>
+        <div class="text" i18n="@@Notification">List this group in the search result</div>
+        <input id="toggleListGroup" class="tgl" type="checkbox" disabled="disabled"
+               [ngModel]="conversation.listInSearchResult"/>
+        <label for="toggleListGroup" class="tgl-btn"></label>
+    </div>
     <div class="buttons">
         <button id="save" class="button primary" (click)="saveInfo()" i18n="@@save">Save</button>
     </div>
