@@ -47,11 +47,12 @@ export class GroupsApiService {
         });
     }
 
-    public UpdateGroupInfo(groupName: string, avatarPath?: string, newName?: string): Observable<AiurProtocal> {
+    public UpdateGroupInfo(groupName: string, listInSearchResult: boolean, avatarPath?: string, newName?: string): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarPath: avatarPath,
-            NewName: newName
+            NewName: newName,
+            ListInSearchResult: listInSearchResult,
         });
     }
 

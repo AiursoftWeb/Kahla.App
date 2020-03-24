@@ -5,4 +5,5 @@ export class GroupConversation extends Conversation {
     public groupImagePath: string;
     public hasPassword: boolean;
     public ownerId: string;
+    public listInSearchResult: boolean;
 }

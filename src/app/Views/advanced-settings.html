@@ -8,7 +8,7 @@
     </div>
     <div class="text" i18n="@@Language">Language</div>
 </div>
-<div class="menu-button notification"
+<div class="menu-button toggle-setting"
      (click)="this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage; updateSettings()" *ngIf="this.me">
     <div class="img">
         <i class="fas fa-exchange-alt"></i>
@@ -23,7 +23,7 @@
 <div class="menu-header">
     Privacy
 </div>
-<div class="menu-button notification" (click)="this.me.markEmailPublic = !this.me.markEmailPublic; updateSettings()"
+<div class="menu-button toggle-setting" (click)="this.me.markEmailPublic = !this.me.markEmailPublic; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-envelope"></i>
@@ -32,7 +32,7 @@
     <input id="toggleEmail" class="tgl" type="checkbox" [checked]="this.me.markEmailPublic" disabled="disabled"/>
     <label for="toggleEmail" class="tgl-btn"></label>
 </div>
-<div class="menu-button notification" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
+<div class="menu-button toggle-setting" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-plug"></i>
@@ -41,7 +41,7 @@
     <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="!me.enableInvisiable" disabled="disabled"/>
     <label for="toggleInvisible" class="tgl-btn"></label>
 </div>
-<div class="menu-button notification"
+<div class="menu-button toggle-setting"
      (click)="this.me.listInSearchResult = !this.me.listInSearchResult; updateSettings()"
      *ngIf="this.me">
     <div class="img">
@@ -54,7 +54,7 @@
 <div class="menu-header">
     Notification
 </div>
-<div class="menu-button notification"
+<div class="menu-button toggle-setting"
      (click)="this.me.enableEmailNotification = !this.me.enableEmailNotification; updateSettings()"
      *ngIf="this.me && me.emailConfirmed">
     <div class="img">

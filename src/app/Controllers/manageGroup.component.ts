@@ -17,7 +17,8 @@ import { ProbeService } from '../Services/ProbeService';
     templateUrl: '../Views/manageGroup.html',
     styleUrls: ['../Styles/menu.scss',
         '../Styles/userDetail.scss',
-        '../Styles/button.scss'
+        '../Styles/button.scss',
+        '../Styles/toggleButton.scss'
     ]
 })
 export class ManageGroupComponent implements OnInit {
@@ -135,17 +136,18 @@ export class ManageGroupComponent implements OnInit {
     }
 
     public saveInfo() {
-        this.groupsApiService.UpdateGroupInfo(this.conversation.groupName, this.conversation.groupImagePath, this.newGroupName)
+        this.groupsApiService.UpdateGroupInfo(this.conversation.groupName, this.conversation.listInSearchResult,
+            this.conversation.groupImagePath, this.newGroupName)
             .subscribe(res => {
-            if (res.code === 0) {
-                Swal.fire('Success', res.message, 'success');
-                this.conversation.groupName = this.newGroupName;
-            } else if (res.code === -10 && (res as AiurCollection<string>).items) {
-                Swal.fire('Error', (res as AiurCollection<string>).items.join('<br/>'), 'error');
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
+                if (res.code === 0) {
+                    Swal.fire('Success', res.message, 'success');
+                    this.conversation.groupName = this.newGroupName;
+                } else if (res.code === -10 && (res as AiurCollection<string>).items) {
+                    Swal.fire('Error', (res as AiurCollection<string>).items.join('<br/>'), 'error');
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            });
     }
 
     public kickMember() {
