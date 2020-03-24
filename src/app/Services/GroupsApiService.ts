@@ -42,12 +42,13 @@ export class GroupsApiService {
 
     public TransferOwner(groupName: string, targetUserId: string): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/TransferGroupOwner', {
-            groupName:    groupName,
+            groupName: groupName,
             targetUserId: targetUserId
         });
     }
 
-    public UpdateGroupInfo(groupName: string, listInSearchResult: boolean, avatarPath?: string, newName?: string): Observable<AiurProtocal> {
+    public UpdateGroupInfo(groupName: string, listInSearchResult: boolean,
+                           avatarPath?: string, newName?: string): Observable<AiurProtocal> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarPath: avatarPath,
