@@ -16,6 +16,11 @@
   overflow-y: auto;
   text-align: center;
 }
+@media (prefers-color-scheme: dark) {
+  .signin-back {
+    background-color: rgb(28, 30, 31)!important;
+  }
+}
 
 .auth-page {
   margin: auto;
