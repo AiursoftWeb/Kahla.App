@@ -3,7 +3,7 @@
 <ng-container *ngIf="webpushSupported()">
     <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
         <div class="img"><i class="far fa-bell"></i></div>
-        <div class="text">Enable WebPush notification</div>
+        <div class="text">Enable push notification</div>
         <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled"/>
         <label for="toggleWebpush" class="tgl-btn"></label>
     </div>
@@ -13,12 +13,12 @@
         </div>
         <div class="text">Send Test Notification</div>
     </div>
-    <div class="menu-hint">This will send a WebPush notification to all your devices.</div>
+    <div class="menu-hint">This will send a push notification to all your devices.</div>
 </ng-container>
 <ng-container *ngIf="electronService.isElectronApp">
     <div class="menu-button toggle-setting" (click)="setElectronNotify(!getElectronNotify())">
         <div class="img"><i class="far fa-bell"></i></div>
-        <div class="text">Enable Desktop Notification</div>
+        <div class="text">Enable Push Notification</div>
         <input id="toggleElectron" class="tgl" type="checkbox" disabled="disabled" [checked]="getElectronNotify()"/>
         <label for="toggleElectron" class="tgl-btn"></label>
     </div>
@@ -26,7 +26,7 @@
 <ng-container *ngIf="!webpushSupported() && !electronService.isElectronApp">
     <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
 </ng-container>
-<div class="menu-header">My devices (WebPush devices only)</div>
+<div class="menu-header">My web devices</div>
 <div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices"
      (click)="detail(device)">
     <div class="img device-img">
