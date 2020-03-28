@@ -54,8 +54,8 @@ function createWindow() {
             event.preventDefault();
             let oauth = new BrowserWindow(
                 {
-                    width: 800,
-                    height: 600,
+                    width: 410,
+                    height: 730,
                     icon: __dirname + '/assets/144x144.png',
                     titleBarStyle: 'default',
                     minWidth: 200,
