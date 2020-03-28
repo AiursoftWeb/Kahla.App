@@ -12,6 +12,7 @@ import { ProbeService } from './ProbeService';
 import { ServerConfig } from '../Models/ServerConfig';
 import { ApiService } from './ApiService';
 import { ServerListApiService } from './ServerListApiService';
+import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Injectable({
     providedIn: 'root'
@@ -195,39 +196,67 @@ export class InitService {
         }, this.timeoutNumber);
     }
 
-    private subscribeUser(): void {
+    public subscribeUser() {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function (registration) {
-                return registration.pushManager.getSubscription().then(function (sub) {
+            navigator.serviceWorker.ready.then((registration => {
+                return registration.pushManager.getSubscription().then(sub => {
                     if (sub === null) {
                         return registration.pushManager.subscribe(_this.options)
                             .then(function (pushSubscription) {
-                                return _this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                    .subscribe(function (result) {
-                                        localStorage.setItem('deviceID', result.value.toString());
-                                    });
+                                _this.bindDevice(pushSubscription);
                             });
+                    } else {
+                        _this.bindDevice(sub);
                     }
                 });
-            }.bind(_this));
+            }));
+        }
+    }
+
+    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
+        let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
+        console.log(data);
+        if (!data) {
+            data = {
+                enabled: true,
+                deviceId: 0
+            };
+            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+        }
+        if (!data.enabled && data.deviceId) {
+            this.devicesApiService.DropDevice(data.deviceId).subscribe(t => {
+                if (t.code === 0) {
+                    data.deviceId = 0;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+                }
+            });
+
+        }
+        if (data.deviceId) {
+            if (force) {
+                this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+            }
+        } else {
+            this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
+                data.deviceId = t.value;
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+            });
         }
     }
 
     private updateSubscription(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function (registration) {
-                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function () {
+            navigator.serviceWorker.ready.then(registration =>
+                navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => {
                     registration.pushManager.subscribe(_this.options)
-                        .then(function (pushSubscription) {
-                            return _this.devicesApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
-                                pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                .subscribe();
+                        .then(pushSubscription => {
+                            _this.bindDevice(pushSubscription, true);
                         });
-                });
-            }.bind(_this));
+                }));
         }
     }
 

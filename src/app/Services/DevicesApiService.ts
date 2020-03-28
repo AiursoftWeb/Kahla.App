@@ -24,13 +24,19 @@ export class DevicesApiService {
     }
 
     public UpdateDevice(deviceID: number, userAgent: string, PushEndpoint: string,
-        PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
+                        PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
         return this.apiService.Post(DevicesApiService.serverPath + '/UpdateDevice', {
             DeviceId: deviceID,
             Name: userAgent,
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
+        });
+    }
+
+    public DropDevice(deviceId: number): Observable<AiurProtocal> {
+        return this.apiService.Post(DevicesApiService.serverPath + '/DropDevice', {
+            id: deviceId
         });
     }
 

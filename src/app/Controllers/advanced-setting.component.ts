@@ -61,18 +61,6 @@ export class AdvancedSettingComponent implements OnInit {
             });
     }
 
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
-    }
-
     public todo(): void {
         Swal.fire('Under development', 'This features is still under development ^_^.', 'info');
     }

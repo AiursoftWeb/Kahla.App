@@ -1,5 +1,34 @@
-<app-header title="Devices"></app-header>
-<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices" (click)="detail(device)">
+<app-header title="Push Notification Settings"></app-header>
+<div class="menu-header">Status & Settings</div>
+<ng-container *ngIf="webpushSupported()">
+    <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
+        <div class="img"><i class="far fa-bell"></i></div>
+        <div class="text">Enable WebPush notification</div>
+        <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled"/>
+        <label for="toggleWebpush" class="tgl-btn"></label>
+    </div>
+    <div class="menu-button" (click)="testPush()">
+        <div class="img">
+            <i class="fas fa-flask" aria-hidden="true"></i>
+        </div>
+        <div class="text">Send Test Notification</div>
+    </div>
+    <div class="menu-hint">This will send a WebPush notification to all your devices.</div>
+</ng-container>
+<ng-container *ngIf="electronService.isElectronApp">
+    <div class="menu-button toggle-setting">
+        <div class="img"><i class="far fa-bell"></i></div>
+        <div class="text">Enable Desktop Notification</div>
+        <input id="toggleElectron" class="tgl" type="checkbox" disabled="disabled"/>
+        <label for="toggleElectron" class="tgl-btn"></label>
+    </div>
+</ng-container>
+<ng-container *ngIf="!webpushSupported() && !electronService.isElectronApp">
+    <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
+</ng-container>
+<div class="menu-header">My devices (WebPush devices only)</div>
+<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices"
+     (click)="detail(device)">
     <div class="img device-img">
         <i *ngIf="device.name.includes('Windows')" class="fab fa-windows" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fab fa-apple"
