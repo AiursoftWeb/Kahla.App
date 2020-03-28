@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
-import { DevicesApiService } from '../Services/DevicesApiService';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
 import { Subscription } from 'rxjs';
@@ -21,7 +20,6 @@ export class AdvancedSettingComponent implements OnInit {
 
     constructor(
         private authApiService: AuthApiService,
-        private devicesApiService: DevicesApiService,
         private cacheService: CacheService,
         private probeService: ProbeService,
     ) {

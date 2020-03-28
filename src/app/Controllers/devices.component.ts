@@ -77,4 +77,12 @@ export class DevicesComponent implements OnInit {
         this.webPushEnabled = value;
         this.initService.subscribeUser();
     }
+
+    public getElectronNotify(): boolean {
+        return localStorage.getItem('setting-electronNotify') === 'true';
+    }
+
+    public setElectronNotify(value: boolean) {
+        localStorage.setItem('setting-electronNotify', value ? 'true' : 'false');
+    }
 }

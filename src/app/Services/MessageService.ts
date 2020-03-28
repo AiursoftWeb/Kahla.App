@@ -351,7 +351,10 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.message.sender.id !== this.cacheService.cachedData.me.id && this._electronService.isElectronApp) {
+        if (!event.muted &&
+            event.message.sender.id !== this.cacheService.cachedData.me.id &&
+            this._electronService.isElectronApp &&
+            localStorage.getItem('setting-electronNotify') === 'true') {
             event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
             event.message.content = this.cacheService.modifyMessage(event.message.content);
             const notify = new Notification(event.message.sender.nickName, {

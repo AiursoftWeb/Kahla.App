@@ -16,10 +16,10 @@
     <div class="menu-hint">This will send a WebPush notification to all your devices.</div>
 </ng-container>
 <ng-container *ngIf="electronService.isElectronApp">
-    <div class="menu-button toggle-setting">
+    <div class="menu-button toggle-setting" (click)="setElectronNotify(!getElectronNotify())">
         <div class="img"><i class="far fa-bell"></i></div>
         <div class="text">Enable Desktop Notification</div>
-        <input id="toggleElectron" class="tgl" type="checkbox" disabled="disabled"/>
+        <input id="toggleElectron" class="tgl" type="checkbox" disabled="disabled" [checked]="getElectronNotify()"/>
         <label for="toggleElectron" class="tgl-btn"></label>
     </div>
 </ng-container>
