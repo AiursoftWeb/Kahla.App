@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
-import { DevicesApiService } from '../Services/DevicesApiService';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
 import { Subscription } from 'rxjs';
@@ -21,7 +20,6 @@ export class AdvancedSettingComponent implements OnInit {
 
     constructor(
         private authApiService: AuthApiService,
-        private devicesApiService: DevicesApiService,
         private cacheService: CacheService,
         private probeService: ProbeService,
     ) {
@@ -59,18 +57,6 @@ export class AdvancedSettingComponent implements OnInit {
                     Swal.fire('Error', res.message, 'error');
                 }
             });
-    }
-
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
     }
 
     public todo(): void {
