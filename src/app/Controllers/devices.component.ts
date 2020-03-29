@@ -79,7 +79,7 @@ export class DevicesComponent implements OnInit {
     }
 
     public getElectronNotify(): boolean {
-        return localStorage.getItem('setting-electronNotify') === 'true';
+        return localStorage.getItem('setting-electronNotify') !== 'false';
     }
 
     public setElectronNotify(value: boolean) {
