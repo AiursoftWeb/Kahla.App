@@ -216,7 +216,6 @@ export class InitService {
 
     public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
         let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
-        console.log(data);
         if (!data) {
             data = {
                 enabled: true,
