@@ -3,6 +3,7 @@ import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
 import { ApiService } from '../Services/ApiService';
 import { ElectronService } from 'ngx-electron';
+import { environment } from '../../environments/environment';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -14,6 +15,7 @@ import { ElectronService } from 'ngx-electron';
 
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
+    public website = environment.officialServerList;
 
     constructor(
         public checkService: CheckService,
