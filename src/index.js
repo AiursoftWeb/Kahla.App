@@ -36,8 +36,9 @@ function createWindow() {
     }));
 
     mainWindow.on('close', function (event) {
-        if (!app.isQuiting && app.showExitNotif) {
+        if (!app.isQuiting) {
             event.preventDefault();
+            mainWindow.hide();
             if (app.showExitNotif) {
                 app.showExitNotif = false;
                 new Notification({
@@ -45,7 +46,6 @@ function createWindow() {
                     body: 'Kahla is running in the background. Press Ctrl + Alt + S to open.'
                 }).show();
             }
-            mainWindow.hide();
         }
     });
 
