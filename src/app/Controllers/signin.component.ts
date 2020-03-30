@@ -94,4 +94,12 @@ export class SignInComponent implements OnInit {
             this.serverAddr = this.apiService.serverConfig.domain.server;
         }
     }
+
+    public goLogin(url: string) {
+        if (this._electronService.isElectronApp) {
+            this._electronService.ipcRenderer.send('oauth', url);
+        } else {
+            document.location.href = url;
+        }
+    }
 }

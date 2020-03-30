@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { Menu, Tray, Notification, shell, globalShortcut } = require('electron');
+const {Menu, Tray, Notification, shell, globalShortcut, ipcMain} = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
@@ -50,41 +50,42 @@ function createWindow() {
     });
 
     mainWindow.webContents.on("new-window", (event, url) => {
-        if (url.match(/https:\/\/.*server\.kahla\.app\/Auth\/(Oauth|GoRegister)\/*/gi)) {
-            event.preventDefault();
-            let oauth = new BrowserWindow(
-                {
-                    width: 410,
-                    height: 730,
-                    icon: __dirname + '/assets/144x144.png',
-                    titleBarStyle: 'default',
-                    minWidth: 200,
-                    minHeight: 300,
-                    title: 'Please login via your aiursoft account.'
-                });
-            oauth.loadURL(url);
-            oauth.webContents.on('will-redirect', (event_, url_) => {
-
-                if (url_.match(/((staging|web)\.kahla\.app)|localhost/gi)) {
-                    event_.preventDefault();
-                    oauth.close();
-                    oauth.destroy();
-                    mainWindow.loadURL(Url.format({
-                        pathname: path.join(__dirname, 'index.html'),
-                        protocol: 'file:',
-                        slashes: true
-                    }));
-                }
-            });
-            oauth.show();
-        } else {
-            event.preventDefault();
-            shell.openExternal(url);
-        }
-    })
+        event.preventDefault();
+        shell.openExternal(url);
+    });
 }
 
 app.on('ready', createWindow);
+
+ipcMain.on('oauth', (event, arg) => {
+    let nextExit = false;
+    let oauth = new BrowserWindow(
+        {
+            width: 410,
+            height: 730,
+            icon: __dirname + '/assets/144x144.png',
+            titleBarStyle: 'default',
+            minWidth: 200,
+            minHeight: 300,
+            title: 'Please login via your aiursoft account.'
+        });
+    oauth.loadURL(arg);
+    oauth.webContents.on('will-redirect', (event_, url_) => {
+        if (nextExit) {
+            oauth.close();
+            oauth.destroy();
+            mainWindow.loadURL(Url.format({
+                pathname: path.join(__dirname, 'index.html'),
+                protocol: 'file:',
+                slashes: true,
+            }));
+        }
+        if (url_.match(/.+\/Auth\/AuthResult.+/gi)) {
+            nextExit = true;
+        }
+    });
+    oauth.show();
+});
 
 app.addListener('before-quit', () => {
     app.isQuiting = true;
@@ -95,9 +96,9 @@ app.on('window-all-closed', function () {
 });
 
 app.on('will-quit', () => {
-    globalShortcut.unregister('CommandOrControl+Alt+S')
+    globalShortcut.unregister('CommandOrControl+Alt+S');
     globalShortcut.unregisterAll()
-})
+});
 
 app.setAppUserModelId('com.example.kahla');
 
@@ -131,17 +132,24 @@ app.on('ready', () => {
         } else {
             mainWindow.show();
         }
-    })
+    });
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Kahla', click: function () { mainWindow.show(); }
+            label: 'Kahla', click: function () {
+                mainWindow.show();
+            }
         },
         {
-            label: 'Toggle developer tools', click: function () { mainWindow.toggleDevTools() }
+            label: 'Toggle developer tools', click: function () {
+                mainWindow.toggleDevTools()
+            }
         },
-        { type: 'separator' },
+        {type: 'separator'},
         {
-            label: 'Exit', click: function () { app.isQuiting = true; app.quit(); }
+            label: 'Exit', click: function () {
+                app.isQuiting = true;
+                app.quit();
+            }
         }
     ]);
     Menu.setApplicationMenu(null);

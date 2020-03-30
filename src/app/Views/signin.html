@@ -7,18 +7,18 @@
         </div>
         <div class="auth-content" *ngIf="!changingServer && apiService.serverConfig">
             <a class="actionLink" href="javascript:"
-                (click)="changingServer = true">Server: {{this.apiService.serverConfig.serverName}}</a>
+               (click)="changingServer = true">Server: {{this.apiService.serverConfig.serverName}}</a>
             <p *ngIf="!this.apiService.serverConfig.officialServer" class="text-warn">
                 (Not an official server)
             </p>
-            <a class="button white login" href="{{ this.apiService.serverConfig.domain.server }}/Auth/Oauth"
-               [target]="_electronService.isElectronApp ? '_blank' : ''">
+            <div class="button white login"
+                 (click)="goLogin(this.apiService.serverConfig.domain.server + '/Auth/Oauth')">
                 Sign in
-            </a>
-            <a class="button white login" href="{{ this.apiService.serverConfig.domain.server }}/Auth/GoRegister"
-               [target]="_electronService.isElectronApp ? '_blank' : ''">
+            </div>
+            <div class="button white login"
+                 (click)="goLogin(this.apiService.serverConfig.domain.server + '/Auth/GoRegister')">
                 Register
-            </a>
+            </div>
             <a class="actionLink" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
                target="_blank" rel="noopener noreferrer">Forgot password?</a>
         </div>
