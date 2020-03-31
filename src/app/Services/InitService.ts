@@ -230,20 +230,22 @@ export class InitService {
                     localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
                 }
             });
-
         }
-        if (data.deviceId) {
-            if (force) {
-                this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+        if (data.enabled) {
+            if (data.deviceId) {
+                if (force) {
+                    this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
+                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+                }
+            } else {
+                this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
+                    data.deviceId = t.value;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+                });
             }
-        } else {
-            this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
-                data.deviceId = t.value;
-                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-            });
         }
+
     }
 
     private updateSubscription(): void {
