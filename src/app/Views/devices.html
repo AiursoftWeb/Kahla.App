@@ -1,5 +1,33 @@
-<app-header title="Devices"></app-header>
-<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices" (click)="detail(device)">
+<app-header title="Push Notification Settings"></app-header>
+<div class="menu-header">Status & Settings</div>
+<ng-container *ngIf="webpushSupported()">
+    <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
+        <div class="img"><i class="far fa-bell"></i></div>
+        <div class="text">Enable web push notification</div>
+        <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled"/>
+        <label for="toggleWebpush" class="tgl-btn"></label>
+    </div>
+</ng-container>
+<ng-container *ngIf="electronService.isElectronApp">
+    <div class="menu-button toggle-setting" (click)="setElectronNotify(!getElectronNotify())">
+        <div class="img"><i class="fas fa-concierge-bell"></i></div>
+        <div class="text">Enable desktop notification</div>
+        <input id="toggleElectron" class="tgl" type="checkbox" disabled="disabled" [checked]="getElectronNotify()"/>
+        <label for="toggleElectron" class="tgl-btn"></label>
+    </div>
+</ng-container>
+<div class="menu-button" (click)="testPush()">
+    <div class="img">
+        <i class="fas fa-flask" aria-hidden="true"></i>
+    </div>
+    <div class="text">Send test notification</div>
+</div>
+<ng-container *ngIf="!webpushSupported() && !electronService.isElectronApp">
+    <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
+</ng-container>
+<div class="menu-header">My web devices</div>
+<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices"
+     (click)="detail(device)">
     <div class="img device-img">
         <i *ngIf="device.name.includes('Windows')" class="fab fa-windows" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fab fa-apple"

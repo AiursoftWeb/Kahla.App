@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EventType } from '../Models/EventType';
-import { AiurEvent } from '../Models/AiurEvent';
+import { EventType } from '../Models/Events/EventType';
+import { AiurEvent } from '../Models/Events/AiurEvent';
 import Swal from 'sweetalert2';
-import { NewMessageEvent } from '../Models/NewMessageEvent';
+import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './ConversationApiService';
@@ -15,17 +15,17 @@ import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
 import { ElectronService } from 'ngx-electron';
-import { TimerUpdatedEvent } from '../Models/TimerUpdatedEvent';
+import { TimerUpdatedEvent } from '../Models/Events/TimerUpdatedEvent';
 import { TimerService } from './TimerService';
-import { WereDeletedEvent } from '../Models/WereDeletedEvent';
-import { NewFriendRequestEvent } from '../Models/NewFriendRequestEvent';
-import { FriendAcceptedEvent } from '../Models/FriendAcceptedEvent';
+import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
+import { NewFriendRequestEvent } from '../Models/Events/NewFriendRequestEvent';
+import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
-import { SomeoneLeftEvent } from '../Models/SomeoneLeftEvent';
-import { NewMemberEvent } from '../Models/NewMemberEvent';
+import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
+import { NewMemberEvent } from '../Models/Events/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
-import { DissolveEvent } from '../Models/DissolveEvent';
+import { DissolveEvent } from '../Models/Events/DissolveEvent';
 import { HomeService } from './HomeService';
 import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
@@ -45,9 +45,10 @@ export class MessageService {
     public newMessages = false;
     private oldScrollHeight: number;
     public maxImageWidth = 0;
+    public videoHeight = 0;
     private userColors = new Map<string, string>();
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chocolate',
-        'coral', 'cornflowerblue', 'darkcyan', 'darkgoldenrod'];
+    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'chocolate',
+        'coral', 'deepskyblue', 'darkturquoise', 'lightseagreen', 'indigo', 'lavenderblush', 'lawngreen', 'maroon'];
     public groupConversation = false;
     public sysNotifyText: string;
     public sysNotifyShown: boolean;
@@ -64,7 +65,8 @@ export class MessageService {
         private groupsApiService: GroupsApiService,
         private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
-    ) { }
+    ) {
+    }
 
     public OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
@@ -76,8 +78,10 @@ export class MessageService {
                     .findIndex(x => x.conversationId === evt.message.conversationId);
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    conversationCache.latestMessage = this.cacheService.modifyMessage(
+                    const latestMsg = Object.assign({}, evt.message);
+                    latestMsg.content = this.cacheService.modifyMessage(
                         AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
+                    conversationCache.latestMessage = latestMsg;
                     if (!this.conversation || this.conversation.id !== evt.message.conversationId) {
                         conversationCache.unReadAmount++;
                         if (evt.mentioned) {
@@ -98,11 +102,17 @@ export class MessageService {
                 }
                 if (this.conversation && this.conversation.id === evt.message.conversationId
                     && this.localMessages.findIndex(t => t.id === evt.message.id) === -1) {
-                    this.rawMessages.push(evt.message);
-                    this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
-                    this.reorderLocalMessages();
-                    this.updateAtLink();
-                    this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
+                    if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
+                        evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
+                        this.rawMessages.push(evt.message);
+                        this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
+                        this.reorderLocalMessages();
+                        this.updateAtLink();
+                        this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
+                        this.saveMessage();
+                    } else { // lost some message.
+                        this.getMessages(0, this.conversation.id, null, 15);
+                    }
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
                             this.uploadService.scrollBottom(true);
@@ -111,38 +121,43 @@ export class MessageService {
                     if (!document.hasFocus()) {
                         this.showNotification(evt);
                     }
-                    this.saveMessage();
                 } else {
                     this.showNotification(evt);
                 }
                 break;
             }
             case EventType.NewFriendRequest: {
-                if (fireAlert) {
-                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).requester.nickName, 'info');
+                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== this.cacheService.cachedData.me.id) {
+                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
                 }
                 this.cacheService.updateRequests();
                 break;
             }
-            case EventType.WereDeletedEvent: {
-                if (fireAlert) {
-                    Swal.fire('Were deleted', 'You were deleted by ' + (<WereDeletedEvent>ev).trigger.nickName, 'info');
+            case EventType.FriendDeletedEvent: {
+                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
+                    Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
                 break;
             }
-            case EventType.FriendAcceptedEvent: {
-                if (fireAlert) {
-                    Swal.fire('Friend request accepted', 'You and ' + (<FriendAcceptedEvent>ev).target.nickName +
-                        ' are now friends!', 'success');
-                }
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                if (this.router.isActive(`/user/${(ev as FriendAcceptedEvent).target.id}`, false)) {
-                    this.friendsApiService.UserDetail((ev as FriendAcceptedEvent).target.id).subscribe(t => {
-                        this.router.navigate(['/talking', t.conversationId]);
-                    });
+            case EventType.FriendsChangedEvent: {
+                const evt = <FriendsChangedEvent>ev;
+                this.cacheService.updateRequests();
+                if (evt.result) {
+                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                        Swal.fire('Friend request accepted', 'You and ' + evt.createdConversation.displayName +
+                            ' are now friends!', 'success');
+                    }
+                    this.cacheService.updateConversation();
+                    this.cacheService.updateFriends();
+                    if (this.router.isActive(`/user/${evt.request.targetId}`, false)) {
+                        this.router.navigate(['/talking', evt.createdConversation.id]);
+                    }
+                } else {
+                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                        Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
+                    }
                 }
                 break;
             }
@@ -168,7 +183,7 @@ export class MessageService {
                 }
                 break;
             }
-            case EventType.SomeoneLeftLevent: {
+            case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
                 const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
                 if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
@@ -194,6 +209,11 @@ export class MessageService {
                         'warning');
                     this.router.navigate(['/home']);
                 }
+                this.cacheService.updateFriends();
+                this.cacheService.updateConversation();
+                break;
+            }
+            case EventType.GroupJoinedEvent: {
                 this.cacheService.updateFriends();
                 this.cacheService.updateConversation();
                 break;
@@ -313,6 +333,7 @@ export class MessageService {
 
     public updateMaxImageWidth(): void {
         this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
+        this.videoHeight = Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400));
     }
 
     public resetVariables(): void {
@@ -330,7 +351,10 @@ export class MessageService {
     }
 
     private showNotification(event: NewMessageEvent): void {
-        if (!event.muted && event.message.sender.id !== this.cacheService.cachedData.me.id && this._electronService.isElectronApp) {
+        if (!event.muted &&
+            event.message.sender.id !== this.cacheService.cachedData.me.id &&
+            this._electronService.isElectronApp &&
+            localStorage.getItem('setting-electronNotify') !== 'false') {
             event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
             event.message.content = this.cacheService.modifyMessage(event.message.content);
             const notify = new Notification(event.message.sender.nickName, {
@@ -417,12 +441,13 @@ export class MessageService {
         t.contentRaw = t.content;
         t.sendTimeDate = new Date(t.sendTime);
         t.timeStamp = t.sendTimeDate.getTime();
-        if (t.content.match(/^\[(video|img)\].*/)) {
+        if (t.content.match(/^\[(video|img)].*/)) {
             if (t.content.startsWith('[img]')) {
                 let imageWidth = Number(t.content.split('|')[1]),
                     imageHeight = Number(t.content.split('|')[2]);
                 const ratio = imageHeight / imageWidth;
-                const realMaxWidth = Math.min(this.maxImageWidth, Math.floor(900 / ratio));
+                const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
+                    Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
 
                 if (realMaxWidth < imageWidth) {
                     imageWidth = realMaxWidth;
@@ -455,7 +480,7 @@ export class MessageService {
                     t.content = 'Invalid User';
                 }
             });
-        } else if (!t.content.match(/^\[(file|audio)\].*/)) {
+        } else if (!t.content.match(/^\[(file|audio)].*/)) {
             t.isEmoji = this.checkEmoji(t.content);
             t.content = he.encode(t.content);
             t.content = Autolinker.link(t.content, {

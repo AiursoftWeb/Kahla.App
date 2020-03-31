@@ -42,6 +42,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 65%;
+
+    b {
+      font-weight: 600;
+    }
   }
 
   .status-badge {

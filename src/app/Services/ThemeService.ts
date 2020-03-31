@@ -3,12 +3,17 @@ import { AuthApiService } from './AuthApiService';
 import { Themes } from '../Models/Themes';
 import { KahlaUser } from '../Models/KahlaUser';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class ThemeService {
 
     constructor(
         private authApiService: AuthApiService,
-    ) { }
+    ) {
+    }
+
+    public mediaListener: MediaQueryList;
 
     ApplyThemeFromRemote(remoteInfo: KahlaUser) {
         if (this.LocalThemeSetting !== remoteInfo.themeId) {
@@ -22,7 +27,25 @@ export class ThemeService {
     }
 
     ApplyTheme(theme: Themes) {
-        switch (theme) {
+        let themeComputed = theme;
+        if (theme % 3 === 0) {
+            if (!this.mediaListener) {
+                this.mediaListener = matchMedia('(prefers-color-scheme: dark)');
+                this.mediaListener.onchange = () => this.ApplyThemeFromLocal();
+            }
+            if (this.mediaListener.matches) {
+                themeComputed = theme + 2;
+            } else {
+                themeComputed = theme + 1;
+            }
+        } else {
+            // make sure all media listener detached
+            if (this.mediaListener) {
+                this.mediaListener.onchange = null;
+                this.mediaListener = null;
+            }
+        }
+        switch (themeComputed) {
             case Themes.sakuraLight:
                 document.body.className = 'theme-sakura-light';
                 document.querySelector('meta[name=theme-color]')

@@ -1,4 +1,4 @@
-<app-header title="Advanced Settings" closeDirectly="true" [processing]="updatingSetting"></app-header>
+<app-header title="Advanced Settings" closeDirectly="true" [processing]="!!updatingSetting"></app-header>
 <div class="menu-header">
     General
 </div>
@@ -8,7 +8,7 @@
     </div>
     <div class="text" i18n="@@Language">Language</div>
 </div>
-<div class="menu-button notification"
+<div class="menu-button toggle-setting"
      (click)="this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage; updateSettings()" *ngIf="this.me">
     <div class="img">
         <i class="fas fa-exchange-alt"></i>
@@ -23,7 +23,7 @@
 <div class="menu-header">
     Privacy
 </div>
-<div class="menu-button notification" (click)="this.me.markEmailPublic = !this.me.markEmailPublic; updateSettings()"
+<div class="menu-button toggle-setting" (click)="this.me.markEmailPublic = !this.me.markEmailPublic; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-envelope"></i>
@@ -32,48 +32,43 @@
     <input id="toggleEmail" class="tgl" type="checkbox" [checked]="this.me.markEmailPublic" disabled="disabled"/>
     <label for="toggleEmail" class="tgl-btn"></label>
 </div>
-<div class="menu-button notification" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
+<div class="menu-button toggle-setting" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-plug"></i>
     </div>
-    <div class="text" i18n="@@Notification">Always offline</div>
-    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="me.enableInvisiable" disabled="disabled"/>
+    <div class="text" i18n="@@Notification">Show my online status</div>
+    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="!me.enableInvisiable" disabled="disabled"/>
     <label for="toggleInvisible" class="tgl-btn"></label>
 </div>
-<div class="menu-button notification" (click)="this.me.listInSearchResult = !this.me.listInSearchResult; updateSettings()"
+<div class="menu-button toggle-setting"
+     (click)="this.me.listInSearchResult = !this.me.listInSearchResult; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-stream"></i>
     </div>
     <div class="text" i18n="@@Notification">List me in search result</div>
-    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="me.listInSearchResult" disabled="disabled"/>
-    <label for="toggleInvisible" class="tgl-btn"></label>
+    <input id="toggleList" class="tgl" type="checkbox" [checked]="me.listInSearchResult" disabled="disabled"/>
+    <label for="toggleList" class="tgl-btn"></label>
 </div>
 <div class="menu-header">
     Notification
 </div>
-<div class="menu-button notification"
+<div class="menu-button toggle-setting"
      (click)="this.me.enableEmailNotification = !this.me.enableEmailNotification; updateSettings()"
      *ngIf="this.me && me.emailConfirmed">
     <div class="img">
         <i class="fas fa-envelope"></i>
     </div>
-    <div class="text" i18n="@@Notification">Email Notification</div>
+    <div class="text" i18n="@@Notification">Email notification</div>
     <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification" disabled="disabled"/>
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
 <div class="menu-button" routerLink="/devices">
     <div class="img">
-        <i class="fas fa-laptop" aria-hidden="true"></i>
+        <i class="far fa-bell" aria-hidden="true"></i>
     </div>
-    <div class="text">My Devices</div>
-</div>
-<div class="menu-button" (click)="testPush()">
-    <div class="img">
-        <i class="fas fa-flask" aria-hidden="true"></i>
-    </div>
-    <div class="text">Send Test Notification</div>
+    <div class="text">Push notification settings</div>
 </div>
 <div class="menu-header">
     Account
@@ -82,17 +77,17 @@
     <div class="img">
         <i class="fas fa-lock" aria-hidden="true"></i>
     </div>
-    <div class="text">Change Password</div>
+    <div class="text">Change password</div>
 </div>
 <a class="menu-button" href="https://account.aiursoft.com/Account/Email" target="_blank">
     <div class="img">
         <i class="fas fa-envelope" aria-hidden="true"></i>
     </div>
-    <div class="text">Advanced Email Settings</div>
+    <div class="text">Advanced email settings</div>
 </a>
 <a class="menu-button" href="https://account.aiursoft.com/Account" target="_blank">
     <div class="img">
         <i class="fas fa-cogs" aria-hidden="true"></i>
     </div>
-    <div class="text">Advanced Account Settings</div>
+    <div class="text">Advanced account settings</div>
 </a>

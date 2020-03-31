@@ -6,6 +6,7 @@ import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './DevicesApiService';
 import { ConversationApiService } from './ConversationApiService';
 import { ProbeService } from './ProbeService';
+import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Injectable()
 export class CacheService {
@@ -31,11 +32,11 @@ export class CacheService {
                 info.forEach(e => {
                     if (e.latestMessage != null) {
                         try {
-                            e.latestMessage = AES.decrypt(e.latestMessage, e.aesKey).toString(enc.Utf8);
+                            e.latestMessage.content = AES.decrypt(e.latestMessage.content, e.aesKey).toString(enc.Utf8);
                         } catch (error) {
-                            e.latestMessage = '';
+                            e.latestMessage.content = '';
                         }
-                        e.latestMessage = this.modifyMessage(e.latestMessage);
+                        e.latestMessage.content = this.modifyMessage(e.latestMessage.content);
                     }
                     e.avatarURL = this.probeService.encodeProbeFileUrl(e.displayImagePath);
                 });
@@ -75,6 +76,10 @@ export class CacheService {
 
     public updateDevice(): void {
         this.devicesApiService.MyDevices().subscribe(response => {
+            let currentId = 0;
+            if (localStorage.getItem('setting-pushSubscription')) {
+                currentId = (<PushSubscriptionSetting>JSON.parse(localStorage.getItem('setting-pushSubscription'))).deviceId;
+            }
             response.items.forEach(item => {
                 if (item.name !== null && item.name.length >= 0) {
                     const deviceName = [];
@@ -93,7 +98,7 @@ export class CacheService {
                         deviceName.push('Unknown OS');
                     }
 
-                    if (item.id === Number(localStorage.getItem('deviceID'))) {
+                    if (item.id === currentId) {
                         deviceName[0] += '(Current device)';
                     }
 

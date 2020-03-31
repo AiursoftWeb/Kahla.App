@@ -266,16 +266,12 @@
 
 .image-container {
   position: relative;
-  max-height: 1000px;
+  max-height: 500px;
   overflow: hidden;
 
   img {
     width: 100%;
   }
-}
-
-.message-list .message-balloon video {
-  width: 100%;
 }
 
 .chat-action {

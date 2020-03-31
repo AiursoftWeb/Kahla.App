@@ -16,6 +16,7 @@ import { HomeService } from '../Services/HomeService';
 })
 export class ConversationsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
+
     constructor(
         private router: Router,
         public cacheService: CacheService,

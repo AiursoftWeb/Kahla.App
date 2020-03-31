@@ -6,8 +6,8 @@ import { catchError } from 'rxjs/operators';
 @Component({
     templateUrl: '../Views/changePassword.html',
     styleUrls: [
-      '../Styles/userDetail.scss',
-      '../Styles/button.scss'
+        '../Styles/userDetail.scss',
+        '../Styles/button.scss'
     ]
 })
 export class ChangePasswordComponent {
@@ -24,9 +24,8 @@ export class ChangePasswordComponent {
 
     public checkValid(): void {
         this.samePassword = this.newPassword === this.confirmPassword;
-        if (this.oldPassword.length >= 6 && this.oldPassword.length <= 32 && this.newPassword.length >= 6 &&
-            this.newPassword.length <= 32 && this.samePassword) {
-                this.valid = true;
+        if (/^.{6,32}$/.test(this.oldPassword) && /^.{6,32}$/.test(this.newPassword)) {
+            this.valid = true;
         }
     }
 
@@ -34,12 +33,13 @@ export class ChangePasswordComponent {
         this.checkValid();
         if (!this.samePassword) {
             Swal.fire('Passwords are not same!', 'error');
+            return;
         }
-        if (!this.valid && this.samePassword) {
-            Swal.fire('Password length should between six and thirty-two');
+        if (!this.valid) {
+            Swal.fire('Password length should between 6 and 32.');
+            return;
         }
-        if (this.valid) {
-            this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
+        this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
             .pipe(catchError(error => {
                 Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
                 return Promise.reject(error.message || error);
@@ -51,6 +51,5 @@ export class ChangePasswordComponent {
                     Swal.fire('Try again', result.message, 'error');
                 }
             });
-        }
     }
 }

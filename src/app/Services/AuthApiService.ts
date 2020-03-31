@@ -4,7 +4,6 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { Observable } from 'rxjs/';
 import { AiurProtocal } from '../Models/AiurProtocal';
 import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
-import { VersionViewModel } from '../Models/VersionViewModel';
 import { ApiService } from './ApiService';
 
 @Injectable()
@@ -14,10 +13,6 @@ export class AuthApiService {
     constructor(
         private apiService: ApiService
     ) {}
-
-    public Version(): Observable<VersionViewModel> {
-        return this.apiService.Get(AuthApiService.serverPath + '/Version');
-    }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
         return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');

@@ -4,12 +4,15 @@ import { AuthApiService } from './AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
-import { environment } from '../../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from './DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
+import { ServerConfig } from '../Models/ServerConfig';
+import { ApiService } from './ApiService';
+import { ServerListApiService } from './ServerListApiService';
+import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Injectable({
     providedIn: 'root'
@@ -25,10 +28,11 @@ export class InitService {
     private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(environment.applicationServerKey)
+        applicationServerKey: null
     };
 
     constructor(
+        private apiService: ApiService,
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
@@ -38,13 +42,11 @@ export class InitService {
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
         private probeService: ProbeService,
+        private serverListApiService: ServerListApiService
     ) {
     }
 
     public init(): void {
-        this.online = navigator.onLine;
-        this.closeWebSocket = false;
-        this.checkService.checkVersion(false);
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
                 'Oops, it seems that you are opening Kahla in IE.',
@@ -54,28 +56,64 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
+        this.checkService.checkVersion(false);
+        // load server config
+        if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
+            this.apiService.serverConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
+        } else {
+            this.router.navigate(['/signin'], {replaceUrl: true});
+            this.serverListApiService.Servers().subscribe(servers => {
+                let target: ServerConfig;
+                if (this._electronService.isElectronApp) {
+                    target = servers[0];
+                } else {
+                    target = servers.find(t => t.domain.client === window.location.origin);
+                }
+
+                if (target) {
+                    target.officialServer = true;
+                    this.apiService.serverConfig = target;
+                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
+                }
+                this.init();
+            });
+            return;
+        }
+
+        this.online = navigator.onLine;
+        this.closeWebSocket = false;
         this.cacheService.initCache();
-        this.authApiService.SignInStatus().subscribe(signInStatus => {
-            if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], { replaceUrl: true });
-            } else {
-                this.authApiService.Me().subscribe(p => {
-                    if (p.code === 0) {
-                        this.cacheService.cachedData.me = p.value;
-                        this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
-                        this.themeService.ApplyThemeFromRemote(p.value);
-                        if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                            this.subscribeUser();
-                            this.updateSubscription();
-                        }
-                        this.loadPusher(false);
-                        this.cacheService.updateConversation();
-                        this.cacheService.updateFriends();
-                        this.cacheService.updateRequests();
+
+        if (this.apiService.serverConfig) {
+            this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
+            this.checkService.checkApiVersion();
+            this.authApiService.SignInStatus().subscribe(signInStatus => {
+                if (signInStatus.value === false) {
+                    this.router.navigate(['/signin'], {replaceUrl: true});
+                } else {
+                    if (this.router.isActive('/signin', false)) {
+                        this.router.navigate(['/home'], {replaceUrl: true});
                     }
-                });
-            }
-        });
+                    this.authApiService.Me().subscribe(p => {
+                        if (p.code === 0) {
+                            this.cacheService.cachedData.me = p.value;
+                            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
+                            this.themeService.ApplyThemeFromRemote(p.value);
+                            if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                                this.subscribeUser();
+                                this.updateSubscription();
+                            }
+                            this.loadPusher(false);
+                            this.cacheService.updateConversation();
+                            this.cacheService.updateFriends();
+                            this.cacheService.updateRequests();
+                        }
+                    });
+                }
+            });
+        } else {
+            this.router.navigate(['/signin'], {replaceUrl: true});
+        }
     }
 
     private loadPusher(reconnect: boolean): void {
@@ -158,39 +196,68 @@ export class InitService {
         }, this.timeoutNumber);
     }
 
-    private subscribeUser(): void {
+    public subscribeUser() {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function (registration) {
-                return registration.pushManager.getSubscription().then(function (sub) {
+            navigator.serviceWorker.ready.then((registration => {
+                return registration.pushManager.getSubscription().then(sub => {
                     if (sub === null) {
                         return registration.pushManager.subscribe(_this.options)
                             .then(function (pushSubscription) {
-                                return _this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                    .subscribe(function (result) {
-                                        localStorage.setItem('deviceID', result.value.toString());
-                                    });
+                                _this.bindDevice(pushSubscription);
                             });
+                    } else {
+                        _this.bindDevice(sub);
                     }
                 });
-            }.bind(_this));
+            }));
         }
+    }
+
+    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
+        let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
+        if (!data) {
+            data = {
+                enabled: true,
+                deviceId: 0
+            };
+            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+        }
+        if (!data.enabled && data.deviceId) {
+            this.devicesApiService.DropDevice(data.deviceId).subscribe(t => {
+                if (t.code === 0) {
+                    data.deviceId = 0;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+                }
+            });
+        }
+        if (data.enabled) {
+            if (data.deviceId) {
+                if (force) {
+                    this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
+                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+                }
+            } else {
+                this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
+                    data.deviceId = t.value;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+                });
+            }
+        }
+
     }
 
     private updateSubscription(): void {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
             const _this = this;
-            navigator.serviceWorker.ready.then(function (registration) {
-                return navigator.serviceWorker.addEventListener('pushsubscriptionchange', function () {
+            navigator.serviceWorker.ready.then(registration =>
+                navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => {
                     registration.pushManager.subscribe(_this.options)
-                        .then(function (pushSubscription) {
-                            return _this.devicesApiService.UpdateDevice(Number(localStorage.getItem('deviceID')), navigator.userAgent,
-                                pushSubscription.endpoint, pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth)
-                                .subscribe();
+                        .then(pushSubscription => {
+                            _this.bindDevice(pushSubscription, true);
                         });
-                });
-            }.bind(_this));
+                }));
         }
     }
 

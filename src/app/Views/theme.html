@@ -31,11 +31,16 @@
 <div class="menu-header">Accent color</div>
 <div class="select-button-group">
     <span class="select-button" [class.selected]="accentColor === 0" (click)="accentColor = 0;applyTheme();">
+        <i class="fas fa-adjust color-ellipse"></i>
+        <span>System</span>
+        <i class="fas fa-check checked"></i>
+    </span>
+    <span class="select-button" [class.selected]="accentColor === 1" (click)="accentColor = 1;applyTheme();">
         <span class="color-ellipse" style="background-color: #efeff4"></span>
         <span>Light</span>
         <i class="fas fa-check checked"></i>
     </span>
-    <span class="select-button" [class.selected]="accentColor === 1" (click)="accentColor = 1;applyTheme();">
+    <span class="select-button" [class.selected]="accentColor === 2" (click)="accentColor = 2;applyTheme();">
         <span class="color-ellipse" style="background-color: #2c3e50"></span>
         <span>Dark</span>
         <i class="fas fa-check checked"></i>

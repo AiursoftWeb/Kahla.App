@@ -5,9 +5,9 @@
          (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
         <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100"
              (click)="detail(inf); $event.stopPropagation();"/>
-        <div class="small-dot" *ngIf="inf.discriminator === 'PrivateConversation'" 
-            [class.greendot]="inf.online"
-            [class.graydot]="!inf.online">
+        <div class="small-dot" *ngIf="inf.discriminator === 'PrivateConversation'"
+             [class.greendot]="inf.online"
+             [class.graydot]="!inf.online">
         </div>
         <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
             {{inf.unReadAmount}}
@@ -21,12 +21,19 @@
         <div class="sender">
             {{inf.displayName}}
         </div>
-        <div class="last-time">
-            {{inf.latestMessageTime | date:'shortTime'}}
-        </div>
-        <div class="last-message" *ngIf="inf.latestMessage !== null">
-            {{inf.latestMessage}}
-        </div>
+        <ng-container *ngIf="inf.latestMessage !== null">
+            <div class="last-time">
+                {{inf.latestMessage.sendTime | date:'shortTime'}}
+            </div>
+            <div class="last-message">
+                <i class="fas fa-angle-right"
+                   *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
+                <i class="fas fa-angle-left"
+                   *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId !== cacheService.cachedData.me.id"></i>
+                <b *ngIf="inf.discriminator === 'GroupConversation'">{{inf.latestMessage.sender.nickName}}: </b>
+                {{inf.latestMessage.content}}
+            </div>
+        </ng-container>
         <div class="last-message" *ngIf="inf.latestMessage === null" i18n="@@NoMessage">
             No message. Start talking now!
         </div>

@@ -5,6 +5,7 @@ export class Request {
     public creatorId: string;
     public creator: KahlaUser;
     public targetId: string;
+    public target: KahlaUser;
     public createTime: Date;
     public completed: boolean;
 }

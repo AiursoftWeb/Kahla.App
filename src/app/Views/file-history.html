@@ -4,47 +4,51 @@
     <div *ngFor="let dir of files.items">
         <div class="menu-header">{{dir.folderName}}</div>
         <div class="file-tiles">
-            <a class="file-item" *ngFor="let file of dir.files" href="{{buildProbeUrl(file, dir)}}" target="_blank">
-                <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}?w=60" class="icon"/>
-                <ng-template #file_ico>
-                    <div class="icon"
-                         [ngSwitch]="file.fileName.substring(file.fileName.lastIndexOf('.') + 1)">
-                        <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'jpg'" class="far fa-file-image" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'png'" class="far fa-file-image" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'svg'" class="far fa-file-image" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'bmp'" class="far fa-file-image" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'jpeg'" class="far fa-file-image" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mp3'" class="far fa-file-audio" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'aac'" class="far fa-file-audio" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'flac'" class="far fa-file-audio" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'wav'" class="far fa-file-audio" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mp4'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'avi'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'mkv'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'ogg'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'webm'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'m4v'" class="far fa-file-video" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'zip'" class="far fa-file-archive" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'tar'" class="far fa-file-archive" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'7z'" class="far fa-file-archive" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'dmg'" class="far fa-file-archive" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'tar.gz'" class="far fa-file-archive" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'doc'" class="far fa-file-word" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'docx'" class="far fa-file-word" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'pages'" class="far fa-file-word" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'xls'" class="far fa-file-excel" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'xlsx'" class="far fa-file-excel" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'numbers'" class="far fa-file-excel" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'ppt'" class="far fa-file-powerpoint" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'pptx'" class="far fa-file-powerpoint" aria-hidden="true"></i>
-                        <i *ngSwitchCase="'key'" class="far fa-file-powerpoint" aria-hidden="true"></i>
-                        <i *ngSwitchDefault class="fas fa-file" aria-hidden="true"></i>
-                    </div>
-                </ng-template>
-                <div class="title">{{file.fileName}}</div>
-                <div class="detail">Size: {{probeService.getFileSizeText(file.fileSize)}}</div>
-            </a>
+            <div *ngFor="let file of dir.files" class="file-item">
+                <a title="{{file.fileName}}" href="{{buildProbeUrl(file, dir)}}" target="_blank">
+                    <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}?w=60"
+                         class="icon"/>
+                    <ng-template #file_ico>
+                        <div class="icon"
+                             [ngSwitch]="file.fileName.substring(file.fileName.lastIndexOf('.') + 1)">
+                            <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'jpg'" class="far fa-file-image" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'png'" class="far fa-file-image" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'svg'" class="far fa-file-image" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'bmp'" class="far fa-file-image" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'jpeg'" class="far fa-file-image" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mp3'" class="far fa-file-audio" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'aac'" class="far fa-file-audio" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'flac'" class="far fa-file-audio" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'wav'" class="far fa-file-audio" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mp4'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'avi'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'mkv'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'ogg'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'webm'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'m4v'" class="far fa-file-video" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'zip'" class="far fa-file-archive" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'tar'" class="far fa-file-archive" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'7z'" class="far fa-file-archive" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'dmg'" class="far fa-file-archive" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'tar.gz'" class="far fa-file-archive" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'doc'" class="far fa-file-word" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'docx'" class="far fa-file-word" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'pages'" class="far fa-file-word" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'xls'" class="far fa-file-excel" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'xlsx'" class="far fa-file-excel" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'numbers'" class="far fa-file-excel" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'ppt'" class="far fa-file-powerpoint" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'pptx'" class="far fa-file-powerpoint" aria-hidden="true"></i>
+                            <i *ngSwitchCase="'key'" class="far fa-file-powerpoint" aria-hidden="true"></i>
+                            <i *ngSwitchDefault class="fas fa-file" aria-hidden="true"></i>
+                        </div>
+                    </ng-template>
+                    <div class="title">{{file.fileName}}</div>
+                    <div class="detail">Size: {{probeService.getFileSizeText(file.fileSize)}}</div>
+                </a>
+                <div class="operate-button" (click)="share(file, dir)"><i class="fas fa-share-alt"></i></div>
+            </div>
         </div>
     </div>
 </div>
