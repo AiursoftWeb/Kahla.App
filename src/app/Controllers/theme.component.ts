@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Themes } from '../Models/Themes';
+import { Theme } from '../Models/Theme';
 import { ThemeService } from '../Services/ThemeService';
 
 @Component({
@@ -12,7 +12,7 @@ export class ThemeComponent implements OnInit {
     ) {
     }
 
-    public currentTheme: Themes = Themes.kahlaAuto;
+    public currentTheme: Theme = Theme.kahlaAuto;
     public primaryColor: number;
     public accentColor: number;
 
@@ -26,7 +26,7 @@ export class ThemeComponent implements OnInit {
         this.changeTheme(this.primaryColor * 3 + this.accentColor);
     }
 
-    public changeTheme(theme: Themes) {
+    public changeTheme(theme: Theme) {
         if (this.currentTheme === theme) {
             return;
         }
