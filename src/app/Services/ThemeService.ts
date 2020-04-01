@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthApiService } from './AuthApiService';
-import { Themes } from '../Models/Themes';
+import { Theme } from '../Models/Theme';
 import { KahlaUser } from '../Models/KahlaUser';
 
 @Injectable({
@@ -26,7 +26,7 @@ export class ThemeService {
         this.ApplyTheme(this.LocalThemeSetting);
     }
 
-    ApplyTheme(theme: Themes) {
+    ApplyTheme(theme: Theme) {
         let themeComputed = theme;
         if (theme % 3 === 0) {
             if (!this.mediaListener) {
@@ -46,52 +46,52 @@ export class ThemeService {
             }
         }
         switch (themeComputed) {
-            case Themes.sakuraLight:
+            case Theme.sakuraLight:
                 document.body.className = 'theme-sakura-light';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#cf4c78');
                 break;
-            case Themes.sakuraDark:
+            case Theme.sakuraDark:
                 document.body.className = 'theme-sakura-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#cf4c78');
                 break;
-            case Themes.violetLight:
+            case Theme.violetLight:
                 document.body.className = 'theme-violet-light';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#5F4B8B');
                 break;
-            case Themes.violetDark:
+            case Theme.violetDark:
                 document.body.className = 'theme-violet-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#5F4B8B');
                 break;
-            case Themes.communistLight:
+            case Theme.communistLight:
                 document.body.className = 'theme-communist-light';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#df2710');
                 break;
-            case Themes.communistDark:
+            case Theme.communistDark:
                 document.body.className = 'theme-communist-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#df2710');
                 break;
-            case Themes.grassLight:
+            case Theme.grassLight:
                 document.body.className = 'theme-grass-light';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#409344');
                 break;
-            case Themes.grassDark:
+            case Theme.grassDark:
                 document.body.className = 'theme-grass-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#409344');
                 break;
-            case Themes.kahlaDark:
+            case Theme.kahlaDark:
                 document.body.className = 'theme-dark';
                 document.querySelector('meta[name=theme-color]')
                     .setAttribute('content', '#18a4f9');
                 break;
-            case Themes.kahlaLight:
+            case Theme.kahlaLight:
             default:
                 document.body.className = 'theme-light';
                 document.querySelector('meta[name=theme-color]')
@@ -100,22 +100,39 @@ export class ThemeService {
         }
     }
 
-    SetRemoteThemeSetting(theme: Themes): void {
+    IsDarkTheme(): boolean {
+        const theme = this.LocalThemeSetting;
+        if (theme % 3 === 0) {
+            if (!this.mediaListener) {
+                this.mediaListener = matchMedia('(prefers-color-scheme: dark)');
+                this.mediaListener.onchange = () => this.ApplyThemeFromLocal();
+            }
+            if (this.mediaListener.matches) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return (theme - 2) % 3 === 0;
+        }
+    }
+
+    SetRemoteThemeSetting(theme: Theme): void {
         this.authApiService.UpdateClientSetting(theme, null).subscribe();
     }
 
-    get LocalThemeSetting(): Themes {
+    get LocalThemeSetting(): Theme {
         const themeSet = localStorage.getItem('setting-theme');
-        let theme: Themes;
+        let theme: Theme;
         if (themeSet == null) {
-            theme = Themes.kahlaLight;
+            theme = Theme.kahlaAuto;
         } else {
-            theme = parseInt(themeSet, 10) as Themes;
+            theme = parseInt(themeSet, 10) as Theme;
         }
         return theme;
     }
 
-    set LocalThemeSetting(theme: Themes) {
+    set LocalThemeSetting(theme: Theme) {
         localStorage.setItem('setting-theme', theme.toString());
     }
 

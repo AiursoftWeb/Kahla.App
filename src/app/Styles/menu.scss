@@ -109,13 +109,13 @@
     margin-left: 0;
   }
 
-  .warning {
-    color: #d9534f !important;
-  }
-
   &.toggle-setting {
     grid-template-columns: 15% auto 15%;
   }
+}
+
+.warning {
+  color: #d9534f !important;
 }
 
 .groupGridRow {
