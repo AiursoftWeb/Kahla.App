@@ -15,7 +15,7 @@
     <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
          (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
         <i class="far fa-clock"></i>
-        <div class="dot reddot">
+        <div class="dot" [ngClass]="{'reddot': messageService.checkOwner(), 'bluedot': !messageService.checkOwner()}">
             {{timerService.destructTime}}
         </div>
     </div>
