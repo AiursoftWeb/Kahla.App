@@ -100,6 +100,23 @@ export class ThemeService {
         }
     }
 
+    IsDarkTheme(): boolean {
+        const theme = this.LocalThemeSetting;
+        if (theme % 3 === 0) {
+            if (!this.mediaListener) {
+                this.mediaListener = matchMedia('(prefers-color-scheme: dark)');
+                this.mediaListener.onchange = () => this.ApplyThemeFromLocal();
+            }
+            if (this.mediaListener.matches) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return (theme - 2) % 3 === 0;
+        }
+    }
+
     SetRemoteThemeSetting(theme: Theme): void {
         this.authApiService.UpdateClientSetting(theme, null).subscribe();
     }
@@ -108,7 +125,7 @@ export class ThemeService {
         const themeSet = localStorage.getItem('setting-theme');
         let theme: Theme;
         if (themeSet == null) {
-            theme = Theme.kahlaLight;
+            theme = Theme.kahlaAuto;
         } else {
             theme = parseInt(themeSet, 10) as Theme;
         }
