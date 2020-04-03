@@ -5,7 +5,7 @@
          (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
         <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&h=100"
              (click)="detail(inf); $event.stopPropagation();"/>
-        <div class="small-dot" *ngIf="inf.online !== 'null'"
+        <div class="small-dot" *ngIf="inf.online !== null"
              [class.greendot]="inf.online"
              [class.graydot]="!inf.online">
         </div>

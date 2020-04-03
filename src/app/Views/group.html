@@ -61,7 +61,7 @@
         <div>
             <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
             <div class="small-dot"
-                 style="top:29px; right:-42px;"
+                 style="top:29px; right:-42px;" *ngIf="e.user.IsOnline !== null"
                  [class.greendot]="e.user.isOnline"
                  [class.graydot]="!e.user.isOnline">
             </div>

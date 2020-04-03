@@ -25,7 +25,7 @@
                      routerLink="/user/{{message.senderId}}">
                     <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
                     <div class="small-dot"
-                         style="top: -10px; right: -35px;"
+                         style="top: -10px; right: -35px;" *ngIf="message.sender.isOnline !== null"
                          [class.greendot]="message.sender.isOnline"
                          [class.graydot]="!message.sender.isOnline">
                     </div>

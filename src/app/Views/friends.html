@@ -68,7 +68,7 @@
             <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80"
                 routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();">
             <div class="small-dot"
-                style="top:32px; right:-43px;"
+                style="top:32px; right:-43px;" *ngIf="user.isOnline !== null"
                 [class.greendot]="user.isOnline"
                 [class.graydot]="!user.isOnline">
             </div>
