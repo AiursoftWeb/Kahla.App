@@ -2,7 +2,7 @@
 <div *ngIf="info" class="user">
     <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank" rel="noopener noreferrer">
         <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=100&h=100">
-        <div class="small-dot greendot" *ngIf="info.IsOnline !== null"
+        <div class="small-dot greendot" *ngIf="info.isOnline !== null"
             [class.greendot]="info.isOnline"
             [class.graydot]="!info.isOnline"
             style="top:-11px; right:-43px;"></div>
