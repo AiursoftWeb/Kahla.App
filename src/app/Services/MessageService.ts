@@ -266,8 +266,9 @@ export class MessageService {
                             this.localMessages = modifiedMsg;
                             this.rawMessages = messages;
                         } else {
-                            this.localMessages.splice(index, modifiedMsg.length, ...modifiedMsg);
-                            this.rawMessages.splice(index, messages.length, ...messages);
+                            const deleteCount = this.rawMessages.length - index;
+                            this.localMessages.splice(index, deleteCount, ...modifiedMsg);
+                            this.rawMessages.splice(index, deleteCount, ...messages);
                         }
                     } else {
                         this.localMessages = modifiedMsg;
