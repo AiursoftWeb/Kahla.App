@@ -54,20 +54,20 @@
         </div>
         <div class="text">Change Join Password</div>
     </div>
-    <div class="menu-header warning">
+    <div class="menu-header text-warning">
         Danger Zone
     </div>
     <div class="menu-button" (click)="transferOwner()">
-        <div class="img warning">
+        <div class="img text-warning">
             <i class="fas fa-exchange-alt"></i>
         </div>
-        <div class="text warning">Transfer Owner</div>
+        <div class="text text-warning">Transfer Owner</div>
     </div>
     <div class="menu-button" (click)="dissolveGroup()">
-        <div class="img warning">
+        <div class="img text-warning">
             <i class="fas fa-trash"></i>
         </div>
-        <div class="text warning">Dissolve Group</div>
+        <div class="text text-warning">Dissolve Group</div>
     </div>
 </div>
 <div *ngIf="conversation && !messageService.checkOwner()">
