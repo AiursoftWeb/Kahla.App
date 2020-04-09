@@ -7,7 +7,7 @@ assignees: 'Anduin2017'
 
 ---
 
-[//]: <Don't delete any header! Please fill out the form or your bug report will not be considered!> 
+[//]: <Don't delete any header! Please fill out the form, or your bug report will not be considered!> 
 
 ## Environment
 

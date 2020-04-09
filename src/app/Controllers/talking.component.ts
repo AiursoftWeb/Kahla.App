@@ -358,6 +358,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
             files = this.imageInput.nativeElement.files[0];
         }
         if (files) {
+            if (fileType !== FileType.File) {
+                files = this.probeService.renameFile(files, fileType === FileType.Image ? 'img_' : 'video_');
+            }
             this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
         }
     }
@@ -368,8 +371,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (items[i].kind === 'file') {
                 this.preventDefault(event);
                 const originalFile = items[i].getAsFile();
-                const blob = new File([originalFile],
-                    `clipboardImg_${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`);
+                const blob = this.probeService.renameFile(originalFile, 'clipboardImg_');
                 if (blob != null) {
                     const urlString = URL.createObjectURL(blob);
                     Swal.fire({

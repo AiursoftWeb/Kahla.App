@@ -25,4 +25,9 @@ export class ProbeService {
             return fileSize.toFixed(1) + ' ' + units[index];
         }
     }
+
+    public renameFile(originalFile: File, prefix: string): File {
+        return new File([originalFile],
+            `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`);
+    }
 }

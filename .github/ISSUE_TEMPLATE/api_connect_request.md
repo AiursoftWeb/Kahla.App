@@ -1,5 +1,5 @@
 ---
-name: API suggest
+name: API suggestion
 about: Request the client side code to connect to a target API.
 title: ''
 labels: ''
@@ -7,7 +7,7 @@ assignees: 'Anduin2017'
 
 ---
 
-[//]: <Don't delete any header! Please fill out the form or your bug report will not be considered!> 
+[//]: <Don't delete any header! Please fill out the form, or your bug report will not be considered!> 
 
 ## About the new API
 

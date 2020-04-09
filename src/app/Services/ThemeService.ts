@@ -107,11 +107,7 @@ export class ThemeService {
                 this.mediaListener = matchMedia('(prefers-color-scheme: dark)');
                 this.mediaListener.onchange = () => this.ApplyThemeFromLocal();
             }
-            if (this.mediaListener.matches) {
-                return true;
-            } else {
-                return false;
-            }
+            return this.mediaListener.matches;
         } else {
             return (theme - 2) % 3 === 0;
         }
