@@ -5,7 +5,7 @@ import videojs from 'video.js';
 @Component({
     selector: 'app-vjs-player',
     template: `
-        <video #target class="video-js vjs-theme-sea" controls playsinline preload="auto"></video>`,
+        <video #target class="video-js vjs-theme-sea" controls playsinline preload="metadata"></video>`,
     styleUrls: [
         '../Styles/vjs-module.scss'
     ],
