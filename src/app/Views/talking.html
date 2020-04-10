@@ -109,9 +109,8 @@
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')">
-                        <video src="{{ probeService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
-                               [style.height.px]="messageService.videoHeight"
-                               muted></video>
+                        <app-vjs-player
+                            [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.content.substring(7))}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
