@@ -28,6 +28,7 @@ export class ProbeService {
 
     public renameFile(originalFile: File, prefix: string): File {
         return new File([originalFile],
-            `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`);
+            `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`,
+            {type: originalFile.type, lastModified: originalFile.lastModified});
     }
 }
