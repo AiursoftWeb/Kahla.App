@@ -7,7 +7,6 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
-import { Values } from '../values';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
@@ -260,15 +259,6 @@ export class UploadService {
         const validVideoType = ['webm', 'mp4', 'ogg'];
         const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
         return validVideoType.includes(fileExtension);
-    }
-
-    public getFileURL(event: MouseEvent, message: string): void {
-        event.preventDefault();
-        const link = document.createElement('a');
-        link.href = Values.fileDownloadAddress + encodeURIComponent(message.substring(6).split('|')[0]).replace(/%2F/g, '/');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
 
     public getAudio(target: HTMLElement, message: string): void {
