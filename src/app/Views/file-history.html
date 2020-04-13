@@ -5,7 +5,7 @@
         <div class="menu-header">{{dir.folderName}}</div>
         <div class="file-tiles">
             <div *ngFor="let file of dir.files" class="file-item">
-                <a title="{{file.fileName}}" href="{{buildProbeUrl(file, dir)}}" target="_blank">
+                <a title="{{file.fileName}}" href="{{buildProbeUrl(file, dir)}}" target="_blank" class="file-item-body">
                     <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}?w=60"
                          class="icon"/>
                     <ng-template #file_ico>
@@ -47,7 +47,10 @@
                     <div class="title">{{file.fileName}}</div>
                     <div class="detail">Size: {{probeService.getFileSizeText(file.fileSize)}}</div>
                 </a>
-                <div class="operate-button" (click)="share(file, dir)"><i class="fas fa-share-alt"></i></div>
+                <div class="operate-button share" (click)="share(file, dir)" title="Share"><i
+                    class="fas fa-share-alt"></i></div>
+                <a class="operate-button download" href="{{buildProbeUrl(file, dir, true)}}" title="Download"><i
+                    class="fas fa-arrow-down"></i></a>
             </div>
         </div>
     </div>

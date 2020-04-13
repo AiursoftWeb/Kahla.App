@@ -1,4 +1,5 @@
 @import "menus";
+@import "effects";
 
 /******************
  *    User
@@ -73,12 +74,8 @@
     border-bottom-style: solid;
   }
 
-  &.menu-button-transparent:hover {
-    background-color: var(--default-foreground-20);
-  }
-
-  &.menu-button-transparent:active {
-    background-color: var(--default-foreground-40);
+  &.menu-button-transparent {
+    @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
   }
 
   > * {
@@ -169,14 +166,7 @@ a {
   user-select: none;
   font-size: 15px;
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background: var(--selectable-hover-bg);
-  }
-
-  &:active {
-    background: var(--selectable-active-bg);
-  }
+  @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 
   .checked {
     visibility: hidden;

@@ -1,4 +1,5 @@
 @import "fixed_widescreen";
+@import "effects";
 
 /******************
  *    Talking
@@ -83,10 +84,6 @@
     .button {
       margin-right: 0.5rem;
       background-color: #d9534f;
-    }
-
-    .share {
-      cursor: pointer;
     }
   }
 
@@ -184,6 +181,19 @@
     span {
       font-weight: bold;
     }
+
+    .message-action-button {
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      height: 25px;
+      padding: 2px 4px 2px 4px;
+      transition: all 0.2s ease-in-out;
+      margin: 2px;
+      border-radius: 4px;
+      outline: 0;
+      color: inherit;
+    }
   }
 
   .left .message-balloon {
@@ -196,6 +206,10 @@
       top: 20px;
       border-right-color: var(--talking-chat-bg);
     }
+
+    .message-action-button {
+      @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
+    }
   }
 
   .right .message-balloon {
@@ -205,6 +219,10 @@
       border-left-color: var(--primary-color-depth3);
       left: 100%;
       top: 20px;
+    }
+
+    .message-action-button {
+      @include hover-effect(transparentize(#fff, 0.8), transparentize(#fff, 0.6));
     }
   }
 
@@ -418,14 +436,7 @@
         }
 
         label {
-          &:hover {
-            background-color: var(--default-foreground-20);
-          }
-
-          &:active {
-            background-color: var(--default-foreground-40);
-          }
-
+          @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
           text-align: center;
           padding: 10px;
           margin-top: 15px;
@@ -463,15 +474,15 @@ i {
 }
 
 .left {
-  .message-block a,
-  .message-balloon .voicemsg span {
+  .message-block .share-item,
+  .message-balloon .voicemsg * {
     color: #9baec8;
   }
 }
 
 .right {
-  .message-block a,
-  .message-balloon .voicemsg span {
+  .message-block .share-item,
+  .message-balloon .voicemsg * {
     color: #d9e1e8;
   }
 }
@@ -531,15 +542,8 @@ i {
 }
 
 #scrollDown {
-  background-color: var(--primary-color-depth2);
-
-  &:hover:enabled {
-    background-color: var(--primary-color-depth3);
-  }
-
-  &:active {
-    background-color: var(--primary-color-depth3);
-  }
+  background: var(--primary-color-depth2);
+  @include hover-effect(var(--primary-color-depth3), var(--primary-color-depth3));
 }
 
 .oneResult {

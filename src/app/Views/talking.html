@@ -61,8 +61,8 @@
                     </a>
                     <a class="share-item file"
                        *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
-                       target="_blank" rel="noopener noreferrer" href=""
-                       (click)="uploadService.getFileURL($event, message.content)">
+                       target="_blank" rel="noopener noreferrer"
+                       href="{{probeService.encodeProbeFileUrl(message.content.substring(6).split('|')[0], true)}}">
                         <div
                             [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
@@ -123,8 +123,16 @@
                        [innerHTML]="message.content"></p>
                     <div
                         *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
-                        <i (click)="shareToOther(message.contentRaw)" class="share fa fa-share-alt"
-                           aria-hidden="true"></i>
+                        <div class="message-action-button" (click)="shareToOther(message.contentRaw)">
+                            <i class="share fa fa-share-alt" aria-hidden="true"></i>
+                            Share
+                        </div>
+                        <a class="message-action-button" *ngIf="!message.content.startsWith('[file]')"
+                           href="{{probeService.encodeProbeFileUrl(message.content.startsWith('[img]') ?
+                            message.contentRaw.substring(5).split('|')[0] : message.content.substring(7), true)}}">
+                            <i class="share fa fa-file-download" aria-hidden="true"></i>
+                            Download
+                        </a>
                     </div>
                 </div>
                 <p class="sendFail" [class.last]="isLast" *ngIf="message.resend">

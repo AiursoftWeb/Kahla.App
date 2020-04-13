@@ -5,10 +5,12 @@ import { Values } from '../values';
     providedIn: 'root',
 })
 export class ProbeService {
-    public encodeProbeFileUrl(filePath: string) {
+    public encodeProbeFileUrl(filePath: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
-        return Values.fileCompatAddress.replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
+
+        return (downloadAddr ? Values.fileDownloadAddress : Values.fileCompatAddress)
+            .replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
     }
 
     public getFileSizeText(fileSize: number) {
