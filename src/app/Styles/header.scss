@@ -1,4 +1,5 @@
 @import "fixed_widescreen";
+@import "button";
 
 /******************
  *    Header
@@ -31,12 +32,22 @@
 }
 
 .header {
-  .headerButton:hover {
-    background-color: transparentize(#fff, 0.8);
+  .headerButton {
+    @extend %transparent-button;
+    cursor: pointer;
+    width: 35px;
+    color: #FFF;
+    text-align: center;
+    font-size: 1.7em;
+    outline: none;
+    border-radius: 5px;
+    margin: auto;
+    transition: all 0.2s ease-out;
+    position: relative;
   }
 
-  .headerButton:active {
-    background-color: transparentize(#fff, 0.6);
+  .macOSReturnButton {
+    margin: auto auto auto 70px !important;
   }
 
   .text {
@@ -61,23 +72,6 @@
       }
     }
   }
-}
-
-.headerButton {
-  cursor: pointer;
-  width: 35px;
-  color: #FFF;
-  text-align: center;
-  font-size: 1.7em;
-  outline: none;
-  border-radius: 5px;
-  margin: auto;
-  transition: all 0.2s ease-out;
-  position: relative;
-}
-
-.macOSReturnButton {
-  margin: auto auto auto 70px !important;
 }
 
 .macOSHeader {

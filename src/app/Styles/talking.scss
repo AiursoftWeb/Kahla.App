@@ -1,4 +1,5 @@
 @import "fixed_widescreen";
+@import "effects";
 
 /******************
  *    Talking
@@ -418,14 +419,7 @@
         }
 
         label {
-          &:hover {
-            background-color: var(--default-foreground-20);
-          }
-
-          &:active {
-            background-color: var(--default-foreground-40);
-          }
-
+          @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
           text-align: center;
           padding: 10px;
           margin-top: 15px;
@@ -531,15 +525,8 @@ i {
 }
 
 #scrollDown {
-  background-color: var(--primary-color-depth2);
-
-  &:hover:enabled {
-    background-color: var(--primary-color-depth3);
-  }
-
-  &:active {
-    background-color: var(--primary-color-depth3);
-  }
+  background: var(--primary-color-depth2);
+  @include hover-effect(var(--primary-color-depth3), var(--primary-color-depth3));
 }
 
 .oneResult {
