@@ -8,13 +8,14 @@
     width: 250px;
     height: 60px;
     grid-template-columns: 1fr 30px;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr 1fr;
     margin: 6px;
     border: 1px solid var(--selectable-border-color);
     background: var(--selectable-bg);
     user-select: none;
 
-    a {
+    .file-item-body {
+      grid-area: 1 / 1 / 3 / 2;
       padding: 4px 0 4px 12px;
       transition: all 0.1s ease-in-out;
       display: grid;
@@ -65,13 +66,14 @@
       transition: all 0.1s ease-in-out;
       align-items: center;
       color: var(--primary-color-depth3);
+      @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
 
-      &:hover {
-        background: var(--default-foreground-20);
+      &.share {
+        grid-area: 1 / 2 / 2 / 3;
       }
 
-      &:active {
-        background: var(--default-foreground-40);
+      &.download {
+        grid-area: 2 / 2 / 3 / 3;
       }
     }
   }

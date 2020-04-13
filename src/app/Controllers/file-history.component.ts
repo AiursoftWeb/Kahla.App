@@ -44,8 +44,9 @@ export class FileHistoryComponent implements OnInit {
         return !!fileName.substring(fileName.lastIndexOf('.') + 1).match(/png|jpg|jpeg|gif|webp|bmp/);
     }
 
-    public buildProbeUrl(file: ProbeFile, dir: ProbeFolder): string {
-        return this.probeService.encodeProbeFileUrl(`${this.files.siteName}/${this.files.rootPath}/${dir.folderName}/${file.fileName}`);
+    public buildProbeUrl(file: ProbeFile, dir: ProbeFolder, download: boolean = false): string {
+        return this.probeService.encodeProbeFileUrl(`${this.files.siteName}/${this.files.rootPath}/${dir.folderName}/${file.fileName}`,
+            download);
     }
 
     public calcSummary() {
