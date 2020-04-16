@@ -7,7 +7,6 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
-import { Values } from '../values';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
@@ -109,12 +108,11 @@ export class UploadService {
     private encryptThenSend(response: number | UploadFile, fileType: FileType, conversationID: number, aesKey: string, file: File): void {
         if (response && !Number(response)) {
             if ((<UploadFile>response).code === 0) {
-                let encedMessages;
                 switch (fileType) {
                     case FileType.Image:
                         loadImage(
                             file,
-                            function (img, data) {
+                            (img, data) => {
                                 let orientation = 0, width = img.width, height = img.height;
                                 if (data.exif) {
                                     orientation = data.exif.get('Orientation');
@@ -122,24 +120,20 @@ export class UploadService {
                                         [width, height] = [height, width];
                                     }
                                 }
-                                encedMessages = AES.encrypt(`[img]${(<UploadFile>response).filePath}|${width}|${
-                                    height}|${orientation}`, aesKey).toString();
-                                this.sendMessage(encedMessages, conversationID);
-                            }.bind(this),
+                                this.sendMessage(`[img]${(<UploadFile>response).filePath}|${width}|${
+                                    height}|${orientation}`, conversationID, aesKey);
+                            },
                             {meta: true}
                         );
                         break;
                     case FileType.Video:
-                        encedMessages = AES.encrypt(`[video]${(<UploadFile>response).filePath}`, aesKey).toString();
-                        this.sendMessage(encedMessages, conversationID);
+                        this.sendMessage(`[video]${(<UploadFile>response).filePath}`, conversationID, aesKey);
                         break;
                     case FileType.File:
-                        encedMessages = AES.encrypt(this.formatFileMessage(<UploadFile>response, file.name), aesKey).toString();
-                        this.sendMessage(encedMessages, conversationID);
+                        this.sendMessage(this.formatFileMessage(<UploadFile>response, file.name), conversationID, aesKey);
                         break;
                     case FileType.Audio:
-                        encedMessages = AES.encrypt(`[audio]${(<UploadFile>response).filePath}`, aesKey).toString();
-                        this.sendMessage(encedMessages, conversationID);
+                        this.sendMessage(`[audio]${(<UploadFile>response).filePath}`, conversationID, aesKey);
                         break;
                     default:
                         break;
@@ -148,20 +142,12 @@ export class UploadService {
         }
     }
 
-    private sendMessage(message: string, conversationID: number): void {
-        this.conversationApiService.SendMessage(conversationID, message, uuid4(), [])
+    private sendMessage(message: string, conversationID: number, aesKey: string): void {
+        this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
             .subscribe(() => {
                 this.scrollBottom(true);
             }, () => {
-                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                if (unsentMessages.get(conversationID) && (<Array<string>>unsentMessages.get(conversationID)).length > 0) {
-                    const tempArray = <Array<string>>unsentMessages.get(conversationID);
-                    tempArray.push(message);
-                    unsentMessages.set(conversationID, tempArray);
-                } else {
-                    unsentMessages.set(conversationID, [message]);
-                }
-                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
             });
     }
 
@@ -260,15 +246,6 @@ export class UploadService {
         const validVideoType = ['webm', 'mp4', 'ogg'];
         const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
         return validVideoType.includes(fileExtension);
-    }
-
-    public getFileURL(event: MouseEvent, message: string): void {
-        event.preventDefault();
-        const link = document.createElement('a');
-        link.href = Values.fileDownloadAddress + encodeURIComponent(message.substring(6).split('|')[0]).replace(/%2F/g, '/');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
 
     public getAudio(target: HTMLElement, message: string): void {

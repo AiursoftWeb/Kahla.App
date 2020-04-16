@@ -6,27 +6,27 @@
     <div *ngFor="let request of cacheService.cachedData.requests" class="friendrequests"
          (click)="this.router.navigate(['/user', request.creatorId]);">
         <img class="user-img"
-             src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&h=100">
+             src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&square=true">
         <div class="name">
-                {{request.creator.nickName}}
+            {{request.creator.nickName}}
+        </div>
+
+        <div class="time">
+            {{request.createTime | date:'short'}}
+        </div>
+
+        <div class="decision">
+            <div class="Completed" *ngIf="request.completed; else elseblock">
+                Compeleted!
             </div>
-        
-            <div class="time">
-                {{request.createTime | date:'short'}}
-            </div>
-        
-            <div class="decision">
-                <div class="Completed" *ngIf="request.completed; else elseblock">
-                    Compeleted!
-                </div>
-        
-                <ng-template #elseblock>
-                    <button class="button success" (click)="accept(request.id);$event.stopPropagation();">Accept
-                    </button>
-                    <button class="button warning" (click)="decline(request.id);$event.stopPropagation();">Decline
-                    </button>
-                </ng-template>
-        
-            </div>
+
+            <ng-template #elseblock>
+                <button class="button success" (click)="accept(request.id);$event.stopPropagation();">Accept
+                </button>
+                <button class="button warning" (click)="decline(request.id);$event.stopPropagation();">Decline
+                </button>
+            </ng-template>
+
+        </div>
         </div>
 </ng-template>

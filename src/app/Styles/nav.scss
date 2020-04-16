@@ -1,4 +1,5 @@
 @import "fixed_widescreen";
+@import "effects";
 /******************
  *    Nav bar
  ******************** */
@@ -34,6 +35,7 @@
       height: 100%;
       text-decoration: none;
       transition: all 0.2s ease-out;
+      @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 
       .icon {
         width: 40px;
@@ -50,12 +52,6 @@
       }
 
       &:hover {
-        background-color: var(--selectable-hover-bg);
-        color: var(--primary-color-depth1);
-      }
-
-      &:active {
-        background-color: var(--selectable-active-bg);
         color: var(--primary-color-depth1);
       }
 

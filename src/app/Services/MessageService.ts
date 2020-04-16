@@ -30,6 +30,7 @@ import { HomeService } from './HomeService';
 import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
 import { ProbeService } from './ProbeService';
+import { ThemeService } from './ThemeService';
 
 @Injectable({
     providedIn: 'root'
@@ -47,8 +48,8 @@ export class MessageService {
     public maxImageWidth = 0;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
-    private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'chocolate',
-        'coral', 'deepskyblue', 'darkturquoise', 'lightseagreen', 'indigo', 'lavenderblush', 'lawngreen', 'maroon'];
+    // private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'chocolate',
+    //     'coral', 'deepskyblue', 'darkturquoise', 'lightseagreen', 'indigo', 'lavenderblush', 'lawngreen', 'maroon'];
     public groupConversation = false;
     public sysNotifyText: string;
     public sysNotifyShown: boolean;
@@ -65,6 +66,7 @@ export class MessageService {
         private groupsApiService: GroupsApiService,
         private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
+        private themeService: ThemeService,
     ) {
     }
 
@@ -264,8 +266,9 @@ export class MessageService {
                             this.localMessages = modifiedMsg;
                             this.rawMessages = messages;
                         } else {
-                            this.localMessages.splice(index, modifiedMsg.length, ...modifiedMsg);
-                            this.rawMessages.splice(index, messages.length, ...messages);
+                            const deleteCount = this.rawMessages.length - index;
+                            this.localMessages.splice(index, deleteCount, ...modifiedMsg);
+                            this.rawMessages.splice(index, deleteCount, ...messages);
                         }
                     } else {
                         this.localMessages = modifiedMsg;
@@ -368,9 +371,21 @@ export class MessageService {
         }
     }
 
+    public getRandomColor(darkColor: boolean): string {
+        let r = Math.floor(Math.random() * 128);
+        let g = Math.floor(Math.random() * 128);
+        let b = Math.floor(Math.random() * 128);
+        if (!darkColor) {
+            r = Math.max(r + 127, 200);
+            g = Math.max(g + 127, 200);
+            b = Math.max(b + 127, 200);
+        }
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
     public getGroupColor(message: Message): string {
         if (!this.userColors.has(message.senderId)) {
-            this.userColors.set(message.senderId, this.colors[Math.floor(Math.random() * this.colors.length)]);
+            this.userColors.set(message.senderId, this.getRandomColor(!this.themeService.IsDarkTheme()));
         }
         return this.userColors.get(message.senderId);
     }

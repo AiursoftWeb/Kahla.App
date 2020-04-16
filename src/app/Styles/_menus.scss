@@ -1,5 +1,6 @@
+@import "effects";
 %menu-item {
-  background-color: var(--selectable-bg);
+  background: var(--selectable-bg);
   border-color: var(--selectable-border-color);
 
   .img {
@@ -7,18 +8,11 @@
   }
 
   &.w-current {
-    background-color: var(--selectable-hover-bg) !important;
+    background: var(--selectable-hover-bg) !important;
   }
 }
 
 %menu-item-clickable {
   @extend %menu-item;
-
-  &:hover {
-    background-color: var(--selectable-hover-bg);
-  }
-
-  &:active {
-    background-color: var(--selectable-active-bg);
-  }
+  @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 }

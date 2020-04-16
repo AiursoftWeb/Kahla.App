@@ -5,10 +5,12 @@ import { Values } from '../values';
     providedIn: 'root',
 })
 export class ProbeService {
-    public encodeProbeFileUrl(filePath: string) {
+    public encodeProbeFileUrl(filePath: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
-        return Values.fileCompatAddress.replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
+
+        return (downloadAddr ? Values.fileDownloadAddress : Values.fileCompatAddress)
+            .replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1);
     }
 
     public getFileSizeText(fileSize: number) {
@@ -24,5 +26,11 @@ export class ProbeService {
             } while (fileSize >= thresh && index < units.length - 1);
             return fileSize.toFixed(1) + ' ' + units[index];
         }
+    }
+
+    public renameFile(originalFile: File, prefix: string): File {
+        return new File([originalFile],
+            `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`,
+            {type: originalFile.type, lastModified: originalFile.lastModified});
     }
 }

@@ -48,6 +48,7 @@ import { TimerService } from './Services/TimerService';
 import { HomeService } from './Services/HomeService';
 import { FriendshipService } from './Services/FriendshipService';
 import { ProbeService } from './Services/ProbeService';
+import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 
 @NgModule({
     imports: [
@@ -81,6 +82,7 @@ import { ProbeService } from './Services/ProbeService';
         HomeComponent,
         ShareComponent,
         FileHistoryComponent,
+        VjsPlayerComponent,
     ],
     providers: [
         ApiService,

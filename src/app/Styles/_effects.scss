@@ -1,0 +1,9 @@
+@mixin hover-effect($hover-col, $active-col) {
+  &:hover {
+    background: #{$hover-col};
+  }
+
+  &:active {
+    background: #{$active-col};
+  }
+}

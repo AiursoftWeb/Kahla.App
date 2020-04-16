@@ -7,7 +7,7 @@
     <div class="profile avatar">
         <label>Group Avatar</label>
         <a class="user-img" href="{{conversation.avatarURL}}" target="_blank">
-            <img class="user-img" src="{{conversation.avatarURL}}?w=140&h=140">
+            <img class="user-img" src="{{conversation.avatarURL}}?w=140&square=true">
         </a>
         <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
         <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()"
@@ -54,20 +54,20 @@
         </div>
         <div class="text">Change Join Password</div>
     </div>
-    <div class="menu-header">
+    <div class="menu-header text-warning">
         Danger Zone
     </div>
     <div class="menu-button" (click)="transferOwner()">
-        <div class="img">
+        <div class="img text-warning">
             <i class="fas fa-exchange-alt"></i>
         </div>
-        <div class="text">Transfer Owner</div>
+        <div class="text text-warning">Transfer Owner</div>
     </div>
     <div class="menu-button" (click)="dissolveGroup()">
-        <div class="img">
+        <div class="img text-warning">
             <i class="fas fa-trash"></i>
         </div>
-        <div class="text">Dissolve Group</div>
+        <div class="text text-warning">Dissolve Group</div>
     </div>
 </div>
 <div *ngIf="conversation && !messageService.checkOwner()">

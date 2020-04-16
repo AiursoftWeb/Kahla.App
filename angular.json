@@ -27,6 +27,7 @@
               "src/manifest.json",
               "src/favicon.ico",
               "src/web.config",
+              "src/robots.txt",
               "src/sw.js",
               "src/index.js",
               {

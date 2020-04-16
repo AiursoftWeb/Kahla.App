@@ -23,9 +23,9 @@
             <div class="chat-avatar">
                 <div class="chart-avatar-wrapper" *ngIf="!message.groupWithPrevious"
                      routerLink="/user/{{message.senderId}}">
-                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&h=80">
+                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&square=true">
                     <div class="small-dot"
-                         style="top: -10px; right: -35px;"
+                         style="top: -10px; right: -35px;" *ngIf="message.sender.isOnline !== null"
                          [class.greendot]="message.sender.isOnline"
                          [class.graydot]="!message.sender.isOnline">
                     </div>
@@ -54,15 +54,15 @@
                         <div class="image-container" [style.width.px]="message.content.split('|')[1]"
                              [style.height.px]="message.content.split('|')[2]">
                             <img src="{{ message.content.substring(5).split('|')[0] }}"
-                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }}&h={{ message.content.split('|')[2] }},
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }}&h={{ Math.floor(message.content.split('|')[2] * 1.5) }} 1.5x,
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }}&h={{ Math.floor(message.content.split('|')[2] * 2) }} 2x">
+                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }},
+                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }} 1.5x,
+                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }} 2x">
                         </div>
                     </a>
                     <a class="share-item file"
                        *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
-                       target="_blank" rel="noopener noreferrer" href=""
-                       (click)="uploadService.getFileURL($event, message.content)">
+                       target="_blank" rel="noopener noreferrer"
+                       href="{{probeService.encodeProbeFileUrl(message.content.substring(6).split('|')[0], true)}}">
                         <div
                             [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
@@ -103,15 +103,14 @@
                     <a class="share-item" href="javascript:void(0);" (click)="shareClick(message)"
                        *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
                         <div>
-                            <img src="{{message.content.split('|')[3]}}?w=40&h=40"/>
+                            <img src="{{message.content.split('|')[3]}}?w=40&square=true"/>
                         </div>
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
                     <div *ngIf="message.content.startsWith('[video]')">
-                        <video src="{{ probeService.encodeProbeFileUrl(message.content.substring(7)) }}" controls
-                               [style.height.px]="messageService.videoHeight"
-                               muted></video>
+                        <app-vjs-player
+                            [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.content.substring(7))}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
@@ -124,8 +123,16 @@
                        [innerHTML]="message.content"></p>
                     <div
                         *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
-                        <i (click)="shareToOther(message.contentRaw)" class="share fa fa-share-alt"
-                           aria-hidden="true"></i>
+                        <div class="message-action-button" (click)="shareToOther(message.contentRaw)">
+                            <i class="share fa fa-share-alt" aria-hidden="true"></i>
+                            Share
+                        </div>
+                        <a class="message-action-button" *ngIf="!message.content.startsWith('[file]')"
+                           href="{{probeService.encodeProbeFileUrl(message.content.startsWith('[img]') ?
+                            message.contentRaw.substring(5).split('|')[0] : message.content.substring(7), true)}}">
+                            <i class="share fa fa-file-download" aria-hidden="true"></i>
+                            Download
+                        </a>
                     </div>
                 </div>
                 <p class="sendFail" [class.last]="isLast" *ngIf="message.resend">
@@ -162,7 +169,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&h=72">
+            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&square=true">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>

@@ -54,7 +54,7 @@ Excute following command in the root directory of this repository to restore all
 npm install
 ```
 
-Excute following command to run and start a debug server at `localhost:8001`.
+Excute following command to run and start a debugging server at `localhost:8001`.
 
 ```bash
 npm start
@@ -62,7 +62,7 @@ npm start
 
 ### How to run as desktop app
 
-Currently we are using [Electron](https://electron.atom.io/) to target Windows, Mac and Linux platform.
+Currently, we are using [Electron](https://electron.atom.io/) to target Windows, Mac and Linux platform.
 
 Supports Windows 7+, Linux and macOS 10.9+.
 
@@ -106,6 +106,6 @@ For more info please view [Kahla Wiki](https://wiki.aiursoft.com/ReadDoc/Kahla/W
 
 There are many ways to contribute to the project: logging bugs, submitting pull requests, reporting issues, and creating suggestions.
 
-Even if you have push rights on the repository, you should create a personal fork and create feature branches there when you need them. This keeps the main repository clean and your personal workflow cruft out of sight.
+Even if you have push rights on the repository, you should create a personal fork and create feature branches there when you need them. This keeps the main repository clean, and your personal workflow cruft out of sight.
 
 We're also interested in your feedback for the future of this project. You can submit a suggestion or feature request through the issue tracker. To make this process more effective, we're asking that these include more information to help define them more clearly.
