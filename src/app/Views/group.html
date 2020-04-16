@@ -3,7 +3,7 @@
     <a class="user-img groupGridRow" href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}"
        target="_blank" rel="noopener noreferrer">
         <img class="user-img groupGridRow"
-             src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&h=100">
+             src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=100&square=true">
     </a>
     <div class="name">
         {{conversation.displayName}}
@@ -59,7 +59,7 @@
     </div>
     <div class="menu-button" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
         <div>
-            <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&h=72">
+            <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=72&square=true">
             <div class="small-dot"
                  style="top:29px; right:-42px;" *ngIf="e.user.isOnline !== null"
                  [class.greendot]="e.user.isOnline"
