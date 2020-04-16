@@ -65,12 +65,12 @@
 <div *ngIf="showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let user of results.users" (click)="userClick(user, $event.ctrlKey)">
         <div>
-            <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&h=80"
-                routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();">
+            <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=80&square=true"
+                 routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();">
             <div class="small-dot"
-                style="top:32px; right:-43px;" *ngIf="user.isOnline !== null"
-                [class.greendot]="user.isOnline"
-                [class.graydot]="!user.isOnline">
+                 style="top:32px; right:-43px;" *ngIf="user.isOnline !== null"
+                 [class.greendot]="user.isOnline"
+                 [class.graydot]="!user.isOnline">
             </div>
         </div>
         <div class="sender">
@@ -88,7 +88,7 @@
 <div *ngIf="!showUsers && cacheService.cachedData.friends">
     <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="searchGroupImage">
-            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&h=80"
+            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=80&square=true"
                  routerLink="/group/{{group.id}}" (click)="$event.stopPropagation();"/>
         </div>
         <div class="sender">

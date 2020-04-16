@@ -7,7 +7,7 @@
     <div class="profile avatar">
         <label>Group Avatar</label>
         <a class="user-img" href="{{conversation.avatarURL}}" target="_blank">
-            <img class="user-img" src="{{conversation.avatarURL}}?w=140&h=140">
+            <img class="user-img" src="{{conversation.avatarURL}}?w=140&square=true">
         </a>
         <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
         <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()"
