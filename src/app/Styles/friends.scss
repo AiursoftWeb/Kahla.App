@@ -36,33 +36,6 @@
   }
 }
 
-.friend {
-  @extend %menu-item-clickable;
-  height: 50px;
-  border-width: 1px;
-  border-bottom-style: solid;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease-out;
-
-  .user-img {
-    margin-left: 10px;
-    margin-top: 7px;
-    width: 36px;
-    height: 36px;
-    float: left;
-    border-radius: 8px;
-  }
-
-  .name {
-    position: absolute;
-    margin-left: 55px;
-    margin-top: 15px;
-    font-size: 15px;
-    font-weight: 400;
-  }
-}
-
 .search-type {
   margin-top: 5px;
 }
