@@ -94,11 +94,22 @@
   user-select: none;
   transition: all ease-out 0.2s;
 
+  .user-img-group {
+    position: relative;
+
+    .small-dot {
+      top: 36px;
+      right: -4px;
+      position: absolute;
+    }
+  }
+
   .user-img {
     width: 40px;
     height: 40px;
     border-radius: 4px;
   }
+
 
   .sender {
     font-size: 15px;
