@@ -3,7 +3,7 @@
   <div class="profile avatar">
       <label>Avatar</label>
       <a class="user-img" href="{{user ? user.avatarURL : loadingImgURL}}" target="_blank">
-        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=140&square=true">
+        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=256&square=true">
       </a>
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />

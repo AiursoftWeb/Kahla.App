@@ -6,7 +6,7 @@
     <div *ngFor="let request of cacheService.cachedData.requests" class="friendrequests"
          (click)="this.router.navigate(['/user', request.creatorId]);">
         <img class="user-img"
-             src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=100&square=true">
+             src="{{request.creator.avatarURL ? request.creator.avatarURL : loadingImgURL}}?w=128&square=true">
         <div class="name">
             {{request.creator.nickName}}
         </div>
