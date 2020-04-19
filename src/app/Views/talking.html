@@ -23,7 +23,7 @@
             <div class="chat-avatar">
                 <div class="chart-avatar-wrapper" *ngIf="!message.groupWithPrevious"
                      routerLink="/user/{{message.senderId}}">
-                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&square=true">
+                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=128&square=true">
                     <div class="small-dot"
                          style="top: -10px; right: -35px;" *ngIf="message.sender.isOnline !== null"
                          [class.greendot]="message.sender.isOnline"
@@ -103,7 +103,7 @@
                     <a class="share-item" href="javascript:void(0);" (click)="shareClick(message)"
                        *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
                         <div>
-                            <img src="{{message.content.split('|')[3]}}?w=40&square=true"/>
+                            <img src="{{message.content.split('|')[3]}}?w=128&square=true"/>
                         </div>
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
@@ -169,7 +169,7 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&square=true">
+            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=128&square=true">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>
