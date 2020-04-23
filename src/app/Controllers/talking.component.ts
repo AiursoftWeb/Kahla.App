@@ -19,6 +19,8 @@ import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
+import * as EmojiButton from '@joeattardi/emoji-button';
+import { ThemeService } from '../Services/ThemeService';
 
 declare var MediaRecorder: any;
 
@@ -46,6 +48,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 0;
     private load = 15;
     private chatInputHeight: number;
+    private picker: EmojiButton;
     public Math = Math;
     public Date = Date;
     public showUserList = false;
@@ -54,7 +57,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', {static: true}) public header: HeaderComponent;
+    @ViewChild('header', { static: true }) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -65,6 +68,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public cacheService: CacheService,
         public timerService: TimerService,
         private friendshipService: FriendshipService,
+        private themeService: ThemeService,
         public _electronService: ElectronService,
         public probeService: ProbeService,
     ) {
@@ -470,6 +474,22 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     return;
                 });
         }
+    }
+
+    public emoji(): void {
+        const chatBox = <HTMLElement>document.querySelector('.chat-box');
+        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        if(!this.picker) {
+            this.picker = new EmojiButton();
+            this.picker.on('emoji', emoji => {
+                input.value += emoji;
+            });
+        }
+        this.picker.togglePicker(chatBox, {
+            position: 'top-start',
+            zIndex: 20,
+            theme: this.themeService.IsDarkTheme() ? 'dark' : 'light'
+        });
     }
 
     public complete(nickname: string): void {
