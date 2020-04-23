@@ -391,6 +391,7 @@
         text-align: center;
         flex: 0 0 auto;
         transition: all 0.15s ease-in-out;
+        width: 40px;
 
         &.active {
           color: var(--primary-color-depth3);
@@ -415,7 +416,6 @@
         }
 
         i {
-          width: 40px;
           opacity: 1;
         }
       }
