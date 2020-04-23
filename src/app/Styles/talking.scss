@@ -388,14 +388,17 @@
         color: #bbb;
         font-size: 2.5em;
         outline: none;
-        width: 0;
         text-align: center;
         flex: 0 0 auto;
-        opacity: 0;
         transition: all 0.15s ease-in-out;
 
         &.active {
           color: var(--primary-color-depth3);
+        }
+
+        &.auto-hide {
+          opacity: 0;
+          width: 0;
         }
       }
 
