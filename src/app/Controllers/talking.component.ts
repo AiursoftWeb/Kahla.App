@@ -483,7 +483,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 position: 'top-start',
                 zIndex: 20,
                 theme: this.themeService.IsDarkTheme() ? 'dark' : 'light',
-                autoFocusSearch: false
+                autoFocusSearch: false,
+                showSearch: false
             });
             this.picker.on('emoji', emoji => {
                 this.content = this.content ? this.content + emoji : emoji;
