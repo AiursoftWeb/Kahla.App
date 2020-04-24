@@ -479,17 +479,16 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public emoji(): void {
         const chatBox = <HTMLElement>document.querySelector('.chat-box');
         if (!this.picker) {
-            this.picker = new EmojiButton();
+            this.picker = new EmojiButton({
+                position: 'top-start',
+                zIndex: 20,
+                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light'
+            });
             this.picker.on('emoji', emoji => {
                 this.content = this.content ? this.content + emoji : emoji;
             });
         }
-        console.log(this.themeService.IsDarkTheme());
-        this.picker.togglePicker(chatBox, {
-            position: 'top-start',
-            zIndex: 20,
-            theme: this.themeService.IsDarkTheme() ? 'dark' : 'light'
-        });
+        this.picker.togglePicker(chatBox);
     }
 
     public complete(nickname: string): void {
