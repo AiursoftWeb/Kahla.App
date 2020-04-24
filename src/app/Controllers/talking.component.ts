@@ -298,7 +298,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             });
         this.content = '';
         const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
-        inputElement.focus();
+        // inputElement.focus();
         inputElement.style.height = 34 + 'px';
     }
 
