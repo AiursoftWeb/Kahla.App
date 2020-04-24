@@ -482,7 +482,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.picker = new EmojiButton({
                 position: 'top-start',
                 zIndex: 20,
-                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light'
+                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light',
+                autoFocusSearch: false
             });
             this.picker.on('emoji', emoji => {
                 this.content = this.content ? this.content + emoji : emoji;
