@@ -52,6 +52,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public Math = Math;
     public Date = Date;
     public showUserList = false;
+    public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
 
     @ViewChild('imageInput') public imageInput;
@@ -96,7 +97,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
-            this.messageService.loadMore();
+            const now = Date.now();
+            if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
+                this.messageService.loadMore();
+                this.lastAutoLoadMoreTimestamp = now;
+            } else {
+                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
+            }
         }
     }
 
