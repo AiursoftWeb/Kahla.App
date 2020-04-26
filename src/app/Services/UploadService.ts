@@ -248,16 +248,6 @@ export class UploadService {
         return validVideoType.includes(fileExtension);
     }
 
-    public getAudio(target: HTMLElement, message: string): void {
-        target.style.display = 'none';
-        const audioElement = document.createElement('audio');
-        audioElement.style.maxWidth = '100%';
-        audioElement.src = this.probeService.encodeProbeFileUrl(message.substring(7).split('|')[0]);
-        audioElement.controls = true;
-        target.parentElement.appendChild(audioElement);
-        audioElement.play();
-    }
-
     private formatFileMessage(response: UploadFile, fileName: string): string {
         return `[file]${response.filePath}|${fileName}|${this.probeService.getFileSizeText(response.fileSize)}`;
     }

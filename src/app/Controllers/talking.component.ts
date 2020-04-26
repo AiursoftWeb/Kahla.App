@@ -550,4 +550,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.friendshipService.joinGroup(group, true);
         }
     }
+
+    public getAudio(target: HTMLElement, message: string): void {
+        target.style.display = 'none';
+        const audioElement = document.createElement('audio');
+        audioElement.style.maxWidth = '100%';
+        audioElement.src = this.probeService.encodeProbeFileUrl(message.substring(7).split('|')[0], this.messageService.fileAccessToken);
+        audioElement.controls = true;
+        target.parentElement.appendChild(audioElement);
+        audioElement.play();
+    }
 }

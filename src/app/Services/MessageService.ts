@@ -31,6 +31,7 @@ import { GroupsApiService } from './GroupsApiService';
 import { FriendsApiService } from './FriendsApiService';
 import { ProbeService } from './ProbeService';
 import { ThemeService } from './ThemeService';
+import { FilesApiService } from './FilesApiService';
 
 @Injectable({
     providedIn: 'root'
@@ -53,10 +54,12 @@ export class MessageService {
     public sysNotifyShown: boolean;
     public messageLoading = false;
     public fileAccessToken: string;
+    public accessTokenUpdateSchedule: any;
 
     constructor(
         private conversationApiService: ConversationApiService,
         private uploadService: UploadService,
+        private filesApiService: FilesApiService,
         private cacheService: CacheService,
         private _electronService: ElectronService,
         private timerService: TimerService,
@@ -350,6 +353,11 @@ export class MessageService {
         this.maxImageWidth = 0;
         this.userColors.clear();
         this.groupConversation = false;
+        this.fileAccessToken = null;
+        if (this.accessTokenUpdateSchedule) {
+            clearInterval(this.accessTokenUpdateSchedule);
+            this.accessTokenUpdateSchedule = null;
+        }
     }
 
     private showNotification(event: NewMessageEvent): void {
@@ -536,6 +544,8 @@ export class MessageService {
         this.showFailedMessages();
         this.reorderLocalMessages();
         this.updateAtLink();
+        this.updateAccessToken();
+        this.accessTokenUpdateSchedule = setInterval(() => this.updateAccessToken(), 1190000); // 20min - 10s
         setTimeout(() => this.uploadService.scrollBottom(false), 0);
     }
 
@@ -575,5 +585,11 @@ export class MessageService {
 
     public upperFloorImageSize(width: number) {
         return Math.pow(2, Math.ceil(Math.log2(width)));
+    }
+
+    public updateAccessToken() {
+        this.filesApiService.InitFileAccess(this.conversation.id).subscribe(t => {
+            this.fileAccessToken = encodeURIComponent(t.value);
+        });
     }
 }
