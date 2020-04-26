@@ -48,9 +48,9 @@ export class UploadService {
                 showCancelButton: true
             }).then(result => {
                 if (result.value) {
-                    this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+                    this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
                         if (response.code === 0) {
-                            this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                            this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
                                 this.encryptThenSend(res, fileType, conversationID, aesKey, file);
                             }, () => {
                                 Swal.close();
@@ -64,9 +64,9 @@ export class UploadService {
         } else {
             const alert = this.fireUploadingAlert(`Uploading your ${fileType === FileType.Image ? 'image' : (fileType === FileType.Video ? 'video' : 'file')}...`);
 
-            this.filesApiService.InitFileUpload(conversationID).subscribe(response => {
+            this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
                 if (response.code === 0) {
-                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                    const mission = this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
                         if (Number(res)) {
                             this.updateAlertProgress(Number(res));
                         } else if (res) {

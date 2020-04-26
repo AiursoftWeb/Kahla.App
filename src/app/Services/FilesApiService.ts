@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/';
 import { UploadFile } from '../Models/Probe/UploadFile';
 import { catchError, map } from 'rxjs/operators';
 import { AiurValue } from '../Models/AiurValue';
+import { FileTokenApiModel } from '../Models/ApiModels/FileTokenApiModel';
 
 @Injectable()
 export class FilesApiService {
@@ -13,14 +14,16 @@ export class FilesApiService {
     constructor(
         private apiService: ApiService,
         private http: HttpClient,
-    ) {}
+    ) {
+    }
 
     public InitIconUpload(): Observable<AiurValue<string>> {
         return this.apiService.Get(FilesApiService.serverPath + '/InitIconUpload');
     }
 
-    public InitFileUpload(conversationId: number): Observable<AiurValue<string>> {
-        return this.apiService.Get(`${FilesApiService.serverPath}/InitFileUpload?ConversationId=${conversationId}`);
+    public InitFileAccess(conversationId: number, upload: boolean): Observable<FileTokenApiModel> {
+        return this.apiService.Get(`${FilesApiService.serverPath}/InitFileAccess` +
+            `?ConversationId=${conversationId}&upload=${upload}&download=${!upload}`);
     }
 
     public UploadFile(formData: FormData, uploadURL: string): Observable<number | UploadFile> {

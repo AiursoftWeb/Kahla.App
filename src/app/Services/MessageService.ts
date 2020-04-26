@@ -48,12 +48,11 @@ export class MessageService {
     public maxImageWidth = 0;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
-    // private colors = ['aqua', 'aquamarine', 'bisque', 'blue', 'blueviolet', 'brown', 'burlywood', 'chocolate',
-    //     'coral', 'deepskyblue', 'darkturquoise', 'lightseagreen', 'indigo', 'lavenderblush', 'lawngreen', 'maroon'];
     public groupConversation = false;
     public sysNotifyText: string;
     public sysNotifyShown: boolean;
     public messageLoading = false;
+    public fileAccessToken: string;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -468,7 +467,7 @@ export class MessageService {
                     imageWidth = realMaxWidth;
                     imageHeight = Math.floor(realMaxWidth * ratio);
                 }
-                t.content = `[img]${this.probeService.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}`;
+                t.content = `[img]${this.probeService.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}|${this.upperFloorImageSize(imageWidth)}`;
             }
         } else if (t.content.startsWith('[group]')) {
             const groupId = Number(t.content.substring(7));
@@ -572,5 +571,9 @@ export class MessageService {
                 this.localMessages.push(message);
             }, this);
         }
+    }
+
+    public upperFloorImageSize(width: number) {
+        return Math.pow(2, Math.ceil(Math.log2(width)));
     }
 }

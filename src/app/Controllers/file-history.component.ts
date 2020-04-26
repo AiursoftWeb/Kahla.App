@@ -45,8 +45,8 @@ export class FileHistoryComponent implements OnInit {
     }
 
     public buildProbeUrl(file: ProbeFile, dir: ProbeFolder, download: boolean = false): string {
-        return this.probeService.encodeProbeFileUrl(`${this.files.siteName}/${this.files.rootPath}/${dir.folderName}/${file.fileName}`,
-            download);
+        return this.probeService.encodeProbeFileUrl(`${this.files.siteName}/${this.files.rootPath}/${dir.folderName}/${file.fileName}`
+            , null, download);
     }
 
     public calcSummary() {
