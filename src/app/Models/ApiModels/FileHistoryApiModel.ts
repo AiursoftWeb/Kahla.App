@@ -1,7 +1,8 @@
 import { AiurCollection } from '../AiurCollection';
-import { ProbeFolder } from '../Probe/ProbeFolder';
+import { ProbeFile } from '../Probe/ProbeFile';
 
-export class FileHistoryApiModel extends AiurCollection<ProbeFolder> {
+export class FileHistoryApiModel extends AiurCollection<ProbeFile> {
     public siteName: string;
     public rootPath: string;
+    public showingDateUTC: string;
 }
