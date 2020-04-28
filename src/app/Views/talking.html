@@ -48,21 +48,21 @@
                         <label class="badge badge-secondary"
                                *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>
-                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('|').length === 3"
+                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('|').length === 4"
                        target="_blank" rel="noopener noreferrer"
-                       href="{{ message.content.substring(5).split('|')[0] }}">
+                       href="{{ message.content.substring(5).split('|')[0] }}?token={{messageService.fileAccessToken}}">
                         <div class="image-container" [style.width.px]="message.content.split('|')[1]"
                              [style.height.px]="message.content.split('|')[2]">
-                            <img src="{{ message.content.substring(5).split('|')[0] }}"
-                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }},
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }} 1.5x,
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }} 2x">
+                            <img *ngIf="messageService.fileAccessToken"
+                                 src="{{ message.content.substring(5).split('|')[0] }}?token={{messageService.fileAccessToken}}"
+                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[3] }}&token={{messageService.fileAccessToken}},
+                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[3] * 2) }}&token={{messageService.fileAccessToken}} 2x">
                         </div>
                     </a>
                     <a class="share-item file"
                        *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
                        target="_blank" rel="noopener noreferrer"
-                       href="{{probeService.encodeProbeFileUrl(message.content.substring(6).split('|')[0], true)}}">
+                       href="{{probeService.encodeProbeFileUrl(message.content.substring(6).split('|')[0], messageService.fileAccessToken, true)}}">
                         <div
                             [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
@@ -108,13 +108,13 @@
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
-                    <div *ngIf="message.content.startsWith('[video]')">
-                        <app-vjs-player
-                            [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.content.substring(7))}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
+                    <div *ngIf="message.content.startsWith('[video]')" [style.height]="messageService.videoHeight">
+                        <app-vjs-player *ngIf="messageService.fileAccessToken"
+                                        [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.content.substring(7), messageService.fileAccessToken)}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
-                           (click)="uploadService.getAudio($event.currentTarget, message.content) //noinspection ValidateTypes">
+                           (click)="getAudio($event.currentTarget, message.content) //noinspection ValidateTypes">
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
                         </a>
@@ -129,7 +129,7 @@
                         </div>
                         <a class="message-action-button" *ngIf="!message.content.startsWith('[file]')"
                            href="{{probeService.encodeProbeFileUrl(message.content.startsWith('[img]') ?
-                            message.contentRaw.substring(5).split('|')[0] : message.content.substring(7), true)}}">
+                            message.contentRaw.substring(5).split('|')[0] : message.content.substring(7), messageService.fileAccessToken, true)}}">
                             <i class="share fa fa-file-download" aria-hidden="true"></i>
                             Download
                         </a>

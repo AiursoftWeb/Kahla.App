@@ -96,3 +96,10 @@ button,
   width: auto !important;
   margin: 0 auto !important;
 }
+
+.load-more {
+  width: 240px;
+  margin-bottom: 20px;
+  background-color: var(--selectable-bg);
+  color: var(--minor-textcolor);
+}
