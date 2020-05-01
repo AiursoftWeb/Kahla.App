@@ -6,7 +6,7 @@
         <div class="file-tiles">
             <div *ngFor="let file of dir.items" class="file-item">
                 <a title="{{file.fileName}}" href="{{buildProbeUrl(file, dir)}}" target="_blank" class="file-item-body">
-                    <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}&w=60"
+                    <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}&w=128"
                          class="icon"/>
                     <ng-template #file_ico>
                         <div class="icon"
