@@ -143,6 +143,7 @@
     position: relative;
     display: inline-block;
     min-height: 17px;
+    z-index:1;
 
     p {
       text-align: left;
@@ -274,13 +275,6 @@
   margin-bottom: 161px;
 }
 
-.load-more {
-  width: 240px;
-  margin-bottom: 20px;
-  background-color: var(--selectable-bg);
-  color: var(--minor-textcolor);
-}
-
 .image-container {
   position: relative;
   max-height: 500px;
@@ -388,14 +382,18 @@
         color: #bbb;
         font-size: 2.5em;
         outline: none;
-        width: 0;
         text-align: center;
         flex: 0 0 auto;
-        opacity: 0;
         transition: all 0.15s ease-in-out;
+        width: 40px;
 
         &.active {
           color: var(--primary-color-depth3);
+        }
+
+        &.auto-hide {
+          opacity: 0;
+          width: 0;
         }
       }
 
@@ -412,8 +410,8 @@
         }
 
         i {
-          width: 40px;
           opacity: 1;
+          width: 40px;
         }
       }
     }

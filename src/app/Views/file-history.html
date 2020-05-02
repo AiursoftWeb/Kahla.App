@@ -1,12 +1,12 @@
-<app-header title="File History"></app-header>
-<div *ngIf="(files && files.items && files.items.length > 0) else noFile">
+<app-header title="File History" [processing]="loading"></app-header>
+<div *ngIf="files.length > 0">
     <div class="menu-hint">{{calcSummary()}}</div>
-    <div *ngFor="let dir of files.items">
-        <div class="menu-header">{{dir.folderName}}</div>
+    <div *ngFor="let dir of files">
+        <div class="menu-header">{{dir.showingDateUTC}}</div>
         <div class="file-tiles">
-            <div *ngFor="let file of dir.files" class="file-item">
+            <div *ngFor="let file of dir.items" class="file-item">
                 <a title="{{file.fileName}}" href="{{buildProbeUrl(file, dir)}}" target="_blank" class="file-item-body">
-                    <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}?w=60"
+                    <img *ngIf="isImage(file.fileName) else file_ico" src="{{buildProbeUrl(file, dir)}}&w=128"
                          class="icon"/>
                     <ng-template #file_ico>
                         <div class="icon"
@@ -55,13 +55,21 @@
         </div>
     </div>
 </div>
-<ng-template #noFile>
-    <div class="empty-notice" *ngIf="loaded">
-        <p>No files.</p>
-        <p>Files uploaded to the conversation will be shown here.</p>
-    </div>
+<div class="empty-notice" *ngIf="noMoreFiles && files.length === 0">
+    <p>No files.</p>
+    <p>Files uploaded to the conversation will be shown here.</p>
+</div>
 
-    <div class="empty-notice" *ngIf="!loaded">
-        Loading...
+<div class="empty-notice" *ngIf="noMoreFiles && files.length > 0">
+    <p>All files have been shown.</p>
+</div>
+
+<ng-container *ngIf="!noMoreFiles">
+    <div style="height: 20px;"></div>
+    <div class="buttons">
+        <button class="button primary" [disabled]="loading" (click)="loadFiles()">
+            {{loading ? 'Loading...' : 'Load more'}}
+        </button>
     </div>
-</ng-template>
+</ng-container>
+

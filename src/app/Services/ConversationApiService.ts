@@ -53,7 +53,7 @@ export class ConversationApiService {
         });
     }
 
-    public FileHistory(id: number): Observable<FileHistoryApiModel> {
-        return this.apiService.Get(ConversationApiService.serverPath + `/FileHistory/${id}`);
+    public FileHistory(id: number, skipDates: number): Observable<FileHistoryApiModel> {
+        return this.apiService.Get(ConversationApiService.serverPath + `/FileHistory/${id}?skipDates=${skipDates}`);
     }
 }

@@ -23,7 +23,7 @@
             <div class="chat-avatar">
                 <div class="chart-avatar-wrapper" *ngIf="!message.groupWithPrevious"
                      routerLink="/user/{{message.senderId}}">
-                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=80&square=true">
+                    <img src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=128&square=true">
                     <div class="small-dot"
                          style="top: -10px; right: -35px;" *ngIf="message.sender.isOnline !== null"
                          [class.greendot]="message.sender.isOnline"
@@ -48,23 +48,23 @@
                         <label class="badge badge-secondary"
                                *ngIf="message.sender.emailConfirmed && message.sender.email && message.sender.email.endsWith('@aiursoft.com')">Staff</label>
                     </span>
-                    <a *ngIf="message.content.startsWith('[img]') && message.content.split('|').length === 3"
+                    <a *ngIf="message.fileRef && message.fileRef.fileType === 0"
                        target="_blank" rel="noopener noreferrer"
-                       href="{{ message.content.substring(5).split('|')[0] }}">
-                        <div class="image-container" [style.width.px]="message.content.split('|')[1]"
-                             [style.height.px]="message.content.split('|')[2]">
-                            <img src="{{ message.content.substring(5).split('|')[0] }}"
-                                 srcset="{{ message.content.substring(5).split('|')[0] }}?w={{ message.content.split('|')[1] }},
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 1.5) }} 1.5x,
-                                {{ message.content.substring(5).split('|')[0] }}?w={{ Math.floor(message.content.split('|')[1] * 2) }} 2x">
+                       href="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}">
+                        <div class="image-container" [style.width.px]="message.fileRef.imgDisplayWidth"
+                             [style.height.px]="message.fileRef.imgDisplayHeight">
+                            <img *ngIf="messageService.fileAccessToken"
+                                 src="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}"
+                                 srcset="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) }},
+                                {{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) * 2 }} 2x">
                         </div>
                     </a>
                     <a class="share-item file"
-                       *ngIf="message.content.startsWith('[file]') && message.content.split('|').length == 3"
+                       *ngIf="message.fileRef && message.fileRef.fileType === 2"
                        target="_blank" rel="noopener noreferrer"
-                       href="{{probeService.encodeProbeFileUrl(message.content.substring(6).split('|')[0], true)}}">
+                       href="{{probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken, true)}}">
                         <div
-                            [ngSwitch]="message.content.split('|')[1].substring(message.content.split('|')[1].indexOf('.') + 1)">
+                            [ngSwitch]="message.fileRef.fileName.substring(message.fileRef.fileName.indexOf('.') + 1)">
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
                             <i *ngSwitchCase="'jpg'" class="far fa-file-image" aria-hidden="true"></i>
                             <i *ngSwitchCase="'png'" class="far fa-file-image" aria-hidden="true"></i>
@@ -97,39 +97,39 @@
                             <i *ngSwitchCase="'key'" class="far fa-file-powerpoint" aria-hidden="true"></i>
                             <i *ngSwitchDefault class="fas fa-file" aria-hidden="true"></i>
                         </div>
-                        <h5>{{message.content.split('|')[1]}}</h5>
-                        <span>{{message.content.split('|')[2]}}</span>
+                        <h5>{{message.fileRef.fileName}}</h5>
+                        <span>{{message.fileRef.fileSize}}</span>
                     </a>
                     <a class="share-item" href="javascript:void(0);" (click)="shareClick(message)"
                        *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4">
                         <div>
-                            <img src="{{message.content.split('|')[3]}}?w=40&square=true"/>
+                            <img src="{{message.content.split('|')[3]}}?w=128&square=true"/>
                         </div>
                         <h5>{{message.content.split('|')[1]}}</h5>
                         <span>{{message.content.split('|')[2]}}</span>
                     </a>
-                    <div *ngIf="message.content.startsWith('[video]')">
-                        <app-vjs-player
-                            [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.content.substring(7))}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
+                    <div *ngIf="message.fileRef && message.fileRef.fileType === 1"
+                         [style.height]="messageService.videoHeight">
+                        <app-vjs-player *ngIf="messageService.fileAccessToken"
+                                        [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken)}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"></app-vjs-player>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a href="javascript:void(0)" class="voicemsg"
-                           (click)="uploadService.getAudio($event.currentTarget, message.content) //noinspection ValidateTypes">
+                           (click)="getAudio($event.currentTarget, message.fileRef.filePath) //noinspection ValidateTypes">
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
                         </a>
                     </div>
-                    <p *ngIf="!message.content.startsWith('[img]') && !message.content.startsWith('[file]') && !message.content.startsWith('[video]') && !message.content.startsWith('[audio]') && !message.content.startsWith('[share]')"
+                    <p *ngIf="!message.fileRef && !message.content.startsWith('[share]')"
                        [innerHTML]="message.content"></p>
                     <div
-                        *ngIf="(message.content.startsWith('[img]') || message.content.startsWith('[file]') || message.content.startsWith('[video]')) && message.contentRaw">
-                        <div class="message-action-button" (click)="shareToOther(message.contentRaw)">
+                        *ngIf="message.fileRef && message.fileRef.fileType !== 3 && message.contentRaw">
+                        <div class="message-action-button" (click)="shareToOther(message.fileRef)">
                             <i class="share fa fa-share-alt" aria-hidden="true"></i>
                             Share
                         </div>
-                        <a class="message-action-button" *ngIf="!message.content.startsWith('[file]')"
-                           href="{{probeService.encodeProbeFileUrl(message.content.startsWith('[img]') ?
-                            message.contentRaw.substring(5).split('|')[0] : message.content.substring(7), true)}}">
+                        <a class="message-action-button" *ngIf="message.fileRef.fileType !== 2"
+                           href="{{probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken, true)}}">
                             <i class="share fa fa-file-download" aria-hidden="true"></i>
                             Download
                         </a>
@@ -169,17 +169,18 @@
     <ul *ngIf="showUserList" class="userList" [ngClass]="{'oneResult': matchedUsers.length == 1}"
         [style.max-height.px]="getAtListMaxHeight()">
         <li *ngFor="let user of matchedUsers" (click)="complete(user.nickName)" class="menu-button-transparent">
-            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=72&square=true">
+            <img class="img" src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=128&square=true">
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul>
     <div class="chat-box">
         <div class="chat-part" [class.empty]="content==undefined || content.trim().length === 0">
+            <i class="far fa-smile-wink" aria-hidden="true" (click)="emoji()" style="margin-right: 7px;margin-top: 2px;"></i>
             <textarea id="chatInput" [(ngModel)]="content" type="text" (click)="startInput()" rows="1" maxlength="500"
                       (paste)="paste($event)" (drop)="drop($event)" (dragover)="preventDefault($event)"></textarea>
             <button class="button primary" (click)="send()" i18n="@@Send">Send</button>
-            <i class="fas fa-microphone" aria-hidden="true" (click)="record()" [class.active]="recording"></i>
-            <i class="icon fa fa-plus-circle" (click)="togglePanel()"></i>
+            <i class="fas fa-microphone auto-hide" aria-hidden="true" (click)="record()" [class.active]="recording"></i>
+            <i class="icon fa fa-plus-circle auto-hide" (click)="togglePanel()"></i>
         </div>
         <div *ngIf="showPanel" class="more-panel">
             <div class="of4">

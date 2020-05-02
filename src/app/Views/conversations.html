@@ -3,9 +3,10 @@
 <div id="main">
     <div class="conversation" *ngFor="let inf of cacheService.cachedData.conversations"
          (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
-        <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=100&square=true"
+        <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=128&square=true"
              (click)="detail(inf); $event.stopPropagation();"/>
         <div class="small-dot" *ngIf="inf.online !== null"
+             style="top: 52px; right: 7px;"
              [class.greendot]="inf.online"
              [class.graydot]="!inf.online">
         </div>

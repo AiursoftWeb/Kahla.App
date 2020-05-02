@@ -1,7 +1,7 @@
 <app-header title="Profile"></app-header>
 <div *ngIf="info" class="user">
     <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank" rel="noopener noreferrer">
-        <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=100&square=true">
+        <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=128&square=true">
         <div class="small-dot greendot" *ngIf="info.isOnline !== null"
             [class.greendot]="info.isOnline"
             [class.graydot]="!info.isOnline"

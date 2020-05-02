@@ -19,12 +19,22 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <style>
     ::-webkit-scrollbar {
-      display: none;
+        width: 8px;
     }
 
-    * {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: rgba(127, 127, 127, 0.2);
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: rgba(127, 127, 127, 0.4);
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(127, 127, 127, 0.9);
     }
 
     html {
@@ -45,6 +55,10 @@
 
     .holder {
       height: 20px
+    }
+
+    .wrapper {
+      z-index: 20;
     }
   </style>
 </head>

@@ -12,6 +12,11 @@
   position: fixed;
   left: 0;
   top: 0;
+
+  &::-webkit-scrollbar{
+    width: 0px!important;
+    background: transparent;
+  }
 }
 
 .window-wrapper {

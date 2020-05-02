@@ -19,6 +19,9 @@ import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
+import * as EmojiButton from '@joeattardi/emoji-button';
+import { ThemeService } from '../Services/ThemeService';
+import { MessageFileRef } from '../Models/MessageFileRef';
 
 declare var MediaRecorder: any;
 
@@ -46,15 +49,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private unread = 0;
     private load = 15;
     private chatInputHeight: number;
+    private picker: EmojiButton;
     public Math = Math;
     public Date = Date;
     public showUserList = false;
+    public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', {static: true}) public header: HeaderComponent;
+    @ViewChild('header', { static: true }) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -65,6 +70,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public cacheService: CacheService,
         public timerService: TimerService,
         private friendshipService: FriendshipService,
+        private themeService: ThemeService,
         public _electronService: ElectronService,
         public probeService: ProbeService,
     ) {
@@ -92,7 +98,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
-            this.messageService.loadMore();
+            const now = Date.now();
+            if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
+                this.messageService.loadMore();
+                this.lastAutoLoadMoreTimestamp = now;
+            } else {
+                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
+            }
         }
     }
 
@@ -472,6 +484,23 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public emoji(): void {
+        const chatBox = <HTMLElement>document.querySelector('.chat-box');
+        if (!this.picker) {
+            this.picker = new EmojiButton({
+                position: 'top-start',
+                zIndex: 20,
+                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light',
+                autoFocusSearch: false,
+                showSearch: false
+            });
+            this.picker.on('emoji', emoji => {
+                this.content = this.content ? this.content + emoji : emoji;
+            });
+        }
+        this.picker.togglePicker(chatBox);
+    }
+
     public complete(nickname: string): void {
         const input = <HTMLTextAreaElement>document.getElementById('chatInput');
         const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
@@ -506,8 +535,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
 
-    public shareToOther(message: string): void {
-        this.router.navigate(['share-target', { message: message }]);
+    public shareToOther(fileRef: MessageFileRef): void {
+        this.messageService.shareRef = fileRef;
+        this.router.navigate(['share-target', {
+            srcConversation: this.conversationID
+        }], {skipLocationChange: true});
     }
 
     public getAtListMaxHeight(): number {
@@ -521,5 +553,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const group = <GroupsResult>msg.relatedData;
             this.friendshipService.joinGroup(group, true);
         }
+    }
+
+    public getAudio(target: HTMLElement, filePath: string): void {
+        target.style.display = 'none';
+        const audioElement = document.createElement('audio');
+        audioElement.style.maxWidth = '100%';
+        audioElement.src = this.probeService.encodeProbeFileUrl(filePath, this.messageService.fileAccessToken);
+        audioElement.controls = true;
+        target.parentElement.appendChild(audioElement);
+        audioElement.play();
     }
 }
