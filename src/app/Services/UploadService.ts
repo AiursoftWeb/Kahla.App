@@ -76,7 +76,9 @@ export class UploadService {
                         } else if (res) {
                             Swal.close();
                             this.buildFileRef(res, fileType, file)?.then(t => {
-                                this.encryptThenSend(t, conversationID, aesKey);
+                                this.encryptThenSend(t, conversationID, aesKey).then(() => {
+                                    this.scrollBottom(true);
+                                });
                             });
                         }
                     }, () => {
@@ -135,7 +137,6 @@ export class UploadService {
         return new Promise<void>((resolve, reject) => {
             this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
                 .subscribe(() => {
-                    this.scrollBottom(true);
                     resolve();
                 }, () => {
                     Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
@@ -272,5 +273,19 @@ export class UploadService {
                 resolve(fileRef);
             }
         }));
+    }
+
+    public getFileDescriptionFromType(fileType: FileType): string {
+        switch (fileType) {
+            case FileType.Image:
+                return 'Image';
+            case FileType.Video:
+                return 'Video';
+            case FileType.File:
+                return 'File';
+            case FileType.Audio:
+                return 'Audio';
+        }
+        return '';
     }
 }
