@@ -10,6 +10,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
+import { MessageFileRef } from '../Models/MessageFileRef';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class UploadService {
         private filesApiService: FilesApiService,
         private conversationApiService: ConversationApiService,
         private probeService: ProbeService,
-    ) {}
+    ) {
+    }
 
     public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): void {
         if (!this.validateFileSize(file)) {
@@ -51,7 +53,9 @@ export class UploadService {
                     this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
                         if (response.code === 0) {
                             this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
-                                this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                                this.buildFileRef(res, fileType, file)?.then(t => {
+                                    this.encryptThenSend(t, conversationID, aesKey);
+                                });
                             }, () => {
                                 Swal.close();
                                 Swal.fire('Error', 'Upload failed', 'error');
@@ -71,7 +75,9 @@ export class UploadService {
                             this.updateAlertProgress(Number(res));
                         } else if (res) {
                             Swal.close();
-                            this.encryptThenSend(res, fileType, conversationID, aesKey, file);
+                            this.buildFileRef(res, fileType, file)?.then(t => {
+                                this.encryptThenSend(t, conversationID, aesKey);
+                            });
                         }
                     }, () => {
                         Swal.close();
@@ -105,50 +111,37 @@ export class UploadService {
         (<HTMLDivElement>Swal.getContent().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
-    private encryptThenSend(response: number | UploadFile, fileType: FileType, conversationID: number, aesKey: string, file: File): void {
-        if (response && !Number(response)) {
-            if ((<UploadFile>response).code === 0) {
-                switch (fileType) {
-                    case FileType.Image:
-                        loadImage(
-                            file,
-                            (img, data) => {
-                                let orientation = 0, width = img.width, height = img.height;
-                                if (data.exif) {
-                                    orientation = data.exif.get('Orientation');
-                                    if (orientation >= 5 && orientation <= 8) {
-                                        [width, height] = [height, width];
-                                    }
-                                }
-                                this.sendMessage(`[img]${(<UploadFile>response).filePath}|${width}|${
-                                    height}|${orientation}`, conversationID, aesKey);
-                            },
-                            {meta: true}
-                        );
-                        break;
-                    case FileType.Video:
-                        this.sendMessage(`[video]${(<UploadFile>response).filePath}`, conversationID, aesKey);
-                        break;
-                    case FileType.File:
-                        this.sendMessage(this.formatFileMessage(<UploadFile>response, file.name), conversationID, aesKey);
-                        break;
-                    case FileType.Audio:
-                        this.sendMessage(`[audio]${(<UploadFile>response).filePath}`, conversationID, aesKey);
-                        break;
-                    default:
-                        break;
-                }
-            }
+    public encryptThenSend(fileRef: MessageFileRef, conversationID: number, aesKey: string): Promise<void> {
+        if (!fileRef) {
+            return null;
+        }
+        switch (fileRef.fileType) {
+            case FileType.Image:
+                return this.sendMessage(`[img]${fileRef.filePath}|${fileRef.imgWidth}|${
+                    fileRef.imgHeight}`, conversationID, aesKey);
+            case FileType.Video:
+                return this.sendMessage(`[video]${fileRef.filePath}`, conversationID, aesKey);
+            case FileType.File:
+                return this.sendMessage(`[file]${fileRef.filePath}|${fileRef.fileName}|${fileRef.fileSize}`,
+                    conversationID, aesKey);
+            case FileType.Audio:
+                return this.sendMessage(`[audio]${fileRef.filePath}`, conversationID, aesKey);
+            default:
+                return null;
         }
     }
 
-    private sendMessage(message: string, conversationID: number, aesKey: string): void {
-        this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
-            .subscribe(() => {
-                this.scrollBottom(true);
-            }, () => {
-                Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
-            });
+    private sendMessage(message: string, conversationID: number, aesKey: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
+                .subscribe(() => {
+                    this.scrollBottom(true);
+                    resolve();
+                }, () => {
+                    Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
+                    reject();
+                });
+        });
     }
 
     private validateFileSize(file: File): boolean {
@@ -248,7 +241,36 @@ export class UploadService {
         return validVideoType.includes(fileExtension);
     }
 
-    private formatFileMessage(response: UploadFile, fileName: string): string {
-        return `[file]${response.filePath}|${fileName}|${this.probeService.getFileSizeText(response.fileSize)}`;
+    public buildFileRef(response: number | UploadFile, fileType: FileType, file: File): Promise<MessageFileRef> {
+        if (!response || Number(response) || (<UploadFile>response).code !== 0) {
+            return null;
+        }
+        return new Promise<MessageFileRef>((resolve => {
+            const fileRef = new MessageFileRef();
+            fileRef.filePath = (<UploadFile>response).filePath;
+            fileRef.fileType = fileType;
+            fileRef.fileSize = this.probeService.getFileSizeText((<UploadFile>response).fileSize);
+            fileRef.fileName = file.name;
+            if (fileType === FileType.Image) {
+                loadImage(
+                    file,
+                    (img, data) => {
+                        let orientation = 0, width = img.width, height = img.height;
+                        if (data.exif) {
+                            orientation = data.exif.get('Orientation');
+                            if (orientation >= 5 && orientation <= 8) {
+                                [width, height] = [height, width];
+                            }
+                        }
+                        fileRef.imgWidth = width;
+                        fileRef.imgHeight = height;
+                        resolve(fileRef);
+                    },
+                    {meta: true}
+                );
+            } else {
+                resolve(fileRef);
+            }
+        }));
     }
 }

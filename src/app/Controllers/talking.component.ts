@@ -537,7 +537,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public shareToOther(fileRef: MessageFileRef): void {
         this.router.navigate(['share-target', {
-            fileRef: fileRef
+            fileRef: fileRef,
+            srcConversation: this.conversationID
         }], {skipLocationChange: true});
     }
 
