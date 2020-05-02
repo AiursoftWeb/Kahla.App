@@ -57,6 +57,7 @@ export class MessageService {
     public messageLoading = false;
     public fileAccessToken: string;
     public accessTokenUpdateSchedule: any;
+    public shareRef: MessageFileRef;
 
     constructor(
         private conversationApiService: ConversationApiService,

@@ -11,6 +11,9 @@ import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/FriendsApiService';
 import { SearchResult } from '../Models/SearchResult';
 import { uuid4 } from '../Helpers/Uuid';
+import { MessageFileRef } from '../Models/MessageFileRef';
+import { UploadService } from '../Services/UploadService';
+import { FilesApiService } from '../Services/FilesApiService';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -26,6 +29,8 @@ export class ShareComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     public message: string;
+    public fileRef: MessageFileRef;
+    public srcConversation: number;
     public inApp = false;
     public results: SearchResult;
     public searchTxt = '';
@@ -36,13 +41,16 @@ export class ShareComponent implements OnInit, DoCheck {
         private messageService: MessageService,
         public cacheService: CacheService,
         private conversationApiService: ConversationApiService,
-        private friendsApiService: FriendsApiService) {
+        private friendsApiService: FriendsApiService,
+        private uploadService: UploadService,
+        private filesApiService: FilesApiService) {
     }
 
     public ngOnInit(): void {
         this.route.params.subscribe(param => {
-            if (param.message) {
-                this.message = param.message;
+            if (param.srcConversation) {
+                this.srcConversation = param.srcConversation;
+                this.fileRef = this.messageService.shareRef;
                 this.inApp = true;
             } else {
                 const parsedUrl = new URL(location.href);
@@ -72,11 +80,10 @@ export class ShareComponent implements OnInit, DoCheck {
         }
         const name = group ? (<GroupsResult>user).name : (<KahlaUser>user).nickName;
         let dialog: Promise<SweetAlertResult>;
-        const msgType = this.cacheService.modifyMessage(this.message, true);
-        if (msgType !== 'Text') {
+        if (this.fileRef) {
             dialog = Swal.fire({
-                title: `Share ${msgType}?`,
-                text: `Are you sure to send this ${msgType} to ${name}?`,
+                title: `Share ${this.fileRef.fileType}?`,
+                text: `Are you sure to send this ${this.fileRef.fileType} to ${name}?`,
                 showCancelButton: true,
                 icon: 'question',
             });
@@ -89,19 +96,35 @@ export class ShareComponent implements OnInit, DoCheck {
                 showCancelButton: true,
             });
         }
-        dialog.then(input => {
-            const msg = msgType !== 'Text' ? this.message : input.value;
-            if (!input.dismiss && msg) {
-                if (this.messageService.conversation &&
-                    this.messageService.conversation.id === conversationID) {
-                    this.sendMessage(msg);
-                } else {
-                    this.conversationApiService.ConversationDetail(conversationID)
-                        .subscribe(result => {
-                            this.messageService.conversation = result.value;
-                            this.sendMessage(msg);
-                        });
+        dialog.then(async input => {
+            if (input.dismiss) {
+                return;
+            }
+            // get conversation detail if necessary
+            if (!this.messageService.conversation || this.messageService.conversation.id !== conversationID) {
+                this.messageService.conversation = (await this.conversationApiService.ConversationDetail(conversationID).toPromise()).value;
+            }
+            if (this.fileRef) {
+                // get file path
+                const filePath = this.fileRef.filePath.match(new RegExp(`.+\/conversation-${this.srcConversation}\/(.+)`))[1];
+                if (!filePath) {
+                    Swal.fire('Failed.', 'Sorry, but you can\'t share this file.', 'error');
+                    return;
                 }
+                // copy file
+                this.filesApiService.ForwardMedia(this.srcConversation, filePath, conversationID).subscribe(async t => {
+                    // build message with new file path
+                    const targetFileRef = Object.assign({}, this.fileRef);
+                    targetFileRef.filePath = t.filePath;
+                    await this.uploadService.encryptThenSend(targetFileRef, conversationID, this.messageService.conversation.aesKey);
+                    Swal.fire(
+                        'Send success',
+                        'Your message was sent successfully.',
+                        'success');
+                    history.back();
+                });
+            } else {
+                this.sendMessage(input.value);
             }
         });
     }

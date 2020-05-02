@@ -6,6 +6,7 @@ import { UploadFile } from '../Models/Probe/UploadFile';
 import { catchError, map } from 'rxjs/operators';
 import { AiurValue } from '../Models/AiurValue';
 import { FileTokenApiModel } from '../Models/ApiModels/FileTokenApiModel';
+import { ForwardMediaApiModel } from '../Models/ApiModels/ForwardMediaApiModel';
 
 @Injectable()
 export class FilesApiService {
@@ -24,6 +25,16 @@ export class FilesApiService {
     public InitFileAccess(conversationId: number, upload: boolean = false): Observable<FileTokenApiModel> {
         return this.apiService.Get(`${FilesApiService.serverPath}/InitFileAccess` +
             `?ConversationId=${conversationId}&upload=${upload}&download=${!upload}`);
+    }
+
+    public ForwardMedia(sourceConversationId: number,
+                        sourceFilePath: string,
+                        targetConversationId: number): Observable<ForwardMediaApiModel> {
+        return this.apiService.Post(`${FilesApiService.serverPath}/ForwardMedia`, {
+            SourceConversationId: sourceConversationId,
+            SourceFilePath: sourceFilePath,
+            TargetConversationId: targetConversationId
+        });
     }
 
     public UploadFile(formData: FormData, uploadURL: string): Observable<number | UploadFile> {
