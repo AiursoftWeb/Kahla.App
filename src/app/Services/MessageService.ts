@@ -32,6 +32,8 @@ import { FriendsApiService } from './FriendsApiService';
 import { ProbeService } from './ProbeService';
 import { ThemeService } from './ThemeService';
 import { FilesApiService } from './FilesApiService';
+import { FileType } from '../Models/FileType';
+import { MessageFileRef } from '../Models/MessageFileRef';
 
 @Injectable({
     providedIn: 'root'
@@ -55,6 +57,7 @@ export class MessageService {
     public messageLoading = false;
     public fileAccessToken: string;
     public accessTokenUpdateSchedule: any;
+    public shareRef: MessageFileRef;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -463,19 +466,52 @@ export class MessageService {
         t.contentRaw = t.content;
         t.sendTimeDate = new Date(t.sendTime);
         t.timeStamp = t.sendTimeDate.getTime();
-        if (t.content.match(/^\[(video|img)].*/)) {
-            if (t.content.startsWith('[img]')) {
-                let imageWidth = Number(t.content.split('|')[1]),
-                    imageHeight = Number(t.content.split('|')[2]);
+        const isFile = t.content.match(/^\[(video|img|file|audio)](.+)$/);
+        if (isFile) {
+            if (isFile[1] === 'img') {
+                const imgSplit = isFile[2].split('|');
+                if (imgSplit.length < 3) {
+                    t.content = 'Invalid';
+                    return t;
+                }
+                const imageWidth = Number(imgSplit[1]),
+                    imageHeight = Number(imgSplit[2]);
                 const ratio = imageHeight / imageWidth;
                 const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
                     Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
-
+                t.fileRef = {
+                    imgWidth: imageWidth,
+                    imgHeight: imageHeight,
+                    imgDisplayWidth: imageWidth,
+                    imgDisplayHeight: imageHeight,
+                    fileType: FileType.Image,
+                    filePath: imgSplit[0]
+                } as MessageFileRef;
                 if (realMaxWidth < imageWidth) {
-                    imageWidth = realMaxWidth;
-                    imageHeight = Math.floor(realMaxWidth * ratio);
+                    t.fileRef.imgDisplayWidth = realMaxWidth;
+                    t.fileRef.imgDisplayHeight = Math.floor(realMaxWidth * ratio);
                 }
-                t.content = `[img]${this.probeService.encodeProbeFileUrl(t.content.substring(5).split('|')[0])}|${imageWidth}|${imageHeight}|${this.upperFloorImageSize(imageWidth)}`;
+            } else if (isFile[1] === 'file') {
+                const fileSplit = isFile[2].split('|');
+                if (fileSplit.length < 3) {
+                    t.content = 'Invalid';
+                    return t;
+                }
+                t.fileRef = {
+                    filePath: fileSplit[0],
+                    fileName: fileSplit[1],
+                    fileSize: fileSplit[2],
+                    fileType: FileType.File
+                } as MessageFileRef;
+            } else {
+                if (!isFile[2]) {
+                    t.content = 'Invalid';
+                    return t;
+                }
+                t.fileRef = {
+                    filePath: isFile[2],
+                    fileType: isFile[1] === 'video' ? FileType.Video : FileType.Audio
+                } as MessageFileRef;
             }
         } else if (t.content.startsWith('[group]')) {
             const groupId = Number(t.content.substring(7));
@@ -502,7 +538,7 @@ export class MessageService {
                     t.content = 'Invalid User';
                 }
             });
-        } else if (!t.content.match(/^\[(file|audio)].*/)) {
+        } else {
             t.isEmoji = this.checkEmoji(t.content);
             t.content = he.encode(t.content);
             t.content = Autolinker.link(t.content, {

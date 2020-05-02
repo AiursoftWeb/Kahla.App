@@ -21,6 +21,7 @@ import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
 import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
+import { MessageFileRef } from '../Models/MessageFileRef';
 
 declare var MediaRecorder: any;
 
@@ -534,8 +535,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
 
-    public shareToOther(message: string): void {
-        this.router.navigate(['share-target', { message: message }]);
+    public shareToOther(fileRef: MessageFileRef): void {
+        this.messageService.shareRef = fileRef;
+        this.router.navigate(['share-target', {
+            srcConversation: this.conversationID
+        }], {skipLocationChange: true});
     }
 
     public getAtListMaxHeight(): number {
@@ -551,11 +555,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getAudio(target: HTMLElement, message: string): void {
+    public getAudio(target: HTMLElement, filePath: string): void {
         target.style.display = 'none';
         const audioElement = document.createElement('audio');
         audioElement.style.maxWidth = '100%';
-        audioElement.src = this.probeService.encodeProbeFileUrl(message.substring(7).split('|')[0], this.messageService.fileAccessToken);
+        audioElement.src = this.probeService.encodeProbeFileUrl(filePath, this.messageService.fileAccessToken);
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();
