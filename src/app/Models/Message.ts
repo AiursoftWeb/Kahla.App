@@ -1,4 +1,5 @@
 ﻿import { KahlaUser } from './KahlaUser';
+import { MessageFileRef } from './MessageFileRef';
 
 export class Message {
     public id: string;
@@ -18,5 +19,6 @@ export class Message {
     public avatarURL: string;
     public timeStamp: number;
     public lastRead = false;
+    public fileRef: MessageFileRef;
     public relatedData: any;
 }
