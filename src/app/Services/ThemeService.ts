@@ -14,6 +14,7 @@ export class ThemeService {
     }
 
     public mediaListener: MediaQueryList;
+    private _notifyIcon = false;
 
     ApplyThemeFromRemote(remoteInfo: KahlaUser) {
         if (this.LocalThemeSetting !== remoteInfo.themeId) {
@@ -130,6 +131,20 @@ export class ThemeService {
 
     set LocalThemeSetting(theme: Theme) {
         localStorage.setItem('setting-theme', theme.toString());
+    }
+
+    public set NotifyIcon(value: boolean) {
+        if (value === this._notifyIcon) {
+            return;
+        }
+        if (value) {
+            document.querySelector('link[rel=icon]')
+                .setAttribute('href', 'favicon_notify.ico');
+        } else {
+            document.querySelector('link[rel=icon]')
+                .setAttribute('href', 'favicon.ico');
+        }
+        this._notifyIcon = value;
     }
 
 }

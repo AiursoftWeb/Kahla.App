@@ -7,6 +7,7 @@ import { DevicesApiService } from './DevicesApiService';
 import { ConversationApiService } from './ConversationApiService';
 import { ProbeService } from './ProbeService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
+import { ThemeService } from './ThemeService';
 
 @Injectable()
 export class CacheService {
@@ -19,7 +20,9 @@ export class CacheService {
         private devicesApiService: DevicesApiService,
         private conversationApiService: ConversationApiService,
         private probeService: ProbeService,
-    ) { }
+        private themeService: ThemeService,
+    ) {
+    }
 
     public reset() {
         this.cachedData = new CacheModel();
@@ -155,6 +158,7 @@ export class CacheService {
     public updateTotalUnread(): void {
         this.totalUnread = this.cachedData.conversations
             .filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
+        this.themeService.NotifyIcon = this.totalUnread > 0;
     }
 
     public initCache(): void {
