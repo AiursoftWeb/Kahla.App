@@ -14,7 +14,7 @@ export class ThemeService {
     }
 
     public mediaListener: MediaQueryList;
-    private _notifyIcon = false;
+    public readonly TITLE = 'Kahla - Aiursoft';
 
     ApplyThemeFromRemote(remoteInfo: KahlaUser) {
         if (this.LocalThemeSetting !== remoteInfo.themeId) {
@@ -133,18 +133,16 @@ export class ThemeService {
         localStorage.setItem('setting-theme', theme.toString());
     }
 
-    public set NotifyIcon(value: boolean) {
-        if (value === this._notifyIcon) {
-            return;
-        }
-        if (value) {
+    public set NotifyIcon(value: number) {
+        if (value !== 0) {
+            document.title = `(${value}) ${this.TITLE}`;
             document.querySelector('link[rel=icon]')
                 .setAttribute('href', 'favicon_notify.ico');
         } else {
+            document.title = this.TITLE;
             document.querySelector('link[rel=icon]')
                 .setAttribute('href', 'favicon.ico');
         }
-        this._notifyIcon = value;
     }
 
 }
