@@ -224,11 +224,9 @@ export class InitService {
             localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (!data.enabled && data.deviceId) {
-            this.devicesApiService.DropDevice(data.deviceId).subscribe(t => {
-                if (t.code === 0) {
-                    data.deviceId = 0;
-                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-                }
+            this.devicesApiService.DropDevice(data.deviceId).subscribe(_t => {
+                data.deviceId = 0;
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
             });
         }
         if (data.enabled) {
