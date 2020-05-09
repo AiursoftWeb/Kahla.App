@@ -132,6 +132,15 @@ export class CacheService {
                 }
             });
             this.cachedData.devices = response.items;
+            // should check if current device id has already been invalid
+            if (localStorage.getItem('setting-pushSubscription')) {
+                const val = JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting;
+                if (val.deviceId && !this.cachedData.devices.find(t => t.id === val.deviceId)) {
+                    // invalid id, remove it
+                    val.deviceId = null;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(val));
+                }
+            }
             this.saveCache();
         });
     }
