@@ -113,9 +113,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
             if ((e.altKey || e.ctrlKey || e.shiftKey) === this.cacheService.cachedData.me.enableEnterToSendMessage) {
-                const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-                this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
-                this.updateInputHeight();
+                this.insertToSelection('\n');
                 this.oldContent = ''; // prevent send message on keyup
             } else {
                 this.oldContent = this.content;
@@ -344,10 +342,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            document.querySelector('.message-list').classList.add('active-list');
             window.scroll(0, window.scrollY + 105);
         } else {
-            document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
@@ -495,7 +491,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 showSearch: false
             });
             this.picker.on('emoji', emoji => {
-                this.content = this.content ? this.content + emoji : emoji;
+                this.insertToSelection(emoji);
             });
         }
         this.picker.togglePicker(chatBox);
@@ -553,6 +549,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const group = <GroupsResult>msg.relatedData;
             this.friendshipService.joinGroup(group, true);
         }
+    }
+
+    public insertToSelection(content: string) {
+        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        this.content = this.content ? `${this.content.slice(0, input.selectionStart)
+        }${content}${this.content.slice(input.selectionStart)}` : content;
+        this.updateInputHeight();
     }
 
     public getAudio(target: HTMLElement, filePath: string): void {
