@@ -11,6 +11,8 @@ import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
+import { AiurValue } from '../Models/AiurValue';
+import { Message } from '../Models/Message';
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +27,7 @@ export class UploadService {
     ) {
     }
 
-    public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): void {
+    public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): Promise<AiurValue<Message>> {
         if (!this.validateFileSize(file)) {
             Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 2047MB.', 'error');
             return;
@@ -67,30 +69,36 @@ export class UploadService {
             });
         } else {
             const alert = this.fireUploadingAlert(`Uploading your ${fileType === FileType.Image ? 'image' : (fileType === FileType.Video ? 'video' : 'file')}...`);
-
-            this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
-                if (response.code === 0) {
-                    const mission = this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
-                        if (Number(res)) {
-                            this.updateAlertProgress(Number(res));
-                        } else if (res) {
-                            Swal.close();
-                            this.buildFileRef(res, fileType, file)?.then(t => {
-                                this.encryptThenSend(t, conversationID, aesKey).then(() => {
-                                    this.scrollBottom(true);
+            return new Promise<AiurValue<Message>>((resolve, reject) => {
+                this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
+                    if (response.code === 0) {
+                        const mission = this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
+                            if (Number(res)) {
+                                this.updateAlertProgress(Number(res));
+                            } else if (res) {
+                                Swal.close();
+                                this.buildFileRef(res, fileType, file)?.then(t => {
+                                    this.encryptThenSend(t, conversationID, aesKey).then((t_) => {
+                                        this.scrollBottom(true);
+                                        resolve(t_);
+                                    });
                                 });
-                            });
-                        }
-                    }, () => {
-                        Swal.close();
-                        Swal.fire('Error', 'Upload failed', 'error');
-                    });
-                    alert.then(result => {
-                        if (result.dismiss) {
-                            mission.unsubscribe();
-                        }
-                    });
-                }
+                            }
+                        }, () => {
+                            Swal.close();
+                            Swal.fire('Error', 'Upload failed', 'error');
+                            reject();
+                        });
+                        alert.then(result => {
+                            if (result.dismiss) {
+                                mission.unsubscribe();
+                                reject();
+                            }
+                        });
+                    } else {
+                        reject();
+                    }
+                });
             });
         }
     }
@@ -113,7 +121,7 @@ export class UploadService {
         (<HTMLDivElement>Swal.getContent().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
-    public encryptThenSend(fileRef: MessageFileRef, conversationID: number, aesKey: string): Promise<void> {
+    public encryptThenSend(fileRef: MessageFileRef, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {
         if (!fileRef) {
             return null;
         }
@@ -133,11 +141,11 @@ export class UploadService {
         }
     }
 
-    private sendMessage(message: string, conversationID: number, aesKey: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+    private sendMessage(message: string, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {
+        return new Promise((resolve, reject) => {
             this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
-                .subscribe(() => {
-                    resolve();
+                .subscribe((t) => {
+                    resolve(t);
                 }, () => {
                     Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
                     reject();
@@ -155,9 +163,7 @@ export class UploadService {
     public scrollBottom(smooth: boolean): void {
         if (!this.talkingDestroyed) {
             const h = document.documentElement.scrollHeight;
-            if (document.querySelector('.message-list').scrollHeight < window.innerHeight - 50) {
-                window.scroll(0, 0);
-            } else if (smooth) {
+            if (smooth) {
                 window.scroll({top: h, behavior: 'smooth'});
             } else {
                 window.scroll(0, h);

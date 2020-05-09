@@ -295,11 +295,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 },
                 next: p => {
                     this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
-                    this.messageService.rawMessages.push(p.value);
-                    this.messageService.localMessages.push(this.messageService.modifyMessage(Object.assign({}, p.value)));
-                    this.messageService.reorderLocalMessages();
-                    this.messageService.updateAtLink();
-                    this.messageService.saveMessage();
+                    this.messageService.insertMessage(p.value);
                 }
             });
         this.content = '';
@@ -369,7 +365,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (fileType !== FileType.File) {
                 files = this.probeService.renameFile(files, fileType === FileType.Image ? 'img_' : 'video_');
             }
-            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
+            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
+                ?.then(t => {
+                    this.messageService.insertMessage(t.value);
+                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                });
         }
     }
 
@@ -389,7 +389,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }).then((send) => {
                         if (send.value) {
                             this.uploadService.upload(blob, this.messageService.conversation.id,
-                                this.messageService.conversation.aesKey, FileType.Image);
+                                this.messageService.conversation.aesKey, FileType.Image)?.then(t => {
+                                this.messageService.insertMessage(t.value);
+                                setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                            });
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -433,7 +436,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 fileType = FileType.Video;
             }
 
-            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
+            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
+                ?.then(msg => {
+                    this.messageService.insertMessage(msg.value);
+                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                });
         });
         this.removeDragData(event);
     }
