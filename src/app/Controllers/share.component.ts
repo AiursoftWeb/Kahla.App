@@ -101,7 +101,7 @@ export class ShareComponent implements OnInit, DoCheck {
                 if (this.fileRef) {
                     // get file path
                     const filePath = this.relativePath ? this.fileRef.filePath :
-                        this.fileRef.filePath.match(new RegExp(`.+\/conversation-${this.srcConversation}\/(.+)`))[1];
+                        this.fileRef.filePath.match(new RegExp(`.+\/conversation-${this.srcConversation}\/(.+)`))?.[1];
                     if (!filePath) {
                         resolve();
                         Swal.fire('Failed.', 'Sorry, but you can\'t share this file.', 'error');
