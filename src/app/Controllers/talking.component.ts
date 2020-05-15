@@ -113,9 +113,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
             if ((e.altKey || e.ctrlKey || e.shiftKey) === this.cacheService.cachedData.me.enableEnterToSendMessage) {
-                const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-                this.content = `${this.content.slice(0, input.selectionStart)}\n${this.content.slice(input.selectionStart)}`;
-                this.updateInputHeight();
+                this.insertToSelection('\n');
                 this.oldContent = ''; // prevent send message on keyup
             } else {
                 this.oldContent = this.content;
@@ -297,11 +295,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 },
                 next: p => {
                     this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
-                    this.messageService.rawMessages.push(p.value);
-                    this.messageService.localMessages.push(this.messageService.modifyMessage(Object.assign({}, p.value)));
-                    this.messageService.reorderLocalMessages();
-                    this.messageService.updateAtLink();
-                    this.messageService.saveMessage();
+                    this.messageService.insertMessage(p.value);
                 }
             });
         this.content = '';
@@ -344,10 +338,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public togglePanel(): void {
         this.showPanel = !this.showPanel;
         if (this.showPanel) {
-            document.querySelector('.message-list').classList.add('active-list');
             window.scroll(0, window.scrollY + 105);
         } else {
-            document.querySelector('.message-list').classList.remove('active-list');
             if (this.messageService.belowWindowPercent <= 0.2) {
                 this.uploadService.scrollBottom(false);
             } else {
@@ -373,7 +365,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
             if (fileType !== FileType.File) {
                 files = this.probeService.renameFile(files, fileType === FileType.Image ? 'img_' : 'video_');
             }
-            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
+            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
+                ?.then(t => {
+                    this.messageService.insertMessage(t.value);
+                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                });
         }
     }
 
@@ -393,7 +389,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }).then((send) => {
                         if (send.value) {
                             this.uploadService.upload(blob, this.messageService.conversation.id,
-                                this.messageService.conversation.aesKey, FileType.Image);
+                                this.messageService.conversation.aesKey, FileType.Image)?.then(t => {
+                                this.messageService.insertMessage(t.value);
+                                setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                            });
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -437,7 +436,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 fileType = FileType.Video;
             }
 
-            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType);
+            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
+                ?.then(msg => {
+                    this.messageService.insertMessage(msg.value);
+                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                });
         });
         this.removeDragData(event);
     }
@@ -495,7 +498,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 showSearch: false
             });
             this.picker.on('emoji', emoji => {
-                this.content = this.content ? this.content + emoji : emoji;
+                this.insertToSelection(emoji);
             });
         }
         this.picker.togglePicker(chatBox);
@@ -553,6 +556,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
             const group = <GroupsResult>msg.relatedData;
             this.friendshipService.joinGroup(group, true);
         }
+    }
+
+    public insertToSelection(content: string) {
+        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        this.content = this.content ? `${this.content.slice(0, input.selectionStart)
+        }${content}${this.content.slice(input.selectionStart)}` : content;
+        this.updateInputHeight();
     }
 
     public getAudio(target: HTMLElement, filePath: string): void {

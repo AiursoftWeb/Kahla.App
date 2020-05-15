@@ -19,12 +19,13 @@ export class TimerService {
             input: 'select',
             inputOptions: {
                 5: '5 seconds',
-                30: '30 seconds',
                 60: '1 minute',
                 600: '10 minutes',
                 3600: '1 hour',
                 [3600 * 24]: '1 day',
                 [3600 * 24 * 7]: '1 week',
+                [3600 * 24 * 30]: '1 month',
+                [3600 * 24 * 365]: '1 year',
                 [Math.pow(2, 31) - 1]: 'off'
             },
             inputPlaceholder: 'Select one',

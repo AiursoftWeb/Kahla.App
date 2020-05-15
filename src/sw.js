@@ -1,6 +1,6 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js');
 
-const CACHE = 'v4';
+const CACHE = 'v5';
 const UPDATE_REQUIRED = '__Update_Required__';
 const UPDATE_COMPLETED = '__Update_Completed__';
 
@@ -17,6 +17,7 @@ function installCache() {
             '/styles.js',
             '/vendor.js',
             '/favicon.ico',
+            '/favicon_notify.ico',
             '/fa-solid-900.woff2',
             '/fa-regular-400.woff2',
             '/fa-brands-400.woff2',

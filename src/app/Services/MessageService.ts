@@ -628,4 +628,15 @@ export class MessageService {
             this.fileAccessToken = encodeURIComponent(t.value);
         });
     }
+
+    public insertMessage(p: Message) {
+        if (this.rawMessages.find(t => t.id === p.id)) {
+            return;
+        }
+        this.rawMessages.push(p);
+        this.localMessages.push(this.modifyMessage(Object.assign({}, p)));
+        this.reorderLocalMessages();
+        this.updateAtLink();
+        this.saveMessage();
+    }
 }

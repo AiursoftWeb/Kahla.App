@@ -7,6 +7,7 @@ import { DevicesApiService } from './DevicesApiService';
 import { ConversationApiService } from './ConversationApiService';
 import { ProbeService } from './ProbeService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
+import { ThemeService } from './ThemeService';
 
 @Injectable()
 export class CacheService {
@@ -19,7 +20,9 @@ export class CacheService {
         private devicesApiService: DevicesApiService,
         private conversationApiService: ConversationApiService,
         private probeService: ProbeService,
-    ) { }
+        private themeService: ThemeService,
+    ) {
+    }
 
     public reset() {
         this.cachedData = new CacheModel();
@@ -129,6 +132,15 @@ export class CacheService {
                 }
             });
             this.cachedData.devices = response.items;
+            // should check if current device id has already been invalid
+            if (localStorage.getItem('setting-pushSubscription')) {
+                const val = JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting;
+                if (val.deviceId && !this.cachedData.devices.find(t => t.id === val.deviceId)) {
+                    // invalid id, remove it
+                    val.deviceId = null;
+                    localStorage.setItem('setting-pushSubscription', JSON.stringify(val));
+                }
+            }
             this.saveCache();
         });
     }
@@ -155,6 +167,7 @@ export class CacheService {
     public updateTotalUnread(): void {
         this.totalUnread = this.cachedData.conversations
             .filter(item => !item.muted).map(item => item.unReadAmount).reduce((a, b) => a + b, 0);
+        this.themeService.NotifyIcon = this.totalUnread;
     }
 
     public initCache(): void {
