@@ -2,11 +2,11 @@ import { ApiService } from './ApiService';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/';
-import { UploadFile } from '../Models/Probe/UploadFile';
+import { UploadFile } from '../../Models/Probe/UploadFile';
 import { catchError, map } from 'rxjs/operators';
-import { AiurValue } from '../Models/AiurValue';
-import { FileTokenApiModel } from '../Models/ApiModels/FileTokenApiModel';
-import { ForwardMediaApiModel } from '../Models/ApiModels/ForwardMediaApiModel';
+import { AiurValue } from '../../Models/AiurValue';
+import { FileTokenApiModel } from '../../Models/ApiModels/FileTokenApiModel';
+import { ForwardMediaApiModel } from '../../Models/ApiModels/ForwardMediaApiModel';
 
 @Injectable()
 export class FilesApiService {

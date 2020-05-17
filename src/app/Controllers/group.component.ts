@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GroupsApiService } from '../Services/GroupsApiService';
+import { GroupsApiService } from '../Services/Api/GroupsApiService';
 import { CacheService } from '../Services/CacheService';
 import { filter, map, switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { MessageService } from '../Services/MessageService';
 import { ProbeService } from '../Services/ProbeService';
 

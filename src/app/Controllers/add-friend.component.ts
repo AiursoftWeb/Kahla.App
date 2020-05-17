@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { Values } from '../values';
 import { SearchResult } from '../Models/SearchResult';
 import { FriendshipService } from '../Services/FriendshipService';

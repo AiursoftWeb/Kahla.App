@@ -1,6 +1,6 @@
 ﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { Message } from '../Models/Message';
 import { map, switchMap } from 'rxjs/operators';
 import { AES } from 'crypto-js';

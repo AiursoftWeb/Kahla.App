@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AiurValue } from '../Models/AiurValue';
-import { KahlaUser } from '../Models/KahlaUser';
+import { AiurValue } from '../../Models/AiurValue';
+import { KahlaUser } from '../../Models/KahlaUser';
 import { Observable } from 'rxjs/';
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { InitPusherViewModel } from '../Models/ApiModels/InitPusherViewModel';
+import { AiurProtocal } from '../../Models/AiurProtocal';
+import { InitPusherViewModel } from '../../Models/ApiModels/InitPusherViewModel';
 import { ApiService } from './ApiService';
 
 @Injectable()
@@ -12,7 +12,8 @@ export class AuthApiService {
 
     constructor(
         private apiService: ApiService
-    ) {}
+    ) {
+    }
 
     public SignInStatus(): Observable<AiurValue<boolean>> {
         return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');

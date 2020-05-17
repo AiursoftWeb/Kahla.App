@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
 import Swal from 'sweetalert2';

@@ -1,5 +1,4 @@
-<app-header title="Kahla"
-            [returnButton]="false"></app-header>
+<app-header title="Kahla" [processing]="cacheService.updatingConversation" [returnButton]="false"></app-header>
 <div id="main">
     <div class="conversation" *ngFor="let inf of cacheService.cachedData.conversations"
          (click)="talk(inf.conversationId, inf.unReadAmount)" [class.w-current]="current(inf)">
@@ -26,7 +25,7 @@
             <div class="last-time">
                 {{inf.latestMessage.sendTime | date:'shortTime'}}
             </div>
-            <div class="last-message">
+            <div class="last-message" title="{{inf.latestMessage.content}}">
                 <i class="fas fa-angle-right"
                    *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
                 <i class="fas fa-angle-left"

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
-import { FriendsApiService } from './FriendsApiService';
+import { FriendsApiService } from './Api/FriendsApiService';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
-import { DevicesApiService } from './DevicesApiService';
-import { ConversationApiService } from './ConversationApiService';
+import { DevicesApiService } from './Api/DevicesApiService';
+import { ConversationApiService } from './Api/ConversationApiService';
 import { ProbeService } from './ProbeService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ThemeService } from './ThemeService';
@@ -14,6 +14,7 @@ export class CacheService {
     public cachedData: CacheModel;
     public totalUnread = 0;
     public totalRequests = 0;
+    public updatingConversation = false;
 
     constructor(
         private friendsApiService: FriendsApiService,
@@ -29,9 +30,11 @@ export class CacheService {
     }
 
     public updateConversation(): void {
+        this.updatingConversation = true;
         this.conversationApiService.All()
             .pipe(map(t => t.items))
             .subscribe(info => {
+                this.updatingConversation = false;
                 info.forEach(e => {
                     if (e.latestMessage != null) {
                         try {
