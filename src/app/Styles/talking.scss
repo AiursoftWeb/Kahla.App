@@ -414,6 +414,12 @@
           width: 40px;
         }
       }
+
+      &.no-send-button {
+        textarea {
+          border-radius: 6px;
+        }
+      }
     }
 
     .more-panel {
