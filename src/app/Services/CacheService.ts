@@ -14,6 +14,7 @@ export class CacheService {
     public cachedData: CacheModel;
     public totalUnread = 0;
     public totalRequests = 0;
+    public updatingConversation = false;
 
     constructor(
         private friendsApiService: FriendsApiService,
@@ -29,9 +30,11 @@ export class CacheService {
     }
 
     public updateConversation(): void {
+        this.updatingConversation = true;
         this.conversationApiService.All()
             .pipe(map(t => t.items))
             .subscribe(info => {
+                this.updatingConversation = false;
                 info.forEach(e => {
                     if (e.latestMessage != null) {
                         try {
