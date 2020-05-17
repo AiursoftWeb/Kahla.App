@@ -1,5 +1,5 @@
 ﻿import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';

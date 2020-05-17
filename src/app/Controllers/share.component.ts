@@ -6,14 +6,14 @@ import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { AES } from 'crypto-js';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { SearchResult } from '../Models/SearchResult';
 import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';
-import { FilesApiService } from '../Services/FilesApiService';
+import { FilesApiService } from '../Services/Api/FilesApiService';
 import { Conversation } from '../Models/Conversation';
 import { Observable } from 'rxjs';
 import { AiurValue } from '../Models/AiurValue';
@@ -67,7 +67,7 @@ export class ShareComponent implements OnInit, DoCheck {
                 const parsedUrl = new URL(location.href);
                 const text = parsedUrl.searchParams.get('text');
                 const url = parsedUrl.searchParams.get('url');
-                this.message = `${text ? text : ''} ${url ? url : ''}`;
+                this.message = `${text ?? ''} ${url ?? ''}`;
             }
         });
         this.search('');

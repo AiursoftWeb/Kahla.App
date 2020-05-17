@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';

@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CheckService } from './CheckService';
-import { AuthApiService } from './AuthApiService';
+import { AuthApiService } from './Api/AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
 import { ElectronService } from 'ngx-electron';
-import { DevicesApiService } from './DevicesApiService';
+import { DevicesApiService } from './Api/DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
 import { ServerConfig } from '../Models/ServerConfig';
-import { ApiService } from './ApiService';
-import { ServerListApiService } from './ServerListApiService';
+import { ApiService } from './Api/ApiService';
+import { ServerListApiService } from './Api/ServerListApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Injectable({

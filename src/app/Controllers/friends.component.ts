@@ -4,10 +4,10 @@ import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
-import { GroupsApiService } from '../Services/GroupsApiService';
+import { GroupsApiService } from '../Services/Api/GroupsApiService';
 import { SearchResult } from '../Models/SearchResult';
 import { KahlaUser } from '../Models/KahlaUser';
-import { FriendsApiService } from '../Services/FriendsApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { GroupsResult } from '../Models/GroupsResults';
 
 @Component({
@@ -25,7 +25,7 @@ import { GroupsResult } from '../Models/GroupsResults';
 export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
-    private results: SearchResult;
+    public results: SearchResult;
     public searchTxt = '';
     private detailLoading = false;
 

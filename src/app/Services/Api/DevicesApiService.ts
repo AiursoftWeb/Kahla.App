@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
-import { AiurCollection } from '../Models/AiurCollection';
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { AiurValue } from '../Models/AiurValue';
-import { Device } from '../Models/Device';
+import { AiurCollection } from '../../Models/AiurCollection';
+import { AiurProtocal } from '../../Models/AiurProtocal';
+import { AiurValue } from '../../Models/AiurValue';
+import { Device } from '../../Models/Device';
 import { Observable } from 'rxjs/';
 
 @Injectable()
@@ -12,7 +12,8 @@ export class DevicesApiService {
 
     constructor(
         private apiService: ApiService
-    ) {}
+    ) {
+    }
 
     public AddDevice(userAgent: string, PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
         return this.apiService.Post(DevicesApiService.serverPath + '/AddDevice', {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthApiService } from '../Services/AuthApiService';
+import { AuthApiService } from '../Services/Api/AuthApiService';
 import Swal from 'sweetalert2';
 import { catchError } from 'rxjs/operators';
 

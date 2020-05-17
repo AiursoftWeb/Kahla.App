@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthApiService } from '../Services/AuthApiService';
+import { AuthApiService } from '../Services/Api/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AiurProtocal } from '../Models/AiurProtocal';

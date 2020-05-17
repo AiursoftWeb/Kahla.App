@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
 import { Observable } from 'rxjs/';
-import { AiurCollection } from '../Models/AiurCollection';
-import { Message } from '../Models/Message';
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { AiurValue } from '../Models/AiurValue';
-import { Conversation } from '../Models/Conversation';
-import { ContactInfo } from '../Models/ContactInfo';
-import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
+import { AiurCollection } from '../../Models/AiurCollection';
+import { Message } from '../../Models/Message';
+import { AiurProtocal } from '../../Models/AiurProtocal';
+import { AiurValue } from '../../Models/AiurValue';
+import { Conversation } from '../../Models/Conversation';
+import { ContactInfo } from '../../Models/ContactInfo';
+import { FileHistoryApiModel } from '../../Models/ApiModels/FileHistoryApiModel';
 
 @Injectable()
 export class ConversationApiService {
@@ -15,7 +15,8 @@ export class ConversationApiService {
 
     constructor(
         private apiService: ApiService
-    ) {}
+    ) {
+    }
 
     public All(): Observable<AiurCollection<ContactInfo>> {
         return this.apiService.Get(ConversationApiService.serverPath + '/All');

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
-import { FriendsApiService } from './FriendsApiService';
+import { FriendsApiService } from './Api/FriendsApiService';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
-import { DevicesApiService } from './DevicesApiService';
-import { ConversationApiService } from './ConversationApiService';
+import { DevicesApiService } from './Api/DevicesApiService';
+import { ConversationApiService } from './Api/ConversationApiService';
 import { ProbeService } from './ProbeService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ThemeService } from './ThemeService';

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { ApiService } from '../Services/ApiService';
+import { ApiService } from '../Services/Api/ApiService';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { ServerListApiService } from '../Services/ServerListApiService';
+import { ServerListApiService } from '../Services/Api/ServerListApiService';
 
 @Component({
     templateUrl: '../Views/signin.html',

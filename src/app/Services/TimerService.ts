@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { ConversationApiService } from './ConversationApiService';
+import { ConversationApiService } from './Api/ConversationApiService';
 import { Timers } from '../Models/Timers';
 
 @Injectable({

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GroupsResult } from '../Models/GroupsResults';
 import Swal from 'sweetalert2';
 import { CacheService } from './CacheService';
-import { GroupsApiService } from './GroupsApiService';
+import { GroupsApiService } from './Api/GroupsApiService';
 import { Router } from '@angular/router';
 
 @Injectable({
