@@ -25,7 +25,7 @@
             <div class="last-time">
                 {{inf.latestMessage.sendTime | date:'shortTime'}}
             </div>
-            <div class="last-message">
+            <div class="last-message" title="{{inf.latestMessage.content}}">
                 <i class="fas fa-angle-right"
                    *ngIf="cacheService.cachedData.me && inf.discriminator === 'PrivateConversation' && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
                 <i class="fas fa-angle-left"
