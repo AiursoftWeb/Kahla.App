@@ -341,7 +341,7 @@ export class MessageService {
 
     public updateMaxImageWidth(): void {
         this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
-        this.videoHeight = Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400));
+        this.videoHeight = Math.max(Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400)), 170);
     }
 
     public resetVariables(): void {
