@@ -58,9 +58,17 @@ export class InitService {
         }
         this.checkService.checkVersion(false);
         // load server config
+        let reload = false;
         if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
             this.apiService.serverConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
+            if (this.apiService.serverConfig._cacheVersion !== ServerConfig.CACHE_VERSION) {
+                reload = true;
+                this.apiService.serverConfig = null;
+            }
         } else {
+            reload = true;
+        }
+        if (reload) {
             this.router.navigate(['/signin'], {replaceUrl: true});
             this.serverListApiService.Servers().subscribe(servers => {
                 let target: ServerConfig;
@@ -72,6 +80,7 @@ export class InitService {
 
                 if (target) {
                     target.officialServer = true;
+                    target._cacheVersion = ServerConfig.CACHE_VERSION;
                     this.apiService.serverConfig = target;
                     localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
                 }
