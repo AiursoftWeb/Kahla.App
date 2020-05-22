@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Values } from '../values';
+import { ApiService } from './Api/ApiService';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ProbeService {
+
+    constructor(private apiService: ApiService) {
+    }
+
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
 
-        return (downloadAddr ? Values.fileDownloadAddress : Values.fileCompatAddress)
-                .replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1) +
+        return (downloadAddr ? this.apiService.serverConfig?.probe.downloadFormat : this.apiService.serverConfig?.probe.openFormat)
+                .replace('{0}', encoded.substring(0, index)) + '/' + encoded.substring(index + 1) +
             (accessToken ? `?token=${accessToken}` : '');
     }
 
