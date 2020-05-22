@@ -1,7 +1,7 @@
 import { AiurProtocal } from './AiurProtocal';
 
 export class ServerConfig extends AiurProtocal {
-    public static CACHE_VERSION = 1;
+    public static readonly CACHE_VERSION = 1;
 
     public _cacheVersion: number;
     public apiVersion: string;
