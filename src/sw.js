@@ -9,7 +9,7 @@ const self_scope = self.registration.scope;
 
 function installCache() {
     return caches.open(CACHE).then(function (cache) {
-        return cache.addAll([
+        let requests = [
             '/index.html',
             '/main.js',
             '/manifest.json',
@@ -23,7 +23,8 @@ function installCache() {
             '/fa-regular-400.woff2',
             '/fa-brands-400.woff2',
             '/assets/144x144.png'
-        ]);
+        ].map(t => new Request(t, {cache: 'no-cache'}))
+        return cache.addAll(requests);
     });
 }
 
