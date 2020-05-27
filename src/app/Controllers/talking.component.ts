@@ -5,7 +5,6 @@ import { Message } from '../Models/Message';
 import { map, switchMap } from 'rxjs/operators';
 import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
-import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
@@ -36,7 +35,6 @@ declare var MediaRecorder: any;
 export class TalkingComponent implements OnInit, OnDestroy {
     public content = '';
     public showPanel = false;
-    public loadingImgURL = Values.loadingImgURL;
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
