@@ -34,6 +34,7 @@ import { ThemeService } from './ThemeService';
 import { FilesApiService } from './Api/FilesApiService';
 import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
+import { AccessToken } from '../Models/AccessToken';
 
 @Injectable({
     providedIn: 'root'
@@ -580,8 +581,21 @@ export class MessageService {
         this.showFailedMessages();
         this.reorderLocalMessages();
         this.updateAtLink();
-        this.updateAccessToken();
-        this.accessTokenUpdateSchedule = setInterval(() => this.updateAccessToken(), 1190000); // 20min - 10s
+        // init accessToken
+        const localToken: AccessToken = this.cacheService.cachedData.probeTokens[conversationId];
+        if (localToken) {
+            localToken.expiresDate = new Date(localToken.expires);
+            if (localToken.expiresDate.getTime() < Date.now() + 5000) {
+                this.updateAccessToken();
+            } else {
+                this.fileAccessToken = localToken.raw;
+                this.accessTokenUpdateSchedule =
+                    setTimeout(() => this.updateAccessToken(), localToken.expiresDate.getTime() - Date.now() - 5000);
+            }
+        } else {
+            this.updateAccessToken();
+        }
+
         setTimeout(() => this.uploadService.scrollBottom(false), 0);
     }
 
@@ -624,8 +638,15 @@ export class MessageService {
     }
 
     public updateAccessToken() {
-        this.filesApiService.InitFileAccess(this.conversation.id).subscribe(t => {
-            this.fileAccessToken = encodeURIComponent(t.value);
+        const id = this.conversation.id;
+        this.filesApiService.InitFileAccess(id).subscribe(t => {
+            this.fileAccessToken = t.value;
+            const token = this.probeService.resolveAccessToken(t.value);
+            this.cacheService.cachedData.probeTokens[id] = token;
+            this.cacheService.saveCache();
+            // schedule the next update
+            this.accessTokenUpdateSchedule =
+                setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
         });
     }
 
