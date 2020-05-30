@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './Api/ApiService';
+import { AccessToken } from '../Models/AccessToken';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +16,7 @@ export class ProbeService {
 
         return (downloadAddr ? this.apiService.serverConfig?.probe.downloadFormat : this.apiService.serverConfig?.probe.openFormat)
                 .replace('{0}', encoded.substring(0, index)) + '/' + encoded.substring(index + 1) +
-            (accessToken ? `?token=${accessToken}` : '');
+            (accessToken ? `?token=${encodeURIComponent(accessToken)}` : '');
     }
 
     public getFileSizeText(fileSize: number) {
@@ -37,5 +38,13 @@ export class ProbeService {
         return new File([originalFile],
             `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`,
             {type: originalFile.type, lastModified: originalFile.lastModified});
+    }
+
+    public resolveAccessToken(tokenRaw: string): AccessToken {
+        console.log(tokenRaw);
+        const token = JSON.parse(atob(tokenRaw.split('.')[0])) as AccessToken;
+        token.raw = tokenRaw;
+        token.expiresDate = new Date(token.expires);
+        return token;
     }
 }
