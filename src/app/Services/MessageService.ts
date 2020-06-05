@@ -614,11 +614,12 @@ export class MessageService {
         const id = this.conversation.id;
         this.filesApiService.InitFileAccess(id).subscribe(t => {
             this.fileAccessToken = t.value;
-            this.cacheService.cachedData.probeTokens[id] = this.probeService.resolveAccessToken(t.value);
+            const token = this.probeService.resolveAccessToken(t.value);
+            this.cacheService.cachedData.probeTokens[id] = token;
             this.cacheService.saveCache();
             // schedule the next update
             this.accessTokenUpdateSchedule =
-                setTimeout(() => this.updateAccessToken(), 60000);
+                setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
             this.applicationRef.tick();
         });
     }
