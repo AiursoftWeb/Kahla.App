@@ -2,10 +2,10 @@
 </app-header>
 <ul id="messageList" class="message-list" [class.active-list]="showPanel" (paste)="paste($event)" (drop)="drop($event)"
     (dragover)="preventDefault($event)" (click)="hideUserList()">
-    <button *ngIf="!messageService.loadingMore && !messageService.noMoreMessages" class="load-more" (click)="LoadMore()"
+    <button *ngIf="!loadingMore && !messageService.noMoreMessages" class="load-more" (click)="loadMore()"
             i18n="@@ClickToLoadMore">Click to load more
     </button>
-    <button *ngIf="messageService.loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
+    <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages; last as isLast; let i = index"
         [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id,
          'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
