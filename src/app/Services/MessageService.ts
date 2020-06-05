@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ApplicationRef, Injectable } from '@angular/core';
 import { EventType } from '../Models/Events/EventType';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import Swal from 'sweetalert2';
@@ -73,6 +73,7 @@ export class MessageService {
         private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
         private themeService: ThemeService,
+        private applicationRef: ApplicationRef,
     ) {
     }
 
@@ -646,7 +647,8 @@ export class MessageService {
             this.cacheService.saveCache();
             // schedule the next update
             this.accessTokenUpdateSchedule =
-                setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
+                setTimeout(() => this.updateAccessToken(), 60000);
+            this.applicationRef.tick();
         });
     }
 
