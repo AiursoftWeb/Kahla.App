@@ -45,10 +45,8 @@ export class MessageService {
     public localMessages: Message[] = [];
     public rawMessages: Message[] = [];
     public noMoreMessages = false;
-    public loadingMore = false;
     public belowWindowPercent = 0;
     public newMessages = false;
-    private oldScrollHeight: number;
     public maxImageWidth = 0;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
@@ -77,7 +75,7 @@ export class MessageService {
     ) {
     }
 
-    public OnMessage(data: MessageEvent) {
+    public async OnMessage(data: MessageEvent) {
         const ev = JSON.parse(data.data) as AiurEvent;
         const fireAlert = !localStorage.getItem('deviceID');
         switch (ev.type) {
@@ -120,7 +118,7 @@ export class MessageService {
                         this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
                         this.saveMessage();
                     } else { // lost some message.
-                        this.getMessages(0, this.conversation.id, null, 15);
+                        await this.getMessages(0, this.conversation.id, null, 15);
                     }
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => {
@@ -242,98 +240,74 @@ export class MessageService {
         }
     }
 
-    public getMessages(unread: number, id: number, skipFrom: string, take: number) {
+    public async getMessages(unread: number, id: number, skipFrom: string, take: number) {
         this.messageLoading = true;
         this.localMessages = this.localMessages.filter(t => !t.local);
-        this.conversationApiService.GetMessage(id, skipFrom, take)
-            .pipe(
-                map(t => t.items)
-            )
-            .subscribe(messages => {
-                if (!this.conversation || this.conversation.id !== id) {
-                    return;
-                }
-                const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
-                if (messages.length < take) {
-                    this.noMoreMessages = true;
-                }
-                if (this.localMessages.length > 0 && messages.length > 0) {
-                    this.newMessages = this.cacheService.cachedData.me &&
-                        messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
-                        take === 1 && this.belowWindowPercent > 0;
-                }
-                // if (this.localMessages.length > 1000) {
-                //     this.localMessages.splice(0, 500);
-                // }
-                // Load new
-                if (!skipFrom) {
-                    if (this.localMessages.length > 0 && messages.length > 0) {
-                        const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
-                        if (index === -1) {
-                            this.localMessages = modifiedMsg;
-                            this.rawMessages = messages;
-                        } else {
-                            const deleteCount = this.rawMessages.length - index;
-                            this.localMessages.splice(index, deleteCount, ...modifiedMsg);
-                            this.rawMessages.splice(index, deleteCount, ...messages);
-                        }
-                    } else {
-                        this.localMessages = modifiedMsg;
-                        this.rawMessages = messages;
-                    }
-                } else { // load more
-                    this.localMessages.unshift(...modifiedMsg);
-                    this.rawMessages.unshift(...messages);
-                }
-                if (unread === 0) {
-                    setTimeout(() => {
-                        this.uploadService.scrollBottom(true);
-                    }, 0);
-                } else if (unread === -1) { // load more
-                    this.loadingMore = false;
-                    setTimeout(() => {
-                        window.scroll(0, document.documentElement.scrollHeight - this.oldScrollHeight);
-                    }, 0);
+        const messages = await this.conversationApiService.GetMessage(id, skipFrom, take)
+            .pipe(map(t => t.items)).toPromise();
+        if (!this.conversation || this.conversation.id !== id) {
+            return;
+        }
+        const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
+        if (messages.length < take) {
+            this.noMoreMessages = true;
+        }
+        if (this.localMessages.length > 0 && messages.length > 0) {
+            this.newMessages = this.cacheService.cachedData.me &&
+                messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
+                take === 1 && this.belowWindowPercent > 0;
+        }
+        // Load new
+        if (!skipFrom) {
+            if (this.localMessages.length > 0 && messages.length > 0) {
+                const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
+                if (index === -1) {
+                    this.localMessages = modifiedMsg;
+                    this.rawMessages = messages;
                 } else {
-                    if (unread > 1) {
-                        // add a last read bar
-                        this.localMessages[this.localMessages.length - unread].lastRead = true;
-                        this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
-                    }
-                    setTimeout(() => {
-                        const lis = document.querySelector('#messageList').querySelectorAll('li');
-                        window.scrollTo({
-                            top: lis[lis.length - unread].offsetTop,
-                            left: 0,
-                            behavior: 'smooth'
-                        });
-                    }, 0);
+                    const deleteCount = this.rawMessages.length - index;
+                    this.localMessages.splice(index, deleteCount, ...modifiedMsg);
+                    this.rawMessages.splice(index, deleteCount, ...messages);
                 }
-                this.updateAtLink();
-                this.saveMessage();
-                // clear red dot if necessary
-                const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversation.id);
-                if (listItem) {
-                    listItem.unReadAmount = 0;
-                }
-                this.cacheService.updateTotalUnread();
-                this.showFailedMessages();
-                this.reorderLocalMessages();
-                this.messageLoading = false;
-            });
+            } else {
+                this.localMessages = modifiedMsg;
+                this.rawMessages = messages;
+            }
+        } else { // load more
+            this.localMessages.unshift(...modifiedMsg);
+            this.rawMessages.unshift(...messages);
+        }
+        if (unread >= 1) {
+            if (unread > 1) {
+                // add a last read bar
+                this.localMessages[this.localMessages.length - unread].lastRead = true;
+                this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
+            }
+            setTimeout(() => {
+                const lis = document.querySelector('#messageList').querySelectorAll('li');
+                window.scrollTo({
+                    top: lis[lis.length - unread].offsetTop,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }, 0);
+        }
+        this.updateAtLink();
+        this.saveMessage();
+        // clear red dot if necessary
+        const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversation.id);
+        if (listItem) {
+            listItem.unReadAmount = 0;
+        }
+        this.cacheService.updateTotalUnread();
+        this.showFailedMessages();
+        this.reorderLocalMessages();
+        this.messageLoading = false;
     }
 
     public updateBelowWindowPercent(): void {
         this.belowWindowPercent = (document.documentElement.scrollHeight - window.scrollY
             - document.documentElement.clientHeight) / document.documentElement.clientHeight;
-    }
-
-    public loadMore(): void {
-        if (!this.noMoreMessages) {
-            this.loadingMore = true;
-            this.oldScrollHeight = document.documentElement.scrollHeight;
-            this.getMessages(-1, this.conversation.id, this.localMessages[0].id, 15);
-        }
     }
 
     public updateFriends(): void {
@@ -351,10 +325,8 @@ export class MessageService {
         this.localMessages = [];
         this.rawMessages = [];
         this.noMoreMessages = false;
-        this.loadingMore = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
-        this.oldScrollHeight = 0;
         this.maxImageWidth = 0;
         this.userColors.clear();
         this.groupConversation = false;
@@ -642,8 +614,7 @@ export class MessageService {
         const id = this.conversation.id;
         this.filesApiService.InitFileAccess(id).subscribe(t => {
             this.fileAccessToken = t.value;
-            const token = this.probeService.resolveAccessToken(t.value);
-            this.cacheService.cachedData.probeTokens[id] = token;
+            this.cacheService.cachedData.probeTokens[id] = this.probeService.resolveAccessToken(t.value);
             this.cacheService.saveCache();
             // schedule the next update
             this.accessTokenUpdateSchedule =

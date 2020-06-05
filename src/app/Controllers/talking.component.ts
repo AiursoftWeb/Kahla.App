@@ -53,11 +53,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
+    public loadingMore: boolean;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
     @ViewChild('header', { static: true }) public header: HeaderComponent;
+
 
     constructor(
         private route: ActivatedRoute,
@@ -98,7 +100,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
             if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
-                this.messageService.loadMore();
+                this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
             } else {
                 setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
@@ -242,10 +244,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public trackByMessages(_index: number, message: Message): string {
         return message.id;
-    }
-
-    public LoadMore(): void {
-        this.messageService.loadMore();
     }
 
     public send(): void {
@@ -571,5 +569,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();
+    }
+
+    public async loadMore() {
+        if (!this.messageService.noMoreMessages) {
+            this.loadingMore = true;
+            const oldScrollHeight = document.documentElement.scrollHeight;
+            await this.messageService.getMessages(-1,
+                this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
+            this.loadingMore = false;
+            setTimeout(() => {
+                window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
+            }, 0);
+        }
     }
 }
