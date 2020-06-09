@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Values } from '../values';
+import { ApiService } from './Api/ApiService';
+import { AccessToken } from '../Models/AccessToken';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ProbeService {
+
+    constructor(private apiService: ApiService) {
+    }
+
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
 
-        return (downloadAddr ? Values.fileDownloadAddress : Values.fileCompatAddress)
-                .replace('{site}', encoded.substring(0, index)) + encoded.substring(index + 1) +
-            (accessToken ? `?token=${accessToken}` : '');
+        return (downloadAddr ? this.apiService.serverConfig?.probe.downloadFormat : this.apiService.serverConfig?.probe.openFormat)
+                .replace('{0}', encoded.substring(0, index)) + '/' + encoded.substring(index + 1) +
+            (accessToken ? `?token=${encodeURIComponent(accessToken)}` : '');
     }
 
     public getFileSizeText(fileSize: number) {
@@ -33,5 +38,13 @@ export class ProbeService {
         return new File([originalFile],
             `${prefix}${new Date().getTime()}.${originalFile.name.substring(originalFile.name.lastIndexOf('.') + 1)}`,
             {type: originalFile.type, lastModified: originalFile.lastModified});
+    }
+
+    public resolveAccessToken(tokenRaw: string): AccessToken {
+        console.log(tokenRaw);
+        const token = JSON.parse(atob(tokenRaw.split('.')[0])) as AccessToken;
+        token.raw = tokenRaw;
+        token.expiresDate = new Date(token.expires);
+        return token;
     }
 }

@@ -159,6 +159,7 @@
 
     &.single-emoji {
       background: transparent !important;
+      color: var(--default-textcolor) !important;
 
       p {
         font-size: 64px;
@@ -412,6 +413,12 @@
         i {
           opacity: 1;
           width: 40px;
+        }
+      }
+
+      &.no-send-button {
+        textarea {
+          border-radius: 6px;
         }
       }
     }

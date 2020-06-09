@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
 import { Observable } from 'rxjs';
-import { ServerConfig } from '../Models/ServerConfig';
-import { environment } from '../../environments/environment';
-import { VersionViewModel } from '../Models/VersionViewModel';
+import { ServerConfig } from '../../Models/ServerConfig';
+import { environment } from '../../../environments/environment';
+import { VersionViewModel } from '../../Models/VersionViewModel';
 
 @Injectable({
     providedIn: 'root',

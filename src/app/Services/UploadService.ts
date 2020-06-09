@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AES } from 'crypto-js';
-import { FilesApiService } from './FilesApiService';
+import { FilesApiService } from './Api/FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
-import { ConversationApiService } from './ConversationApiService';
+import { ConversationApiService } from './Api/ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';

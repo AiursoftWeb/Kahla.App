@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthApiService } from '../Services/AuthApiService';
+import { AuthApiService } from '../Services/Api/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';

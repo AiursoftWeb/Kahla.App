@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ElectronService } from 'ngx-electron';
-import { ServerListApiService } from './ServerListApiService';
-import { ApiService } from './ApiService';
+import { ServerListApiService } from './Api/ServerListApiService';
+import { ApiService } from './Api/ApiService';
 
 @Injectable({
     providedIn: 'root'

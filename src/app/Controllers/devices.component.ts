@@ -3,7 +3,7 @@ import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
 import { ElectronService } from 'ngx-electron';
-import { DevicesApiService } from '../Services/DevicesApiService';
+import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
 

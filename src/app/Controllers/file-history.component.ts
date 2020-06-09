@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { ProbeFile } from '../Models/Probe/ProbeFile';
 import { ProbeService } from '../Services/ProbeService';
-import { FilesApiService } from '../Services/FilesApiService';
+import { FilesApiService } from '../Services/Api/FilesApiService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { FileType } from '../Models/FileType';
 import { MessageService } from '../Services/MessageService';

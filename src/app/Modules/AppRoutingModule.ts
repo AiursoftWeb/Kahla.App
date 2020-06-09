@@ -35,9 +35,10 @@ const routes: Routes = [
     {path: 'changepassword', component: ChangePasswordComponent},
     {path: 'discover', component: DiscoverComponent},
     {path: 'devices', component: DevicesComponent},
-    { path: 'theme', component: ThemeComponent},
+    {path: 'theme', component: ThemeComponent},
     {path: 'advanced-setting', component: AdvancedSettingComponent},
-    { path: 'share-target', component: ShareComponent }
+    {path: 'share-target', component: ShareComponent},
+    {path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

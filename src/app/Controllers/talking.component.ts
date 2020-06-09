@@ -1,11 +1,10 @@
 ﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { Message } from '../Models/Message';
 import { map, switchMap } from 'rxjs/operators';
 import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
-import { Values } from '../values';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
@@ -36,7 +35,6 @@ declare var MediaRecorder: any;
 export class TalkingComponent implements OnInit, OnDestroy {
     public content = '';
     public showPanel = false;
-    public loadingImgURL = Values.loadingImgURL;
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
@@ -55,11 +53,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
+    public loadingMore: boolean;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
     @ViewChild('header', { static: true }) public header: HeaderComponent;
+
 
     constructor(
         private route: ActivatedRoute,
@@ -100,7 +100,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
             if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
-                this.messageService.loadMore();
+                this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
             } else {
                 setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
@@ -244,10 +244,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public trackByMessages(_index: number, message: Message): string {
         return message.id;
-    }
-
-    public LoadMore(): void {
-        this.messageService.loadMore();
     }
 
     public send(): void {
@@ -573,5 +569,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();
+    }
+
+    public async loadMore() {
+        if (!this.messageService.noMoreMessages) {
+            this.loadingMore = true;
+            const oldScrollHeight = document.documentElement.scrollHeight;
+            await this.messageService.getMessages(-1,
+                this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
+            this.loadingMore = false;
+            setTimeout(() => {
+                window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
+            }, 0);
+        }
     }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GroupsApiService } from '../Services/GroupsApiService';
+import { GroupsApiService } from '../Services/Api/GroupsApiService';
 import { MessageService } from '../Services/MessageService';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupConversation } from '../Models/GroupConversation';
-import { ConversationApiService } from '../Services/ConversationApiService';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import Swal from 'sweetalert2';
 import { TimerService } from '../Services/TimerService';
 import { UploadService } from '../Services/UploadService';

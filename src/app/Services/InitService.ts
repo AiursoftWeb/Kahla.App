@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CheckService } from './CheckService';
-import { AuthApiService } from './AuthApiService';
+import { AuthApiService } from './Api/AuthApiService';
 import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
 import { ElectronService } from 'ngx-electron';
-import { DevicesApiService } from './DevicesApiService';
+import { DevicesApiService } from './Api/DevicesApiService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
 import { ServerConfig } from '../Models/ServerConfig';
-import { ApiService } from './ApiService';
-import { ServerListApiService } from './ServerListApiService';
+import { ApiService } from './Api/ApiService';
+import { ServerListApiService } from './Api/ServerListApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Injectable({
@@ -58,9 +58,17 @@ export class InitService {
         }
         this.checkService.checkVersion(false);
         // load server config
+        let reload = false;
         if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
             this.apiService.serverConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
+            if (this.apiService.serverConfig._cacheVersion !== ServerConfig.CACHE_VERSION) {
+                reload = true;
+                this.apiService.serverConfig = null;
+            }
         } else {
+            reload = true;
+        }
+        if (reload) {
             this.router.navigate(['/signin'], {replaceUrl: true});
             this.serverListApiService.Servers().subscribe(servers => {
                 let target: ServerConfig;
@@ -72,6 +80,7 @@ export class InitService {
 
                 if (target) {
                     target.officialServer = true;
+                    target._cacheVersion = ServerConfig.CACHE_VERSION;
                     this.apiService.serverConfig = target;
                     localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
                 }

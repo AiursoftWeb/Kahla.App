@@ -3,12 +3,13 @@ importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-j
 const CACHE = 'v5';
 const UPDATE_REQUIRED = '__Update_Required__';
 const UPDATE_COMPLETED = '__Update_Completed__';
+const self_scope = self.registration.scope;
 
 //region cache-control
 
 function installCache() {
     return caches.open(CACHE).then(function (cache) {
-        return cache.addAll([
+        let requests = [
             '/index.html',
             '/main.js',
             '/manifest.json',
@@ -22,7 +23,8 @@ function installCache() {
             '/fa-regular-400.woff2',
             '/fa-brands-400.woff2',
             '/assets/144x144.png'
-        ]);
+        ].map(t => new Request(t, {cache: 'no-cache'}))
+        return cache.addAll(requests);
     });
 }
 
@@ -32,7 +34,7 @@ self.addEventListener('install', function (event) {
 
 self.addEventListener('fetch', function (event) {
     // bypass upload request
-    if (event.request.method !== 'GET') {
+    if (event.request.method !== 'GET' || !event.request.url.startsWith(self_scope)) {
         return;
     }
 

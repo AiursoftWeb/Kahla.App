@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthApiService } from './AuthApiService';
+import { AuthApiService } from './Api/AuthApiService';
 import { Theme } from '../Models/Theme';
 import { KahlaUser } from '../Models/KahlaUser';
 

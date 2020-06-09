@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { ApiService } from '../Services/ApiService';
+import { ApiService } from '../Services/Api/ApiService';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { ServerListApiService } from '../Services/ServerListApiService';
+import { ServerListApiService } from '../Services/Api/ServerListApiService';
+import { ServerConfig } from '../Models/ServerConfig';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -55,19 +56,13 @@ export class SignInComponent implements OnInit {
                     fireFailed();
                     return;
                 }
-                this.serverListApiService.Servers().subscribe(officialServer => {
+                this.serverListApiService.Servers().subscribe(async officialServer => {
                     Swal.close();
-                    const last = () => {
-                        localStorage.setItem('serverConfig', JSON.stringify(serverConfig));
-                        this.changingServer = false;
-                        this.initService.init();
-                    };
                     if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
                         // an official server
                         serverConfig.officialServer = true;
-                        last();
                     } else {
-                        Swal.fire({
+                        const res = await Swal.fire({
                             title: 'Connecting to a community server...',
                             text: 'Aiursoft CANNOT prove the community server is secure.\n' +
                                 ' You should NEVER connect to a server you don\'t trust.\n' +
@@ -75,14 +70,16 @@ export class SignInComponent implements OnInit {
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonText: 'Continue'
-                        }).then(res => {
-                            if (res.dismiss) {
-                                return;
-                            }
-                            serverConfig.officialServer = false;
-                            last();
                         });
+                        if (res.dismiss) {
+                            return;
+                        }
+                        serverConfig.officialServer = false;
                     }
+                    serverConfig._cacheVersion = ServerConfig.CACHE_VERSION;
+                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(serverConfig));
+                    this.changingServer = false;
+                    this.initService.init();
                 });
             },
             error: _t => fireFailed()

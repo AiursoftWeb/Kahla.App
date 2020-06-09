@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
-import { AiurCollection } from '../Models/AiurCollection';
-import { AiurProtocal } from '../Models/AiurProtocal';
-import { AiurValue } from '../Models/AiurValue';
-import { Request } from '../Models/Request';
-import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
+import { AiurCollection } from '../../Models/AiurCollection';
+import { AiurProtocal } from '../../Models/AiurProtocal';
+import { AiurValue } from '../../Models/AiurValue';
+import { Request } from '../../Models/Request';
+import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
 import { ApiService } from './ApiService';
-import { DiscoverUser } from '../Models/DiscoverUser';
-import { SearchResult } from '../Models/SearchResult';
+import { DiscoverUser } from '../../Models/DiscoverUser';
+import { SearchResult } from '../../Models/SearchResult';
 
 @Injectable()
 export class FriendsApiService {
@@ -15,7 +15,8 @@ export class FriendsApiService {
 
     constructor(
         private apiService: ApiService
-    ) {}
+    ) {
+    }
 
     public Mine(): Observable<SearchResult> {
         return this.apiService.Get(FriendsApiService.serverPath + '/Mine');
