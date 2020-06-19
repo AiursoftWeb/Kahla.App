@@ -75,8 +75,7 @@ export class MessageService {
     ) {
     }
 
-    public async OnMessage(data: MessageEvent) {
-        const ev = JSON.parse(data.data) as AiurEvent;
+    public async OnMessage(ev: AiurEvent) {
         const fireAlert = !localStorage.getItem('deviceID');
         switch (ev.type) {
             case EventType.NewMessage: {
@@ -227,6 +226,14 @@ export class MessageService {
             }
             default:
                 break;
+        }
+    }
+
+    public reconnectPull() {
+        this.cacheService.updateConversation();
+        this.cacheService.updateFriends();
+        if (this.conversation) {
+            this.getMessages(0, this.conversation.id, null, 15);
         }
     }
 

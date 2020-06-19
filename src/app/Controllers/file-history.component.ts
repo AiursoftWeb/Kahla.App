@@ -41,7 +41,7 @@ export class FileHistoryComponent implements OnInit {
             // get access token first
             this.loading = true;
             this.filesApiService.InitFileAccess(this.conversationId, false).subscribe(t => {
-                this.accessToken = encodeURIComponent(t.value);
+                this.accessToken = t.value;
                 this.loadFiles();
             });
         });
