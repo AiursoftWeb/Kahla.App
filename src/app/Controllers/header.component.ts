@@ -4,7 +4,7 @@ import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { HomeService } from '../Services/HomeService';
 import { ElectronService } from 'ngx-electron';
-import { InitService } from '../Services/InitService';
+import { EventService } from '../Services/EventService';
 
 @Component({
     selector: 'app-header',
@@ -30,7 +30,7 @@ export class HeaderComponent {
         public messageService: MessageService,
         public homeService: HomeService,
         public _electronService: ElectronService,
-        public initService: InitService
+        public eventService: EventService,
     ) {}
 
     public goBack(): void {
