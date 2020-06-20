@@ -157,9 +157,6 @@ export class MessageService {
                     }
                     this.cacheService.updateConversation();
                     this.cacheService.updateFriends();
-                    if (this.router.isActive(`/user/${evt.request.targetId}`, false)) {
-                        this.router.navigate(['/talking', evt.createdConversation.id]);
-                    }
                 } else {
                     if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
                         Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
