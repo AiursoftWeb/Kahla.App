@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
@@ -14,7 +14,7 @@ import { HomeService } from '../Services/HomeService';
         '../Styles/button.scss',
         '../Styles/badge.scss']
 })
-export class ConversationsComponent implements OnInit, OnDestroy {
+export class ConversationsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
@@ -63,9 +63,5 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate(['/talking', id]);
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.loadingImgURL = null;
     }
 }
