@@ -107,9 +107,16 @@ export class MessageService {
                     }
                 }
                 if (this.conversation && this.conversation.id === evt.message.conversationId
-                    && this.localMessages.findIndex(t => t.id === evt.message.id) === -1) {
+                    && this.rawMessages.findIndex(t => t.id === evt.message.id) === -1) {
                     if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
                         evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
+                        if (evt.message.senderId === this.cacheService.cachedData.me.id) {
+                            // the temp message should still exist
+                            const index = this.localMessages.findIndex(t => t.id === evt.message.id && t.local);
+                            if (index !== -1) {
+                                this.localMessages.splice(index);
+                            }
+                        }
                         this.rawMessages.push(evt.message);
                         this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
                         this.reorderLocalMessages();
@@ -157,9 +164,6 @@ export class MessageService {
                     }
                     this.cacheService.updateConversation();
                     this.cacheService.updateFriends();
-                    if (this.router.isActive(`/user/${evt.request.targetId}`, false)) {
-                        this.router.navigate(['/talking', evt.createdConversation.id]);
-                    }
                 } else {
                     if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
                         Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');

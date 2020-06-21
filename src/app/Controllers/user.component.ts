@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { KahlaUser } from '../Models/KahlaUser';
@@ -9,6 +9,12 @@ import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { Request } from '../Models/Request';
 import { ProbeService } from '../Services/ProbeService';
+import { Subscription } from 'rxjs';
+import { EventService } from '../Services/EventService';
+import { filter } from 'rxjs/operators';
+import { EventType } from '../Models/Events/EventType';
+import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
+import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -18,13 +24,14 @@ import { ProbeService } from '../Services/ProbeService';
         '../Styles/badge.scss']
 })
 
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
     public info: KahlaUser;
     public conversationId: number;
     public areFriends: boolean;
     public loadingImgURL = Values.loadingImgURL;
     public sentRequest: boolean;
     public pendingRequest: Request;
+    public updateSubscription: Subscription;
 
     constructor(
         private route: ActivatedRoute,
@@ -34,6 +41,7 @@ export class UserComponent implements OnInit {
         public messageService: MessageService,
         public timerService: TimerService,
         private probeService: ProbeService,
+        private eventService: EventService
     ) {
     }
 
@@ -41,6 +49,11 @@ export class UserComponent implements OnInit {
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);
         });
+        this.updateSubscription = this.eventService.onMessage
+            .pipe(filter(t => this.info &&
+                ((t.type === EventType.FriendsChangedEvent && (<FriendsChangedEvent>t).request.targetId === this.info.id) ||
+                    (t.type === EventType.FriendDeletedEvent && (<FriendDeletedEvent>t).trigger.id === this.info.id))))
+            .subscribe(() => this.updateFriendInfo(this.info.id));
     }
 
     public updateFriendInfo(userId: string) {
@@ -140,5 +153,9 @@ export class UserComponent implements OnInit {
 
     public shareUser() {
         this.router.navigate(['/share-target', {message: `[user]${this.info.id}`}]);
+    }
+
+    ngOnDestroy(): void {
+        this.updateSubscription?.unsubscribe();
     }
 }

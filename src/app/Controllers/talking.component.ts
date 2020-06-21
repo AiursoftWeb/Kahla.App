@@ -290,8 +290,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     }
                 },
                 next: p => {
-                    this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
-                    this.messageService.insertMessage(p.value);
+                    const index = this.messageService.localMessages.indexOf(tempMessage);
+                    if (index !== -1) {
+                        this.messageService.localMessages.splice(index, 1);
+                        this.messageService.insertMessage(p.value);
+                    }
                 }
             });
         this.content = '';
