@@ -624,6 +624,9 @@ export class MessageService {
     public updateAccessToken() {
         const id = this.conversation.id;
         this.filesApiService.InitFileAccess(id).subscribe(t => {
+            if (this.conversation.id !== id) {
+                return;
+            }
             this.fileAccessToken = t.value;
             const token = this.probeService.resolveAccessToken(t.value);
             this.cacheService.cachedData.probeTokens[id] = token;
