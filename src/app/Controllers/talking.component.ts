@@ -53,11 +53,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
     public loadingMore: boolean;
+    public showMessagesCount = 15;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', { static: true }) public header: HeaderComponent;
+    @ViewChild('header', {static: true}) public header: HeaderComponent;
 
 
     constructor(
@@ -97,11 +98,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
-            if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
+            const interval = this.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
+            if (this.lastAutoLoadMoreTimestamp + interval < now) {
                 this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
             } else {
-                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
+                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + interval + 10 - now);
             }
         }
     }
@@ -459,7 +461,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({ audio: true })
+            navigator.mediaDevices.getUserMedia({audio: true})
                 .then(stream => {
                     this.recording = true;
                     this.mediaRecorder = new MediaRecorder(stream);
@@ -574,15 +576,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public async loadMore() {
-        if (!this.messageService.noMoreMessages) {
+        const oldScrollHeight = document.documentElement.scrollHeight;
+        if (this.showMessagesCount < this.messageService.localMessages.length) {
+            this.showMessagesCount += 15;
+        } else if (!this.messageService.noMoreMessages) {
             this.loadingMore = true;
-            const oldScrollHeight = document.documentElement.scrollHeight;
             await this.messageService.getMessages(-1,
                 this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
             this.loadingMore = false;
-            setTimeout(() => {
-                window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
-            }, 0);
+            this.showMessagesCount = this.messageService.localMessages.length;
+        } else {
+            return;
         }
+        setTimeout(() => {
+            window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
+        }, 0);
     }
+
+    public takeMessages(): Message[] {
+        return this.messageService.localMessages.slice(Math.max(this.messageService.localMessages.length - this.showMessagesCount, 0));
+    }
+
 }
