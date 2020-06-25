@@ -14,6 +14,7 @@ import { ApiService } from './Api/ApiService';
 import { ServerListApiService } from './Api/ServerListApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { EventService } from './EventService';
+import { GlobalNotifyService } from './GlobalNotifyService';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +38,7 @@ export class InitService {
         private probeService: ProbeService,
         private serverListApiService: ServerListApiService,
         private eventService: EventService,
+        private globalNotifyService: GlobalNotifyService,
     ) {
     }
 
@@ -107,7 +109,7 @@ export class InitService {
                             this.eventService.initPusher();
                             this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
                             this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
-                            // .globalNotifyService.Init();
+                            this.globalNotifyService.init();
                             this.cacheService.updateConversation();
                             this.cacheService.updateFriends();
                             this.cacheService.updateRequests();

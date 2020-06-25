@@ -6,14 +6,14 @@
             i18n="@@ClickToLoadMore">Click to load more
     </button>
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
-    <li *ngFor="let message of messageService.localMessages; trackBy: trackByMessages; last as isLast; let i = index"
+    <li *ngFor="let message of takeMessages() as msg; trackBy: trackByMessages; last as isLast; let i = index"
         [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id,
          'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}">
         <div *ngIf="message.lastRead">
             <div class="last-read-bar">LAST READ</div>
         </div>
         <div
-            *ngIf="i === 0 || messageService.localMessages[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()">
+            *ngIf="i === 0 || msg[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()">
             <div class="date-bar">
                 {{message.sendTimeDate.toLocaleDateString()}}
             </div>
@@ -149,7 +149,7 @@
     <button
         *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)"
         id="scrollDown" [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}"
-        class="button button--fab" (click)="uploadService.scrollBottom(true)">
+        class="button button--fab" (click)="messageService.scrollBottom(true)">
         <i class="fas fa-angle-down" aria-hidden="true"></i>
         <div *ngIf="messageService.newMessages" class="dot reddot"></div>
     </button>

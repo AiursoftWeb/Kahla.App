@@ -5,7 +5,6 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
-import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { Request } from '../Models/Request';
 import { ProbeService } from '../Services/ProbeService';
@@ -38,7 +37,6 @@ export class UserComponent implements OnInit, OnDestroy {
         private friendsApiService: FriendsApiService,
         private router: Router,
         public cacheService: CacheService,
-        public messageService: MessageService,
         public timerService: TimerService,
         private probeService: ProbeService,
         private eventService: EventService
