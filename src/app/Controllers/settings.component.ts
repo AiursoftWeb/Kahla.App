@@ -3,7 +3,6 @@ import { AuthApiService } from '../Services/Api/AuthApiService';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { InitService } from '../Services/InitService';
-import { MessageService } from '../Services/MessageService';
 import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
@@ -24,7 +23,6 @@ export class SettingsComponent implements OnInit {
         private authApiService: AuthApiService,
         private router: Router,
         private initSerivce: InitService,
-        public messageService: MessageService,
         public cacheService: CacheService,
         private _electronService: ElectronService,
         public homeService: HomeService,

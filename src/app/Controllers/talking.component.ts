@@ -9,7 +9,6 @@ import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { ElectronService } from 'ngx-electron';
 import { HeaderComponent } from './header.component';
 import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
@@ -71,7 +70,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private friendshipService: FriendshipService,
         private themeService: ThemeService,
-        public _electronService: ElectronService,
         public probeService: ProbeService,
     ) {
     }
@@ -164,10 +162,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    if (!this.uploadService.talkingDestroyed) {
+                    if (!this.messageService.talkingDestroyed) {
                         this.destroyCurrent();
                     }
-                    this.uploadService.talkingDestroyed = false;
+                    this.messageService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
                     this.conversationID = Number(params.id);
                     this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
@@ -203,7 +201,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (this.conversationID !== conversation.id || this.uploadService.talkingDestroyed) {
+                if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
                     return;
                 }
                 this.updateConversation(conversation);
@@ -266,7 +264,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.modifyMessage(tempMessage, false);
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
-            this.uploadService.scrollBottom(true);
+            this.messageService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
@@ -286,7 +284,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
                         this.messageService.showFailedMessages();
                         this.messageService.reorderLocalMessages();
-                        this.uploadService.scrollBottom(false);
+                        this.messageService.scrollBottom(false);
                     }
                 },
                 next: p => {
@@ -340,7 +338,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             window.scroll(0, window.scrollY + 105);
         } else {
             if (this.messageService.belowWindowPercent <= 0.2) {
-                this.uploadService.scrollBottom(false);
+                this.messageService.scrollBottom(false);
             } else {
                 window.scroll(0, window.scrollY - 105);
             }
@@ -367,7 +365,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
                 ?.then(t => {
                     this.messageService.insertMessage(t.value);
-                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                    setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
         }
     }
@@ -390,7 +388,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             this.uploadService.upload(blob, this.messageService.conversation.id,
                                 this.messageService.conversation.aesKey, FileType.Image)?.then(t => {
                                 this.messageService.insertMessage(t.value);
-                                setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                                setTimeout(() => this.messageService.scrollBottom(true), 0);
                             });
                         }
                         URL.revokeObjectURL(urlString);
@@ -438,7 +436,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
                 ?.then(msg => {
                     this.messageService.insertMessage(msg.value);
-                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                    setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
         });
         this.removeDragData(event);
@@ -473,7 +471,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.mediaRecorder.addEventListener('stop', () => {
                         this.recording = false;
                         const audioBlob = new File(audioChunks, `voiceMsg_${new Date().getTime()}.opus`);
-                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio);
+                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio)
+                            .then(() => this.messageService.scrollBottom(true));
                         clearTimeout(this.forceStopTimeout);
                         stream.getTracks().forEach(track => track.stop());
                     });
@@ -527,7 +526,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public destroyCurrent() {
-        this.uploadService.talkingDestroyed = true;
+        this.messageService.talkingDestroyed = true;
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();

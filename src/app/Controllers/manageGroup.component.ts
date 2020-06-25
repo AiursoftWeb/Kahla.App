@@ -8,7 +8,6 @@ import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import Swal from 'sweetalert2';
 import { TimerService } from '../Services/TimerService';
 import { UploadService } from '../Services/UploadService';
-import { ElectronService } from 'ngx-electron';
 import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
@@ -35,7 +34,6 @@ export class ManageGroupComponent implements OnInit {
                 private router: Router,
                 public timerService: TimerService,
                 public uploadService: UploadService,
-                public _electronService: ElectronService,
                 private probeService: ProbeService,
     ) {
 

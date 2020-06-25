@@ -7,7 +7,6 @@ import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './Api/ConversationApiService';
 import { map } from 'rxjs/operators';
-import { UploadService } from './UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
 import { CacheService } from './CacheService';
@@ -54,10 +53,10 @@ export class MessageService {
     public fileAccessToken: string;
     public accessTokenUpdateSchedule: any;
     public shareRef: MessageFileRef;
+    public talkingDestroyed = false;
 
     constructor(
         private conversationApiService: ConversationApiService,
-        private uploadService: UploadService,
         private filesApiService: FilesApiService,
         private cacheService: CacheService,
         private timerService: TimerService,
@@ -95,9 +94,7 @@ export class MessageService {
                         await this.getMessages(0, this.conversation.id, null, 15);
                     }
                     if (this.belowWindowPercent <= 0.2) {
-                        setTimeout(() => {
-                            this.uploadService.scrollBottom(true);
-                        }, 0);
+                        setTimeout(() => this.scrollBottom(true), 0);
                     }
                 }
                 break;
@@ -478,7 +475,7 @@ export class MessageService {
             this.updateAccessToken();
         }
 
-        setTimeout(() => this.uploadService.scrollBottom(false), 0);
+        setTimeout(() => this.scrollBottom(false), 0);
     }
 
     public cleanMessageByTimer(): void {
@@ -545,5 +542,16 @@ export class MessageService {
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();
+    }
+
+    public scrollBottom(smooth: boolean): void {
+        if (!this.talkingDestroyed) {
+            const h = document.documentElement.scrollHeight;
+            if (smooth) {
+                window.scroll({top: h, behavior: 'smooth'});
+            } else {
+                window.scroll(0, h);
+            }
+        }
     }
 }

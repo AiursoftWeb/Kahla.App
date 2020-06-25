@@ -7,8 +7,6 @@ import { AiurProtocal } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
-import { MessageService } from '../Services/MessageService';
-import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
 
@@ -30,9 +28,7 @@ export class UserDetailComponent implements OnInit {
         private authApiService: AuthApiService,
         private router: Router,
         public uploadService: UploadService,
-        public messageService: MessageService,
         public cacheService: CacheService,
-        public _electronService: ElectronService,
         private probeService: ProbeService,
     ) {
     }

@@ -3,7 +3,6 @@ import { ContactInfo } from '../Models/ContactInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
-import { MessageService } from '../Services/MessageService';
 import { HomeService } from '../Services/HomeService';
 
 @Component({
@@ -20,7 +19,6 @@ export class ConversationsComponent implements OnInit {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        public messageService: MessageService,
         private homeService: HomeService,
     ) {
     }

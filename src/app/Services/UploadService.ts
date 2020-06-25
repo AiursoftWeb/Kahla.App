@@ -18,7 +18,6 @@ import { Message } from '../Models/Message';
     providedIn: 'root'
 })
 export class UploadService {
-    public talkingDestroyed = false;
 
     constructor(
         private filesApiService: FilesApiService,
@@ -79,7 +78,6 @@ export class UploadService {
                                 Swal.close();
                                 this.buildFileRef(res, fileType, file)?.then(t => {
                                     this.encryptThenSend(t, conversationID, aesKey).then((t_) => {
-                                        this.scrollBottom(true);
                                         resolve(t_);
                                     });
                                 });
@@ -158,17 +156,6 @@ export class UploadService {
             return false;
         }
         return file.size >= 0.125 && file.size <= 2146435072;
-    }
-
-    public scrollBottom(smooth: boolean): void {
-        if (!this.talkingDestroyed) {
-            const h = document.documentElement.scrollHeight;
-            if (smooth) {
-                window.scroll({top: h, behavior: 'smooth'});
-            } else {
-                window.scroll(0, h);
-            }
-        }
     }
 
     public uploadAvatar(user: KahlaUser, file: File): void {
