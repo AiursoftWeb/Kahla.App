@@ -39,7 +39,8 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
 
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me && !this.cacheService.cachedData.friends) {
-            this.messageService.updateFriends();
+            this.cacheService.updateFriends();
+            this.cacheService.updateRequests();
         }
     }
 
