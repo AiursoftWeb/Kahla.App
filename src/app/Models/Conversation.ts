@@ -2,7 +2,7 @@
 
 export class Conversation {
     public id: number;
-    public discriminator: string;
+    public discriminator: 'GroupConversation' | 'PrivateConversation';
     public conversationCreateTime: Date;
     public displayName: string;
     public displayImagePath: string;

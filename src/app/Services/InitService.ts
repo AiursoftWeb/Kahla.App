@@ -13,19 +13,13 @@ import { ServerConfig } from '../Models/ServerConfig';
 import { ApiService } from './Api/ApiService';
 import { ServerListApiService } from './Api/ServerListApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
+import { EventService } from './EventService';
+import { GlobalNotifyService } from './GlobalNotifyService';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InitService {
-    public connecting = false;
-    private ws: WebSocket;
-    private timeoutNumber = 1000;
-    private interval;
-    private timeout;
-    public online: boolean;
-    private errorOrClose: boolean;
-    private closeWebSocket = false;
     private options = {
         userVisibleOnly: true,
         applicationServerKey: null
@@ -42,7 +36,9 @@ export class InitService {
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
         private probeService: ProbeService,
-        private serverListApiService: ServerListApiService
+        private serverListApiService: ServerListApiService,
+        private eventService: EventService,
+        private globalNotifyService: GlobalNotifyService,
     ) {
     }
 
@@ -89,8 +85,6 @@ export class InitService {
             return;
         }
 
-        this.online = navigator.onLine;
-        this.closeWebSocket = false;
         this.cacheService.initCache();
 
         if (this.apiService.serverConfig) {
@@ -112,7 +106,10 @@ export class InitService {
                                 this.subscribeUser();
                                 this.updateSubscription();
                             }
-                            this.loadPusher(false);
+                            this.eventService.initPusher();
+                            this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+                            this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
+                            this.globalNotifyService.init();
                             this.cacheService.updateConversation();
                             this.cacheService.updateFriends();
                             this.cacheService.updateRequests();
@@ -125,84 +122,11 @@ export class InitService {
         }
     }
 
-    private loadPusher(reconnect: boolean): void {
-        this.connecting = true;
-        this.authApiService.InitPusher().subscribe(model => {
-            if (this.ws) {
-                this.closeWebSocket = true;
-                this.ws.close();
-            }
-            this.errorOrClose = false;
-            this.closeWebSocket = false;
-            this.ws = new WebSocket(model.serverPath);
-            this.ws.onopen = () => {
-                this.connecting = false;
-                clearTimeout(this.timeout);
-                clearInterval(this.interval);
-                this.interval = setInterval(this.checkNetwork.bind(this), 3000);
-            };
-            this.ws.onmessage = evt => this.messageService.OnMessage(evt);
-            this.ws.onerror = () => {
-                this.errorOrClosedFunc();
-                this.fireNetworkAlert();
-            };
-            this.ws.onclose = () => this.errorOrClosedFunc();
-            if (reconnect) {
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                if (this.messageService.conversation) {
-                    this.messageService.getMessages(0, this.messageService.conversation.id, null, 15);
-                }
-            }
-        }, () => {
-            this.fireNetworkAlert();
-            this.errorOrClosedFunc();
-        });
-    }
-
-    private errorOrClosedFunc(): void {
-        if (!this.closeWebSocket) {
-            this.connecting = false;
-            this.errorOrClose = true;
-            clearTimeout(this.timeout);
-            clearInterval(this.interval);
-            this.interval = setInterval(this.checkNetwork.bind(this), 3000);
-        }
-    }
-
-    public fireNetworkAlert(): void {
-        console.error('Failed to connect to stargate channel.' + 'This might caused by the bad network you connected.<br/>' +
-            'We will try to reconnect later, but before that, your message might no be the latest.', 'error');
-    }
-
-    private checkNetwork(): void {
-        if (navigator.onLine && !this.connecting && (!this.online || this.errorOrClose)) {
-            this.autoReconnect();
-        }
-        this.online = navigator.onLine;
-    }
-
     public destroy(): void {
-        this.closeWebSocket = true;
-        if (this.ws) {
-            this.ws.close();
-        }
-        clearTimeout(this.timeout);
-        clearInterval(this.interval);
-        this.timeout = null;
-        this.interval = null;
+        this.eventService.destroyConnection();
         this.messageService.resetVariables();
         this.cacheService.reset();
         localStorage.clear();
-    }
-
-    private autoReconnect(): void {
-        this.timeout = setTimeout(() => {
-            this.loadPusher(true);
-            if (this.timeoutNumber < 10000 && this.timeoutNumber > 1000) {
-                this.timeoutNumber += 1000;
-            }
-        }, this.timeoutNumber);
     }
 
     public subscribeUser() {

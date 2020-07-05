@@ -5,7 +5,6 @@ import { ElectronService } from 'ngx-electron';
 import { ThemeService } from '../Services/ThemeService';
 import { Router } from '@angular/router';
 import { HomeService } from '../Services/HomeService';
-import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 
 @Component({
@@ -20,7 +19,6 @@ export class AppComponent implements OnInit {
     constructor(
         private initService: InitService,
         private themeService: ThemeService,
-        public messageService: MessageService,
         public cacheService: CacheService,
         private _electronService: ElectronService,
         public route: Router,

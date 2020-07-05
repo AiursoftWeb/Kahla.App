@@ -9,7 +9,6 @@ import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { TimerService } from '../Services/TimerService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { ElectronService } from 'ngx-electron';
 import { HeaderComponent } from './header.component';
 import { GroupsResult } from '../Models/GroupsResults';
 import { FriendshipService } from '../Services/FriendshipService';
@@ -54,11 +53,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
     public loadingMore: boolean;
+    public showMessagesCount = 15;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
     @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', { static: true }) public header: HeaderComponent;
+    @ViewChild('header', {static: true}) public header: HeaderComponent;
 
 
     constructor(
@@ -71,7 +71,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private friendshipService: FriendshipService,
         private themeService: ThemeService,
-        public _electronService: ElectronService,
         public probeService: ProbeService,
     ) {
     }
@@ -99,11 +98,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
-            if (this.lastAutoLoadMoreTimestamp + 2000 < now) {
+            const interval = this.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
+            if (this.lastAutoLoadMoreTimestamp + interval < now) {
                 this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
             } else {
-                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + 2010 - now);
+                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + interval + 10 - now);
             }
         }
     }
@@ -164,10 +164,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.route.params
             .pipe(
                 switchMap((params: Params) => {
-                    if (!this.uploadService.talkingDestroyed) {
+                    if (!this.messageService.talkingDestroyed) {
                         this.destroyCurrent();
                     }
-                    this.uploadService.talkingDestroyed = false;
+                    this.messageService.talkingDestroyed = false;
                     this.messageService.updateMaxImageWidth();
                     this.conversationID = Number(params.id);
                     this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
@@ -203,7 +203,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 map(t => t.value)
             )
             .subscribe(conversation => {
-                if (this.conversationID !== conversation.id || this.uploadService.talkingDestroyed) {
+                if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
                     return;
                 }
                 this.updateConversation(conversation);
@@ -266,7 +266,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.messageService.modifyMessage(tempMessage, false);
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
-            this.uploadService.scrollBottom(true);
+            this.messageService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
         this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
@@ -286,12 +286,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
                         this.messageService.showFailedMessages();
                         this.messageService.reorderLocalMessages();
-                        this.uploadService.scrollBottom(false);
+                        this.messageService.scrollBottom(false);
                     }
                 },
                 next: p => {
-                    this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
-                    this.messageService.insertMessage(p.value);
+                    const index = this.messageService.localMessages.indexOf(tempMessage);
+                    if (index !== -1) {
+                        this.messageService.localMessages.splice(index, 1);
+                        this.messageService.insertMessage(p.value);
+                    }
                 }
             });
         this.content = '';
@@ -337,7 +340,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             window.scroll(0, window.scrollY + 105);
         } else {
             if (this.messageService.belowWindowPercent <= 0.2) {
-                this.uploadService.scrollBottom(false);
+                this.messageService.scrollBottom(false);
             } else {
                 window.scroll(0, window.scrollY - 105);
             }
@@ -364,7 +367,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
                 ?.then(t => {
                     this.messageService.insertMessage(t.value);
-                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                    setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
         }
     }
@@ -387,7 +390,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             this.uploadService.upload(blob, this.messageService.conversation.id,
                                 this.messageService.conversation.aesKey, FileType.Image)?.then(t => {
                                 this.messageService.insertMessage(t.value);
-                                setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                                setTimeout(() => this.messageService.scrollBottom(true), 0);
                             });
                         }
                         URL.revokeObjectURL(urlString);
@@ -435,7 +438,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
                 ?.then(msg => {
                     this.messageService.insertMessage(msg.value);
-                    setTimeout(() => this.uploadService.scrollBottom(true), 0);
+                    setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
         });
         this.removeDragData(event);
@@ -458,7 +461,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({ audio: true })
+            navigator.mediaDevices.getUserMedia({audio: true})
                 .then(stream => {
                     this.recording = true;
                     this.mediaRecorder = new MediaRecorder(stream);
@@ -470,7 +473,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     this.mediaRecorder.addEventListener('stop', () => {
                         this.recording = false;
                         const audioBlob = new File(audioChunks, `voiceMsg_${new Date().getTime()}.opus`);
-                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio);
+                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio)
+                            .then(() => this.messageService.scrollBottom(true));
                         clearTimeout(this.forceStopTimeout);
                         stream.getTracks().forEach(track => track.stop());
                     });
@@ -524,7 +528,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public destroyCurrent() {
-        this.uploadService.talkingDestroyed = true;
+        this.messageService.talkingDestroyed = true;
         this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
@@ -572,15 +576,25 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public async loadMore() {
-        if (!this.messageService.noMoreMessages) {
+        const oldScrollHeight = document.documentElement.scrollHeight;
+        if (this.showMessagesCount < this.messageService.localMessages.length) {
+            this.showMessagesCount += 15;
+        } else if (!this.messageService.noMoreMessages) {
             this.loadingMore = true;
-            const oldScrollHeight = document.documentElement.scrollHeight;
             await this.messageService.getMessages(-1,
                 this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
             this.loadingMore = false;
-            setTimeout(() => {
-                window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
-            }, 0);
+            this.showMessagesCount = this.messageService.localMessages.length;
+        } else {
+            return;
         }
+        setTimeout(() => {
+            window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
+        }, 0);
     }
+
+    public takeMessages(): Message[] {
+        return this.messageService.localMessages.slice(Math.max(this.messageService.localMessages.length - this.showMessagesCount, 0));
+    }
+
 }

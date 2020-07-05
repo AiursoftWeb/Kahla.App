@@ -49,6 +49,8 @@ import { HomeService } from './Services/HomeService';
 import { FriendshipService } from './Services/FriendshipService';
 import { ProbeService } from './Services/ProbeService';
 import { VjsPlayerComponent } from './Controllers/vjs-player.component';
+import { EventService } from './Services/EventService';
+import { GlobalNotifyService } from './Services/GlobalNotifyService';
 
 @NgModule({
     imports: [
@@ -102,7 +104,9 @@ import { VjsPlayerComponent } from './Controllers/vjs-player.component';
         TimerService,
         HomeService,
         FriendshipService,
-        ProbeService
+        ProbeService,
+        EventService,
+        GlobalNotifyService,
     ],
     bootstrap: [AppComponent]
 })

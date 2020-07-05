@@ -7,19 +7,15 @@ import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './Api/ConversationApiService';
 import { map } from 'rxjs/operators';
-import { UploadService } from './UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
 import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
-import { ElectronService } from 'ngx-electron';
 import { TimerUpdatedEvent } from '../Models/Events/TimerUpdatedEvent';
 import { TimerService } from './TimerService';
 import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
-import { NewFriendRequestEvent } from '../Models/Events/NewFriendRequestEvent';
-import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
@@ -57,13 +53,12 @@ export class MessageService {
     public fileAccessToken: string;
     public accessTokenUpdateSchedule: any;
     public shareRef: MessageFileRef;
+    public talkingDestroyed = false;
 
     constructor(
         private conversationApiService: ConversationApiService,
-        private uploadService: UploadService,
         private filesApiService: FilesApiService,
         private cacheService: CacheService,
-        private _electronService: ElectronService,
         private timerService: TimerService,
         private router: Router,
         private homeService: HomeService,
@@ -75,102 +70,44 @@ export class MessageService {
     ) {
     }
 
-    public async OnMessage(data: MessageEvent) {
-        const ev = JSON.parse(data.data) as AiurEvent;
-        const fireAlert = !localStorage.getItem('deviceID');
+    public async OnMessage(ev: AiurEvent) {
+        if (!this.conversation) {
+            return;
+        }
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
-                const conversationCacheIndex = this.cacheService.cachedData.conversations
-                    .findIndex(x => x.conversationId === evt.message.conversationId);
-                if (conversationCacheIndex !== -1) {
-                    const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
-                    const latestMsg = Object.assign({}, evt.message);
-                    latestMsg.content = this.cacheService.modifyMessage(
-                        AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
-                    conversationCache.latestMessage = latestMsg;
-                    if (!this.conversation || this.conversation.id !== evt.message.conversationId) {
-                        conversationCache.unReadAmount++;
-                        if (evt.mentioned) {
-                            conversationCache.someoneAtMe = true;
-                        }
-                    } else {
-                        conversationCache.unReadAmount = 0; // clear red dot when something went wrong
-                    }
-                    // move the new conversation to the top
-                    this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);
-                    this.cacheService.cachedData.conversations.splice(0, 0, conversationCache);
-                    this.cacheService.saveCache();
-                    this.cacheService.updateTotalUnread();
-                } else {
-                    if (this.homeService.wideScreenEnabled || this.router.isActive('home', false)) {
-                        setTimeout(() => this.cacheService.updateConversation(), 1000);
-                    }
-                }
-                if (this.conversation && this.conversation.id === evt.message.conversationId
-                    && this.localMessages.findIndex(t => t.id === evt.message.id) === -1) {
+                if (this.conversation.id === evt.message.conversationId
+                    && this.rawMessages.findIndex(t => t.id === evt.message.id) === -1) {
                     if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
                         evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
-                        this.rawMessages.push(evt.message);
-                        this.localMessages.push(this.modifyMessage(Object.assign({}, evt.message)));
-                        this.reorderLocalMessages();
-                        this.updateAtLink();
+                        if (evt.message.senderId === this.cacheService.cachedData.me.id) {
+                            // the temp message should still exist
+                            const index = this.localMessages.findIndex(t => t.id === evt.message.id && t.local);
+                            if (index !== -1) {
+                                this.localMessages.splice(index);
+                            }
+                        }
+                        this.insertMessage(evt.message);
                         this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
-                        this.saveMessage();
                     } else { // lost some message.
                         await this.getMessages(0, this.conversation.id, null, 15);
                     }
                     if (this.belowWindowPercent <= 0.2) {
-                        setTimeout(() => {
-                            this.uploadService.scrollBottom(true);
-                        }, 0);
+                        setTimeout(() => this.scrollBottom(true), 0);
                     }
-                    if (!document.hasFocus()) {
-                        this.showNotification(evt);
-                    }
-                } else {
-                    this.showNotification(evt);
                 }
-                break;
-            }
-            case EventType.NewFriendRequest: {
-                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== this.cacheService.cachedData.me.id) {
-                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
-                }
-                this.cacheService.updateRequests();
                 break;
             }
             case EventType.FriendDeletedEvent: {
-                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
-                    Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
-                }
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                break;
-            }
-            case EventType.FriendsChangedEvent: {
-                const evt = <FriendsChangedEvent>ev;
-                this.cacheService.updateRequests();
-                if (evt.result) {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
-                        Swal.fire('Friend request accepted', 'You and ' + evt.createdConversation.displayName +
-                            ' are now friends!', 'success');
-                    }
-                    this.cacheService.updateConversation();
-                    this.cacheService.updateFriends();
-                    if (this.router.isActive(`/user/${evt.request.targetId}`, false)) {
-                        this.router.navigate(['/talking', evt.createdConversation.id]);
-                    }
-                } else {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
-                        Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
-                    }
+                if ((<FriendDeletedEvent>ev).conversationId === this.conversation.id) {
+                    this.router.navigate(['/home']);
                 }
                 break;
             }
             case EventType.TimerUpdatedEvent: {
                 const evt = ev as TimerUpdatedEvent;
-                if (this.conversation && this.conversation.id === evt.conversationId) {
+                if (this.conversation.id === evt.conversationId) {
                     this.conversation.maxLiveSeconds = evt.newTimer;
                     this.timerService.updateDestructTime(evt.newTimer);
                     Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
@@ -181,7 +118,7 @@ export class MessageService {
             }
             case EventType.NewMemberEvent: {
                 const evt = ev as NewMemberEvent;
-                if (this.conversation && this.conversation.id === evt.conversationId) {
+                if (this.conversation.id === evt.conversationId) {
                     this.conversationApiService.ConversationDetail(evt.conversationId)
                         .subscribe(updated => {
                             this.conversation = updated.value;
@@ -192,41 +129,33 @@ export class MessageService {
             }
             case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
-                const current = this.conversation && this.conversation.id === evt.conversationId && this.router.isActive('talking', false);
-                if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
-                    Swal.fire('Oops, you have been kicked.',
-                        `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
-                            .find(x => x.conversationId === evt.conversationId).displayName}.`,
-                        'warning');
-                    this.cacheService.updateFriends();
-                    this.cacheService.updateConversation();
-                    if (current) {
+                if (this.conversation.id === evt.conversationId) {
+                    if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
                         this.router.navigate(['/home']);
+                    } else {
+                        this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                        this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
                     }
-                } else if (current) {
-                    this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
-                    this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
                 }
                 break;
             }
             case EventType.DissolveEvent: {
-                if (this.conversation && this.conversation.id === (<DissolveEvent>ev).conversationId) {
+                if (this.conversation.id === (<DissolveEvent>ev).conversationId) {
                     Swal.fire('The group has been dissolved!',
                         `Group ${this.conversation.displayName} has been dissolved by the owner!`,
                         'warning');
                     this.router.navigate(['/home']);
                 }
-                this.cacheService.updateFriends();
-                this.cacheService.updateConversation();
                 break;
             }
-            case EventType.GroupJoinedEvent: {
-                this.cacheService.updateFriends();
-                this.cacheService.updateConversation();
-                break;
-            }
-            default:
-                break;
+        }
+    }
+
+    public reconnectPull() {
+        this.cacheService.updateConversation();
+        this.cacheService.updateFriends();
+        if (this.conversation) {
+            this.getMessages(0, this.conversation.id, null, 15);
         }
     }
 
@@ -310,11 +239,6 @@ export class MessageService {
             - document.documentElement.clientHeight) / document.documentElement.clientHeight;
     }
 
-    public updateFriends(): void {
-        this.cacheService.updateFriends();
-        this.cacheService.updateRequests();
-    }
-
     public updateMaxImageWidth(): void {
         this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
         this.videoHeight = Math.max(Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400)), 170);
@@ -334,24 +258,6 @@ export class MessageService {
         if (this.accessTokenUpdateSchedule) {
             clearInterval(this.accessTokenUpdateSchedule);
             this.accessTokenUpdateSchedule = null;
-        }
-    }
-
-    private showNotification(event: NewMessageEvent): void {
-        if (!event.muted &&
-            event.message.sender.id !== this.cacheService.cachedData.me.id &&
-            this._electronService.isElectronApp &&
-            localStorage.getItem('setting-electronNotify') !== 'false') {
-            event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);
-            event.message.content = this.cacheService.modifyMessage(event.message.content);
-            const notify = new Notification(event.message.sender.nickName, {
-                body: event.message.content,
-                icon: this.probeService.encodeProbeFileUrl(event.message.sender.iconFilePath)
-            });
-            notify.onclick = function (clickEvent) {
-                clickEvent.preventDefault();
-                window.focus();
-            };
         }
     }
 
@@ -569,7 +475,7 @@ export class MessageService {
             this.updateAccessToken();
         }
 
-        setTimeout(() => this.uploadService.scrollBottom(false), 0);
+        setTimeout(() => this.scrollBottom(false), 0);
     }
 
     public cleanMessageByTimer(): void {
@@ -613,6 +519,9 @@ export class MessageService {
     public updateAccessToken() {
         const id = this.conversation.id;
         this.filesApiService.InitFileAccess(id).subscribe(t => {
+            if (this.conversation.id !== id) {
+                return;
+            }
             this.fileAccessToken = t.value;
             const token = this.probeService.resolveAccessToken(t.value);
             this.cacheService.cachedData.probeTokens[id] = token;
@@ -633,5 +542,16 @@ export class MessageService {
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();
+    }
+
+    public scrollBottom(smooth: boolean): void {
+        if (!this.talkingDestroyed) {
+            const h = document.documentElement.scrollHeight;
+            if (smooth) {
+                window.scroll({top: h, behavior: 'smooth'});
+            } else {
+                window.scroll(0, h);
+            }
+        }
     }
 }
