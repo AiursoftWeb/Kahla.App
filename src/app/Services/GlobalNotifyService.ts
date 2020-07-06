@@ -41,7 +41,7 @@ export class GlobalNotifyService {
                     latestMsg.content = this.cacheService.modifyMessage(
                         AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
                     conversationCache.latestMessage = latestMsg;
-                    if (this.messageService.conversation?.id !== evt.message.conversationId) {
+                    if (this.messageService.conversation?.id !== evt.message.conversationId || !document.hasFocus()) {
                         conversationCache.unReadAmount++;
                         if (evt.mentioned) {
                             conversationCache.someoneAtMe = true;
