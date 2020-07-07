@@ -50,7 +50,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
     public loadingMore: boolean;
-    public showMessagesCount = 15;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -95,7 +94,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
-            const interval = this.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
+            const interval = this.messageService.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
             if (this.lastAutoLoadMoreTimestamp + interval < now) {
                 this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
@@ -569,14 +568,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public async loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
-        if (this.showMessagesCount < this.messageService.localMessages.length) {
-            this.showMessagesCount += 15;
+        if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {
+            this.messageService.showMessagesCount += 15;
         } else if (!this.messageService.noMoreMessages) {
             this.loadingMore = true;
             await this.messageService.getMessages(-1,
                 this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
             this.loadingMore = false;
-            this.showMessagesCount = this.messageService.localMessages.length;
+            this.messageService.showMessagesCount = this.messageService.localMessages.length;
         } else {
             return;
         }
@@ -586,7 +585,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public takeMessages(): Message[] {
-        return this.messageService.localMessages.slice(Math.max(this.messageService.localMessages.length - this.showMessagesCount, 0));
+        return this.messageService.localMessages
+            .slice(Math.max(this.messageService.rawMessages.length - this.messageService.showMessagesCount, 0));
     }
 
     @HostListener('window:focus')

@@ -54,6 +54,7 @@ export class MessageService {
     public accessTokenUpdateSchedule: any;
     public shareRef: MessageFileRef;
     public talkingDestroyed = false;
+    public showMessagesCount = 15;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -542,6 +543,9 @@ export class MessageService {
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();
+        if (!p.local) {
+            this.showMessagesCount++;
+        }
     }
 
     public scrollBottom(smooth: boolean): void {
