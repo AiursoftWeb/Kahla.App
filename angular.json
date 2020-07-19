@@ -23,7 +23,6 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/crypto-js.min.js",
               "src/assets",
               "src/manifest.json",
               "src/favicon.ico",
