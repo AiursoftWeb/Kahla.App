@@ -63,7 +63,7 @@ export class UserDetailComponent implements OnInit {
                     this.cacheService.saveCache();
                     this.router.navigate(['/home']);
                 } else {
-                    Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items[0], 'error');
+                    Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
                 }
                 saveButton.textContent = 'Save';
             });
