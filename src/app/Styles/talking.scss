@@ -300,23 +300,6 @@
     pointer-events: auto;
   }
 
-  .sys-notify {
-    height: 25px;
-    width: 100%;
-    text-align: center;
-    font-size: 16px;
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
-    visibility: collapse;
-    background-color: var(--primary-color-depth2);
-    color: var(--default-textcolor);
-
-    &.sys-notify-shown {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
   .userList {
     left: 0;
     bottom: 0;
