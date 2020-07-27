@@ -11,6 +11,7 @@ import { UploadService } from '../Services/UploadService';
 import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
+import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',
@@ -138,7 +139,7 @@ export class ManageGroupComponent implements OnInit {
             this.conversation.groupImagePath, this.newGroupName)
             .subscribe(res => {
                 if (res.code === 0) {
-                    Swal.fire('Success', res.message, 'success');
+                    SwalToast.fire('Success', '', 'success');
                     this.conversation.groupName = this.newGroupName;
                 } else if (res.code === -10 && (res as AiurCollection<string>).items) {
                     Swal.fire('Error', (res as AiurCollection<string>).items.join('<br/>'), 'error');

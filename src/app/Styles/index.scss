@@ -12,7 +12,7 @@ body {
     color: var(--left-a-color);
   }
 
-  .swal2-popup {
+  .swal2-popup, .swal2-popup.swal2-toast {
     background-color: var(--alert-bg);
 
     .swal2-content,

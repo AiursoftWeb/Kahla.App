@@ -18,6 +18,7 @@ import { Conversation } from '../Models/Conversation';
 import { Observable } from 'rxjs';
 import { AiurValue } from '../Models/AiurValue';
 import { Message } from '../Models/Message';
+import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -115,9 +116,9 @@ export class ShareComponent implements OnInit, DoCheck {
                         await this.uploadService.encryptThenSend(targetFileRef, conversationID, this.conversation.aesKey);
                         resolve();
                         history.back();
-                        setTimeout(() => Swal.fire(
+                        setTimeout(() => SwalToast.fire(
                             'Send success',
-                            'Your message was sent successfully.',
+                            '',
                             'success'), 100);
                     });
                 } else {
@@ -130,9 +131,9 @@ export class ShareComponent implements OnInit, DoCheck {
                                 } else {
                                     this.router.navigate(['/home'], {replaceUrl: true});
                                 }
-                                setTimeout(() => Swal.fire(
+                                setTimeout(() => SwalToast.fire(
                                     'Send success',
-                                    'Your message was sent successfully.',
+                                    '',
                                     'success'), 100);
                             } else {
                                 Swal.fire(
