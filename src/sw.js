@@ -1,4 +1,4 @@
-importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js');
+importScripts('/assets/crypto-js.min.js');
 
 const CACHE = 'v5';
 const UPDATE_REQUIRED = '__Update_Required__';

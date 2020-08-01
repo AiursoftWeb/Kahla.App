@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
-import Swal from 'sweetalert2';
 import { ProbeService } from '../Services/ProbeService';
+import { SwalToast } from '../Helpers/Toast';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/discover.html',
     styleUrls: ['../Styles/add-friend.scss',
-                '../Styles/button.scss']
+        '../Styles/button.scss']
 })
 export class DiscoverComponent implements OnInit {
     private amount = 15;
@@ -52,7 +53,7 @@ export class DiscoverComponent implements OnInit {
         this.friendsApiService.CreateRequest(id)
             .subscribe(response => {
                 if (response.code === 0) {
-                    Swal.fire('Success', response.message, 'success');
+                    SwalToast.fire('Success', '', 'success');
                     for (let index = 0; index < this.users.length; index++) {
                         if (this.users[index].targetUser.id === id) {
                             this.users[index].sentRequest = true;

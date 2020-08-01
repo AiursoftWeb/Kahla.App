@@ -1,6 +1,6 @@
 {
   "name": "kahla",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <service@aiursoft.com> (https://www.aiursoft.com/)",
   "build": {
@@ -62,10 +62,10 @@
     "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "ng serve --open",
-    "prebuild": "ts-node version.ts",
+    "prebuild": "ts-node version.ts && uglifyjs node_modules/crypto-js/crypto-js.js -c -m -o src/assets/crypto-js.min.js",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "ng build --base-href / --prod --output-hashing none",
+    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
     "prod-electron": "ng build --base-href ./ --prod",
     "prod-zh": "ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
@@ -111,6 +111,7 @@
     "ts-node": "^8.10.1",
     "tslint": "~6.1.2",
     "typescript": "~3.8.3",
+    "uglify-js": "^3.10.0",
     "webpack": "^4.43.0"
   },
   "main": "index.js",

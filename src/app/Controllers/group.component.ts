@@ -9,6 +9,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { MessageService } from '../Services/MessageService';
 import { ProbeService } from '../Services/ProbeService';
+import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -67,14 +68,13 @@ export class GroupComponent implements OnInit {
     }
 
     public leaveGroup(groupName: string): void {
-        let alertTitle: string;
-        if (this.groupMembers === 1) {
-            alertTitle = 'This group will be deleted, are you sure?';
-        } else {
-            alertTitle = 'Are you sure to leave this group?';
+        if (this.conversation.ownerId === this.cacheService.cachedData.me.id) {
+            Swal.fire('Error', 'You can\'t leave the group without transferring the ownership ' +
+                'or dissolving the entire group.', 'error');
+            return;
         }
         Swal.fire({
-            title: alertTitle,
+            title: 'Are you sure to leave this group?',
             icon: 'warning',
             showCancelButton: true
         }).then((willDelete) => {
@@ -82,7 +82,7 @@ export class GroupComponent implements OnInit {
                 this.groupsApiService.LeaveGroup(groupName)
                     .subscribe(response => {
                         if (response.code === 0) {
-                            Swal.fire('Success', response.message, 'success');
+                            SwalToast.fire('Success', '', 'success');
                             this.cacheService.updateConversation();
                             this.cacheService.updateFriends();
                             this.router.navigate(['/home']);

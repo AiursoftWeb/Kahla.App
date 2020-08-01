@@ -14,6 +14,7 @@ import { filter } from 'rxjs/operators';
 import { EventType } from '../Models/Events/EventType';
 import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
+import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -74,10 +75,15 @@ export class UserComponent implements OnInit, OnDestroy {
             if (willDelete.value) {
                 this.friendsApiService.DeleteFriend(id)
                     .subscribe(response => {
-                        Swal.fire('Success', response.message, 'success');
-                        this.cacheService.updateConversation();
-                        this.cacheService.updateFriends();
-                        this.router.navigate(['/home']);
+                        if (response.code === 0) {
+                            SwalToast.fire('Success', '', 'success');
+                            this.cacheService.updateConversation();
+                            this.cacheService.updateFriends();
+                            this.router.navigate(['/home']);
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+
                     });
             }
         });
@@ -87,7 +93,7 @@ export class UserComponent implements OnInit, OnDestroy {
         this.friendsApiService.CreateRequest(id)
             .subscribe(response => {
                 if (response.code === 0) {
-                    Swal.fire('Success', response.message, 'success');
+                    SwalToast.fire('Success', '', 'success');
                     this.sentRequest = true;
                 } else {
                     Swal.fire('Error', response.message, 'error');
@@ -129,23 +135,33 @@ export class UserComponent implements OnInit, OnDestroy {
     public accept(id: number): void {
         this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
-                Swal.fire('Success', r.message, 'success');
-                this.updateFriendInfo(this.info.id);
-                this.cacheService.updateRequests();
-                this.cacheService.updateFriends();
-                this.areFriends = true;
-                this.pendingRequest = null;
-                this.sentRequest = false;
+                if (r.code === 0) {
+                    SwalToast.fire('Success', '', 'success');
+                    this.updateFriendInfo(this.info.id);
+                    this.cacheService.updateRequests();
+                    this.cacheService.updateFriends();
+                    this.areFriends = true;
+                    this.pendingRequest = null;
+                    this.sentRequest = false;
+                } else {
+                    Swal.fire('Error', r.message, 'error');
+                }
+
             });
     }
 
     public decline(id: number): void {
         this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
-                Swal.fire('Success', r.message, 'success');
-                this.cacheService.updateRequests();
-                this.sentRequest = false;
-                this.pendingRequest = null;
+                if (r.code === 0) {
+                    SwalToast.fire('Success', '', 'success');
+                    this.cacheService.updateRequests();
+                    this.sentRequest = false;
+                    this.pendingRequest = null;
+                } else {
+                    Swal.fire('Error', r.message, 'error');
+                }
+
             });
     }
 
