@@ -1,14 +1,15 @@
 ﻿import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { CacheService } from '../Services/CacheService';
-import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { Router } from '@angular/router';
+import { SwalToast } from '../Helpers/Toast';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/friendrequests.html',
     styleUrls: ['../Styles/friendrequests.scss',
-                '../Styles/button.scss']
+        '../Styles/button.scss']
 })
 export class FriendRequestsComponent implements OnInit, OnDestroy {
     public loadingImgURL = Values.loadingImgURL;
@@ -29,17 +30,25 @@ export class FriendRequestsComponent implements OnInit, OnDestroy {
     public accept(id: number): void {
         this.friendsApiService.CompleteRequest(id, true)
             .subscribe(r => {
-                Swal.fire('Success', r.message, 'success');
-                this.cacheService.updateRequests();
-                this.cacheService.updateFriends();
+                if (r.code === 0) {
+                    SwalToast.fire('Success', '', 'success');
+                    this.cacheService.updateRequests();
+                    this.cacheService.updateFriends();
+                } else {
+                    Swal.fire('Error', r.message, 'error');
+                }
             });
     }
 
     public decline(id: number): void {
         this.friendsApiService.CompleteRequest(id, false)
             .subscribe(r => {
-                Swal.fire('Success', r.message, 'success');
-                this.cacheService.updateRequests();
+                if (r.code === 0) {
+                    SwalToast.fire('Success', '', 'success');
+                    this.cacheService.updateRequests();
+                } else {
+                    Swal.fire('Error', r.message, 'error');
+                }
             });
     }
 

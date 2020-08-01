@@ -1,8 +1,7 @@
 ﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { Message } from '../Models/Message';
-import { map, switchMap } from 'rxjs/operators';
 import { AES } from 'crypto-js';
 import Swal from 'sweetalert2';
 import { UploadService } from '../Services/UploadService';
@@ -43,8 +42,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private mediaRecorder;
     private forceStopTimeout;
     private oldContent: string;
-    private unread = 0;
-    private load = 15;
     private chatInputHeight: number;
     private picker: EmojiButton;
     public Math = Math;
@@ -53,7 +50,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
     public loadingMore: boolean;
-    public showMessagesCount = 15;
 
     @ViewChild('imageInput') public imageInput;
     @ViewChild('videoInput') public videoInput;
@@ -98,7 +94,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
             && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
             const now = Date.now();
-            const interval = this.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
+            const interval = this.messageService.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
             if (this.lastAutoLoadMoreTimestamp + interval < now) {
                 this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
@@ -162,54 +158,49 @@ export class TalkingComponent implements OnInit, OnDestroy {
         });
 
         this.route.params
-            .pipe(
-                switchMap((params: Params) => {
-                    if (!this.messageService.talkingDestroyed) {
-                        this.destroyCurrent();
-                    }
-                    this.messageService.talkingDestroyed = false;
-                    this.messageService.updateMaxImageWidth();
-                    this.conversationID = Number(params.id);
-                    this.unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
-                    this.load = this.unread < 15 ? 15 : this.unread;
-                    if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                        this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
-                        this.messageService.initMessage(this.conversationID);
-                        this.messageService.getMessages(this.unread, this.conversationID, null, this.load);
+            .subscribe(async params => {
+                if (!this.messageService.talkingDestroyed) {
+                    this.destroyCurrent();
+                }
+                this.messageService.talkingDestroyed = false;
+                this.messageService.updateMaxImageWidth();
+                this.conversationID = Number(params.id);
+                const unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
+                const load = unread < 15 ? 15 : unread;
+                if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                    this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
+                    this.messageService.initMessage(this.conversationID);
+                    this.messageService.getMessages(unread, this.conversationID, null, load);
+                } else {
+                    const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
+                    if (listItem) {
+                        this.header.title = listItem.displayName;
                     } else {
-                        const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
-                        if (listItem) {
-                            this.header.title = listItem.displayName;
-                        } else {
-                            this.header.title = 'Loading...';
-                        }
+                        this.header.title = 'Loading...';
                     }
+                }
 
-                    this.content = localStorage.getItem('draft' + this.conversationID);
-                    this.autoSaveInterval = setInterval(() => {
-                        if (this.content != null) {
-                            localStorage.setItem('draft' + this.conversationID, this.content);
-                        }
-                    }, 1000);
-
-                    this.updateInputHeight();
-
-                    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                        inputElement.focus();
+                this.content = localStorage.getItem('draft' + this.conversationID);
+                this.autoSaveInterval = setInterval(() => {
+                    if (this.content !== null) {
+                        localStorage.setItem('draft' + this.conversationID, this.content);
                     }
+                }, 1000);
 
-                    return this.conversationApiService.ConversationDetail(this.conversationID);
-                }),
-                map(t => t.value)
-            )
-            .subscribe(conversation => {
+                this.updateInputHeight();
+
+                if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    inputElement.focus();
+                }
+
+                const conversation = (await this.conversationApiService.ConversationDetail(this.conversationID).toPromise()).value;
                 if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
                     return;
                 }
                 this.updateConversation(conversation);
                 if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
                     this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(this.unread, this.conversationID, null, this.load);
+                    this.messageService.getMessages(unread, this.conversationID, null, load);
                 }
                 this.messageService.cleanMessageByTimer();
                 this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
@@ -577,14 +568,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public async loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
-        if (this.showMessagesCount < this.messageService.localMessages.length) {
-            this.showMessagesCount += 15;
+        if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {
+            this.messageService.showMessagesCount += 15;
         } else if (!this.messageService.noMoreMessages) {
             this.loadingMore = true;
             await this.messageService.getMessages(-1,
                 this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
             this.loadingMore = false;
-            this.showMessagesCount = this.messageService.localMessages.length;
+            this.messageService.showMessagesCount = this.messageService.localMessages.length;
         } else {
             return;
         }
@@ -594,7 +585,18 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public takeMessages(): Message[] {
-        return this.messageService.localMessages.slice(Math.max(this.messageService.localMessages.length - this.showMessagesCount, 0));
+        return this.messageService.localMessages
+            .slice(Math.max(this.messageService.rawMessages.length - this.messageService.showMessagesCount, 0));
+    }
+
+    @HostListener('window:focus')
+    public onFocus() {
+        const conversationCache =
+            this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
+        if (conversationCache) {
+            conversationCache.unReadAmount = 0;
+            this.cacheService.updateTotalUnread();
+        }
     }
 
 }

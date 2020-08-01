@@ -31,6 +31,7 @@ import { FilesApiService } from './Api/FilesApiService';
 import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
+import { SwalToast } from '../Helpers/Toast';
 
 @Injectable({
     providedIn: 'root'
@@ -47,13 +48,12 @@ export class MessageService {
     public videoHeight = 0;
     private userColors = new Map<string, string>();
     public groupConversation = false;
-    public sysNotifyText: string;
-    public sysNotifyShown: boolean;
     public messageLoading = false;
     public fileAccessToken: string;
     public accessTokenUpdateSchedule: any;
     public shareRef: MessageFileRef;
     public talkingDestroyed = false;
+    public showMessagesCount = 15;
 
     constructor(
         private conversationApiService: ConversationApiService,
@@ -123,7 +123,11 @@ export class MessageService {
                         .subscribe(updated => {
                             this.conversation = updated.value;
                         });
-                    this.displaySysNotify(`${evt.newMember.nickName} joined the group.`);
+                    SwalToast.fire({
+                        title: `${evt.newMember.nickName} joined the group.`,
+                        icon: 'info',
+                        position: 'bottom'
+                    });
                 }
                 break;
             }
@@ -134,7 +138,11 @@ export class MessageService {
                         this.router.navigate(['/home']);
                     } else {
                         this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
-                        this.displaySysNotify(`${evt.leftUser.nickName} left the group.`);
+                        SwalToast.fire({
+                            title: `${evt.leftUser.nickName} left the group.`,
+                            icon: 'info',
+                            position: 'bottom'
+                        });
                     }
                 }
                 break;
@@ -156,16 +164,6 @@ export class MessageService {
         this.cacheService.updateFriends();
         if (this.conversation) {
             this.getMessages(0, this.conversation.id, null, 15);
-        }
-    }
-
-    public displaySysNotify(message: string) {
-        this.sysNotifyText = message;
-        if (!this.sysNotifyShown) {
-            this.sysNotifyShown = true;
-            setTimeout(() => {
-                this.sysNotifyShown = false;
-            }, 10000);
         }
     }
 
@@ -542,6 +540,9 @@ export class MessageService {
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();
+        if (!p.local) {
+            this.showMessagesCount++;
+        }
     }
 
     public scrollBottom(smooth: boolean): void {
