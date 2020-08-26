@@ -13,9 +13,9 @@ import { ProbeService } from '../Services/ProbeService';
     selector: 'app-settings',
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.scss',
-                '../Styles/reddot.scss',
-                '../Styles/button.scss',
-                '../Styles/badge.scss']
+        '../Styles/reddot.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
@@ -28,7 +28,7 @@ export class SettingsComponent implements OnInit {
         public homeService: HomeService,
         private probeService: ProbeService,
     ) {
-        }
+    }
 
     public ngOnInit(): void {
         if (!this.cacheService.cachedData.me) {
@@ -81,17 +81,15 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    private callLogOffAPI(deviceID: number): void {
-        const _this = this;
-        this.authApiService.LogOff(Number(deviceID)).subscribe({
-            next() {
-                _this.initSerivce.destroy();
-                _this.router.navigate(['/signin'], {replaceUrl: true});
-            },
-            error(e) {
-                Swal.fire('Logoff error', e.message, 'error');
-            }
-        });
+    private async callLogOffAPI(deviceID: number) {
+        try {
+            await this.authApiService.LogOff(Number(deviceID));
+        } catch (e) {
+            console.error(e.message);
+        } finally {
+            this.initSerivce.destroy();
+            this.router.navigate(['/signin'], { replaceUrl: true });
+        }
     }
 
     public sendEmail(): void {

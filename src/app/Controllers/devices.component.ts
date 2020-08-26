@@ -23,8 +23,8 @@ export class DevicesComponent implements OnInit {
 
     public webPushEnabled: boolean;
 
-    public ngOnInit(): void {
-        this.cacheService.updateDevice();
+    async ngOnInit(): Promise<void> {
+        await this.cacheService.updateDevice();
         if (this.webpushSupported()) {
             this.webPushEnabled = this.getWebPushStatus();
         }
@@ -45,16 +45,15 @@ export class DevicesComponent implements OnInit {
         return !this.electronService.isElectronApp && 'Notification' in window && 'serviceWorker' in navigator;
     }
 
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
+    public async testPush() {
+        const response = await this.devicesApiService.PushTestMessage();
+        if (response.code === 0) {
+            Swal.fire(
+                'Successfully sent!',
+                response.message,
+                'info'
+            );
+        }
     }
 
     public getWebPushStatus(): boolean {
@@ -65,7 +64,7 @@ export class DevicesComponent implements OnInit {
         return status.enabled;
     }
 
-    public setWebPushStatus(value: boolean) {
+    public async setWebPushStatus(value: boolean) {
         const status: PushSubscriptionSetting = localStorage.getItem('setting-pushSubscription') ?
             JSON.parse(localStorage.getItem('setting-pushSubscription')) :
             {
@@ -75,7 +74,7 @@ export class DevicesComponent implements OnInit {
         status.enabled = value;
         localStorage.setItem('setting-pushSubscription', JSON.stringify(status));
         this.webPushEnabled = value;
-        this.initService.subscribeUser();
+        await this.initService.subscribeUser();
     }
 
     public getElectronNotify(): boolean {

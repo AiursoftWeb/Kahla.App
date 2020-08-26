@@ -4,7 +4,6 @@ import { AiurCollection } from '../../Models/AiurCollection';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
 import { Device } from '../../Models/Device';
-import { Observable } from 'rxjs/';
 
 @Injectable()
 export class DevicesApiService {
@@ -15,37 +14,45 @@ export class DevicesApiService {
     ) {
     }
 
-    public AddDevice(userAgent: string, PushEndpoint: string, PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(DevicesApiService.serverPath + '/AddDevice', {
+    public AddDevice(
+        userAgent: string,
+        PushEndpoint: string,
+        PushP256DH: string,
+        PushAuth: string) {
+        return this.apiService.Post<AiurValue<number>>(DevicesApiService.serverPath + '/AddDevice', {
             Name: userAgent,
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
-        });
+        }).toPromise();
     }
 
-    public UpdateDevice(deviceID: number, userAgent: string, PushEndpoint: string,
-                        PushP256DH: string, PushAuth: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(DevicesApiService.serverPath + '/UpdateDevice', {
+    public UpdateDevice(
+        deviceID: number,
+        userAgent: string,
+        PushEndpoint: string,
+        PushP256DH: string,
+        PushAuth: string) {
+        return this.apiService.Post<AiurValue<number>>(DevicesApiService.serverPath + '/UpdateDevice', {
             DeviceId: deviceID,
             Name: userAgent,
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
-        });
+        }).toPromise();
     }
 
-    public DropDevice(deviceId: number): Observable<AiurProtocal> {
-        return this.apiService.Post(DevicesApiService.serverPath + '/DropDevice', {
+    public DropDevice(deviceId: number) {
+        return this.apiService.Post<AiurProtocal>(DevicesApiService.serverPath + '/DropDevice', {
             id: deviceId
-        });
+        }).toPromise();
     }
 
-    public MyDevices(): Observable<AiurCollection<Device>> {
-        return this.apiService.Get(DevicesApiService.serverPath + '/MyDevices');
+    public MyDevices() {
+        return this.apiService.Get<AiurCollection<Device>>(DevicesApiService.serverPath + '/MyDevices').toPromise();
     }
 
-    public PushTestMessage(): Observable<AiurProtocal> {
-        return this.apiService.Post(DevicesApiService.serverPath + '/PushTestMessage', {});
+    public PushTestMessage() {
+        return this.apiService.Post<AiurProtocal>(DevicesApiService.serverPath + '/PushTestMessage', {}).toPromise();
     }
 }

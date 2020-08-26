@@ -129,25 +129,18 @@ export class InitService {
         localStorage.clear();
     }
 
-    public subscribeUser() {
+    public async subscribeUser() {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
-            const _this = this;
-            navigator.serviceWorker.ready.then((registration => {
-                return registration.pushManager.getSubscription().then(sub => {
-                    if (sub === null) {
-                        return registration.pushManager.subscribe(_this.options)
-                            .then(function (pushSubscription) {
-                                _this.bindDevice(pushSubscription);
-                            });
-                    } else {
-                        _this.bindDevice(sub);
-                    }
-                });
-            }));
+            const registration = await navigator.serviceWorker.ready;
+            let sub = await registration.pushManager.getSubscription();
+            if (sub === null) {
+                sub = await registration.pushManager.subscribe(this.options);
+            }
+            await this.bindDevice(sub);
         }
     }
 
-    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
+    public async bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
         let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
         if (!data) {
             data = {
@@ -157,26 +150,30 @@ export class InitService {
             localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (!data.enabled && data.deviceId) {
-            this.devicesApiService.DropDevice(data.deviceId).subscribe(_t => {
-                data.deviceId = 0;
-                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-            });
+            await this.devicesApiService.DropDevice(data.deviceId);
+            data.deviceId = 0;
+            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (data.enabled) {
             if (data.deviceId) {
                 if (force) {
-                    this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
-                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+                    await this.devicesApiService.UpdateDevice(
+                        data.deviceId,
+                        navigator.userAgent,
+                        pushSubscription.endpoint,
+                        pushSubscription.toJSON().keys.p256dh,
+                        pushSubscription.toJSON().keys.auth);
                 }
             } else {
-                this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
-                    data.deviceId = t.value;
-                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-                });
+                const response = await this.devicesApiService.AddDevice(
+                    navigator.userAgent,
+                    pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh,
+                    pushSubscription.toJSON().keys.auth);
+                data.deviceId = response.value;
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
             }
         }
-
     }
 
     private updateSubscription(): void {
