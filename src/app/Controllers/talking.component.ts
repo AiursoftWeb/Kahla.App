@@ -193,7 +193,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     inputElement.focus();
                 }
 
-                const conversation = (await this.conversationApiService.ConversationDetail(this.conversationID).toPromise()).value;
+                const conversation = (await this.conversationApiService.ConversationDetail(this.conversationID)).value;
                 if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
                     return;
                 }
@@ -237,7 +237,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         return message.id;
     }
 
-    public send(): void {
+    public async send() {
         if (this.content.trim().length === 0) {
             return;
         }
@@ -260,49 +260,48 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.messageService.scrollBottom(true);
         }, 0);
         const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
-            this.messageService.getAtIDs(this.content).slice(1))
-            .subscribe({
-                error: e => {
-                    if (e.status === 0 || e.status === 503) {
-                        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
-                        if (tempArray && tempArray.length > 0) {
-                            tempArray.push(tempMessage);
-                            unsentMessages.set(this.conversationID, tempArray);
-                        } else {
-                            unsentMessages.set(this.conversationID, [tempMessage]);
-                        }
-                        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-                        this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
-                        this.messageService.showFailedMessages();
-                        this.messageService.reorderLocalMessages();
-                        this.messageService.scrollBottom(false);
-                    }
-                },
-                next: p => {
-                    const index = this.messageService.localMessages.indexOf(tempMessage);
-                    if (index !== -1) {
-                        this.messageService.localMessages.splice(index, 1);
-                        this.messageService.insertMessage(p.value);
-                    }
+        try {
+            const p = await this.conversationApiService.SendMessage(
+                this.messageService.conversation.id,
+                encryptedMessage,
+                tempMessage.id,
+                this.messageService.getAtIDs(this.content).slice(1));
+            const index = this.messageService.localMessages.indexOf(tempMessage);
+                if (index !== -1) {
+                    this.messageService.localMessages.splice(index, 1);
+                    this.messageService.insertMessage(p.value);
                 }
-            });
+        } catch (e) {
+            if (e.status === 0 || e.status === 503) {
+                const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
+                const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
+                if (tempArray && tempArray.length > 0) {
+                    tempArray.push(tempMessage);
+                    unsentMessages.set(this.conversationID, tempArray);
+                } else {
+                    unsentMessages.set(this.conversationID, [tempMessage]);
+                }
+                localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+                this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
+                this.messageService.showFailedMessages();
+                this.messageService.reorderLocalMessages();
+                this.messageService.scrollBottom(false);
+            }
+        }
         this.content = '';
         const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
         inputElement.focus();
         inputElement.style.height = 34 + 'px';
     }
 
-    public resend(message: Message): void {
+    public async resend(message: Message) {
         const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
         const encryptedMessage = AES.encrypt(message.contentRaw, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id, messageIDArry.slice(1))
-            .subscribe(result => {
-                if (result.code === 0) {
-                    this.delete(message);
-                }
-            });
+        const result = await this.conversationApiService.SendMessage(
+            this.messageService.conversation.id, encryptedMessage, message.id, messageIDArry.slice(1));
+        if (result.code === 0) {
+            this.delete(message);
+        }
     }
 
     public delete(message: Message): void {
