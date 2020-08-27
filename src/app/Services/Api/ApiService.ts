@@ -21,18 +21,18 @@ export class ApiService {
         private paramTool: ParamService) {
     }
 
-    public Get<T>(address: string) {
+    public Get<T>(address: string): Promise<T> {
         return this.GetByFullUrl<T>(`${this.serverConfig.domain.server}${address}`);
     }
 
-    public GetByFullUrl<T>(address: string, withCredentials = true) {
+    public GetByFullUrl<T>(address: string, withCredentials = true): Promise<T> {
         return this.http.get<T>(address, {
             headers: this._headers,
             withCredentials: withCredentials
         }).pipe(catchError(this.handleError)).toPromise();
     }
 
-    public Post<T>(address: string, data: any) {
+    public Post<T>(address: string, data: any): Promise<T> {
         return this.http.post<T>(`${this.serverConfig.domain.server}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true

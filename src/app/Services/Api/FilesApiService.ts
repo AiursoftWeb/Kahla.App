@@ -37,7 +37,7 @@ export class FilesApiService {
         });
     }
 
-    public UploadFile(formData: FormData, uploadURL: string): Observable<number | UploadFile> {
+    public UploadFile(formData: FormData, uploadURL: string): Promise<number | UploadFile> {
         const req = new HttpRequest('POST', uploadURL, formData, {
             reportProgress: true
         });
@@ -45,7 +45,7 @@ export class FilesApiService {
         return this.http.request(req).pipe(
             map(event => this.getProgress(event)),
             catchError(this.apiService.handleError)
-        );
+        ).toPromise();
     }
 
     private getProgress(event: HttpEvent<any>): number | UploadFile {
