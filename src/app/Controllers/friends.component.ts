@@ -105,17 +105,16 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         });
     }
 
-    private createPrivateGroup(groupName: string, password: string): void {
-        this.groupsApiService.CreateGroup(groupName, password).subscribe((response) => {
-            if (response.code === 0) {
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                this.messageService.resetVariables();
-                this.router.navigate(['/talking', response.value]);
-            } else {
-                Swal.fire('Can\'t create group', response.message, 'error');
-            }
-        });
+    private async createPrivateGroup(groupName: string, password: string) {
+        const response = await this.groupsApiService.CreateGroup(groupName, password);
+        if (response.code === 0) {
+            this.cacheService.updateConversation();
+            this.cacheService.updateFriends();
+            this.messageService.resetVariables();
+            this.router.navigate(['/talking', response.value]);
+        } else {
+            Swal.fire('Can\'t create group', response.message, 'error');
+        }
     }
 
     public showUsersResults(selectUsers: boolean): void {
@@ -161,7 +160,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         }
     }
 
-    public userClick(user: KahlaUser, ctrl: boolean) {
+    public async userClick(user: KahlaUser, ctrl: boolean) {
         if (ctrl) {
             this.router.navigate(['/user', user.id]);
         } else {
@@ -169,10 +168,9 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                 return;
             }
             this.detailLoading = true;
-            this.friendsApiService.UserDetail(user.id).subscribe(p => {
-                this.router.navigate(['/talking', p.conversationId]);
-                this.detailLoading = false;
-            });
+            const p = await this.friendsApiService.UserDetail(user.id);
+            this.router.navigate(['/talking', p.conversationId]);
+            this.detailLoading = false;
         }
     }
 
