@@ -42,7 +42,7 @@ export class InitService {
     ) {
     }
 
-    public init(): void {
+    public async init() {
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
                 'Oops, it seems that you are opening Kahla in IE.',
@@ -90,33 +90,31 @@ export class InitService {
         if (this.apiService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
             this.checkService.checkApiVersion();
-            this.authApiService.SignInStatus().subscribe(signInStatus => {
-                if (signInStatus.value === false) {
-                    this.router.navigate(['/signin'], {replaceUrl: true});
-                } else {
-                    if (this.router.isActive('/signin', false)) {
-                        this.router.navigate(['/home'], {replaceUrl: true});
-                    }
-                    this.authApiService.Me().subscribe(p => {
-                        if (p.code === 0) {
-                            this.cacheService.cachedData.me = p.value;
-                            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
-                            this.themeService.ApplyThemeFromRemote(p.value);
-                            if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                                this.subscribeUser();
-                                this.updateSubscription();
-                            }
-                            this.eventService.initPusher();
-                            this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
-                            this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
-                            this.globalNotifyService.init();
-                            this.cacheService.updateConversation();
-                            this.cacheService.updateFriends();
-                            this.cacheService.updateRequests();
-                        }
-                    });
+            const signInStatus = await this.authApiService.SignInStatus();
+            if (signInStatus.value === false) {
+                this.router.navigate(['/signin'], {replaceUrl: true});
+            } else {
+                if (this.router.isActive('/signin', false)) {
+                    this.router.navigate(['/home'], {replaceUrl: true});
                 }
-            });
+                const me = await this.authApiService.Me();
+                if (me.code === 0) {
+                    this.cacheService.cachedData.me = me.value;
+                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
+                    this.themeService.ApplyThemeFromRemote(me.value);
+                    if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                        this.subscribeUser();
+                        this.updateSubscription();
+                    }
+                    this.eventService.initPusher();
+                    this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+                    this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
+                    this.globalNotifyService.init();
+                    this.cacheService.updateConversation();
+                    this.cacheService.updateFriends();
+                    this.cacheService.updateRequests();
+                }
+            }
         } else {
             this.router.navigate(['/signin'], {replaceUrl: true});
         }

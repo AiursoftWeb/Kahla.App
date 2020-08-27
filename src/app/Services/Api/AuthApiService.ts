@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AiurValue } from '../../Models/AiurValue';
 import { KahlaUser } from '../../Models/KahlaUser';
-import { Observable } from 'rxjs/';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { InitPusherViewModel } from '../../Models/ApiModels/InitPusherViewModel';
 import { ApiService } from './ApiService';
@@ -15,16 +14,16 @@ export class AuthApiService {
     ) {
     }
 
-    public SignInStatus(): Observable<AiurValue<boolean>> {
-        return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');
+    public SignInStatus() {
+        return this.apiService.Get<AiurValue<boolean>>(AuthApiService.serverPath + '/SignInStatus');
     }
 
-    public Me(): Observable<AiurValue<KahlaUser>> {
-        return this.apiService.Get(AuthApiService.serverPath + '/Me');
+    public Me() {
+        return this.apiService.Get<AiurValue<KahlaUser>>(AuthApiService.serverPath + '/Me');
     }
 
-    public UpdateInfo(nickName: string, bio: string, headIconPath: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/UpdateInfo', {
+    public UpdateInfo(nickName: string, bio: string, headIconPath: string) {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateInfo', {
             nickName: nickName,
             bio: bio,
             headIconPath: headIconPath,
@@ -36,8 +35,8 @@ export class AuthApiService {
                                enableEnterToSendMessage: boolean = null,
                                enableInvisiable: boolean = null,
                                markEmailPublic: boolean = null,
-                               listInSearchResult: boolean = null): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
+                               listInSearchResult: boolean = null) {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,
@@ -47,23 +46,23 @@ export class AuthApiService {
         });
     }
 
-    public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/ChangePassword', {
+    public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string) {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/ChangePassword', {
             OldPassword: oldPassword,
             NewPassword: newPassword,
             RepeatPassword: repeatPassword
         });
     }
 
-    public InitPusher(): Observable<InitPusherViewModel> {
-        return this.apiService.Get(AuthApiService.serverPath + '/InitPusher');
+    public InitPusher() {
+        return this.apiService.Get<InitPusherViewModel>(AuthApiService.serverPath + '/InitPusher');
     }
 
     public LogOff(deviceID: number) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/LogOff', {deviceID: deviceID}).toPromise();
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/LogOff', {deviceID: deviceID});
     }
 
-    public SendMail(email: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/SendEmail', {email: email});
+    public SendMail(email: string) {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/SendEmail', {email: email});
     }
 }

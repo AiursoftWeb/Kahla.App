@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/';
 import { ParamService } from '../ParamService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
@@ -22,22 +21,22 @@ export class ApiService {
         private paramTool: ParamService) {
     }
 
-    public Get<T>(address: string): Observable<T> {
+    public Get<T>(address: string) {
         return this.GetByFullUrl<T>(`${this.serverConfig.domain.server}${address}`);
     }
 
-    public GetByFullUrl<T>(address: string, withCredentials = true): Observable<T> {
+    public GetByFullUrl<T>(address: string, withCredentials = true) {
         return this.http.get<T>(address, {
             headers: this._headers,
             withCredentials: withCredentials
-        }).pipe(catchError(this.handleError));
+        }).pipe(catchError(this.handleError)).toPromise();
     }
 
-    public Post<T>(address: string, data: any): Observable<T> {
+    public Post<T>(address: string, data: any) {
         return this.http.post<T>(`${this.serverConfig.domain.server}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true
-        }).pipe(catchError(this.handleError));
+        }).pipe(catchError(this.handleError)).toPromise();
     }
 
     public handleError(error: any): Promise<any> {

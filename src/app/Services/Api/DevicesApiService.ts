@@ -24,7 +24,7 @@ export class DevicesApiService {
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
-        }).toPromise();
+        });
     }
 
     public UpdateDevice(
@@ -39,20 +39,20 @@ export class DevicesApiService {
             PushEndpoint: PushEndpoint,
             PushP256DH: PushP256DH,
             PushAuth: PushAuth
-        }).toPromise();
+        });
     }
 
     public DropDevice(deviceId: number) {
         return this.apiService.Post<AiurProtocal>(DevicesApiService.serverPath + '/DropDevice', {
             id: deviceId
-        }).toPromise();
+        });
     }
 
     public MyDevices() {
-        return this.apiService.Get<AiurCollection<Device>>(DevicesApiService.serverPath + '/MyDevices').toPromise();
+        return this.apiService.Get<AiurCollection<Device>>(DevicesApiService.serverPath + '/MyDevices');
     }
 
     public PushTestMessage() {
-        return this.apiService.Post<AiurProtocal>(DevicesApiService.serverPath + '/PushTestMessage', {}).toPromise();
+        return this.apiService.Post<AiurProtocal>(DevicesApiService.serverPath + '/PushTestMessage', {});
     }
 }
