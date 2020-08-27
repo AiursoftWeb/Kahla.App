@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
-import { Observable } from 'rxjs/';
 import { AiurCollection } from '../../Models/AiurCollection';
 import { Message } from '../../Models/Message';
 import { AiurProtocal } from '../../Models/AiurProtocal';
@@ -18,19 +17,19 @@ export class ConversationApiService {
     ) {
     }
 
-    public All(): Observable<AiurCollection<ContactInfo>> {
-        return this.apiService.Get(ConversationApiService.serverPath + '/All');
+    public All() {
+        return this.apiService.Get<AiurCollection<ContactInfo>>(ConversationApiService.serverPath + '/All');
     }
 
-    public GetMessage(id: number, skipFrom: string, take: number): Observable<AiurCollection<Message>> {
+    public GetMessage(id: number, skipFrom: string, take: number) {
         if (skipFrom) {
-            return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipFrom=${skipFrom}&take=${take}`);
+            return this.apiService.Get<AiurCollection<Message>>(ConversationApiService.serverPath + `/GetMessage?id=${id}&skipFrom=${skipFrom}&take=${take}`);
         } else {
-            return this.apiService.Get(ConversationApiService.serverPath + `/GetMessage?id=${id}&take=${take}`);
+            return this.apiService.Get<AiurCollection<Message>>(ConversationApiService.serverPath + `/GetMessage?id=${id}&take=${take}`);
         }
     }
 
-    public SendMessage(conversationID: number, content: string, messageId: string, userIDs: Array<string>): Observable<AiurValue<Message>> {
+    public SendMessage(conversationID: number, content: string, messageId: string, userIDs: Array<string>) {
         const form = {
             Content: content,
             MessageId: messageId,
@@ -40,21 +39,21 @@ export class ConversationApiService {
                 form[`At[${index}]`] = id;
             });
         }
-        return this.apiService.Post(ConversationApiService.serverPath + `/SendMessage/${conversationID}`, form);
+        return this.apiService.Post<AiurValue<Message>>(ConversationApiService.serverPath + `/SendMessage/${conversationID}`, form);
     }
 
-    public ConversationDetail(id: number): Observable<AiurValue<Conversation>> {
-        return this.apiService.Get(ConversationApiService.serverPath + `/ConversationDetail/${id}`);
+    public ConversationDetail(id: number) {
+        return this.apiService.Get<AiurValue<Conversation>>(ConversationApiService.serverPath + `/ConversationDetail/${id}`);
     }
 
-    public UpdateMessageLifeTime(id: number, newLifeTime: number): Observable<AiurProtocal> {
-        return this.apiService.Post(ConversationApiService.serverPath + `/UpdateMessageLifeTime/`, {
+    public UpdateMessageLifeTime(id: number, newLifeTime: number)  {
+        return this.apiService.Post<AiurProtocal>(ConversationApiService.serverPath + `/UpdateMessageLifeTime/`, {
             Id: id,
             NewLifeTime: newLifeTime
         });
     }
 
-    public FileHistory(id: number, skipDates: number): Observable<FileHistoryApiModel> {
-        return this.apiService.Get(ConversationApiService.serverPath + `/FileHistory/${id}?skipDates=${skipDates}`);
+    public FileHistory(id: number, skipDates: number) {
+        return this.apiService.Get<FileHistoryApiModel>(ConversationApiService.serverPath + `/FileHistory/${id}?skipDates=${skipDates}`);
     }
 }

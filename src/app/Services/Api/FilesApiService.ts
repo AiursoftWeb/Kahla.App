@@ -18,19 +18,19 @@ export class FilesApiService {
     ) {
     }
 
-    public InitIconUpload(): Observable<AiurValue<string>> {
-        return this.apiService.Get(FilesApiService.serverPath + '/InitIconUpload');
+    public InitIconUpload() {
+        return this.apiService.Get<AiurValue<string>>(FilesApiService.serverPath + '/InitIconUpload');
     }
 
-    public InitFileAccess(conversationId: number, upload: boolean = false): Observable<FileTokenApiModel> {
-        return this.apiService.Get(`${FilesApiService.serverPath}/InitFileAccess` +
+    public InitFileAccess(conversationId: number, upload: boolean = false) {
+        return this.apiService.Get<FileTokenApiModel>(`${FilesApiService.serverPath}/InitFileAccess` +
             `?ConversationId=${conversationId}&upload=${upload}&download=${!upload}`);
     }
 
     public ForwardMedia(sourceConversationId: number,
                         sourceFilePath: string,
-                        targetConversationId: number): Observable<ForwardMediaApiModel> {
-        return this.apiService.Post(`${FilesApiService.serverPath}/ForwardMedia`, {
+                        targetConversationId: number) {
+        return this.apiService.Post<ForwardMediaApiModel>(`${FilesApiService.serverPath}/ForwardMedia`, {
             SourceConversationId: sourceConversationId,
             SourceFilePath: sourceFilePath,
             TargetConversationId: targetConversationId

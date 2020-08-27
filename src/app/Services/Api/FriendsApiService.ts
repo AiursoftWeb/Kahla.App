@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/';
 import { AiurCollection } from '../../Models/AiurCollection';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
@@ -18,44 +17,45 @@ export class FriendsApiService {
     ) {
     }
 
-    public Mine(): Observable<SearchResult> {
-        return this.apiService.Get(FriendsApiService.serverPath + '/Mine');
+    public Mine() {
+        return this.apiService.Get<SearchResult>(FriendsApiService.serverPath + '/Mine');
     }
 
-    public DeleteFriend(id: string): Observable<AiurProtocal> {
-        return this.apiService.Post(FriendsApiService.serverPath + `/DeleteFriend/${id}`, {});
+    public DeleteFriend(id: string) {
+        return this.apiService.Post<AiurProtocal>(FriendsApiService.serverPath + `/DeleteFriend/${id}`, {});
     }
 
-    public CreateRequest(id: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(FriendsApiService.serverPath + `/CreateRequest/${id}`, {});
+    public CreateRequest(id: string) {
+        return this.apiService.Post<AiurValue<number>>(FriendsApiService.serverPath + `/CreateRequest/${id}`, {});
     }
 
-    public CompleteRequest(id: number, accept: boolean): Observable<AiurProtocal> {
-        return this.apiService.Post(FriendsApiService.serverPath + `/CompleteRequest/${id}`, {
+    public CompleteRequest(id: number, accept: boolean) {
+        return this.apiService.Post<AiurProtocal>(FriendsApiService.serverPath + `/CompleteRequest/${id}`, {
             accept: accept
         });
     }
 
-    public MyRequests(): Observable<AiurCollection<Request>> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/MyRequests`);
+    public MyRequests() {
+        return this.apiService.Get<AiurCollection<Request>>(FriendsApiService.serverPath + `/MyRequests`);
     }
 
-    public SearchEverything(searchInput: string, take: number): Observable<SearchResult> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/SearchEverything/?searchInput=${searchInput}&take=${take}`);
+    public SearchEverything(searchInput: string, take: number) {
+        return this.apiService.Get<SearchResult>(FriendsApiService.serverPath +
+            `/SearchEverything/?searchInput=${searchInput}&take=${take}`);
     }
 
-    public UserDetail(id: string): Observable<UserDetailViewModel> {
-        return this.apiService.Get(FriendsApiService.serverPath + `/UserDetail/${id}`);
+    public UserDetail(id: string) {
+        return this.apiService.Get<UserDetailViewModel>(FriendsApiService.serverPath + `/UserDetail/${id}`);
     }
 
-    public Report(id: string, reason: string): Observable<AiurCollection<string>> {
-        return this.apiService.Post(FriendsApiService.serverPath + '/ReportHim', {
+    public Report(id: string, reason: string) {
+        return this.apiService.Post<AiurCollection<string>>(FriendsApiService.serverPath + '/ReportHim', {
             TargetUserId: id,
             Reason: reason
         });
     }
 
-    public Discover(amount: number): Observable<AiurCollection<DiscoverUser>> {
-        return this.apiService.Get(FriendsApiService.serverPath + '/DiscoverFriends?take=' + amount);
+    public Discover(amount: number) {
+        return this.apiService.Get<AiurCollection<DiscoverUser>>(FriendsApiService.serverPath + '/DiscoverFriends?take=' + amount);
     }
 }

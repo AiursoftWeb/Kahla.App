@@ -6,7 +6,6 @@ import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './Api/ConversationApiService';
-import { map } from 'rxjs/operators';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AES, enc } from 'crypto-js';
 import { CacheService } from './CacheService';
@@ -89,7 +88,7 @@ export class MessageService {
                             }
                         }
                         this.insertMessage(evt.message);
-                        this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
+                        this.conversationApiService.GetMessage(this.conversation.id, null, 0);
                     } else { // lost some message.
                         await this.getMessages(0, this.conversation.id, null, 15);
                     }
@@ -119,10 +118,8 @@ export class MessageService {
             case EventType.NewMemberEvent: {
                 const evt = ev as NewMemberEvent;
                 if (this.conversation.id === evt.conversationId) {
-                    this.conversationApiService.ConversationDetail(evt.conversationId)
-                        .subscribe(updated => {
-                            this.conversation = updated.value;
-                        });
+                    const updated = await this.conversationApiService.ConversationDetail(evt.conversationId);
+                    this.conversation = updated.value;
                     SwalToast.fire({
                         title: `${evt.newMember.nickName} joined the group.`,
                         icon: 'info',
@@ -170,8 +167,7 @@ export class MessageService {
     public async getMessages(unread: number, id: number, skipFrom: string, take: number) {
         this.messageLoading = true;
         this.localMessages = this.localMessages.filter(t => !t.local);
-        const messages = await this.conversationApiService.GetMessage(id, skipFrom, take)
-            .pipe(map(t => t.items)).toPromise();
+        const messages = (await this.conversationApiService.GetMessage(id, skipFrom, take)).map(t => t.items);
         if (!this.conversation || this.conversation.id !== id) {
             return;
         }
@@ -333,31 +329,31 @@ export class MessageService {
         return false;
     }
 
-    public modifyMessage(t: Message, decrypt: boolean = true): Message {
+    public async modifyMessage(message: Message, decrypt: boolean = true): Promise<Message> {
         if (decrypt) {
             try {
-                t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
+                message.content = AES.decrypt(message.content, this.conversation.aesKey).toString(enc.Utf8);
             } catch (error) {
-                t.content = '';
+                message.content = '';
             }
         }
-        t.contentRaw = t.content;
-        t.sendTimeDate = new Date(t.sendTime);
-        t.timeStamp = t.sendTimeDate.getTime();
-        const isFile = t.content.match(/^\[(video|img|file|audio)](.+)$/);
+        message.contentRaw = message.content;
+        message.sendTimeDate = new Date(message.sendTime);
+        message.timeStamp = message.sendTimeDate.getTime();
+        const isFile = message.content.match(/^\[(video|img|file|audio)](.+)$/);
         if (isFile) {
             if (isFile[1] === 'img') {
                 const imgSplit = isFile[2].split('|');
                 if (imgSplit.length < 3) {
-                    t.content = 'Invalid';
-                    return t;
+                    message.content = 'Invalid';
+                    return message;
                 }
                 const imageWidth = Number(imgSplit[1]),
                     imageHeight = Number(imgSplit[2]);
                 const ratio = imageHeight / imageWidth;
                 const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
                     Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
-                t.fileRef = {
+                message.fileRef = {
                     imgWidth: imageWidth,
                     imgHeight: imageHeight,
                     imgDisplayWidth: imageWidth,
@@ -366,16 +362,16 @@ export class MessageService {
                     filePath: imgSplit[0]
                 } as MessageFileRef;
                 if (realMaxWidth < imageWidth) {
-                    t.fileRef.imgDisplayWidth = realMaxWidth;
-                    t.fileRef.imgDisplayHeight = Math.floor(realMaxWidth * ratio);
+                    message.fileRef.imgDisplayWidth = realMaxWidth;
+                    message.fileRef.imgDisplayHeight = Math.floor(realMaxWidth * ratio);
                 }
             } else if (isFile[1] === 'file') {
                 const fileSplit = isFile[2].split('|');
                 if (fileSplit.length < 3) {
-                    t.content = 'Invalid';
-                    return t;
+                    message.content = 'Invalid';
+                    return message;
                 }
-                t.fileRef = {
+                message.fileRef = {
                     filePath: fileSplit[0],
                     fileName: fileSplit[1],
                     fileSize: fileSplit[2],
@@ -383,49 +379,47 @@ export class MessageService {
                 } as MessageFileRef;
             } else {
                 if (!isFile[2]) {
-                    t.content = 'Invalid';
-                    return t;
+                    message.content = 'Invalid';
+                    return message;
                 }
-                t.fileRef = {
+                message.fileRef = {
                     filePath: isFile[2],
                     fileType: isFile[1] === 'video' ? FileType.Video : FileType.Audio
                 } as MessageFileRef;
             }
-        } else if (t.content.startsWith('[group]')) {
-            const groupId = Number(t.content.substring(7));
-            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-            this.groupsApiService.GroupSummary(groupId).subscribe(p => {
-                if (p.value) {
-                    t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
-                        `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
-                    t.relatedData = p.value;
-                } else {
-                    t.content = 'Invalid Group';
-                }
-            });
+        } else if (message.content.startsWith('[group]')) {
+            const groupId = Number(message.content.substring(7));
+            message.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            const p = await this.groupsApiService.GroupSummary(groupId);
+            if (p.value) {
+                message.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
+                    `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
+                message.relatedData = p.value;
+            } else {
+                message.content = 'Invalid Group';
+            }
 
-        } else if (t.content.startsWith('[user]')) {
-            const userId = t.content.substring(6);
-            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-            this.friendsApiService.UserDetail(userId).subscribe(p => {
-                if (p.user) {
-                    t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.user.iconFilePath)}`;
-                    t.relatedData = p.user;
-                } else {
-                    t.content = 'Invalid User';
-                }
-            });
+        } else if (message.content.startsWith('[user]')) {
+            const userId = message.content.substring(6);
+            message.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
+            const p = await this.friendsApiService.UserDetail(userId);
+            if (p.user) {
+                message.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
+                    `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.user.iconFilePath)}`;
+                message.relatedData = p.user;
+            } else {
+                message.content = 'Invalid User';
+            }
         } else {
-            t.isEmoji = this.checkEmoji(t.content);
-            t.content = he.encode(t.content);
-            t.content = Autolinker.link(t.content, {
+            message.isEmoji = this.checkEmoji(message.content);
+            message.content = he.encode(message.content);
+            message.content = Autolinker.link(message.content, {
                 stripPrefix: false,
                 className: 'chat-inline-link'
             });
-            t.content = this.getAtIDs(t.content)[0];
+            message.content = this.getAtIDs(message.content)[0];
         }
-        return t;
+        return message;
     }
 
     public reorderLocalMessages() {
@@ -449,12 +443,12 @@ export class MessageService {
         localStorage.setItem(`cache-log-${this.conversation.id}`, JSON.stringify(this.rawMessages));
     }
 
-    public initMessage(conversationId: number): void {
+    public async initMessage(conversationId: number) {
         const json = localStorage.getItem(`cache-log-${conversationId}`);
         if (json) {
             this.rawMessages = JSON.parse(json);
         }
-        this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.localMessages = await Promise.all(this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t))));
         this.showFailedMessages();
         this.reorderLocalMessages();
         this.updateAtLink();
@@ -514,29 +508,28 @@ export class MessageService {
         return Math.pow(2, Math.ceil(Math.log2(width)));
     }
 
-    public updateAccessToken() {
+    public async updateAccessToken() {
         const id = this.conversation.id;
-        this.filesApiService.InitFileAccess(id).subscribe(t => {
-            if (this.conversation.id !== id) {
-                return;
-            }
-            this.fileAccessToken = t.value;
-            const token = this.probeService.resolveAccessToken(t.value);
-            this.cacheService.cachedData.probeTokens[id] = token;
-            this.cacheService.saveCache();
-            // schedule the next update
-            this.accessTokenUpdateSchedule =
-                setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
-            this.applicationRef.tick();
-        });
+        const t = await this.filesApiService.InitFileAccess(id);
+        if (this.conversation.id !== id) {
+            return;
+        }
+        this.fileAccessToken = t.value;
+        const token = this.probeService.resolveAccessToken(t.value);
+        this.cacheService.cachedData.probeTokens[id] = token;
+        this.cacheService.saveCache();
+        // schedule the next update
+        this.accessTokenUpdateSchedule =
+            setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
+        this.applicationRef.tick();
     }
 
-    public insertMessage(p: Message) {
+    public async insertMessage(p: Message) {
         if (this.rawMessages.find(t => t.id === p.id)) {
             return;
         }
         this.rawMessages.push(p);
-        this.localMessages.push(this.modifyMessage(Object.assign({}, p)));
+        this.localMessages.push(await this.modifyMessage(Object.assign({}, p)));
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();
