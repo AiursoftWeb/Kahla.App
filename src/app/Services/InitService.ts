@@ -97,19 +97,25 @@ export class InitService {
                     if (this.router.isActive('/signin', false)) {
                         this.router.navigate(['/home'], {replaceUrl: true});
                     }
+
+                    // Webpush Service
+                    if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                        this.subscribeUser();
+                        this.updateSubscription();
+                    }
+
+                    // Init stargate push
+                    this.eventService.initPusher();
+                    this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+                    this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
+                    this.globalNotifyService.init();
+
+                    // Load User Info
                     this.authApiService.Me().subscribe(p => {
                         if (p.code === 0) {
                             this.cacheService.cachedData.me = p.value;
                             this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                             this.themeService.ApplyThemeFromRemote(p.value);
-                            if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                                this.subscribeUser();
-                                this.updateSubscription();
-                            }
-                            this.eventService.initPusher();
-                            this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
-                            this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
-                            this.globalNotifyService.init();
                             this.cacheService.updateConversation();
                             this.cacheService.updateFriends();
                             this.cacheService.updateRequests();

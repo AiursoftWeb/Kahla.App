@@ -34,8 +34,8 @@
     </div>
 </div>
 
-<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
-     *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && (!eventService.online && !eventService.connecting))">
+<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled" (click)="showDisconnectedDialog()"
+     *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && (eventService.errorOrClose && !eventService.connecting))">
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fas fa-cloud"></i>
         Disconnected
