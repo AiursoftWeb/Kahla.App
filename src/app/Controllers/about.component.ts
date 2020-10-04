@@ -15,7 +15,7 @@ import { environment } from '../../environments/environment';
 
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
-    public website = environment.officialServerList;
+    public website = environment.serversProvider;
 
     constructor(
         public checkService: CheckService,

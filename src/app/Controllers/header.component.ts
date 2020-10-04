@@ -5,6 +5,7 @@ import { TimerService } from '../Services/TimerService';
 import { HomeService } from '../Services/HomeService';
 import { ElectronService } from 'ngx-electron';
 import { EventService } from '../Services/EventService';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-header',
@@ -50,6 +51,19 @@ export class HeaderComponent {
             this.homeService.currentPage = Number(this.buttonLink);
         } else {
             this.router.navigateByUrl(<string>this.buttonLink);
+        }
+    }
+
+    public async showDisconnectedDialog() {
+        if (!(await Swal.fire({
+            title: 'Message Event Connection Down.',
+            text: 'This might because of the broken network environment.\n We will try to reconnect later, but before that,' +
+                ' your message might no be the latest.',
+            icon: 'warning',
+            confirmButtonText: 'Reconnect',
+            showCancelButton: true
+        })).dismiss) {
+            this.eventService.attemptReconnect();
         }
     }
 }

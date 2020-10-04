@@ -14,11 +14,11 @@ export class ServerListApiService {
     }
 
     public Servers(): Observable<Array<ServerConfig>> {
-        return this.apiService.GetByFullUrl(`${environment.officialServerList}/servers`, false);
+        return this.apiService.GetByFullUrl(`${environment.serversProvider}/servers`, false);
     }
 
     public Version(): Observable<VersionViewModel> {
-        return this.apiService.GetByFullUrl(`${environment.officialServerList}/version`, false);
+        return this.apiService.GetByFullUrl(`${environment.serversProvider}/version`, false);
     }
 
     public getServerConfig(server: string): Observable<ServerConfig> {

@@ -9,7 +9,7 @@ import { AuthApiService } from './Api/AuthApiService';
 export class EventService {
     private ws: WebSocket;
     public connecting = false;
-    public online: boolean;
+    public errorOrClose: boolean;
 
     public onMessage: Subject<AiurEvent> = new Subject<AiurEvent>();
     public onErrorOrClose: Subject<boolean> = new Subject<boolean>();
@@ -17,17 +17,14 @@ export class EventService {
 
     private timeoutNumber = 1000;
     private reconnectAttemptTimeout;
-    private errorOrClose: boolean;
     private closeWebSocket = false;
 
 
     constructor(private authApiService: AuthApiService) {
-
     }
 
     public initPusher(): void {
         this.connecting = true;
-        this.online = navigator.onLine;
         this.closeWebSocket = false;
         this.authApiService.InitPusher().subscribe(model => {
             if (this.ws) {
@@ -75,8 +72,14 @@ export class EventService {
             if (this.timeoutNumber < 10000) {
                 this.timeoutNumber += 1000;
             }
-            this.initPusher();
+            this.attemptReconnect();
         }, this.timeoutNumber);
+    }
+
+    public attemptReconnect() {
+        if (this.errorOrClose) {
+            this.initPusher();
+        }
     }
 
     public fireNetworkAlert(): void {
