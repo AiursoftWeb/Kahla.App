@@ -1,5 +1,6 @@
 @import "fixed_widescreen";
 @import "button";
+@import "effects";
 
 /******************
  *    Header
@@ -33,7 +34,7 @@
 
 .header {
   .headerButton {
-    @extend %transparent-button;
+    @include hover-effect(transparentize(#fff, 0.8), transparentize(#fff, 0.6));
     cursor: pointer;
     width: 35px;
     color: #FFF;
