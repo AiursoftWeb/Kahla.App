@@ -16,7 +16,7 @@ import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Helpers/Uuid';
-import * as EmojiButton from '@joeattardi/emoji-button';
+import { EmojiButton } from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 
@@ -488,8 +488,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 autoFocusSearch: false,
                 showSearch: false
             });
-            this.picker.on('emoji', emoji => {
-                this.insertToSelection(emoji);
+            this.picker.on('emoji', selection => {
+                this.insertToSelection(selection.emoji);
             });
         }
         this.picker.togglePicker(chatBox);

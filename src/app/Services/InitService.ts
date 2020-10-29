@@ -100,6 +100,7 @@ export class InitService {
 
                     // Webpush Service
                     if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                        this.cacheService.updateDevice();
                         this.subscribeUser();
                         this.updateSubscription();
                     }
@@ -169,7 +170,7 @@ export class InitService {
             });
         }
         if (data.enabled) {
-            if (data.deviceId) {
+            if (data.deviceId && this.cacheService.cachedData.devices.some(de => de.id === data.deviceId)) {
                 if (force) {
                     this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
                         pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();

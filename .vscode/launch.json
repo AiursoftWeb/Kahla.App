@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "pwa-msedge",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "type": "firefox",
             "request": "launch",
             "reAttach": true,
