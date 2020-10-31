@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { ElectronService } from 'ngx-electron';
 import { ThemeService } from '../Services/ThemeService';
 import { Router } from '@angular/router';
 import { HomeService } from '../Services/HomeService';
