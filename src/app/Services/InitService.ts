@@ -16,6 +16,8 @@ import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
+import { BrowserContextService } from './BrowserContextService';
+import { Toolbox } from './Toolbox';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +42,9 @@ export class InitService {
         private serverListApiService: ServerListApiService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
-        private localStore: LocalStoreService
+        private localStore: LocalStoreService,
+        private browserContext: BrowserContextService,
+        private toolbox: Toolbox
     ) {
     }
 
@@ -65,43 +69,53 @@ export class InitService {
 
         this.cacheService.initCache();
 
-        if (this.apiService.serverConfig) {
-            this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
-            await this.checkService.checkApiVersion();
-            const signInStatus = await this.authApiService.SignInStatus();
-            if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], { replaceUrl: true });
-            } else {
-                if (this.router.isActive('/signin', false)) {
-                    this.router.navigate(['/home'], { replaceUrl: true });
-                }
-
-                // Webpush Service
-                if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                    await this.cacheService.updateDevice();
-                    await this.subscribeUser();
-                    await this.updateSubscription();
-                }
-
-                // Init stargate push
-                await this.eventService.initPusher();
-                this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
-                this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
-                this.globalNotifyService.init();
-
-                // Load User Info
-                const me = await this.authApiService.Me();
-                if (me.code === 0) {
-                    this.cacheService.cachedData.me = me.value;
-                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
-                    this.themeService.ApplyThemeFromRemote(me.value);
-                    this.cacheService.updateConversation();
-                    this.cacheService.updateFriends();
-                    this.cacheService.updateRequests();
-                }
-            }
-        } else {
+        if (!this.apiService.serverConfig) {
             this.router.navigate(['/signin'], { replaceUrl: true });
+            return;
+        }
+
+        this.options.applicationServerKey = this.toolbox.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
+        await this.checkService.checkApiVersion();
+        const signInStatus = await this.authApiService.SignInStatus();
+        if (signInStatus.value === false) {
+            this.router.navigate(['/signin'], { replaceUrl: true });
+            return;
+        } 
+        
+        if (this.router.isActive('/signin', false)) {
+            this.router.navigate(['/home'], { replaceUrl: true });
+        }
+
+        // Webpush Service
+        if (this.browserContext.readyForWebPush()) {
+            this.refreshWebPush();
+            navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => this.refreshWebPush());
+        }
+
+        // Init stargate push
+        await this.eventService.initPusher();
+        this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+        this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
+        this.globalNotifyService.init();
+
+        // Load User Info
+        const me = await this.authApiService.Me();
+        if (me.code === 0) {
+            this.cacheService.cachedData.me = me.value;
+            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
+            this.themeService.ApplyThemeFromRemote(me.value);
+            this.cacheService.updateConversation();
+            this.cacheService.updateFriends();
+            this.cacheService.updateRequests();
+        }
+      
+    }
+
+    private async refreshWebPush() {
+        await this.cacheService.updateDevice();
+        const subscription = await this.getSubscription();
+        if (subscription) {
+            await this.registerSubscriptionAsDevice(subscription);
         }
     }
 
@@ -131,18 +145,20 @@ export class InitService {
         this.localStore.resetAll();
     }
 
-    public async subscribeUser(): Promise<void> {
-        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
+    public async getSubscription(): Promise<PushSubscription> {
+        if (this.browserContext.readyForWebPush()) {
             const registration = await navigator.serviceWorker.ready;
             let sub = await registration.pushManager.getSubscription();
             if (sub === null) {
                 sub = await registration.pushManager.subscribe(this.options);
             }
-            await this.registerDevice(sub);
+            return sub;
+        } else {
+            return null;
         }
     }
 
-    public async registerDevice(pushSubscription: PushSubscription): Promise<void> {
+    public async registerSubscriptionAsDevice(pushSubscription: PushSubscription): Promise<void> {
 
         const localSubSettings = this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting);
 
@@ -167,30 +183,5 @@ export class InitService {
                 this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, (t) => t.deviceId = addedDevice.value);
             }
         }
-    }
-
-    private async updateSubscription(): Promise<void> {
-        if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
-            const registration = await navigator.serviceWorker.ready;
-            navigator.serviceWorker.addEventListener('pushsubscriptionchange', async () => {
-                const pushSubscription = await registration.pushManager.subscribe(this.options);
-                await this.registerDevice(pushSubscription);
-            });
-        }
-    }
-
-    private urlBase64ToUint8Array(base64String: string): Uint8Array {
-        const padding = '='.repeat((4 - base64String.length % 4) % 4);
-        const base64 = (base64String + padding)
-            .replace(/-/g, '+')
-            .replace(/_/g, '/');
-
-        const rawData = window.atob(base64);
-        const outputArray = new Uint8Array(rawData.length);
-
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
     }
 }

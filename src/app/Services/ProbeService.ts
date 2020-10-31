@@ -20,7 +20,7 @@ export class ProbeService {
     }
 
     public getFileSizeText(fileSize: number) {
-        const units = ['kB', 'MB', 'GB'];
+        const units = ['KB', 'MB', 'GB'];
         const thresh = 1000;
         if (fileSize < thresh) {
             return `${fileSize} B`;

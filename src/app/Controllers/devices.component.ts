@@ -6,6 +6,7 @@ import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
+import { LocalStoreService } from '../Services/LocalstoreService';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -18,16 +19,12 @@ export class DevicesComponent implements OnInit {
         public electronService: ElectronService,
         public devicesApiService: DevicesApiService,
         public initService: InitService,
+        private localStore: LocalStoreService
     ) {
     }
 
-    public webPushEnabled: boolean;
-
     public async ngOnInit(): Promise<void> {
         await this.cacheService.updateDevice();
-        if (this.webpushSupported()) {
-            this.webPushEnabled = this.getWebPushStatus();
-        }
     }
 
     public detail(device: Device): void {
@@ -48,40 +45,23 @@ export class DevicesComponent implements OnInit {
     public async testPush(): Promise<void> {
         const pushResult = await this.devicesApiService.PushTestMessage();
         if (pushResult.code === 0) {
-            Swal.fire(
-                'Successfully sent!',
-                pushResult.message,
-                'info'
-            );
+            Swal.fire('Successfully sent!', pushResult.message, 'info');
         }
     }
 
-    public getWebPushStatus(): boolean {
-        if (!localStorage.getItem('setting-pushSubscription')) {
-            return true;
-        }
-        const status: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
-        return status.enabled;
+    public webPushEnabled(): boolean {
+        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).enabled;
     }
 
-    public setWebPushStatus(value: boolean) {
-        const status: PushSubscriptionSetting = localStorage.getItem('setting-pushSubscription') ?
-            JSON.parse(localStorage.getItem('setting-pushSubscription')) :
-            {
-                enabled: value,
-                deviceId: 0
-            };
-        status.enabled = value;
-        localStorage.setItem('setting-pushSubscription', JSON.stringify(status));
-        this.webPushEnabled = value;
-        this.initService.subscribeUser();
+    public setWebPushStatus(enable: boolean) {
+        this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enabled = enable);
     }
 
     public getElectronNotify(): boolean {
-        return localStorage.getItem('setting-electronNotify') !== 'false';
+        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).enableElectron;
     }
 
-    public setElectronNotify(value: boolean) {
-        localStorage.setItem('setting-electronNotify', value ? 'true' : 'false');
+    public setElectronNotify(enable: boolean) {
+        this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enableElectron = enable);
     }
 }

@@ -1,10 +1,10 @@
 <app-header title="Push Notification Settings"></app-header>
 <div class="menu-header">Status & Settings</div>
 <ng-container *ngIf="webpushSupported()">
-    <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
+    <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled())">
         <div class="img"><i class="far fa-bell"></i></div>
         <div class="text">Enable web push notification</div>
-        <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled"/>
+        <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled()"/>
         <label for="toggleWebpush" class="tgl-btn"></label>
     </div>
 </ng-container>

@@ -52,6 +52,8 @@ import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { LocalStoreService } from './Services/LocalstoreService';
+import { BrowserContextService } from './Services/BrowserContextService';
+import { Toolbox } from './Services/Toolbox';
 
 @NgModule({
     imports: [
@@ -109,6 +111,8 @@ import { LocalStoreService } from './Services/LocalstoreService';
         ProbeService,
         EventService,
         GlobalNotifyService,
+        BrowserContextService,
+        Toolbox
     ],
     bootstrap: [AppComponent]
 })
