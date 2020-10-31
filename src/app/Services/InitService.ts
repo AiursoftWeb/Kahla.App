@@ -87,7 +87,7 @@ export class InitService {
         }
 
         // Webpush Service
-        if (this.browserContext.readyForWebPush()) {
+        if (this.browserContext.permittedForWebPush()) {
             this.refreshWebPush();
             navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => this.refreshWebPush());
         }
@@ -146,7 +146,7 @@ export class InitService {
     }
 
     public async getSubscription(): Promise<PushSubscription> {
-        if (this.browserContext.readyForWebPush()) {
+        if (this.browserContext.permittedForWebPush()) {
             const registration = await navigator.serviceWorker.ready;
             let sub = await registration.pushManager.getSubscription();
             if (sub === null) {

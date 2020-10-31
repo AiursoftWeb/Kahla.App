@@ -8,10 +8,15 @@ export class BrowserContextService {
 
     }
 
-    public readyForWebPush(): boolean {
-        return !this.electronService.isElectronApp &&
-            'Notification' in window &&
-            'serviceWorker' in navigator &&
-            Notification.permission === 'granted';
+    public permittedForWebPush(): boolean {
+        return Notification.permission === 'granted' && this.supportWebPush();
+    }
+
+    public supportWebPush(): boolean {
+        return !this.electronService.isElectronApp && this.supportNotification();
+    }
+
+    public supportNotification(): boolean {
+        return 'Notification' in window && 'serviceWorker' in navigator;
     }
 }
