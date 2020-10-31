@@ -15,6 +15,7 @@ import { ProbeService } from '../Services/ProbeService';
 export class AdvancedSettingComponent implements OnInit {
 
     public me: KahlaUser;
+    public updatingSetting: boolean;
 
     constructor(
         private authApiService: AuthApiService,
@@ -34,6 +35,7 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     public async updateSettings(): Promise<void> {
+        this.updatingSetting = true;
         const res = await this.authApiService.UpdateClientSetting(null,
             this.me.enableEmailNotification,
             this.me.enableEnterToSendMessage,
@@ -46,6 +48,7 @@ export class AdvancedSettingComponent implements OnInit {
         } else {
             Swal.fire('Error', res.message, 'error');
         }
+        this.updatingSetting = false;
     }
 
     public todo(): void {
