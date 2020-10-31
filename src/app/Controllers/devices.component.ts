@@ -18,8 +18,8 @@ export class DevicesComponent implements OnInit {
         public cacheService: CacheService,
         public devicesApiService: DevicesApiService,
         public initService: InitService,
-        private localStore: LocalStoreService,
-        private browserContext: BrowserContextService
+        public localStore: LocalStoreService,
+        public browserContext: BrowserContextService
     ) {
     }
 

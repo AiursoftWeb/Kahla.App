@@ -19,4 +19,8 @@ export class BrowserContextService {
     public supportNotification(): boolean {
         return 'Notification' in window && 'serviceWorker' in navigator;
     }
+
+    public isElectronApp(): boolean {
+        return this.electronService.isElectronApp;
+    }
 }
