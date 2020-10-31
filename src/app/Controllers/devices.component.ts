@@ -7,6 +7,7 @@ import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
 import { LocalStoreService } from '../Services/LocalstoreService';
+import { BrowserContextService } from '../Services/BrowserContextService';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -19,7 +20,8 @@ export class DevicesComponent implements OnInit {
         public electronService: ElectronService,
         public devicesApiService: DevicesApiService,
         public initService: InitService,
-        private localStore: LocalStoreService
+        private localStore: LocalStoreService,
+        private browserContext: BrowserContextService
     ) {
     }
 
@@ -38,8 +40,8 @@ export class DevicesComponent implements OnInit {
         }
     }
 
-    public webpushSupported(): boolean {
-        return !this.electronService.isElectronApp && 'Notification' in window && 'serviceWorker' in navigator;
+    public webpushSupported() {
+        return this.browserContext.supportWebPush();
     }
 
     public async testPush(): Promise<void> {
