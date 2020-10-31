@@ -80,8 +80,8 @@ export class InitService {
         if (signInStatus.value === false) {
             this.router.navigate(['/signin'], { replaceUrl: true });
             return;
-        } 
-        
+        }
+
         if (this.router.isActive('/signin', false)) {
             this.router.navigate(['/home'], { replaceUrl: true });
         }
@@ -108,7 +108,7 @@ export class InitService {
             this.cacheService.updateFriends();
             this.cacheService.updateRequests();
         }
-      
+
     }
 
     private async refreshWebPush() {
