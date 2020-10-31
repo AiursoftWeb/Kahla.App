@@ -52,19 +52,17 @@ export class UserDetailComponent implements OnInit {
         }
     }
 
-    public save(): void {
+    public async save(): Promise<void> {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath)
-            .subscribe((response) => {
-                if (response.code === 0) {
-                    this.cacheService.cachedData.me = Object.assign({}, this.user);
-                    this.cacheService.saveCache();
-                    this.router.navigate(['/home']);
-                } else {
-                    Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
-                }
-                saveButton.textContent = 'Save';
-            });
+        const response = await this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath);
+        if (response.code === 0) {
+            this.cacheService.cachedData.me = Object.assign({}, this.user);
+            this.cacheService.saveCache();
+            this.router.navigate(['/home']);
+        } else {
+            Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
+        }
+        saveButton.textContent = 'Save';
     }
 }

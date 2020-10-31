@@ -105,7 +105,7 @@ export class InitService {
                 }
 
                 // Init stargate push
-                this.eventService.initPusher();
+                await this.eventService.initPusher();
                 this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
                 this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
                 this.globalNotifyService.init();
