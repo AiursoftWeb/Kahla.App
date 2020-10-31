@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
-import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
@@ -17,7 +16,6 @@ import { BrowserContextService } from '../Services/BrowserContextService';
 export class DevicesComponent implements OnInit {
     constructor(
         public cacheService: CacheService,
-        public electronService: ElectronService,
         public devicesApiService: DevicesApiService,
         public initService: InitService,
         private localStore: LocalStoreService,

@@ -22,7 +22,7 @@
     </div>
     <div class="text">Send test notification</div>
 </div>
-<ng-container *ngIf="!webpushSupported() && !electronService.isElectronApp">
+<ng-container *ngIf="!browserContext.supportNotification()">
     <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
 </ng-container>
 <div class="menu-header">My web devices</div>
