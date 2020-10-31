@@ -9,7 +9,6 @@ import { ServerConfig } from '../../Models/ServerConfig';
     providedIn: 'root'
 })
 export class ApiService {
-    public readonly STORAGE_SERVER_CONFIG = 'serverConfig';
     public serverConfig: ServerConfig;
 
     private _headers: HttpHeaders =

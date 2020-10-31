@@ -51,6 +51,7 @@ import { ProbeService } from './Services/ProbeService';
 import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
+import { LocalStoreService } from './Services/LocalstoreService';
 
 @NgModule({
     imports: [
@@ -94,6 +95,7 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
         CheckService,
         AuthApiService,
         ConversationApiService,
+        LocalStoreService,
         FilesApiService,
         FriendsApiService,
         GroupsApiService,

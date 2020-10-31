@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { ServerListApiService } from '../Services/Api/ServerListApiService';
 import { ServerConfig } from '../Models/ServerConfig';
+import { LocalStoreService } from '../Services/LocalstoreService';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -15,7 +16,7 @@ import { ServerConfig } from '../Models/ServerConfig';
 export class SignInComponent implements OnInit {
 
     public changingServer = false;
-    public serverAddr;
+    public serverAddr: string;
 
     constructor(
         public _electronService: ElectronService,
@@ -23,11 +24,12 @@ export class SignInComponent implements OnInit {
         public serverListApiService: ServerListApiService,
         public initService: InitService,
         public http: HttpClient,
+        private localstore: LocalStoreService,
     ) {
     }
 
     public async clearCommunityServerData(): Promise<void> {
-        localStorage.removeItem('serverConfig');
+        this.localstore.reset(LocalStoreService.STORAGE_SERVER_CONFIG);
         this.changingServer = false;
         await this.initService.init();
     }
@@ -55,7 +57,7 @@ export class SignInComponent implements OnInit {
                 return;
             }
             const officialServer = await this.serverListApiService.Servers();
-            if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
+            if (officialServer.some(t => t.domain.server === serverConfig.domain.server)) {
                 // an official server
                 serverConfig.officialServer = true;
             } else {
@@ -75,7 +77,7 @@ export class SignInComponent implements OnInit {
                 serverConfig.officialServer = false;
             }
             serverConfig._cacheVersion = ServerConfig.CACHE_VERSION;
-            localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(serverConfig));
+            this.localstore.replace(LocalStoreService.STORAGE_SERVER_CONFIG, serverConfig);
             this.changingServer = false;
             await this.initService.init();
         } catch {

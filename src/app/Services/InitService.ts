@@ -15,6 +15,7 @@ import { ServerListApiService } from './Api/ServerListApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
+import { LocalStoreService } from './LocalstoreService';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,7 @@ export class InitService {
         private serverListApiService: ServerListApiService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
+        private localStore: LocalStoreService
     ) {
     }
 
@@ -53,35 +55,12 @@ export class InitService {
             );
         }
         await this.checkService.checkVersion(false);
-        // load server config
-        let reload = false;
-        if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
-            this.apiService.serverConfig = JSON.parse(localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) as ServerConfig;
-            if (this.apiService.serverConfig._cacheVersion !== ServerConfig.CACHE_VERSION) {
-                reload = true;
-                this.apiService.serverConfig = null;
-            }
-        } else {
-            reload = true;
-        }
-        if (reload) {
-            this.router.navigate(['/signin'], {replaceUrl: true});
-            const servers = await this.serverListApiService.Servers();
-            let target: ServerConfig;
-            if (this._electronService.isElectronApp) {
-                target = servers[0];
-            } else {
-                target = servers.find(t => t.domain.client === window.location.origin);
-            }
+        const serverConfig = this.localStore.get(LocalStoreService.STORAGE_SERVER_CONFIG, ServerConfig);
+        this.apiService.serverConfig = serverConfig;
 
-            if (target) {
-                target.officialServer = true;
-                target._cacheVersion = ServerConfig.CACHE_VERSION;
-                this.apiService.serverConfig = target;
-                localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
-            }
-            await this.init();
-            return;
+        if (this.apiService.serverConfig._cacheVersion !== ServerConfig.CACHE_VERSION) {
+            this.apiService.serverConfig = null;
+            await this.reload();
         }
 
         this.cacheService.initCache();
@@ -91,10 +70,10 @@ export class InitService {
             await this.checkService.checkApiVersion();
             const signInStatus = await this.authApiService.SignInStatus();
             if (signInStatus.value === false) {
-                this.router.navigate(['/signin'], {replaceUrl: true});
+                this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
                 if (this.router.isActive('/signin', false)) {
-                    this.router.navigate(['/home'], {replaceUrl: true});
+                    this.router.navigate(['/home'], { replaceUrl: true });
                 }
 
                 // Webpush Service
@@ -122,15 +101,34 @@ export class InitService {
                 }
             }
         } else {
-            this.router.navigate(['/signin'], {replaceUrl: true});
+            this.router.navigate(['/signin'], { replaceUrl: true });
         }
+    }
+
+    private async reload(): Promise<void> {
+        this.router.navigate(['/signin'], { replaceUrl: true });
+        const servers = await this.serverListApiService.Servers();
+        let target: ServerConfig;
+        if (this._electronService.isElectronApp) {
+            target = servers[0];
+        } else {
+            target = servers.find(t => t.domain.client === window.location.origin);
+        }
+
+        if (target) {
+            target.officialServer = true;
+            target._cacheVersion = ServerConfig.CACHE_VERSION;
+            this.apiService.serverConfig = target;
+            this.localStore.replace(LocalStoreService.STORAGE_SERVER_CONFIG, target);
+        }
+        await this.init();
     }
 
     public destroy(): void {
         this.eventService.destroyConnection();
         this.messageService.resetVariables();
         this.cacheService.reset();
-        localStorage.clear();
+        this.localStore.resetAll();
     }
 
     public async subscribeUser(): Promise<void> {
@@ -138,40 +136,37 @@ export class InitService {
             const registration = await navigator.serviceWorker.ready;
             let sub = await registration.pushManager.getSubscription();
             if (sub === null) {
-                sub = await  registration.pushManager.subscribe(this.options);
+                sub = await registration.pushManager.subscribe(this.options);
             }
-            await this.bindDevice(sub);
+            await this.registerDevice(sub);
         }
     }
 
-    public async bindDevice(pushSubscription: PushSubscription, force: boolean = false): Promise<void> {
-        let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
-        if (!data) {
-            data = {
-                enabled: true,
-                deviceId: 0
-            };
-            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-        }
-        if (!data.enabled && data.deviceId) {
-            await this.devicesApiService.DropDevice(data.deviceId);
-            data.deviceId = 0;
-            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-        }
-        if (data.enabled) {
-            if (data.deviceId && this.cacheService.cachedData.devices.some(de => de.id === data.deviceId)) {
-                if (force) {
-                    await this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
-                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth);
-                }
+    public async registerDevice(pushSubscription: PushSubscription): Promise<void> {
+
+        const localSubSettings = this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting);
+
+        if (!localSubSettings.enabled && localSubSettings.deviceId) {
+            await this.devicesApiService.DropDevice(localSubSettings.deviceId);
+            localSubSettings.deviceId = 0;
+            this.localStore.replace(LocalStoreService.PUSH_SUBSCRIPTION, localSubSettings);
+        } else if (localSubSettings.enabled) {
+            if (localSubSettings.deviceId && this.cacheService.cachedData.devices.some(de => de.id === localSubSettings.deviceId)) {
+                await this.devicesApiService.UpdateDevice(
+                    localSubSettings.deviceId,
+                    navigator.userAgent,
+                    pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh,
+                    pushSubscription.toJSON().keys.auth);
             } else {
-                const addedDevice = await this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth);
-                data.deviceId = addedDevice.value;
-                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
+                const addedDevice = await this.devicesApiService.AddDevice(
+                    navigator.userAgent,
+                    pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh,
+                    pushSubscription.toJSON().keys.auth);
+                this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, (t) => t.deviceId = addedDevice.value);
             }
         }
-
     }
 
     private async updateSubscription(): Promise<void> {
@@ -179,7 +174,7 @@ export class InitService {
             const registration = await navigator.serviceWorker.ready;
             navigator.serviceWorker.addEventListener('pushsubscriptionchange', async () => {
                 const pushSubscription = await registration.pushManager.subscribe(this.options);
-                await this.bindDevice(pushSubscription, true);
+                await this.registerDevice(pushSubscription);
             });
         }
     }
