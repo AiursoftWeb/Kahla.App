@@ -52,7 +52,7 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
-        this.checkService.checkVersion(false);
+        await this.checkService.checkVersion(false);
         // load server config
         let reload = false;
         if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {

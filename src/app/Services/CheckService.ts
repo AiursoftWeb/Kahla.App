@@ -41,17 +41,15 @@ export class CheckService {
         }
     }
 
-    public checkVersion(showAlert: boolean): void {
+    public async checkVersion(showAlert: boolean): Promise<void> {
         this.checking = true;
-        this.serverListApiService.Version()
-            .subscribe(t => {
-                if (this.compareVersion(t.latestVersion, versions.version) > 0) {
-                    this.redirectToDownload(t.downloadAddress, showAlert);
-                } else if (showAlert) {
-                    Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
-                }
-                this.checking = false;
-            });
+        const version = await this.serverListApiService.Version();
+        if (this.compareVersion(version.latestVersion, versions.version) > 0) {
+            this.redirectToDownload(version.downloadAddress, showAlert);
+        } else if (showAlert) {
+            Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
+        }
+        this.checking = false;
     }
 
     public async checkApiVersion(): Promise<void> {

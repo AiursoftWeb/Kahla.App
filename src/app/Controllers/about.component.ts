@@ -24,8 +24,8 @@ export class AboutComponent {
     ) {
     }
 
-    public check(): void {
-        this.checkService.checkVersion(true);
+    public async check(): Promise<void> {
+        await this.checkService.checkVersion(true);
     }
 
     public getCurrentYear(): number {

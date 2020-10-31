@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
-import { Observable } from 'rxjs';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 import { VersionViewModel } from '../../Models/VersionViewModel';
@@ -17,8 +16,8 @@ export class ServerListApiService {
         return this.apiService.GetByFullUrl<ServerConfig[]>(`${environment.serversProvider}/servers`, false).toPromise();
     }
 
-    public Version(): Observable<VersionViewModel> {
-        return this.apiService.GetByFullUrl(`${environment.serversProvider}/version`, false);
+    public Version() {
+        return this.apiService.GetByFullUrl<VersionViewModel>(`${environment.serversProvider}/version`, false).toPromise();
     }
 
     public getServerConfig(server: string) {
