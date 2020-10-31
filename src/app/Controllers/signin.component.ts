@@ -26,13 +26,13 @@ export class SignInComponent implements OnInit {
     ) {
     }
 
-    public clearCommunityServerData() {
+    public async clearCommunityServerData(): Promise<void> {
         localStorage.removeItem('serverConfig');
         this.changingServer = false;
-        this.initService.init();
+        await this.initService.init();
     }
 
-    public connectCommunity() {
+    public async connectCommunity(): Promise<void> {
         if (!this.serverAddr) {
             Swal.fire('Please input an valid server url!', '', 'error');
             return;
@@ -48,42 +48,44 @@ export class SignInComponent implements OnInit {
             showCancelButton: false
         });
         Swal.showLoading();
-        const fireFailed = () => Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
-        this.serverListApiService.getServerConfig(this.serverAddr).subscribe({
-            next: serverConfig => {
-                if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
-                    Swal.close();
-                    fireFailed();
+        try {
+            const serverConfig = await this.serverListApiService.getServerConfig(this.serverAddr);
+            if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
+                this.fireFailed();
+                return;
+            }
+            const officialServer = await this.serverListApiService.Servers();
+            if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
+                // an official server
+                serverConfig.officialServer = true;
+            } else {
+                Swal.close();
+                const res = await Swal.fire({
+                    title: 'Connecting to a community server...',
+                    text: 'Aiursoft CANNOT prove the community server is secure.\n' +
+                        ' You should NEVER connect to a server you don\'t trust.\n' +
+                        'Chat data in community server will never be synced with one in official server.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continue'
+                });
+                if (res.dismiss) {
                     return;
                 }
-                this.serverListApiService.Servers().subscribe(async officialServer => {
-                    Swal.close();
-                    if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
-                        // an official server
-                        serverConfig.officialServer = true;
-                    } else {
-                        const res = await Swal.fire({
-                            title: 'Connecting to a community server...',
-                            text: 'Aiursoft CANNOT prove the community server is secure.\n' +
-                                ' You should NEVER connect to a server you don\'t trust.\n' +
-                                'Chat data in community server will never be synced with one in official server.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Continue'
-                        });
-                        if (res.dismiss) {
-                            return;
-                        }
-                        serverConfig.officialServer = false;
-                    }
-                    serverConfig._cacheVersion = ServerConfig.CACHE_VERSION;
-                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(serverConfig));
-                    this.changingServer = false;
-                    this.initService.init();
-                });
-            },
-            error: _t => fireFailed()
-        });
+                serverConfig.officialServer = false;
+            }
+            serverConfig._cacheVersion = ServerConfig.CACHE_VERSION;
+            localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(serverConfig));
+            this.changingServer = false;
+            await this.initService.init();
+        } catch {
+            this.fireFailed();
+        }
+    }
+
+    private fireFailed() {
+        Swal.close();
+        Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
     }
 
     ngOnInit(): void {

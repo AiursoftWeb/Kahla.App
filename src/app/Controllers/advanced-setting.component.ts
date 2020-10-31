@@ -25,14 +25,13 @@ export class AdvancedSettingComponent implements OnInit {
     ) {
     }
 
-    ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         if (this.cacheService.cachedData.me) {
             this.me = Object.assign({}, this.cacheService.cachedData.me);
         } else {
-            this.authApiService.Me().subscribe(p => {
-                this.me = p.value;
-                this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
-            });
+            const me = await this.authApiService.Me();
+            this.me = me.value;
+            this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
         }
     }
 

@@ -33,12 +33,11 @@ export class UserDetailComponent implements OnInit {
     ) {
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         if (!this.cacheService.cachedData.me) {
-            this.authApiService.Me().subscribe(p => {
-                this.user = p.value;
-                this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
-            });
+            const me = await this.authApiService.Me();
+            this.user = me.value;
+            this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
         } else {
             this.user = Object.assign({}, this.cacheService.cachedData.me);
         }

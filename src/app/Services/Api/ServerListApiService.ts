@@ -13,15 +13,15 @@ export class ServerListApiService {
     constructor(private apiService: ApiService) {
     }
 
-    public Servers(): Observable<Array<ServerConfig>> {
-        return this.apiService.GetByFullUrl(`${environment.serversProvider}/servers`, false);
+    public Servers() {
+        return this.apiService.GetByFullUrl<ServerConfig[]>(`${environment.serversProvider}/servers`, false).toPromise();
     }
 
     public Version(): Observable<VersionViewModel> {
         return this.apiService.GetByFullUrl(`${environment.serversProvider}/version`, false);
     }
 
-    public getServerConfig(server: string): Observable<ServerConfig> {
-        return this.apiService.GetByFullUrl(server, false);
+    public getServerConfig(server: string) {
+        return this.apiService.GetByFullUrl<ServerConfig>(server, false).toPromise();
     }
 }

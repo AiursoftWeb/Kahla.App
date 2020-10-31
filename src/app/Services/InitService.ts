@@ -42,7 +42,7 @@ export class InitService {
     ) {
     }
 
-    public init(): void {
+    public async init(): Promise<void> {
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
                 'Oops, it seems that you are opening Kahla in IE.',
@@ -66,22 +66,21 @@ export class InitService {
         }
         if (reload) {
             this.router.navigate(['/signin'], {replaceUrl: true});
-            this.serverListApiService.Servers().subscribe(servers => {
-                let target: ServerConfig;
-                if (this._electronService.isElectronApp) {
-                    target = servers[0];
-                } else {
-                    target = servers.find(t => t.domain.client === window.location.origin);
-                }
+            const servers = await this.serverListApiService.Servers();
+            let target: ServerConfig;
+            if (this._electronService.isElectronApp) {
+                target = servers[0];
+            } else {
+                target = servers.find(t => t.domain.client === window.location.origin);
+            }
 
-                if (target) {
-                    target.officialServer = true;
-                    target._cacheVersion = ServerConfig.CACHE_VERSION;
-                    this.apiService.serverConfig = target;
-                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
-                }
-                this.init();
-            });
+            if (target) {
+                target.officialServer = true;
+                target._cacheVersion = ServerConfig.CACHE_VERSION;
+                this.apiService.serverConfig = target;
+                localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(target));
+            }
+            await this.init();
             return;
         }
 
@@ -89,41 +88,39 @@ export class InitService {
 
         if (this.apiService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
-            this.checkService.checkApiVersion();
-            this.authApiService.SignInStatus().subscribe(signInStatus => {
-                if (signInStatus.value === false) {
-                    this.router.navigate(['/signin'], {replaceUrl: true});
-                } else {
-                    if (this.router.isActive('/signin', false)) {
-                        this.router.navigate(['/home'], {replaceUrl: true});
-                    }
-
-                    // Webpush Service
-                    if (!this._electronService.isElectronApp && navigator.serviceWorker) {
-                        this.cacheService.updateDevice();
-                        this.subscribeUser();
-                        this.updateSubscription();
-                    }
-
-                    // Init stargate push
-                    this.eventService.initPusher();
-                    this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
-                    this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
-                    this.globalNotifyService.init();
-
-                    // Load User Info
-                    this.authApiService.Me().subscribe(p => {
-                        if (p.code === 0) {
-                            this.cacheService.cachedData.me = p.value;
-                            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
-                            this.themeService.ApplyThemeFromRemote(p.value);
-                            this.cacheService.updateConversation();
-                            this.cacheService.updateFriends();
-                            this.cacheService.updateRequests();
-                        }
-                    });
+            await this.checkService.checkApiVersion();
+            const signInStatus = await this.authApiService.SignInStatus();
+            if (signInStatus.value === false) {
+                this.router.navigate(['/signin'], {replaceUrl: true});
+            } else {
+                if (this.router.isActive('/signin', false)) {
+                    this.router.navigate(['/home'], {replaceUrl: true});
                 }
-            });
+
+                // Webpush Service
+                if (!this._electronService.isElectronApp && navigator.serviceWorker) {
+                    await this.cacheService.updateDevice();
+                    await this.subscribeUser();
+                    await this.updateSubscription();
+                }
+
+                // Init stargate push
+                this.eventService.initPusher();
+                this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+                this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
+                this.globalNotifyService.init();
+
+                // Load User Info
+                const me = await this.authApiService.Me();
+                if (me.code === 0) {
+                    this.cacheService.cachedData.me = me.value;
+                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
+                    this.themeService.ApplyThemeFromRemote(me.value);
+                    this.cacheService.updateConversation();
+                    this.cacheService.updateFriends();
+                    this.cacheService.updateRequests();
+                }
+            }
         } else {
             this.router.navigate(['/signin'], {replaceUrl: true});
         }
@@ -136,25 +133,18 @@ export class InitService {
         localStorage.clear();
     }
 
-    public subscribeUser() {
+    public async subscribeUser(): Promise<void> {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
-            const _this = this;
-            navigator.serviceWorker.ready.then((registration => {
-                return registration.pushManager.getSubscription().then(sub => {
-                    if (sub === null) {
-                        return registration.pushManager.subscribe(_this.options)
-                            .then(function (pushSubscription) {
-                                _this.bindDevice(pushSubscription);
-                            });
-                    } else {
-                        _this.bindDevice(sub);
-                    }
-                });
-            }));
+            const registration = await navigator.serviceWorker.ready;
+            let sub = await registration.pushManager.getSubscription();
+            if (sub === null) {
+                sub = await  registration.pushManager.subscribe(this.options);
+            }
+            await this.bindDevice(sub);
         }
     }
 
-    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
+    public async bindDevice(pushSubscription: PushSubscription, force: boolean = false): Promise<void> {
         let data: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
         if (!data) {
             data = {
@@ -164,38 +154,33 @@ export class InitService {
             localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (!data.enabled && data.deviceId) {
-            this.devicesApiService.DropDevice(data.deviceId).subscribe(_t => {
-                data.deviceId = 0;
-                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-            });
+            await this.devicesApiService.DropDevice(data.deviceId);
+            data.deviceId = 0;
+            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (data.enabled) {
             if (data.deviceId && this.cacheService.cachedData.devices.some(de => de.id === data.deviceId)) {
                 if (force) {
-                    this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
-                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe();
+                    await this.devicesApiService.UpdateDevice(data.deviceId, navigator.userAgent, pushSubscription.endpoint,
+                        pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth);
                 }
             } else {
-                this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth).subscribe(t => {
-                    data.deviceId = t.value;
-                    localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
-                });
+                const addedDevice = await this.devicesApiService.AddDevice(navigator.userAgent, pushSubscription.endpoint,
+                    pushSubscription.toJSON().keys.p256dh, pushSubscription.toJSON().keys.auth);
+                data.deviceId = addedDevice.value;
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
             }
         }
 
     }
 
-    private updateSubscription(): void {
+    private async updateSubscription(): Promise<void> {
         if ('Notification' in window && 'serviceWorker' in navigator && Notification.permission === 'granted') {
-            const _this = this;
-            navigator.serviceWorker.ready.then(registration =>
-                navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => {
-                    registration.pushManager.subscribe(_this.options)
-                        .then(pushSubscription => {
-                            _this.bindDevice(pushSubscription, true);
-                        });
-                }));
+            const registration = await navigator.serviceWorker.ready;
+            navigator.serviceWorker.addEventListener('pushsubscriptionchange', async () => {
+                const pushSubscription = await registration.pushManager.subscribe(this.options);
+                await this.bindDevice(pushSubscription, true);
+            });
         }
     }
 

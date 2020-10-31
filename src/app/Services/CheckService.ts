@@ -54,17 +54,16 @@ export class CheckService {
             });
     }
 
-    public checkApiVersion(): void {
-        this.serverListApiService.getServerConfig(this.apiService.serverConfig.domain.server).subscribe(t => {
-            const delta = this.compareVersion(t.apiVersion, versions.version);
-            if (delta === 1 || delta === 2) {
-                Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
-                    'Kahla might not work properly if you don\'t upgrade.', 'warning');
-            } else if (delta < 0 && !this.apiService.serverConfig.officialServer) {
-                Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
-                    'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
-            }
-        });
+    public async checkApiVersion(): Promise<void> {
+        const config = await this.serverListApiService.getServerConfig(this.apiService.serverConfig.domain.server);
+        const delta = this.compareVersion(config.apiVersion, versions.version);
+        if (delta === 1 || delta === 2) {
+            Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
+                'Kahla might not work properly if you don\'t upgrade.', 'warning');
+        } else if (delta < 0 && !this.apiService.serverConfig.officialServer) {
+            Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
+                'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
+        }
     }
 
     public compareVersion(a: string, b: string): number {

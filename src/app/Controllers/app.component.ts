@@ -54,9 +54,9 @@ export class AppComponent implements OnInit {
         this.homeService.pwaHomeScreenPrompt = e;
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal();
-        this.initService.init();
+        await this.initService.init();
     }
 }

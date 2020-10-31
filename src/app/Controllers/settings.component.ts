@@ -30,15 +30,14 @@ export class SettingsComponent implements OnInit {
     ) {
         }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         if (!this.cacheService.cachedData.me) {
-            this.authApiService.Me().subscribe(p => {
-                if (p.code === 0) {
-                    this.cacheService.cachedData.me = p.value;
-                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
-                    this.cacheService.saveCache();
-                }
-            });
+            const me = await this.authApiService.Me();
+            if (me.code === 0) {
+                this.cacheService.cachedData.me = me.value;
+                this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
+                this.cacheService.saveCache();
+            }
         }
     }
 
@@ -94,40 +93,39 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    public sendEmail(): void {
-        this.authApiService.Me().subscribe(p => {
-            if (p.code === 0) {
-                this.cacheService.cachedData.me.emailConfirmed = p.value.emailConfirmed;
-                if (!this.cacheService.cachedData.me.emailConfirmed) {
-                    Swal.fire({
-                        title: 'Please verify your email.',
-                        text: 'Please confirm your email as soon as possible! Or you may lose access \
-                            to your account in a few days! Without confirming your email, you won\'t receive \
-                            any important notifications and cannot reset your password!',
-                        icon: 'warning',
-                        confirmButtonText: 'Send Email',
-                        showCancelButton: true
-                    }).then((sendEmail) => {
-                        if (sendEmail.value && this.cacheService.cachedData.me) {
-                            this.authApiService.SendMail(this.cacheService.cachedData.me.email).subscribe((result) => {
-                                if (result.code === 0) {
-                                    Swal.fire({
-                                        title: 'Please check your inbox.',
-                                        text: 'Email was send to ' + this.cacheService.cachedData.me.email,
-                                        icon: 'success'
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: result.message,
-                                        icon: 'error'
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
+    public async sendEmail(): Promise<void> {
+        const me = await this.authApiService.Me();
+        if (me.code === 0) {
+            this.cacheService.cachedData.me.emailConfirmed = me.value.emailConfirmed;
+            if (!this.cacheService.cachedData.me.emailConfirmed) {
+                Swal.fire({
+                    title: 'Please verify your email.',
+                    text: 'Please confirm your email as soon as possible! Or you may lose access \
+                        to your account in a few days! Without confirming your email, you won\'t receive \
+                        any important notifications and cannot reset your password!',
+                    icon: 'warning',
+                    confirmButtonText: 'Send Email',
+                    showCancelButton: true
+                }).then((sendEmail) => {
+                    if (sendEmail.value && this.cacheService.cachedData.me) {
+                        this.authApiService.SendMail(this.cacheService.cachedData.me.email).subscribe((result) => {
+                            if (result.code === 0) {
+                                Swal.fire({
+                                    title: 'Please check your inbox.',
+                                    text: 'Email was send to ' + this.cacheService.cachedData.me.email,
+                                    icon: 'success'
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: result.message,
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }
     }
 }

@@ -23,8 +23,8 @@ export class DevicesComponent implements OnInit {
 
     public webPushEnabled: boolean;
 
-    public ngOnInit(): void {
-        this.cacheService.updateDevice();
+    public async ngOnInit(): Promise<void> {
+        await this.cacheService.updateDevice();
         if (this.webpushSupported()) {
             this.webPushEnabled = this.getWebPushStatus();
         }
@@ -45,16 +45,15 @@ export class DevicesComponent implements OnInit {
         return !this.electronService.isElectronApp && 'Notification' in window && 'serviceWorker' in navigator;
     }
 
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
+    public async testPush(): Promise<void> {
+        const pushResult = await this.devicesApiService.PushTestMessage();
+        if (pushResult.code === 0) {
+            Swal.fire(
+                'Successfully sent!',
+                pushResult.message,
+                'info'
+            );
+        }
     }
 
     public getWebPushStatus(): boolean {

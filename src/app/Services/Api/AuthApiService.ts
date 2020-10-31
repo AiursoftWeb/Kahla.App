@@ -15,16 +15,16 @@ export class AuthApiService {
     ) {
     }
 
-    public SignInStatus(): Observable<AiurValue<boolean>> {
-        return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');
+    public SignInStatus() {
+        return this.apiService.Get<AiurValue<boolean>>(AuthApiService.serverPath + '/SignInStatus').toPromise();
     }
 
-    public Me(): Observable<AiurValue<KahlaUser>> {
-        return this.apiService.Get(AuthApiService.serverPath + '/Me');
+    public Me() {
+        return this.apiService.Get<AiurValue<KahlaUser>>(AuthApiService.serverPath + '/Me').toPromise();
     }
 
     public UpdateInfo(nickName: string, bio: string, headIconPath: string): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/UpdateInfo', {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateInfo', {
             nickName: nickName,
             bio: bio,
             headIconPath: headIconPath,
@@ -37,7 +37,7 @@ export class AuthApiService {
                                enableInvisiable: boolean = null,
                                markEmailPublic: boolean = null,
                                listInSearchResult: boolean = null): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
+        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,

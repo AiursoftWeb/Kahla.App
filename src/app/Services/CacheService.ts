@@ -80,72 +80,72 @@ export class CacheService {
         });
     }
 
-    public updateDevice(): void {
-        this.devicesApiService.MyDevices().subscribe(response => {
-            let currentId = 0;
-            if (localStorage.getItem('setting-pushSubscription')) {
-                currentId = (<PushSubscriptionSetting>JSON.parse(localStorage.getItem('setting-pushSubscription'))).deviceId;
+    public async updateDevice(): Promise<void> {
+        const response = await this.devicesApiService.MyDevices();
+        let currentId = 0;
+        if (localStorage.getItem('setting-pushSubscription')) {
+            currentId = (<PushSubscriptionSetting>JSON.parse(localStorage.getItem('setting-pushSubscription'))).deviceId;
+        }
+        response.items.forEach(item => {
+            if (!item.name) {
+                return;
             }
-            response.items.forEach(item => {
-                if (item.name !== null && item.name.length >= 0) {
-                    const deviceName = [];
-                    // OS
-                    if (item.name.includes('Win')) {
-                        deviceName.push('Windows');
-                    } else if (item.name.includes('Android')) {
-                        deviceName.push('Android');
-                    } else if (item.name.includes('Linux')) {
-                        deviceName.push('Linux');
-                    } else if (item.name.includes('iPhone') || item.name.includes('iPad')) {
-                        deviceName.push('iOS');
-                    } else if (item.name.includes('Mac')) {
-                        deviceName.push('macOS');
-                    } else {
-                        deviceName.push('Unknown OS');
-                    }
-
-                    if (item.id === currentId) {
-                        deviceName[0] += '(Current device)';
-                    }
-
-                    // Browser Name
-                    if (item.name.includes('Firefox') && !item.name.includes('Seamonkey')) {
-                        deviceName.push('Firefox');
-                    } else if (item.name.includes('Seamonkey')) {
-                        deviceName.push('Seamonkey');
-                    } else if (item.name.includes('Edge')) {
-                        deviceName.push('Microsoft Edge');
-                    } else if (item.name.includes('Edg')) {
-                        deviceName.push('Edge Chromium');
-                    } else if (item.name.includes('Chrome') && !item.name.includes('Chromium')) {
-                        deviceName.push('Chrome');
-                    } else if (item.name.includes('Chromium')) {
-                        deviceName.push('Chromium');
-                    } else if (item.name.includes('Safari') && (!item.name.includes('Chrome') || !item.name.includes('Chromium'))) {
-                        deviceName.push('Safari');
-                    } else if (item.name.includes('Opera') || item.name.includes('OPR')) {
-                        deviceName.push('Opera');
-                    } else if (item.name.match(/MSIE|Trident/)) {
-                        deviceName.push('Internet Explorer');
-                    } else {
-                        deviceName.push('Unknown browser');
-                    }
-
-                    item.name = deviceName.join('-');
-                }
-            });
-            this.cachedData.devices = response.items;
-            // should check if current device id has already been invalid
-            if (localStorage.getItem('setting-pushSubscription')) {
-                const val = JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting;
-                if (val.deviceId && !this.cachedData.devices.find(t => t.id === val.deviceId)) {
-                    // invalid id, remove it
-                    val.deviceId = null;
-                    localStorage.setItem('setting-pushSubscription', JSON.stringify(val));
-                }
+            const deviceName = [];
+            // OS
+            if (item.name.includes('Win')) {
+                deviceName.push('Windows');
+            } else if (item.name.includes('Android')) {
+                deviceName.push('Android');
+            } else if (item.name.includes('Linux')) {
+                deviceName.push('Linux');
+            } else if (item.name.includes('iPhone') || item.name.includes('iPad')) {
+                deviceName.push('iOS');
+            } else if (item.name.includes('Mac')) {
+                deviceName.push('macOS');
+            } else {
+                deviceName.push('Unknown OS');
             }
-            this.saveCache();
+
+            if (item.id === currentId) {
+                deviceName[0] += '(Current device)';
+            }
+
+            // Browser Name
+            if (item.name.includes('Firefox') && !item.name.includes('Seamonkey')) {
+                deviceName.push('Firefox');
+            } else if (item.name.includes('Seamonkey')) {
+                deviceName.push('Seamonkey');
+            } else if (item.name.includes('Edge')) {
+                deviceName.push('Microsoft Edge');
+            } else if (item.name.includes('Edg')) {
+                deviceName.push('Edge Chromium');
+            } else if (item.name.includes('Chrome') && !item.name.includes('Chromium')) {
+                deviceName.push('Chrome');
+            } else if (item.name.includes('Chromium')) {
+                deviceName.push('Chromium');
+            } else if (item.name.includes('Safari') && (!item.name.includes('Chrome') || !item.name.includes('Chromium'))) {
+                deviceName.push('Safari');
+            } else if (item.name.includes('Opera') || item.name.includes('OPR')) {
+                deviceName.push('Opera');
+            } else if (item.name.match(/MSIE|Trident/)) {
+                deviceName.push('Internet Explorer');
+            } else {
+                deviceName.push('Unknown browser');
+            }
+
+            item.name = deviceName.join('-');
         });
+        this.cachedData.devices = response.items;
+        // should check if current device id has already been invalid
+        if (localStorage.getItem('setting-pushSubscription')) {
+            const subscriptionSettings = JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting;
+            if (subscriptionSettings.deviceId && !this.cachedData.devices.some(t => t.id === subscriptionSettings.deviceId)) {
+                // invalid id, remove it
+                subscriptionSettings.deviceId = null;
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(subscriptionSettings));
+            }
+        }
+        this.saveCache();
     }
 
     public modifyMessage(content: string, modifyText: boolean = false): string {
