@@ -8,19 +8,34 @@ export class BrowserContextService {
 
     }
 
+    public isInternetExplorer(): boolean {
+        return !!navigator.userAgent.match(/MSIE|Trident/);
+    }
+
     public permittedForWebPush(): boolean {
         return Notification.permission === 'granted' && this.supportWebPush();
     }
 
     public supportWebPush(): boolean {
-        return !this.electronService.isElectronApp && this.supportNotification();
+        return !this.isElectron() &&
+            this.supportNotification() &&
+            'serviceWorker' in navigator &&
+            !!navigator.serviceWorker.controller;
     }
 
     public supportNotification(): boolean {
-        return 'Notification' in window && 'serviceWorker' in navigator;
+        return 'Notification' in window;
     }
 
-    public isElectronApp(): boolean {
+    public isElectron(): boolean {
         return this.electronService.isElectronApp;
+    }
+
+    public openWebPage(url: string): void {
+        if (this.isElectron()) {
+            this.electronService.shell.openExternal(url);
+        } else {
+            location.href = url;
+        }
     }
 }

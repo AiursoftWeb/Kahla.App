@@ -43,13 +43,12 @@ export class InitService {
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
-        private browserContext: BrowserContextService,
-        private toolbox: Toolbox
+        private browserContext: BrowserContextService
     ) {
     }
 
     public async init(): Promise<void> {
-        if (navigator.userAgent.match(/MSIE|Trident/)) {
+        if (this.browserContext.isInternetExplorer()) {
             Swal.fire(
                 'Oops, it seems that you are opening Kahla in IE.',
                 'Please note that Kahla doesn\'t support IE :(<br/>' +
@@ -74,7 +73,7 @@ export class InitService {
             return;
         }
 
-        this.options.applicationServerKey = this.toolbox.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
+        this.options.applicationServerKey = Toolbox.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
         await this.checkService.checkApiVersion();
         const signInStatus = await this.authApiService.SignInStatus();
         if (signInStatus.value === false) {

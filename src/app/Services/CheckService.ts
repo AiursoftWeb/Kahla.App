@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
-import { ElectronService } from 'ngx-electron';
 import { ServerListApiService } from './Api/ServerListApiService';
 import { ApiService } from './Api/ApiService';
+import { Toolbox } from './Toolbox';
+import { BrowserContextService } from './BrowserContextService';
 
 @Injectable({
     providedIn: 'root'
@@ -16,11 +17,11 @@ export class CheckService {
     public buildTime = versions.buildTime;
 
     constructor(
-        private _electronService: ElectronService,
+        private broswerContext: BrowserContextService,
         private serverListApiService: ServerListApiService,
         private apiService: ApiService,
     ) {
-        if (this.checkSwCache()) {
+        if (this.broswerContext.supportWebPush()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
                 if (t.data === '__Update_Completed__') {
                     Swal.fire({
@@ -44,8 +45,8 @@ export class CheckService {
     public async checkVersion(showAlert: boolean): Promise<void> {
         this.checking = true;
         const version = await this.serverListApiService.Version();
-        if (this.compareVersion(version.latestVersion, versions.version) > 0) {
-            this.redirectToDownload(version.downloadAddress, showAlert);
+        if (Toolbox.compareVersion(version.latestVersion, versions.version) > 0) {
+            await this.redirectToDownload(version.downloadAddress, showAlert);
         } else if (showAlert) {
             Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
         }
@@ -54,7 +55,7 @@ export class CheckService {
 
     public async checkApiVersion(): Promise<void> {
         const config = await this.serverListApiService.getServerConfig(this.apiService.serverConfig.domain.server);
-        const delta = this.compareVersion(config.apiVersion, versions.version);
+        const delta = Toolbox.compareVersion(config.apiVersion, versions.version);
         if (delta === 1 || delta === 2) {
             Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
                 'Kahla might not work properly if you don\'t upgrade.', 'warning');
@@ -64,34 +65,20 @@ export class CheckService {
         }
     }
 
-    public compareVersion(a: string, b: string): number {
-        const verA = a.split('.').map(Number);
-        const verB = b.split('.').map(Number);
-
-        for (let i = 0; i < 3; i++) {
-            if (verA[i] === verB[i]) {
-                continue;
-            }
-            return Math.sign(verA[i] - verB[i]) * (i + 1);
-        }
-        return 0;
-    }
-
-    private redirectToDownload(downloadAddress: string, showAlert: boolean = false): void {
-        if (this._electronService.isElectronApp) {
-            Swal.fire({
+    private async redirectToDownload(downloadAddress: string, showAlert: boolean = false): Promise<void> {
+        if (this.broswerContext.isElectron()) {
+            const downloadIt = await Swal.fire({
                 title: 'There is a new version of Kahla!',
                 text: 'Do you want to download the latest version of Kahla now?',
                 icon: 'warning',
                 confirmButtonText: 'Download now',
                 cancelButtonText: 'Remind me later',
                 showCancelButton: true
-            }).then(ToDownload => {
-                if (ToDownload.value) {
-                    this.openWebPage(downloadAddress);
-                }
             });
-        } else if (this.checkSwCache()) {
+            if (downloadIt.value) {
+                this.broswerContext.openWebPage(downloadAddress);
+            }
+        } else if (this.broswerContext.supportWebPush()) {
             this.updateServiceWorkerCache();
             if (showAlert) {
                 Swal.fire({
@@ -113,17 +100,5 @@ export class CheckService {
 
     public updateServiceWorkerCache() {
         navigator.serviceWorker.controller.postMessage('__Update_Required__');
-    }
-
-    public checkSwCache(): boolean {
-        return !this._electronService.isElectronApp && 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
-    }
-
-    public openWebPage(url: string): void {
-        if (this._electronService.isElectronApp) {
-            this._electronService.shell.openExternal(url);
-        } else {
-            location.href = url;
-        }
     }
 }
