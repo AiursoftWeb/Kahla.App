@@ -8,7 +8,7 @@
         <label for="toggleWebpush" class="tgl-btn"></label>
     </div>
 </ng-container>
-<ng-container *ngIf="browserContext.isElectronApp()">
+<ng-container *ngIf="browserContext.isElectron()">
     <div class="menu-button toggle-setting" (click)="setElectronNotify(!getElectronNotify())">
         <div class="img"><i class="fas fa-concierge-bell"></i></div>
         <div class="text">Enable desktop notification</div>

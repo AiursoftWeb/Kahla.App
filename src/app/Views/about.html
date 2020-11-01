@@ -29,7 +29,7 @@
         <div class="text" i18n="@@CheckingForUpdates">Checking for updates...</div>
     </div>
 </ng-template>
-<div class="menu-button" (click)="checkService.updateServiceWorkerCache()" *ngIf="checkService.checkSwCache()">
+<div class="menu-button" (click)="checkService.updateServiceWorkerCache()" *ngIf="browserContext.supportWebPush()">
     <div class="img">
         <i class="fas fa-redo"></i>
     </div>
