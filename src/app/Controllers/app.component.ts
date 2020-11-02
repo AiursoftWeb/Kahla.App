@@ -32,6 +32,15 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:load', [])
     onLoad() {
+        if (this.browserContext.isInternetExplorer()) {
+            Swal.fire(
+                'Oops, it seems that you are opening Kahla in IE.',
+                'Please note that Kahla doesn\'t support IE :(<br/>' +
+                'We recommend upgrading to the latest <a href="https://mozilla.org/firefox/">Firefox</a>, ' +
+                '<a href="https://chrome.google.com">Google Chrome, </a>' +
+                'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
+            );
+        }
         if (this.browserContext.supportNotification()) {
             if (this.browserContext.supportWebPush()) {
                 navigator.serviceWorker.register('/sw.js').then(function (registration) {

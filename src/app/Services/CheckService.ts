@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ServerListApiService } from './Api/ServerListApiService';
-import { KahlaHTTP } from './Api/KahlaHTTP';
 import { Toolbox } from './Toolbox';
 import { BrowserContextService } from './BrowserContextService';
 import { ServerRepo } from '../Repos/ServerRepo';
@@ -45,7 +44,7 @@ export class CheckService {
         }
     }
 
-    public async checkAppVersion(showAlert: boolean): Promise<void> {
+    public async checkAndAlertAppVersion(showAlert: boolean): Promise<void> {
         this.checking = true;
         const globalVersion = await this.serverListApiService.Version();
         if (Toolbox.compareVersion(globalVersion.latestVersion, versions.version) > 0) {
@@ -56,13 +55,13 @@ export class CheckService {
         this.checking = false;
     }
 
-    public async checkApiVersion(): Promise<void> {
-        const config = await this.serverRepo.getOurServer(false);
-        const delta = Toolbox.compareVersion(config.apiVersion, versions.version);
+    public async checkAndAlertApiVersion(): Promise<void> {
+        const selectedServerConfig = await this.serverRepo.getOurServer(false);
+        const delta = Toolbox.compareVersion(selectedServerConfig.apiVersion, versions.version);
         if (delta === 1 || delta === 2) {
             Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
                 'Kahla might not work properly if you don\'t upgrade.', 'warning');
-        } else if (delta < 0 && !await this.serversRepo.isOfficialServer(config)) {
+        } else if (delta < 0 && !await this.serversRepo.isOfficialServer(selectedServerConfig)) {
             Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
                 'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
         }
