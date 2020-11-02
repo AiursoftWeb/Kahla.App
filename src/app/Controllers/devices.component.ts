@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
-import { Device } from '../Models/Device';
+import { Device, LocalDevice } from '../Models/Device';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
 import { LocalStoreService } from '../Services/LocalstoreService';
 import { BrowserContextService } from '../Services/BrowserContextService';
+import { DeviceRepo } from '../Repos/DeviceRepo';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -14,17 +15,19 @@ import { BrowserContextService } from '../Services/BrowserContextService';
         '../Styles/toggleButton.scss']
 })
 export class DevicesComponent implements OnInit {
+    public devices: LocalDevice[];
+
     constructor(
-        public cacheService: CacheService,
         public devicesApiService: DevicesApiService,
         public initService: InitService,
         public localStore: LocalStoreService,
-        public browserContext: BrowserContextService
+        public browserContext: BrowserContextService,
+        private deviceRepo: DeviceRepo
     ) {
     }
 
     public async ngOnInit(): Promise<void> {
-        await this.cacheService.updateDevice();
+        this.devices = await this.deviceRepo.getDevices();
     }
 
     public detail(device: Device): void {
@@ -53,8 +56,9 @@ export class DevicesComponent implements OnInit {
         return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).enabled;
     }
 
-    public setWebPushStatus(enable: boolean) {
+    public async setWebPushStatus(enable: boolean): Promise<void> {
         this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enabled = enable);
+        this.devices = await this.deviceRepo.getDevices(false);
     }
 
     public getElectronNotify(): boolean {

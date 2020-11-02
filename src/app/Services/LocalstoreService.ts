@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LocalStoreService {
-    public static readonly STORAGE_SERVER_CONFIG = 'serverConfig';
-    public static readonly PUSH_SUBSCRIPTION = 'setting-pushSubscription';
+    public static readonly STORAGE_SERVER_CONFIG = 'server-config';
+    public static readonly PUSH_SUBSCRIPTION = 'push-subscription-config';
+    public static readonly REMOTE_DEVICES = 'remote-devices';
 
     public resetAll() {
         localStorage.clear();
@@ -15,13 +16,15 @@ export class LocalStoreService {
 
     public get<T>(key: string, creator: new () => T): T {
         const localStore = localStorage.getItem(key);
+        let result: T = null;
         if (localStore) {
-            const result = JSON.parse(localStore) as T;
-            return result;
-        } else {
-            const newStore = new creator();
-            return newStore;
+            result = JSON.parse(localStore) as T;
         }
+        if (!result) {
+            const newStore = new creator();
+            result = newStore;
+        }
+        return result;
     }
 
     public replace<T>(key: string, newObject: T): void {

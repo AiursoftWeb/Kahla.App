@@ -54,6 +54,7 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { LocalStoreService } from './Services/LocalstoreService';
 import { BrowserContextService } from './Services/BrowserContextService';
 import { Toolbox } from './Services/Toolbox';
+import { DeviceRepo } from './Repos/DeviceRepo';
 
 @NgModule({
     imports: [
@@ -112,7 +113,8 @@ import { Toolbox } from './Services/Toolbox';
         EventService,
         GlobalNotifyService,
         BrowserContextService,
-        Toolbox
+        Toolbox,
+        DeviceRepo
     ],
     bootstrap: [AppComponent]
 })

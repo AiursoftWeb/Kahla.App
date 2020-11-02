@@ -18,6 +18,7 @@ import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
 import { BrowserContextService } from './BrowserContextService';
 import { Toolbox } from './Toolbox';
+import { DeviceRepo } from '../Repos/DeviceRepo';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +44,8 @@ export class InitService {
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
-        private browserContext: BrowserContextService
+        private browserContext: BrowserContextService,
+        private deviceRepo: DeviceRepo,
     ) {
     }
 
@@ -111,7 +113,6 @@ export class InitService {
     }
 
     private async refreshWebPush() {
-        await this.cacheService.updateDevice();
         const subscription = await this.getSubscription();
         if (subscription) {
             await this.registerSubscriptionAsDevice(subscription);
@@ -166,7 +167,7 @@ export class InitService {
             localSubSettings.deviceId = 0;
             this.localStore.replace(LocalStoreService.PUSH_SUBSCRIPTION, localSubSettings);
         } else if (localSubSettings.enabled) {
-            if (localSubSettings.deviceId && this.cacheService.cachedData.devices.some(de => de.id === localSubSettings.deviceId)) {
+            if (localSubSettings.deviceId && (await this.deviceRepo.getDevices(false)).some(de => de.remoteDevice.id === localSubSettings.deviceId)) {
                 await this.devicesApiService.UpdateDevice(
                     localSubSettings.deviceId,
                     navigator.userAgent,
