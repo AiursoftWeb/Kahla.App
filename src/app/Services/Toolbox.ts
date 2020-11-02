@@ -14,6 +14,16 @@ export class Toolbox {
         return outputArray;
     }
 
+    public static trim(source: string, target: string): string {
+        if (target === ']') {
+            target = '\\]';
+        }
+        if (target === '\\') {
+            target = '\\\\';
+        }
+        return source.replace(new RegExp('^[' + target + ']+|[' + target + ']+$', 'g'), '');
+    }
+
     public static compareVersion(a: string, b: string): number {
         const verA = a.split('.').map(Number);
         const verB = b.split('.').map(Number);
@@ -35,5 +45,15 @@ export class Toolbox {
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    }
+
+    public param(obj: any): string {
+        let data = ``;
+        for (const prop in obj) {
+            if (obj.hasOwnProperty(prop) && obj[prop] != null) {
+                data += prop + '=' + encodeURIComponent(obj[prop].toString()) + '&';
+            }
+        }
+        return data;
     }
 }

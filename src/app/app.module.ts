@@ -30,8 +30,7 @@ import { HomeComponent } from './Controllers/home.component';
 import { ShareComponent } from './Controllers/share.component';
 import { FileHistoryComponent } from './Controllers/file-history.component';
 // Services
-import { ApiService } from './Services/Api/ApiService';
-import { ParamService } from './Services/ParamService';
+import { KahlaHTTP } from './Services/Api/KahlaHTTP';
 import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
 import { UploadService } from './Services/UploadService';
@@ -55,6 +54,9 @@ import { LocalStoreService } from './Services/LocalstoreService';
 import { BrowserContextService } from './Services/BrowserContextService';
 import { Toolbox } from './Services/Toolbox';
 import { DeviceRepo } from './Repos/DeviceRepo';
+import { ServersRepo } from './Repos/ServersRepo';
+import { ServerRepo } from './Repos/ServerRepo';
+import { SubscriptionManager } from './Services/SubscriptionManager';
 
 @NgModule({
     imports: [
@@ -91,8 +93,7 @@ import { DeviceRepo } from './Repos/DeviceRepo';
         VjsPlayerComponent,
     ],
     providers: [
-        ApiService,
-        ParamService,
+        KahlaHTTP,
         CacheService,
         UploadService,
         CheckService,
@@ -114,7 +115,10 @@ import { DeviceRepo } from './Repos/DeviceRepo';
         GlobalNotifyService,
         BrowserContextService,
         Toolbox,
-        DeviceRepo
+        DeviceRepo,
+        ServersRepo,
+        ServerRepo,
+        SubscriptionManager
     ],
     bootstrap: [AppComponent]
 })

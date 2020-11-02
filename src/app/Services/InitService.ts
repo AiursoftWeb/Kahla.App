@@ -10,27 +10,23 @@ import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
 import { ProbeService } from './ProbeService';
 import { ServerConfig } from '../Models/ServerConfig';
-import { ApiService } from './Api/ApiService';
+import { KahlaHTTP } from './Api/KahlaHTTP';
 import { ServerListApiService } from './Api/ServerListApiService';
-import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
 import { BrowserContextService } from './BrowserContextService';
 import { Toolbox } from './Toolbox';
 import { DeviceRepo } from '../Repos/DeviceRepo';
+import { SubscriptionManager } from './SubscriptionManager';
+import { ServersRepo } from '../Repos/ServersRepo';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InitService {
-    private options = {
-        userVisibleOnly: true,
-        applicationServerKey: null
-    };
-
     constructor(
-        private apiService: ApiService,
+        private apiService: KahlaHTTP,
         private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
@@ -38,14 +34,14 @@ export class InitService {
         private cacheService: CacheService,
         private _electronService: ElectronService,
         private themeService: ThemeService,
-        private devicesApiService: DevicesApiService,
         private probeService: ProbeService,
         private serverListApiService: ServerListApiService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
         private browserContext: BrowserContextService,
-        private deviceRepo: DeviceRepo,
+        private subscriptionManager: SubscriptionManager,
+        private serverConfigRepo: ServersRepo
     ) {
     }
 
@@ -59,13 +55,13 @@ export class InitService {
                 'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
-        await this.checkService.checkVersion(false);
-        const serverConfig = this.localStore.get(LocalStoreService.STORAGE_SERVER_CONFIG, ServerConfig);
+        await this.checkService.checkAppVersion(false);
+        const serverConfig = this.serverConfigRepo.getServer();
         this.apiService.serverConfig = serverConfig;
 
         if (this.apiService.serverConfig._cacheVersion !== ServerConfig.CACHE_VERSION) {
             this.apiService.serverConfig = null;
-            await this.reload();
+            await this.backToServerSelection();
         }
 
         this.cacheService.initCache();
@@ -75,7 +71,6 @@ export class InitService {
             return;
         }
 
-        this.options.applicationServerKey = Toolbox.urlBase64ToUint8Array(this.apiService.serverConfig.vapidPublicKey);
         await this.checkService.checkApiVersion();
         const signInStatus = await this.authApiService.SignInStatus();
         if (signInStatus.value === false) {
@@ -88,10 +83,7 @@ export class InitService {
         }
 
         // Webpush Service
-        if (this.browserContext.permittedForWebPush()) {
-            this.refreshWebPush();
-            navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => this.refreshWebPush());
-        }
+        this.subscriptionManager.registerWebPush();
 
         // Init stargate push
         await this.eventService.initPusher();
@@ -112,14 +104,7 @@ export class InitService {
 
     }
 
-    private async refreshWebPush() {
-        const subscription = await this.getSubscription();
-        if (subscription) {
-            await this.registerSubscriptionAsDevice(subscription);
-        }
-    }
-
-    private async reload(): Promise<void> {
+    private async backToServerSelection(): Promise<void> {
         this.router.navigate(['/signin'], { replaceUrl: true });
         const servers = await this.serverListApiService.Servers();
         let target: ServerConfig;
@@ -133,7 +118,7 @@ export class InitService {
             target.officialServer = true;
             target._cacheVersion = ServerConfig.CACHE_VERSION;
             this.apiService.serverConfig = target;
-            this.localStore.replace(LocalStoreService.STORAGE_SERVER_CONFIG, target);
+            this.localStore.replace(LocalStoreService.SERVER_CONFIG, target);
         }
         await this.init();
     }
@@ -143,45 +128,5 @@ export class InitService {
         this.messageService.resetVariables();
         this.cacheService.reset();
         this.localStore.resetAll();
-    }
-
-    public async getSubscription(): Promise<PushSubscription> {
-        if (this.browserContext.permittedForWebPush()) {
-            const registration = await navigator.serviceWorker.ready;
-            let sub = await registration.pushManager.getSubscription();
-            if (sub === null) {
-                sub = await registration.pushManager.subscribe(this.options);
-            }
-            return sub;
-        } else {
-            return null;
-        }
-    }
-
-    public async registerSubscriptionAsDevice(pushSubscription: PushSubscription): Promise<void> {
-
-        const localSubSettings = this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting);
-
-        if (!localSubSettings.enabled && localSubSettings.deviceId) {
-            await this.devicesApiService.DropDevice(localSubSettings.deviceId);
-            localSubSettings.deviceId = 0;
-            this.localStore.replace(LocalStoreService.PUSH_SUBSCRIPTION, localSubSettings);
-        } else if (localSubSettings.enabled) {
-            if (localSubSettings.deviceId && (await this.deviceRepo.getDevices(false)).some(de => de.remoteDevice.id === localSubSettings.deviceId)) {
-                await this.devicesApiService.UpdateDevice(
-                    localSubSettings.deviceId,
-                    navigator.userAgent,
-                    pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth);
-            } else {
-                const addedDevice = await this.devicesApiService.AddDevice(
-                    navigator.userAgent,
-                    pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth);
-                this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, (t) => t.deviceId = addedDevice.value);
-            }
-        }
     }
 }

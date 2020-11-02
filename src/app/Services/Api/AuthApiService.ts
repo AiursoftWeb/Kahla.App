@@ -3,14 +3,14 @@ import { AiurValue } from '../../Models/AiurValue';
 import { KahlaUser } from '../../Models/KahlaUser';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { InitPusherViewModel } from '../../Models/ApiModels/InitPusherViewModel';
-import { ApiService } from './ApiService';
+import { KahlaHTTP } from './KahlaHTTP';
 
 @Injectable()
 export class AuthApiService {
     private static serverPath = '/auth';
 
     constructor(
-        private apiService: ApiService
+        private apiService: KahlaHTTP
     ) {
     }
 

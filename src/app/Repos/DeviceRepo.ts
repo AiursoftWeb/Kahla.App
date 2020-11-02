@@ -19,16 +19,20 @@ export class DeviceRepo {
         return remoteDevices.items;
     }
 
-    private getCurrentDeviceId(): number {
-        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).deviceId;
-    }
-
     private async getRemoteDevices(allowCache = true): Promise<Device[]> {
         let devices = this.localStore.get(LocalStoreService.REMOTE_DEVICES, Devices).devices;
         if (!devices.length || !allowCache) {
             devices = await this.pullRemoteDevices();
         }
         return devices;
+    }
+
+    public getCurrentDeviceId(): number {
+        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).deviceId;
+    }
+
+    public setCurrentDeviceId(newId: number) {
+        this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, (t) => t.deviceId = newId);
     }
 
     public async getDevices(allowCache = true): Promise<LocalDevice[]> {

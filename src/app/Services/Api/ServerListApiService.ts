@@ -1,26 +1,35 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './ApiService';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 import { VersionViewModel } from '../../Models/VersionViewModel';
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ServerListApiService {
+    constructor(
+        private http: HttpClient) {
+    }
 
-    constructor(private apiService: ApiService) {
+    private get<T>(address: string): Promise<T> {
+        return this.http.get<T>(address).pipe(catchError(this.handleError)).toPromise();
     }
 
     public Servers() {
-        return this.apiService.GetByFullUrl<ServerConfig[]>(`${environment.serversProvider}/servers`, false).toPromise();
+        return this.get<ServerConfig[]>(`${environment.serversProvider}/servers`);
     }
 
     public Version() {
-        return this.apiService.GetByFullUrl<VersionViewModel>(`${environment.serversProvider}/version`, false).toPromise();
+        return this.get<VersionViewModel>(`${environment.serversProvider}/version`);
     }
 
     public getServerConfig(server: string) {
-        return this.apiService.GetByFullUrl<ServerConfig>(server, false).toPromise();
+        return this.get<ServerConfig>(server);
+    }
+
+    public handleError(error: any): Promise<any> {
+        return Promise.reject(error);
     }
 }

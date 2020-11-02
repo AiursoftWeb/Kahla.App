@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LocalStoreService {
-    public static readonly STORAGE_SERVER_CONFIG = 'server-config';
+    public static readonly SERVERS_STORE = 'official-servers';
+    public static readonly SERVER_CONFIG = 'server-config';
     public static readonly PUSH_SUBSCRIPTION = 'push-subscription-config';
     public static readonly REMOTE_DEVICES = 'remote-devices';
 

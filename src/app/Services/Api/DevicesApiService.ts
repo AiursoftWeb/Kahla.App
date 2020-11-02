@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './ApiService';
+import { KahlaHTTP } from './KahlaHTTP';
 import { AiurCollection } from '../../Models/AiurCollection';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
@@ -10,7 +10,7 @@ export class DevicesApiService {
     private static serverPath = '/devices';
 
     constructor(
-        private apiService: ApiService
+        private apiService: KahlaHTTP
     ) {
     }
 

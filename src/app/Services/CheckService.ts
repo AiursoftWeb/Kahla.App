@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
 import { ServerListApiService } from './Api/ServerListApiService';
-import { ApiService } from './Api/ApiService';
+import { KahlaHTTP } from './Api/KahlaHTTP';
 import { Toolbox } from './Toolbox';
 import { BrowserContextService } from './BrowserContextService';
+import { ServerRepo } from '../Repos/ServerRepo';
+import { ServersRepo } from '../Repos/ServersRepo';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +21,8 @@ export class CheckService {
     constructor(
         private broswerContext: BrowserContextService,
         private serverListApiService: ServerListApiService,
-        private apiService: ApiService,
+        private serverRepo: ServerRepo,
+        private serversRepo: ServersRepo
     ) {
         if (this.broswerContext.supportWebPush()) {
             navigator.serviceWorker.addEventListener('message', (t: MessageEvent) => {
@@ -42,11 +45,11 @@ export class CheckService {
         }
     }
 
-    public async checkVersion(showAlert: boolean): Promise<void> {
+    public async checkAppVersion(showAlert: boolean): Promise<void> {
         this.checking = true;
-        const version = await this.serverListApiService.Version();
-        if (Toolbox.compareVersion(version.latestVersion, versions.version) > 0) {
-            await this.redirectToDownload(version.downloadAddress, showAlert);
+        const globalVersion = await this.serverListApiService.Version();
+        if (Toolbox.compareVersion(globalVersion.latestVersion, versions.version) > 0) {
+            await this.redirectToDownload(globalVersion.downloadAddress, showAlert);
         } else if (showAlert) {
             Swal.fire('Success', 'You are running the latest version of Kahla!', 'success');
         }
@@ -54,12 +57,12 @@ export class CheckService {
     }
 
     public async checkApiVersion(): Promise<void> {
-        const config = await this.serverListApiService.getServerConfig(this.apiService.serverConfig.domain.server);
+        const config = await this.serverRepo.getOurServer(false);
         const delta = Toolbox.compareVersion(config.apiVersion, versions.version);
         if (delta === 1 || delta === 2) {
             Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
                 'Kahla might not work properly if you don\'t upgrade.', 'warning');
-        } else if (delta < 0 && !this.apiService.serverConfig.officialServer) {
+        } else if (delta < 0 && !await this.serversRepo.isOfficialServer(config)) {
             Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
                 'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
         }
@@ -87,7 +90,6 @@ export class CheckService {
                     icon: 'warning'
                 });
             }
-
         } else {
             // in a browser without serviceworker
             Swal.fire({
