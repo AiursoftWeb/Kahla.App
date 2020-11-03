@@ -59,9 +59,7 @@ export class SignInComponent implements OnInit {
             }
         }
         Swal.fire({
-            icon: 'info',
-            title: 'Fetching manifest from server...',
-            text: this.serverAddress,
+            title: 'Connecting...',
             showConfirmButton: false,
             showCancelButton: false
         });
