@@ -43,15 +43,16 @@
 </a>
 <a class="menu-button" href="{{ website }}" target="_blank" rel="noopener noreferrer" >
 	<div class="img">
-        <i class="fas fa-download" [class.fa-download]="!electronService.isElectronApp"
-           [class.fa-info-circle]="electronService.isElectronApp"></i>
+        <i class="fas fa-download" 
+            [class.fa-download]="!browserContext.isElectron()" 
+            [class.fa-info-circle]="browserContext.isElectron()"></i>
 	</div>
-    <div class="text">{{electronService.isElectronApp ? 'Open Kahla official site' : 'Download Kahla App'}}</div>
+    <div class="text">
+        {{browserContext.isElectron() ? 'Open Kahla official site' : 'Download Kahla App'}}
+    </div>
 </a>
 <div class="foot-text">
-    <p>Server connected: {{apiService.serverConfig.serverName}} ({{apiService.serverConfig.domain.server}})</p>
-    <p *ngIf="apiService.serverConfig.officialServer">An aiursoft official server.</p>
-    <p *ngIf="!apiService.serverConfig.officialServer">A community server.</p>
+    <p>Server connected: {{this.currentServer.serverName}} ({{this.currentServer.domain.server}})</p>
     <p>
         <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
         |

@@ -13,8 +13,10 @@ export class ServerListApiService {
         private http: HttpClient) {
     }
 
-    private get<T>(address: string): Promise<T> {
-        return this.http.get<T>(address).pipe(catchError(this.handleError)).toPromise();
+    private get<T>(address: string, withAuth = false): Promise<T> {
+        return this.http.get<T>(address, {
+            withCredentials: withAuth
+        }).pipe(catchError(this.handleError)).toPromise();
     }
 
     public Servers() {
@@ -26,7 +28,7 @@ export class ServerListApiService {
     }
 
     public getServerConfig(server: string) {
-        return this.get<ServerConfig>(server);
+        return this.get<ServerConfig>(server, true);
     }
 
     public handleError(error: any): Promise<any> {

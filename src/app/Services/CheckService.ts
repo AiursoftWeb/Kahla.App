@@ -61,7 +61,7 @@ export class CheckService {
         if (delta === 1 || delta === 2) {
             Swal.fire('Outdated client.', 'Your Kahla App is too far from the version of the server connected.\n' +
                 'Kahla might not work properly if you don\'t upgrade.', 'warning');
-        } else if (delta < 0 && !await this.serversRepo.isOfficialServer(selectedServerConfig)) {
+        } else if (delta < 0 && !await this.serversRepo.isOfficialServer(selectedServerConfig.domain.server)) {
             Swal.fire('Community server outdated!', 'The Client version is newer then the Server version.\n' +
                 'Consider contact the host of the server for updating the kahla.server version to latest.', 'warning');
         }

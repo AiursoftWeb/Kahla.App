@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { DeviceRepo } from '../Repos/DeviceRepo';
+import { ServerRepo } from '../Repos/ServerRepo';
 import { DevicesApiService } from './Api/DevicesApiService';
 import { BrowserContextService } from './BrowserContextService';
 import { LocalStoreService } from './LocalstoreService';
 
 @Injectable()
 export class SubscriptionManager {
-    private options = {
-        userVisibleOnly: true,
-        applicationServerKey: null
-    };
-
     constructor(
         private browserContext: BrowserContextService,
         private localStore: LocalStoreService,
         private devicesApiService: DevicesApiService,
-        private deviceRepo: DeviceRepo) {
+        private deviceRepo: DeviceRepo,
+        private serverRepo: ServerRepo) {
 
     }
 
@@ -25,7 +22,11 @@ export class SubscriptionManager {
         let sub = await registration.pushManager.getSubscription();
         if (sub === null) {
             console.warn('Subscription out of date. Will try resubscribe now...');
-            sub = await registration.pushManager.subscribe(this.options);
+            const server = await this.serverRepo.getOurServer();
+            sub = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: server.vapidPublicKey
+            });
         }
         return sub;
     }

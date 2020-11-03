@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ServerConfig } from '../Models/ServerConfig';
 import { BrowserContextService } from '../Services/BrowserContextService';
 import { LocalStoreService } from '../Services/LocalstoreService';
+import { Toolbox } from '../Services/Toolbox';
 import { ServersRepo } from './ServersRepo';
 
 @Injectable()
@@ -23,27 +24,33 @@ export class ServerRepo {
         }
         console.warn('Trying to get a server config with no server saved. Will wait till all servers loaded.');
         this.getOurServer(true).then(() => { });
-        while (!this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig).domain) {
+        while (!this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig).serverName) {
             // Hold it here.
         }
         return this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig);
+    }
+
+    public async getDefaultServer(): Promise<ServerConfig> {
+        let serverConfig: ServerConfig = null;
+        const defaultServers = await this.remoteServersRepo.getRemoteServers();
+        if (!defaultServers.length) {
+            throw new Error('No server found from remote! Kahla will crash.');
+        }
+        if (this.browserContext.isElectron()) {
+            serverConfig = defaultServers[0];
+            console.log('Default server is just the first server because running in Electron.');
+        } else {
+            serverConfig = defaultServers.find(t => t.domain.client === window.location.origin);
+            console.log(`Default server is ${serverConfig.domain.server}.`);
+        }
+        return serverConfig;
     }
 
     public async getOurServer(allowCache = true): Promise<ServerConfig> {
         let serverConfig = this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig);
         if (!serverConfig.serverName) {
             console.warn('No server configured. Trying to select a default server...');
-            const defaultServers = await this.remoteServersRepo.getRemoteServers();
-            if (!defaultServers.length) {
-                throw new Error('No server found from remote! Kahla will crash.');
-            }
-            if (this.browserContext.isElectron()) {
-                serverConfig = defaultServers[0];
-                console.log('Default server is just the first server because running in Electron.');
-            } else {
-                serverConfig = defaultServers.find(t => t.domain.client === window.location.origin);
-                console.log(`Default server is ${serverConfig.domain.server}.`);
-            }
+            serverConfig = await this.getDefaultServer();
         }
         if (!allowCache) {
             serverConfig = await this.remoteServersRepo.getServer(serverConfig.domain.server, false);
@@ -59,5 +66,26 @@ export class ServerRepo {
 
     public setOurServer(serverConfig: ServerConfig) {
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, serverConfig);
+    }
+
+    public trimServerAddress(rawServerAddress: string): string {
+        let trimedAddress = Toolbox.trim(rawServerAddress, '/').toLowerCase();
+        if (!trimedAddress.match(/^https?:\/\/.+/g)) {
+            trimedAddress = 'https://' + trimedAddress;
+        }
+        return trimedAddress;
+    }
+
+    public async connectAndSetOurServer(serverAddress: string): Promise<boolean> {
+        try {
+            const server = await this.remoteServersRepo.getServer(serverAddress, false);
+            if (server.code !== 0 || server.domain.server !== serverAddress) {
+                return false;
+            }
+            this.setOurServer(server);
+            return true;
+        } catch {
+            return false;
+        }
     }
 }

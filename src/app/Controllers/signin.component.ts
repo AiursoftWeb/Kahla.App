@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { LocalStoreService } from '../Services/LocalstoreService';
-import { ServersRepo } from '../Repos/ServersRepo';
 import { ServerRepo } from '../Repos/ServerRepo';
-import { Toolbox } from '../Services/Toolbox';
 import { BrowserContextService } from '../Services/BrowserContextService';
+import { ServerConfig } from '../Models/ServerConfig';
+import { ServersRepo } from '../Repos/ServersRepo';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -16,55 +14,38 @@ import { BrowserContextService } from '../Services/BrowserContextService';
 })
 export class SignInComponent implements OnInit {
 
-    public changingServer = false;
-    public serverAddr: string;
+    public viewingChangeServerPage = false;
+    public serverAddress: string;
+    public currentServer: ServerConfig;
 
     constructor(
         private browserContext: BrowserContextService,
         public electronService: ElectronService,
-        public apiService: KahlaHTTP,
         public initService: InitService,
-        private localstore: LocalStoreService,
-        private remoteServersRepo: ServersRepo,
-        private serverRepo: ServerRepo) {
+        private serverRepo: ServerRepo,
+        private serversRepo: ServersRepo) {
     }
 
     async ngOnInit(): Promise<void> {
-        const ourServer = await this.serverRepo.getOurServer();
-        this.serverAddr = ourServer.domain.server;
+        this.currentServer = await this.serverRepo.getOurServer();
+        this.serverAddress = this.currentServer.domain.server;
     }
 
-    public async clearCommunityServerData(): Promise<void> {
-        this.localstore.reset(LocalStoreService.SERVER_CONFIG);
-        this.changingServer = false;
-        await this.initService.init();
+    public async resetServerAndBack(): Promise<void> {
+        const defaultServer = await this.serverRepo.getDefaultServer();
+        this.serverRepo.setOurServer(defaultServer);
+        this.serverAddress = defaultServer.domain.server;
+        this.viewingChangeServerPage = false;
     }
 
     public async connectCommunity(): Promise<void> {
-        if (!this.serverAddr) {
+        if (!this.serverAddress) {
             Swal.fire('Please input an valid server url!', '', 'error');
             return;
         }
-        this.serverAddr = Toolbox.trim(this.serverAddr, '/').toLowerCase();
-        if (!this.serverAddr.match(/^https?:\/\/.+/g)) {
-            this.serverAddr = 'https://' + this.serverAddr;
-        }
-        Swal.fire({
-            icon: 'info',
-            title: 'Fetching manifest from server...',
-            text: this.serverAddr,
-            showConfirmButton: false,
-            showCancelButton: false
-        });
-        Swal.showLoading();
-        try {
-            const serverConfig = await this.remoteServersRepo.getServer(this.serverAddr);
-            if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
-                this.fireFailed();
-                return;
-            }
-            Swal.close();
-            const res = await Swal.fire({
+        this.serverAddress = this.serverRepo.trimServerAddress(this.serverAddress);
+        if (!this.serversRepo.isOfficialServer(this.serverAddress)) {
+            const connectToUntrustServer = await Swal.fire({
                 title: 'Connecting to a community server...',
                 text: 'Aiursoft CANNOT prove the community server is secure.\n' +
                     ' You should NEVER connect to a server you don\'t trust.\n' +
@@ -73,13 +54,24 @@ export class SignInComponent implements OnInit {
                 showCancelButton: true,
                 confirmButtonText: 'Continue'
             });
-            if (res.dismiss) {
+            if (connectToUntrustServer.dismiss) {
                 return;
             }
-            this.serverRepo.setOurServer(serverConfig);
-            this.changingServer = false;
+        }
+        Swal.fire({
+            icon: 'info',
+            title: 'Fetching manifest from server...',
+            text: this.serverAddress,
+            showConfirmButton: false,
+            showCancelButton: false
+        });
+        Swal.showLoading();
+        const connected = await this.serverRepo.connectAndSetOurServer(this.serverAddress);
+        Swal.close();
+        if (connected) {
             await this.initService.init();
-        } catch {
+            this.viewingChangeServerPage = false;
+        } else {
             this.fireFailed();
         }
     }

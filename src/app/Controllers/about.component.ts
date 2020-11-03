@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
-import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
-import { ElectronService } from 'ngx-electron';
 import { environment } from '../../environments/environment';
 import { BrowserContextService } from '../Services/BrowserContextService';
+import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerConfig } from '../Models/ServerConfig';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -14,16 +14,20 @@ import { BrowserContextService } from '../Services/BrowserContextService';
         '../Styles/button.scss']
 })
 
-export class AboutComponent {
+export class AboutComponent implements OnInit {
     public sourceCodeURL = Values.sourceCodeURL;
     public website = environment.serversProvider;
+    public currentServer: ServerConfig;
 
     constructor(
         public checkService: CheckService,
-        public electronService: ElectronService,
-        public apiService: KahlaHTTP,
-        public browserContext: BrowserContextService
+        public browserContext: BrowserContextService,
+        public serverRepo: ServerRepo
     ) {
+    }
+
+    async ngOnInit(): Promise<void> {
+        this.currentServer = await this.serverRepo.getOurServer();
     }
 
     public async check(): Promise<void> {

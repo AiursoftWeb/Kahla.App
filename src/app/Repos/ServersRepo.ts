@@ -24,17 +24,17 @@ export class ServersRepo {
         return servers;
     }
 
-    public async isOfficialServer(inputServer: ServerConfig): Promise<boolean> {
+    public async isOfficialServer(inputServer: string): Promise<boolean> {
         const officialServer = await this.getRemoteServers();
-        return officialServer.some(t => t.domain.server === inputServer.domain.server);
+        return officialServer.some(t => t.domain.server === inputServer);
     }
 
     public async getServer(inputAddress: string, allowCache = true): Promise<ServerConfig> {
         const servers = await this.getRemoteServers();
-        let cached = servers.find(t => t.domain.server === inputAddress);
-        if (!cached || !allowCache) {
-            cached = await this.serversApi.getServerConfig(inputAddress);
+        const cached = servers.find(t => t.domain.server === inputAddress);
+        if (cached && allowCache) {
+            return cached;
         }
-        return cached;
+        return await this.serversApi.getServerConfig(inputAddress);
     }
 }
