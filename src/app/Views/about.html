@@ -51,7 +51,7 @@
         {{browserContext.isElectron() ? 'Open Kahla official site' : 'Download Kahla App'}}
     </div>
 </a>
-<div class="foot-text">
+<div class="foot-text" *ngIf="this.currentServer">
     <p>Server connected: {{this.currentServer.serverName}} ({{this.currentServer.domain.server}})</p>
     <p>
         <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
