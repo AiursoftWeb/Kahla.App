@@ -16,13 +16,13 @@ export class LocalDevice {
         currentId: number) {
         this.remoteDevice = remoteDeivce;
         this.isCurrent = currentId === remoteDeivce.id;
-        const osName = LocalDevice.getOSName(remoteDeivce.name);
-        const browserName = LocalDevice.getBrowserName(remoteDeivce.name);
-        this.displayName = `${osName}-${browserName}`;
+        this.osName = LocalDevice.getOSName(remoteDeivce.name);
+        this.browserName = LocalDevice.getBrowserName(remoteDeivce.name);
     }
     public remoteDevice: Device;
     public isCurrent: boolean;
-    public displayName: string;
+    public osName: string;
+    public browserName: string;
 
     private static getOSName(sourceName: string): string {
         if (sourceName.includes('Win')) {

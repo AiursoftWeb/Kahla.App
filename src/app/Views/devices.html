@@ -26,27 +26,30 @@
     <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
 </ng-container>
 <div class="menu-header">My web devices</div>
-<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices"
+<div class="menu-button device-menu-button" *ngFor="let device of devices"
      (click)="detail(device)">
     <div class="img device-img">
-        <i *ngIf="device.name.includes('Windows')" class="fab fa-windows" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fab fa-apple"
+        <i *ngIf="device.osName.includes('Windows')" class="fab fa-windows" aria-hidden="true"></i>
+        <i *ngIf="device.osName.includes('macOS') || device.osName.includes('iOS')" class="fab fa-apple"
            aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Android')" class="fab fa-android" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Linux')" class="fab fa-linux" aria-hidden="true"></i>
+        <i *ngIf="device.osName.includes('Android')" class="fab fa-android" aria-hidden="true"></i>
+        <i *ngIf="device.osName.includes('Linux')" class="fab fa-linux" aria-hidden="true"></i>
     </div>
-    <div class="text device-text">{{ device.name.split('-')[0] }}</div>
+    <div class="text device-text">
+        {{ device.osName }}
+        <label *ngIf="device.isCurrent">(Current)</label>
+    </div>
 
     <div class="img device-img">
-        <i *ngIf="device.name.includes('Firefox')" class="fab fa-firefox" aria-hidden="true"></i>
-        <i *ngIf="(device.name.includes('Chromium') && !device.name.includes('Edge')) || device.name.includes('Chrome')"
+        <i *ngIf="device.browserName.includes('Firefox')" class="fab fa-firefox" aria-hidden="true"></i>
+        <i *ngIf="(device.browserName.includes('Chromium') && !device.browserName.includes('Edge')) || device.browserName.includes('Chrome')"
            class="fab fa-chrome"
            aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Safari')" class="fab fa-safari" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Opera')" class="fab fa-opera" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Internet Explorer')" class="fab fa-internet-explorer" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Edge')" class="fab fa-edge" aria-hidden="true"></i>
+        <i *ngIf="device.browserName.includes('Safari')" class="fab fa-safari" aria-hidden="true"></i>
+        <i *ngIf="device.browserName.includes('Opera')" class="fab fa-opera" aria-hidden="true"></i>
+        <i *ngIf="device.browserName.includes('Internet Explorer')" class="fab fa-internet-explorer" aria-hidden="true"></i>
+        <i *ngIf="device.browserName.includes('Edge')" class="fab fa-edge" aria-hidden="true"></i>
     </div>
-    <div class="text device-text">{{ device.name.split('-')[1] }}</div>
-    <div class="text device-text">{{ device.addTime | date:'mediumDate' }}</div>
+    <div class="text device-text">{{ device.browserName }}</div>
+    <div class="text device-text">{{ device.remoteDevice.addTime | date:'mediumDate' }}</div>
 </div>

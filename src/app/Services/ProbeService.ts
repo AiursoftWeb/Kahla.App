@@ -13,7 +13,7 @@ export class ProbeService {
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
-        const probeConfig = (await this.serverRepo.getOurServer()).probe;
+        const probeConfig = this.serverRepo.getOurServerSync().probe;
         const formatString = downloadAddr ? probeConfig.downloadFormat : probeConfig.openFormat;
         return formatString.replace('{0}', encoded.substring(0, index)) + '/' +
             encoded.substring(index + 1) +

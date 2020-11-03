@@ -3,8 +3,6 @@ import { ElectronService } from 'ngx-electron';
 import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { HttpClient } from '@angular/common/http';
-import { ServerListApiService } from '../Services/Api/ServerListApiService';
 import { LocalStoreService } from '../Services/LocalstoreService';
 import { ServersRepo } from '../Repos/ServersRepo';
 import { ServerRepo } from '../Repos/ServerRepo';

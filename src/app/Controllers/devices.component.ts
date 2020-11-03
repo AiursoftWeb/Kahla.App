@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
-import { Device, LocalDevice } from '../Models/Device';
+import { LocalDevice } from '../Models/Device';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
-import { InitService } from '../Services/InitService';
 import { LocalStoreService } from '../Services/LocalstoreService';
 import { BrowserContextService } from '../Services/BrowserContextService';
 import { DeviceRepo } from '../Repos/DeviceRepo';
+import { SubscriptionManager } from '../Services/SubscriptionManager';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -19,10 +18,10 @@ export class DevicesComponent implements OnInit {
 
     constructor(
         public devicesApiService: DevicesApiService,
-        public initService: InitService,
         public localStore: LocalStoreService,
         public browserContext: BrowserContextService,
-        private deviceRepo: DeviceRepo
+        private deviceRepo: DeviceRepo,
+        private subscriptionManager: SubscriptionManager
     ) {
     }
 
@@ -30,12 +29,12 @@ export class DevicesComponent implements OnInit {
         this.devices = await this.deviceRepo.getDevices();
     }
 
-    public detail(device: Device): void {
+    public detail(device: LocalDevice): void {
         if (device !== null) {
             Swal.fire({
                 title: 'Device detail',
-                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.ipAddress +
-                    '</td></tr><tr><th>Add time</th><td>' + new Date(device.addTime).toLocaleString() +
+                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.remoteDevice.ipAddress +
+                    '</td></tr><tr><th>Add time</th><td>' + new Date(device.remoteDevice.addTime).toLocaleString() +
                     '</td></tr></table>'
             });
         }
@@ -58,6 +57,7 @@ export class DevicesComponent implements OnInit {
 
     public async setWebPushStatus(enable: boolean): Promise<void> {
         this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enabled = enable);
+        await this.subscriptionManager.setKahlaDevice(enable);
         this.devices = await this.deviceRepo.getDevices(false);
     }
 

@@ -30,41 +30,44 @@ export class SubscriptionManager {
         return sub;
     }
 
-    private async registerSubscriptionAsDevice(pushSubscription: PushSubscription): Promise<void> {
+    public async setKahlaDevice(enable: boolean) {
 
         const localSubSettings = this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting);
 
-        if (!localSubSettings.enabled && localSubSettings.deviceId) {
-            await this.devicesApiService.DropDevice(localSubSettings.deviceId);
-            localSubSettings.deviceId = 0;
-            this.localStore.replace(LocalStoreService.PUSH_SUBSCRIPTION, localSubSettings);
-        } else if (localSubSettings.enabled) {
+        if (enable) {
+            const subscription = await this.getSubscription();
             if (localSubSettings.deviceId && (await this.deviceRepo.getDevices(false)).some(de => de.remoteDevice.id === localSubSettings.deviceId)) {
                 await this.devicesApiService.UpdateDevice(
                     localSubSettings.deviceId,
                     navigator.userAgent,
-                    pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth);
+                    subscription.endpoint,
+                    subscription.toJSON().keys.p256dh,
+                    subscription.toJSON().keys.auth);
             } else {
                 const addedDevice = await this.devicesApiService.AddDevice(
                     navigator.userAgent,
-                    pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth);
+                    subscription.endpoint,
+                    subscription.toJSON().keys.p256dh,
+                    subscription.toJSON().keys.auth);
                 this.deviceRepo.setCurrentDeviceId(addedDevice.value);
+            }
+        } else {
+            if (localSubSettings.deviceId) {
+                await this.devicesApiService.DropDevice(localSubSettings.deviceId);
+                localSubSettings.deviceId = 0;
+                this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.deviceId = 0);
             }
         }
     }
 
     public async registerWebPushOnce() {
-        const subscription = await this.getSubscription();
-        await this.registerSubscriptionAsDevice(subscription);
+        const localSubSettings = this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting);
+        await this.setKahlaDevice(localSubSettings.enabled);
     }
 
     public async registerWebPush() {
         if (this.browserContext.permittedForWebPush()) {
-            this.registerWebPushOnce();
+            await this.registerWebPushOnce();
             navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => this.registerWebPushOnce());
         } else {
             console.error('Get subscription failed! The browser might not support webpush.');

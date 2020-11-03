@@ -26,7 +26,7 @@ export class KahlaHTTP {
     }
 
     public Get<T>(address: string, withCredentials = true): Observable<T> {
-        return this.http.get<T>(`${this.getOurServerAddress()}${address}address`, {
+        return this.http.get<T>(`${this.getOurServerAddress()}${address}`, {
             headers: this._headers,
             withCredentials: withCredentials
         }).pipe(catchError(this.handleError));
