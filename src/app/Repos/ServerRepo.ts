@@ -64,7 +64,7 @@ export class ServerRepo {
         return !!serverConfig.serverName;
     }
 
-    public setOurServer(serverConfig: ServerConfig) {
+    private setOurServer(serverConfig: ServerConfig) {
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, serverConfig);
     }
 
