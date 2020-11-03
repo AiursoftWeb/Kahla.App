@@ -33,11 +33,8 @@ export class SignInComponent implements OnInit {
 
     public async resetServerAndBack(): Promise<void> {
         const defaultServer = await this.serverRepo.getDefaultServer();
-        const connected = await this.serverRepo.connectAndSetOurServer(this.serverAddress);
-        if (!connected) {
-            throw new Error('Kahla can\'t process because cannot connect to our official server.');
-        }
         this.serverAddress = defaultServer.domain.server;
+        await this.connectCommunity();
         this.viewingChangeServerPage = false;
     }
 

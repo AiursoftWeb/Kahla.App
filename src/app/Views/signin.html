@@ -6,11 +6,6 @@
             <h3 *ngIf="viewingChangeServerPage">Select server</h3>
         </div>
         <div class="auth-content" *ngIf="!viewingChangeServerPage && this.currentServer">
-            <a class="actionLink" href="javascript:"
-               (click)="viewingChangeServerPage = true">Server: {{this.currentServer.serverName}}</a>
-            <p *ngIf="!this.currentServer.officialServer" class="text-warn">
-                (Not an official server)
-            </p>
             <div class="button white login"
                  (click)="goLogin(this.currentServer.domain.server + '/Auth/Oauth')">
                 Sign in
@@ -19,15 +14,15 @@
                  (click)="goLogin(this.currentServer.domain.server + '/Auth/GoRegister')">
                 Register
             </div>
-            <a class="actionLink" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
-               target="_blank" rel="noopener noreferrer">Forgot password?</a>
+            <a class="actionLink" href="javascript:"
+               (click)="viewingChangeServerPage = true">Server: {{this.currentServer.serverName}}</a>
         </div>
 
         <div class="auth-content" *ngIf="viewingChangeServerPage">
             <div class="button white login" (click)="resetServerAndBack()">
-                Aiursoft official server
+                Use official server
             </div>
-            <div class="split-bar">community server</div>
+            <div class="split-bar">Custom server</div>
             <input type="text" [(ngModel)]="serverAddress" class="inputAddr" placeholder="https://example.com"
                    (keyup.enter)="connectCommunity()"/>
             <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
