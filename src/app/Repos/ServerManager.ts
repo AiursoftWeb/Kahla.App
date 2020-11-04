@@ -39,7 +39,7 @@ export class ServerManager {
         if (!defaultServers.length) {
             throw new Error('No server found from remote! Kahla will crash.');
         }
-        if (this.browserContext.isElectron()) {
+        if (!this.browserContext.domainLimited()) {
             serverConfig = defaultServers[0];
             console.log('Default server is just the first server because running in Electron.');
         } else {

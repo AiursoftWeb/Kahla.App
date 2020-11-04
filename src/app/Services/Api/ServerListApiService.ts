@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
-import { VersionViewModel } from '../../Models/VersionViewModel';
+import { VersionViewModel } from '../../Models/ApiModels/VersionViewModel';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 

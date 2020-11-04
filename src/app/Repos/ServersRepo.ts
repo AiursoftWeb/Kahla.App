@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ServerConfig, Servers } from '../Models/ServerConfig';
 import { ServerListApiService } from '../Services/Api/ServerListApiService';
+import { BrowserContextService } from '../Services/BrowserContextService';
 import { LocalStoreService } from '../Services/LocalstoreService';
 
 @Injectable()
 export class ServersRepo {
     constructor(
         private localStore: LocalStoreService,
-        private serversApi: ServerListApiService) {
+        private serversApi: ServerListApiService,
+        private browserContext: BrowserContextService) {
     }
 
     private async pullRemoteServers(): Promise<ServerConfig[]> {
@@ -21,7 +23,7 @@ export class ServersRepo {
         if (!servers.length || !allowCache) {
             servers = await this.pullRemoteServers();
         }
-        if (onlySuitable) {
+        if (onlySuitable && this.browserContext.domainLimited()) {
             servers = servers.filter(t => t.domain.client === window.location.origin);
         }
         return servers;

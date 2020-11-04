@@ -31,6 +31,10 @@ export class BrowserContextService {
         return this.electronService.isElectronApp;
     }
 
+    public domainLimited(): boolean {
+        return !this.isElectron();
+    }
+
     public openWebPage(url: string): void {
         if (this.isElectron()) {
             this.electronService.shell.openExternal(url);
