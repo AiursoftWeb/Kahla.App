@@ -4,7 +4,7 @@ import { versions } from '../../environments/versions';
 import { ServerListApiService } from './Api/ServerListApiService';
 import { Toolbox } from './Toolbox';
 import { BrowserContextService } from './BrowserContextService';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 import { ServersRepo } from '../Repos/ServersRepo';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class CheckService {
     constructor(
         private broswerContext: BrowserContextService,
         private serverListApiService: ServerListApiService,
-        private serverRepo: ServerRepo,
+        private serverRepo: ServerManager,
         private serversRepo: ServersRepo
     ) {
         if (this.broswerContext.supportWebPush()) {

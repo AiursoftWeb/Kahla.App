@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AccessToken } from '../Models/AccessToken';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ProbeService {
 
-    constructor(private serverRepo: ServerRepo) {
+    constructor(private serverRepo: ServerManager) {
     }
 
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {

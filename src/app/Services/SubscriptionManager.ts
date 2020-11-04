@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { DeviceRepo } from '../Repos/DeviceRepo';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 import { DevicesApiService } from './Api/DevicesApiService';
 import { BrowserContextService } from './BrowserContextService';
 import { LocalStoreService } from './LocalstoreService';
@@ -13,7 +13,7 @@ export class SubscriptionManager {
         private localStore: LocalStoreService,
         private devicesApiService: DevicesApiService,
         private deviceRepo: DeviceRepo,
-        private serverRepo: ServerRepo) {
+        private serverRepo: ServerManager) {
 
     }
 

@@ -3,7 +3,7 @@ import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
 import { environment } from '../../environments/environment';
 import { BrowserContextService } from '../Services/BrowserContextService';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 import { ServerConfig } from '../Models/ServerConfig';
 
 @Component({
@@ -22,7 +22,7 @@ export class AboutComponent implements OnInit {
     constructor(
         public checkService: CheckService,
         public browserContext: BrowserContextService,
-        public serverRepo: ServerRepo
+        public serverRepo: ServerManager
     ) {
     }
 

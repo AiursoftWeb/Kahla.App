@@ -10,7 +10,7 @@ import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
 import { SubscriptionManager } from './SubscriptionManager';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +28,7 @@ export class InitService {
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
         private subscriptionManager: SubscriptionManager,
-        private serverRepo: ServerRepo
+        private serverRepo: ServerManager
     ) {
     }
 

@@ -55,7 +55,7 @@ import { BrowserContextService } from './Services/BrowserContextService';
 import { Toolbox } from './Services/Toolbox';
 import { DeviceRepo } from './Repos/DeviceRepo';
 import { ServersRepo } from './Repos/ServersRepo';
-import { ServerRepo } from './Repos/ServerRepo';
+import { ServerManager } from './Repos/ServerManager';
 import { SubscriptionManager } from './Services/SubscriptionManager';
 
 @NgModule({
@@ -117,7 +117,7 @@ import { SubscriptionManager } from './Services/SubscriptionManager';
         Toolbox,
         DeviceRepo,
         ServersRepo,
-        ServerRepo,
+        ServerManager,
         SubscriptionManager
     ],
     bootstrap: [AppComponent]

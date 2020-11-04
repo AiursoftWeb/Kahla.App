@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { ServerRepo } from '../Repos/ServerRepo';
+import { ServerManager } from '../Repos/ServerManager';
 import { BrowserContextService } from '../Services/BrowserContextService';
 import { ServerConfig } from '../Models/ServerConfig';
 import { ServersRepo } from '../Repos/ServersRepo';
@@ -22,7 +22,7 @@ export class SignInComponent implements OnInit {
         private browserContext: BrowserContextService,
         public electronService: ElectronService,
         public initService: InitService,
-        private serverRepo: ServerRepo,
+        private serverRepo: ServerManager,
         private serversRepo: ServersRepo) {
     }
 

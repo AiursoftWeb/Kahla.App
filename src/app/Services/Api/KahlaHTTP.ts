@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Toolbox } from '../Toolbox';
-import { ServerRepo } from '../../Repos/ServerRepo';
+import { ServerManager } from '../../Repos/ServerManager';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +17,7 @@ export class KahlaHTTP {
     constructor(
         private http: HttpClient,
         private tools: Toolbox,
-        private serverRepo: ServerRepo) {
+        private serverRepo: ServerManager) {
     }
 
     private getOurServerAddress(): string {

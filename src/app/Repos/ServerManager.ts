@@ -6,7 +6,7 @@ import { Toolbox } from '../Services/Toolbox';
 import { ServersRepo } from './ServersRepo';
 
 @Injectable()
-export class ServerRepo {
+export class ServerManager {
     constructor(
         private localStore: LocalStoreService,
         private remoteServersRepo: ServersRepo,
