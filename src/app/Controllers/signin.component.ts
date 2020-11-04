@@ -17,6 +17,7 @@ export class SignInComponent implements OnInit {
     public viewingChangeServerPage = false;
     public serverAddress: string;
     public currentServer: ServerConfig;
+    public servers: ServerConfig[];
 
     constructor(
         private browserContext: BrowserContextService,
@@ -28,14 +29,13 @@ export class SignInComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.currentServer = await this.serverRepo.getOurServer();
+        this.servers = await this.serversRepo.getRemoteServers(true, true);
         this.serverAddress = this.currentServer.domain.server;
     }
 
-    public async resetServerAndBack(): Promise<void> {
-        const defaultServer = await this.serverRepo.getDefaultServer();
-        this.serverAddress = defaultServer.domain.server;
+    public async select(server: ServerConfig): Promise<void> {
+        this.serverAddress = server.domain.server;
         await this.connectCommunity();
-        this.viewingChangeServerPage = false;
     }
 
     public async connectCommunity(): Promise<void> {

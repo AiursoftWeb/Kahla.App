@@ -16,10 +16,13 @@ export class ServersRepo {
         return remoteServers;
     }
 
-    public async getRemoteServers(allowCache = true): Promise<ServerConfig[]> {
+    public async getRemoteServers(allowCache = true, onlySuitable = false): Promise<ServerConfig[]> {
         let servers = this.localStore.get(LocalStoreService.SERVERS_STORE, Servers).servers;
         if (!servers.length || !allowCache) {
             servers = await this.pullRemoteServers();
+        }
+        if (onlySuitable) {
+            servers = servers.filter(t => t.domain.client === window.location.origin);
         }
         return servers;
     }
@@ -29,12 +32,7 @@ export class ServersRepo {
         return officialServer.some(t => t.domain.server === inputServer);
     }
 
-    public async getServer(inputAddress: string, allowCache = true): Promise<ServerConfig> {
-        const servers = await this.getRemoteServers();
-        const cached = servers.find(t => t.domain.server === inputAddress);
-        if (cached && allowCache) {
-            return cached;
-        }
-        return await this.serversApi.getServerConfig(inputAddress);
+    public getServer(inputAddress: string): Promise<ServerConfig> {
+        return this.serversApi.getServerConfig(inputAddress);
     }
 }

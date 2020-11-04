@@ -19,8 +19,10 @@
         </div>
 
         <div class="auth-content" *ngIf="viewingChangeServerPage">
-            <div class="button white login" (click)="resetServerAndBack()">
-                Use official server
+            <div *ngFor="let server of servers">
+                <div class="button white login" (click)="select(server)">
+                    {{server.serverName}}
+                </div>
             </div>
             <div class="split-bar">Custom server</div>
             <input type="text" [(ngModel)]="serverAddress" class="inputAddr" placeholder="https://example.com"

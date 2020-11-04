@@ -23,13 +23,16 @@ export class ServerManager {
             return savedServer;
         }
         console.warn('Trying to get a server config with no server saved. Will wait till all servers loaded.');
-        this.getOurServer(true).then(() => { });
+        this.getOurServer().then(() => { });
         while (!this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig).serverName) {
             // Hold it here.
         }
         return this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig);
     }
 
+    /**
+     * Get the first official suitable server for our current environment.
+     */
     public async getDefaultServer(): Promise<ServerConfig> {
         let serverConfig: ServerConfig = null;
         const defaultServers = await this.remoteServersRepo.getRemoteServers();
@@ -53,7 +56,7 @@ export class ServerManager {
             serverConfig = await this.getDefaultServer();
         }
         if (!allowCache) {
-            serverConfig = await this.remoteServersRepo.getServer(serverConfig.domain.server, false);
+            serverConfig = await this.remoteServersRepo.getServer(serverConfig.domain.server);
         }
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, serverConfig);
         return serverConfig;
@@ -78,7 +81,7 @@ export class ServerManager {
 
     public async connectAndSetOurServer(serverAddress: string): Promise<boolean> {
         try {
-            const server = await this.remoteServersRepo.getServer(serverAddress, false);
+            const server = await this.remoteServersRepo.getServer(serverAddress);
             if (server.code !== 0 || server.domain.server !== serverAddress) {
                 return false;
             }
