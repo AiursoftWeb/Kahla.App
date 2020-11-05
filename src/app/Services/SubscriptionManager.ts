@@ -37,7 +37,7 @@ export class SubscriptionManager {
 
         if (enable) {
             const subscription = await this.getSubscription();
-            if (localSubSettings.deviceId && (await this.deviceRepo.getDevices(false)).some(de => de.remoteDevice.id === localSubSettings.deviceId)) {
+            if (localSubSettings.deviceId && (await this.deviceRepo.getDevices(false)).response.some(de => de.remoteDevice.id === localSubSettings.deviceId)) {
                 await this.devicesApiService.UpdateDevice(
                     localSubSettings.deviceId,
                     navigator.userAgent,

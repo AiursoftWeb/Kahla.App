@@ -26,7 +26,14 @@ export class DevicesComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.devices = await this.deviceRepo.getDevices();
+        // Fast render
+        const cachedResponse = await this.deviceRepo.getDevices();
+        this.devices = cachedResponse.response;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.devices = (await this.deviceRepo.getDevices(false)).response;
+        }
     }
 
     public detail(device: LocalDevice): void {
@@ -58,7 +65,7 @@ export class DevicesComponent implements OnInit {
     public async setWebPushStatus(enable: boolean): Promise<void> {
         this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enabled = enable);
         await this.subscriptionManager.setKahlaDevice(enable);
-        this.devices = await this.deviceRepo.getDevices(false);
+        this.devices = (await this.deviceRepo.getDevices(false)).response;
     }
 
     public getElectronNotify(): boolean {
