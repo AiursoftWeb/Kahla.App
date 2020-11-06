@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ServerConfig } from '../Models/ServerConfig';
 import { BrowserContextService } from '../Services/BrowserContextService';
 import { LocalStoreService } from '../Services/LocalstoreService';
-import { Toolbox } from '../Services/Toolbox';
 import { ServersRepo } from './ServersRepo';
 
 @Injectable()
@@ -69,14 +68,6 @@ export class ServerManager {
 
     private setOurServer(serverConfig: ServerConfig) {
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, serverConfig);
-    }
-
-    public trimServerAddress(rawServerAddress: string): string {
-        let trimedAddress = Toolbox.trim(rawServerAddress, '/').toLowerCase();
-        if (!trimedAddress.match(/^https?:\/\/.+/g)) {
-            trimedAddress = 'https://' + trimedAddress;
-        }
-        return trimedAddress;
     }
 
     public async connectAndSetOurServer(serverAddress: string): Promise<boolean> {

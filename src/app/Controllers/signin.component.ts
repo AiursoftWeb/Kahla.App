@@ -6,6 +6,7 @@ import { ServerManager } from '../Repos/ServerManager';
 import { BrowserContextService } from '../Services/BrowserContextService';
 import { ServerConfig } from '../Models/ServerConfig';
 import { ServersRepo } from '../Repos/ServersRepo';
+import { Toolbox } from '../Services/Toolbox';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -43,7 +44,7 @@ export class SignInComponent implements OnInit {
             Swal.fire('Please input an valid server url!', '', 'error');
             return;
         }
-        this.serverAddress = this.serverRepo.trimServerAddress(this.serverAddress);
+        this.serverAddress = Toolbox.trimServerAddress(this.serverAddress);
         if (!this.serversRepo.isOfficialServer(this.serverAddress)) {
             const connectToUntrustServer = await Swal.fire({
                 title: 'Connecting to a community server...',

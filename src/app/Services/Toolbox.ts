@@ -47,7 +47,7 @@ export class Toolbox {
         });
     }
 
-    public param(obj: any): string {
+    public static param(obj: any): string {
         let data = ``;
         for (const prop in obj) {
             if (obj.hasOwnProperty(prop) && obj[prop] != null) {
@@ -55,5 +55,13 @@ export class Toolbox {
             }
         }
         return data;
+    }
+
+    public static trimServerAddress(rawServerAddress: string): string {
+        let trimedAddress = Toolbox.trim(rawServerAddress, '/').toLowerCase();
+        if (!trimedAddress.match(/^https?:\/\/.+/g)) {
+            trimedAddress = 'https://' + trimedAddress;
+        }
+        return trimedAddress;
     }
 }

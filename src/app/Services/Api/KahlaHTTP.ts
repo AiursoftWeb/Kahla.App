@@ -16,7 +16,6 @@ export class KahlaHTTP {
 
     constructor(
         private http: HttpClient,
-        private tools: Toolbox,
         private serverRepo: ServerManager) {
     }
 
@@ -33,7 +32,7 @@ export class KahlaHTTP {
     }
 
     public Post<T>(address: string, data: any): Observable<T> {
-        return this.http.post<T>(`${this.getOurServerAddress()}${address}`, this.tools.param(data), {
+        return this.http.post<T>(`${this.getOurServerAddress()}${address}`, Toolbox.param(data), {
             headers: this._headers,
             withCredentials: true
         }).pipe(catchError(this.handleError));
