@@ -32,7 +32,7 @@ export class ThemeComponent implements OnInit {
         }
         this.currentTheme = theme;
         this.themeService.LocalThemeSetting = theme;
-        await this.themeService.SetRemoteThemeSetting(theme);
         this.themeService.ApplyTheme(theme);
+        await this.themeService.SetRemoteThemeSetting(theme);
     }
 }
