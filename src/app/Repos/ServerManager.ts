@@ -50,12 +50,12 @@ export class ServerManager {
 
     public async getOurServer(allowCache = true): Promise<ServerConfig> {
         let serverConfig = this.localStore.get(LocalStoreService.SERVER_CONFIG, ServerConfig);
+        if (!allowCache) {
+            serverConfig = await this.remoteServersRepo.fetchServer(serverConfig.domain.server);
+        }
         if (!serverConfig.serverName) {
             console.warn('No server configured. Trying to select a default server...');
             serverConfig = await this.getDefaultServer();
-        }
-        if (!allowCache) {
-            serverConfig = await this.remoteServersRepo.getServer(serverConfig.domain.server);
         }
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, serverConfig);
         return serverConfig;
@@ -72,7 +72,7 @@ export class ServerManager {
 
     public async connectAndSetOurServer(serverAddress: string): Promise<boolean> {
         try {
-            const server = await this.remoteServersRepo.getServer(serverAddress);
+            const server = await this.remoteServersRepo.fetchServer(serverAddress);
             if (server.code !== 0 || server.domain.server !== serverAddress) {
                 return false;
             }

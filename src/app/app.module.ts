@@ -57,6 +57,7 @@ import { DeviceRepo } from './Repos/DeviceRepo';
 import { ServersRepo } from './Repos/ServersRepo';
 import { ServerManager } from './Repos/ServerManager';
 import { SubscriptionManager } from './Services/SubscriptionManager';
+import { MeRepo } from './Repos/MeRepo';
 
 @NgModule({
     imports: [
@@ -116,6 +117,7 @@ import { SubscriptionManager } from './Services/SubscriptionManager';
         BrowserContextService,
         Toolbox,
         DeviceRepo,
+        MeRepo,
         ServersRepo,
         ServerManager,
         SubscriptionManager

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class LocalStoreService {
     public static readonly SERVERS_STORE = 'official-servers';
     public static readonly SERVER_CONFIG = 'server-config';
+    public static readonly ME_CONFIG = 'me';
     public static readonly PUSH_SUBSCRIPTION = 'push-subscription-config';
     public static readonly REMOTE_DEVICES = 'remote-devices';
 
