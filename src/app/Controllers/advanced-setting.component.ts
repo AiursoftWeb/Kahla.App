@@ -25,7 +25,14 @@ export class AdvancedSettingComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.me = await this.meRepo.getMe();
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
+        }
     }
 
     public async updateSettings(): Promise<void> {
