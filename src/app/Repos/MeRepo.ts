@@ -33,6 +33,10 @@ export class MeRepo {
         return me;
     }
 
+    public overrideCache(newMe: KahlaUser) {
+        this.localStore.replace(LocalStoreService.ME_CONFIG, newMe);
+    }
+
     public async getAvatarUrl() {
         const me = await this.getMe();
         return this.probeService.encodeProbeFileUrl(me.iconFilePath);
