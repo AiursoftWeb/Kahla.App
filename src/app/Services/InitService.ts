@@ -11,6 +11,7 @@ import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
 import { SubscriptionManager } from './SubscriptionManager';
 import { ServerManager } from '../Repos/ServerManager';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Injectable({
     providedIn: 'root'
@@ -23,12 +24,12 @@ export class InitService {
         private messageService: MessageService,
         private cacheService: CacheService,
         private themeService: ThemeService,
-        private probeService: ProbeService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
         private subscriptionManager: SubscriptionManager,
-        private serverRepo: ServerManager
+        private serverRepo: ServerManager,
+        private meRepo: MeRepo
     ) {
     }
 
@@ -64,15 +65,11 @@ export class InitService {
         this.globalNotifyService.init();
 
         // Load User Info
-        const me = await this.authApiService.Me();
-        if (me.code === 0) {
-            this.cacheService.cachedData.me = me.value;
-            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
-            this.themeService.ApplyThemeFromRemote(me.value);
-            this.cacheService.updateConversation();
-            this.cacheService.updateFriends();
-            this.cacheService.updateRequests();
-        }
+        const me = await this.meRepo.getMe();
+        this.themeService.ApplyThemeFromRemote(me);
+        this.cacheService.updateConversation();
+        this.cacheService.updateFriends();
+        this.cacheService.updateRequests();
 
     }
 

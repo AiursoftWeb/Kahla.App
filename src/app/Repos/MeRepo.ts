@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { KahlaUser } from '../Models/KahlaUser';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { LocalStoreService } from '../Services/LocalstoreService';
+import { ProbeService } from '../Services/ProbeService';
 
 @Injectable()
 export class MeRepo {
     constructor(
         private authApiService: AuthApiService,
-        private localStore: LocalStoreService) {
+        private localStore: LocalStoreService,
+        private probeService: ProbeService) {
 
     }
 
@@ -29,5 +31,10 @@ export class MeRepo {
         }
         this.localStore.replace(LocalStoreService.SERVER_CONFIG, me);
         return me;
+    }
+
+    public async getAvatarUrl() {
+        const me = await this.getMe();
+        return this.probeService.encodeProbeFileUrl(me.iconFilePath);
     }
 }
