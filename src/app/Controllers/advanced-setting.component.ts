@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
-import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
 import { MeRepo } from '../Repos/MeRepo';
 
 

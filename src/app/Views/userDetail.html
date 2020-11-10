@@ -2,19 +2,19 @@
 <div *ngIf="user">
   <div class="profile avatar">
       <label>Avatar</label>
-      <a class="user-img" href="{{user ? user.avatarURL : loadingImgURL}}" target="_blank">
-        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=256&square=true">
+      <a class="user-img" href="{{me ? me.iconUrl : loadingImgURL}}" target="_blank">
+        <img class="user-img" src="{{me.iconUrl ? me.iconUrl : loadingImgURL}}?w=256&square=true">
       </a>
       <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
       <input type="file" name="image" id="image" #imageInput (change)="uploadAvatar()" accept="image/png, image/jpeg, image/bmp" />
     </div>
   <div class="profile">
     <label>Nick name</label>
-    <input [(ngModel)]="user.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
+    <input [(ngModel)]="me.nickName" placeholder=" Enter your new nickname" type="text" (keyup.enter)="save()" />
   </div>
   <div class="profile">
     <label>Bio</label>
-    <input [(ngModel)]="user.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
+    <input [(ngModel)]="me.bio" placeholder="Enter your new signature" type="text" (keyup.enter)="save()" />
   </div>
   <div class="buttons">
     <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>

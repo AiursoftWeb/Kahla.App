@@ -158,33 +158,32 @@ export class UploadService {
         return file.size >= 0.125 && file.size <= 2146435072;
     }
 
-    public uploadAvatar(user: KahlaUser, file: File): void {
+    public async uploadAvatar(file: File): Promise<string> {
         if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading your avatar...');
 
-            this.filesApiService.InitIconUpload().subscribe(response => {
-                if (response.code === 0) {
-                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
-                        if (Number(res)) {
-                            this.updateAlertProgress(Number(res));
-                        } else if (res != null && (<UploadFile>res).code === 0) {
-                            Swal.close();
-                            user.iconFilePath = (<UploadFile>res).filePath;
-                            user.avatarURL = this.probeService.encodeProbeFileUrl(user.iconFilePath);
-                        }
-                    });
-                    alert.then(result => {
-                        if (result.dismiss) {
-                            mission.unsubscribe();
-                        }
-                    });
-                }
-            });
+            const response = await this.filesApiService.InitIconUpload();
+            if (response.code === 0) {
+                const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                    if (Number(res)) {
+                        this.updateAlertProgress(Number(res));
+                    } else if (res != null && (<UploadFile>res).code === 0) {
+                        Swal.close();
+                        return (<UploadFile>res).filePath;
+                    }
+                });
+                alert.then(result => {
+                    if (result.dismiss) {
+                        mission.unsubscribe();
+                    }
+                });
+            }
         } else {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }
+        return '';
     }
 
     public uploadGroupAvater(group: GroupConversation, file: File): void {
