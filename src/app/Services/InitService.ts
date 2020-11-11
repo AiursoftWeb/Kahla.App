@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
 import { ThemeService } from './ThemeService';
-import { ProbeService } from './ProbeService';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
@@ -65,11 +64,11 @@ export class InitService {
         this.globalNotifyService.init();
 
         // Load User Info
-        const me = await this.meRepo.getMe();
-        this.themeService.ApplyThemeFromRemote(me);
-        this.cacheService.updateConversation();
-        this.cacheService.updateFriends();
-        this.cacheService.updateRequests();
+        const me = await this.meRepo.getMe(); // Obsolete
+        this.themeService.ApplyThemeFromRemote(me.response); // Obsolete
+        this.cacheService.updateConversation(); // Obsolete
+        this.cacheService.updateFriends(); // Obsolete
+        this.cacheService.updateRequests(); // Obsolete
 
     }
 

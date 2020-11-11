@@ -15,6 +15,7 @@ import { MessageService } from './MessageService';
 import { HomeService } from './HomeService';
 import { ElectronService } from 'ngx-electron';
 import { ProbeService } from './ProbeService';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Injectable({providedIn: 'root'})
 export class GlobalNotifyService {
@@ -25,10 +26,11 @@ export class GlobalNotifyService {
                 private homeService: HomeService,
                 private _electronService: ElectronService,
                 private probeService: ProbeService,
-                private router: Router) {
+                private router: Router,
+                private meRepo: MeRepo) {
     }
 
-    private OnMessage(ev: AiurEvent) {
+    private async OnMessage(ev: AiurEvent) : Promise<void> {
         const fireAlert = !localStorage.getItem('deviceID');
         switch (ev.type) {
             case EventType.NewMessage: {

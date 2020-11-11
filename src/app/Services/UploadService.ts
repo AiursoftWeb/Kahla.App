@@ -3,7 +3,6 @@ import { AES } from 'crypto-js';
 import { FilesApiService } from './Api/FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
-import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './Api/ConversationApiService';
 import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
@@ -186,31 +185,29 @@ export class UploadService {
         return '';
     }
 
-    public uploadGroupAvater(group: GroupConversation, file: File): void {
+    public async uploadGroupAvater(group: GroupConversation, file: File): Promise<void> {
         if (this.validImageType(file, true)) {
             const formData = new FormData();
             formData.append('image', file);
             const alert = this.fireUploadingAlert('Uploading group avatar...');
 
-            this.filesApiService.InitIconUpload().subscribe(response => {
-                if (response.code === 0) {
-                    const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
-                        if (Number(res)) {
-                            this.updateAlertProgress(Number(res));
-                        } else if (res != null && (<UploadFile>res).code === 0) {
-                            Swal.close();
-                            group.groupImagePath = (<UploadFile>res).filePath;
-                            group.avatarURL = this.probeService.encodeProbeFileUrl(group.groupImagePath);
-                        }
-                    });
-                    alert.then(result => {
-                        if (result.dismiss) {
-                            mission.unsubscribe();
-                        }
-                    });
-                }
-            });
-
+            const response = await this.filesApiService.InitIconUpload();
+            if (response.code === 0) {
+                const mission = this.filesApiService.UploadFile(formData, response.value).subscribe(res => {
+                    if (Number(res)) {
+                        this.updateAlertProgress(Number(res));
+                    } else if (res != null && (<UploadFile>res).code === 0) {
+                        Swal.close();
+                        group.groupImagePath = (<UploadFile>res).filePath;
+                        group.avatarURL = this.probeService.encodeProbeFileUrl(group.groupImagePath);
+                    }
+                });
+                alert.then(result => {
+                    if (result.dismiss) {
+                        mission.unsubscribe();
+                    }
+                });
+            }
         } else {
             Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
         }

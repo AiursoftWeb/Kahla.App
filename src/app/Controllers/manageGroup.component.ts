@@ -125,11 +125,11 @@ export class ManageGroupComponent implements OnInit {
         });
     }
 
-    public uploadAvatar() {
+    public async uploadAvatar() : Promise<void> {
         if (this.imageInput) {
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
-                this.uploadService.uploadGroupAvater(this.conversation, fileBrowser.files[0]);
+                await this.uploadService.uploadGroupAvater(this.conversation, fileBrowser.files[0]);
             }
         }
     }
