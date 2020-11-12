@@ -12,6 +12,7 @@ import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
 import { SwalToast } from '../Helpers/Toast';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',
@@ -36,6 +37,7 @@ export class ManageGroupComponent implements OnInit {
                 public timerService: TimerService,
                 public uploadService: UploadService,
                 private probeService: ProbeService,
+                private meRepo: MeRepo
     ) {
 
     }
@@ -61,10 +63,11 @@ export class ManageGroupComponent implements OnInit {
         }
     }
 
-    public transferOwner(): void {
+    public async transferOwner(): Promise<void> {
         const inputOptions = {};
+        const me = (await this.meRepo.getMe()).response;
         this.conversation.users.forEach(val => {
-            if (val.user.id !== this.cacheService.cachedData.me.id) {
+            if (val.user.id !== me.id) {
                 inputOptions[val.user.id] = val.user.nickName;
             }
         });
@@ -78,9 +81,7 @@ export class ManageGroupComponent implements OnInit {
             if (willTransfer.value) {
                 Swal.fire({
                     title: 'Transfer ownership?',
-                    html: 'You are transferring your ownership to <br/> ' +
-                        `<b>${inputOptions[willTransfer.value]}(id:${willTransfer.value})</b> <br/> ` +
-                        'This operation CANNOT be undone! are you sure to continue?',
+                    html: `You are transferring your ownership to <br/> <b>${inputOptions[willTransfer.value]}(id:${willTransfer.value})</b> <br/> This operation CANNOT be undone! are you sure to continue?`,
                     showCancelButton: true,
                     icon: 'warning'
                 }).then(res => {
@@ -125,7 +126,7 @@ export class ManageGroupComponent implements OnInit {
         });
     }
 
-    public async uploadAvatar() : Promise<void> {
+    public async uploadAvatar(): Promise<void> {
         if (this.imageInput) {
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
@@ -149,10 +150,11 @@ export class ManageGroupComponent implements OnInit {
             });
     }
 
-    public kickMember() {
+    public async kickMember(): Promise<void> {
         const inputOptions = {};
+        const me = (await this.meRepo.getMe()).response;
         this.conversation.users.forEach(val => {
-            if (val.user.id !== this.cacheService.cachedData.me.id) {
+            if (val.user.id !== me.id) {
                 inputOptions[val.user.id] = val.user.nickName;
             }
         });
