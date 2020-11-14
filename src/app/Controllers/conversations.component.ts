@@ -24,9 +24,7 @@ export class ConversationsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        if (this.cacheService.cachedData.me) {
-            this.cacheService.updateConversation();
-        }
+        this.cacheService.updateConversation();
         setTimeout(() => {
             if (this.homeService.floatingHomeWrapper === null) {
                 document.body.scroll(0, 0);

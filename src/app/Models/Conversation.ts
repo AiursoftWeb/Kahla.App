@@ -9,6 +9,5 @@ export class Conversation {
     public anotherUserId: string;
     public aesKey: string;
     public users: UserGroupRelation[];
-    public avatarURL: string;
     public maxLiveSeconds: number;
 }

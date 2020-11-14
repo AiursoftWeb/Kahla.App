@@ -17,20 +17,21 @@ import { ElectronService } from 'ngx-electron';
 import { ProbeService } from './ProbeService';
 import { MeRepo } from '../Repos/MeRepo';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class GlobalNotifyService {
 
     constructor(private eventService: EventService,
-                private cacheService: CacheService,
-                private messageService: MessageService,
-                private homeService: HomeService,
-                private _electronService: ElectronService,
-                private probeService: ProbeService,
-                private router: Router,
-                private meRepo: MeRepo) {
+        private cacheService: CacheService,
+        private messageService: MessageService,
+        private homeService: HomeService,
+        private _electronService: ElectronService,
+        private probeService: ProbeService,
+        private router: Router,
+        private meRepo: MeRepo) {
     }
 
-    private async OnMessage(ev: AiurEvent) : Promise<void> {
+    private async OnMessage(ev: AiurEvent): Promise<void> {
+        const me = (await this.meRepo.getMe()).response;
         const fireAlert = !localStorage.getItem('deviceID');
         switch (ev.type) {
             case EventType.NewMessage: {
@@ -62,19 +63,19 @@ export class GlobalNotifyService {
                     }
                 }
                 if (this.messageService.conversation?.id !== evt.message.conversationId) {
-                    this.showNotification(evt);
+                    await this.showNotification(evt);
                 }
                 break;
             }
             case EventType.NewFriendRequest: {
-                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== this.cacheService.cachedData.me.id) {
+                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== me.id) {
                     Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
                 }
                 this.cacheService.updateRequests();
                 break;
             }
             case EventType.FriendDeletedEvent: {
-                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
+                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== me.id) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.updateConversation();
@@ -85,14 +86,14 @@ export class GlobalNotifyService {
                 const evt = <FriendsChangedEvent>ev;
                 this.cacheService.updateRequests();
                 if (evt.result) {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                    if (fireAlert && evt.request.creatorId === me.id) {
                         Swal.fire('Friend request accepted', 'You and ' + evt.createdConversation.displayName +
                             ' are now friends!', 'success');
                     }
                     this.cacheService.updateConversation();
                     this.cacheService.updateFriends();
                 } else {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
+                    if (fireAlert && evt.request.creatorId === me.id) {
                         Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
                     }
                 }
@@ -100,7 +101,7 @@ export class GlobalNotifyService {
             }
             case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
-                if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
+                if (evt.leftUser.id === me.id) {
                     Swal.fire('Oops, you have been kicked.',
                         `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
                             .find(x => x.conversationId === evt.conversationId).displayName}.`,
@@ -129,9 +130,10 @@ export class GlobalNotifyService {
         this.eventService.onMessage.subscribe(t => this.OnMessage(t));
     }
 
-    private showNotification(event: NewMessageEvent): void {
+    private async showNotification(event: NewMessageEvent): Promise<void> {
+        const me = (await this.meRepo.getMe()).response;
         if (!event.muted &&
-            event.message.sender.id !== this.cacheService.cachedData.me.id &&
+            event.message.sender.id !== me.id &&
             this._electronService.isElectronApp &&
             localStorage.getItem('setting-electronNotify') !== 'false') {
             event.message.content = AES.decrypt(event.message.content, event.aesKey).toString(enc.Utf8);

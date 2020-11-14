@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { TimerService } from '../Services/TimerService';
 import { Request } from '../Models/Request';
-import { ProbeService } from '../Services/ProbeService';
 import { Subscription } from 'rxjs';
 import { EventService } from '../Services/EventService';
 import { filter } from 'rxjs/operators';
@@ -40,7 +39,6 @@ export class UserComponent implements OnInit, OnDestroy {
         private router: Router,
         public cacheService: CacheService,
         public timerService: TimerService,
-        private probeService: ProbeService,
         private eventService: EventService,
         public apiService: KahlaHTTP
     ) {
@@ -64,7 +62,6 @@ export class UserComponent implements OnInit, OnDestroy {
             this.conversationId = response.conversationId;
             this.sentRequest = response.sentRequest;
             this.pendingRequest = response.pendingRequest;
-            this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
         });
     }
 

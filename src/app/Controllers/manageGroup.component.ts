@@ -10,7 +10,6 @@ import { TimerService } from '../Services/TimerService';
 import { UploadService } from '../Services/UploadService';
 import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
 import { SwalToast } from '../Helpers/Toast';
 import { MeRepo } from '../Repos/MeRepo';
 
@@ -36,7 +35,6 @@ export class ManageGroupComponent implements OnInit {
                 private router: Router,
                 public timerService: TimerService,
                 public uploadService: UploadService,
-                private probeService: ProbeService,
                 private meRepo: MeRepo
     ) {
 
@@ -53,12 +51,10 @@ export class ManageGroupComponent implements OnInit {
                 .subscribe(conversation => {
                     this.messageService.conversation = conversation;
                     this.conversation = <GroupConversation>conversation;
-                    this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(this.conversation.groupImagePath);
                     this.newGroupName = this.conversation.groupName;
                 });
         } else {
             this.conversation = <GroupConversation>this.messageService.conversation;
-            this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(this.conversation.groupImagePath);
             this.newGroupName = this.conversation.groupName;
         }
     }

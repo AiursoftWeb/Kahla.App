@@ -19,6 +19,7 @@ import { EmojiButton } from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { Toolbox } from '../Services/Toolbox';
+import { MeRepo } from '../Repos/MeRepo';
 
 declare var MediaRecorder: any;
 
@@ -68,6 +69,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         private friendshipService: FriendshipService,
         private themeService: ThemeService,
         public probeService: ProbeService,
+        private meRepo: MeRepo
     ) {
     }
 
@@ -105,10 +107,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     @HostListener('keydown', ['$event'])
-    onKeydown(e: KeyboardEvent) {
+    async onKeydown(e: KeyboardEvent) {
+        const me = await this.meRepo.getMe();
         if (e.key === 'Enter' && !this.showUserList) {
             e.preventDefault();
-            if ((e.altKey || e.ctrlKey || e.shiftKey) === this.cacheService.cachedData.me.enableEnterToSendMessage) {
+            if ((e.altKey || e.ctrlKey || e.shiftKey) === me.response.enableEnterToSendMessage) {
                 this.insertToSelection('\n');
                 this.oldContent = ''; // prevent send message on keyup
             } else {
@@ -237,19 +240,20 @@ export class TalkingComponent implements OnInit, OnDestroy {
         return message.id;
     }
 
-    public send(): void {
+    public async send(): Promise<void> {
         if (this.content.trim().length === 0) {
             return;
         }
+        const me = (await this.meRepo.getMe()).response;
         const tempMessage = new Message();
         tempMessage.id = Toolbox.getUuid();
         tempMessage.isEmoji = this.messageService.checkEmoji(this.content);
         tempMessage.content = this.content;
-        tempMessage.senderId = this.cacheService.cachedData.me.id;
-        tempMessage.sender = this.cacheService.cachedData.me;
+        tempMessage.senderId = me.id;
+        tempMessage.sender = me;
         if (this.messageService.localMessages.length > 0) {
             const prevMsg = this.messageService.localMessages[this.messageService.localMessages.length - 1];
-            tempMessage.groupWithPrevious = prevMsg.senderId === this.cacheService.cachedData.me.id
+            tempMessage.groupWithPrevious = prevMsg.senderId === me.id
                 && new Date().getTime() - prevMsg.timeStamp <= 3600000;
         }
         tempMessage.sendTime = new Date().toISOString();

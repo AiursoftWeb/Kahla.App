@@ -32,6 +32,7 @@ import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Helpers/Toast';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Injectable({
     providedIn: 'root'
@@ -67,6 +68,7 @@ export class MessageService {
         private probeService: ProbeService,
         private themeService: ThemeService,
         private applicationRef: ApplicationRef,
+        private meRepo: MeRepo
     ) {
     }
 
@@ -74,6 +76,7 @@ export class MessageService {
         if (!this.conversation) {
             return;
         }
+        const me = (await this.meRepo.getMe()).response;
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
@@ -81,7 +84,7 @@ export class MessageService {
                     && this.rawMessages.findIndex(t => t.id === evt.message.id) === -1) {
                     if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
                         evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
-                        if (evt.message.senderId === this.cacheService.cachedData.me.id) {
+                        if (evt.message.senderId === me.id) {
                             // the temp message should still exist
                             const index = this.localMessages.findIndex(t => t.id === evt.message.id && t.local);
                             if (index !== -1) {
@@ -134,7 +137,7 @@ export class MessageService {
             case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
                 if (this.conversation.id === evt.conversationId) {
-                    if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
+                    if (evt.leftUser.id === me.id) {
                         this.router.navigate(['/home']);
                     } else {
                         this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
@@ -168,6 +171,7 @@ export class MessageService {
     }
 
     public async getMessages(unread: number, id: number, skipFrom: string, take: number) {
+        const me = (await this.meRepo.getMe()).response;
         this.messageLoading = true;
         this.localMessages = this.localMessages.filter(t => !t.local);
         const messages = await this.conversationApiService.GetMessage(id, skipFrom, take)
@@ -180,8 +184,7 @@ export class MessageService {
             this.noMoreMessages = true;
         }
         if (this.localMessages.length > 0 && messages.length > 0) {
-            this.newMessages = this.cacheService.cachedData.me &&
-                messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
+            this.newMessages = messages[messages.length - 1].senderId !== me.id &&
                 take === 1 && this.belowWindowPercent > 0;
         }
         // Load new
@@ -322,10 +325,11 @@ export class MessageService {
         return regex.test(text);
     }
 
-    public checkOwner(id?: string): boolean {
-        if (this.conversation && this.cacheService.cachedData.me) {
+    public async checkOwner(id?: string): Promise<boolean> {
+        const me = await this.meRepo.getMe();
+        if (this.conversation) {
             if (this.conversation.discriminator === 'GroupConversation') {
-                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.cacheService.cachedData.me.id);
+                return (<GroupConversation>this.conversation).ownerId === (id ? id : me.response.id);
             } else {
                 return true;
             }

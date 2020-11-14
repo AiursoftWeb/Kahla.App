@@ -9,6 +9,7 @@ import { SearchResult } from '../Models/SearchResult';
 import { KahlaUser } from '../Models/KahlaUser';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { GroupsResult } from '../Models/GroupsResults';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     selector: 'app-friends',
@@ -34,14 +35,13 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         private friendsApiService: FriendsApiService,
         private router: Router,
         private messageService: MessageService,
-        public cacheService: CacheService) {
+        public cacheService: CacheService,
+        private meRepo: MeRepo) {
     }
 
     public ngOnInit(): void {
-        if (this.cacheService.cachedData.me && !this.cacheService.cachedData.friends) {
-            this.cacheService.updateFriends();
-            this.cacheService.updateRequests();
-        }
+        this.cacheService.updateFriends();
+        this.cacheService.updateRequests();
     }
 
     ngAfterViewInit(): void {
@@ -51,8 +51,9 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         }
     }
 
-    public createGroup(): void {
-        if (!this.cacheService.cachedData.me.emailConfirmed) {
+    public async createGroup(): Promise<void> {
+        const me = await this.meRepo.getMe();
+        if (!me.response.emailConfirmed) {
             Swal.fire('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
             return;
         }

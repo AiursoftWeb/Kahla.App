@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
-import { ProbeService } from '../Services/ProbeService';
 import { SwalToast } from '../Helpers/Toast';
 import Swal from 'sweetalert2';
 
@@ -19,8 +18,7 @@ export class DiscoverComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
 
     constructor(
-        private friendsApiService: FriendsApiService,
-        private probeService: ProbeService,
+        private friendsApiService: FriendsApiService
     ) {
         }
 
@@ -31,9 +29,6 @@ export class DiscoverComponent implements OnInit {
     public loadMore(): void {
         this.loading = true;
         this.friendsApiService.Discover(this.amount).subscribe(users => {
-            users.items.forEach(item => {
-                item.targetUser.avatarURL = this.probeService.encodeProbeFileUrl(item.targetUser.iconFilePath);
-            });
             const top = window.scrollY;
             this.users = users.items;
             if (this.users.length < this.amount) {

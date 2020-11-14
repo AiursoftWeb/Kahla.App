@@ -6,7 +6,6 @@ import { FriendsApiService } from './Api/FriendsApiService';
 import { map } from 'rxjs/operators';
 import { AES, enc } from 'crypto-js';
 import { ConversationApiService } from './Api/ConversationApiService';
-import { ProbeService } from './ProbeService';
 import { ThemeService } from './ThemeService';
 
 @Injectable()
@@ -19,7 +18,6 @@ export class CacheService {
     constructor(
         private friendsApiService: FriendsApiService,
         private conversationApiService: ConversationApiService,
-        private probeService: ProbeService,
         private themeService: ThemeService,
     ) {
     }
@@ -43,7 +41,6 @@ export class CacheService {
                         }
                         e.latestMessage.content = this.modifyMessage(e.latestMessage.content);
                     }
-                    e.avatarURL = this.probeService.encodeProbeFileUrl(e.displayImagePath);
                 });
                 this.cachedData.conversations = info;
                 this.updateTotalUnread();
@@ -55,13 +52,6 @@ export class CacheService {
         this.friendsApiService.Mine()
             .subscribe(result => {
                 if (result.code === 0) {
-                    result.users.forEach(user => {
-                        user.avatarURL = this.probeService.encodeProbeFileUrl(user.iconFilePath);
-                    });
-                    result.groups.forEach(group => {
-                        group.avatarURL = this.probeService.encodeProbeFileUrl(group.imagePath);
-                    });
-
                     this.cachedData.friends = result;
                     this.saveCache();
                 }
@@ -71,9 +61,6 @@ export class CacheService {
     public updateRequests(): void {
         this.friendsApiService.MyRequests().subscribe(response => {
             this.cachedData.requests = response.items;
-            response.items.forEach(item => {
-                item.creator.avatarURL = this.probeService.encodeProbeFileUrl(item.creator.iconFilePath);
-            });
             this.totalRequests = response.items.filter(t => !t.completed).length;
             this.saveCache();
         });

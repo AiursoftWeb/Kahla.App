@@ -199,7 +199,6 @@ export class UploadService {
                     } else if (res != null && (<UploadFile>res).code === 0) {
                         Swal.close();
                         group.groupImagePath = (<UploadFile>res).filePath;
-                        group.avatarURL = this.probeService.encodeProbeFileUrl(group.groupImagePath);
                     }
                 });
                 alert.then(result => {
