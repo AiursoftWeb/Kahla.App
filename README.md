@@ -6,7 +6,7 @@
 
 [![Build status](https://aiursoft.visualstudio.com/Star/_apis/build/status/Kahla%20App%20Build)](https://aiursoft.visualstudio.com/Star/_build/latest?definitionId=4)
 [![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]() 
-[![Maintainability](https://api.codeclimate.com/v1/badges/b7d4a3f5746bcbbe99c1/maintainability)](https://codeclimate.com/github/AiursoftWeb/Kahla.App/maintainability)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fweb.kahla.app)
 [![npm](https://img.shields.io/npm/v/kahla.svg?style=flat)](https://www.npmjs.com/package/kahla)
 ![GitHub all releases](https://img.shields.io/github/downloads/AiursoftWeb/Kahla.App/total)
 [![GitHub contributors](https://img.shields.io/github/contributors/AiursoftWeb/Kahla.App.svg?style=flat)](https://github.com/AiursoftWeb/Kahla.App/graphs/contributors)
