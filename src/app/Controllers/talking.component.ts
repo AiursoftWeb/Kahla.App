@@ -50,6 +50,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: Array<KahlaUser> = [];
+    public me: KahlaUser;
     public loadingMore: boolean;
 
     @ViewChild('imageInput') public imageInput;
@@ -149,7 +150,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
         const inputElement = <HTMLElement>document.querySelector('#chatInput');
         inputElement.addEventListener('input', () => {
             inputElement.style.height = 'auto';
@@ -210,6 +214,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.cacheService.saveCache();
             });
         this.windowInnerHeight = window.innerHeight;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
+        }
     }
 
     private updateInputHeight(): void {
