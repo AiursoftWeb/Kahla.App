@@ -8,7 +8,7 @@
 [![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]() 
 [![Maintainability](https://api.codeclimate.com/v1/badges/b7d4a3f5746bcbbe99c1/maintainability)](https://codeclimate.com/github/AiursoftWeb/Kahla.App/maintainability)
 [![npm](https://img.shields.io/npm/v/kahla.svg?style=flat)](https://www.npmjs.com/package/kahla)
-[![Issues](https://img.shields.io/github/issues/AiursoftWeb/Kahla.App.svg)](https://github.com/AiursoftWeb/Kahla.App/issues)
+![GitHub all releases](https://img.shields.io/github/downloads/AiursoftWeb/Kahla.App/total)
 [![GitHub contributors](https://img.shields.io/github/contributors/AiursoftWeb/Kahla.App.svg?style=flat)](https://github.com/AiursoftWeb/Kahla.App/graphs/contributors)
 [![LICENSE](https://img.shields.io/github/license/AiursoftWeb/Kahla.App)](https://github.com/AiursoftWeb/Kahla.App/blob/dev/LICENSE)
 
