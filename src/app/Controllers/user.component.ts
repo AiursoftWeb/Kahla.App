@@ -15,7 +15,7 @@ import { EventType } from '../Models/Events/EventType';
 import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
 import { SwalToast } from '../Helpers/Toast';
-import { ApiService } from '../Services/Api/ApiService';
+import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -42,7 +42,7 @@ export class UserComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private probeService: ProbeService,
         private eventService: EventService,
-        public apiService: ApiService
+        public apiService: KahlaHTTP
     ) {
     }
 

@@ -10,7 +10,6 @@ import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { SearchResult } from '../Models/SearchResult';
-import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';
 import { FilesApiService } from '../Services/Api/FilesApiService';
@@ -19,6 +18,7 @@ import { Observable } from 'rxjs';
 import { AiurValue } from '../Models/AiurValue';
 import { Message } from '../Models/Message';
 import { SwalToast } from '../Helpers/Toast';
+import { Toolbox } from '../Services/Toolbox';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -173,7 +173,7 @@ export class ShareComponent implements OnInit, DoCheck {
         const encryptedMessage = AES.encrypt(content, this.conversation.aesKey).toString();
         const messageIDArry = this.messageService.getAtIDs(content);
         return this.conversationApiService.SendMessage(this.conversation.id,
-            encryptedMessage, uuid4(), messageIDArry.slice(1));
+            encryptedMessage, Toolbox.getUuid(), messageIDArry.slice(1));
     }
 
     public search(term: string, keydown: boolean = false): void {

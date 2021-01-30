@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { ApiService } from '../Services/Api/ApiService';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { HttpClient } from '@angular/common/http';
-import { ServerListApiService } from '../Services/Api/ServerListApiService';
+import { ServerManager } from '../Repos/ServerManager';
+import { BrowserContextService } from '../Services/BrowserContextService';
 import { ServerConfig } from '../Models/ServerConfig';
+import { ServersRepo } from '../Repos/ServersRepo';
+import { Toolbox } from '../Services/Toolbox';
 
 @Component({
     templateUrl: '../Views/signin.html',
@@ -14,87 +15,74 @@ import { ServerConfig } from '../Models/ServerConfig';
 })
 export class SignInComponent implements OnInit {
 
-    public changingServer = false;
-    public serverAddr;
+    public viewingChangeServerPage = false;
+    public serverAddress: string;
+    public currentServer: ServerConfig;
+    public servers: ServerConfig[];
 
     constructor(
-        public _electronService: ElectronService,
-        public apiService: ApiService,
-        public serverListApiService: ServerListApiService,
+        private browserContext: BrowserContextService,
+        public electronService: ElectronService,
         public initService: InitService,
-        public http: HttpClient,
-    ) {
+        private serverRepo: ServerManager,
+        private serversRepo: ServersRepo) {
     }
 
-    public clearCommunityServerData() {
-        localStorage.removeItem('serverConfig');
-        this.changingServer = false;
-        this.initService.init();
+    async ngOnInit(): Promise<void> {
+        this.currentServer = await this.serverRepo.getOurServer();
+        this.servers = await this.serversRepo.getRemoteServers(true, true);
+        this.serverAddress = this.currentServer.domain.server;
     }
 
-    public connectCommunity() {
-        if (!this.serverAddr) {
+    public async select(server: ServerConfig): Promise<void> {
+        this.serverAddress = server.domain.server;
+        await this.connectCommunity();
+    }
+
+    public async connectCommunity(): Promise<void> {
+        if (!this.serverAddress) {
             Swal.fire('Please input an valid server url!', '', 'error');
             return;
         }
-        if (!this.serverAddr.match(/^https?:\/\/.+/g)) {
-            this.serverAddr = 'https://' + this.serverAddr;
+        this.serverAddress = Toolbox.trimServerAddress(this.serverAddress);
+        if (!this.serversRepo.isOfficialServer(this.serverAddress)) {
+            const connectToUntrustServer = await Swal.fire({
+                title: 'Connecting to a community server...',
+                text: 'Aiursoft CANNOT prove the community server is secure.\n' +
+                    ' You should NEVER connect to a server you don\'t trust.\n' +
+                    'Chat data in community server will never be synced with one in official server.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Continue'
+            });
+            if (connectToUntrustServer.dismiss) {
+                return;
+            }
         }
         Swal.fire({
-            icon: 'info',
-            title: 'Fetching manifest from server...',
-            text: this.serverAddr,
+            title: 'Connecting...',
             showConfirmButton: false,
             showCancelButton: false
         });
         Swal.showLoading();
-        const fireFailed = () => Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
-        this.serverListApiService.getServerConfig(this.serverAddr).subscribe({
-            next: serverConfig => {
-                if (serverConfig.code !== 0 || serverConfig.domain.server !== this.serverAddr) {
-                    Swal.close();
-                    fireFailed();
-                    return;
-                }
-                this.serverListApiService.Servers().subscribe(async officialServer => {
-                    Swal.close();
-                    if (officialServer.map(t => t.domain.server).includes(serverConfig.domain.server)) {
-                        // an official server
-                        serverConfig.officialServer = true;
-                    } else {
-                        const res = await Swal.fire({
-                            title: 'Connecting to a community server...',
-                            text: 'Aiursoft CANNOT prove the community server is secure.\n' +
-                                ' You should NEVER connect to a server you don\'t trust.\n' +
-                                'Chat data in community server will never be synced with one in official server.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Continue'
-                        });
-                        if (res.dismiss) {
-                            return;
-                        }
-                        serverConfig.officialServer = false;
-                    }
-                    serverConfig._cacheVersion = ServerConfig.CACHE_VERSION;
-                    localStorage.setItem(this.apiService.STORAGE_SERVER_CONFIG, JSON.stringify(serverConfig));
-                    this.changingServer = false;
-                    this.initService.init();
-                });
-            },
-            error: _t => fireFailed()
-        });
-    }
-
-    ngOnInit(): void {
-        if (this.apiService.serverConfig && !this.apiService.serverConfig.officialServer) {
-            this.serverAddr = this.apiService.serverConfig.domain.server;
+        const connected = await this.serverRepo.connectAndSetOurServer(this.serverAddress);
+        Swal.close();
+        if (connected) {
+            await this.initService.init();
+            this.viewingChangeServerPage = false;
+        } else {
+            this.fireFailed();
         }
     }
 
+    private fireFailed() {
+        Swal.close();
+        Swal.fire('Failed to fetch manifest from server.', 'Check syntax, then contract the server\'s owner.', 'error');
+    }
+
     public goLogin(url: string) {
-        if (this._electronService.isElectronApp) {
-            this._electronService.ipcRenderer.send('oauth', url);
+        if (this.browserContext.isElectron()) {
+            this.electronService.ipcRenderer.send('oauth', url);
         } else {
             document.location.href = url;
         }

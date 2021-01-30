@@ -30,8 +30,7 @@ import { HomeComponent } from './Controllers/home.component';
 import { ShareComponent } from './Controllers/share.component';
 import { FileHistoryComponent } from './Controllers/file-history.component';
 // Services
-import { ApiService } from './Services/Api/ApiService';
-import { ParamService } from './Services/ParamService';
+import { KahlaHTTP } from './Services/Api/KahlaHTTP';
 import { CacheService } from './Services/CacheService';
 import { CheckService } from './Services/CheckService';
 import { UploadService } from './Services/UploadService';
@@ -51,6 +50,14 @@ import { ProbeService } from './Services/ProbeService';
 import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
+import { LocalStoreService } from './Services/LocalstoreService';
+import { BrowserContextService } from './Services/BrowserContextService';
+import { Toolbox } from './Services/Toolbox';
+import { DeviceRepo } from './Repos/DeviceRepo';
+import { ServersRepo } from './Repos/ServersRepo';
+import { ServerManager } from './Repos/ServerManager';
+import { SubscriptionManager } from './Services/SubscriptionManager';
+import { MeRepo } from './Repos/MeRepo';
 
 @NgModule({
     imports: [
@@ -87,13 +94,13 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
         VjsPlayerComponent,
     ],
     providers: [
-        ApiService,
-        ParamService,
+        KahlaHTTP,
         CacheService,
         UploadService,
         CheckService,
         AuthApiService,
         ConversationApiService,
+        LocalStoreService,
         FilesApiService,
         FriendsApiService,
         GroupsApiService,
@@ -107,6 +114,13 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
         ProbeService,
         EventService,
         GlobalNotifyService,
+        BrowserContextService,
+        Toolbox,
+        DeviceRepo,
+        MeRepo,
+        ServersRepo,
+        ServerManager,
+        SubscriptionManager
     ],
     bootstrap: [AppComponent]
 })

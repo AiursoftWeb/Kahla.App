@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import Swal from 'sweetalert2';
-import { catchError } from 'rxjs/operators';
 
 @Component({
     templateUrl: '../Views/changePassword.html',
@@ -29,7 +28,7 @@ export class ChangePasswordComponent {
         }
     }
 
-    public onSubmit(): void {
+    public async onSubmit(): Promise<void> {
         this.checkValid();
         if (!this.samePassword) {
             Swal.fire('Passwords are not same!', 'error');
@@ -39,17 +38,16 @@ export class ChangePasswordComponent {
             Swal.fire('Password length should between 6 and 32.');
             return;
         }
-        this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword)
-            .pipe(catchError(error => {
-                Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
-                return Promise.reject(error.message || error);
-            }))
-            .subscribe(result => {
-                if (result.code === 0) {
-                    Swal.fire('All set', result.message, 'success');
-                } else {
-                    Swal.fire('Try again', result.message, 'error');
-                }
-            });
+
+        try {
+            const changeResult = await this.authApiServer.ChangePassword(this.oldPassword, this.newPassword, this.confirmPassword);
+            if (changeResult.code === 0) {
+                Swal.fire('All set', changeResult.message, 'success');
+            } else {
+                Swal.fire('Try again', changeResult.message, 'error');
+            }
+        } catch {
+            Swal.fire('Network issue', 'Could not connect to Kahla server.', 'error');
+        }
     }
 }
