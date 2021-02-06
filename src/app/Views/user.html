@@ -87,8 +87,8 @@
     <button class="button primary"
             *ngIf="info && cacheService.cachedData.me && !areFriends && cacheService.cachedData.me.emailConfirmed && !sentRequest"
             (click)="request(info.id)" i18n="@@SendFriendRequest">
-            <label *ngIf="apiService.serverConfig.autoAcceptRequests">Connect</label>
-            <label *ngIf="!apiService.serverConfig.autoAcceptRequests">Send Friend Request</label>
+            <label *ngIf="server && server.autoAcceptRequests">Connect</label>
+            <label *ngIf="server && !server.autoAcceptRequests">Send Friend Request</label>
     </button>
     <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
     <button class="button primary"
