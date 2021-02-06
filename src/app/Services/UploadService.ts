@@ -9,10 +9,10 @@ import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
+import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AiurValue } from '../Models/AiurValue';
 import { Message } from '../Models/Message';
-import { Toolbox } from './Toolbox';
 
 @Injectable({
     providedIn: 'root'
@@ -141,7 +141,7 @@ export class UploadService {
 
     private sendMessage(message: string, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {
         return new Promise((resolve, reject) => {
-            this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), Toolbox.getUuid(), [])
+            this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
                 .subscribe((t) => {
                     resolve(t);
                 }, () => {

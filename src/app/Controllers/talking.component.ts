@@ -15,10 +15,10 @@ import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
-import { EmojiButton } from '@joeattardi/emoji-button';
+import { uuid4 } from '../Helpers/Uuid';
+import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
-import { Toolbox } from '../Services/Toolbox';
 
 declare var MediaRecorder: any;
 
@@ -242,7 +242,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             return;
         }
         const tempMessage = new Message();
-        tempMessage.id = Toolbox.getUuid();
+        tempMessage.id = uuid4();
         tempMessage.isEmoji = this.messageService.checkEmoji(this.content);
         tempMessage.content = this.content;
         tempMessage.senderId = this.cacheService.cachedData.me.id;
@@ -488,8 +488,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 autoFocusSearch: false,
                 showSearch: false
             });
-            this.picker.on('emoji', selection => {
-                this.insertToSelection(selection.emoji);
+            this.picker.on('emoji', emoji => {
+                this.insertToSelection(emoji);
             });
         }
         this.picker.togglePicker(chatBox);

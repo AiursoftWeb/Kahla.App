@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
+import { ApiService } from '../Services/Api/ApiService';
+import { ElectronService } from 'ngx-electron';
 import { environment } from '../../environments/environment';
-import { BrowserContextService } from '../Services/BrowserContextService';
-import { ServerManager } from '../Repos/ServerManager';
-import { ServerConfig } from '../Models/ServerConfig';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -14,24 +13,19 @@ import { ServerConfig } from '../Models/ServerConfig';
         '../Styles/button.scss']
 })
 
-export class AboutComponent implements OnInit {
+export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
     public website = environment.serversProvider;
-    public currentServer: ServerConfig;
 
     constructor(
         public checkService: CheckService,
-        public browserContext: BrowserContextService,
-        public serverRepo: ServerManager
+        public electronService: ElectronService,
+        public apiService: ApiService
     ) {
     }
 
-    async ngOnInit(): Promise<void> {
-        this.currentServer = await this.serverRepo.getOurServer();
-    }
-
-    public async check(): Promise<void> {
-        await this.checkService.checkAndAlertAppVersion(true);
+    public check(): void {
+        this.checkService.checkVersion(true);
     }
 
     public getCurrentYear(): number {

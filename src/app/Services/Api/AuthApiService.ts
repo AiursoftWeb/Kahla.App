@@ -1,33 +1,34 @@
 import { Injectable } from '@angular/core';
 import { AiurValue } from '../../Models/AiurValue';
 import { KahlaUser } from '../../Models/KahlaUser';
+import { Observable } from 'rxjs/';
 import { AiurProtocal } from '../../Models/AiurProtocal';
 import { InitPusherViewModel } from '../../Models/ApiModels/InitPusherViewModel';
-import { KahlaHTTP } from './KahlaHTTP';
+import { ApiService } from './ApiService';
 
 @Injectable()
 export class AuthApiService {
     private static serverPath = '/auth';
 
     constructor(
-        private apiService: KahlaHTTP
+        private apiService: ApiService
     ) {
     }
 
-    public SignInStatus() {
-        return this.apiService.Get<AiurValue<boolean>>(AuthApiService.serverPath + '/SignInStatus').toPromise();
+    public SignInStatus(): Observable<AiurValue<boolean>> {
+        return this.apiService.Get(AuthApiService.serverPath + '/SignInStatus');
     }
 
-    public Me() {
-        return this.apiService.Get<AiurValue<KahlaUser>>(AuthApiService.serverPath + '/Me').toPromise();
+    public Me(): Observable<AiurValue<KahlaUser>> {
+        return this.apiService.Get(AuthApiService.serverPath + '/Me');
     }
 
-    public UpdateInfo(nickName: string, bio: string, headIconPath: string) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateInfo', {
+    public UpdateInfo(nickName: string, bio: string, headIconPath: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/UpdateInfo', {
             nickName: nickName,
             bio: bio,
             headIconPath: headIconPath,
-        }).toPromise();
+        });
     }
 
     public UpdateClientSetting(themeId: number = null,
@@ -35,34 +36,34 @@ export class AuthApiService {
                                enableEnterToSendMessage: boolean = null,
                                enableInvisiable: boolean = null,
                                markEmailPublic: boolean = null,
-                               listInSearchResult: boolean = null) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/UpdateClientSetting', {
+                               listInSearchResult: boolean = null): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/UpdateClientSetting', {
             ThemeId: themeId,
             EnableEmailNotification: enableEmailNotification,
             EnableEnterToSendMessage: enableEnterToSendMessage,
             EnableInvisiable: enableInvisiable,
             MarkEmailPublic: markEmailPublic,
             ListInSearchResult: listInSearchResult
-        }).toPromise();
+        });
     }
 
-    public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/ChangePassword', {
+    public ChangePassword(oldPassword: string, newPassword: string, repeatPassword: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/ChangePassword', {
             OldPassword: oldPassword,
             NewPassword: newPassword,
             RepeatPassword: repeatPassword
-        }).toPromise();
+        });
     }
 
-    public InitPusher() {
-        return this.apiService.Get<InitPusherViewModel>(AuthApiService.serverPath + '/InitPusher').toPromise();
+    public InitPusher(): Observable<InitPusherViewModel> {
+        return this.apiService.Get(AuthApiService.serverPath + '/InitPusher');
     }
 
-    public LogOff(deviceID: number) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/LogOff', {deviceID: deviceID}).toPromise();
+    public LogOff(deviceID: number): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/LogOff', {deviceID: deviceID});
     }
 
-    public SendMail(email: string) {
-        return this.apiService.Post<AiurProtocal>(AuthApiService.serverPath + '/SendEmail', {email: email}).toPromise();
+    public SendMail(email: string): Observable<AiurProtocal> {
+        return this.apiService.Post(AuthApiService.serverPath + '/SendEmail', {email: email});
     }
 }

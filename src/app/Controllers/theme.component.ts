@@ -22,17 +22,17 @@ export class ThemeComponent implements OnInit {
         this.accentColor = this.currentTheme % 3;
     }
 
-    public async applyTheme(): Promise<void> {
-        await this.changeTheme(this.primaryColor * 3 + this.accentColor);
+    public applyTheme() {
+        this.changeTheme(this.primaryColor * 3 + this.accentColor);
     }
 
-    public async changeTheme(theme: Theme): Promise<void> {
+    public changeTheme(theme: Theme) {
         if (this.currentTheme === theme) {
             return;
         }
         this.currentTheme = theme;
         this.themeService.LocalThemeSetting = theme;
+        this.themeService.SetRemoteThemeSetting(theme);
         this.themeService.ApplyTheme(theme);
-        await this.themeService.SetRemoteThemeSetting(theme);
     }
 }

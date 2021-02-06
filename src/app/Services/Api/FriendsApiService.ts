@@ -5,7 +5,7 @@ import { AiurProtocal } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
 import { Request } from '../../Models/Request';
 import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
-import { KahlaHTTP } from './KahlaHTTP';
+import { ApiService } from './ApiService';
 import { DiscoverUser } from '../../Models/DiscoverUser';
 import { SearchResult } from '../../Models/SearchResult';
 
@@ -14,7 +14,7 @@ export class FriendsApiService {
     private static serverPath = '/friendship';
 
     constructor(
-        private apiService: KahlaHTTP
+        private apiService: ApiService
     ) {
     }
 

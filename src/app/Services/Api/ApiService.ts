@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
+import { ParamService } from '../ParamService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { Toolbox } from '../Toolbox';
-import { ServerManager } from '../../Repos/ServerManager';
+import { ServerConfig } from '../../Models/ServerConfig';
 
 @Injectable({
     providedIn: 'root'
 })
-export class KahlaHTTP {
+export class ApiService {
+    public readonly STORAGE_SERVER_CONFIG = 'serverConfig';
+    public serverConfig: ServerConfig;
+
     private _headers: HttpHeaders =
         new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -16,23 +19,22 @@ export class KahlaHTTP {
 
     constructor(
         private http: HttpClient,
-        private serverRepo: ServerManager) {
+        private paramTool: ParamService) {
     }
 
-    private getOurServerAddress(): string {
-        const ourServer = this.serverRepo.getOurServerSync();
-        return ourServer.domain.server;
+    public Get<T>(address: string): Observable<T> {
+        return this.GetByFullUrl<T>(`${this.serverConfig.domain.server}${address}`);
     }
 
-    public Get<T>(address: string, withCredentials = true): Observable<T> {
-        return this.http.get<T>(`${this.getOurServerAddress()}${address}`, {
+    public GetByFullUrl<T>(address: string, withCredentials = true): Observable<T> {
+        return this.http.get<T>(address, {
             headers: this._headers,
             withCredentials: withCredentials
         }).pipe(catchError(this.handleError));
     }
 
     public Post<T>(address: string, data: any): Observable<T> {
-        return this.http.post<T>(`${this.getOurServerAddress()}${address}`, Toolbox.param(data), {
+        return this.http.post<T>(`${this.serverConfig.domain.server}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true
         }).pipe(catchError(this.handleError));
