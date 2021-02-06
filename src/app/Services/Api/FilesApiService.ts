@@ -1,4 +1,4 @@
-import { KahlaHTTP } from './KahlaHTTP';
+import { ApiService } from './ApiService';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/';
@@ -13,7 +13,7 @@ export class FilesApiService {
     private static serverPath = '/Storage';
 
     constructor(
-        private apiService: KahlaHTTP,
+        private apiService: ApiService,
         private http: HttpClient,
     ) {
     }

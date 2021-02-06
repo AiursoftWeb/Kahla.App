@@ -1,4 +1,4 @@
-import { KahlaHTTP } from './KahlaHTTP';
+import { ApiService } from './ApiService';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurValue } from '../../Models/AiurValue';
@@ -10,7 +10,7 @@ export class GroupsApiService {
     private static serverPath = '/groups';
 
     constructor(
-        private apiService: KahlaHTTP
+        private apiService: ApiService
     ) {
     }
 

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
-import { LocalDevice } from '../Models/Device';
+import { Device } from '../Models/Device';
+import { ElectronService } from 'ngx-electron';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
-import { LocalStoreService } from '../Services/LocalstoreService';
-import { BrowserContextService } from '../Services/BrowserContextService';
-import { DeviceRepo } from '../Repos/DeviceRepo';
-import { SubscriptionManager } from '../Services/SubscriptionManager';
+import { InitService } from '../Services/InitService';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -14,65 +13,76 @@ import { SubscriptionManager } from '../Services/SubscriptionManager';
         '../Styles/toggleButton.scss']
 })
 export class DevicesComponent implements OnInit {
-    public devices: LocalDevice[];
-
     constructor(
+        public cacheService: CacheService,
+        public electronService: ElectronService,
         public devicesApiService: DevicesApiService,
-        public localStore: LocalStoreService,
-        public browserContext: BrowserContextService,
-        private deviceRepo: DeviceRepo,
-        private subscriptionManager: SubscriptionManager
+        public initService: InitService,
     ) {
     }
 
-    public async ngOnInit(): Promise<void> {
-        // Fast render
-        const cachedResponse = await this.deviceRepo.getDevices();
-        this.devices = cachedResponse.response;
+    public webPushEnabled: boolean;
 
-        // Full load
-        if (!cachedResponse.isLatest) {
-            this.devices = (await this.deviceRepo.getDevices(false)).response;
+    public ngOnInit(): void {
+        this.cacheService.updateDevice();
+        if (this.webpushSupported()) {
+            this.webPushEnabled = this.getWebPushStatus();
         }
     }
 
-    public detail(device: LocalDevice): void {
+    public detail(device: Device): void {
         if (device !== null) {
             Swal.fire({
                 title: 'Device detail',
-                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.remoteDevice.ipAddress +
-                    '</td></tr><tr><th>Add time</th><td>' + new Date(device.remoteDevice.addTime).toLocaleString() +
+                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.ipAddress +
+                    '</td></tr><tr><th>Add time</th><td>' + new Date(device.addTime).toLocaleString() +
                     '</td></tr></table>'
             });
         }
     }
 
-    public webpushSupported() {
-        return this.browserContext.supportWebPush();
+    public webpushSupported(): boolean {
+        return !this.electronService.isElectronApp && 'Notification' in window && 'serviceWorker' in navigator;
     }
 
-    public async testPush(): Promise<void> {
-        const pushResult = await this.devicesApiService.PushTestMessage();
-        if (pushResult.code === 0) {
-            Swal.fire('Successfully sent!', pushResult.message, 'info');
+    public testPush(): void {
+        this.devicesApiService.PushTestMessage().subscribe(t => {
+            if (t.code === 0) {
+                Swal.fire(
+                    'Successfully sent!',
+                    t.message,
+                    'info'
+                );
+            }
+        });
+    }
+
+    public getWebPushStatus(): boolean {
+        if (!localStorage.getItem('setting-pushSubscription')) {
+            return true;
         }
+        const status: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
+        return status.enabled;
     }
 
-    public webPushEnabled(): boolean {
-        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).enabled;
-    }
-
-    public async setWebPushStatus(enable: boolean): Promise<void> {
-        this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enabled = enable);
-        await this.subscriptionManager.setKahlaDevice(enable);
-        this.devices = (await this.deviceRepo.getDevices(false)).response;
+    public setWebPushStatus(value: boolean) {
+        const status: PushSubscriptionSetting = localStorage.getItem('setting-pushSubscription') ?
+            JSON.parse(localStorage.getItem('setting-pushSubscription')) :
+            {
+                enabled: value,
+                deviceId: 0
+            };
+        status.enabled = value;
+        localStorage.setItem('setting-pushSubscription', JSON.stringify(status));
+        this.webPushEnabled = value;
+        this.initService.subscribeUser();
     }
 
     public getElectronNotify(): boolean {
-        return this.localStore.get(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting).enableElectron;
+        return localStorage.getItem('setting-electronNotify') !== 'false';
     }
 
-    public setElectronNotify(enable: boolean) {
-        this.localStore.update(LocalStoreService.PUSH_SUBSCRIPTION, PushSubscriptionSetting, t => t.enableElectron = enable);
+    public setElectronNotify(value: boolean) {
+        localStorage.setItem('setting-electronNotify', value ? 'true' : 'false');
     }
 }

@@ -33,11 +33,12 @@ export class UserDetailComponent implements OnInit {
     ) {
     }
 
-    public async ngOnInit(): Promise<void> {
+    public ngOnInit(): void {
         if (!this.cacheService.cachedData.me) {
-            const me = await this.authApiService.Me();
-            this.user = me.value;
-            this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
+            this.authApiService.Me().subscribe(p => {
+                this.user = p.value;
+                this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
+            });
         } else {
             this.user = Object.assign({}, this.cacheService.cachedData.me);
         }
@@ -52,17 +53,19 @@ export class UserDetailComponent implements OnInit {
         }
     }
 
-    public async save(): Promise<void> {
+    public save(): void {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        const response = await this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath);
-        if (response.code === 0) {
-            this.cacheService.cachedData.me = Object.assign({}, this.user);
-            this.cacheService.saveCache();
-            this.router.navigate(['/home']);
-        } else {
-            Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
-        }
-        saveButton.textContent = 'Save';
+        this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath)
+            .subscribe((response) => {
+                if (response.code === 0) {
+                    this.cacheService.cachedData.me = Object.assign({}, this.user);
+                    this.cacheService.saveCache();
+                    this.router.navigate(['/home']);
+                } else {
+                    Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
+                }
+                saveButton.textContent = 'Save';
+            });
     }
 }

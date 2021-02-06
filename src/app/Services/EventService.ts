@@ -16,24 +16,23 @@ export class EventService {
     public onReconnect: Subject<void> = new Subject<void>();
 
     private timeoutNumber = 1000;
-    private reconnectAttemptTimeout: NodeJS.Timeout;
+    private reconnectAttemptTimeout;
     private closeWebSocket = false;
 
 
     constructor(private authApiService: AuthApiService) {
     }
 
-    public async initPusher(): Promise<void> {
+    public initPusher(): void {
         this.connecting = true;
         this.closeWebSocket = false;
-        try {
-            const pusherModel = await this.authApiService.InitPusher();
+        this.authApiService.InitPusher().subscribe(model => {
             if (this.ws) {
                 this.closeWebSocket = true;
                 this.ws.close();
             }
             this.closeWebSocket = false;
-            this.ws = new WebSocket(pusherModel.serverPath);
+            this.ws = new WebSocket(model.serverPath);
             this.ws.onopen = () => {
                 this.connecting = false;
                 clearTimeout(this.reconnectAttemptTimeout);
@@ -54,9 +53,9 @@ export class EventService {
                 this.errorOrClosedFunc();
                 this.onErrorOrClose.next(false);
             };
-        } catch {
+        }, () => {
             this.errorOrClosedFunc();
-        }
+        });
     }
 
     private errorOrClosedFunc(): void {
@@ -77,9 +76,9 @@ export class EventService {
         }, this.timeoutNumber);
     }
 
-    public async attemptReconnect(): Promise<void> {
+    public attemptReconnect() {
         if (this.errorOrClose) {
-            await this.initPusher();
+            this.initPusher();
         }
     }
 

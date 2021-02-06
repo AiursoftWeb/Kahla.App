@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { KahlaHTTP } from './KahlaHTTP';
+import { ApiService } from './ApiService';
 import { Observable } from 'rxjs/';
 import { AiurCollection } from '../../Models/AiurCollection';
 import { Message } from '../../Models/Message';
@@ -14,7 +14,7 @@ export class ConversationApiService {
     private static serverPath = '/conversation';
 
     constructor(
-        private apiService: KahlaHTTP
+        private apiService: ApiService
     ) {
     }
 

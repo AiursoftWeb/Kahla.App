@@ -114,8 +114,8 @@ export class ThemeService {
         }
     }
 
-    async SetRemoteThemeSetting(theme: Theme): Promise<void> {
-        await this.authApiService.UpdateClientSetting(theme, null);
+    SetRemoteThemeSetting(theme: Theme): void {
+        this.authApiService.UpdateClientSetting(theme, null).subscribe();
     }
 
     get LocalThemeSetting(): Theme {
