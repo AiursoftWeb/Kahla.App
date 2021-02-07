@@ -1,5 +1,5 @@
 <app-header title="Edit Profile" closeDirectly="true"></app-header>
-<div *ngIf="user">
+<div *ngIf="me">
   <div class="profile avatar">
       <label>Avatar</label>
       <a class="user-img" href="{{me ? me.iconUrl : loadingImgURL}}" target="_blank">

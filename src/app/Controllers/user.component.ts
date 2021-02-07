@@ -17,6 +17,7 @@ import { SwalToast } from '../Helpers/Toast';
 import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
 import { ServerManager } from '../Repos/ServerManager';
 import { ServerConfig } from '../Models/ServerConfig';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -35,6 +36,7 @@ export class UserComponent implements OnInit, OnDestroy {
     public pendingRequest: Request;
     public updateSubscription: Subscription;
     public server: ServerConfig;
+    public me: KahlaUser;
 
     constructor(
         private route: ActivatedRoute,
@@ -44,11 +46,15 @@ export class UserComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private eventService: EventService,
         public apiService: KahlaHTTP,
-        private serverManager: ServerManager
+        private serverManager: ServerManager,
+        private meRepo: MeRepo
     ) {
     }
 
     public async ngOnInit(): Promise<void> {
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+        
         this.server = await this.serverManager.getOurServer();
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);

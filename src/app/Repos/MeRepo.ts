@@ -28,7 +28,7 @@ export class MeRepo {
         let me = this.localStore.get(LocalStoreService.ME_CONFIG, KahlaUser);
         let latest = false;
         if (!allowCache || !me.id) {
-            console.warn('Cache not available. Trying to refetch...');
+            console.warn('Me cache not available. Trying to refetch...');
             me = await this.fetchMe();
             latest = true;
         }
