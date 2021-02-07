@@ -15,6 +15,8 @@ import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
 import { SwalToast } from '../Helpers/Toast';
 import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
+import { ServerManager } from '../Repos/ServerManager';
+import { ServerConfig } from '../Models/ServerConfig';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -32,6 +34,7 @@ export class UserComponent implements OnInit, OnDestroy {
     public sentRequest: boolean;
     public pendingRequest: Request;
     public updateSubscription: Subscription;
+    public server: ServerConfig;
 
     constructor(
         private route: ActivatedRoute,
@@ -40,11 +43,13 @@ export class UserComponent implements OnInit, OnDestroy {
         public cacheService: CacheService,
         public timerService: TimerService,
         private eventService: EventService,
-        public apiService: KahlaHTTP
+        public apiService: KahlaHTTP,
+        private serverManager: ServerManager
     ) {
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
+        this.server = await this.serverManager.getOurServer();
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);
         });
