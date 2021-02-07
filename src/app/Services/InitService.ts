@@ -27,7 +27,7 @@ export class InitService {
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
         private subscriptionManager: SubscriptionManager,
-        private serverRepo: ServerManager,
+        private serverManager: ServerManager,
         private meRepo: MeRepo
     ) {
     }
@@ -37,7 +37,7 @@ export class InitService {
 
         this.cacheService.initCache(); // Obsolete
 
-        if (!this.serverRepo.ourServerSet()) {
+        if (!this.serverManager.ourServerSet()) {
             this.router.navigate(['/signin'], { replaceUrl: true });
             return;
         }

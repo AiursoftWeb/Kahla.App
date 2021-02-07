@@ -19,8 +19,7 @@ export class BrowserContextService {
     public supportWebPush(): boolean {
         return !this.isElectron() &&
             this.supportNotification() &&
-            'serviceWorker' in navigator &&
-            !!navigator.serviceWorker.controller;
+            'serviceWorker' in navigator;
     }
 
     public supportNotification(): boolean {
