@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { TimerService } from '../Services/TimerService';
 import { Request } from '../Models/Request';
-import { ProbeService } from '../Services/ProbeService';
 import { Subscription } from 'rxjs';
 import { EventService } from '../Services/EventService';
 import { filter } from 'rxjs/operators';
@@ -18,6 +17,7 @@ import { SwalToast } from '../Helpers/Toast';
 import { KahlaHTTP } from '../Services/Api/KahlaHTTP';
 import { ServerManager } from '../Repos/ServerManager';
 import { ServerConfig } from '../Models/ServerConfig';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -36,6 +36,7 @@ export class UserComponent implements OnInit, OnDestroy {
     public pendingRequest: Request;
     public updateSubscription: Subscription;
     public server: ServerConfig;
+    public me: KahlaUser;
 
     constructor(
         private route: ActivatedRoute,
@@ -43,14 +44,16 @@ export class UserComponent implements OnInit, OnDestroy {
         private router: Router,
         public cacheService: CacheService,
         public timerService: TimerService,
-        private probeService: ProbeService,
         private eventService: EventService,
         public apiService: KahlaHTTP,
-        private serverManager: ServerManager
+        private serverManager: ServerManager,
+        private meRepo: MeRepo
     ) {
     }
 
     public async ngOnInit(): Promise<void> {
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
         this.server = await this.serverManager.getOurServer();
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);
@@ -69,7 +72,6 @@ export class UserComponent implements OnInit, OnDestroy {
             this.conversationId = response.conversationId;
             this.sentRequest = response.sentRequest;
             this.pendingRequest = response.pendingRequest;
-            this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
         });
     }
 

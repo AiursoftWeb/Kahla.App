@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { HomeService } from '../Services/HomeService';
 import { CacheService } from '../Services/CacheService';
 import { BrowserContextService } from '../Services/BrowserContextService';
+import { MeRepo } from '../Repos/MeRepo';
+import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     selector: 'app-kahla',
@@ -13,8 +15,8 @@ import { BrowserContextService } from '../Services/BrowserContextService';
     styleUrls: ['../Styles/app.scss']
 })
 
-
 export class AppComponent implements OnInit {
+    public me: KahlaUser;
 
     constructor(
         private initService: InitService,
@@ -22,7 +24,8 @@ export class AppComponent implements OnInit {
         public cacheService: CacheService,
         public route: Router,
         public homeService: HomeService,
-        private browserContext: BrowserContextService) {
+        private browserContext: BrowserContextService,
+        private meRepo: MeRepo) {
     }
 
     @HostListener('window:popstate', [])
@@ -65,5 +68,14 @@ export class AppComponent implements OnInit {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal();
         await this.initService.init();
+
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
+        }
     }
 }

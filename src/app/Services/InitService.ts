@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
 import { ThemeService } from './ThemeService';
-import { ProbeService } from './ProbeService';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { LocalStoreService } from './LocalstoreService';
 import { SubscriptionManager } from './SubscriptionManager';
 import { ServerManager } from '../Repos/ServerManager';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Injectable({
     providedIn: 'root'
@@ -23,12 +23,12 @@ export class InitService {
         private messageService: MessageService,
         private cacheService: CacheService,
         private themeService: ThemeService,
-        private probeService: ProbeService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private localStore: LocalStoreService,
         private subscriptionManager: SubscriptionManager,
-        private serverRepo: ServerManager
+        private serverManager: ServerManager,
+        private meRepo: MeRepo
     ) {
     }
 
@@ -37,7 +37,7 @@ export class InitService {
 
         this.cacheService.initCache(); // Obsolete
 
-        if (!this.serverRepo.ourServerSet()) {
+        if (!this.serverManager.ourServerSet()) {
             this.router.navigate(['/signin'], { replaceUrl: true });
             return;
         }
@@ -64,15 +64,11 @@ export class InitService {
         this.globalNotifyService.init();
 
         // Load User Info
-        const me = await this.authApiService.Me();
-        if (me.code === 0) {
-            this.cacheService.cachedData.me = me.value;
-            this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
-            this.themeService.ApplyThemeFromRemote(me.value);
-            this.cacheService.updateConversation();
-            this.cacheService.updateFriends();
-            this.cacheService.updateRequests();
-        }
+        const me = await this.meRepo.getMe(); // Obsolete
+        this.themeService.ApplyThemeFromRemote(me.response); // Obsolete
+        this.cacheService.updateConversation(); // Obsolete
+        this.cacheService.updateFriends(); // Obsolete
+        this.cacheService.updateRequests(); // Obsolete
 
     }
 

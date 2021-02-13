@@ -1,29 +1,29 @@
 <app-header title="Me" [returnButton]="false"></app-header>
 
-<div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
+<div class="user" routerLink="/userInfo" *ngIf="me">
     <div class="user-img">
-        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=128&square=true">
-        <div class="small-dot" *ngIf="cacheService.cachedData.me.isOnline !== null"
-            [class.greendot]="cacheService.cachedData.me.isOnline"
-            [class.graydot]="!cacheService.cachedData.me.isOnline"
+        <img class="user-img" src="{{ me.avatarURL}}?w=128&square=true">
+        <div class="small-dot" *ngIf="me.isOnline !== null"
+            [class.greendot]="me.isOnline"
+            [class.graydot]="!me.isOnline"
             style="top:-11px; right:-43px;">
         </div>
     </div>
     <div class="name">
-        {{ cacheService.cachedData.me.nickName }}
+        {{ me.nickName }}
         <label class="badge badge-secondary"
-               *ngIf="cacheService.cachedData.me.emailConfirmed && cacheService.cachedData.me.email && cacheService.cachedData.me.email.endsWith('@aiursoft.com')">
+               *ngIf="me.emailConfirmed && me.email && me.email.endsWith('@aiursoft.com')">
             Staff
         </label>
     </div>
     <div class="bio">
-        {{ cacheService.cachedData.me.bio }}
+        {{ me.bio }}
     </div>
-    <div class="email" *ngIf="cacheService.cachedData.me.email">
-        {{ cacheService.cachedData.me.email }}
-        <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed">Verified</label>
-        <label class="badge badge-primary" *ngIf="cacheService.cachedData.me.markEmailPublic">Public</label>
-        <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.markEmailPublic">Hidden</label>
+    <div class="email" *ngIf="me.email">
+        {{ me.email }}
+        <label class="badge badge-success" *ngIf="me.emailConfirmed">Verified</label>
+        <label class="badge badge-primary" *ngIf="me.markEmailPublic">Public</label>
+        <label class="badge badge-primary" *ngIf="!me.markEmailPublic">Hidden</label>
     </div>
 </div>
 
@@ -41,7 +41,7 @@
 </div>
 <div class="menu-holder"></div>
 
-<div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
+<div class="menu-button" *ngIf="me && !me.emailConfirmed"
      (click)="sendEmail()">
     <div class="img warning">
         <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>

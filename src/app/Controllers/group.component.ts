@@ -8,8 +8,8 @@ import { Values } from '../values';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { MessageService } from '../Services/MessageService';
-import { ProbeService } from '../Services/ProbeService';
 import { SwalToast } from '../Helpers/Toast';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     templateUrl: '../Views/group.html',
@@ -34,41 +34,29 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cacheService: CacheService,
         public messageService: MessageService,
-        private probeService: ProbeService,
+        private meRepo: MeRepo
     ) {
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         this.route.params
             .pipe(
                 switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
                 filter(t => t.code === 0),
                 map(t => t.value)
             )
-            .subscribe(conversation => {
+            .subscribe(async conversation => {
+                const me = await this.meRepo.getMe();
                 this.messageService.conversation = conversation;
                 this.conversation = <GroupConversation>conversation;
                 this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl((<GroupConversation>this.conversation).groupImagePath);
-                this.conversation.users.forEach(user => {
-                    user.user.avatarURL = this.probeService.encodeProbeFileUrl(user.user.iconFilePath);
-                    try {
-                        if (user.userId === this.cacheService.cachedData.me.id) {
-                            this.muted = user.muted;
-                        }
-                    } catch (error) {
-                        setTimeout(() => {
-                            if (user.userId === this.cacheService.cachedData.me.id) {
-                                this.muted = user.muted;
-                            }
-                        }, 1000);
-                    }
-                });
+                this.muted = this.conversation.users.find(t => t.userId === me.response.id).muted;
             });
     }
 
-    public leaveGroup(groupName: string): void {
-        if (this.conversation.ownerId === this.cacheService.cachedData.me.id) {
+    public async leaveGroup(groupName: string): Promise<void> {
+        const me = await this.meRepo.getMe();
+        if (this.conversation.ownerId === me.response.id) {
             Swal.fire('Error', 'You can\'t leave the group without transferring the ownership ' +
                 'or dissolving the entire group.', 'error');
             return;

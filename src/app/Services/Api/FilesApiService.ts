@@ -18,8 +18,8 @@ export class FilesApiService {
     ) {
     }
 
-    public InitIconUpload(): Observable<AiurValue<string>> {
-        return this.apiService.Get(FilesApiService.serverPath + '/InitIconUpload');
+    public InitIconUpload(): Promise<AiurValue<string>> {
+        return this.apiService.Get<AiurValue<string>>(FilesApiService.serverPath + '/InitIconUpload').toPromise();
     }
 
     public InitFileAccess(conversationId: number, upload: boolean = false): Observable<FileTokenApiModel> {

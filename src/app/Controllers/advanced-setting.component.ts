@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
-import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
+import { MeRepo } from '../Repos/MeRepo';
 
 
 @Component({
@@ -19,34 +18,33 @@ export class AdvancedSettingComponent implements OnInit {
 
     constructor(
         private authApiService: AuthApiService,
-        private cacheService: CacheService,
-        private probeService: ProbeService,
+        private meRepo: MeRepo
     ) {
     }
 
     public async ngOnInit(): Promise<void> {
-        if (this.cacheService.cachedData.me) {
-            this.me = Object.assign({}, this.cacheService.cachedData.me);
-        } else {
-            const me = await this.authApiService.Me();
-            this.me = me.value;
-            this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
         }
     }
 
     public async updateSettings(): Promise<void> {
         this.updatingSetting = true;
-        const res = await this.authApiService.UpdateClientSetting(null,
+        const response = await this.authApiService.UpdateClientSetting(null,
             this.me.enableEmailNotification,
             this.me.enableEnterToSendMessage,
             this.me.enableInvisiable,
             this.me.markEmailPublic,
             this.me.listInSearchResult);
-        if (res.code === 0) {
-            this.cacheService.cachedData.me = Object.assign({}, this.me);
-            this.cacheService.saveCache();
+        if (response.code === 0) {
+            this.meRepo.overrideCache(this.me);
         } else {
-            Swal.fire('Error', res.message, 'error');
+            Swal.fire('Error', response.message, 'error');
         }
         this.updatingSetting = false;
     }

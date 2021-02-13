@@ -6,5 +6,4 @@ export class GroupsResult {
     public id: number;
     public hasTimer: boolean;
     public conversationCreateTime: Date;
-    public avatarURL: string;
 }

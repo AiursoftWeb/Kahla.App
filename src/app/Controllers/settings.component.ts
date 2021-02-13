@@ -7,18 +7,21 @@ import Swal from 'sweetalert2';
 import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
 import { HomeService } from '../Services/HomeService';
-import { ProbeService } from '../Services/ProbeService';
+import { MeRepo } from '../Repos/MeRepo';
+import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     selector: 'app-settings',
     templateUrl: '../Views/settings.html',
     styleUrls: ['../Styles/menu.scss',
-                '../Styles/reddot.scss',
-                '../Styles/button.scss',
-                '../Styles/badge.scss']
+        '../Styles/reddot.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss']
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
+    public me: KahlaUser;
+
     constructor(
         private authApiService: AuthApiService,
         private router: Router,
@@ -26,18 +29,18 @@ export class SettingsComponent implements OnInit {
         public cacheService: CacheService,
         private _electronService: ElectronService,
         public homeService: HomeService,
-        private probeService: ProbeService,
+        private meRepo: MeRepo
     ) {
-        }
+    }
 
     public async ngOnInit(): Promise<void> {
-        if (!this.cacheService.cachedData.me) {
-            const me = await this.authApiService.Me();
-            if (me.code === 0) {
-                this.cacheService.cachedData.me = me.value;
-                this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(me.value.iconFilePath);
-                this.cacheService.saveCache();
-            }
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
         }
     }
 
@@ -86,39 +89,37 @@ export class SettingsComponent implements OnInit {
             Swal.fire('Logoff error', e.message, 'error');
         }
         this.initSerivce.destroy();
-        this.router.navigate(['/signin'], {replaceUrl: true});
+        this.router.navigate(['/signin'], { replaceUrl: true });
     }
 
     public async sendEmail(): Promise<void> {
-        const me = await this.authApiService.Me();
-        if (me.code === 0) {
-            this.cacheService.cachedData.me.emailConfirmed = me.value.emailConfirmed;
-            if (!this.cacheService.cachedData.me.emailConfirmed) {
-                const sendEmail = await Swal.fire({
-                    title: 'Please verify your email.',
-                    text: 'Please confirm your email as soon as possible! Or you may lose access \
-                        to your account in a few days! Without confirming your email, you won\'t receive \
-                        any important notifications and cannot reset your password!',
-                    icon: 'warning',
-                    confirmButtonText: 'Send Email',
-                    showCancelButton: true
+        const me = (await this.meRepo.getMe()).response;
+        if (me.emailConfirmed) {
+            return;
+        }
+        const sendEmail = await Swal.fire({
+            title: 'Please verify your email.',
+            text: 'Please confirm your email as soon as possible! Or you may lose access \
+                    to your account in a few days! Without confirming your email, you won\'t receive \
+                    any important notifications and cannot reset your password!',
+            icon: 'warning',
+            confirmButtonText: 'Send Email',
+            showCancelButton: true
+        });
+        if (sendEmail.value) {
+            const sendResult = await this.authApiService.SendMail(me.email);
+            if (sendResult.code === 0) {
+                Swal.fire({
+                    title: 'Please check your inbox.',
+                    text: 'Email was send to ' + me.email,
+                    icon: 'success'
                 });
-                if (sendEmail.value && this.cacheService.cachedData.me) {
-                    const sendResult = await this.authApiService.SendMail(this.cacheService.cachedData.me.email);
-                    if (sendResult.code === 0) {
-                        Swal.fire({
-                            title: 'Please check your inbox.',
-                            text: 'Email was send to ' + this.cacheService.cachedData.me.email,
-                            icon: 'success'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: sendResult.message,
-                            icon: 'error'
-                        });
-                    }
-                }
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: sendResult.message,
+                    icon: 'error'
+                });
             }
         }
     }

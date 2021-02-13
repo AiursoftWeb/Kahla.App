@@ -50,21 +50,21 @@
     <div class="text" i18n="@@FileHistory">File History</div>
 </div>
 <div class="menu-button" (click)="report()"
-     *ngIf="info && cacheService.cachedData.me && info.id != cacheService.cachedData.me.id">
+     *ngIf="info && me && info.id != me.id">
     <div class="img">
         <i class="fas fa-gavel "></i>
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
 <div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id">
+     *ngIf="info && me && areFriends && info.id != me.id">
     <div class="img">
         <i class="fas fa-ban"></i>
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
 <div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id"
+     *ngIf="info && me && areFriends && info.id != me.id"
      (click)="delete(info.id)">
     <div class="img">
         <i class="fas fa-trash warning"></i>
@@ -74,7 +74,7 @@
 <div class="menu-holder"></div>
 
 <div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && !areFriends && !cacheService.cachedData.me.emailConfirmed">
+     *ngIf="info && me && !areFriends && !me.emailConfirmed">
     <div class="img warning">
         <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
@@ -85,22 +85,22 @@
 
 <div class="buttons">
     <button class="button primary"
-            *ngIf="info && cacheService.cachedData.me && !areFriends && cacheService.cachedData.me.emailConfirmed && !sentRequest"
+            *ngIf="info && me && !areFriends && me.emailConfirmed && !sentRequest"
             (click)="request(info.id)" i18n="@@SendFriendRequest">
             <label *ngIf="server && server.autoAcceptRequests">Connect</label>
             <label *ngIf="server && !server.autoAcceptRequests">Send Friend Request</label>
     </button>
     <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
     <button class="button primary"
-            *ngIf="!areFriends && sentRequest && !(pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id)"
+            *ngIf="!areFriends && sentRequest && !(pendingRequest && me && pendingRequest.targetId === me.id)"
             disabled>Request was sent
     </button>
     <button class="button success"
-            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
+            *ngIf="sentRequest && pendingRequest && me && pendingRequest.targetId === me.id"
             (click)="accept(pendingRequest.id)">Accept
     </button>
     <button class="button warning"
-            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
+            *ngIf="sentRequest && pendingRequest && me && pendingRequest.targetId === me.id"
             (click)="decline(pendingRequest.id)">Decline
     </button>
 </div>

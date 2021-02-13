@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
+import { MeRepo } from '../Repos/MeRepo';
 
 @Component({
     templateUrl: '../Views/userDetail.html',
@@ -19,8 +20,12 @@ import { ProbeService } from '../Services/ProbeService';
     ]
 })
 
+/**
+ * Consider rename this component because it's name is conflict with user.component.
+ */
 export class UserDetailComponent implements OnInit {
-    public user: KahlaUser;
+    public me: KahlaUser;
+    public iconUrl: string;
     public loadingImgURL = Values.loadingImgURL;
     @ViewChild('imageInput') public imageInput;
 
@@ -30,24 +35,31 @@ export class UserDetailComponent implements OnInit {
         public uploadService: UploadService,
         public cacheService: CacheService,
         private probeService: ProbeService,
+        private meRepo: MeRepo
     ) {
     }
 
     public async ngOnInit(): Promise<void> {
-        if (!this.cacheService.cachedData.me) {
-            const me = await this.authApiService.Me();
-            this.user = me.value;
-            this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
-        } else {
-            this.user = Object.assign({}, this.cacheService.cachedData.me);
+        // Fast render
+        const cachedResponse = await this.meRepo.getMe();
+        this.me = cachedResponse.response;
+        this.iconUrl = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
+
+        // Full load
+        if (!cachedResponse.isLatest) {
+            this.me = (await this.meRepo.getMe(false)).response;
+            this.iconUrl = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
         }
     }
 
-    public uploadAvatar(): void {
+    public async uploadAvatar(): Promise<void> {
         if (this.imageInput) {
             const fileBrowser = this.imageInput.nativeElement;
             if (fileBrowser.files && fileBrowser.files[0]) {
-                this.uploadService.uploadAvatar(this.user, fileBrowser.files[0]);
+                const newIconPath = await this.uploadService.uploadAvatar(fileBrowser.files[0]);
+                if (newIconPath) {
+                    this.me.iconFilePath = newIconPath;
+                }
             }
         }
     }
@@ -55,10 +67,9 @@ export class UserDetailComponent implements OnInit {
     public async save(): Promise<void> {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        const response = await this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath);
+        const response = await this.authApiService.UpdateInfo(this.me.nickName, this.me.bio, this.me.iconFilePath);
         if (response.code === 0) {
-            this.cacheService.cachedData.me = Object.assign({}, this.user);
-            this.cacheService.saveCache();
+            this.meRepo.overrideCache(this.me);
             this.router.navigate(['/home']);
         } else {
             Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');

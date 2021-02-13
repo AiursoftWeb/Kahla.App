@@ -9,7 +9,6 @@ export class ContactInfo {
     public discriminator: 'GroupConversation' | 'PrivateConversation';
     public userId: string;
     public aesKey: string;
-    public avatarURL: string;
     public muted: boolean;
     public someoneAtMe: boolean;
     public online?: boolean;

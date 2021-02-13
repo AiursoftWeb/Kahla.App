@@ -1,6 +1,5 @@
 ﻿export class KahlaUser {
     public accountCreateTime: Date;
-    public avatarURL: string;
     public bio: string;
     public email: string;
     public emailConfirmed: boolean;
