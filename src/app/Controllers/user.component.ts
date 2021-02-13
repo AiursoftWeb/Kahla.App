@@ -54,7 +54,6 @@ export class UserComponent implements OnInit, OnDestroy {
     public async ngOnInit(): Promise<void> {
         const cachedResponse = await this.meRepo.getMe();
         this.me = cachedResponse.response;
-        
         this.server = await this.serverManager.getOurServer();
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);
