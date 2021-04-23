@@ -31,7 +31,7 @@ For more document about Kahla project and Kahla API, please view document [here]
 
 For our official website, please view [here](https://www.kahla.app).
 
-## How to develope
+## How to develop
 
 ### Before starting
 
