@@ -31,16 +31,16 @@ For more document about Kahla project and Kahla API, please view document [here]
 
 For our official website, please view [here](https://www.kahla.app).
 
-## How to develope
+## How to develop
 
 ### Before starting
 
-To develope Kahla, you need to install the following components:
+To develop Kahla, you need to install the following components:
 
 * Git
 * Nodejs and npm
 
-We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com) to develope this project.
+We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com) to develop this project.
 
 Using Visual Studio Code to open the directory directly.
 
