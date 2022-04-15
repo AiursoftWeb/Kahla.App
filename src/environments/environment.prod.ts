@@ -1,1 +1,4 @@
-export const environment = { production: true, serversProvider: 'https://www.kahla.app' };
+export const environment = {
+    production: true,
+    serversProvider: "https://www.kahla.app",
+};

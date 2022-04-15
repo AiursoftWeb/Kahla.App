@@ -32,7 +32,7 @@ export class FriendshipService {
                 confirmButtonText: 'Join'
             }).then((result) => {
                 if (result.value) {
-                    this.joinGroupWithPassword(group.name, result.value, group.id);
+                    this.joinGroupWithPassword(group.name, result.value as string, group.id);
                 }
             });
         } else if (askWhenNoPwd) {

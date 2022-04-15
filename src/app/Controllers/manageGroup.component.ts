@@ -79,16 +79,16 @@ export class ManageGroupComponent implements OnInit {
                 Swal.fire({
                     title: 'Transfer ownership?',
                     html: 'You are transferring your ownership to <br/> ' +
-                        `<b>${inputOptions[willTransfer.value]}(id:${willTransfer.value})</b> <br/> ` +
+                        `<b>${inputOptions[willTransfer.value as string]}(id:${willTransfer.value})</b> <br/> ` +
                         'This operation CANNOT be undone! are you sure to continue?',
                     showCancelButton: true,
                     icon: 'warning'
                 }).then(res => {
                     if (!res.dismiss) {
-                        this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value)
+                        this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value as string)
                             .subscribe(response => {
                                 if (response.code === 0) {
-                                    (<GroupConversation>this.messageService.conversation).ownerId = willTransfer.value;
+                                    (this.messageService.conversation as GroupConversation).ownerId = willTransfer.value as string;
                                     Swal.fire('Success', response.message, 'success');
                                     this.router.navigate(['/group', this.conversation.id]);
                                 } else {
@@ -115,7 +115,7 @@ export class ManageGroupComponent implements OnInit {
             if (result.dismiss) {
                 return;
             }
-            this.groupsApiService.UpdateGroupPassword(this.conversation.groupName, result.value).subscribe(res => {
+            this.groupsApiService.UpdateGroupPassword(this.conversation.groupName, result.value as string).subscribe(res => {
                 if (res.code === 0) {
                     Swal.fire('Success', res.message, 'success');
                 } else {
@@ -167,12 +167,12 @@ export class ManageGroupComponent implements OnInit {
                 Swal.fire({
                     title: 'Kick member?',
                     html: 'Are you sure to kick out ' +
-                        `<b>${inputOptions[result.value]}(id:${result.value})</b>?`,
+                        `<b>${inputOptions[result.value as string]}(id:${result.value})</b>?`,
                     showCancelButton: true,
                     icon: 'warning'
                 }).then(confirmAlert => {
                     if (!confirmAlert.dismiss) {
-                        this.groupsApiService.KickMember(this.conversation.groupName, result.value)
+                        this.groupsApiService.KickMember(this.conversation.groupName, result.value as string)
                             .subscribe(response => {
                                 if (response.code === 0) {
                                     Swal.fire('Success', response.message, 'success');

@@ -32,9 +32,9 @@ export class TimerService {
             showCancelButton: true
         }).then(selected => {
             if (selected.value && selected.value !== this.formerTimer) {
-                this.conversationApiService.UpdateMessageLifeTime(conversationId, selected.value)
+                this.conversationApiService.UpdateMessageLifeTime(conversationId, selected.value as number)
                     .subscribe(result => {
-                        this.updateDestructTime(selected.value);
+                        this.updateDestructTime(selected.value as number);
                         if (result.code !== 0) {
                             Swal.fire({
                                 title: 'Error!',

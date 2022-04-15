@@ -121,7 +121,7 @@ export class UserComponent implements OnInit, OnDestroy {
             }
         }).then((result) => {
             if (!result.dismiss) {
-                this.friendsApiService.Report(this.info.id, result.value).subscribe(response => {
+                this.friendsApiService.Report(this.info.id, result.value as string).subscribe(response => {
                     if (response.code === 0) {
                         Swal.fire('Success', response.message, 'success');
                     } else {

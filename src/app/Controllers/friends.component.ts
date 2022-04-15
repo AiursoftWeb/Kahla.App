@@ -79,7 +79,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                         showCancelButton: true
                     }).then((result) => {
                         if (result.value) {
-                            this.createPrivateGroup(input.value, '');
+                            this.createPrivateGroup(input.value as string, '');
                         }
                     });
                 } else {
@@ -97,7 +97,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
                         showCancelButton: true
                     }).then((result) => {
                         if (result.value) {
-                            this.createPrivateGroup(input.value, result.value);
+                            this.createPrivateGroup(input.value as string, result.value as string);
                         }
                     });
                 }
