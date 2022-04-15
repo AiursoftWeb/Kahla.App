@@ -67,6 +67,7 @@
     "lint": "ng lint --type-check && tsc",
     "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
     "prod-electron": "ng build --base-href ./ --prod",
+    "pack": "electron-builder -p never",
     "prod-zh": "ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
