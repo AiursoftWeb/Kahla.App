@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    serversProvider: "https://staging.kahla.app",
+    serversProvider: 'https://staging.kahla.app',
 };
