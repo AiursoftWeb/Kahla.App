@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://www.kahla.app/"><img width="100px" src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/dev/src/assets/144x144.png"></a>
+    <a href="https://www.kahla.app/"><img width="100px" src="https://raw.githubusercontent.com/AiursoftWeb/Kahla.App/master/src/assets/144x144.png"></a>
     <h3 align="center">Kahla</h3>
     <p align="center">Kahla is a cross-platform business messaging app.<p>
 </p>
