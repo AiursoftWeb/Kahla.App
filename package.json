@@ -97,7 +97,7 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.6",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular-devkit/build-optimizer": "^0.901.6",
     "@angular-devkit/core": "^9.1.13",
     "@angular/cli": "^9.1.13",
@@ -114,7 +114,7 @@
     "tslint": "~6.1.2",
     "typescript": "~3.8.3",
     "uglify-js": "^3.10.0",
-    "webpack": "^4.43.0"
+    "webpack": "^5.75.0"
   },
   "main": "index.js",
   "repository": {
