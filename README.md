@@ -51,13 +51,13 @@ Using Visual Studio Code to open the directory directly.
 Excute following command in the root directory of this repository to restore all dependencies.
 
 ```bash
-$ npm install
+npm install
 ```
 
 Excute following command to run and start a debugging server at `localhost:8001`.
 
 ```bash
-$ npm start
+npm start
 ```
 
 ### How to run as desktop app
@@ -67,7 +67,7 @@ Currently, we are using [Electron](https://electron.atom.io/) to target Windows,
 Supports Windows 7+, Linux and macOS 10.9+.
 
 ```bash
-$ npm run electron
+npm run electron
 ```
 
 ## How to publish
