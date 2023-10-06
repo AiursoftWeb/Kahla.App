@@ -109,9 +109,7 @@
     "codelyzer": "^5.2.2",
     "electron": "^8.3.0",
     "electron-builder": "^22.6.0",
-    "node": "^14.2.0",
-    "ts-node": "^8.10.1",
-    "tslint": "~6.1.2",
+    "ts-node": "^10.9.1",
     "typescript": "~3.8.3",
     "uglify-js": "^3.10.0",
     "webpack": "^4.43.0"
