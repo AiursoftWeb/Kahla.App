@@ -119,11 +119,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AiursoftWeb/Kahla.App.git"
+    "url": "https://gitlab.aiursoft.cn/aiursoft/kahla.app.git"
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/AiursoftWeb/Kahla.App/issues"
+    "url": "https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/issues"
   },
   "homepage": "https://www.kahla.app",
   "release": "build"
