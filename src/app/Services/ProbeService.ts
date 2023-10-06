@@ -14,7 +14,7 @@ export class ProbeService {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
 
-        return (downloadAddr ? this.apiService.serverConfig?.probe.downloadFormat : this.apiService.serverConfig?.probe.openFormat)
+        return (downloadAddr ? this.apiService.serverConfig?.probe.downloadPattern : this.apiService.serverConfig?.probe.openPattern)
                 .replace('{0}', encoded.substring(0, index)) + '/' + encoded.substring(index + 1) +
             (accessToken ? `?token=${encodeURIComponent(accessToken)}` : '');
     }

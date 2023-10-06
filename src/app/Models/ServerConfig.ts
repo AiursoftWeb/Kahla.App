@@ -16,8 +16,8 @@ export class ServerConfig extends AiurProtocal {
     };
     public probe: {
         endpoint: string,
-        openFormat: string,
-        downloadFormat: string,
+        openPattern: string,
+        downloadPattern: string,
         playerFormat: string
     };
 }
