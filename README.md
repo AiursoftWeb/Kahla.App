@@ -6,7 +6,7 @@
 
 [![Build status](https://aiursoft.visualstudio.com/Star/_apis/build/status/Kahla%20App%20Build)](https://aiursoft.visualstudio.com/Star/_build/latest?definitionId=4)
 [![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]() 
-[![ManHours](https://manhours.aiursoft.cn/gitlab/gitlab.aiursoft.cn/aiursoft/kahla.app.svg)](https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/commits/master?ref_type=heads)
+[![ManHours](https://manhours.aiursoft.cn/r/gitlab.aiursoft.cn/aiursoft/kahla.app.svg)](https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/commits/master?ref_type=heads)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b7d4a3f5746bcbbe99c1/maintainability)](https://codeclimate.com/github/AiursoftWeb/Kahla.App/maintainability)
 [![npm](https://img.shields.io/npm/v/kahla.svg?style=flat)](https://www.npmjs.com/package/kahla)
 [![Issues](https://img.shields.io/github/issues/AiursoftWeb/Kahla.App.svg)](https://github.com/AiursoftWeb/Kahla.App/issues)
