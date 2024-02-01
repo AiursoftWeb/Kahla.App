@@ -107,7 +107,7 @@
     "@types/crypto-js": "^3.1.46",
     "@types/node": "^12.12.39",
     "codelyzer": "^5.2.2",
-    "electron": "^8.3.0",
+    "electron": "^15.5.5",
     "electron-builder": "^22.6.0",
     "ts-node": "^10.9.1",
     "typescript": "~3.8.3",
