@@ -1,4 +1,4 @@
-const CACHE = 'v5';
+const CACHE = 'v6';
 const UPDATE_REQUIRED = '__Update_Required__';
 const UPDATE_COMPLETED = '__Update_Completed__';
 const self_scope = self.registration.scope;
@@ -12,13 +12,12 @@ function installCache() {
             '/main.js',
             '/manifest.json',
             '/polyfills.js',
-            '/runtime.js',
             '/styles.css',
             '/favicon.ico',
             '/favicon_notify.ico',
-            '/fa-solid-900.woff2',
-            '/fa-regular-400.woff2',
-            '/fa-brands-400.woff2',
+            '/media/fa-solid-900.woff2',
+            '/media/fa-regular-400.woff2',
+            '/media/fa-brands-400.woff2',
             '/assets/144x144.png'
         ].map(t => new Request(t, {cache: 'no-cache'}))
         return cache.addAll(requests);
