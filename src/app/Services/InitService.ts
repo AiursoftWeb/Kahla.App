@@ -77,6 +77,7 @@ export class InitService {
                     // !this._electronService.isElectronApp && // TODO: ELECTRON
                     navigator.serviceWorker
                 ) {
+                    console.log("Start Webpush subscribe.")
                     this.subscribeUser();
                     this.updateSubscription();
                 }
@@ -126,16 +127,22 @@ export class InitService {
         ) {
             const _this = this;
             navigator.serviceWorker.ready.then((registration) => {
+                console.log("Service worker responsed");
                 return registration.pushManager
                     .getSubscription()
                     .then((sub) => {
+                        console.log("Got subscription:");
+                        console.log(sub);
+
                         if (sub === null) {
                             return registration.pushManager
                                 .subscribe(_this.options)
                                 .then(function (pushSubscription) {
+                                    console.log("Call bind device");
                                     _this.bindDevice(pushSubscription);
                                 });
                         } else {
+                            console.log("Call bind device");
                             _this.bindDevice(sub);
                         }
                     });
