@@ -11,10 +11,6 @@
     </div>
     <div class="name">
         {{ cacheService.cachedData.me.nickName }}
-        <label class="badge badge-secondary"
-               *ngIf="cacheService.cachedData.me.emailConfirmed && cacheService.cachedData.me.email && cacheService.cachedData.me.email.endsWith('@aiursoft.com')">
-            Staff
-        </label>
     </div>
     <div class="bio">
         {{ cacheService.cachedData.me.bio }}
@@ -22,8 +18,6 @@
     <div class="email" *ngIf="cacheService.cachedData.me.email">
         {{ cacheService.cachedData.me.email }}
         <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed">Verified</label>
-        <label class="badge badge-primary" *ngIf="cacheService.cachedData.me.markEmailPublic">Public</label>
-        <label class="badge badge-primary" *ngIf="!cacheService.cachedData.me.markEmailPublic">Hidden</label>
     </div>
 </div>
 
