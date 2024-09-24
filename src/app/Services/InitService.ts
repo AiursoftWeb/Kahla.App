@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { CheckService } from "./CheckService";
 import { AuthApiService } from "./Api/AuthApiService";
 import { Router } from "@angular/router";
 import { MessageService } from "./MessageService";
@@ -26,7 +25,6 @@ export class InitService {
 
     constructor(
         private apiService: ApiService,
-        private checkService: CheckService,
         private authApiService: AuthApiService,
         private router: Router,
         private messageService: MessageService,
@@ -49,7 +47,6 @@ export class InitService {
                     'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
-        this.checkService.checkVersion(false);
         // load server config
         let reload = false;
         if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
@@ -95,7 +92,6 @@ export class InitService {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(
                 this.apiService.serverConfig.vapidPublicKey
             );
-            this.checkService.checkApiVersion();
             this.authApiService.SignInStatus().subscribe((signInStatus) => {
                 if (signInStatus.value === false) {
                     this.router.navigate(["/signin"], { replaceUrl: true });

@@ -32,7 +32,6 @@ import { FileHistoryComponent } from './Controllers/file-history.component';
 import { ApiService } from './Services/Api/ApiService';
 import { ParamService } from './Services/ParamService';
 import { CacheService } from './Services/CacheService';
-import { CheckService } from './Services/CheckService';
 import { UploadService } from './Services/UploadService';
 import { AuthApiService } from './Services/Api/AuthApiService';
 import { ConversationApiService } from './Services/Api/ConversationApiService';
@@ -89,7 +88,6 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
         ParamService,
         CacheService,
         UploadService,
-        CheckService,
         AuthApiService,
         ConversationApiService,
         FilesApiService,

@@ -5,36 +5,13 @@
 </div>
 
 <div class="version">
-    <h4>Kahla {{checkService.version}}</h4>
-    <p>Last git commit: <a href="{{sourceCodeURL}}{{checkService.revision}}" target="_blank" rel="noopener noreferrer"><kbd>{{checkService.revision.substring(0, 7)}}</kbd></a></p>
-    <p>Build Date: <kbd>{{checkService.buildTime}}</kbd></p>
+    <h4>Kahla</h4>
+    <p>Last git commit: <a href="{{sourceCodeURL}}" target="_blank" rel="noopener noreferrer"><kbd>unknown</kbd></a></p>
+    <p>Build Date: <kbd>unknown</kbd></p>
 </div>
 
 <div class="menu-holder"></div>
 
-<div *ngIf="checkService.checking; then checkingButton else checkButton"></div>
-<ng-template #checkButton>
-    <div class="menu-button" (click)="check()">
-        <div class="img">
-            <i class="fas fa-sync"></i>
-        </div>
-        <div class="text" i18n="@@CheckForUpdates">Check for updates</div>
-    </div>
-</ng-template>
-<ng-template #checkingButton>
-    <div class="menu-button">
-        <div class="img">
-            <i class="fas fa-sync fa-spin"></i>
-        </div>
-        <div class="text" i18n="@@CheckingForUpdates">Checking for updates...</div>
-    </div>
-</ng-template>
-<div class="menu-button" (click)="checkService.updateServiceWorkerCache()" *ngIf="checkService.checkSwCache()">
-    <div class="img">
-        <i class="fas fa-redo"></i>
-    </div>
-    <div class="text" i18n="@@CheckForUpdates">Force Upgrade Manually</div>
-</div>
 <a class="menu-button" href="https://github.com/AiursoftWeb/Kahla.App/tags" target="_blank" rel="noopener noreferrer">
     <div class="img">
         <i class="fas fa-book"></i>

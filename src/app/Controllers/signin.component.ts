@@ -12,7 +12,9 @@ import { ServerListApiService } from "../Services/Api/ServerListApiService";
 export class SignInComponent implements OnInit {
     public userName: string = "";
     public password: string = "";
-
+    public inRegister: boolean = false;
+    public confirmPassword: string = "";
+    public emailAddr: string = "";
 
     constructor(
         public apiService: ApiService,
@@ -21,19 +23,33 @@ export class SignInComponent implements OnInit {
         public http: HttpClient
     ) {}
 
-    ngOnInit(): void {
-    }
+    ngOnInit(): void {}
 
     login() {
-        Swal.fire("Your login credential is", `Username: ${this.userName} Password: ${this.password}`, "success");
+        Swal.fire(
+            "Your login credential is",
+            `Username: ${this.userName} Password: ${this.password}`,
+            "success"
+        );
     }
 
     register() {
-        
+        if (this.password !== this.confirmPassword) {
+            Swal.fire("Password does not match", "", "error");
+            return;
+        }
+        Swal.fire(
+            "Your registration information is",
+            `Username: ${this.userName} Password: ${this.password} Email: ${this.emailAddr}`,
+            "success"
+        );
     }
 
     forgetPassword() {
-        Swal.fire("Forget Password", "Please contact your administrator", "info");
+        Swal.fire(
+            "Forget Password",
+            "Please contact your administrator",
+            "info"
+        );
     }
-
 }

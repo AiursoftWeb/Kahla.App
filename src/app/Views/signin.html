@@ -4,19 +4,36 @@
             <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
         </div>
-        <div class="auth-content">
-            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="UserName"
-            (keyup.enter)="login()"/>
+        <div class="auth-content" *ngIf="!inRegister">
+            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Username"
+                (keyup.enter)="login()" />
 
             <input type="password" [(ngModel)]="password" class="inputAddr" placeholder="Password"
-            (keyup.enter)="login()"/>
+                (keyup.enter)="login()" />
             <div class="button white login" (click)="login()">
                 Sign in
             </div>
-            <div class="button white login">
+            <div class="button white login" (click)="inRegister = true">
                 Register
             </div>
             <a class="actionLink" href="javascript:void(0)" (click)="forgetPassword()">Forgot password?</a>
+        </div>
+
+        <div class="auth-content" *ngIf="inRegister">
+            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Username"
+                (keyup.enter)="register()" />
+                <input type="text" [(ngModel)]="emailAddr" class="inputAddr" placeholder="Email address"
+                (keyup.enter)="register()" />
+            <input type="password" [(ngModel)]="password" class="inputAddr" placeholder="Password"
+                (keyup.enter)="register()" />
+            <input type="password" [(ngModel)]="confirmPassword" class="inputAddr" placeholder="Confirm Password"
+                (keyup.enter)="register()" />
+            <div class="button white login" (click)="register()">
+                Register
+            </div>
+            <div class="button white login" (click)="inRegister = false">
+                Back to login
+            </div>
         </div>
     </div>
 </div>
