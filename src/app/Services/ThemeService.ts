@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthApiService } from './Api/AuthApiService';
 import { Theme } from '../Models/Theme';
-import { KahlaUser } from '../Models/KahlaUser';
+import { AppOptions } from '../Models/AppOptions';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +16,7 @@ export class ThemeService {
     public mediaListener: MediaQueryList;
     public readonly TITLE = 'Kahla - Aiursoft';
 
-    ApplyThemeFromRemote(remoteInfo: KahlaUser) {
+    ApplyThemeFromRemote(remoteInfo: AppOptions) {
         if (this.LocalThemeSetting !== remoteInfo.themeId) {
             this.LocalThemeSetting = remoteInfo.themeId;
         }
@@ -115,7 +115,9 @@ export class ThemeService {
     }
 
     SetRemoteThemeSetting(theme: Theme): void {
-        this.authApiService.UpdateClientSetting(theme, null).subscribe();
+        this.authApiService.UpdateMe({
+            themeId: theme
+        }).subscribe();
     }
 
     get LocalThemeSetting(): Theme {

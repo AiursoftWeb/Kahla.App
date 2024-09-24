@@ -3,8 +3,8 @@ import { AuthApiService } from '../Services/Api/AuthApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
 import { Subscription } from 'rxjs';
+import { AppOptions } from '../Models/AppOptions';
 
 
 @Component({
@@ -16,22 +16,25 @@ import { Subscription } from 'rxjs';
 export class AdvancedSettingComponent implements OnInit {
 
     public me: KahlaUser;
+    public options: AppOptions;
     public updatingSetting: Subscription;
 
     constructor(
         private authApiService: AuthApiService,
         private cacheService: CacheService,
-        private probeService: ProbeService,
+        // private probeService: ProbeService,
     ) {
     }
 
     ngOnInit(): void {
         if (this.cacheService.cachedData.me) {
             this.me = Object.assign({}, this.cacheService.cachedData.me);
+            this.options = Object.assign({}, this.cacheService.cachedData.options);
         } else {
             this.authApiService.Me().subscribe(p => {
-                this.me = p.value;
-                this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
+                this.me = p.user;
+                this.options = {...p};
+                // this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
             });
         }
     }
@@ -41,17 +44,19 @@ export class AdvancedSettingComponent implements OnInit {
             this.updatingSetting.unsubscribe();
             this.updatingSetting = null;
         }
-        this.updatingSetting = this.authApiService.UpdateClientSetting(null,
-            this.me.enableEmailNotification,
-            this.me.enableEnterToSendMessage,
-            this.me.enableInvisiable,
-            this.me.markEmailPublic,
-            this.me.listInSearchResult)
+        this.updatingSetting = this.authApiService.UpdateMe({
+            themeId: this.options.themeId,
+            enableEmailNotification: this.options.enableEmailNotification,
+            enableEnterToSendMessage: this.options.enableEnterToSendMessage,
+            enableHideMyOnlineStatus: this.options.enableHideMyOnlineStatus,
+            listInSearchResult: this.options.listInSearchResult
+        })
             .subscribe(res => {
                 this.updatingSetting = null;
 
                 if (res.code === 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.me);
+                    this.cacheService.cachedData.options = Object.assign({}, this.options);
                     this.cacheService.saveCache();
                 } else {
                     Swal.fire('Error', res.message, 'error');

@@ -131,7 +131,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             e.preventDefault();
             if (
                 (e.altKey || e.ctrlKey || e.shiftKey) ===
-                this.cacheService.cachedData.me.enableEnterToSendMessage
+                this.cacheService.cachedData.options.enableEnterToSendMessage
             ) {
                 this.insertToSelection("\n");
                 this.oldContent = ""; // prevent send message on keyup

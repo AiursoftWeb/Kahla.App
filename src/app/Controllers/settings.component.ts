@@ -6,7 +6,6 @@ import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';
 import { HomeService } from '../Services/HomeService';
-import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     selector: 'app-settings',
@@ -24,7 +23,6 @@ export class SettingsComponent implements OnInit {
         private initSerivce: InitService,
         public cacheService: CacheService,
         public homeService: HomeService,
-        private probeService: ProbeService,
     ) {
         }
 
@@ -32,8 +30,9 @@ export class SettingsComponent implements OnInit {
         if (!this.cacheService.cachedData.me) {
             this.authApiService.Me().subscribe(p => {
                 if (p.code === 0) {
-                    this.cacheService.cachedData.me = p.value;
-                    this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
+                    this.cacheService.cachedData.me = p.user;
+                    this.cacheService.cachedData.options = {...p};
+                    // this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                     this.cacheService.saveCache();
                 }
             });
@@ -95,7 +94,7 @@ export class SettingsComponent implements OnInit {
     public sendEmail(): void {
         this.authApiService.Me().subscribe(p => {
             if (p.code === 0) {
-                this.cacheService.cachedData.me.emailConfirmed = p.value.emailConfirmed;
+                this.cacheService.cachedData.me.emailConfirmed = p.user.emailConfirmed;
                 if (!this.cacheService.cachedData.me.emailConfirmed) {
                     Swal.fire({
                         title: 'Please verify your email.',

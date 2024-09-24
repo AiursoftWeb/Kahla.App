@@ -29,7 +29,6 @@ export class InitService {
         private cacheService: CacheService,
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
-        // private probeService: ProbeService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService
     ) {}
@@ -56,9 +55,9 @@ export class InitService {
             );
             let signedIn = false;
             try {
-                this.cacheService.cachedData.me = (
-                    await lastValueFrom(this.authApiService.Me())
-                ).value;
+                const me_resp = await lastValueFrom(this.authApiService.Me());
+                this.cacheService.cachedData.me = me_resp.user;
+                this.cacheService.cachedData.options = {...me_resp};
                 signedIn = true;
             } catch (error) {
                 console.log(error);
@@ -95,7 +94,7 @@ export class InitService {
                 // this.cacheService.cachedData.me.avatarURL =
                 //     this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
                 this.themeService.ApplyThemeFromRemote(
-                    this.cacheService.cachedData.me
+                    this.cacheService.cachedData.options
                 );
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();

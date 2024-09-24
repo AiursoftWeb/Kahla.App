@@ -8,7 +8,6 @@ import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/userDetail.html',
@@ -29,15 +28,14 @@ export class UserDetailComponent implements OnInit {
         private router: Router,
         public uploadService: UploadService,
         public cacheService: CacheService,
-        private probeService: ProbeService,
     ) {
     }
 
     public ngOnInit(): void {
         if (!this.cacheService.cachedData.me) {
             this.authApiService.Me().subscribe(p => {
-                this.user = p.value;
-                this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
+                this.user = p.user;
+                // this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
             });
         } else {
             this.user = Object.assign({}, this.cacheService.cachedData.me);
@@ -56,7 +54,10 @@ export class UserDetailComponent implements OnInit {
     public save(): void {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        this.authApiService.UpdateInfo(this.user.nickName, this.user.bio, this.user.iconFilePath)
+        this.authApiService.UpdateMe({
+            nickName: this.user.nickName,
+            bio: this.user.bio,
+        })
             .subscribe((response) => {
                 if (response.code === 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.user);

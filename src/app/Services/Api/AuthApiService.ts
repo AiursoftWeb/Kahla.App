@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { AiurValue } from "../../Models/AiurValue";
-import { KahlaUser } from "../../Models/KahlaUser";
 import { Observable } from "rxjs/";
 import { AiurProtocal } from "../../Models/AiurProtocal";
 import { ApiService } from "./ApiService";
+import { MeApiModel } from "../../Models/ApiModels/MeApiModel";
 
 @Injectable()
 export class AuthApiService {
@@ -11,40 +10,22 @@ export class AuthApiService {
 
     constructor(private apiService: ApiService) {}
 
-    public Me(): Observable<AiurValue<KahlaUser>> {
+    public Me(): Observable<MeApiModel> {
         return this.apiService.Get(AuthApiService.serverPath + "/Me");
     }
 
-    public UpdateInfo(
-        nickName: string,
-        bio: string,
-        headIconPath: string
-    ): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + "/UpdateInfo", {
-            nickName: nickName,
-            bio: bio,
-            headIconPath: headIconPath,
-        });
-    }
-
-    public UpdateClientSetting(
-        themeId: number = null,
-        enableEmailNotification: boolean = null,
-        enableEnterToSendMessage: boolean = null,
-        enableInvisiable: boolean = null,
-        markEmailPublic: boolean = null,
-        listInSearchResult: boolean = null
-    ): Observable<AiurProtocal> {
-        return this.apiService.Post(
-            AuthApiService.serverPath + "/UpdateClientSetting",
-            {
-                ThemeId: themeId,
-                EnableEmailNotification: enableEmailNotification,
-                EnableEnterToSendMessage: enableEnterToSendMessage,
-                EnableInvisiable: enableInvisiable,
-                MarkEmailPublic: markEmailPublic,
-                ListInSearchResult: listInSearchResult,
-            }
+    public UpdateMe(updateModel: {
+        nickName?: string;
+        bio?: string;
+        themeId?: number;
+        enableEmailNotification?: boolean;
+        enableEnterToSendMessage?: boolean;
+        enableHideMyOnlineStatus?: boolean;
+        listInSearchResult?: boolean;
+    }): Observable<AiurProtocal> {
+        return this.apiService.Patch(
+            AuthApiService.serverPath + "/update-me",
+            updateModel
         );
     }
 
@@ -62,7 +43,6 @@ export class AuthApiService {
             }
         );
     }
-
 
     public SendMail(email: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + "/SendEmail", {
@@ -85,6 +65,8 @@ export class AuthApiService {
     }
 
     public Signout(deviceId: number): Observable<AiurProtocal> {
-        return this.apiService.Post(AuthApiService.serverPath + "/Signout", {DeviceId: deviceId});
+        return this.apiService.Post(AuthApiService.serverPath + "/Signout", {
+            DeviceId: deviceId,
+        });
     }
 }

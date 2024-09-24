@@ -47,6 +47,13 @@ export class ApiService {
         }).pipe(catchError(this.handleError));
     }
 
+    public Patch<T>(address: string, data: any): Observable<T> {
+        return this.http.patch<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
+            headers: this._headers,
+            withCredentials: true
+        }).pipe(catchError(this.handleError));
+    }
+
     public handleError(error: any): Promise<any> {
         return Promise.reject(error);
     }
