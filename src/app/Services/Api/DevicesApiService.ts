@@ -60,7 +60,7 @@ export class DevicesApiService {
 
     public PushTestMessage(): Observable<AiurProtocal> {
         return this.apiService.Post(
-            DevicesApiService.serverPath + "/PushTestMessage",
+            DevicesApiService.serverPath + "/push-test-message",
             {}
         );
     }

@@ -60,11 +60,10 @@
   "license": "MIT",
   "scripts": {
     "electron": "ng build --base-href ./ && electron ./www/index.js",
-    "start": "yarn prebuild && ng serve --open",
-    "prebuild": "ts-node prebuild.ts",
+    "start": "ng serve --open",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "yarn prebuild && ng build --base-href / --output-hashing none",
+    "prod": "ng build --base-href / --output-hashing none",
     "prod-electron": "ng build --base-href ./",
     "pack": "electron-builder -p never",
     "prod-zh": "ng build --base-href / --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
@@ -94,7 +93,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.5",
-    "@angular-devkit/build-optimizer": "^0.1302.1",
     "@angular-devkit/core": "^18.2.5",
     "@angular/cli": "^18.2.5",
     "@angular/compiler": "^18.2.5",
@@ -104,9 +102,7 @@
     "codelyzer": "^6.0.2",
     "electron": "^32.1.2",
     "electron-builder": "^25.0.5",
-    "ts-node": "^10.9.1",
-    "typescript": "~5.5.0",
-    "webpack": "^5.94.0"
+    "typescript": "~5.5.0"
   },
   "main": "index.js",
   "repository": {

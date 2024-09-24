@@ -15,13 +15,13 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "www",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "browser": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["src/polyfills.ts"],
             "assets": [
               "src/assets",
               "src/manifest.json",
@@ -52,9 +52,6 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "ngswConfigPath": "ngsw-config.json",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -92,11 +89,6 @@
           }
         }
       }
-    },
-    "kahla-e2e": {
-      "root": "",
-      "sourceRoot": "",
-      "projectType": "application"
     }
   },
   "defaultProject": "kahla",
