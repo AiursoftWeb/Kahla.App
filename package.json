@@ -84,7 +84,6 @@
     "autolinker": "^3.14.1",
     "blueimp-load-image": "^5.11.0",
     "core-js": "^3.6.5",
-    "crypto-js": "^4.0.0",
     "he": "^1.2.0",
     "rxjs": "^7.8.1",
     "smoothscroll-polyfill": "^0.4.4",
