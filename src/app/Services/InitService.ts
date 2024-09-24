@@ -58,7 +58,6 @@ export class InitService {
                 const me_resp = await lastValueFrom(this.authApiService.Me());
                 this.cacheService.cachedData.me = me_resp.user;
                 this.cacheService.cachedData.options = {...me_resp};
-                console.log("Self information loaded.");
                 signedIn = true;
             } catch (error) {
                 console.log(error);

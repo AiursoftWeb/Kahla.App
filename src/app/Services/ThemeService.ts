@@ -18,18 +18,18 @@ export class ThemeService {
     public mediaListener: MediaQueryList;
     public readonly TITLE = 'Kahla - Aiursoft';
 
-    ApplyThemeFromRemote(remoteInfo: AppOptions) {
+    public ApplyThemeFromRemote(remoteInfo: AppOptions) {
         if (this.LocalThemeSetting !== remoteInfo.themeId) {
             this.LocalThemeSetting = remoteInfo.themeId;
         }
         this.ApplyTheme(remoteInfo.themeId);
     }
 
-    ApplyThemeFromLocal() {
+    public ApplyThemeFromLocal() {
         this.ApplyTheme(this.LocalThemeSetting);
     }
 
-    ApplyTheme(theme: Theme) {
+    public ApplyTheme(theme: Theme) {
         let themeComputed = theme;
         if (theme % 3 === 0) {
             if (!this.mediaListener) {
@@ -103,7 +103,7 @@ export class ThemeService {
         }
     }
 
-    IsDarkTheme(): boolean {
+    public IsDarkTheme(): boolean {
         const theme = this.LocalThemeSetting;
         if (theme % 3 === 0) {
             if (!this.mediaListener) {
@@ -116,15 +116,14 @@ export class ThemeService {
         }
     }
 
-    SetRemoteThemeSetting(theme: Theme): void {
-        console.log(this.cacheService);
+    public SetRemoteThemeSetting(theme: Theme): void {
         this.cacheService.cachedData.options.themeId = theme;
         this.authApiService.UpdateMe({
             themeId: theme
         }).subscribe();
     }
 
-    get LocalThemeSetting(): Theme {
+    public get LocalThemeSetting(): Theme {
         const themeSet = localStorage.getItem('setting-theme');
         let theme: Theme;
         if (themeSet == null) {
@@ -135,7 +134,7 @@ export class ThemeService {
         return theme;
     }
 
-    set LocalThemeSetting(theme: Theme) {
+    public set LocalThemeSetting(theme: Theme) {
         localStorage.setItem('setting-theme', theme.toString());
     }
 
