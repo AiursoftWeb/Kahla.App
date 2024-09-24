@@ -5,7 +5,7 @@
             <h1 i18n="@@Kahla">Kahla</h1>
         </div>
         <div class="auth-content" *ngIf="!inRegister">
-            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Username"
+            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Email Address"
                 (keyup.enter)="login()" />
 
             <input type="password" [(ngModel)]="password" class="inputAddr" placeholder="Password"
@@ -20,9 +20,7 @@
         </div>
 
         <div class="auth-content" *ngIf="inRegister">
-            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Username"
-                (keyup.enter)="register()" />
-                <input type="text" [(ngModel)]="emailAddr" class="inputAddr" placeholder="Email address"
+            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="Email Address"
                 (keyup.enter)="register()" />
             <input type="password" [(ngModel)]="password" class="inputAddr" placeholder="Password"
                 (keyup.enter)="register()" />

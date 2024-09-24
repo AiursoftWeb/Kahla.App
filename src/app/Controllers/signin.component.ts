@@ -16,7 +16,6 @@ export class SignInComponent implements OnInit {
     public password: string = "";
     public inRegister: boolean = false;
     public confirmPassword: string = "";
-    public emailAddr: string = "";
 
     constructor(
         public apiService: ApiService,
@@ -55,14 +54,10 @@ export class SignInComponent implements OnInit {
             Swal.fire("Username is too short", "", "error");
             return;
         }
-        if (this.emailAddr.length < 4) {
-            Swal.fire("Email is too short", "", "error");
-            return;
-        }
 
         try {
-            const regResult = await lastValueFrom(
-                this.authApiService.Register(this.emailAddr, this.password)
+            await lastValueFrom(
+                this.authApiService.Register(this.userName, this.password)
             );
             Swal.fire(
                 "Register success",
