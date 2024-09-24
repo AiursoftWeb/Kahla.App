@@ -9,7 +9,9 @@ import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ThemeService } from './ThemeService';
 import { ServerConfig } from '../Models/ServerConfig';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class CacheService {
     public cachedData: CacheModel;
     public totalUnread = 0;
