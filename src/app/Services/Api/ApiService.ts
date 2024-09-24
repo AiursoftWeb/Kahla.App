@@ -45,6 +45,6 @@ export class ApiService {
     }
 
     public ServerInfo() {
-        return this.Get<ServerConfig>('');
+        return this.Get<ServerConfig>('/');
     }
 }
