@@ -40,6 +40,13 @@ export class ApiService {
         }).pipe(catchError(this.handleError));
     }
 
+    public Put<T>(address: string, data: any): Observable<T> {
+        return this.http.put<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
+            headers: this._headers,
+            withCredentials: true
+        }).pipe(catchError(this.handleError));
+    }
+
     public handleError(error: any): Promise<any> {
         return Promise.reject(error);
     }
