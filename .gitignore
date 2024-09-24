@@ -50,10 +50,4 @@ Thumbs.db
 
 # yarn.lock
 
-# generated file
-/src/environments/versions.ts
-
-# generated crypto-js
-/src/assets/crypto-js.min.js
-
 .angular/
