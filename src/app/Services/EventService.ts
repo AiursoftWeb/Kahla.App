@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AiurEvent } from '../Models/Events/AiurEvent';
-import { AuthApiService } from './Api/AuthApiService';
+import { MessagesApiService } from './Api/MessagesApiService';
 
 @Injectable({
     providedIn: 'root',
@@ -20,19 +20,19 @@ export class EventService {
     private closeWebSocket = false;
 
 
-    constructor(private authApiService: AuthApiService) {
+    constructor(private messagesApiService: MessagesApiService) {
     }
 
     public initPusher(): void {
         this.connecting = true;
         this.closeWebSocket = false;
-        this.authApiService.InitPusher().subscribe(model => {
+        this.messagesApiService.InitWebsocket().subscribe(model => {
             if (this.ws) {
                 this.closeWebSocket = true;
                 this.ws.close();
             }
             this.closeWebSocket = false;
-            this.ws = new WebSocket(model.serverPath);
+            this.ws = new WebSocket(model.webSocketEndpoint);
             this.ws.onopen = () => {
                 this.connecting = false;
                 clearTimeout(this.reconnectAttemptTimeout);
@@ -83,7 +83,7 @@ export class EventService {
     }
 
     public fireNetworkAlert(): void {
-        console.warn('Stargate connection down.');
+        console.warn('Websocket connection down.');
     }
 
     public destroyConnection() {

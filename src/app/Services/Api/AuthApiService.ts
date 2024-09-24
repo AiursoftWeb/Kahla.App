@@ -3,7 +3,6 @@ import { AiurValue } from "../../Models/AiurValue";
 import { KahlaUser } from "../../Models/KahlaUser";
 import { Observable } from "rxjs/";
 import { AiurProtocal } from "../../Models/AiurProtocal";
-import { InitPusherViewModel } from "../../Models/ApiModels/InitPusherViewModel";
 import { ApiService } from "./ApiService";
 
 @Injectable()
@@ -64,9 +63,6 @@ export class AuthApiService {
         );
     }
 
-    public InitPusher(): Observable<InitPusherViewModel> {
-        return this.apiService.Get(AuthApiService.serverPath + "/InitPusher");
-    }
 
     public SendMail(email: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + "/SendEmail", {

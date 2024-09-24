@@ -1,8 +1,7 @@
-﻿class CreateChannelViewModel {
-    public channelId: number;
-    public connectKey: string;
-}
+﻿import { AiurProtocal } from "../AiurProtocal";
 
-export class InitPusherViewModel extends CreateChannelViewModel {
-    public serverPath: string;
+export class InitWebsocketViewModel extends AiurProtocal {
+    otp: string;
+    otpValidTo: string;
+    webSocketEndpoint: string;
 }
