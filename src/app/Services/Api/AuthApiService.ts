@@ -74,21 +74,21 @@ export class AuthApiService {
         });
     }
 
-    public SignIn(email: string, password: string) {
+    public SignIn(email: string, password: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + "/SignIn", {
             Email: email,
             Password: password,
         });
     }
 
-    public Register(email: string, password: string) {
+    public Register(email: string, password: string): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + "/Register", {
             Email: email,
             Password: password,
         });
     }
 
-    public Signout(deviceId: number) {
+    public Signout(deviceId: number): Observable<AiurProtocal> {
         return this.apiService.Post(AuthApiService.serverPath + "/Signout", {DeviceId: deviceId});
     }
 }

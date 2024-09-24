@@ -28,7 +28,9 @@ export class SignInComponent implements OnInit {
 
     async login() {
         try {
-            await lastValueFrom(this.authApiService.SignIn(this.userName, this.password));
+            await lastValueFrom(
+                this.authApiService.SignIn(this.userName, this.password)
+            );
             this.initService.init();
         } catch (err) {
             if (err instanceof HttpErrorResponse) {
@@ -38,19 +40,44 @@ export class SignInComponent implements OnInit {
                 Swal.fire("Unknown error", "", "error");
             }
         }
-        
     }
 
-    register() {
+    async register() {
         if (this.password !== this.confirmPassword) {
             Swal.fire("Password does not match", "", "error");
             return;
         }
-        Swal.fire(
-            "Your registration information is",
-            `Username: ${this.userName} Password: ${this.password} Email: ${this.emailAddr}`,
-            "success"
-        );
+        if (this.password.length < 6) {
+            Swal.fire("Password is too short", "", "error");
+            return;
+        }
+        if (this.userName.length < 4) {
+            Swal.fire("Username is too short", "", "error");
+            return;
+        }
+        if (this.emailAddr.length < 4) {
+            Swal.fire("Email is too short", "", "error");
+            return;
+        }
+
+        try {
+            const regResult = await lastValueFrom(
+                this.authApiService.Register(this.emailAddr, this.password)
+            );
+            Swal.fire(
+                "Register success",
+                "",
+                "success"
+            );
+            this.initService.init();
+        } catch (err) {
+            if (err instanceof HttpErrorResponse) {
+                const error = err.error as AiurProtocal;
+                Swal.fire(error.message, "", "error");
+            } else {
+                Swal.fire("Unknown error", "", "error");
+            }
+        }
     }
 
     forgetPassword() {
