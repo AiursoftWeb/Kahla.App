@@ -9,12 +9,12 @@
     <div class="text" i18n="@@Language">Language</div>
 </div>
 <div class="menu-button toggle-setting"
-     (click)="this.me.enableEnterToSendMessage = !this.me.enableEnterToSendMessage; updateSettings()" *ngIf="this.me">
+     (click)="this.options.enableEnterToSendMessage = !this.options.enableEnterToSendMessage; updateSettings()" *ngIf="this.options">
     <div class="img">
         <i class="fas fa-exchange-alt"></i>
     </div>
     <div class="text" i18n="@@Notification">Use Enter to send message</div>
-    <input id="toggleEnter" class="tgl" type="checkbox" [checked]="me.enableEnterToSendMessage" disabled="disabled"/>
+    <input id="toggleEnter" class="tgl" type="checkbox" [checked]="this.options.enableEnterToSendMessage" disabled="disabled"/>
     <label for="toggleEnter" class="tgl-btn"></label>
 </div>
 <div class="menu-hint">
@@ -23,45 +23,36 @@
 <div class="menu-header">
     Privacy
 </div>
-<div class="menu-button toggle-setting" (click)="this.me.markEmailPublic = !this.me.markEmailPublic; updateSettings()"
-     *ngIf="this.me">
-    <div class="img">
-        <i class="fas fa-envelope"></i>
-    </div>
-    <div class="text" i18n="@@Notification">Make my email public</div>
-    <input id="toggleEmail" class="tgl" type="checkbox" [checked]="this.me.markEmailPublic" disabled="disabled"/>
-    <label for="toggleEmail" class="tgl-btn"></label>
-</div>
-<div class="menu-button toggle-setting" (click)="this.me.enableInvisiable = !this.me.enableInvisiable; updateSettings()"
-     *ngIf="this.me">
+<div class="menu-button toggle-setting" (click)="this.options.enableHideMyOnlineStatus = !this.options.enableHideMyOnlineStatus; updateSettings()"
+     *ngIf="this.options">
     <div class="img">
         <i class="fas fa-plug"></i>
     </div>
     <div class="text" i18n="@@Notification">Show my online status</div>
-    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="!me.enableInvisiable" disabled="disabled"/>
+    <input id="toggleInvisible" class="tgl" type="checkbox" [checked]="!this.options.enableHideMyOnlineStatus" disabled="disabled"/>
     <label for="toggleInvisible" class="tgl-btn"></label>
 </div>
 <div class="menu-button toggle-setting"
-     (click)="this.me.listInSearchResult = !this.me.listInSearchResult; updateSettings()"
+     (click)="this.options.listInSearchResult = !this.options.listInSearchResult; updateSettings()"
      *ngIf="this.me">
     <div class="img">
         <i class="fas fa-stream"></i>
     </div>
     <div class="text" i18n="@@Notification">List me in search result</div>
-    <input id="toggleList" class="tgl" type="checkbox" [checked]="me.listInSearchResult" disabled="disabled"/>
+    <input id="toggleList" class="tgl" type="checkbox" [checked]="this.options.listInSearchResult" disabled="disabled"/>
     <label for="toggleList" class="tgl-btn"></label>
 </div>
 <div class="menu-header">
     Notification
 </div>
 <div class="menu-button toggle-setting"
-     (click)="this.me.enableEmailNotification = !this.me.enableEmailNotification; updateSettings()"
+     (click)="this.options.enableEmailNotification = !this.options.enableEmailNotification; updateSettings()"
      *ngIf="this.me && me.emailConfirmed">
     <div class="img">
         <i class="fas fa-envelope"></i>
     </div>
     <div class="text" i18n="@@Notification">Email notification</div>
-    <input id="toggleMute" class="tgl" type="checkbox" [checked]="me.enableEmailNotification" disabled="disabled"/>
+    <input id="toggleMute" class="tgl" type="checkbox" [checked]="this.options.enableEmailNotification" disabled="disabled"/>
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
 <div class="menu-button" routerLink="/devices">
