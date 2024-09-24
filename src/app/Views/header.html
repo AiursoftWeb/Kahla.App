@@ -1,6 +1,5 @@
-<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer, 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }">
-    <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()"
-         [ngClass]="{ 'macOSReturnButton': _electronService.isElectronApp && _electronService.isMacOS }">
+<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer }">
+    <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()">
         <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fas fa-times"></i>
         <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fas fa-caret-left"></i>
     </div>
@@ -24,7 +23,7 @@
     </div>
 </div>
 
-<div class="header-holder" [ngClass]="{ 'macOSHeader': _electronService.isElectronApp && _electronService.isMacOS }"></div>
+<div class="header-holder"></div>
 
 <div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
      *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting)">

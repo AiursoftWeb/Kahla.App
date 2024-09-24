@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CheckService } from '../Services/CheckService';
 import { Values } from '../values';
 import { ApiService } from '../Services/Api/ApiService';
-import { ElectronService } from 'ngx-electron';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -19,7 +18,6 @@ export class AboutComponent {
 
     constructor(
         public checkService: CheckService,
-        public electronService: ElectronService,
         public apiService: ApiService
     ) {
     }

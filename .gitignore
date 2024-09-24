@@ -55,3 +55,5 @@ Thumbs.db
 
 # generated crypto-js
 /src/assets/crypto-js.min.js
+
+.angular/

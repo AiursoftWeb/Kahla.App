@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 import { versions } from '../../environments/versions';
-import { ElectronService } from 'ngx-electron';
 import { ServerListApiService } from './Api/ServerListApiService';
 import { ApiService } from './Api/ApiService';
 
@@ -16,7 +15,6 @@ export class CheckService {
     public buildTime = versions.buildTime;
 
     constructor(
-        private _electronService: ElectronService,
         private serverListApiService: ServerListApiService,
         private apiService: ApiService,
     ) {
@@ -81,20 +79,23 @@ export class CheckService {
     }
 
     private redirectToDownload(downloadAddress: string, showAlert: boolean = false): void {
-        if (this._electronService.isElectronApp) {
-            Swal.fire({
-                title: 'There is a new version of Kahla!',
-                text: 'Do you want to download the latest version of Kahla now?',
-                icon: 'warning',
-                confirmButtonText: 'Download now',
-                cancelButtonText: 'Remind me later',
-                showCancelButton: true
-            }).then(ToDownload => {
-                if (ToDownload.value) {
-                    this.openWebPage(downloadAddress);
-                }
-            });
-        } else if (this.checkSwCache()) {
+        console.log(downloadAddress);
+        // if (this._electronService.isElectronApp) {
+        //     Swal.fire({
+        //         title: 'There is a new version of Kahla!',
+        //         text: 'Do you want to download the latest version of Kahla now?',
+        //         icon: 'warning',
+        //         confirmButtonText: 'Download now',
+        //         cancelButtonText: 'Remind me later',
+        //         showCancelButton: true
+        //     }).then(ToDownload => {
+        //         if (ToDownload.value) {
+        //             this.openWebPage(downloadAddress);
+        //         }
+        //     });
+        // } else
+        // TODO: electron
+        if (this.checkSwCache()) {
             this.updateServiceWorkerCache();
             if (showAlert) {
                 Swal.fire({
@@ -119,14 +120,15 @@ export class CheckService {
     }
 
     public checkSwCache(): boolean {
-        return !this._electronService.isElectronApp && 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+        return 'serviceWorker' in navigator && !!navigator.serviceWorker.controller; // TODO: ELECTRON
     }
 
     public openWebPage(url: string): void {
-        if (this._electronService.isElectronApp) {
-            this._electronService.shell.openExternal(url);
-        } else {
+        // if (this._electronService.isElectronApp) {
+        //     this._electronService.shell.openExternal(url);
+        // } else {
             location.href = url;
-        }
+        // }
+        //TODO: ELECTRON
     }
 }

@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { ElectronService } from 'ngx-electron';
 import { ThemeService } from '../Services/ThemeService';
 import { Router } from '@angular/router';
 import { HomeService } from '../Services/HomeService';
@@ -20,7 +19,6 @@ export class AppComponent implements OnInit {
         private initService: InitService,
         private themeService: ThemeService,
         public cacheService: CacheService,
-        private _electronService: ElectronService,
         public route: Router,
         public homeService: HomeService) {
     }
@@ -33,7 +31,7 @@ export class AppComponent implements OnInit {
     @HostListener('window:load', [])
     onLoad() {
         if ('Notification' in window && 'serviceWorker' in navigator) {
-            if (!this._electronService.isElectronApp) {
+            if (true) { // TODO: ELECTRON
                 navigator.serviceWorker.register('/sw.js').then(function (registration) {
                     // Registration was successful
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);

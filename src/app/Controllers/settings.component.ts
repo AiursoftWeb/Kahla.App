@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Values } from '../values';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
-import { ElectronService } from 'ngx-electron';
 import { CacheService } from '../Services/CacheService';
 import { HomeService } from '../Services/HomeService';
 import { ProbeService } from '../Services/ProbeService';
@@ -24,7 +23,6 @@ export class SettingsComponent implements OnInit {
         private router: Router,
         private initSerivce: InitService,
         public cacheService: CacheService,
-        private _electronService: ElectronService,
         public homeService: HomeService,
         private probeService: ProbeService,
     ) {
@@ -65,7 +63,7 @@ export class SettingsComponent implements OnInit {
                     deviceID = '-1';
                 }
                 this.callLogOffAPI(Number(deviceID));
-                if (!(this._electronService.isElectronApp || !navigator.serviceWorker)) {
+                if (navigator.serviceWorker) { // TODO:electron
                     const _this = this;
                     navigator.serviceWorker.ready.then(function (reg) {
                         return reg.pushManager.getSubscription().then(function (subscription) {

@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxElectronModule } from 'ngx-electron';
 // Component
 import { AppComponent } from './Controllers/app.component';
 import { ConversationsComponent } from './Controllers/conversations.component';
@@ -58,7 +57,6 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        NgxElectronModule
     ],
     declarations: [
         AboutComponent,

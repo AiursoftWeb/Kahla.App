@@ -93,7 +93,7 @@ export class ShareComponent implements OnInit, DoCheck {
         const name = group ? (<GroupsResult>user).name : (<KahlaUser>user).nickName;
         const preConfirm = (input) => {
             // get conversation detail
-            return new Promise(async resolve => {
+            return new Promise<void>(async resolve => {
                 if (this.messageService.conversation && this.messageService.conversation.id === conversationID) {
                     this.conversation = this.messageService.conversation;
                 } else {
