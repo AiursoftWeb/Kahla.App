@@ -73,7 +73,6 @@
   "dependencies": {
     "@angular/animations": "9.1.13",
     "@angular/common": "9.1.13",
-    "@angular/compiler": "9.1.13",
     "@angular/core": "9.1.13",
     "@angular/forms": "9.1.13",
     "@angular/localize": "^9.1.13",
@@ -124,5 +123,6 @@
     "url": "https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/issues"
   },
   "homepage": "https://www.kahla.app",
-  "release": "build"
+  "release": "build",
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

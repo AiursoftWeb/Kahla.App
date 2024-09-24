@@ -48,7 +48,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
-yarn.lock
+# yarn.lock
 
 # generated file
 /src/environments/versions.ts
