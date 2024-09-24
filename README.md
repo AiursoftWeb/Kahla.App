@@ -63,6 +63,8 @@ npm start
 
 ### How to run as desktop app
 
+**Currently Electron is out of support, we cannot g**
+
 Currently, we are using [Electron](https://electron.atom.io/) to target Windows, Mac and Linux platform.
 
 Supports Windows 7+, Linux and macOS 10.9+.
@@ -76,7 +78,7 @@ npm run electron
 ### How to publish to a web server
 
 ```bash
-ng build --prod
+yarn run prod
 ```
 
 ### How to publish for electron production version

@@ -1,0 +1,12 @@
+stages: # List of stages for jobs, and their order of execution
+  - build
+
+build-job: # This job runs in the build stage, which runs first.
+  stage: build
+  before_script:
+    - pwd
+  only:
+    - master
+  script:
+    - docker build . -t hub.aiursoft.cn/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+    - docker push hub.aiursoft.cn/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest

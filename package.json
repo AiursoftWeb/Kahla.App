@@ -59,16 +59,15 @@
   ],
   "license": "MIT",
   "scripts": {
-    "postinstall": "npm run prebuild",
     "electron": "ng build --base-href ./ && electron ./www/index.js",
-    "start": "ng serve --open",
+    "start": "yarn prebuild && ng serve --open",
     "prebuild": "ts-node prebuild.ts && uglifyjs node_modules/crypto-js/crypto-js.js -c -m -o src/assets/crypto-js.min.js",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
-    "prod": "npm run prebuild && ng build --base-href / --prod --output-hashing none",
-    "prod-electron": "ng build --base-href ./ --prod",
+    "prod": "yarn prebuild && ng build --base-href / --output-hashing none",
+    "prod-electron": "ng build --base-href ./",
     "pack": "electron-builder -p never",
-    "prod-zh": "ng build --base-href / --prod --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
+    "prod-zh": "ng build --base-href / --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
     "@angular/animations": "18.2.5",
