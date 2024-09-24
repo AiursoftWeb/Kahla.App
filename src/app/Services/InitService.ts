@@ -147,6 +147,7 @@ export class InitService {
         pushSubscription: PushSubscription,
         force: boolean = false
     ) {
+        console.log(pushSubscription);
         let data: PushSubscriptionSetting = JSON.parse(
             localStorage.getItem("setting-pushSubscription")
         );
