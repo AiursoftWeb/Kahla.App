@@ -1,37 +1,44 @@
-﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConversationApiService } from '../Services/Api/ConversationApiService';
-import { Message } from '../Models/Message';
-import { AES } from 'crypto-js';
-import Swal from 'sweetalert2';
-import { UploadService } from '../Services/UploadService';
-import { MessageService } from '../Services/MessageService';
-import { TimerService } from '../Services/TimerService';
-import { KahlaUser } from '../Models/KahlaUser';
-import { HeaderComponent } from './header.component';
-import { GroupsResult } from '../Models/GroupsResults';
-import { FriendshipService } from '../Services/FriendshipService';
-import { CacheService } from '../Services/CacheService';
-import { Conversation } from '../Models/Conversation';
-import { FileType } from '../Models/FileType';
-import { ProbeService } from '../Services/ProbeService';
-import { uuid4 } from '../Helpers/Uuid';
-import * as EmojiButton from '@joeattardi/emoji-button';
-import { ThemeService } from '../Services/ThemeService';
-import { MessageFileRef } from '../Models/MessageFileRef';
+﻿import {
+    Component,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ConversationApiService } from "../Services/Api/ConversationApiService";
+import { Message } from "../Models/Message";
+import Swal from "sweetalert2";
+import { UploadService } from "../Services/UploadService";
+import { MessageService } from "../Services/MessageService";
+import { TimerService } from "../Services/TimerService";
+import { KahlaUser } from "../Models/KahlaUser";
+import { HeaderComponent } from "./header.component";
+import { GroupsResult } from "../Models/GroupsResults";
+import { FriendshipService } from "../Services/FriendshipService";
+import { CacheService } from "../Services/CacheService";
+import { Conversation } from "../Models/Conversation";
+import { FileType } from "../Models/FileType";
+import { ProbeService } from "../Services/ProbeService";
+import { uuid4 } from "../Helpers/Uuid";
+import * as EmojiButton from "@joeattardi/emoji-button";
+import { ThemeService } from "../Services/ThemeService";
+import { MessageFileRef } from "../Models/MessageFileRef";
 
 declare var MediaRecorder: any;
 
 @Component({
-    templateUrl: '../Views/talking.html',
-    styleUrls: ['../Styles/talking.scss',
-        '../Styles/button.scss',
-        '../Styles/reddot.scss',
-        '../Styles/menu.scss',
-        '../Styles/badge.scss']
+    templateUrl: "../Views/talking.html",
+    styleUrls: [
+        "../Styles/talking.scss",
+        "../Styles/button.scss",
+        "../Styles/reddot.scss",
+        "../Styles/menu.scss",
+        "../Styles/badge.scss",
+    ],
 })
 export class TalkingComponent implements OnInit, OnDestroy {
-    public content = '';
+    public content = "";
     public showPanel = false;
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
@@ -51,11 +58,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public matchedUsers: Array<KahlaUser> = [];
     public loadingMore: boolean;
 
-    @ViewChild('imageInput') public imageInput;
-    @ViewChild('videoInput') public videoInput;
-    @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', {static: true}) public header: HeaderComponent;
-
+    @ViewChild("imageInput") public imageInput;
+    @ViewChild("videoInput") public videoInput;
+    @ViewChild("fileInput") public fileInput;
+    @ViewChild("header", { static: true }) public header: HeaderComponent;
 
     constructor(
         private route: ActivatedRoute,
@@ -67,17 +73,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public timerService: TimerService,
         private friendshipService: FriendshipService,
         private themeService: ThemeService,
-        public probeService: ProbeService,
-    ) {
-    }
+        public probeService: ProbeService
+    ) {}
 
-    @HostListener('window:resize', [])
+    @HostListener("window:resize", [])
     onResize() {
         this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, window.scrollY + this.keyBoardHeight);
-        } else if (window.innerHeight - this.formerWindowInnerHeight > 100 && this.messageService.belowWindowPercent > 0.2) {
+        } else if (
+            window.innerHeight - this.formerWindowInnerHeight > 100 &&
+            this.messageService.belowWindowPercent > 0.2
+        ) {
             window.scroll(0, window.scrollY - this.keyBoardHeight);
         } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
             window.scroll(0, window.scrollY);
@@ -85,41 +93,57 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.formerWindowInnerHeight = window.innerHeight;
     }
 
-    @HostListener('window:scroll', [])
+    @HostListener("window:scroll", [])
     onScroll() {
         this.messageService.updateBelowWindowPercent();
         if (this.messageService.belowWindowPercent <= 0) {
             this.messageService.newMessages = false;
         }
-        if (window.scrollY <= 0 && document.documentElement.scrollHeight > document.documentElement.clientHeight + 100
-            && this.messageService.conversation && !this.messageService.messageLoading && !this.messageService.noMoreMessages) {
+        if (
+            window.scrollY <= 0 &&
+            document.documentElement.scrollHeight >
+                document.documentElement.clientHeight + 100 &&
+            this.messageService.conversation &&
+            !this.messageService.messageLoading &&
+            !this.messageService.noMoreMessages
+        ) {
             const now = Date.now();
-            const interval = this.messageService.showMessagesCount < this.messageService.localMessages.length ? 10 : 2000;
+            const interval =
+                this.messageService.showMessagesCount <
+                this.messageService.localMessages.length
+                    ? 10
+                    : 2000;
             if (this.lastAutoLoadMoreTimestamp + interval < now) {
                 this.loadMore();
                 this.lastAutoLoadMoreTimestamp = now;
             } else {
-                setTimeout(() => this.onScroll(), this.lastAutoLoadMoreTimestamp + interval + 10 - now);
+                setTimeout(
+                    () => this.onScroll(),
+                    this.lastAutoLoadMoreTimestamp + interval + 10 - now
+                );
             }
         }
     }
 
-    @HostListener('keydown', ['$event'])
+    @HostListener("keydown", ["$event"])
     onKeydown(e: KeyboardEvent) {
-        if (e.key === 'Enter' && !this.showUserList) {
+        if (e.key === "Enter" && !this.showUserList) {
             e.preventDefault();
-            if ((e.altKey || e.ctrlKey || e.shiftKey) === this.cacheService.cachedData.me.enableEnterToSendMessage) {
-                this.insertToSelection('\n');
-                this.oldContent = ''; // prevent send message on keyup
+            if (
+                (e.altKey || e.ctrlKey || e.shiftKey) ===
+                this.cacheService.cachedData.me.enableEnterToSendMessage
+            ) {
+                this.insertToSelection("\n");
+                this.oldContent = ""; // prevent send message on keyup
             } else {
                 this.oldContent = this.content;
             }
         }
     }
 
-    @HostListener('keyup', ['$event'])
+    @HostListener("keyup", ["$event"])
     onKeyup(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             e.preventDefault();
             if (this.showUserList) {
                 // accept default suggestion
@@ -128,14 +152,21 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.send();
                 this.showUserList = false;
             }
-        } else if (this.content && e.key !== 'Backspace') {
+        } else if (this.content && e.key !== "Backspace") {
             this.showUserList = false;
-            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-            const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
+            const input = <HTMLTextAreaElement>(
+                document.getElementById("chatInput")
+            );
+            const typingWords = this.content
+                .slice(0, input.selectionStart)
+                .split(/\s|\n/);
             const typingWord = typingWords[typingWords.length - 1];
-            if (typingWord.charAt(0) === '@') {
+            if (typingWord.charAt(0) === "@") {
                 const searchName = typingWord.slice(1).toLowerCase();
-                const searchResults = this.messageService.searchUser(searchName, false);
+                const searchResults = this.messageService.searchUser(
+                    searchName,
+                    false
+                );
                 if (searchResults.length > 0) {
                     this.matchedUsers = searchResults;
                     this.showUserList = true;
@@ -147,90 +178,136 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        const inputElement = <HTMLElement>document.querySelector('#chatInput');
-        inputElement.addEventListener('input', () => {
-            inputElement.style.height = 'auto';
-            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+        const inputElement = <HTMLElement>document.querySelector("#chatInput");
+        inputElement.addEventListener("input", () => {
+            inputElement.style.height = "auto";
+            inputElement.style.height = inputElement.scrollHeight + "px";
             this.chatInputHeight = inputElement.scrollHeight;
-            if (document.querySelector('#scrollDown')) {
-                (<HTMLElement>document.querySelector('#scrollDown')).style.bottom = inputElement.scrollHeight + 46 + 'px';
+            if (document.querySelector("#scrollDown")) {
+                (<HTMLElement>(
+                    document.querySelector("#scrollDown")
+                )).style.bottom = inputElement.scrollHeight + 46 + "px";
             }
         });
 
-        this.route.params
-            .subscribe(async params => {
-                if (!this.messageService.talkingDestroyed) {
-                    this.destroyCurrent();
-                }
-                this.messageService.talkingDestroyed = false;
-                this.messageService.updateMaxImageWidth();
-                this.conversationID = Number(params.id);
-                const unread = (params.unread && params.unread <= 50) ? Number(params.unread) : 0;
-                const load = unread < 15 ? 15 : unread;
-                if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                    this.updateConversation(this.cacheService.cachedData.conversationDetail[this.conversationID]);
-                    this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(unread, this.conversationID, null, load);
+        this.route.params.subscribe(async (params) => {
+            if (!this.messageService.talkingDestroyed) {
+                this.destroyCurrent();
+            }
+            this.messageService.talkingDestroyed = false;
+            this.messageService.updateMaxImageWidth();
+            this.conversationID = Number(params.id);
+            const unread =
+                params.unread && params.unread <= 50
+                    ? Number(params.unread)
+                    : 0;
+            const load = unread < 15 ? 15 : unread;
+            if (
+                this.cacheService.cachedData.conversationDetail[
+                    this.conversationID
+                ]
+            ) {
+                this.updateConversation(
+                    this.cacheService.cachedData.conversationDetail[
+                        this.conversationID
+                    ]
+                );
+                this.messageService.initMessage(this.conversationID);
+                this.messageService.getMessages(
+                    unread,
+                    this.conversationID,
+                    null,
+                    load
+                );
+            } else {
+                const listItem =
+                    this.cacheService.cachedData.conversations.find(
+                        (t) => t.conversationId === this.conversationID
+                    );
+                if (listItem) {
+                    this.header.title = listItem.displayName;
                 } else {
-                    const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
-                    if (listItem) {
-                        this.header.title = listItem.displayName;
-                    } else {
-                        this.header.title = 'Loading...';
-                    }
+                    this.header.title = "Loading...";
                 }
+            }
 
-                this.content = localStorage.getItem('draft' + this.conversationID);
-                this.autoSaveInterval = setInterval(() => {
-                    if (this.content !== null) {
-                        localStorage.setItem('draft' + this.conversationID, this.content);
-                    }
-                }, 1000);
-
-                this.updateInputHeight();
-
-                if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    inputElement.focus();
+            this.content = localStorage.getItem("draft" + this.conversationID);
+            this.autoSaveInterval = setInterval(() => {
+                if (this.content !== null) {
+                    localStorage.setItem(
+                        "draft" + this.conversationID,
+                        this.content
+                    );
                 }
+            }, 1000);
 
-                const conversation = (await this.conversationApiService.ConversationDetail(this.conversationID).toPromise()).value;
-                if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
-                    return;
-                }
-                this.updateConversation(conversation);
-                if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                    this.messageService.initMessage(this.conversationID);
-                    this.messageService.getMessages(unread, this.conversationID, null, load);
-                }
-                this.messageService.cleanMessageByTimer();
-                this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-                this.cacheService.saveCache();
-            });
+            this.updateInputHeight();
+
+            if (
+                !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent
+                )
+            ) {
+                inputElement.focus();
+            }
+
+            const conversation = (
+                await this.conversationApiService
+                    .ConversationDetail(this.conversationID)
+                    .toPromise()
+            ).value;
+            if (
+                this.conversationID !== conversation.id ||
+                this.messageService.talkingDestroyed
+            ) {
+                return;
+            }
+            this.updateConversation(conversation);
+            if (
+                !this.cacheService.cachedData.conversationDetail[
+                    this.conversationID
+                ]
+            ) {
+                this.messageService.initMessage(this.conversationID);
+                this.messageService.getMessages(
+                    unread,
+                    this.conversationID,
+                    null,
+                    load
+                );
+            }
+            this.messageService.cleanMessageByTimer();
+            this.cacheService.cachedData.conversationDetail[
+                this.conversationID
+            ] = conversation;
+            this.cacheService.saveCache();
+        });
         this.windowInnerHeight = window.innerHeight;
     }
 
     private updateInputHeight(): void {
-        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        const inputElement = <HTMLElement>document.querySelector("#chatInput");
         setTimeout(() => {
-            inputElement.style.height = (inputElement.scrollHeight) + 'px';
+            inputElement.style.height = inputElement.scrollHeight + "px";
             this.chatInputHeight = inputElement.scrollHeight;
         }, 0);
     }
 
     public updateConversation(conversation: Conversation): void {
         this.messageService.conversation = conversation;
-        this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
+        this.messageService.groupConversation =
+            conversation.discriminator === "GroupConversation";
         this.header.title = conversation.displayName;
         this.header.button = true;
         if (conversation.anotherUserId) {
-            this.header.buttonIcon = 'user';
+            this.header.buttonIcon = "user";
             this.header.buttonLink = `/user/${conversation.anotherUserId}`;
         } else {
             this.header.buttonIcon = `users`;
             this.header.buttonLink = `/group/${conversation.id}`;
         }
         this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-        this.header.timer = this.timerService.destructTime !== 'off';
+        this.header.timer = this.timerService.destructTime !== "off";
     }
 
     public trackByMessages(_index: number, message: Message): string {
@@ -248,57 +325,87 @@ export class TalkingComponent implements OnInit, OnDestroy {
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;
         if (this.messageService.localMessages.length > 0) {
-            const prevMsg = this.messageService.localMessages[this.messageService.localMessages.length - 1];
-            tempMessage.groupWithPrevious = prevMsg.senderId === this.cacheService.cachedData.me.id
-                && new Date().getTime() - prevMsg.timeStamp <= 3600000;
+            const prevMsg =
+                this.messageService.localMessages[
+                    this.messageService.localMessages.length - 1
+                ];
+            tempMessage.groupWithPrevious =
+                prevMsg.senderId === this.cacheService.cachedData.me.id &&
+                new Date().getTime() - prevMsg.timeStamp <= 3600000;
         }
         tempMessage.sendTime = new Date().toISOString();
         tempMessage.local = true;
-        this.messageService.modifyMessage(tempMessage, false);
+        this.messageService.modifyMessage(tempMessage);
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.messageService.scrollBottom(true);
         }, 0);
-        const encryptedMessage = AES.encrypt(this.content, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, tempMessage.id,
-            this.messageService.getAtIDs(this.content).slice(1))
+        this.conversationApiService
+            .SendMessage(
+                this.messageService.conversation.id,
+                this.content,
+                tempMessage.id,
+                this.messageService.getAtIDs(this.content).slice(1)
+            )
             .subscribe({
-                error: e => {
+                error: (e) => {
                     if (e.status === 0 || e.status === 503) {
-                        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-                        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
+                        const unsentMessages = new Map(
+                            JSON.parse(localStorage.getItem("unsentMessages"))
+                        );
+                        const tempArray = <Array<Message>>(
+                            unsentMessages.get(this.conversationID)
+                        );
                         if (tempArray && tempArray.length > 0) {
                             tempArray.push(tempMessage);
                             unsentMessages.set(this.conversationID, tempArray);
                         } else {
-                            unsentMessages.set(this.conversationID, [tempMessage]);
+                            unsentMessages.set(this.conversationID, [
+                                tempMessage,
+                            ]);
                         }
-                        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-                        this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(tempMessage), 1);
+                        localStorage.setItem(
+                            "unsentMessages",
+                            JSON.stringify(Array.from(unsentMessages))
+                        );
+                        this.messageService.localMessages.splice(
+                            this.messageService.localMessages.indexOf(
+                                tempMessage
+                            ),
+                            1
+                        );
                         this.messageService.showFailedMessages();
                         this.messageService.reorderLocalMessages();
                         this.messageService.scrollBottom(false);
                     }
                 },
-                next: p => {
-                    const index = this.messageService.localMessages.indexOf(tempMessage);
+                next: (p) => {
+                    const index =
+                        this.messageService.localMessages.indexOf(tempMessage);
                     if (index !== -1) {
                         this.messageService.localMessages.splice(index, 1);
                         this.messageService.insertMessage(p.value);
                     }
-                }
+                },
             });
-        this.content = '';
-        const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
+        this.content = "";
+        const inputElement = <HTMLTextAreaElement>(
+            document.querySelector("#chatInput")
+        );
         inputElement.focus();
-        inputElement.style.height = 34 + 'px';
+        inputElement.style.height = 34 + "px";
     }
 
     public resend(message: Message): void {
         const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
-        const encryptedMessage = AES.encrypt(message.contentRaw, this.messageService.conversation.aesKey).toString();
-        this.conversationApiService.SendMessage(this.messageService.conversation.id, encryptedMessage, message.id, messageIDArry.slice(1))
-            .subscribe(result => {
+        this.conversationApiService
+            .SendMessage(
+                this.messageService.conversation.id,
+                message.contentRaw,
+                message.id,
+                messageIDArry.slice(1)
+            )
+            .subscribe((result) => {
                 if (result.code === 0) {
                     this.delete(message);
                 }
@@ -306,19 +413,31 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public delete(message: Message): void {
-        this.messageService.localMessages.splice(this.messageService.localMessages.indexOf(message), 1);
-        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
-        const index = tempArray.findIndex(t => t.id === message.id);
+        this.messageService.localMessages.splice(
+            this.messageService.localMessages.indexOf(message),
+            1
+        );
+        const unsentMessages = new Map(
+            JSON.parse(localStorage.getItem("unsentMessages"))
+        );
+        const tempArray = <Array<Message>>(
+            unsentMessages.get(this.conversationID)
+        );
+        const index = tempArray.findIndex((t) => t.id === message.id);
         tempArray.splice(index, 1);
         unsentMessages.set(this.conversationID, tempArray);
-        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
+        localStorage.setItem(
+            "unsentMessages",
+            JSON.stringify(Array.from(unsentMessages))
+        );
     }
 
     public startInput(): void {
         if (this.showPanel) {
             this.showPanel = false;
-            document.querySelector('.message-list').classList.remove('active-list');
+            document
+                .querySelector(".message-list")
+                .classList.remove("active-list");
             if (this.messageService.belowWindowPercent > 0) {
                 window.scroll(0, window.scrollY - 105);
             }
@@ -340,7 +459,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public uploadInput(fileType: FileType): void {
         this.showPanel = false;
-        document.querySelector('.message-list').classList.remove('active-list');
+        document.querySelector(".message-list").classList.remove("active-list");
         let files;
         if (this.fileInput.nativeElement.files.length > 0) {
             files = this.fileInput.nativeElement.files[0];
@@ -353,10 +472,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         if (files) {
             if (fileType !== FileType.File) {
-                files = this.probeService.renameFile(files, fileType === FileType.Image ? 'img_' : 'video_');
+                files = this.probeService.renameFile(
+                    files,
+                    fileType === FileType.Image ? "img_" : "video_"
+                );
             }
-            this.uploadService.upload(files, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
-                ?.then(t => {
+            this.uploadService
+                .upload(files, this.messageService.conversation.id, fileType)
+                ?.then((t) => {
                     this.messageService.insertMessage(t.value);
                     setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
@@ -366,23 +489,37 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public paste(event: ClipboardEvent): void {
         const items = event.clipboardData.items;
         for (let i = 0; i < items.length; i++) {
-            if (items[i].kind === 'file') {
+            if (items[i].kind === "file") {
                 this.preventDefault(event);
                 const originalFile = items[i].getAsFile();
-                const blob = this.probeService.renameFile(originalFile, 'clipboardImg_');
+                const blob = this.probeService.renameFile(
+                    originalFile,
+                    "clipboardImg_"
+                );
                 if (blob != null) {
                     const urlString = URL.createObjectURL(blob);
                     Swal.fire({
-                        title: 'Are you sure to post this image?',
+                        title: "Are you sure to post this image?",
                         imageUrl: urlString,
-                        showCancelButton: true
+                        showCancelButton: true,
                     }).then((send) => {
                         if (send.value) {
-                            this.uploadService.upload(blob, this.messageService.conversation.id,
-                                this.messageService.conversation.aesKey, FileType.Image)?.then(t => {
-                                this.messageService.insertMessage(t.value);
-                                setTimeout(() => this.messageService.scrollBottom(true), 0);
-                            });
+                            this.uploadService
+                                .upload(
+                                    blob,
+                                    this.messageService.conversation.id,
+                                    FileType.Image
+                                )
+                                ?.then((t) => {
+                                    this.messageService.insertMessage(t.value);
+                                    setTimeout(
+                                        () =>
+                                            this.messageService.scrollBottom(
+                                                true
+                                            ),
+                                        0
+                                    );
+                                });
                         }
                         URL.revokeObjectURL(urlString);
                     });
@@ -405,29 +542,44 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 fileList.push(files[i]);
             }
         }
-        fileList.forEach(async t => {
+        fileList.forEach(async (t) => {
             let fileType = FileType.File;
-            if (this.uploadService.validImageType(t, false) && (await Swal.fire({
-                title: `Send "${t.name}" as`,
-                confirmButtonText: 'Image',
-                cancelButtonText: 'File',
-                icon: 'question',
-                showCancelButton: true,
-            })).value) {
+            if (
+                this.uploadService.validImageType(t, false) &&
+                (
+                    await Swal.fire({
+                        title: `Send "${t.name}" as`,
+                        confirmButtonText: "Image",
+                        cancelButtonText: "File",
+                        icon: "question",
+                        showCancelButton: true,
+                    })
+                ).value
+            ) {
                 fileType = FileType.Image;
             }
-            if (this.uploadService.validVideoType(t) && (await Swal.fire({
-                title: `Send "${t.name}" as`,
-                confirmButtonText: 'Video',
-                cancelButtonText: 'File',
-                icon: 'question',
-                showCancelButton: true,
-            })).value) {
+            if (
+                this.uploadService.validVideoType(t) &&
+                (
+                    await Swal.fire({
+                        title: `Send "${t.name}" as`,
+                        confirmButtonText: "Video",
+                        cancelButtonText: "File",
+                        icon: "question",
+                        showCancelButton: true,
+                    })
+                ).value
+            ) {
                 fileType = FileType.Video;
             }
 
-            this.uploadService.upload(t, this.messageService.conversation.id, this.messageService.conversation.aesKey, fileType)
-                ?.then(msg => {
+            this.uploadService
+                .upload(
+                    t,
+                    this.messageService.conversation.id,
+                    fileType
+                )
+                ?.then((msg) => {
                     this.messageService.insertMessage(msg.value);
                     setTimeout(() => this.messageService.scrollBottom(true), 0);
                 });
@@ -452,43 +604,56 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.recording) {
             this.mediaRecorder.stop();
         } else {
-            navigator.mediaDevices.getUserMedia({audio: true})
-                .then(stream => {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(
+                (stream) => {
                     this.recording = true;
                     this.mediaRecorder = new MediaRecorder(stream);
                     this.mediaRecorder.start();
                     const audioChunks = [];
-                    this.mediaRecorder.addEventListener('dataavailable', event => {
-                        audioChunks.push(event.data);
-                    });
-                    this.mediaRecorder.addEventListener('stop', () => {
+                    this.mediaRecorder.addEventListener(
+                        "dataavailable",
+                        (event) => {
+                            audioChunks.push(event.data);
+                        }
+                    );
+                    this.mediaRecorder.addEventListener("stop", () => {
                         this.recording = false;
-                        const audioBlob = new File(audioChunks, `voiceMsg_${new Date().getTime()}.opus`);
-                        this.uploadService.upload(audioBlob, this.conversationID, this.messageService.conversation.aesKey, FileType.Audio)
+                        const audioBlob = new File(
+                            audioChunks,
+                            `voiceMsg_${new Date().getTime()}.opus`
+                        );
+                        this.uploadService
+                            .upload(
+                                audioBlob,
+                                this.conversationID,
+                                FileType.Audio
+                            )
                             .then(() => this.messageService.scrollBottom(true));
                         clearTimeout(this.forceStopTimeout);
-                        stream.getTracks().forEach(track => track.stop());
+                        stream.getTracks().forEach((track) => track.stop());
                     });
                     this.forceStopTimeout = setTimeout(() => {
                         this.mediaRecorder.stop();
                     }, 1000 * 60 * 5);
-                }, () => {
+                },
+                () => {
                     return;
-                });
+                }
+            );
         }
     }
 
     public emoji(): void {
-        const chatBox = <HTMLElement>document.querySelector('.chat-box');
+        const chatBox = <HTMLElement>document.querySelector(".chat-box");
         if (!this.picker) {
             this.picker = new EmojiButton({
-                position: 'top-start',
+                position: "top-start",
                 zIndex: 20,
-                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light',
+                theme: this.themeService.IsDarkTheme() ? "dark" : "light",
                 autoFocusSearch: false,
-                showSearch: false
+                showSearch: false,
             });
-            this.picker.on('emoji', emoji => {
+            this.picker.on("emoji", (emoji) => {
                 this.insertToSelection(emoji);
             });
         }
@@ -496,14 +661,22 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public complete(nickname: string): void {
-        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-        const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
+        const input = <HTMLTextAreaElement>document.getElementById("chatInput");
+        const typingWords = this.content
+            .slice(0, input.selectionStart)
+            .split(/\s|\n/);
         const typingWord = typingWords[typingWords.length - 1];
-        const before = this.content.slice(0, input.selectionStart - typingWord.length + typingWord.indexOf('@'));
-        this.content =
-            `${before}@${nickname.replace(/ /g, '')} ${this.content.slice(input.selectionStart)}`;
+        const before = this.content.slice(
+            0,
+            input.selectionStart - typingWord.length + typingWord.indexOf("@")
+        );
+        this.content = `${before}@${nickname.replace(
+            / /g,
+            ""
+        )} ${this.content.slice(input.selectionStart)}`;
         this.showUserList = false;
-        const pointerPos = before.length + nickname.replace(/ /g, '').length + 2;
+        const pointerPos =
+            before.length + nickname.replace(/ /g, "").length + 2;
         setTimeout(() => {
             input.setSelectionRange(pointerPos, pointerPos);
             input.focus();
@@ -528,12 +701,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.autoSaveInterval = null;
     }
 
-
     public shareToOther(fileRef: MessageFileRef): void {
         this.messageService.shareRef = fileRef;
-        this.router.navigate(['share-target', {
-            srcConversation: this.conversationID
-        }], {skipLocationChange: true});
+        this.router.navigate(
+            [
+                "share-target",
+                {
+                    srcConversation: this.conversationID,
+                },
+            ],
+            { skipLocationChange: true }
+        );
     }
 
     public getAtListMaxHeight(): number {
@@ -541,26 +719,33 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public shareClick(msg: Message): void {
-        if (msg.contentRaw.startsWith('[user]') && msg.relatedData) {
-            this.router.navigate(['user', (<KahlaUser>msg.relatedData).id]);
-        } else if (msg.contentRaw.startsWith('[group]') && msg.relatedData) {
+        if (msg.contentRaw.startsWith("[user]") && msg.relatedData) {
+            this.router.navigate(["user", (<KahlaUser>msg.relatedData).id]);
+        } else if (msg.contentRaw.startsWith("[group]") && msg.relatedData) {
             const group = <GroupsResult>msg.relatedData;
             this.friendshipService.joinGroup(group, true);
         }
     }
 
     public insertToSelection(content: string) {
-        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
-        this.content = this.content ? `${this.content.slice(0, input.selectionStart)
-        }${content}${this.content.slice(input.selectionStart)}` : content;
+        const input = <HTMLTextAreaElement>document.getElementById("chatInput");
+        this.content = this.content
+            ? `${this.content.slice(
+                  0,
+                  input.selectionStart
+              )}${content}${this.content.slice(input.selectionStart)}`
+            : content;
         this.updateInputHeight();
     }
 
     public getAudio(target: HTMLElement, filePath: string): void {
-        target.style.display = 'none';
-        const audioElement = document.createElement('audio');
-        audioElement.style.maxWidth = '100%';
-        audioElement.src = this.probeService.encodeProbeFileUrl(filePath, this.messageService.fileAccessToken);
+        target.style.display = "none";
+        const audioElement = document.createElement("audio");
+        audioElement.style.maxWidth = "100%";
+        audioElement.src = this.probeService.encodeProbeFileUrl(
+            filePath,
+            this.messageService.fileAccessToken
+        );
         audioElement.controls = true;
         target.parentElement.appendChild(audioElement);
         audioElement.play();
@@ -568,35 +753,52 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public async loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
-        if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {
+        if (
+            this.messageService.showMessagesCount <
+            this.messageService.localMessages.length
+        ) {
             this.messageService.showMessagesCount += 15;
         } else if (!this.messageService.noMoreMessages) {
             this.loadingMore = true;
-            await this.messageService.getMessages(-1,
-                this.messageService.conversation.id, this.messageService.localMessages[0].id, 15);
+            await this.messageService.getMessages(
+                -1,
+                this.messageService.conversation.id,
+                this.messageService.localMessages[0].id,
+                15
+            );
             this.loadingMore = false;
-            this.messageService.showMessagesCount = this.messageService.localMessages.length;
+            this.messageService.showMessagesCount =
+                this.messageService.localMessages.length;
         } else {
             return;
         }
         setTimeout(() => {
-            window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
+            window.scroll(
+                0,
+                document.documentElement.scrollHeight - oldScrollHeight
+            );
         }, 0);
     }
 
     public takeMessages(): Message[] {
-        return this.messageService.localMessages
-            .slice(Math.max(this.messageService.rawMessages.length - this.messageService.showMessagesCount, 0));
+        return this.messageService.localMessages.slice(
+            Math.max(
+                this.messageService.rawMessages.length -
+                    this.messageService.showMessagesCount,
+                0
+            )
+        );
     }
 
-    @HostListener('window:focus')
+    @HostListener("window:focus")
     public onFocus() {
         const conversationCache =
-            this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversationID);
+            this.cacheService.cachedData.conversations.find(
+                (t) => t.conversationId === this.conversationID
+            );
         if (conversationCache) {
             conversationCache.unReadAmount = 0;
             this.cacheService.updateTotalUnread();
         }
     }
-
 }

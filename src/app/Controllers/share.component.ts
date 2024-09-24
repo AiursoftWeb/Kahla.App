@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
-import { AES } from 'crypto-js';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { SearchResult } from '../Models/SearchResult';
 import { uuid4 } from '../Helpers/Uuid';
@@ -113,7 +112,7 @@ export class ShareComponent implements OnInit, DoCheck {
                         // build message with new file path
                         const targetFileRef = Object.assign({}, this.fileRef);
                         targetFileRef.filePath = t.filePath;
-                        await this.uploadService.encryptThenSend(targetFileRef, conversationID, this.conversation.aesKey);
+                        await this.uploadService.encryptThenSend(targetFileRef, conversationID);
                         resolve();
                         history.back();
                         setTimeout(() => SwalToast.fire(
@@ -170,10 +169,9 @@ export class ShareComponent implements OnInit, DoCheck {
     }
 
     private sendMessage(content: string): Observable<AiurValue<Message>> {
-        const encryptedMessage = AES.encrypt(content, this.conversation.aesKey).toString();
         const messageIDArry = this.messageService.getAtIDs(content);
         return this.conversationApiService.SendMessage(this.conversation.id,
-            encryptedMessage, uuid4(), messageIDArry.slice(1));
+            content, uuid4(), messageIDArry.slice(1));
     }
 
     public search(term: string, keydown: boolean = false): void {

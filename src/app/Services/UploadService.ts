@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AES } from 'crypto-js';
 import { FilesApiService } from './Api/FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
@@ -26,7 +25,7 @@ export class UploadService {
     ) {
     }
 
-    public upload(file: File, conversationID: number, aesKey: string, fileType: FileType): Promise<AiurValue<Message>> {
+    public upload(file: File, conversationID: number, fileType: FileType): Promise<AiurValue<Message>> {
         if (!this.validateFileSize(file)) {
             Swal.fire('Error', 'File size should larger than or equal to one bit and less then or equal to 2047MB.', 'error');
             return;
@@ -55,7 +54,7 @@ export class UploadService {
                         if (response.code === 0) {
                             this.filesApiService.UploadFile(formData, response.uploadAddress).subscribe(res => {
                                 this.buildFileRef(res, fileType, file)?.then(t => {
-                                    this.encryptThenSend(t, conversationID, aesKey);
+                                    this.encryptThenSend(t, conversationID);
                                 });
                             }, () => {
                                 Swal.close();
@@ -77,7 +76,7 @@ export class UploadService {
                             } else if (res) {
                                 Swal.close();
                                 this.buildFileRef(res, fileType, file)?.then(t => {
-                                    this.encryptThenSend(t, conversationID, aesKey).then((t_) => {
+                                    this.encryptThenSend(t, conversationID).then((t_) => {
                                         resolve(t_);
                                     });
                                 });
@@ -119,29 +118,29 @@ export class UploadService {
         (<HTMLDivElement>Swal.getHtmlContainer().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
-    public encryptThenSend(fileRef: MessageFileRef, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {
+    public encryptThenSend(fileRef: MessageFileRef, conversationID: number): Promise<AiurValue<Message>> {
         if (!fileRef) {
             return null;
         }
         switch (fileRef.fileType) {
             case FileType.Image:
                 return this.sendMessage(`[img]${fileRef.filePath}|${fileRef.imgWidth}|${
-                    fileRef.imgHeight}`, conversationID, aesKey);
+                    fileRef.imgHeight}`, conversationID);
             case FileType.Video:
-                return this.sendMessage(`[video]${fileRef.filePath}`, conversationID, aesKey);
+                return this.sendMessage(`[video]${fileRef.filePath}`, conversationID);
             case FileType.File:
                 return this.sendMessage(`[file]${fileRef.filePath}|${fileRef.fileName}|${fileRef.fileSize}`,
-                    conversationID, aesKey);
+                    conversationID);
             case FileType.Audio:
-                return this.sendMessage(`[audio]${fileRef.filePath}`, conversationID, aesKey);
+                return this.sendMessage(`[audio]${fileRef.filePath}`, conversationID);
             default:
                 return null;
         }
     }
 
-    private sendMessage(message: string, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {
+    private sendMessage(message: string, conversationID: number): Promise<AiurValue<Message>> {
         return new Promise((resolve, reject) => {
-            this.conversationApiService.SendMessage(conversationID, AES.encrypt(message, aesKey).toString(), uuid4(), [])
+            this.conversationApiService.SendMessage(conversationID, message, uuid4(), [])
                 .subscribe((t) => {
                     resolve(t);
                 }, () => {

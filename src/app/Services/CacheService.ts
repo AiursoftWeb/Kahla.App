@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
 import { FriendsApiService } from './Api/FriendsApiService';
 import { map } from 'rxjs/operators';
-import { AES, enc } from 'crypto-js';
 import { DevicesApiService } from './Api/DevicesApiService';
 import { ConversationApiService } from './Api/ConversationApiService';
 import { ProbeService } from './ProbeService';
@@ -39,11 +38,6 @@ export class CacheService {
                 this.updatingConversation = false;
                 info.forEach(e => {
                     if (e.latestMessage != null) {
-                        try {
-                            e.latestMessage.content = AES.decrypt(e.latestMessage.content, e.aesKey).toString(enc.Utf8);
-                        } catch (error) {
-                            e.latestMessage.content = '';
-                        }
                         e.latestMessage.content = this.modifyMessage(e.latestMessage.content);
                     }
                     e.avatarURL = this.probeService.encodeProbeFileUrl(e.displayImagePath);

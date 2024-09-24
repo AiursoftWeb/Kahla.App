@@ -61,7 +61,7 @@
   "scripts": {
     "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "yarn prebuild && ng serve --open",
-    "prebuild": "ts-node prebuild.ts && uglifyjs node_modules/crypto-js/crypto-js.js -c -m -o src/assets/crypto-js.min.js",
+    "prebuild": "ts-node prebuild.ts",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
     "prod": "yarn prebuild && ng build --base-href / --output-hashing none",

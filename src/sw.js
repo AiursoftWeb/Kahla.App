@@ -1,5 +1,3 @@
-importScripts('/assets/crypto-js.min.js');
-
 const CACHE = 'v5';
 const UPDATE_REQUIRED = '__Update_Required__';
 const UPDATE_COMPLETED = '__Update_Completed__';
@@ -119,9 +117,7 @@ self.addEventListener('push', function (event) {
         // new message
         const title = (data.mentioned ? '[Mentioned you] ' : '') + data.message.sender.nickName;
         let message = data.message.content;
-        const aesKey = data.aesKey;
 
-        message = CryptoJS.AES.decrypt(message, aesKey).toString(CryptoJS.enc.Utf8);
         if (message.startsWith('[img]')) {
             message = 'Photo';
         } else if (message.startsWith('[video]')) {

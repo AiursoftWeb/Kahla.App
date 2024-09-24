@@ -10,7 +10,6 @@ import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';
 import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
-import { AES, enc } from 'crypto-js';
 import { MessageService } from './MessageService';
 import { HomeService } from './HomeService';
 
@@ -34,8 +33,6 @@ export class GlobalNotifyService {
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
                     const latestMsg = Object.assign({}, evt.message);
-                    latestMsg.content = this.cacheService.modifyMessage(
-                        AES.decrypt(evt.message.content, evt.aesKey).toString(enc.Utf8));
                     conversationCache.latestMessage = latestMsg;
                     if (this.messageService.conversation?.id !== evt.message.conversationId || !document.hasFocus()) {
                         conversationCache.unReadAmount++;

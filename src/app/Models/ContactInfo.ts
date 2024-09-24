@@ -8,7 +8,6 @@ export class ContactInfo {
     public conversationId: number;
     public discriminator: 'GroupConversation' | 'PrivateConversation';
     public userId: string;
-    public aesKey: string;
     public avatarURL: string;
     public muted: boolean;
     public someoneAtMe: boolean;

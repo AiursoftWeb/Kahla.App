@@ -8,7 +8,6 @@ import { Message } from '../Models/Message';
 import { ConversationApiService } from './Api/ConversationApiService';
 import { map } from 'rxjs/operators';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AES, enc } from 'crypto-js';
 import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
@@ -333,14 +332,7 @@ export class MessageService {
         return false;
     }
 
-    public modifyMessage(t: Message, decrypt: boolean = true): Message {
-        if (decrypt) {
-            try {
-                t.content = AES.decrypt(t.content, this.conversation.aesKey).toString(enc.Utf8);
-            } catch (error) {
-                t.content = '';
-            }
-        }
+    public modifyMessage(t: Message): Message {
         t.contentRaw = t.content;
         t.sendTimeDate = new Date(t.sendTime);
         t.timeStamp = t.sendTimeDate.getTime();
