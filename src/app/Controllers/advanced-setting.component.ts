@@ -45,7 +45,6 @@ export class AdvancedSettingComponent implements OnInit {
             this.updatingSetting = null;
         }
         this.updatingSetting = this.authApiService.UpdateMe({
-            themeId: this.options.themeId,
             enableEmailNotification: this.options.enableEmailNotification,
             enableEnterToSendMessage: this.options.enableEnterToSendMessage,
             enableHideMyOnlineStatus: this.options.enableHideMyOnlineStatus,

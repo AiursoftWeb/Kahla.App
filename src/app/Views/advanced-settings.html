@@ -47,7 +47,7 @@
 </div>
 <div class="menu-button toggle-setting"
      (click)="this.options.enableEmailNotification = !this.options.enableEmailNotification; updateSettings()"
-     *ngIf="this.me && me.emailConfirmed">
+     *ngIf="this.me && me.emailConfirmed && this.options">
     <div class="img">
         <i class="fas fa-envelope"></i>
     </div>
@@ -70,15 +70,3 @@
     </div>
     <div class="text">Change password</div>
 </div>
-<a class="menu-button" href="https://account.aiursoft.com/Account/Email" target="_blank">
-    <div class="img">
-        <i class="fas fa-envelope" aria-hidden="true"></i>
-    </div>
-    <div class="text">Advanced email settings</div>
-</a>
-<a class="menu-button" href="https://account.aiursoft.com/Account" target="_blank">
-    <div class="img">
-        <i class="fas fa-cogs" aria-hidden="true"></i>
-    </div>
-    <div class="text">Advanced account settings</div>
-</a>

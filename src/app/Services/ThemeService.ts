@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthApiService } from './Api/AuthApiService';
 import { Theme } from '../Models/Theme';
 import { AppOptions } from '../Models/AppOptions';
+import { CacheService } from './CacheService';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,7 @@ export class ThemeService {
 
     constructor(
         private authApiService: AuthApiService,
+        private cacheService: CacheService
     ) {
     }
 
@@ -115,6 +117,7 @@ export class ThemeService {
     }
 
     SetRemoteThemeSetting(theme: Theme): void {
+        this.cacheService.cachedData.options.themeId = theme;
         this.authApiService.UpdateMe({
             themeId: theme
         }).subscribe();
