@@ -4,13 +4,13 @@ import { ParamService } from '../ParamService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ServerConfig } from '../../Models/ServerConfig';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
     public readonly STORAGE_SERVER_CONFIG = 'serverConfig';
-    public serverConfig: ServerConfig;
 
     private _headers: HttpHeaders =
         new HttpHeaders({
@@ -23,7 +23,7 @@ export class ApiService {
     }
 
     public Get<T>(address: string): Observable<T> {
-        return this.GetByFullUrl<T>(`${this.serverConfig.domain.server}${address}`);
+        return this.GetByFullUrl<T>(`${environment.serversProvider}${address}`);
     }
 
     public GetByFullUrl<T>(address: string, withCredentials = true): Observable<T> {
@@ -34,7 +34,7 @@ export class ApiService {
     }
 
     public Post<T>(address: string, data: any): Observable<T> {
-        return this.http.post<T>(`${this.serverConfig.domain.server}${address}`, this.paramTool.param(data), {
+        return this.http.post<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
             headers: this._headers,
             withCredentials: true
         }).pipe(catchError(this.handleError));
@@ -42,5 +42,9 @@ export class ApiService {
 
     public handleError(error: any): Promise<any> {
         return Promise.reject(error);
+    }
+
+    public ServerInfo() {
+        return this.Get<ServerConfig>('');
     }
 }

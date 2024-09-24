@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    serversProvider: 'https://www.kahla.app',
+    serversProvider: 'https://kahla.aiursoft.cn/api/',
 };

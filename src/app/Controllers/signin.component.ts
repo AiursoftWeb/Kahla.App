@@ -2,8 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ApiService } from "../Services/Api/ApiService";
 import { InitService } from "../Services/InitService";
 import Swal from "sweetalert2";
-import { HttpClient } from "@angular/common/http";
-import { ServerListApiService } from "../Services/Api/ServerListApiService";
 
 @Component({
     templateUrl: "../Views/signin.html",
@@ -18,9 +16,7 @@ export class SignInComponent implements OnInit {
 
     constructor(
         public apiService: ApiService,
-        public serverListApiService: ServerListApiService,
         public initService: InitService,
-        public http: HttpClient
     ) {}
 
     ngOnInit(): void {}

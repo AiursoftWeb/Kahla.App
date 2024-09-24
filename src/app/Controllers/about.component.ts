@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Values } from '../values';
 import { ApiService } from '../Services/Api/ApiService';
 import { environment } from '../../environments/environment';
+import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/about.html',
@@ -16,7 +17,8 @@ export class AboutComponent {
     public website = environment.serversProvider;
 
     constructor(
-        public apiService: ApiService
+        public apiService: ApiService,
+        public cacheService: CacheService
     ) {
     }
 

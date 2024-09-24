@@ -25,9 +25,7 @@
     <div class="text">Open Kahla official site</div>
 </a>
 <div class="foot-text">
-    <p>Server connected: {{apiService.serverConfig.serverName}} ({{apiService.serverConfig.domain.server}})</p>
-    <p *ngIf="apiService.serverConfig.officialServer">An aiursoft official server.</p>
-    <p *ngIf="!apiService.serverConfig.officialServer">A community server.</p>
+    <p>Server connected: {{cacheService.serverConfig.serverName}} (/api/)</p>
     <p>
         <a href="https://www.aiursoft.com/docs/terms" target="_blank" rel="noopener noreferrer">Terms</a>
         |

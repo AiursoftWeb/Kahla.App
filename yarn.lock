@@ -7186,19 +7186,12 @@ rust-result@^1.0.0:
   dependencies:
     individual "^2.0.0"
 
-rxjs@7.8.1:
+rxjs@7.8.1, rxjs@^7.8.1:
   version "7.8.1"
   resolved "https://npm.aiursoft.cn/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
   integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
   dependencies:
     tslib "^2.1.0"
-
-rxjs@^6.5.5:
-  version "6.6.7"
-  resolved "https://npm.aiursoft.cn/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
-  integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
-  dependencies:
-    tslib "^1.9.0"
 
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
@@ -7747,10 +7740,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://npm.aiursoft.cn/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sweetalert2@^9.10.13:
-  version "9.17.4"
-  resolved "https://npm.aiursoft.cn/sweetalert2/-/sweetalert2-9.17.4.tgz#ab8ed721e0d1c22aef627c2116787fe99a60f679"
-  integrity sha512-T6Js/kjtGmpekE1tPT+drdgsedEnaet03mMadKUMvtBlFzVLcYy8kvIuchaQJ09rhG5bdmRRMQ2sEK0ZnHi1vg==
+sweetalert2@^11.14.1:
+  version "11.14.1"
+  resolved "https://npm.aiursoft.cn/sweetalert2/-/sweetalert2-11.14.1.tgz#aa066422e1045aa6923ae5d0ef8cad7067b23097"
+  integrity sha512-xadhfcA4STGMh8nC5zHFFWURhRpWc4zyI3GdMDFH/m3hGWZeQQNWhX9xcG4lI9gZYsi/IlazKbwvvje3juL3Xg==
 
 symbol-observable@4.0.0:
   version "4.0.0"
@@ -7920,7 +7913,7 @@ tslib@2.6.3:
   resolved "https://npm.aiursoft.cn/tslib/-/tslib-2.6.3.tgz#0438f810ad7a9edcde7a241c3d80db693c8cbfe0"
   integrity sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==
 
-tslib@^1.10.0, tslib@^1.9.0:
+tslib@^1.10.0:
   version "1.14.1"
   resolved "https://npm.aiursoft.cn/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==

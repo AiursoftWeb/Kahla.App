@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './Api/ApiService';
 import { AccessToken } from '../Models/AccessToken';
 
 @Injectable({
@@ -7,14 +6,14 @@ import { AccessToken } from '../Models/AccessToken';
 })
 export class ProbeService {
 
-    constructor(private apiService: ApiService) {
+    constructor() {
     }
 
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');
 
-        return (downloadAddr ? this.apiService.serverConfig?.probe.downloadPattern : this.apiService.serverConfig?.probe.openPattern)
+        return (downloadAddr ? "" : "") // TODO: probe
                 .replace('{0}', encoded.substring(0, index)) + '/' + encoded.substring(index + 1) +
             (accessToken ? `?token=${encodeURIComponent(accessToken)}` : '');
     }

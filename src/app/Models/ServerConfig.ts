@@ -9,11 +9,6 @@ export class ServerConfig extends AiurProtocal {
     public vapidPublicKey: string;
     public serverName: string;
     public mode: string;
-    public officialServer: boolean;
-    public domain: {
-        server: string,
-        client: string,
-    };
     public probe: {
         endpoint: string,
         openPattern: string,

@@ -86,9 +86,9 @@
     "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
     "he": "^1.2.0",
-    "rxjs": "^6.5.5",
+    "rxjs": "^7.8.1",
     "smoothscroll-polyfill": "^0.4.4",
-    "sweetalert2": "^9.10.13",
+    "sweetalert2": "^11.14.1",
     "tslib": "^1.10.0",
     "video.js": "^7.7.6",
     "zone.js": "^0.10.3"

@@ -7,12 +7,11 @@ import { DevicesApiService } from "./Api/DevicesApiService";
 import { ThemeService } from "./ThemeService";
 import Swal from "sweetalert2";
 import { ProbeService } from "./ProbeService";
-import { ServerConfig } from "../Models/ServerConfig";
 import { ApiService } from "./Api/ApiService";
-import { ServerListApiService } from "./Api/ServerListApiService";
 import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
 import { EventService } from "./EventService";
 import { GlobalNotifyService } from "./GlobalNotifyService";
+import { lastValueFrom } from "rxjs";
 
 @Injectable({
     providedIn: "root",
@@ -32,12 +31,11 @@ export class InitService {
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
         private probeService: ProbeService,
-        private serverListApiService: ServerListApiService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService
     ) {}
 
-    public init(): void {
+    public async init(): Promise<void> {
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
                 "Oops, it seems that you are opening Kahla in IE.",
@@ -48,95 +46,68 @@ export class InitService {
             );
         }
         // load server config
-        let reload = false;
-        if (localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)) {
-            this.apiService.serverConfig = JSON.parse(
-                localStorage.getItem(this.apiService.STORAGE_SERVER_CONFIG)
-            ) as ServerConfig;
-            if (
-                this.apiService.serverConfig._cacheVersion !==
-                ServerConfig.CACHE_VERSION
-            ) {
-                reload = true;
-                this.apiService.serverConfig = null;
-            }
-        } else {
-            reload = true;
-        }
-        if (reload) {
-            this.router.navigate(["/signin"], { replaceUrl: true });
-            this.serverListApiService.Servers().subscribe((servers) => {
-                let target: ServerConfig;
-                target =
-                    servers.find(
-                        (t) => t.domain.client === window.location.origin
-                    ) ?? servers[0];
-
-                if (target) {
-                    target.officialServer = true;
-                    target._cacheVersion = ServerConfig.CACHE_VERSION;
-                    this.apiService.serverConfig = target;
-                    localStorage.setItem(
-                        this.apiService.STORAGE_SERVER_CONFIG,
-                        JSON.stringify(target)
-                    );
-                }
-                this.init();
-            });
-            return;
-        }
-
+        this.cacheService.serverConfig = await lastValueFrom(
+            this.apiService.ServerInfo()
+        );
         this.cacheService.initCache();
 
-        if (this.apiService.serverConfig) {
+        if (this.cacheService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(
-                this.apiService.serverConfig.vapidPublicKey
+                this.cacheService.serverConfig.vapidPublicKey
             );
-            this.authApiService.SignInStatus().subscribe((signInStatus) => {
-                if (signInStatus.value === false) {
-                    this.router.navigate(["/signin"], { replaceUrl: true });
-                } else {
-                    if (this.router.isActive("/signin", false)) {
-                        this.router.navigate(["/home"], { replaceUrl: true });
-                    }
+            let signedIn = false;
+            try {
+                this.cacheService.cachedData.me = (
+                    await lastValueFrom(this.authApiService.Me())
+                ).value;
+                signedIn = true;
+            } catch (error) {
+                console.log(error);
+            }
 
-                    // Webpush Service
-                    if (
-                        // !this._electronService.isElectronApp && // TODO: ELECTRON
-                        navigator.serviceWorker
-                    ) {
-                        this.subscribeUser();
-                        this.updateSubscription();
-                    }
-
-                    // Init stargate push
-                    this.eventService.initPusher();
-                    this.eventService.onMessage.subscribe((t) =>
-                        this.messageService.OnMessage(t)
-                    );
-                    this.eventService.onReconnect.subscribe(() =>
-                        this.messageService.reconnectPull()
-                    );
-                    this.globalNotifyService.init();
-
-                    // Load User Info
-                    this.authApiService.Me().subscribe((p) => {
-                        if (p.code === 0) {
-                            this.cacheService.cachedData.me = p.value;
-                            this.cacheService.cachedData.me.avatarURL =
-                                this.probeService.encodeProbeFileUrl(
-                                    p.value.iconFilePath
-                                );
-                            this.themeService.ApplyThemeFromRemote(p.value);
-                            this.cacheService.updateConversation();
-                            this.cacheService.updateFriends();
-                            this.cacheService.updateRequests();
-                        }
-                    });
+            if (!signedIn) {
+                this.router.navigate(["/signin"], { replaceUrl: true });
+            } else {
+                if (this.router.isActive("/signin", false)) {
+                    this.router.navigate(["/home"], { replaceUrl: true });
                 }
-            });
+
+                // Webpush Service
+                if (
+                    // !this._electronService.isElectronApp && // TODO: ELECTRON
+                    navigator.serviceWorker
+                ) {
+                    this.subscribeUser();
+                    this.updateSubscription();
+                }
+
+                // Init stargate push
+                this.eventService.initPusher();
+                this.eventService.onMessage.subscribe((t) =>
+                    this.messageService.OnMessage(t)
+                );
+                this.eventService.onReconnect.subscribe(() =>
+                    this.messageService.reconnectPull()
+                );
+                this.globalNotifyService.init();
+
+                // Load User Info
+                this.cacheService.cachedData.me.avatarURL =
+                    this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
+                this.themeService.ApplyThemeFromRemote(
+                    this.cacheService.cachedData.me
+                );
+                this.cacheService.updateConversation();
+                this.cacheService.updateFriends();
+                this.cacheService.updateRequests();
+            }
         } else {
             this.router.navigate(["/signin"], { replaceUrl: true });
+            Swal.fire(
+                "Server is not available",
+                "Please try again later.",
+                "error"
+            );
         }
     }
 

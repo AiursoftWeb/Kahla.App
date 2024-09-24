@@ -8,6 +8,7 @@ import { ConversationApiService } from './Api/ConversationApiService';
 import { ProbeService } from './ProbeService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ThemeService } from './ThemeService';
+import { ServerConfig } from '../Models/ServerConfig';
 
 @Injectable()
 export class CacheService {
@@ -15,6 +16,7 @@ export class CacheService {
     public totalUnread = 0;
     public totalRequests = 0;
     public updatingConversation = false;
+    public serverConfig: ServerConfig;
 
     constructor(
         private friendsApiService: FriendsApiService,

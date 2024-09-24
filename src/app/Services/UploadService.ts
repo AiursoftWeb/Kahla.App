@@ -115,8 +115,8 @@ export class UploadService {
     }
 
     private updateAlertProgress(progress: number): void {
-        (<HTMLProgressElement>Swal.getContent().querySelector('#uploadProgress')).value = progress;
-        (<HTMLDivElement>Swal.getContent().querySelector('#progressText')).innerText = `${progress}%`;
+        (<HTMLProgressElement>Swal.getHtmlContainer().querySelector('#uploadProgress')).value = progress;
+        (<HTMLDivElement>Swal.getHtmlContainer().querySelector('#progressText')).innerText = `${progress}%`;
     }
 
     public encryptThenSend(fileRef: MessageFileRef, conversationID: number, aesKey: string): Promise<AiurValue<Message>> {

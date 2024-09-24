@@ -81,7 +81,7 @@ export class SettingsComponent implements OnInit {
 
     private callLogOffAPI(deviceID: number): void {
         const _this = this;
-        this.authApiService.LogOff(Number(deviceID)).subscribe({
+        this.authApiService.Signout(Number(deviceID)).subscribe({
             next() {
                 _this.initSerivce.destroy();
                 _this.router.navigate(['/signin'], {replaceUrl: true});

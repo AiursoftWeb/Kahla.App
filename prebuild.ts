@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Observable } from 'rxjs/';
+import { Observable } from 'rxjs';
 
 const exec = require('child_process').exec;
 
