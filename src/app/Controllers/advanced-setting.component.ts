@@ -54,7 +54,7 @@ export class AdvancedSettingComponent implements OnInit {
             .subscribe(res => {
                 this.updatingSetting = null;
 
-                if (res.code === 0) {
+                if (res.code > 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.me);
                     this.cacheService.cachedData.options = Object.assign({}, this.options);
                     this.cacheService.saveCache();

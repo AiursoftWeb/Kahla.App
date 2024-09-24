@@ -59,7 +59,7 @@ export class UserDetailComponent implements OnInit {
             bio: this.user.bio,
         })
             .subscribe((response) => {
-                if (response.code === 0) {
+                if (response.code > 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.user);
                     this.cacheService.saveCache();
                     this.router.navigate(['/home']);
