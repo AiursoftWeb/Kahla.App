@@ -6,7 +6,6 @@ import { CacheService } from "./CacheService";
 import { DevicesApiService } from "./Api/DevicesApiService";
 import { ThemeService } from "./ThemeService";
 import Swal from "sweetalert2";
-import { ProbeService } from "./ProbeService";
 import { ApiService } from "./Api/ApiService";
 import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
 import { EventService } from "./EventService";
@@ -30,7 +29,7 @@ export class InitService {
         private cacheService: CacheService,
         private themeService: ThemeService,
         private devicesApiService: DevicesApiService,
-        private probeService: ProbeService,
+        // private probeService: ProbeService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService
     ) {}
@@ -93,8 +92,8 @@ export class InitService {
                 this.globalNotifyService.init();
 
                 // Load User Info
-                this.cacheService.cachedData.me.avatarURL =
-                    this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
+                // this.cacheService.cachedData.me.avatarURL =
+                //     this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
                 this.themeService.ApplyThemeFromRemote(
                     this.cacheService.cachedData.me
                 );
