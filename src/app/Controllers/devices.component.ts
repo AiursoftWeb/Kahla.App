@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { CacheService } from '../Services/CacheService';
-import Swal from 'sweetalert2';
-import { Device } from '../Models/Device';
-import { DevicesApiService } from '../Services/Api/DevicesApiService';
-import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
-import { InitService } from '../Services/InitService';
+import { Component, OnInit } from "@angular/core";
+import { CacheService } from "../Services/CacheService";
+import Swal from "sweetalert2";
+import { Device } from "../Models/Device";
+import { DevicesApiService } from "../Services/Api/DevicesApiService";
+import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
+import { InitService } from "../Services/InitService";
+import { lastValueFrom } from "rxjs";
+import { showCommonErrorDialog } from "../Helpers/CommonErrorDialog";
 
 @Component({
-    templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.scss',
-        '../Styles/toggleButton.scss']
+    templateUrl: "../Views/devices.html",
+    styleUrls: ["../Styles/menu.scss", "../Styles/toggleButton.scss"],
 })
 export class DevicesComponent implements OnInit {
     constructor(
         public cacheService: CacheService,
         public devicesApiService: DevicesApiService,
-        public initService: InitService,
-    ) {
-    }
+        public initService: InitService
+    ) {}
 
     public webPushEnabled: boolean;
 
@@ -31,56 +31,68 @@ export class DevicesComponent implements OnInit {
     public detail(device: Device): void {
         if (device !== null) {
             Swal.fire({
-                title: 'Device detail',
-                html: '<table style="margin: auto;"><tr><th>Add IP</th><td>' + device.ipAddress +
-                    '</td></tr><tr><th>Add time</th><td>' + new Date(device.addTime).toLocaleString() +
-                    '</td></tr></table>'
+                title: "Device detail",
+                html:
+                    '<table style="margin: auto;"><tr><th>Add IP</th><td>' +
+                    device.ipAddress +
+                    "</td></tr><tr><th>Add time</th><td>" +
+                    new Date(device.addTime).toLocaleString() +
+                    "</td></tr></table>",
             });
         }
     }
 
     public webpushSupported(): boolean {
-        return 'Notification' in window && 'serviceWorker' in navigator; // TODO: ELECTRON
+        return "Notification" in window && "serviceWorker" in navigator; // TODO: ELECTRON
     }
 
-    public testPush(): void {
-        this.devicesApiService.PushTestMessage().subscribe(t => {
-            if (t.code === 0) {
-                Swal.fire(
-                    'Successfully sent!',
-                    t.message,
-                    'info'
-                );
-            }
-        });
+    public async testPush() {
+        try {
+            const result = await lastValueFrom(
+                this.devicesApiService.PushTestMessage()
+            );
+            Swal.fire("Successfully sent!", result.message, "info");
+        } catch (err) {
+            showCommonErrorDialog(err);
+        }
     }
 
     public getWebPushStatus(): boolean {
-        if (!localStorage.getItem('setting-pushSubscription')) {
+        if (!localStorage.getItem("setting-pushSubscription")) {
             return true;
         }
-        const status: PushSubscriptionSetting = JSON.parse(localStorage.getItem('setting-pushSubscription'));
+        const status: PushSubscriptionSetting = JSON.parse(
+            localStorage.getItem("setting-pushSubscription")
+        );
         return status.enabled;
     }
 
     public setWebPushStatus(value: boolean) {
-        const status: PushSubscriptionSetting = localStorage.getItem('setting-pushSubscription') ?
-            JSON.parse(localStorage.getItem('setting-pushSubscription')) :
-            {
-                enabled: value,
-                deviceId: 0
-            };
+        const status: PushSubscriptionSetting = localStorage.getItem(
+            "setting-pushSubscription"
+        )
+            ? JSON.parse(localStorage.getItem("setting-pushSubscription"))
+            : {
+                  enabled: value,
+                  deviceId: 0,
+              };
         status.enabled = value;
-        localStorage.setItem('setting-pushSubscription', JSON.stringify(status));
+        localStorage.setItem(
+            "setting-pushSubscription",
+            JSON.stringify(status)
+        );
         this.webPushEnabled = value;
         this.initService.subscribeUser();
     }
 
     public getElectronNotify(): boolean {
-        return localStorage.getItem('setting-electronNotify') !== 'false';
+        return localStorage.getItem("setting-electronNotify") !== "false";
     }
 
     public setElectronNotify(value: boolean) {
-        localStorage.setItem('setting-electronNotify', value ? 'true' : 'false');
+        localStorage.setItem(
+            "setting-electronNotify",
+            value ? "true" : "false"
+        );
     }
 }

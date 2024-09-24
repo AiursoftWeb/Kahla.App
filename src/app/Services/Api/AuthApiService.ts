@@ -31,15 +31,13 @@ export class AuthApiService {
 
     public ChangePassword(
         oldPassword: string,
-        newPassword: string,
-        repeatPassword: string
+        newPassword: string
     ): Observable<AiurProtocal> {
         return this.apiService.Post(
-            AuthApiService.serverPath + "/ChangePassword",
+            AuthApiService.serverPath + "/change-password",
             {
                 OldPassword: oldPassword,
                 NewPassword: newPassword,
-                RepeatPassword: repeatPassword,
             }
         );
     }
