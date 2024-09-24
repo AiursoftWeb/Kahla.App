@@ -3,36 +3,20 @@
         <div class="auth-header">
             <img src="assets/144x144.png">
             <h1 i18n="@@Kahla">Kahla</h1>
-            <h3 *ngIf="changingServer">Select server</h3>
         </div>
-        <div class="auth-content" *ngIf="!changingServer && apiService.serverConfig">
-            <a class="actionLink" href="javascript:"
-               (click)="changingServer = true">Server: {{this.apiService.serverConfig.serverName}}</a>
-            <p *ngIf="!this.apiService.serverConfig.officialServer" class="text-warn">
-                (Not an official server)
-            </p>
-            <div class="button white login"
-                 (click)="goLogin(this.apiService.serverConfig.domain.server + '/Auth/Oauth')">
+        <div class="auth-content">
+            <input type="text" [(ngModel)]="userName" class="inputAddr" placeholder="UserName"
+            (keyup.enter)="login()"/>
+
+            <input type="password" [(ngModel)]="password" class="inputAddr" placeholder="Password"
+            (keyup.enter)="login()"/>
+            <div class="button white login" (click)="login()">
                 Sign in
             </div>
-            <div class="button white login"
-                 (click)="goLogin(this.apiService.serverConfig.domain.server + '/Auth/GoRegister')">
+            <div class="button white login">
                 Register
             </div>
-            <a class="actionLink" href="https://gateway.aiursoft.com/Password/ForgotpasswordFor"
-               target="_blank" rel="noopener noreferrer">Forgot password?</a>
-        </div>
-
-        <div class="auth-content" *ngIf="changingServer">
-            <div class="button white login" (click)="clearCommunityServerData()">
-                Aiursoft official server
-            </div>
-            <div class="split-bar">community server</div>
-            <input type="text" [(ngModel)]="serverAddr" class="inputAddr" placeholder="https://example.com"
-                   (keyup.enter)="connectCommunity()"/>
-            <button class="button white login" (click)="connectCommunity()"><i class="fas fa-chevron-right"></i>
-                Connect
-            </button>
+            <a class="actionLink" href="javascript:void(0)" (click)="forgetPassword()">Forgot password?</a>
         </div>
     </div>
 </div>
