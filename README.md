@@ -63,15 +63,9 @@ npm start
 
 ### How to run as desktop app
 
-**Currently Electron is out of support, we cannot g**
+Currently, electron is out of support. We are working on a new desktop app based on tauri.
 
-Currently, we are using [Electron](https://electron.atom.io/) to target Windows, Mac and Linux platform.
-
-Supports Windows 7+, Linux and macOS 10.9+.
-
-```bash
-npm run electron
-```
+You can also use the PWA feature of the browser to install Kahla as a desktop app.
 
 ## How to publish
 
@@ -80,20 +74,6 @@ npm run electron
 ```bash
 yarn run prod
 ```
-
-### How to publish for electron production version
-
-Please view [here](https://electron.atom.io/docs/tutorial/application-distribution/) for Electron distribution document.
-
-Please view [here](https://www.electron.build/) for Electron builder document.
-
-Run:
-
-```bash
-./publish.sh
-```
-
-And you will publish the distributable version of Kahla desktop.
 
 ## Document
 

@@ -3,53 +3,6 @@
   "version": "4.5.0",
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <service@aiursoft.com> (https://www.aiursoft.com/)",
-  "build": {
-    "appId": "com.aiursoft.kahla",
-    "productName": "Kahla",
-    "copyright": "Copyright © 2019 Aiursoft",
-    "directories": {
-      "app": "www"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
-      "license": "LICENSE",
-      "artifactName": "${productName}.Setup.${version}.${ext}"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis"
-        },
-        {
-          "target": "zip"
-        }
-      ],
-      "extraFiles": [
-        {
-          "from": "build/windows",
-          "to": "./"
-        }
-      ]
-    },
-    "mac": {
-      "target": "dmg"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "deb"
-        },
-        {
-          "target": "rpm"
-        },
-        {
-          "target": "tar.gz"
-        }
-      ]
-    }
-  },
   "contributors": [
     "Anduin@aiursoft.com",
     "xxyzz@aiursoft.com",
@@ -59,13 +12,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "electron": "ng build --base-href ./ && electron ./www/index.js",
     "start": "ng serve --open",
     "build": "ng build --base-href /",
     "lint": "ng lint --type-check && tsc",
     "prod": "ng build --base-href / --output-hashing none",
-    "prod-electron": "ng build --base-href ./",
-    "pack": "electron-builder -p never",
     "prod-zh": "ng build --base-href / --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
   },
   "dependencies": {
@@ -87,7 +37,6 @@
     "rxjs": "^7.8.1",
     "smoothscroll-polyfill": "^0.4.4",
     "sweetalert2": "^11.14.1",
-    "tslib": "^1.10.0",
     "video.js": "^7.7.6",
     "zone.js": "^0.15.0"
   },
@@ -100,8 +49,6 @@
     "@angular/language-service": "18.2.5",
     "@types/node": "^22.6.1",
     "codelyzer": "^6.0.2",
-    "electron": "^32.1.2",
-    "electron-builder": "^25.0.5",
     "typescript": "~5.5.0"
   },
   "main": "index.js",
