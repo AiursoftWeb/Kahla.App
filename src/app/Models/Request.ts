@@ -1,11 +1,11 @@
 ﻿import { KahlaUser } from './KahlaUser';
 
-export class Request {
-    public id: number;
-    public creatorId: string;
-    public creator: KahlaUser;
-    public targetId: string;
-    public target: KahlaUser;
-    public createTime: Date;
-    public completed: boolean;
+export interface Request {
+    id: number;
+    creatorId: string;
+    creator: KahlaUser;
+    targetId: string;
+    target: KahlaUser;
+    createTime: Date;
+    completed: boolean;
 }

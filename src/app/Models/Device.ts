@@ -1,7 +1,7 @@
-export class Device {
-    public id: number;
-    public name: string;
-    public ipAddress: string;
-    public userID: string;
-    public addTime: string;
+export interface Device {
+    id: number;
+    name: string;
+    ipAddress: string;
+    userID: string;
+    addTime: string;
 }

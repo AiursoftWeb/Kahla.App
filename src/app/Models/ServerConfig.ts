@@ -1,15 +1,15 @@
 import { AiurProtocal } from './AiurProtocal';
 
-export class ServerConfig extends AiurProtocal {
-    public static readonly CACHE_VERSION = 1;
+export interface ServerConfig extends AiurProtocal {
+    // public static readonly CACHE_VERSION = 1;
 
-    public _cacheVersion: number;
-    public autoAcceptRequests: boolean;
-    public apiVersion: string;
-    public vapidPublicKey: string;
-    public serverName: string;
-    public mode: string;
-    public probe: {
+    // _cacheVersion: number;
+    autoAcceptRequests: boolean;
+    apiVersion: string;
+    vapidPublicKey: string;
+    serverName: string;
+    mode: string;
+    probe: {
         endpoint: string,
         openPattern: string,
         downloadPattern: string,

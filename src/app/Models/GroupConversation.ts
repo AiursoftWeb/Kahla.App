@@ -1,9 +1,9 @@
 import { Conversation } from './Conversation';
 
-export class GroupConversation extends Conversation {
-    public groupName: string;
-    public groupImagePath: string;
-    public hasPassword: boolean;
-    public ownerId: string;
-    public listInSearchResult: boolean;
+export interface GroupConversation extends Conversation {
+    groupName: string;
+    groupImagePath: string;
+    hasPassword: boolean;
+    ownerId: string;
+    listInSearchResult: boolean;
 }

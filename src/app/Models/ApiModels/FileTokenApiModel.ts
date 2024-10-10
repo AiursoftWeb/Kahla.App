@@ -1,5 +1,5 @@
 import { AiurValue } from '../AiurValue';
 
-export class FileTokenApiModel extends AiurValue<string> {
-    public uploadAddress: string;
+export interface FileTokenApiModel extends AiurValue<string> {
+    uploadAddress: string;
 }

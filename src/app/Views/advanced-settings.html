@@ -42,6 +42,16 @@
     <input id="toggleList" class="tgl" type="checkbox" [checked]="this.options.listInSearchResult" disabled="disabled"/>
     <label for="toggleList" class="tgl-btn"></label>
 </div>
+<div class="menu-button toggle-setting"
+     (click)="this.options.allowHardInvitation = !this.options.allowHardInvitation; updateSettings()"
+     *ngIf="this.me">
+    <div class="img">
+        <i class="fas fa-lock"></i>
+    </div>
+    <div class="text">Private Account</div>
+    <input id="toggleList" class="tgl" type="checkbox" [checked]="this.options.allowHardInvitation" disabled="disabled"/>
+    <label for="toggleList" class="tgl-btn"></label>
+</div>
 <div class="menu-header">
     Notification
 </div>

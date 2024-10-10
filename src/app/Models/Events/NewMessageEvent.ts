@@ -1,9 +1,9 @@
 ﻿import { AiurEvent } from './AiurEvent';
 import { Message } from '../Message';
 
-export class NewMessageEvent extends AiurEvent {
-    public message: Message;
-    public previousMessageId: string;
-    public muted: boolean;
-    public mentioned: boolean;
+export interface NewMessageEvent extends AiurEvent {
+    message: Message;
+    previousMessageId: string;
+    muted: boolean;
+    mentioned: boolean;
 }

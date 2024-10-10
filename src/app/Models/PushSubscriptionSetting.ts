@@ -1,4 +1,4 @@
-export class PushSubscriptionSetting {
-    public deviceId: number;
-    public enabled: boolean;
+export interface PushSubscriptionSetting {
+    deviceId: number;
+    enabled: boolean;
 }

@@ -9,4 +9,5 @@ export interface MeApiModel extends AiurProtocal {
     enableEnterToSendMessage: boolean;
     enableHideMyOnlineStatus: boolean;
     listInSearchResult: boolean;
+    allowHardInvitation: boolean;
 }

@@ -1,10 +1,10 @@
-export class GroupsResult {
-    public imagePath: string;
-    public name: string;
-    public hasPassword: boolean;
-    public ownerId: string;
-    public id: number;
-    public hasTimer: boolean;
-    public conversationCreateTime: Date;
-    public avatarURL: string;
+export interface GroupsResult {
+    imagePath: string;
+    name: string;
+    hasPassword: boolean;
+    ownerId: string;
+    id: number;
+    hasTimer: boolean;
+    conversationCreateTime: Date;
+    avatarURL: string;
 }

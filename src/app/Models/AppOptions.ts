@@ -4,4 +4,5 @@ export interface AppOptions {
     enableEnterToSendMessage: boolean;
     enableHideMyOnlineStatus: boolean;
     listInSearchResult: boolean;
+    allowHardInvitation: boolean
 }

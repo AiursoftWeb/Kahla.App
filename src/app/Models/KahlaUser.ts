@@ -1,14 +1,14 @@
-﻿export class KahlaUser {
-    public accountCreateTime: Date;
-    public avatarURL: string;
-    public bio: string;
-    public email: string;
-    public emailConfirmed: boolean;
-    public iconFilePath: string;
-    public id: string;
-    public nickName: string;
-    public preferedLanguage: string;
-    public sex: string;
-    public listInSearchResult: boolean;
-    public isOnline?: boolean;
+﻿export interface KahlaUser {
+    accountCreateTime: Date;
+    avatarURL: string;
+    bio: string;
+    email: string;
+    emailConfirmed: boolean;
+    iconFilePath: string;
+    id: string;
+    nickName: string;
+    preferedLanguage: string;
+    sex: string;
+    listInSearchResult: boolean;
+    isOnline?: boolean;
 }

@@ -1,5 +1,5 @@
 ﻿import { AiurProtocal } from './AiurProtocal';
 
-export class AiurCollection<T> extends AiurProtocal {
-    public items: T[];
+export interface AiurCollection<T> extends AiurProtocal {
+    items: T[];
 }

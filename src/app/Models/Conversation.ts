@@ -1,13 +1,13 @@
 ﻿import { UserGroupRelation } from './UserGroupRelation';
 
-export class Conversation {
-    public id: number;
-    public discriminator: 'GroupConversation' | 'PrivateConversation';
-    public conversationCreateTime: Date;
-    public displayName: string;
-    public displayImagePath: string;
-    public anotherUserId: string;
-    public users: UserGroupRelation[];
-    public avatarURL: string;
-    public maxLiveSeconds: number;
+export interface Conversation {
+    id: number;
+    discriminator: 'GroupConversation' | 'PrivateConversation';
+    conversationCreateTime: Date;
+    displayName: string;
+    displayImagePath: string;
+    anotherUserId: string;
+    users: UserGroupRelation[];
+    avatarURL: string;
+    maxLiveSeconds: number;
 }

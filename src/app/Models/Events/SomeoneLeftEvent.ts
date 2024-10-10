@@ -1,7 +1,7 @@
 import { AiurEvent } from './AiurEvent';
 import { KahlaUser } from '../KahlaUser';
 
-export class SomeoneLeftEvent extends AiurEvent {
-    public leftUser: KahlaUser;
-    public conversationId: number;
+export interface SomeoneLeftEvent extends AiurEvent {
+    leftUser: KahlaUser;
+    conversationId: number;
 }

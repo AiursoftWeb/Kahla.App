@@ -1,4 +1,4 @@
-﻿export class AiurProtocal {
-    public code: number;
-    public message: string;
+﻿export interface AiurProtocal {
+    code: number;
+    message: string;
 }
