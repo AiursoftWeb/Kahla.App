@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/";
-import { AiurProtocal } from "../../Models/AiurProtocal";
+import { AiurProtocol } from "../../Models/AiurProtocal";
 import { ApiService } from "./ApiService";
 import { MeApiModel } from "../../Models/ApiModels/MeApiModel";
 
@@ -23,7 +23,7 @@ export class AuthApiService {
         enableHideMyOnlineStatus?: boolean;
         listInSearchResult?: boolean;
         allowHardInvitation ?: boolean;
-    }): Observable<AiurProtocal> {
+    }): Observable<AiurProtocol> {
         return this.apiService.Patch(
             AuthApiService.serverPath + "/update-me",
             updateModel
@@ -33,7 +33,7 @@ export class AuthApiService {
     public ChangePassword(
         oldPassword: string,
         newPassword: string
-    ): Observable<AiurProtocal> {
+    ): Observable<AiurProtocol> {
         return this.apiService.Post(
             AuthApiService.serverPath + "/change-password",
             {
@@ -43,27 +43,27 @@ export class AuthApiService {
         );
     }
 
-    public SendMail(email: string): Observable<AiurProtocal> {
+    public SendMail(email: string): Observable<AiurProtocol> {
         return this.apiService.Post(AuthApiService.serverPath + "/SendEmail", {
             email: email,
         });
     }
 
-    public SignIn(email: string, password: string): Observable<AiurProtocal> {
+    public SignIn(email: string, password: string): Observable<AiurProtocol> {
         return this.apiService.Post(AuthApiService.serverPath + "/SignIn", {
             Email: email,
             Password: password,
         });
     }
 
-    public Register(email: string, password: string): Observable<AiurProtocal> {
+    public Register(email: string, password: string): Observable<AiurProtocol> {
         return this.apiService.Post(AuthApiService.serverPath + "/Register", {
             Email: email,
             Password: password,
         });
     }
 
-    public Signout(deviceId: number): Observable<AiurProtocal> {
+    public Signout(deviceId: number): Observable<AiurProtocol> {
         return this.apiService.Post(AuthApiService.serverPath + "/Signout", {
             DeviceId: deviceId,
         });

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AiurProtocal } from '../Models/AiurProtocal';
+import { AiurProtocol } from '../Models/AiurProtocal';
 import { AiurCollection } from '../Models/AiurCollection';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
@@ -64,7 +64,7 @@ export class UserDetailComponent implements OnInit {
                     this.cacheService.saveCache();
                     this.router.navigate(['/home']);
                 } else {
-                    Swal.fire('Error', (response as AiurProtocal as AiurCollection<string>).items.join('<br/>'), 'error');
+                    Swal.fire('Error', (response as AiurProtocol as AiurCollection<string>).items.join('<br/>'), 'error');
                 }
                 saveButton.textContent = 'Save';
             });

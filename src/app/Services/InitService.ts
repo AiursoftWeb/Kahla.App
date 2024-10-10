@@ -57,7 +57,7 @@ export class InitService {
             try {
                 const me_resp = await lastValueFrom(this.authApiService.Me());
                 this.cacheService.cachedData.me = me_resp.user;
-                this.cacheService.cachedData.options = {...me_resp};
+                this.cacheService.cachedData.options = me_resp.privateSettings;
                 signedIn = true;
             } catch (error) {
                 console.log(error);

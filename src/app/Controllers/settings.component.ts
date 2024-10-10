@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit {
             this.authApiService.Me().subscribe(p => {
                 if (p.code === 0) {
                     this.cacheService.cachedData.me = p.user;
-                    this.cacheService.cachedData.options = {...p};
+                    this.cacheService.cachedData.options = p.privateSettings;
                     // this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                     this.cacheService.saveCache();
                 }

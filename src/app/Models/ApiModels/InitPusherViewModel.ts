@@ -1,6 +1,6 @@
-﻿import { AiurProtocal } from "../AiurProtocal";
+﻿import { AiurProtocol } from "../AiurProtocal";
 
-export interface InitWebsocketViewModel extends AiurProtocal {
+export interface InitWebsocketViewModel extends AiurProtocol {
     otp: string;
     otpValidTo: string;
     webSocketEndpoint: string;

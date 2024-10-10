@@ -33,7 +33,7 @@ export class AdvancedSettingComponent implements OnInit {
         } else {
             this.authApiService.Me().subscribe(p => {
                 this.me = p.user;
-                this.options = {...p};
+                this.options = p.privateSettings;
                 // this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
             });
         }

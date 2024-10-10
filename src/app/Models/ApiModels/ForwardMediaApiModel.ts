@@ -1,6 +1,6 @@
-import { AiurProtocal } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocal';
 
-export interface ForwardMediaApiModel extends AiurProtocal {
+export interface ForwardMediaApiModel extends AiurProtocol {
     siteName: string;
     filePath: string;
     internetPath: string;

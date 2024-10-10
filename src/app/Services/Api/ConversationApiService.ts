@@ -3,7 +3,7 @@ import { ApiService } from './ApiService';
 import { Observable } from 'rxjs/';
 import { AiurCollection } from '../../Models/AiurCollection';
 import { Message } from '../../Models/Message';
-import { AiurProtocal } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
 import { Conversation } from '../../Models/Conversation';
 import { ContactInfo } from '../../Models/ContactInfo';
@@ -47,7 +47,7 @@ export class ConversationApiService {
         return this.apiService.Get(ConversationApiService.serverPath + `/ConversationDetail/${id}`);
     }
 
-    public UpdateMessageLifeTime(id: number, newLifeTime: number): Observable<AiurProtocal> {
+    public UpdateMessageLifeTime(id: number, newLifeTime: number): Observable<AiurProtocol> {
         return this.apiService.Post(ConversationApiService.serverPath + `/UpdateMessageLifeTime/`, {
             Id: id,
             NewLifeTime: newLifeTime

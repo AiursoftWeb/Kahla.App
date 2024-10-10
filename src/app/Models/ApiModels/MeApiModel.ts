@@ -1,13 +1,9 @@
-import { AiurProtocal } from "../AiurProtocal";
+import { AiurProtocol } from "../AiurProtocal";
+import { AppOptions } from "../AppOptions";
 import { KahlaUser } from "../KahlaUser";
 
-export interface MeApiModel extends AiurProtocal {
+export interface MeApiModel extends AiurProtocol {
     user: KahlaUser;
-    
-    themeId: number;
-    enableEmailNotification: boolean;
-    enableEnterToSendMessage: boolean;
-    enableHideMyOnlineStatus: boolean;
-    listInSearchResult: boolean;
-    allowHardInvitation: boolean;
+
+    privateSettings: AppOptions;
 }

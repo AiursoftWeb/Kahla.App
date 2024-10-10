@@ -1,8 +1,8 @@
-import { AiurProtocal } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocal';
 import { KahlaUser } from '../KahlaUser';
 import { Request } from '../Request';
 
-export interface UserDetailViewModel extends AiurProtocal {
+export interface UserDetailViewModel extends AiurProtocol {
     user: KahlaUser;
     areFriends: boolean;
     conversationId: number;

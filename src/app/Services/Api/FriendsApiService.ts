@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
 import { AiurCollection } from '../../Models/AiurCollection';
-import { AiurProtocal } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
 import { Request } from '../../Models/Request';
 import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
@@ -22,7 +22,7 @@ export class FriendsApiService {
         return this.apiService.Get(FriendsApiService.serverPath + '/Mine');
     }
 
-    public DeleteFriend(id: string): Observable<AiurProtocal> {
+    public DeleteFriend(id: string): Observable<AiurProtocol> {
         return this.apiService.Post(FriendsApiService.serverPath + `/DeleteFriend/${id}`, {});
     }
 
@@ -30,7 +30,7 @@ export class FriendsApiService {
         return this.apiService.Post(FriendsApiService.serverPath + `/CreateRequest/${id}`, {});
     }
 
-    public CompleteRequest(id: number, accept: boolean): Observable<AiurProtocal> {
+    public CompleteRequest(id: number, accept: boolean): Observable<AiurProtocol> {
         return this.apiService.Post(FriendsApiService.serverPath + `/CompleteRequest/${id}`, {
             accept: accept
         });

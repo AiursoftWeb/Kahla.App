@@ -1,6 +1,6 @@
-import { AiurProtocal } from './AiurProtocal';
+import { AiurProtocol } from './AiurProtocal';
 
-export interface ServerConfig extends AiurProtocal {
+export interface ServerConfig extends AiurProtocol {
     // public static readonly CACHE_VERSION = 1;
 
     // _cacheVersion: number;

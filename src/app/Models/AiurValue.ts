@@ -1,5 +1,5 @@
-import { AiurProtocal } from './AiurProtocal';
+import { AiurProtocol } from './AiurProtocal';
 
-export interface AiurValue<T> extends AiurProtocal {
+export interface AiurValue<T> extends AiurProtocol {
     value: T;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "./ApiService";
 import { AiurCollection } from "../../Models/AiurCollection";
-import { AiurProtocal } from "../../Models/AiurProtocal";
+import { AiurProtocol } from "../../Models/AiurProtocal";
 import { AiurValue } from "../../Models/AiurValue";
 import { Device } from "../../Models/Device";
 import { Observable } from "rxjs/";
@@ -47,7 +47,7 @@ export class DevicesApiService {
         );
     }
 
-    public DropDevice(deviceId: number): Observable<AiurProtocal> {
+    public DropDevice(deviceId: number): Observable<AiurProtocol> {
         return this.apiService.Post(
             DevicesApiService.serverPath + `/drop-device/${deviceId}`,
             {}
@@ -58,7 +58,7 @@ export class DevicesApiService {
         return this.apiService.Get(DevicesApiService.serverPath + "/my-devices");
     }
 
-    public PushTestMessage(): Observable<AiurProtocal> {
+    public PushTestMessage(): Observable<AiurProtocol> {
         return this.apiService.Post(
             DevicesApiService.serverPath + "/push-test-message",
             {}

@@ -1,6 +1,6 @@
-import { AiurProtocal } from './AiurProtocal';
+import { AiurProtocol } from './AiurProtocal';
 
-export interface VersionViewModel extends AiurProtocal {
+export interface VersionViewModel extends AiurProtocol {
     latestVersion: string;
     downloadAddress: string;
 }
