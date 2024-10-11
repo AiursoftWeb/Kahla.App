@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactInfo } from '../Models/ContactInfo';
+import { ThreadInfo } from '../Models/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
@@ -36,7 +36,7 @@ export class ConversationsComponent implements OnInit {
         }, 0);
     }
 
-    public detail(info: ContactInfo): void {
+    public detail(info: ThreadInfo): void {
         if (info.discriminator === 'GroupConversation') {
             this.router.navigate(['/group', info.conversationId]);
         } else {
@@ -44,7 +44,7 @@ export class ConversationsComponent implements OnInit {
         }
     }
 
-    public current(info: ContactInfo): boolean {
+    public current(info: ThreadInfo): boolean {
         return new RegExp(`^.+\/${info.conversationId}(\/.*)*$`, 'g').test(this.router.url);
     }
 

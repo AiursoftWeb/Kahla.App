@@ -37,7 +37,7 @@
     <div class="result" *ngFor="let user of results.users" routerLink="/user/{{ user.id }}">
         <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=128&square=true"/>
         <div class="sender">
-            {{user.nickName}}
+            {{user.user.nickName}}
         </div>
     </div>
     <div *ngIf="results.usersCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
@@ -57,7 +57,7 @@
 </div>
 
 <div class="buttons"
-    *ngIf="results && ((showUsers && results.usersCount >= 0 && results.users.length < results.usersCount) || (!showUsers && results.groupsCount >= 0 && results.groups.length < results.groupsCount))">
+    *ngIf="results && ((showUsers && results.totalUsersCount >= 0 && results.users.length < results.totalUsersCount) || (!showUsers && results.totalThreadsCount >= 0 && results.threads.length < results.totalThreadsCount))">
     <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 1)">Load More</button>
     <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Loading</button>
 </div>

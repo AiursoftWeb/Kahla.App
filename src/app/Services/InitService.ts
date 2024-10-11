@@ -98,7 +98,6 @@ export class InitService {
                 );
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
-                this.cacheService.updateRequests();
             }
         } else {
             this.router.navigate(["/signin"], { replaceUrl: true });

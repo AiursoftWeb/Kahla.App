@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { EventService } from './EventService';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import { EventType } from '../Models/Events/EventType';
-import { NewFriendRequestEvent } from '../Models/Events/NewFriendRequestEvent';
 import Swal from 'sweetalert2';
 import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
-import { FriendsChangedEvent } from '../Models/Events/FriendsChangedEvent';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';
@@ -57,36 +55,12 @@ export class GlobalNotifyService {
                 }
                 break;
             }
-            case EventType.NewFriendRequest: {
-                if (fireAlert && (<NewFriendRequestEvent>ev).request.creatorId !== this.cacheService.cachedData.me.id) {
-                    Swal.fire('Friend request', 'New friend request from ' + (<NewFriendRequestEvent>ev).request.creator.nickName, 'info');
-                }
-                this.cacheService.updateRequests();
-                break;
-            }
             case EventType.FriendDeletedEvent: {
                 if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
                     Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
                 }
                 this.cacheService.updateConversation();
                 this.cacheService.updateFriends();
-                break;
-            }
-            case EventType.FriendsChangedEvent: {
-                const evt = <FriendsChangedEvent>ev;
-                this.cacheService.updateRequests();
-                if (evt.result) {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
-                        Swal.fire('Friend request accepted', 'You and ' + evt.createdConversation.displayName +
-                            ' are now friends!', 'success');
-                    }
-                    this.cacheService.updateConversation();
-                    this.cacheService.updateFriends();
-                } else {
-                    if (fireAlert && evt.request.creatorId === this.cacheService.cachedData.me.id) {
-                        Swal.fire('Friend request rejected', `${evt.request.target.nickName} rejected your friend request.`, 'info');
-                    }
-                }
                 break;
             }
             case EventType.SomeoneLeftEvent: {

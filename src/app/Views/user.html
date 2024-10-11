@@ -1,11 +1,10 @@
 <app-header title="Profile"></app-header>
 <div *ngIf="info" class="user">
-    <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank" rel="noopener noreferrer">
+    <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank"
+        rel="noopener noreferrer">
         <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=128&square=true">
-        <div class="small-dot greendot" *ngIf="info.isOnline !== null"
-            [class.greendot]="info.isOnline"
-            [class.graydot]="!info.isOnline"
-            style="top:-11px; right:-43px;"></div>
+        <div class="small-dot greendot" *ngIf="info.isOnline !== null" [class.greendot]="info.isOnline"
+            [class.graydot]="!info.isOnline" style="top:-11px; right:-43px;"></div>
     </a>
     <div class="name">
         {{ info.nickName }}
@@ -19,7 +18,7 @@
     </div>
 </div>
 
-<div class="menu-button" *ngIf="info && !info.emailConfirmed">
+<div class="menu-button" *ngIf="info && !info.user.emailConfirmed">
     <div class="img warning">
         <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
@@ -35,35 +34,28 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="info && areFriends" (click)="timerService.setTimer(conversationId)">
-    <div class="img">
-        <i class="far fa-clock"></i>
-    </div>
-    <div class="text">Self-destruct Timer</div>
-</div>
-<div class="menu-button" *ngIf="info && areFriends" routerLink="/file-history/{{conversationId}}">
+<div class="menu-button" *ngIf="info" routerLink="/file-history/{{conversationId}}">
     <div class="img">
         <i class="fas fa-history"></i>
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
 </div>
-<div class="menu-button" (click)="report()"
-     *ngIf="info && cacheService.cachedData.me && info.id != cacheService.cachedData.me.id">
+<div class="menu-button" (click)="report()" *ngIf="info && cacheService.cachedData.me && info.user">
     <div class="img">
         <i class="fas fa-gavel "></i>
     </div>
     <div class="text" i18n="@@Report">Report</div>
 </div>
 <div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id">
+    *ngIf="info && cacheService.cachedData.me && info.user.id != cacheService.cachedData.me.id">
     <div class="img">
         <i class="fas fa-ban"></i>
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
 <div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && areFriends && info.id != cacheService.cachedData.me.id"
-     (click)="delete(info.id)">
+    *ngIf="info && info.isKnownContact && cacheService.cachedData.me && info.user.id != cacheService.cachedData.me.id"
+    (click)="delete(info.id)">
     <div class="img">
         <i class="fas fa-trash warning"></i>
     </div>
@@ -71,34 +63,7 @@
 </div>
 <div class="menu-holder"></div>
 
-<div class="menu-button"
-     *ngIf="info && cacheService.cachedData.me && !areFriends && !cacheService.cachedData.me.emailConfirmed">
-    <div class="img warning">
-        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-    </div>
-    <div class="text warning">
-        <strong>You can't send friend requests until your email is verified.</strong>
-    </div>
-</div>
-
 <div class="buttons">
-    <button class="button primary"
-            *ngIf="info && cacheService.cachedData.me && !areFriends && cacheService.cachedData.me.emailConfirmed && !sentRequest"
-            (click)="request(info.id)" i18n="@@SendFriendRequest">
-            <label *ngIf="apiService.serverConfig.autoAcceptRequests">Connect</label>
-            <label *ngIf="!apiService.serverConfig.autoAcceptRequests">Send Friend Request</label>
-    </button>
-    <button class="button primary" *ngIf="info && areFriends" routerLink="/talking/{{ conversationId }}" i18n="@@Message">Messages</button>
-    <button class="button primary"
-            *ngIf="!areFriends && sentRequest && !(pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id)"
-            disabled>Request was sent
-    </button>
-    <button class="button success"
-            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
-            (click)="accept(pendingRequest.id)">Accept
-    </button>
-    <button class="button warning"
-            *ngIf="sentRequest && pendingRequest && cacheService.cachedData.me && pendingRequest.targetId === cacheService.cachedData.me.id"
-            (click)="decline(pendingRequest.id)">Decline
-    </button>
+    <button class="button primary" *ngIf="info && !info.isKnownContact" (click)="request(info.id)">Add as contract</button>
+    <button class="button primary" *ngIf="info" routerLink="/talking/{{ conversationId }}">Messages</button>
 </div>

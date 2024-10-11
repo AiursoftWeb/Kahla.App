@@ -10,7 +10,6 @@ import { ConversationsComponent } from './Controllers/conversations.component';
 import { FriendsComponent } from './Controllers/friends.component';
 import { AddFriendComponent } from './Controllers/add-friend.component';
 import { SettingsComponent } from './Controllers/settings.component';
-import { FriendRequestsComponent } from './Controllers/friendrequests.component';
 import { TalkingComponent } from './Controllers/talking.component';
 import { DiscoverComponent } from './Controllers/discover.component';
 import { SignInComponent } from './Controllers/signin.component';
@@ -50,6 +49,7 @@ import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { MessagesApiService } from './Services/Api/MessagesApiService';
+import { ContactsApiService } from './Services/Api/ContactsApiService';
 
 @NgModule({
     imports: [
@@ -65,7 +65,6 @@ import { MessagesApiService } from './Services/Api/MessagesApiService';
         FriendsComponent,
         AddFriendComponent,
         SettingsComponent,
-        FriendRequestsComponent,
         TalkingComponent,
         DiscoverComponent,
         SignInComponent,
@@ -105,6 +104,7 @@ import { MessagesApiService } from './Services/Api/MessagesApiService';
         ProbeService,
         EventService,
         GlobalNotifyService,
+        ContactsApiService,
     ],
     bootstrap: [AppComponent]
 })

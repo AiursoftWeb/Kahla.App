@@ -10,20 +10,6 @@
                 Add New
             </div>
         </a>
-        <a class="friends-button" routerLink="/friendrequests">
-            <div class="icon">
-                <i class="far fa-check-square"></i>
-                <div class="dot reddot" *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100">
-                    {{cacheService.totalRequests}}
-                </div>
-                <div class="dot reddot" *ngIf="cacheService.totalRequests > 99">
-                    99+
-                </div>
-            </div>
-            <div class="words" i18n="@@Requests">
-                Requests
-            </div>
-        </a>
         <a class="friends-button" routerLink="/discover">
             <div class="icon">
                 <i class="fas fa fa-magic"></i>
@@ -62,31 +48,31 @@
     </div>
 </div>
 <div class="header-space"></div>
-<div *ngIf="showUsers && cacheService.cachedData.friends">
-    <div class="result" *ngFor="let user of results.users" (click)="userClick(user, $event.ctrlKey)">
+<div *ngIf="showUsers && cacheService.cachedData.contacts">
+    <div class="result" *ngFor="let user of this.results" (click)="userClick(user, $event.ctrlKey)">
         <div class="user-img-group">
-            <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=128&square=true"
-                 routerLink="/user/{{user.id}}" (click)="$event.stopPropagation();">
+            <img class="user-img" src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"
+                 routerLink="/user/{{user.user.id}}" (click)="$event.stopPropagation();">
             <div class="small-dot"
-                 *ngIf="user.isOnline !== null"
-                 [class.greendot]="user.isOnline"
-                 [class.graydot]="!user.isOnline">
+                 *ngIf="user.user.isOnline !== null"
+                 [class.greendot]="user.user.isOnline"
+                 [class.graydot]="!user.user.isOnline">
             </div>
         </div>
         <div class="sender">
-            {{user.nickName}}
+            {{user.user.nickName}}
         </div>
     </div>
-    <div *ngIf="results.users.length === 0" class="empty-result-notice">No result.</div>
+    <div *ngIf="results.length === 0" class="empty-result-notice">No result.</div>
     <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
         class="badge badge-secondary">Ctrl</span> to start talking directly.
     </div> -->
-    <div *ngIf="results.users.length === 1" class="empty-result-notice">Press <span
+    <div *ngIf="results.length === 1" class="empty-result-notice">Press <span
         class="badge badge-secondary">Enter</span> to talk.
     </div>
 </div>
-<div *ngIf="!showUsers && cacheService.cachedData.friends">
-    <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
+<div *ngIf="!showUsers && cacheService.cachedData.contacts">
+    <!-- <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="user-img-group">
             <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=128&square=true"
                  routerLink="/group/{{group.id}}" (click)="$event.stopPropagation();"/>
@@ -94,12 +80,12 @@
         <div class="sender">
             {{group.name}}
         </div>
-    </div>
-    <div *ngIf="results.groups.length === 0" class="empty-result-notice">No result.</div>
+    </div>-->
+    <!-- <div *ngIf="results.groups.length === 0" class="empty-result-notice">No result.</div> -->
     <!-- <div *ngIf="results.groups.length !== 0" class="empty-result-notice">Hold <span
         class="badge badge-secondary">Ctrl</span> to start talking directly.
     </div> -->
-    <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
+    <!-- <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
         class="badge badge-secondary">Enter</span> to talk.
-    </div>
+    </div>  -->
 </div>

@@ -10,7 +10,9 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "inlineStyle": true,
+          "inlineTemplate": true,
+          "style": "scss"
         }
       },
       "architect": {
@@ -22,6 +24,7 @@
             "browser": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": ["src/polyfills.ts"],
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
               "src/manifest.json",
@@ -57,25 +60,34 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "namedChunks": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "kahla:build",
             "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "kahla:build:production"
+              "buildTarget": "kahla:build:production"
+            },
+            "development": {
+              "buildTarget": "kahla:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "kahla:build"
+            "buildTarget": "kahla:build"
           }
         },
         "lint": {

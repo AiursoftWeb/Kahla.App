@@ -6,7 +6,7 @@ import { Message } from '../../Models/Message';
 import { AiurProtocol } from '../../Models/AiurProtocal';
 import { AiurValue } from '../../Models/AiurValue';
 import { Conversation } from '../../Models/Conversation';
-import { ContactInfo } from '../../Models/ContactInfo';
+import { ThreadInfo } from '../../Models/ThreadInfo';
 import { FileHistoryApiModel } from '../../Models/ApiModels/FileHistoryApiModel';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class ConversationApiService {
     ) {
     }
 
-    public All(): Observable<AiurCollection<ContactInfo>> {
+    public All(): Observable<AiurCollection<ThreadInfo>> {
         return this.apiService.Get(ConversationApiService.serverPath + '/All');
     }
 

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { Values } from '../values';
 import { SearchResult } from '../Models/SearchResult';
-import { FriendshipService } from '../Services/FriendshipService';
-import { ProbeService } from '../Services/ProbeService';
+import { ContactsApiService } from '../Services/Api/ContactsApiService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -21,9 +19,7 @@ export class AddFriendComponent implements OnInit {
     public searchNumbers = 0;
 
     constructor(
-        private friendsApiService: FriendsApiService,
-        public friendshipService: FriendshipService,
-        private probeService: ProbeService,
+        private contactsApiService: ContactsApiService
     ) {
     }
 
@@ -46,20 +42,14 @@ export class AddFriendComponent implements OnInit {
     }
 
     private callSearchApi(term: string): void {
-        this.friendsApiService.SearchEverything(term.trim(), this.searchNumbers).subscribe(result => {
+        this.contactsApiService.Search(term.trim(), this.searchNumbers).subscribe(result => {
             if (result.code === 0) {
-                result.users.forEach(user => {
-                    user.avatarURL = this.probeService.encodeProbeFileUrl(user.iconFilePath);
-                });
-                result.groups.forEach(group => {
-                    group.avatarURL = this.probeService.encodeProbeFileUrl(group.imagePath);
-                });
                 this.results = result;
-                if (this.showUsers && result.usersCount === 0 && result.groupsCount !== 0) {
-                    this.showUsers = false;
-                } else if (!this.showUsers && result.groupsCount === 0 && result.usersCount !== 0) {
-                    this.showUsers = true;
-                }
+                // if (this.showUsers && result.totalUsersCount === 0 && result.groupsCount !== 0) {
+                //     this.showUsers = false;
+                // } else if (!this.showUsers && result.groupsCount === 0 && result.totalUsersCount !== 0) {
+                //     this.showUsers = true;
+                // }
             }
         });
     }

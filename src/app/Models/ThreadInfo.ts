@@ -1,6 +1,6 @@
 ﻿import { Message } from './Message';
 
-export interface ContactInfo {
+export interface ThreadInfo {
     displayName: string;
     displayImagePath: string;
     latestMessage: Message;

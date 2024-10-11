@@ -400,10 +400,10 @@ export class MessageService {
             const userId = t.content.substring(6);
             t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
             this.friendsApiService.UserDetail(userId).subscribe(p => {
-                if (p.user) {
-                    t.content = `[share]${p.user.id}|${p.user.nickName.replace(/\|/g, '')}|` +
-                        `${p.user.bio ? p.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.user.iconFilePath)}`;
-                    t.relatedData = p.user;
+                if (p?.detailedUser.user) {
+                    t.content = `[share]${p.detailedUser.user.id}|${p.detailedUser.user.nickName.replace(/\|/g, '')}|` +
+                        `${p.detailedUser.user.bio ? p.detailedUser.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.detailedUser.user.iconFilePath)}`;
+                    t.relatedData = p.detailedUser.user;
                 } else {
                     t.content = 'Invalid User';
                 }
