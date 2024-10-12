@@ -1,20 +1,20 @@
 <app-header title="Profile"></app-header>
 <div *ngIf="info" class="user">
-    <a class="user-img" href="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}" target="_blank"
+    <a class="user-img" href="{{ info.user.avatarURL ? info.user.avatarURL : loadingImgURL }}" target="_blank"
         rel="noopener noreferrer">
-        <img class="user-img" src="{{ info.avatarURL ? info.avatarURL : loadingImgURL }}?w=128&square=true">
-        <div class="small-dot greendot" *ngIf="info.isOnline !== null" [class.greendot]="info.isOnline"
-            [class.graydot]="!info.isOnline" style="top:-11px; right:-43px;"></div>
+        <img class="user-img" src="{{ info.user.avatarURL ? info.user.avatarURL : loadingImgURL }}?w=128&square=true">
+        <div class="small-dot greendot" *ngIf="info.online !== null" [class.greendot]="info.online"
+            [class.graydot]="!info.online" style="top:-11px; right:-43px;"></div>
     </a>
     <div class="name">
-        {{ info.nickName }}
+        {{ info.user.nickName }}
     </div>
     <div class="bio">
-        {{ info.bio }}
+        {{ info.user.bio }}
     </div>
     <div class="email">
-        {{ info.email }}
-        <label class="badge badge-success" *ngIf="info.emailConfirmed">Verified</label>
+        {{ info.user.email }}
+        <label class="badge badge-success" *ngIf="info.user.emailConfirmed">Verified</label>
     </div>
 </div>
 
@@ -34,12 +34,12 @@
 </div>
 
 <div class="menu-holder"></div>
-<div class="menu-button" *ngIf="info" routerLink="/file-history/{{conversationId}}">
+<!-- <div class="menu-button" *ngIf="info" routerLink="/file-history/{{conversationId}}">
     <div class="img">
         <i class="fas fa-history"></i>
     </div>
     <div class="text" i18n="@@FileHistory">File History</div>
-</div>
+</div> -->
 <div class="menu-button" (click)="report()" *ngIf="info && cacheService.cachedData.me && info.user">
     <div class="img">
         <i class="fas fa-gavel "></i>
@@ -55,7 +55,7 @@
 </div>
 <div class="menu-button"
     *ngIf="info && info.isKnownContact && cacheService.cachedData.me && info.user.id != cacheService.cachedData.me.id"
-    (click)="delete(info.id)">
+    (click)="delete(info.user.id)">
     <div class="img">
         <i class="fas fa-trash warning"></i>
     </div>
@@ -64,6 +64,6 @@
 <div class="menu-holder"></div>
 
 <div class="buttons">
-    <button class="button primary" *ngIf="info && !info.isKnownContact" (click)="request(info.id)">Add as contract</button>
-    <button class="button primary" *ngIf="info" routerLink="/talking/{{ conversationId }}">Messages</button>
+    <button class="button primary" *ngIf="info && !info.isKnownContact" (click)="addAsContract()">Add as contract</button>
+    <!-- <button class="button primary" *ngIf="info" routerLink="/talking/{{ conversationId }}">Messages</button> -->
 </div>

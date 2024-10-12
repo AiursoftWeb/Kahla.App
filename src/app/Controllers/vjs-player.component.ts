@@ -14,7 +14,7 @@ import videojs from 'video.js';
 export class VjsPlayerComponent implements OnInit, OnDestroy {
     @ViewChild('target', {static: true}) target: ElementRef;
     // see options: https://github.com/videojs/video.js/blob/master/docs/guides/options.md
-    @Input() options: VjsPluginOptions;
+    @Input() options: Partial<VjsPluginOptions>;
     player: videojs.Player;
 
     constructor() {
@@ -33,15 +33,15 @@ export class VjsPlayerComponent implements OnInit, OnDestroy {
     }
 }
 
-export class VjsPluginOptions {
-    public fluid = false;
-    public aspectRatio: string;
-    public autoplay = false;
-    public controls = true;
-    public width: string | number;
-    public height: string | number;
-    public sources: {
+export interface VjsPluginOptions {
+    fluid: boolean;
+    aspectRatio: boolean;
+    autoplay: boolean;
+    controls: boolean;
+    width: string | number;
+    height: string | number;
+    sources: {
         src: string,
-        type: string,
+        type?: string,
     }[];
 }

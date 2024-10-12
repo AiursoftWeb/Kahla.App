@@ -60,11 +60,11 @@
     <div class="menu-button" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
         <div>
             <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=128&square=true">
-            <div class="small-dot"
+            <!-- <div class="small-dot"
                  style="top:29px; right:-42px;" *ngIf="e.user.isOnline !== null"
                  [class.greendot]="e.user.isOnline"
                  [class.graydot]="!e.user.isOnline">
-            </div>
+            </div> -->
         </div>
         <div class="text">
             {{e.user.nickName}}

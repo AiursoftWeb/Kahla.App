@@ -1,4 +1,4 @@
-﻿<app-header returnButton="true" shadow="true" #header closeDirectly="true" [processing]="messageService.messageLoading">
+﻿<app-header [returnButton]="true" [shadow]="true" #header [closeDirectly]="true" [processing]="messageService.messageLoading">
 </app-header>
 <ul id="messageList" class="message-list" [class.active-list]="showPanel" (paste)="paste($event)" (drop)="drop($event)"
     (dragover)="preventDefault($event)" (click)="hideUserList()">

@@ -1,4 +1,4 @@
-﻿<app-header title="Add New" closeDirectly="true"></app-header>
+﻿<app-header title="Add New" [closeDirectly]="true"></app-header>
 <div class="search-part" id="search-part">
     <div class="search-input search-input-with-button">
         <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #friendSearch
@@ -11,10 +11,10 @@
             <span><i class="fas fa-user"></i>
                 Users
             </span>
-            <div *ngIf="results && results.usersCount >= 0 && results.usersCount < 100" class="dot bluedot">
-                {{results.usersCount}}
+            <div *ngIf="results && results.totalUsersCount >= 0 && results.totalUsersCount < 100" class="dot bluedot">
+                {{results.totalUsersCount}}
             </div>
-            <div *ngIf="results && results.usersCount > 99" class="dot bluedot">
+            <div *ngIf="results && results.totalUsersCount > 99" class="dot bluedot">
                 99+
             </div>
         </div>
@@ -22,10 +22,10 @@
             <span><i class="fas fa-users"></i>
                 Groups
             </span>
-            <div *ngIf="results && results.groupsCount >= 0 && results.groupsCount < 100" class="dot bluedot">
-                {{results.groupsCount}}
+            <div *ngIf="results && results.totalThreadsCount >= 0 && results.totalThreadsCount < 100" class="dot bluedot">
+                {{results.totalThreadsCount}}
             </div>
-            <div *ngIf="results && results.groupsCount > 99" class="dot bluedot">
+            <div *ngIf="results && results.totalThreadsCount > 99" class="dot bluedot">
                 99+
             </div>
         </div>
@@ -34,17 +34,17 @@
 <div class="search-holder"></div>
 
 <div *ngIf="showUsers && results">
-    <div class="result" *ngFor="let user of results.users" routerLink="/user/{{ user.id }}">
-        <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=128&square=true"/>
+    <div class="result" *ngFor="let user of results.users" routerLink="/user/{{ user.user.id }}">
+        <img class="user-img" src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"/>
         <div class="sender">
             {{user.user.nickName}}
         </div>
     </div>
-    <div *ngIf="results.usersCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
+    <div *ngIf="results.totalUsersCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
 </div>
 
-<div *ngIf="!showUsers && results">
-    <div class="result" *ngFor="let group of results.groups" (click)="friendshipService.joinGroup(group)">
+<!-- <div *ngIf="!showUsers && results">
+    <div class="result" *ngFor="let group of results.threads" (click)="friendshipService.joinGroup(group)">
         <div class="searchGroupImage">
             <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=128&square=true"/>
             <i class="fas fa-lock" aria-hidden="true" *ngIf="group.hasPassword"></i>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div *ngIf="results.groupsCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
-</div>
+</div> -->
 
 <div class="buttons"
     *ngIf="results && ((showUsers && results.totalUsersCount >= 0 && results.users.length < results.totalUsersCount) || (!showUsers && results.totalThreadsCount >= 0 && results.threads.length < results.totalThreadsCount))">

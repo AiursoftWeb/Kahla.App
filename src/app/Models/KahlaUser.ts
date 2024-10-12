@@ -10,5 +10,4 @@
     preferedLanguage: string;
     sex: string;
     listInSearchResult: boolean;
-    isOnline?: boolean;
 }

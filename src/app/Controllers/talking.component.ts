@@ -574,11 +574,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             }
 
             this.uploadService
-                .upload(
-                    t,
-                    this.messageService.conversation.id,
-                    fileType
-                )
+                .upload(t, this.messageService.conversation.id, fileType)
                 ?.then((msg) => {
                     this.messageService.insertMessage(msg.value);
                     setTimeout(() => this.messageService.scrollBottom(true), 0);
@@ -738,17 +734,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.updateInputHeight();
     }
 
-    public getAudio(target: HTMLElement, filePath: string): void {
-        target.style.display = "none";
-        const audioElement = document.createElement("audio");
-        audioElement.style.maxWidth = "100%";
-        audioElement.src = this.probeService.encodeProbeFileUrl(
-            filePath,
-            this.messageService.fileAccessToken
-        );
-        audioElement.controls = true;
-        target.parentElement.appendChild(audioElement);
-        audioElement.play();
+    public getAudio(target: EventTarget, filePath: string): void {
+        if (target instanceof HTMLElement) {
+            target.style.display = "none";
+            const audioElement = document.createElement("audio");
+            audioElement.style.maxWidth = "100%";
+            audioElement.src = this.probeService.encodeProbeFileUrl(
+                filePath,
+                this.messageService.fileAccessToken
+            );
+            audioElement.controls = true;
+            target.parentElement.appendChild(audioElement);
+            audioElement.play();
+        }
     }
 
     public async loadMore() {

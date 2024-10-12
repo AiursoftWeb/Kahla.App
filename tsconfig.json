@@ -18,4 +18,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true
+  }
 }

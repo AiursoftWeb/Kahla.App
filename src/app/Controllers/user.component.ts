@@ -8,6 +8,8 @@ import { SwalToast } from '../Helpers/Toast';
 import { ApiService } from '../Services/Api/ApiService';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
+import { lastValueFrom } from 'rxjs';
+import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -72,6 +74,15 @@ export class UserComponent implements OnInit {
                     });
             }
         });
+    }
+
+    public async addAsContract() {
+        try {
+            await lastValueFrom(this.contactsApiService.Add(this.info.user.id));
+            SwalToast.fire('Success', '', 'success');
+        } catch(err) {
+            showCommonErrorDialog(err);
+        }
     }
 
     public report(): void {

@@ -1,4 +1,4 @@
-<app-header title="Theme" closeDirectly="true"></app-header>
+<app-header title="Theme" [closeDirectly]="true"></app-header>
 <div class="menu-header">Primary color</div>
 <div class="select-button-group">
     <span class="select-button" [class.selected]="primaryColor === 0" (click)="primaryColor = 0;applyTheme();">

@@ -1,5 +1,6 @@
 <app-header title="Choose to share" [returnButton]="inApp"></app-header>
-<div class="search-part">
+<!--TODO -->
+<!-- <div class="search-part">
     <div class="search-input search-input-with-button">
         <input id="searchBar" placeholder="Search for your friends and groups" type="text" [(ngModel)]="searchTxt"
                (input)="search(searchTxt, true)" (keydown.enter)="goSingleSearch()"/>
@@ -21,7 +22,7 @@
 </div>
 <div class="share-header-space"></div>
 <div *ngIf="showUsers && results">
-    <div class="result" *ngFor="let user of results.users" (click)="share(user, false)">
+    <div class="result" *ngFor="let user of results.users" (click)="share(user.user)">
         <img class="user-img" src="{{user.avatarURL ? user.avatarURL : loadingImgURL}}?w=128&square=true"/>
         <div class="sender">
             {{user.nickName}}
@@ -45,4 +46,4 @@
     <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
         class="badge badge-secondary">Enter</span> to select.
     </div>
-</div>
+</div> -->

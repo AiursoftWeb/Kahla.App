@@ -157,9 +157,9 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         // }
     }
 
-    public userClick(user: KahlaUser, ctrl: boolean) {
+    public userClick(user: ContactInfo, ctrl: boolean) {
         if (ctrl) {
-            this.router.navigate(['/user', user.id]);
+            this.router.navigate(['/user', user.user.id]);
         } else {
             if (this.detailLoading) {
                 return;
