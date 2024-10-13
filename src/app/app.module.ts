@@ -50,6 +50,7 @@ import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { MessagesApiService } from './Services/Api/MessagesApiService';
 import { ContactsApiService } from './Services/Api/ContactsApiService';
+import { SearchApiService } from './Services/Api/SearchApiService';
 
 @NgModule({
     imports: [
@@ -105,6 +106,7 @@ import { ContactsApiService } from './Services/Api/ContactsApiService';
         EventService,
         GlobalNotifyService,
         ContactsApiService,
+        SearchApiService,
     ],
     bootstrap: [AppComponent]
 })

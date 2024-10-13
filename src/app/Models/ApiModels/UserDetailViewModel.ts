@@ -1,6 +1,9 @@
 import { AiurProtocol } from '../AiurProtocal';
 import { ContactInfo } from '../Contacts/ContactInfo';
+import { ThreadInfo } from '../ThreadInfo';
 
 export interface UserDetailViewModel extends AiurProtocol {
-    detailedUser: ContactInfo;
+    searchedUser: ContactInfo;
+    commonThreads: ThreadInfo[];
+    commonThreadsCount: number;
 }

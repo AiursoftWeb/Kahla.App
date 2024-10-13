@@ -41,7 +41,7 @@ export class UserComponent implements OnInit {
 
     public updateFriendInfo(userId: string) {
         this.contactsApiService.Details(userId).subscribe(response => {
-            this.info = response.detailedUser;
+            this.info = response.searchedUser;
         });
         // this.friendsApiService.UserDetail(userId).subscribe(response => {
         //     // this.info = response.user;

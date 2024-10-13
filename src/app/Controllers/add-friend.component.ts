@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Values } from '../values';
 import { SearchResult } from '../Models/SearchResult';
-import { ContactsApiService } from '../Services/Api/ContactsApiService';
+import { SearchApiService } from '../Services/Api/SearchApiService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
@@ -19,7 +19,7 @@ export class AddFriendComponent implements OnInit {
     public searchNumbers = 0;
 
     constructor(
-        private contactsApiService: ContactsApiService
+        private searchApiService: SearchApiService
     ) {
     }
 
@@ -42,7 +42,7 @@ export class AddFriendComponent implements OnInit {
     }
 
     private callSearchApi(term: string): void {
-        this.contactsApiService.Search(term.trim(), this.searchNumbers).subscribe(result => {
+        this.searchApiService.Search(term.trim(), this.searchNumbers).subscribe(result => {
             if (result.code === 0) {
                 this.results = result;
                 // if (this.showUsers && result.totalUsersCount === 0 && result.groupsCount !== 0) {

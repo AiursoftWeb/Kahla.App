@@ -28,15 +28,15 @@ export class ContactsApiService {
         return this.apiService.Post(ContactsApiService.serverPath + `/remove/${id}`, {});
     }
 
-    public Search(searchInput: string, take: number): Observable<SearchResult> {
-        return this.apiService.Post(ContactsApiService.serverPath + `/search`, {
-            SearchInput: searchInput,
-            take
-        });
+    public Details(id: string, takeThreads = 1): Observable<UserDetailViewModel> {
+        return this.apiService.Get(ContactsApiService.serverPath + `/details/${id}?takeThreads=${takeThreads}`);
     }
 
-    public Details(id: string): Observable<UserDetailViewModel> {
-        return this.apiService.Get(ContactsApiService.serverPath + `/details/${id}`);
+    public Report(targetUserId: string, reason: string): Observable<AiurProtocol> {
+        return this.apiService.Post(ContactsApiService.serverPath + `/report/`, {
+            TargetUserId: targetUserId,
+            Reason: reason
+        });
     }
 
 }
