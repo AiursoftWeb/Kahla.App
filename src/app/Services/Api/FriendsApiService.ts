@@ -10,22 +10,19 @@ import { DiscoverUser } from '../../Models/DiscoverUser';
 export class FriendsApiService {
     private static serverPath = '/friendship';
 
-    constructor(
-        private apiService: ApiService
-    ) {
-    }
-
+    constructor(private apiService: ApiService) {}
 
     public CreateRequest(id: string): Observable<AiurValue<number>> {
         return this.apiService.Post(FriendsApiService.serverPath + `/CreateRequest/${id}`, {});
     }
-
 
     public UserDetail(id: string): Observable<UserDetailViewModel> {
         return this.apiService.Get(FriendsApiService.serverPath + `/UserDetail/${id}`);
     }
 
     public Discover(amount: number): Observable<AiurCollection<DiscoverUser>> {
-        return this.apiService.Get(FriendsApiService.serverPath + '/DiscoverFriends?take=' + amount);
+        return this.apiService.Get(
+            FriendsApiService.serverPath + '/DiscoverFriends?take=' + amount
+        );
     }
 }

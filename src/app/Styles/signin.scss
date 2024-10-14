@@ -2,7 +2,8 @@
   color: #339bf9;
   font-weight: 400;
   text-transform: uppercase;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+    Helvetica, sans-serif;
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   margin: 0;
 }
@@ -18,7 +19,7 @@
 }
 @media (prefers-color-scheme: dark) {
   .signin-back {
-    background-color: rgb(28, 30, 31)!important;
+    background-color: rgb(28, 30, 31) !important;
   }
 }
 
@@ -58,7 +59,7 @@
 
 .button.white {
   text-transform: uppercase;
-  color: #2391D3 !important;
+  color: #2391d3 !important;
 }
 
 .actionLink {
@@ -66,7 +67,7 @@
   display: block;
   text-decoration: underline;
   font-size: 12px;
-  color: #2391D3;
+  color: #2391d3;
 }
 
 p {
@@ -92,7 +93,8 @@ a {
   display: inline-block;
   font-size: 1.5em;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: ' ';
     display: block;
     position: absolute;

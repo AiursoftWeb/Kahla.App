@@ -15,7 +15,8 @@ import { ContactsRepository } from '../Repositories/ContactsRepository';
         '../Styles/add-friend.scss',
         '../Styles/friends.scss',
         '../Styles/button.scss',
-        '../Styles/badge.scss']
+        '../Styles/badge.scss',
+    ],
 })
 export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;
@@ -27,8 +28,8 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private contactsRepository: ContactsRepository) {
-    }
+        private contactsRepository: ContactsRepository
+    ) {}
 
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me && this.contactsRepository.health) {
@@ -38,7 +39,11 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
 
     ngAfterViewInit(): void {
         const inputElement = document.querySelector('#searchBar') as HTMLElement;
-        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        if (
+            !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent
+            )
+        ) {
             inputElement.focus();
         }
     }
@@ -48,7 +53,6 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         //     Swal.fire('Your email is not verified!', 'You can\'t create group until your email is verified.', 'error');
         //     return;
         // }
-
         // Swal.fire({
         //     title: 'Enter your group name:',
         //     input: 'text',
@@ -120,8 +124,10 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
             if (term) {
                 this.results.filter(u => {
                     const regex = RegExp(term, 'i');
-                    return regex.test(u.user.nickName) || (u.user.email && regex.test(u.user.email));
-                })
+                    return (
+                        regex.test(u.user.nickName) || (u.user.email && regex.test(u.user.email))
+                    );
+                });
                 // this.results.users = this.results.users.filter(user => {
                 //     const regex = RegExp(term, 'i');
                 //     return regex.test(user.nickName) || (user.email && regex.test(user.email));
@@ -146,7 +152,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     }
 
     public goSingleSearch(ctrl: boolean): void {
-        // TODO 
+        // TODO
         // if (this.showUsers) {
         //     if (this.results.users.length === 1) {
         //         this.userClick(this.results.users[0], ctrl);

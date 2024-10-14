@@ -1,5 +1,5 @@
-@import "fixed_widescreen";
-@import "effects";
+@import 'fixed_widescreen';
+@import 'effects';
 
 /******************
  *    Talking
@@ -106,7 +106,8 @@
     display: inline-block;
     color: #bbb;
 
-    &::before, &::after {
+    &::before,
+    &::after {
       content: ' ';
       display: block;
       position: absolute;
@@ -127,7 +128,8 @@
     color: var(--primary-color-depth2);
     font-weight: 800;
 
-    &::before, &::after {
+    &::before,
+    &::after {
       border-bottom: 2px solid var(--primary-color-depth2);
     }
   }
@@ -143,7 +145,7 @@
     position: relative;
     display: inline-block;
     min-height: 17px;
-    z-index:1;
+    z-index: 1;
 
     p {
       text-align: left;
@@ -152,7 +154,8 @@
       white-space: pre-wrap;
     }
 
-    &.balloon-grouped:after, &.single-emoji:after {
+    &.balloon-grouped:after,
+    &.single-emoji:after {
       border-left: unset !important;
       border-right: unset !important;
     }
@@ -171,7 +174,7 @@
     }
 
     &:after {
-      content: " ";
+      content: ' ';
       height: 0;
       width: 0;
       position: absolute;
@@ -215,7 +218,11 @@
   }
 
   .right .message-balloon {
-    background: linear-gradient(120deg, var(--primary-color-depth3) 0%, var(--primary-color-depth2) 100%);
+    background: linear-gradient(
+      120deg,
+      var(--primary-color-depth3) 0%,
+      var(--primary-color-depth2) 100%
+    );
 
     &::after {
       border-left-color: var(--primary-color-depth3);
@@ -248,7 +255,8 @@
     transform: translateX(30px);
   }
 
-  .message-block:hover ~ .sendTime, .sendTime.show {
+  .message-block:hover ~ .sendTime,
+  .sendTime.show {
     opacity: 1;
     transform: translateX(0) !important;
     flex: 0 0 auto;
@@ -336,7 +344,10 @@
         width: 100%;
         border: none;
         border-radius: 6px 0 0 6px;
-        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, width ease-in-out 0.15s;
+        transition:
+          border-color ease-in-out 0.15s,
+          box-shadow ease-in-out 0.15s,
+          width ease-in-out 0.15s;
         box-shadow: none;
         min-height: 34px;
         padding: 6px 12px;
@@ -539,14 +550,15 @@ i {
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0px);
   }
-  25%, 75% {
+  25%,
+  75% {
     transform: translateX(-10px);
   }
   50% {
     transform: translateX(10px);
   }
-
 }

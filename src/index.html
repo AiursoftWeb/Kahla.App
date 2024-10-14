@@ -1,130 +1,136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <title>Kahla - Aiursoft</title>
+        <base href="/" />
+        <link rel="manifest" href="manifest.json" />
+        <meta
+            name="description"
+            content="As a cross-platform business messaging app, Kahla can encrypt communications at any location, on any device. And it is completely open source and free."
+        />
+        <meta charset="UTF-8" />
+        <meta name="theme-color" content="#2391D3" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="dns-prefetch" href="//www.kahla.app" />
+        <link rel="dns-prefetch" href="//server.kahla.app" />
+        <link rel="preconnect" href="//www.kahla.app" />
+        <link rel="preconnect" href="//server.kahla.app" />
+        <link rel="apple-touch-icon" href="/assets/apple-touch-icon-256.png" />
+        <meta name="apple-mobile-web-app-title" content="Kahla" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+            name="viewport"
+        />
+        <style>
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
 
-<head>
-  <title>Kahla - Aiursoft</title>
-  <base href="/">
-  <link rel="manifest" href="manifest.json" />
-  <meta name="description" content="As a cross-platform business messaging app, Kahla can encrypt communications at any location, on any device. And it is completely open source and free." />
-  <meta charset="UTF-8">
-  <meta name="theme-color" content="#2391D3">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="dns-prefetch" href="//www.kahla.app">
-  <link rel="dns-prefetch" href="//server.kahla.app">
-  <link rel="preconnect" href="//www.kahla.app">
-  <link rel="preconnect" href="//server.kahla.app">
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-256.png">
-  <meta name="apple-mobile-web-app-title" content="Kahla">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-  <style>
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: rgba(127, 127, 127, 0.2);
+            }
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: rgba(127, 127, 127, 0.2);
-    }
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: rgba(127, 127, 127, 0.4);
+            }
 
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: rgba(127, 127, 127, 0.4);
-    }
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(127, 127, 127, 0.9);
+            }
 
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(127, 127, 127, 0.9);
-    }
+            html {
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
 
-    html {
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    }
+            body {
+                height: 100%;
+                -webkit-app-region: drag;
+                margin: 0;
+                padding: 0;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
+                    Ubuntu, Cantarell, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB',
+                    'Microsoft YaHei UI Light', '微软雅黑', sans-serif, 'Apple Color Emoji',
+                    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+                font-size: 12px;
+                line-height: 1.4;
+            }
 
-    body {
-        height: 100%;
-        -webkit-app-region: drag;
-        margin: 0;
-        padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-        "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI Light", "微软雅黑", sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        font-size: 12px;
-        line-height: 1.4;
-    }
+            .holder {
+                height: 20px;
+            }
 
-    .holder {
-      height: 20px
-    }
+            .wrapper {
+                z-index: 20;
+            }
+        </style>
+    </head>
 
-    .wrapper {
-      z-index: 20;
-    }
-  </style>
-</head>
+    <body>
+        <app-kahla id="-app-kahla">
+            <style>
+                html {
+                    height: 100%;
+                }
+                .loading {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                }
 
-<body>
-<app-kahla id="-app-kahla">
-    <style>
-      html {
-        height: 100%;
-      }
-      .loading {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%
-      }
+                body {
+                    background-color: #fff;
+                }
 
-      body {
-        background-color: #fff
-      }
+                @media (prefers-color-scheme: dark) {
+                    body {
+                        background-color: rgb(28, 30, 31) !important;
+                    }
+                }
 
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: rgb(28, 30, 31)!important;
-        }
-      }
+                h1 {
+                    color: #339bf9;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
+                        Ubuntu, Cantarell, Helvetica, sans-serif;
+                    font-size: 2em;
+                    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+                    margin: 0;
+                }
 
-      h1 {
-        color: #339bf9;
-        font-weight: 400;
-        text-transform: uppercase;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, sans-serif;
-        font-size: 2em;
-        text-shadow: 2px 2px 10px rgba(0, 0, 0, .2);
-        margin: 0;
-      }
+                @keyframes con {
+                    50% {
+                        transform: translateY(-0.4rem);
+                    }
+                    100% {
+                        transform: translateY(0);
+                    }
+                }
 
-      @keyframes con {
-        50% {
-          transform: translateY(-.4rem)
-        }
-        100% {
-          transform: translateY(0)
-        }
-      }
+                .d {
+                    animation: con 2s ease-out infinite;
+                }
 
-      .d {
-        animation: con 2.0s ease-out infinite
-      }
+                .d-2 {
+                    animation-delay: 0.5s;
+                }
 
-      .d-2 {
-        animation-delay: .5s
-      }
-
-      .d-3 {
-        animation-delay: 1s
-      }
-    </style>
-    <h1 class="loading">
-      Loading Kahla
-      <span class="d">.</span>
-      <span class="d d-2">.</span>
-      <span class="d d-3">.</span>
-    </h1>
-  </app-kahla>
-</body>
-
+                .d-3 {
+                    animation-delay: 1s;
+                }
+            </style>
+            <h1 class="loading">
+                Loading Kahla
+                <span class="d">.</span>
+                <span class="d d-2">.</span>
+                <span class="d d-3">.</span>
+            </h1>
+        </app-kahla>
+    </body>
 </html>

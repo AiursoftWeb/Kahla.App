@@ -1,5 +1,5 @@
-import { Conversation } from "../Conversation";
-import { KahlaUser } from "../KahlaUser";
+import { Conversation } from '../Conversation';
+import { KahlaUser } from '../KahlaUser';
 
 export interface ContactInfo {
     user: KahlaUser;

@@ -5,14 +5,11 @@ import { HomeService } from '../Services/HomeService';
 @Component({
     selector: 'app-nav',
     templateUrl: '../Views/nav.html',
-    styleUrls: [
-        '../Styles/nav.scss',
-        '../Styles/reddot.scss'
-    ]
+    styleUrls: ['../Styles/nav.scss', '../Styles/reddot.scss'],
 })
 export class NavComponent {
     constructor(
         public cacheService: CacheService,
         public homeService: HomeService
-    ) { }
+    ) {}
 }

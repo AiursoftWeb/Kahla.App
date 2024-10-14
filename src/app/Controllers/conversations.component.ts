@@ -8,10 +8,12 @@ import { HomeService } from '../Services/HomeService';
 @Component({
     selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
-    styleUrls: ['../Styles/conversations.scss',
+    styleUrls: [
+        '../Styles/conversations.scss',
         '../Styles/reddot.scss',
         '../Styles/button.scss',
-        '../Styles/badge.scss']
+        '../Styles/badge.scss',
+    ],
 })
 export class ConversationsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
@@ -19,9 +21,8 @@ export class ConversationsComponent implements OnInit {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private homeService: HomeService,
-    ) {
-    }
+        private homeService: HomeService
+    ) {}
 
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me) {

@@ -53,12 +53,7 @@ import { SearchApiService } from './Services/Api/SearchApiService';
 import { ContactsRepository } from './Repositories/ContactsRepository';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpClientModule,
-        AppRoutingModule,
-    ],
+    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
     declarations: [
         AboutComponent,
         AppComponent,
@@ -106,10 +101,10 @@ import { ContactsRepository } from './Repositories/ContactsRepository';
         GlobalNotifyService,
         ContactsApiService,
         SearchApiService,
-        ContactsRepository
+        ContactsRepository,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
- // platformBrowserDynamic().bootstrapModule(AppModule);
+// platformBrowserDynamic().bootstrapModule(AppModule);

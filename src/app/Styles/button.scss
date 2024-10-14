@@ -33,7 +33,7 @@ button,
 }
 
 .button {
-  &:disabled{
+  &:disabled {
     cursor: not-allowed;
   }
 
@@ -89,7 +89,6 @@ button,
       background-color: #bbb;
     }
   }
-
 }
 
 .inputButton {

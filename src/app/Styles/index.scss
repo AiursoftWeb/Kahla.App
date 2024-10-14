@@ -1,4 +1,4 @@
-@import "themes";
+@import 'themes';
 
 body {
   color: var(--default-textcolor);
@@ -12,7 +12,8 @@ body {
     color: var(--left-a-color);
   }
 
-  .swal2-popup, .swal2-popup.swal2-toast {
+  .swal2-popup,
+  .swal2-popup.swal2-toast {
     background-color: var(--alert-bg);
 
     .swal2-content,
@@ -33,7 +34,6 @@ body {
       background-color: var(--alert-bg) !important;
       color: var(--default-textcolor) !important;
     }
-
   }
 }
 

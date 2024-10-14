@@ -6,12 +6,8 @@ import { CacheService } from '../Services/CacheService';
 
 @Component({
     templateUrl: '../Views/about.html',
-    styleUrls: [
-        '../Styles/about.scss',
-        '../Styles/menu.scss',
-        '../Styles/button.scss']
+    styleUrls: ['../Styles/about.scss', '../Styles/menu.scss', '../Styles/button.scss'],
 })
-
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;
     public website = environment.serversProvider;
@@ -19,8 +15,7 @@ export class AboutComponent {
     constructor(
         public apiService: ApiService,
         public cacheService: CacheService
-    ) {
-    }
+    ) {}
 
     public getCurrentYear(): number {
         return new Date().getFullYear();

@@ -14,10 +14,9 @@ import { CacheService } from '../Services/CacheService';
     styleUrls: [
         '../Styles/userDetail.scss',
         '../Styles/button.scss',
-        '../Styles/toggleButton.scss'
-    ]
+        '../Styles/toggleButton.scss',
+    ],
 })
-
 export class UserDetailComponent implements OnInit {
     public user: KahlaUser;
     public loadingImgURL = Values.loadingImgURL;
@@ -27,9 +26,8 @@ export class UserDetailComponent implements OnInit {
         private authApiService: AuthApiService,
         private router: Router,
         public uploadService: UploadService,
-        public cacheService: CacheService,
-    ) {
-    }
+        public cacheService: CacheService
+    ) {}
 
     public ngOnInit(): void {
         if (!this.cacheService.cachedData.me) {
@@ -54,17 +52,22 @@ export class UserDetailComponent implements OnInit {
     public save(): void {
         const saveButton = document.querySelector('#save');
         saveButton.textContent = 'Saving...';
-        this.authApiService.UpdateMe({
-            nickName: this.user.nickName,
-            bio: this.user.bio,
-        })
-            .subscribe((response) => {
+        this.authApiService
+            .UpdateMe({
+                nickName: this.user.nickName,
+                bio: this.user.bio,
+            })
+            .subscribe(response => {
                 if (response.code > 0) {
                     this.cacheService.cachedData.me = Object.assign({}, this.user);
                     this.cacheService.saveCache();
                     this.router.navigate(['/home']);
                 } else {
-                    Swal.fire('Error', (response as AiurProtocol as AiurCollection<string>).items.join('<br/>'), 'error');
+                    Swal.fire(
+                        'Error',
+                        (response as AiurProtocol as AiurCollection<string>).items.join('<br/>'),
+                        'error'
+                    );
                 }
                 saveButton.textContent = 'Save';
             });

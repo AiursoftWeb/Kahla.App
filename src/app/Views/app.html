@@ -1,22 +1,35 @@
-﻿<div id="homeWrapper" class="floating-home-wrapper"
-     [class.in-widescreen]="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
-     *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false)">
+﻿<div
+    id="homeWrapper"
+    class="floating-home-wrapper"
+    [class.in-widescreen]="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
+    *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false)"
+>
     <app-home></app-home>
 </div>
 <div class="window-wrapper">
-    <div class="home-holder"
-         *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false)"></div>
-    <div id="contentWrapper" class="content-wrapper"
-         *ngIf="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
-         [class.in-widescreen]="homeService.wideScreenEnabled">
+    <div
+        class="home-holder"
+        *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin',false)"
+    ></div>
+    <div
+        id="contentWrapper"
+        class="content-wrapper"
+        *ngIf="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
+        [class.in-widescreen]="homeService.wideScreenEnabled"
+    >
         <router-outlet></router-outlet>
     </div>
     <!-- Show an empty component when no reasonable component to show. -->
-    <div class="content-empty"
-         *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && cacheService.cachedData.me">
+    <div
+        class="content-empty"
+        *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && cacheService.cachedData.me"
+    >
         <h2>Welcome back, {{ cacheService.cachedData.me.nickName }}.</h2>
-        <img style="width: 100px" src="{{ cacheService.cachedData.me.avatarURL}}?w=256&square=true"
-             (click)="homeService.currentPage = 2">
+        <img
+            style="width: 100px"
+            src="{{ cacheService.cachedData.me.avatarURL}}?w=256&square=true"
+            (click)="homeService.currentPage = 2"
+        />
         <h3>Start talking now!</h3>
     </div>
 </div>

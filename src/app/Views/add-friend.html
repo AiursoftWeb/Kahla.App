@@ -1,33 +1,47 @@
 ﻿<app-header title="Add New" [closeDirectly]="true"></app-header>
 <div class="search-part" id="search-part">
     <div class="search-input search-input-with-button">
-        <input id="searchBar" placeholder="Enter the name of the user or group..." type="text" #friendSearch
-               (keyup)="SearchBoxKeyUp($event, friendSearch.value)"/>
-        <button class="button primary" (click)="search(friendSearch.value, 0)"
-                [disabled]="searching || friendSearch.value.length === 0"><i class="fas fa-search"></i></button>
+        <input
+            id="searchBar"
+            placeholder="Enter the name of the user or group..."
+            type="text"
+            #friendSearch
+            (keyup)="SearchBoxKeyUp($event, friendSearch.value)"
+        />
+        <button
+            class="button primary"
+            (click)="search(friendSearch.value, 0)"
+            [disabled]="searching || friendSearch.value.length === 0"
+        >
+            <i class="fas fa-search"></i>
+        </button>
     </div>
     <div class="search-type" *ngIf="results">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span><i class="fas fa-user"></i>
+            <span
+                ><i class="fas fa-user"></i>
                 Users
             </span>
-            <div *ngIf="results && results.totalUsersCount >= 0 && results.totalUsersCount < 100" class="dot bluedot">
+            <div
+                *ngIf="results && results.totalUsersCount >= 0 && results.totalUsersCount < 100"
+                class="dot bluedot"
+            >
                 {{results.totalUsersCount}}
             </div>
-            <div *ngIf="results && results.totalUsersCount > 99" class="dot bluedot">
-                99+
-            </div>
+            <div *ngIf="results && results.totalUsersCount > 99" class="dot bluedot">99+</div>
         </div>
         <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span><i class="fas fa-users"></i>
+            <span
+                ><i class="fas fa-users"></i>
                 Groups
             </span>
-            <div *ngIf="results && results.totalThreadsCount >= 0 && results.totalThreadsCount < 100" class="dot bluedot">
+            <div
+                *ngIf="results && results.totalThreadsCount >= 0 && results.totalThreadsCount < 100"
+                class="dot bluedot"
+            >
                 {{results.totalThreadsCount}}
             </div>
-            <div *ngIf="results && results.totalThreadsCount > 99" class="dot bluedot">
-                99+
-            </div>
+            <div *ngIf="results && results.totalThreadsCount > 99" class="dot bluedot">99+</div>
         </div>
     </div>
 </div>
@@ -35,12 +49,12 @@
 
 <div *ngIf="showUsers && results">
     <div class="result" *ngFor="let user of results.users" routerLink="/user/{{ user.user.id }}">
-        <img class="user-img" src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"/>
-        <div class="sender">
-            {{user.user.nickName}}
-        </div>
+        <img class="user-img" src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true" />
+        <div class="sender">{{user.user.nickName}}</div>
     </div>
-    <div *ngIf="results.totalUsersCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
+    <div *ngIf="results.totalUsersCount === 0" class="empty-result-notice">
+        No results. Check your spelling or try different keywords.
+    </div>
 </div>
 
 <!-- <div *ngIf="!showUsers && results">
@@ -56,8 +70,12 @@
     <div *ngIf="results.groupsCount === 0" class="empty-result-notice">No results. Check your spelling or try different keywords.</div>
 </div> -->
 
-<div class="buttons"
-    *ngIf="results && ((showUsers && results.totalUsersCount >= 0 && results.users.length < results.totalUsersCount) || (!showUsers && results.totalThreadsCount >= 0 && results.threads.length < results.totalThreadsCount))">
-    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 1)">Load More</button>
+<div
+    class="buttons"
+    *ngIf="results && ((showUsers && results.totalUsersCount >= 0 && results.users.length < results.totalUsersCount) || (!showUsers && results.totalThreadsCount >= 0 && results.threads.length < results.totalThreadsCount))"
+>
+    <button *ngIf="!searching" class="button primary" (click)="search(friendSearch.value, 1)">
+        Load More
+    </button>
     <button *ngIf="searchMode == 1 && searching" class="button primary" disabled>Loading</button>
 </div>

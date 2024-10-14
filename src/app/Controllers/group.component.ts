@@ -13,13 +13,14 @@ import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/group.html',
-    styleUrls: ['../Styles/menu.scss',
-                '../Styles/button.scss',
-                '../Styles/toggleButton.scss',
-                '../Styles/reddot.scss',
-                '../Styles/badge.scss']
+    styleUrls: [
+        '../Styles/menu.scss',
+        '../Styles/button.scss',
+        '../Styles/toggleButton.scss',
+        '../Styles/reddot.scss',
+        '../Styles/badge.scss',
+    ],
 })
-
 export class GroupComponent implements OnInit {
     public conversation: GroupConversation;
     public groupMembers: number;
@@ -34,14 +35,15 @@ export class GroupComponent implements OnInit {
         private router: Router,
         private cacheService: CacheService,
         public messageService: MessageService,
-        private probeService: ProbeService,
-    ) {
-    }
+        private probeService: ProbeService
+    ) {}
 
     public ngOnInit(): void {
         this.route.params
             .pipe(
-                switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                switchMap((params: Params) =>
+                    this.conversationApiService.ConversationDetail(+params['id'])
+                ),
                 filter(t => t.code === 0),
                 map(t => t.value)
             )
@@ -49,9 +51,13 @@ export class GroupComponent implements OnInit {
                 this.messageService.conversation = conversation;
                 this.conversation = conversation as GroupConversation;
                 this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl((this.conversation as GroupConversation).groupImagePath);
+                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(
+                    (this.conversation as GroupConversation).groupImagePath
+                );
                 this.conversation.users.forEach(user => {
-                    user.user.avatarURL = this.probeService.encodeProbeFileUrl(user.user.iconFilePath);
+                    user.user.avatarURL = this.probeService.encodeProbeFileUrl(
+                        user.user.iconFilePath
+                    );
                     try {
                         if (user.userId === this.cacheService.cachedData.me.id) {
                             this.muted = user.muted;
@@ -69,26 +75,29 @@ export class GroupComponent implements OnInit {
 
     public leaveGroup(groupName: string): void {
         if (this.conversation.ownerId === this.cacheService.cachedData.me.id) {
-            Swal.fire('Error', 'You can\'t leave the group without transferring the ownership ' +
-                'or dissolving the entire group.', 'error');
+            Swal.fire(
+                'Error',
+                "You can't leave the group without transferring the ownership " +
+                    'or dissolving the entire group.',
+                'error'
+            );
             return;
         }
         Swal.fire({
             title: 'Are you sure to leave this group?',
             icon: 'warning',
-            showCancelButton: true
-        }).then((willDelete) => {
+            showCancelButton: true,
+        }).then(willDelete => {
             if (willDelete.value) {
-                this.groupsApiService.LeaveGroup(groupName)
-                    .subscribe(response => {
-                        if (response.code === 0) {
-                            SwalToast.fire('Success', '', 'success');
-                            this.cacheService.updateConversation();
-                            this.router.navigate(['/home']);
-                        } else {
-                            Swal.fire('Error', response.message, 'error');
-                        }
-                    });
+                this.groupsApiService.LeaveGroup(groupName).subscribe(response => {
+                    if (response.code === 0) {
+                        SwalToast.fire('Success', '', 'success');
+                        this.cacheService.updateConversation();
+                        this.router.navigate(['/home']);
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
             }
         });
     }
@@ -96,21 +105,20 @@ export class GroupComponent implements OnInit {
     public mute(): void {
         if (!this.muting) {
             this.muting = true;
-            this.groupsApiService.MuteGroup(this.conversation.displayName, !this.muted).subscribe(
-                result => {
+            this.groupsApiService
+                .MuteGroup(this.conversation.displayName, !this.muted)
+                .subscribe(result => {
                     this.muting = false;
                     if (result.code === 0) {
                         this.muted = !this.muted;
                     } else {
                         Swal.fire('Error', result.message, 'error');
                     }
-                }
-            );
+                });
         }
     }
 
     public shareGroup(): void {
-        this.router.navigate(['/share-target', {message: `[group]${this.conversation.id}`}]);
+        this.router.navigate(['/share-target', { message: `[group]${this.conversation.id}` }]);
     }
-
 }

@@ -1,5 +1,5 @@
-@import "fixed_widescreen";
-@import "button_effects";
+@import 'fixed_widescreen';
+@import 'button_effects';
 
 /******************
  *    Header
@@ -23,7 +23,7 @@
   padding-right: 1px;
 
   &.shadow {
-    box-shadow: 0 20px 29px -13px rgba(0, 0, 0, 0.41)
+    box-shadow: 0 20px 29px -13px rgba(0, 0, 0, 0.41);
   }
 }
 
@@ -36,7 +36,7 @@
     @extend %transparent-button;
     cursor: pointer;
     width: 35px;
-    color: #FFF;
+    color: #fff;
     text-align: center;
     font-size: 1.7em;
     outline: none;

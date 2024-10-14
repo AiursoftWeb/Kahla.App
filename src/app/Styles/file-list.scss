@@ -1,4 +1,4 @@
-@import "effects";
+@import 'effects';
 .file-tiles {
   display: flex;
   flex-flow: row wrap;
@@ -37,7 +37,8 @@
         color: var(--primary-color-depth3);
       }
 
-      .title, .detail {
+      .title,
+      .detail {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

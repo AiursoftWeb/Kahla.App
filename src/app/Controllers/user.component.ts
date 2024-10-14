@@ -13,12 +13,13 @@ import { ContactsRepository } from '../Repositories/ContactsRepository';
 
 @Component({
     templateUrl: '../Views/user.html',
-    styleUrls: ['../Styles/menu.scss',
+    styleUrls: [
+        '../Styles/menu.scss',
         '../Styles/button.scss',
         '../Styles/reddot.scss',
-        '../Styles/badge.scss']
+        '../Styles/badge.scss',
+    ],
 })
-
 export class UserComponent implements OnInit {
     public info: ContactInfo;
     public loadingImgURL = Values.loadingImgURL;
@@ -30,8 +31,7 @@ export class UserComponent implements OnInit {
         private contactsRepository: ContactsRepository,
         public cacheService: CacheService,
         public apiService: ApiService
-    ) {
-    }
+    ) {}
 
     public ngOnInit(): void {
         this.route.params.subscribe(t => {
@@ -57,7 +57,7 @@ export class UserComponent implements OnInit {
         const resp = await Swal.fire({
             title: 'Are you sure to delete a friend?',
             icon: 'warning',
-            showCancelButton: true
+            showCancelButton: true,
         });
         if (!resp.value) return;
         try {
@@ -69,8 +69,6 @@ export class UserComponent implements OnInit {
         SwalToast.fire('Success', '', 'success');
         this.contactsRepository.updateAll();
         this.router.navigate(['/home']);
-        
-
     }
 
     public async addAsContract() {
@@ -79,7 +77,7 @@ export class UserComponent implements OnInit {
             SwalToast.fire('Success', '', 'success');
             this.updateFriendInfo(this.info.user.id);
             this.contactsRepository.updateAll();
-        } catch(err) {
+        } catch (err) {
             showCommonErrorDialog(err);
         }
     }
@@ -90,17 +88,17 @@ export class UserComponent implements OnInit {
             input: 'textarea',
             inputPlaceholder: 'Type your reason here...',
             inputAttributes: {
-                maxlength: '200'
+                maxlength: '200',
             },
             confirmButtonColor: 'red',
             showCancelButton: true,
             confirmButtonText: 'Report',
             inputValidator: inputValue => {
                 if (!inputValue || inputValue.length < 5) {
-                    return 'The reason\'s length should between five and two hundreds.';
+                    return "The reason's length should between five and two hundreds.";
                 }
-            }
-        }).then((result) => {
+            },
+        }).then(result => {
             if (!result.dismiss) {
                 // this.friendsApiService.Report(this.info.id, result.value as string).subscribe(response => {
                 //     if (response.code === 0) {

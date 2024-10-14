@@ -31,9 +31,8 @@ import { SwalToast } from '../Helpers/Toast';
 import { ContactsRepository } from '../Repositories/ContactsRepository';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
-
 export class MessageService {
     public conversation: Conversation;
     public localMessages: Message[] = [];
@@ -63,9 +62,8 @@ export class MessageService {
         private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
         private themeService: ThemeService,
-        private applicationRef: ApplicationRef,
-    ) {
-    }
+        private applicationRef: ApplicationRef
+    ) {}
 
     public async OnMessage(ev: AiurEvent) {
         if (!this.conversation) {
@@ -74,20 +72,30 @@ export class MessageService {
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
-                if (this.conversation.id === evt.message.conversationId
-                    && this.rawMessages.findIndex(t => t.id === evt.message.id) === -1) {
-                    if (evt.previousMessageId === this.rawMessages[this.rawMessages.length - 1].id ||
-                        evt.previousMessageId === '00000000-0000-0000-0000-000000000000') {
+                if (
+                    this.conversation.id === evt.message.conversationId &&
+                    this.rawMessages.findIndex(t => t.id === evt.message.id) === -1
+                ) {
+                    if (
+                        evt.previousMessageId ===
+                            this.rawMessages[this.rawMessages.length - 1].id ||
+                        evt.previousMessageId === '00000000-0000-0000-0000-000000000000'
+                    ) {
                         if (evt.message.senderId === this.cacheService.cachedData.me.id) {
                             // the temp message should still exist
-                            const index = this.localMessages.findIndex(t => t.id === evt.message.id && t.local);
+                            const index = this.localMessages.findIndex(
+                                t => t.id === evt.message.id && t.local
+                            );
                             if (index !== -1) {
                                 this.localMessages.splice(index);
                             }
                         }
                         this.insertMessage(evt.message);
-                        this.conversationApiService.GetMessage(this.conversation.id, null, 0).subscribe();
-                    } else { // lost some message.
+                        this.conversationApiService
+                            .GetMessage(this.conversation.id, null, 0)
+                            .subscribe();
+                    } else {
+                        // lost some message.
                         await this.getMessages(0, this.conversation.id, null, 15);
                     }
                     if (this.belowWindowPercent <= 0.2) {
@@ -99,14 +107,15 @@ export class MessageService {
             case EventType.NewMemberEvent: {
                 const evt = ev as NewMemberEvent;
                 if (this.conversation.id === evt.conversationId) {
-                    this.conversationApiService.ConversationDetail(evt.conversationId)
+                    this.conversationApiService
+                        .ConversationDetail(evt.conversationId)
                         .subscribe(updated => {
                             this.conversation = updated.value;
                         });
                     SwalToast.fire({
                         title: `${evt.newMember.nickName} joined the group.`,
                         icon: 'info',
-                        position: 'bottom'
+                        position: 'bottom',
                     });
                 }
                 break;
@@ -117,11 +126,13 @@ export class MessageService {
                     if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
                         this.router.navigate(['/home']);
                     } else {
-                        this.conversation.users.splice(this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id));
+                        this.conversation.users.splice(
+                            this.conversation.users.findIndex(x => x.user.id === evt.leftUser.id)
+                        );
                         SwalToast.fire({
                             title: `${evt.leftUser.nickName} left the group.`,
                             icon: 'info',
-                            position: 'bottom'
+                            position: 'bottom',
                         });
                     }
                 }
@@ -129,9 +140,11 @@ export class MessageService {
             }
             case EventType.DissolveEvent: {
                 if (this.conversation.id === (<DissolveEvent>ev).conversationId) {
-                    Swal.fire('The group has been dissolved!',
+                    Swal.fire(
+                        'The group has been dissolved!',
                         `Group ${this.conversation.displayName} has been dissolved by the owner!`,
-                        'warning');
+                        'warning'
+                    );
                     this.router.navigate(['/home']);
                 }
                 break;
@@ -150,8 +163,10 @@ export class MessageService {
     public async getMessages(unread: number, id: number, skipFrom: string, take: number) {
         this.messageLoading = true;
         this.localMessages = this.localMessages.filter(t => !t.local);
-        const messages = await this.conversationApiService.GetMessage(id, skipFrom, take)
-            .pipe(map(t => t.items)).toPromise();
+        const messages = await this.conversationApiService
+            .GetMessage(id, skipFrom, take)
+            .pipe(map(t => t.items))
+            .toPromise();
         if (!this.conversation || this.conversation.id !== id) {
             return;
         }
@@ -160,9 +175,11 @@ export class MessageService {
             this.noMoreMessages = true;
         }
         if (this.localMessages.length > 0 && messages.length > 0) {
-            this.newMessages = this.cacheService.cachedData.me &&
+            this.newMessages =
+                this.cacheService.cachedData.me &&
                 messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
-                take === 1 && this.belowWindowPercent > 0;
+                take === 1 &&
+                this.belowWindowPercent > 0;
         }
         // Load new
         if (!skipFrom) {
@@ -180,7 +197,8 @@ export class MessageService {
                 this.localMessages = modifiedMsg;
                 this.rawMessages = messages;
             }
-        } else { // load more
+        } else {
+            // load more
             this.localMessages.unshift(...modifiedMsg);
             this.rawMessages.unshift(...messages);
         }
@@ -195,14 +213,16 @@ export class MessageService {
                 window.scrollTo({
                     top: lis[lis.length - unread].offsetTop,
                     left: 0,
-                    behavior: 'smooth'
+                    behavior: 'smooth',
                 });
             }, 0);
         }
         this.updateAtLink();
         this.saveMessage();
         // clear red dot if necessary
-        const listItem = this.cacheService.cachedData.conversations.find(t => t.id === this.conversation.id);
+        const listItem = this.cacheService.cachedData.conversations.find(
+            t => t.id === this.conversation.id
+        );
         if (listItem) {
             listItem.unReadAmount = 0;
         }
@@ -213,13 +233,18 @@ export class MessageService {
     }
 
     public updateBelowWindowPercent(): void {
-        this.belowWindowPercent = (document.documentElement.scrollHeight - window.scrollY
-            - document.documentElement.clientHeight) / document.documentElement.clientHeight;
+        this.belowWindowPercent =
+            (document.documentElement.scrollHeight -
+                window.scrollY -
+                document.documentElement.clientHeight) /
+            document.documentElement.clientHeight;
     }
 
     public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor((this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
-        this.videoHeight = Math.max(Math.floor(Math.min(this.maxImageWidth * 9 / 21, 400)), 170);
+        this.maxImageWidth = Math.floor(
+            (this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2
+        );
+        this.videoHeight = Math.max(Math.floor(Math.min((this.maxImageWidth * 9) / 21, 400)), 170);
     }
 
     public resetVariables(): void {
@@ -253,7 +278,10 @@ export class MessageService {
 
     public getGroupColor(message: Message): string {
         if (!this.userColors.has(message.senderId)) {
-            this.userColors.set(message.senderId, this.getRandomColor(!this.themeService.IsDarkTheme()));
+            this.userColors.set(
+                message.senderId,
+                this.getRandomColor(!this.themeService.IsDarkTheme())
+            );
         }
         return this.userColors.get(message.senderId);
     }
@@ -265,9 +293,19 @@ export class MessageService {
             } else {
                 const matchedUsers = [];
                 this.conversation.users.forEach((value: UserGroupRelation) => {
-                    if (!getMessage && value.user.nickName.toLowerCase().replace(/ /g, '').includes(nickName.toLowerCase())) {
+                    if (
+                        !getMessage &&
+                        value.user.nickName
+                            .toLowerCase()
+                            .replace(/ /g, '')
+                            .includes(nickName.toLowerCase())
+                    ) {
                         matchedUsers.push(value.user);
-                    } else if (getMessage && value.user.nickName.toLowerCase().replace(/ /g, '') === nickName.toLowerCase()) {
+                    } else if (
+                        getMessage &&
+                        value.user.nickName.toLowerCase().replace(/ /g, '') ===
+                            nickName.toLowerCase()
+                    ) {
                         matchedUsers.push(value.user);
                     }
                 });
@@ -298,14 +336,18 @@ export class MessageService {
         if (text.length > 2) {
             return false;
         }
-        const regex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
+        const regex =
+            /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
         return regex.test(text);
     }
 
     public checkOwner(id?: string): boolean {
         if (this.conversation && this.cacheService.cachedData.me) {
             if (this.conversation.discriminator === 'GroupConversation') {
-                return (<GroupConversation>this.conversation).ownerId === (id ? id : this.cacheService.cachedData.me.id);
+                return (
+                    (<GroupConversation>this.conversation).ownerId ===
+                    (id ? id : this.cacheService.cachedData.me.id)
+                );
             } else {
                 return true;
             }
@@ -328,15 +370,17 @@ export class MessageService {
                 const imageWidth = Number(imgSplit[1]),
                     imageHeight = Number(imgSplit[2]);
                 const ratio = imageHeight / imageWidth;
-                const realMaxWidth = Math.max(Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
-                    Math.min(this.maxImageWidth, 100)); // for too long image, just cut half of it
+                const realMaxWidth = Math.max(
+                    Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
+                    Math.min(this.maxImageWidth, 100)
+                ); // for too long image, just cut half of it
                 t.fileRef = {
                     imgWidth: imageWidth,
                     imgHeight: imageHeight,
                     imgDisplayWidth: imageWidth,
                     imgDisplayHeight: imageHeight,
                     fileType: FileType.Image,
-                    filePath: imgSplit[0]
+                    filePath: imgSplit[0],
                 } as MessageFileRef;
                 if (realMaxWidth < imageWidth) {
                     t.fileRef.imgDisplayWidth = realMaxWidth;
@@ -352,7 +396,7 @@ export class MessageService {
                     filePath: fileSplit[0],
                     fileName: fileSplit[1],
                     fileSize: fileSplit[2],
-                    fileType: FileType.File
+                    fileType: FileType.File,
                 } as MessageFileRef;
             } else {
                 if (!isFile[2]) {
@@ -361,7 +405,7 @@ export class MessageService {
                 }
                 t.fileRef = {
                     filePath: isFile[2],
-                    fileType: isFile[1] === 'video' ? FileType.Video : FileType.Audio
+                    fileType: isFile[1] === 'video' ? FileType.Video : FileType.Audio,
                 } as MessageFileRef;
             }
         } else if (t.content.startsWith('[group]')) {
@@ -369,20 +413,21 @@ export class MessageService {
             t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
             this.groupsApiService.GroupSummary(groupId).subscribe(p => {
                 if (p.value) {
-                    t.content = `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
+                    t.content =
+                        `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
                         `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
                     t.relatedData = p.value;
                 } else {
                     t.content = 'Invalid Group';
                 }
             });
-
         } else if (t.content.startsWith('[user]')) {
             const userId = t.content.substring(6);
             t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
             this.friendsApiService.UserDetail(userId).subscribe(p => {
                 if (p?.searchedUser.user) {
-                    t.content = `[share]${p.searchedUser.user.id}|${p.searchedUser.user.nickName.replace(/\|/g, '')}|` +
+                    t.content =
+                        `[share]${p.searchedUser.user.id}|${p.searchedUser.user.nickName.replace(/\|/g, '')}|` +
                         `${p.searchedUser.user.bio ? p.searchedUser.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.searchedUser.user.iconFilePath)}`;
                     t.relatedData = p.searchedUser.user;
                 } else {
@@ -394,7 +439,7 @@ export class MessageService {
             t.content = he.encode(t.content);
             t.content = Autolinker.link(t.content, {
                 stripPrefix: false,
-                className: 'chat-inline-link'
+                className: 'chat-inline-link',
             });
             t.content = this.getAtIDs(t.content)[0];
         }
@@ -439,8 +484,10 @@ export class MessageService {
                 this.updateAccessToken();
             } else {
                 this.fileAccessToken = localToken.raw;
-                this.accessTokenUpdateSchedule =
-                    setTimeout(() => this.updateAccessToken(), localToken.expiresDate.getTime() - Date.now() - 5000);
+                this.accessTokenUpdateSchedule = setTimeout(
+                    () => this.updateAccessToken(),
+                    localToken.expiresDate.getTime() - Date.now() - 5000
+                );
             }
         } else {
             this.updateAccessToken();
@@ -475,7 +522,7 @@ export class MessageService {
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
         this.localMessages = this.localMessages.filter(m => !m.resend);
         if (unsentMessages.has(this.conversation.id)) {
-            (<Array<Message>>(unsentMessages.get(this.conversation.id))).forEach((message) => {
+            (<Array<Message>>unsentMessages.get(this.conversation.id)).forEach(message => {
                 message.resend = true;
                 message.sendTimeDate = new Date(message.sendTime);
                 this.localMessages.push(message);
@@ -498,8 +545,10 @@ export class MessageService {
             this.cacheService.cachedData.probeTokens[id] = token;
             this.cacheService.saveCache();
             // schedule the next update
-            this.accessTokenUpdateSchedule =
-                setTimeout(() => this.updateAccessToken(), token.expiresDate.getTime() - Date.now() - 5000);
+            this.accessTokenUpdateSchedule = setTimeout(
+                () => this.updateAccessToken(),
+                token.expiresDate.getTime() - Date.now() - 5000
+            );
             this.applicationRef.tick();
         });
     }
@@ -522,7 +571,7 @@ export class MessageService {
         if (!this.talkingDestroyed) {
             const h = document.documentElement.scrollHeight;
             if (smooth) {
-                window.scroll({top: h, behavior: 'smooth'});
+                window.scroll({ top: h, behavior: 'smooth' });
             } else {
                 window.scroll(0, h);
             }

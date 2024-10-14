@@ -7,10 +7,7 @@ import { ThemeService } from '../Services/ThemeService';
     styleUrls: ['../Styles/menu.scss'],
 })
 export class ThemeComponent implements OnInit {
-    constructor(
-        private themeService: ThemeService
-    ) {
-    }
+    constructor(private themeService: ThemeService) {}
 
     public currentTheme: Theme = Theme.kahlaAuto;
     public primaryColor: number;

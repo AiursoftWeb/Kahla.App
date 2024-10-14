@@ -12,12 +12,9 @@ import { MessageService } from '../Services/MessageService';
 @Component({
     selector: 'app-file-history',
     templateUrl: '../Views/file-history.html',
-    styleUrls: ['../Styles/menu.scss',
-        '../Styles/file-list.scss',
-        '../Styles/button.scss']
+    styleUrls: ['../Styles/menu.scss', '../Styles/file-list.scss', '../Styles/button.scss'],
 })
 export class FileHistoryComponent implements OnInit {
-
     public files: FileHistoryApiModel[] = [];
     public conversationId: number;
     public currentSkip = 0;
@@ -31,9 +28,8 @@ export class FileHistoryComponent implements OnInit {
         private filesApiService: FilesApiService,
         private messageService: MessageService,
         public probeService: ProbeService,
-        public router: Router,
-    ) {
-    }
+        public router: Router
+    ) {}
 
     ngOnInit(): void {
         this.route.params.subscribe(param => {
@@ -48,12 +44,17 @@ export class FileHistoryComponent implements OnInit {
     }
 
     public isImage(fileName: string): boolean {
-        return !!fileName.substring(fileName.lastIndexOf('.') + 1).match(/png|jpg|jpeg|gif|webp|bmp/);
+        return !!fileName
+            .substring(fileName.lastIndexOf('.') + 1)
+            .match(/png|jpg|jpeg|gif|webp|bmp/);
     }
 
     public buildProbeUrl(file: ProbeFile, dir: FileHistoryApiModel, download = false): string {
-        return this.probeService.encodeProbeFileUrl(`${dir.siteName}/${dir.rootPath}/${dir.showingDateUTC}/${file.fileName}`
-            , this.accessToken, download);
+        return this.probeService.encodeProbeFileUrl(
+            `${dir.siteName}/${dir.rootPath}/${dir.showingDateUTC}/${file.fileName}`,
+            this.accessToken,
+            download
+        );
     }
 
     public calcSummary() {
@@ -73,12 +74,15 @@ export class FileHistoryComponent implements OnInit {
             filePath: `${dir.showingDateUTC}/${file.fileName}`,
             fileType: FileType.File,
             fileName: file.fileName,
-            fileSize: this.probeService.getFileSizeText(file.fileSize)
+            fileSize: this.probeService.getFileSizeText(file.fileSize),
         } as MessageFileRef;
-        this.router.navigate(['share-target', {
-            srcConversation: this.conversationId,
-            relativePath: true
-        }]);
+        this.router.navigate([
+            'share-target',
+            {
+                srcConversation: this.conversationId,
+                relativePath: true,
+            },
+        ]);
     }
 
     public loadFiles() {
@@ -86,14 +90,15 @@ export class FileHistoryComponent implements OnInit {
             return;
         }
         this.loading = true;
-        this.conversationApiService.FileHistory(this.conversationId, this.currentSkip++).subscribe(t => {
-            this.loading = false;
-            if (t.code === 0) {
-                this.files.push(t);
-            } else if (t.code === -3) {
-                this.noMoreFiles = true;
-            }
-        });
+        this.conversationApiService
+            .FileHistory(this.conversationId, this.currentSkip++)
+            .subscribe(t => {
+                this.loading = false;
+                if (t.code === 0) {
+                    this.files.push(t);
+                } else if (t.code === -3) {
+                    this.noMoreFiles = true;
+                }
+            });
     }
-
 }

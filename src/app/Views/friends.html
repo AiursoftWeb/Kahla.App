@@ -6,42 +6,50 @@
             <div class="icon">
                 <i class="fas fa-user-plus"></i>
             </div>
-            <div class="words" i18n="@@GlobalSearch">
-                Add New
-            </div>
+            <div class="words" i18n="@@GlobalSearch">Add New</div>
         </a>
         <a class="friends-button" routerLink="/discover">
             <div class="icon">
                 <i class="fas fa fa-magic"></i>
             </div>
-            <div class="words" i18n="@@Discover">
-                Discover Friends
-            </div>
+            <div class="words" i18n="@@Discover">Discover Friends</div>
         </a>
         <a class="friends-button" (click)="createGroup()">
             <div class="icon">
                 <i class="fas fa-users"></i>
             </div>
-            <div class="words" i18n="@@CreateGroup">
-                Create Group
-            </div>
+            <div class="words" i18n="@@CreateGroup">Create Group</div>
         </a>
     </div>
     <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt !== ''}">
-        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
-               (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
-               (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt"/>
-        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''"><i
-            class="fas fa-times"></i></button>
+        <input
+            id="searchBar"
+            placeholder="Search for your friends and groups"
+            type="text"
+            #searchInput
+            (input)="search(searchInput.value, true)"
+            (keydown.enter)="goSingleSearch(false)"
+            (keydown.control.enter)="goSingleSearch(true)"
+            [(ngModel)]="searchTxt"
+        />
+        <button
+            class="button compact primary"
+            [ngClass]="{ 'd-none': searchTxt === '' }"
+            (click)="searchTxt = ''"
+        >
+            <i class="fas fa-times"></i>
+        </button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span><i class="fas fa-user"></i>
+            <span
+                ><i class="fas fa-user"></i>
                 Users
             </span>
         </div>
         <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span><i class="fas fa-users"></i>
+            <span
+                ><i class="fas fa-users"></i>
                 Groups
             </span>
         </div>
@@ -51,24 +59,27 @@
 <div *ngIf="showUsers && this.results">
     <div class="result" *ngFor="let user of this.results" (click)="userClick(user, $event.ctrlKey)">
         <div class="user-img-group">
-            <img class="user-img" src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"
-                 routerLink="/user/{{user.user.id}}" (click)="$event.stopPropagation();">
-            <div class="small-dot"
-                 *ngIf="user.online !== null"
-                 [class.greendot]="user.online"
-                 [class.graydot]="!user.online">
-            </div>
+            <img
+                class="user-img"
+                src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"
+                routerLink="/user/{{user.user.id}}"
+                (click)="$event.stopPropagation();"
+            />
+            <div
+                class="small-dot"
+                *ngIf="user.online !== null"
+                [class.greendot]="user.online"
+                [class.graydot]="!user.online"
+            ></div>
         </div>
-        <div class="sender">
-            {{user.user.nickName}}
-        </div>
+        <div class="sender">{{user.user.nickName}}</div>
     </div>
     <div *ngIf="results.length === 0" class="empty-result-notice">No result.</div>
     <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
         class="badge badge-secondary">Ctrl</span> to start talking directly.
     </div> -->
-    <div *ngIf="results.length === 1" class="empty-result-notice">Press <span
-        class="badge badge-secondary">Enter</span> to talk.
+    <div *ngIf="results.length === 1" class="empty-result-notice">
+        Press <span class="badge badge-secondary">Enter</span> to talk.
     </div>
 </div>
 <div *ngIf="!showUsers && this.results">

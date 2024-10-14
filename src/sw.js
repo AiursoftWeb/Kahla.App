@@ -18,8 +18,8 @@ function installCache() {
             '/media/fa-solid-900.woff2',
             '/media/fa-regular-400.woff2',
             '/media/fa-brands-400.woff2',
-            '/assets/144x144.png'
-        ].map(t => new Request(t, {cache: 'no-cache'}))
+            '/assets/144x144.png',
+        ].map(t => new Request(t, { cache: 'no-cache' }));
         return cache.addAll(requests);
     });
 }
@@ -57,11 +57,13 @@ self.addEventListener('activate', function (event) {
     event.waitUntil(
         self.clients.claim(),
         caches.keys().then(function (keyList) {
-            return Promise.all(keyList.map(function (key) {
-                if (cacheKeeplist.indexOf(key) === -1) {
-                    return caches.delete(key);
-                }
-            }));
+            return Promise.all(
+                keyList.map(function (key) {
+                    if (cacheKeeplist.indexOf(key) === -1) {
+                        return caches.delete(key);
+                    }
+                })
+            );
         })
     );
 });
@@ -69,16 +71,19 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('message', function (event) {
     if (event.data === UPDATE_REQUIRED) {
         console.log('Force Cache Upgrade triggered.');
-        caches.delete(CACHE).then(() => {
-            return installCache();
-        }).then(() => {
-            self.clients.matchAll().then(clients => {
-                console.log(clients);
-                for (let i = 0; i < clients.length; i++) {
-                    clients[i].postMessage(UPDATE_COMPLETED);
-                }
+        caches
+            .delete(CACHE)
+            .then(() => {
+                return installCache();
             })
-        })
+            .then(() => {
+                self.clients.matchAll().then(clients => {
+                    console.log(clients);
+                    for (let i = 0; i < clients.length; i++) {
+                        clients[i].postMessage(UPDATE_COMPLETED);
+                    }
+                });
+            });
     }
 });
 
@@ -126,7 +131,7 @@ self.addEventListener('push', function (event) {
         } else if (message.startsWith('[audio]')) {
             message = 'Audio';
         } else if (message.startsWith('[group]')) {
-            message = 'Group Invitation'
+            message = 'Group Invitation';
         } else if (message.startsWith('[user]')) {
             message = 'Contact card';
         }
@@ -144,7 +149,12 @@ self.addEventListener('push', function (event) {
                             talkingPage = true;
                         }
                     }
-                    if (!isNaN(URLId) && URLId == data.message.conversationId && client.focused && talkingPage) {
+                    if (
+                        !isNaN(URLId) &&
+                        URLId == data.message.conversationId &&
+                        client.focused &&
+                        talkingPage
+                    ) {
                         showNotification = false;
                     }
                 });
@@ -155,7 +165,7 @@ self.addEventListener('push', function (event) {
                         icon: imageLink,
                         renotify: true,
                         tag: data.message.conversationId.toString(),
-                        data: data
+                        data: data,
                     });
                 }
             })
@@ -167,7 +177,7 @@ self.addEventListener('push', function (event) {
             icon: imageLink,
             renotify: true,
             tag: -1,
-            data: data
+            data: data,
         });
     } else if (data.type == 2) {
         // were deleted event
@@ -176,7 +186,7 @@ self.addEventListener('push', function (event) {
             icon: imageLink,
             renotify: true,
             tag: -1,
-            data: data
+            data: data,
         });
     } else if (data.type == 3) {
         // friend accepted event
@@ -185,7 +195,7 @@ self.addEventListener('push', function (event) {
             icon: imageLink,
             renotify: true,
             tag: -1,
-            data: data
+            data: data,
         });
     }
 });

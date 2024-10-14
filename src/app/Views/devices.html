@@ -4,7 +4,13 @@
     <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
         <div class="img"><i class="far fa-bell"></i></div>
         <div class="text">Enable web push notification</div>
-        <input id="toggleWebpush" class="tgl" type="checkbox" disabled="disabled" [checked]="webPushEnabled"/>
+        <input
+            id="toggleWebpush"
+            class="tgl"
+            type="checkbox"
+            disabled="disabled"
+            [checked]="webPushEnabled"
+        />
         <label for="toggleWebpush" class="tgl-btn"></label>
     </div>
 </ng-container>
@@ -22,16 +28,23 @@
     </div>
     <div class="text">Send test notification</div>
 </div>
-<ng-container *ngIf="!webpushSupported()"> <!--TODO: ELECTRON-->
+<ng-container *ngIf="!webpushSupported()">
+    <!--TODO: ELECTRON-->
     <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
 </ng-container>
 <div class="menu-header">My web devices</div>
-<div class="menu-button device-menu-button" *ngFor="let device of cacheService.cachedData.devices"
-     (click)="detail(device)">
+<div
+    class="menu-button device-menu-button"
+    *ngFor="let device of cacheService.cachedData.devices"
+    (click)="detail(device)"
+>
     <div class="img device-img">
         <i *ngIf="device.name.includes('Windows')" class="fab fa-windows" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('macOS') || device.name.includes('iOS')" class="fab fa-apple"
-           aria-hidden="true"></i>
+        <i
+            *ngIf="device.name.includes('macOS') || device.name.includes('iOS')"
+            class="fab fa-apple"
+            aria-hidden="true"
+        ></i>
         <i *ngIf="device.name.includes('Android')" class="fab fa-android" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('Linux')" class="fab fa-linux" aria-hidden="true"></i>
     </div>
@@ -39,12 +52,18 @@
 
     <div class="img device-img">
         <i *ngIf="device.name.includes('Firefox')" class="fab fa-firefox" aria-hidden="true"></i>
-        <i *ngIf="(device.name.includes('Chromium') && !device.name.includes('Edge')) || device.name.includes('Chrome')"
-           class="fab fa-chrome"
-           aria-hidden="true"></i>
+        <i
+            *ngIf="(device.name.includes('Chromium') && !device.name.includes('Edge')) || device.name.includes('Chrome')"
+            class="fab fa-chrome"
+            aria-hidden="true"
+        ></i>
         <i *ngIf="device.name.includes('Safari')" class="fab fa-safari" aria-hidden="true"></i>
         <i *ngIf="device.name.includes('Opera')" class="fab fa-opera" aria-hidden="true"></i>
-        <i *ngIf="device.name.includes('Internet Explorer')" class="fab fa-internet-explorer" aria-hidden="true"></i>
+        <i
+            *ngIf="device.name.includes('Internet Explorer')"
+            class="fab fa-internet-explorer"
+            aria-hidden="true"
+        ></i>
         <i *ngIf="device.name.includes('Edge')" class="fab fa-edge" aria-hidden="true"></i>
     </div>
     <div class="text device-text">{{ device.name.split('-')[1] }}</div>

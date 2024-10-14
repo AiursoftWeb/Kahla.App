@@ -1,13 +1,17 @@
 <app-header title="Group Info"></app-header>
 <div *ngIf="conversation" class="user">
-    <a class="user-img groupGridRow" href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}"
-       target="_blank" rel="noopener noreferrer">
-        <img class="user-img groupGridRow"
-             src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=128&square=true">
+    <a
+        class="user-img groupGridRow"
+        href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        <img
+            class="user-img groupGridRow"
+            src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=128&square=true"
+        />
     </a>
-    <div class="name">
-        {{conversation.displayName}}
-    </div>
+    <div class="name">{{conversation.displayName}}</div>
     <div class="create-time">
         Create Time: {{conversation.conversationCreateTime | date:'mediumDate'}}
     </div>
@@ -39,11 +43,14 @@
         <i *ngIf="!muted" class="fas fa-bell"></i>
     </div>
     <div class="text" i18n="@@Notification">Notification</div>
-    <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()"/>
+    <input id="toggleMute" class="tgl" type="checkbox" [checked]="!muted" (click)="mute()" />
     <label for="toggleMute" class="tgl-btn"></label>
 </div>
-<div class="menu-button" *ngIf="messageService.checkOwner()"
-     routerLink="/managegroup/{{ conversation ? conversation.id : 0 }}">
+<div
+    class="menu-button"
+    *ngIf="messageService.checkOwner()"
+    routerLink="/managegroup/{{ conversation ? conversation.id : 0 }}"
+>
     <div class="img">
         <i class="fas fa-cogs"></i>
     </div>
@@ -59,16 +66,17 @@
     </div>
     <div class="menu-button" *ngFor="let e of conversation.users" routerLink="/user/{{ e.userId }}">
         <div>
-            <img class="img" src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=128&square=true">
+            <img
+                class="img"
+                src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=128&square=true"
+            />
             <!-- <div class="small-dot"
                  style="top:29px; right:-42px;" *ngIf="e.user.isOnline !== null"
                  [class.greendot]="e.user.isOnline"
                  [class.graydot]="!e.user.isOnline">
             </div> -->
         </div>
-        <div class="text">
-            {{e.user.nickName}}
-        </div>
+        <div class="text">{{e.user.nickName}}</div>
         <label class="badge badge-primary" *ngIf="messageService.checkOwner(e.userId)">Owner</label>
     </div>
 </div>

@@ -19,43 +19,44 @@ export class EventService {
     private reconnectAttemptTimeout;
     private closeWebSocket = false;
 
-
-    constructor(private messagesApiService: MessagesApiService) {
-    }
+    constructor(private messagesApiService: MessagesApiService) {}
 
     public initPusher(): void {
         this.connecting = true;
         this.closeWebSocket = false;
-        this.messagesApiService.InitWebsocket().subscribe(model => {
-            if (this.ws) {
-                this.closeWebSocket = true;
-                this.ws.close();
-            }
-            this.closeWebSocket = false;
-            this.ws = new WebSocket(model.webSocketEndpoint);
-            this.ws.onopen = () => {
-                this.connecting = false;
-                clearTimeout(this.reconnectAttemptTimeout);
-                if (this.errorOrClose) {
-                    this.errorOrClose = false;
-                    this.timeoutNumber = 1000;
-                    this.onReconnect.next();
+        this.messagesApiService.InitWebsocket().subscribe(
+            model => {
+                if (this.ws) {
+                    this.closeWebSocket = true;
+                    this.ws.close();
                 }
-            };
-            this.ws.onmessage = evt => {
-                this.onMessage.next(JSON.parse(evt.data) as AiurEvent);
-            };
-            this.ws.onerror = () => {
+                this.closeWebSocket = false;
+                this.ws = new WebSocket(model.webSocketEndpoint);
+                this.ws.onopen = () => {
+                    this.connecting = false;
+                    clearTimeout(this.reconnectAttemptTimeout);
+                    if (this.errorOrClose) {
+                        this.errorOrClose = false;
+                        this.timeoutNumber = 1000;
+                        this.onReconnect.next();
+                    }
+                };
+                this.ws.onmessage = evt => {
+                    this.onMessage.next(JSON.parse(evt.data) as AiurEvent);
+                };
+                this.ws.onerror = () => {
+                    this.errorOrClosedFunc();
+                    this.onErrorOrClose.next(true);
+                };
+                this.ws.onclose = () => {
+                    this.errorOrClosedFunc();
+                    this.onErrorOrClose.next(false);
+                };
+            },
+            () => {
                 this.errorOrClosedFunc();
-                this.onErrorOrClose.next(true);
-            };
-            this.ws.onclose = () => {
-                this.errorOrClosedFunc();
-                this.onErrorOrClose.next(false);
-            };
-        }, () => {
-            this.errorOrClosedFunc();
-        });
+            }
+        );
     }
 
     private errorOrClosedFunc(): void {

@@ -13,5 +13,5 @@ export enum Theme {
     communistDark,
     grassAuto,
     grassLight,
-    grassDark
+    grassDark,
 }

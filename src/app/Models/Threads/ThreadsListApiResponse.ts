@@ -1,4 +1,4 @@
-import { ThreadInfo } from "../ThreadInfo";
+import { ThreadInfo } from '../ThreadInfo';
 
 export class ThreadsListApiResponse {
     public knownThreads: ThreadInfo[];

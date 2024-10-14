@@ -1,20 +1,20 @@
-import { Injectable } from "@angular/core";
-import { AuthApiService } from "./Api/AuthApiService";
-import { Router } from "@angular/router";
-import { MessageService } from "./MessageService";
-import { CacheService } from "./CacheService";
-import { DevicesApiService } from "./Api/DevicesApiService";
-import { ThemeService } from "./ThemeService";
-import Swal from "sweetalert2";
-import { ApiService } from "./Api/ApiService";
-import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
-import { EventService } from "./EventService";
-import { GlobalNotifyService } from "./GlobalNotifyService";
-import { lastValueFrom } from "rxjs";
-import { ContactsRepository } from "../Repositories/ContactsRepository";
+import { Injectable } from '@angular/core';
+import { AuthApiService } from './Api/AuthApiService';
+import { Router } from '@angular/router';
+import { MessageService } from './MessageService';
+import { CacheService } from './CacheService';
+import { DevicesApiService } from './Api/DevicesApiService';
+import { ThemeService } from './ThemeService';
+import Swal from 'sweetalert2';
+import { ApiService } from './Api/ApiService';
+import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
+import { EventService } from './EventService';
+import { GlobalNotifyService } from './GlobalNotifyService';
+import { lastValueFrom } from 'rxjs';
+import { ContactsRepository } from '../Repositories/ContactsRepository';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class InitService {
     private options = {
@@ -38,7 +38,7 @@ export class InitService {
     public async init(): Promise<void> {
         if (navigator.userAgent.match(/MSIE|Trident/)) {
             Swal.fire(
-                "Oops, it seems that you are opening Kahla in IE.",
+                'Oops, it seems that you are opening Kahla in IE.',
                 "Please note that Kahla doesn't support IE :(<br/>" +
                     'We recommend upgrading to the latest <a href="https://mozilla.org/firefox/">Firefox</a>, ' +
                     '<a href="https://chrome.google.com">Google Chrome, </a>' +
@@ -46,9 +46,7 @@ export class InitService {
             );
         }
         // load server config
-        this.cacheService.serverConfig = await lastValueFrom(
-            this.apiService.ServerInfo()
-        );
+        this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
         this.cacheService.initCache();
         this.contactsRepository.initCache();
 
@@ -67,10 +65,10 @@ export class InitService {
             }
 
             if (!signedIn) {
-                this.router.navigate(["/signin"], { replaceUrl: true });
+                this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
-                if (this.router.isActive("/signin", false)) {
-                    this.router.navigate(["/home"], { replaceUrl: true });
+                if (this.router.isActive('/signin', false)) {
+                    this.router.navigate(['/home'], { replaceUrl: true });
                 }
 
                 // Webpush Service
@@ -78,37 +76,27 @@ export class InitService {
                     // !this._electronService.isElectronApp && // TODO: ELECTRON
                     navigator.serviceWorker
                 ) {
-                    console.log("Start Webpush subscribe.")
+                    console.log('Start Webpush subscribe.');
                     this.subscribeUser();
                     this.updateSubscription();
                 }
 
                 // Init stargate push
                 this.eventService.initPusher();
-                this.eventService.onMessage.subscribe((t) =>
-                    this.messageService.OnMessage(t)
-                );
-                this.eventService.onReconnect.subscribe(() =>
-                    this.messageService.reconnectPull()
-                );
+                this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
+                this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
                 this.globalNotifyService.init();
 
                 // Load User Info
                 // this.cacheService.cachedData.me.avatarURL =
                 //     this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
-                this.themeService.ApplyThemeFromRemote(
-                    this.cacheService.cachedData.options
-                );
+                this.themeService.ApplyThemeFromRemote(this.cacheService.cachedData.options);
                 this.cacheService.updateConversation();
                 this.contactsRepository.updateAll();
             }
         } else {
-            this.router.navigate(["/signin"], { replaceUrl: true });
-            Swal.fire(
-                "Server is not available",
-                "Please try again later.",
-                "error"
-            );
+            this.router.navigate(['/signin'], { replaceUrl: true });
+            Swal.fire('Server is not available', 'Please try again later.', 'error');
         }
     }
 
@@ -121,60 +109,49 @@ export class InitService {
 
     public subscribeUser() {
         if (
-            "Notification" in window &&
-            "serviceWorker" in navigator &&
-            Notification.permission === "granted"
+            'Notification' in window &&
+            'serviceWorker' in navigator &&
+            Notification.permission === 'granted'
         ) {
             const _this = this;
-            navigator.serviceWorker.ready.then((registration) => {
-                console.log("Service worker responsed");
-                return registration.pushManager
-                    .getSubscription()
-                    .then((sub) => {
-                        console.log("Got subscription:");
-                        console.log(sub);
+            navigator.serviceWorker.ready.then(registration => {
+                console.log('Service worker responsed');
+                return registration.pushManager.getSubscription().then(sub => {
+                    console.log('Got subscription:');
+                    console.log(sub);
 
-                        if (sub === null) {
-                            return registration.pushManager
-                                .subscribe(_this.options)
-                                .then(function (pushSubscription) {
-                                    console.log("Call bind device");
-                                    _this.bindDevice(pushSubscription);
-                                });
-                        } else {
-                            console.log("Call bind device");
-                            _this.bindDevice(sub);
-                        }
-                    });
+                    if (sub === null) {
+                        return registration.pushManager
+                            .subscribe(_this.options)
+                            .then(function (pushSubscription) {
+                                console.log('Call bind device');
+                                _this.bindDevice(pushSubscription);
+                            });
+                    } else {
+                        console.log('Call bind device');
+                        _this.bindDevice(sub);
+                    }
+                });
             });
         }
     }
 
-    public bindDevice(
-        pushSubscription: PushSubscription,
-        force: boolean = false
-    ) {
+    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
         console.log(pushSubscription);
         let data: PushSubscriptionSetting = JSON.parse(
-            localStorage.getItem("setting-pushSubscription")
+            localStorage.getItem('setting-pushSubscription')
         );
         if (!data) {
             data = {
                 enabled: true,
                 deviceId: 0,
             };
-            localStorage.setItem(
-                "setting-pushSubscription",
-                JSON.stringify(data)
-            );
+            localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (!data.enabled && data.deviceId) {
-            this.devicesApiService.DropDevice(data.deviceId).subscribe((_t) => {
+            this.devicesApiService.DropDevice(data.deviceId).subscribe(_t => {
                 data.deviceId = 0;
-                localStorage.setItem(
-                    "setting-pushSubscription",
-                    JSON.stringify(data)
-                );
+                localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
             });
         }
         if (data.enabled) {
@@ -198,12 +175,9 @@ export class InitService {
                         pushSubscription.toJSON().keys.p256dh,
                         pushSubscription.toJSON().keys.auth
                     )
-                    .subscribe((t) => {
+                    .subscribe(t => {
                         data.deviceId = t.value;
-                        localStorage.setItem(
-                            "setting-pushSubscription",
-                            JSON.stringify(data)
-                        );
+                        localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
                     });
             }
         }
@@ -211,31 +185,24 @@ export class InitService {
 
     private updateSubscription(): void {
         if (
-            "Notification" in window &&
-            "serviceWorker" in navigator &&
-            Notification.permission === "granted"
+            'Notification' in window &&
+            'serviceWorker' in navigator &&
+            Notification.permission === 'granted'
         ) {
             const _this = this;
-            navigator.serviceWorker.ready.then((registration) =>
-                navigator.serviceWorker.addEventListener(
-                    "pushsubscriptionchange",
-                    () => {
-                        registration.pushManager
-                            .subscribe(_this.options)
-                            .then((pushSubscription) => {
-                                _this.bindDevice(pushSubscription, true);
-                            });
-                    }
-                )
+            navigator.serviceWorker.ready.then(registration =>
+                navigator.serviceWorker.addEventListener('pushsubscriptionchange', () => {
+                    registration.pushManager.subscribe(_this.options).then(pushSubscription => {
+                        _this.bindDevice(pushSubscription, true);
+                    });
+                })
             );
         }
     }
 
     private urlBase64ToUint8Array(base64String: string): Uint8Array {
-        const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-        const base64 = (base64String + padding)
-            .replace(/-/g, "+")
-            .replace(/_/g, "/");
+        const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
         const rawData = window.atob(base64);
         const outputArray = new Uint8Array(rawData.length);

@@ -1,4 +1,3 @@
-
 .profile {
   padding: 7px;
   box-sizing: border-box;
@@ -24,7 +23,9 @@
     color: var(--default-textcolor);
     background-color: var(--text-input-bg);
     border-radius: 6px;
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition:
+      border-color ease-in-out 0.15s,
+      box-shadow ease-in-out 0.15s;
     box-shadow: none;
     height: 35px;
     padding: 6px 12px;

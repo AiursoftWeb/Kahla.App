@@ -1,22 +1,22 @@
 <app-header title="Discover Friend" [closeDirectly]="true"></app-header>
-<div class="discoverUsers result" *ngFor="let user of users" routerLink="/user/{{ user.targetUser.id }}">
-    <img class="user-img"
-         src="{{user.targetUser.avatarURL ? user.targetUser.avatarURL : loadingImgURL}}?w=128&square=true"/>
-    <div class="sender">
-        {{ user.targetUser.nickName }}
-    </div>
+<div
+    class="discoverUsers result"
+    *ngFor="let user of users"
+    routerLink="/user/{{ user.targetUser.id }}"
+>
+    <img
+        class="user-img"
+        src="{{user.targetUser.avatarURL ? user.targetUser.avatarURL : loadingImgURL}}?w=128&square=true"
+    />
+    <div class="sender">{{ user.targetUser.nickName }}</div>
     <p>{{ user.commonFriends }} common friends</p>
     <p>{{ user.commonGroups }} common groups</p>
-    <button *ngIf="!user.sentRequest" class="button primary">Send
-        Request
-    </button>
+    <button *ngIf="!user.sentRequest" class="button primary">Send Request</button>
     <button *ngIf="user.sentRequest" class="button primary" disabled>Pending</button>
 </div>
 
 <div *ngIf="users && users.length === 0">
-    <h3>
-        Search users or join groups to add more friends then try again.
-    </h3>
+    <h3>Search users or join groups to add more friends then try again.</h3>
     <div class="buttons">
         <button class="button primary" routerLink="/addfriend" replaceUrl>Search</button>
     </div>

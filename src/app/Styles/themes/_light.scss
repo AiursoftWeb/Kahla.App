@@ -1,4 +1,4 @@
-@import "default-light";
+@import 'default-light';
 
 //
 // Light Theme
@@ -12,5 +12,9 @@ body.theme-light {
   --primary-color-depth1: #{$primary-color-depth1};
   --primary-color-depth2: #{$primary-color-depth2};
   --primary-color-depth3: #{$primary-color-depth3};
-  --header-bg: linear-gradient(to bottom, #{$primary-color-depth3}, #{transparentize($primary-color-depth2, 0.4)});
+  --header-bg: linear-gradient(
+    to bottom,
+    #{$primary-color-depth3},
+    #{transparentize($primary-color-depth2, 0.4)}
+  );
 }

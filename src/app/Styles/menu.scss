@@ -1,5 +1,5 @@
-@import "menus";
-@import "effects";
+@import 'menus';
+@import 'effects';
 
 /******************
  *    User
@@ -59,7 +59,8 @@
   height: 20px;
 }
 
-.menu-button-transparent, .menu-button {
+.menu-button-transparent,
+.menu-button {
   min-height: 50px;
   cursor: pointer;
   outline: none;

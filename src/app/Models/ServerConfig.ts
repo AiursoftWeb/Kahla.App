@@ -10,9 +10,9 @@ export interface ServerConfig extends AiurProtocol {
     serverName: string;
     mode: string;
     probe: {
-        endpoint: string,
-        openPattern: string,
-        downloadPattern: string,
-        playerFormat: string
+        endpoint: string;
+        openPattern: string;
+        downloadPattern: string;
+        playerFormat: string;
     };
 }

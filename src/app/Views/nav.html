@@ -1,46 +1,52 @@
-
 <div class="nav-bar-holder"></div>
 <div class="nav-bar-wrapper">
     <div class="nav-bar">
-        <div class="nav-item" (click)="homeService.currentPage = 0" [class.current]="homeService.currentPage === 0">
+        <div
+            class="nav-item"
+            (click)="homeService.currentPage = 0"
+            [class.current]="homeService.currentPage === 0"
+        >
             <div class="icon">
                 <i class="fas fa-comment" *ngIf="homeService.currentPage === 0"></i>
                 <i class="far fa-comment" *ngIf="homeService.currentPage !== 0"></i>
-                <div *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100" class="dot reddot">
+                <div
+                    *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100"
+                    class="dot reddot"
+                >
                     {{cacheService.totalUnread}}
                 </div>
-                <div *ngIf="cacheService.totalUnread > 99" class="dot reddot">
-                    99+
-                </div>
+                <div *ngIf="cacheService.totalUnread > 99" class="dot reddot">99+</div>
             </div>
-            <div class="words" i18n="@@Kahla">
-                Kahla
-            </div>
+            <div class="words" i18n="@@Kahla">Kahla</div>
         </div>
-        <div class="nav-item" (click)="homeService.currentPage = 1" [class.current]="homeService.currentPage === 1">
+        <div
+            class="nav-item"
+            (click)="homeService.currentPage = 1"
+            [class.current]="homeService.currentPage === 1"
+        >
             <div class="icon">
                 <i class="fas fa-address-book" *ngIf="homeService.currentPage === 1"></i>
                 <i class="far fa-address-book" *ngIf="homeService.currentPage !== 1"></i>
-                <div *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100" class="dot reddot">
+                <div
+                    *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100"
+                    class="dot reddot"
+                >
                     {{cacheService.totalRequests}}
                 </div>
-                <div *ngIf="cacheService.totalRequests > 99" class="dot reddot">
-                    99+
-                </div>
+                <div *ngIf="cacheService.totalRequests > 99" class="dot reddot">99+</div>
             </div>
-            <div class="words" i18n="@@Friends">
-                Friends
-            </div>
+            <div class="words" i18n="@@Friends">Friends</div>
         </div>
-        <div class="nav-item" (click)="homeService.currentPage = 2" [class.current]="homeService.currentPage === 2">
+        <div
+            class="nav-item"
+            (click)="homeService.currentPage = 2"
+            [class.current]="homeService.currentPage === 2"
+        >
             <div class="icon">
                 <i class="fas fa-user" *ngIf="homeService.currentPage === 2"></i>
                 <i class="far fa-user" *ngIf="homeService.currentPage !== 2"></i>
             </div>
-            <div class="words" i18n="@@Me">
-                Me
-            </div>
+            <div class="words" i18n="@@Me">Me</div>
         </div>
     </div>
 </div>
-

@@ -6,25 +6,20 @@ import { CacheService } from '../Services/CacheService';
 import { Subscription } from 'rxjs';
 import { AppOptions } from '../Models/AppOptions';
 
-
 @Component({
     templateUrl: '../Views/advanced-settings.html',
-    styleUrls: ['../Styles/menu.scss',
-        '../Styles/button.scss',
-        '../Styles/toggleButton.scss']
+    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss', '../Styles/toggleButton.scss'],
 })
 export class AdvancedSettingComponent implements OnInit {
-
     public me: KahlaUser;
     public options: AppOptions;
     public updatingSetting: Subscription;
 
     constructor(
         private authApiService: AuthApiService,
-        private cacheService: CacheService,
+        private cacheService: CacheService
         // private probeService: ProbeService,
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         if (this.cacheService.cachedData.me) {
@@ -44,13 +39,14 @@ export class AdvancedSettingComponent implements OnInit {
             this.updatingSetting.unsubscribe();
             this.updatingSetting = null;
         }
-        this.updatingSetting = this.authApiService.UpdateMe({
-            enableEmailNotification: this.options.enableEmailNotification,
-            enableEnterToSendMessage: this.options.enableEnterToSendMessage,
-            enableHideMyOnlineStatus: this.options.enableHideMyOnlineStatus,
-            listInSearchResult: this.options.listInSearchResult,
-            allowHardInvitation: this.options.allowHardInvitation
-        })
+        this.updatingSetting = this.authApiService
+            .UpdateMe({
+                enableEmailNotification: this.options.enableEmailNotification,
+                enableEnterToSendMessage: this.options.enableEnterToSendMessage,
+                enableHideMyOnlineStatus: this.options.enableHideMyOnlineStatus,
+                listInSearchResult: this.options.listInSearchResult,
+                allowHardInvitation: this.options.allowHardInvitation,
+            })
             .subscribe(res => {
                 this.updatingSetting = null;
 

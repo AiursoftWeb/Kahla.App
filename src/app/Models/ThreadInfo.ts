@@ -9,7 +9,7 @@ export interface ThreadInfo {
     id: number;
     muted: boolean;
     someoneAtMe: boolean;
-    
+
     topTenMembers: KahlaUser[];
     lastMessageTime: Date;
     imAdmin: boolean;
@@ -24,9 +24,6 @@ export interface ThreadInfo {
     ownerId: string;
     createTime: Date;
     imInIt: boolean;
-
-
-
 
     /**
      * @deprecated

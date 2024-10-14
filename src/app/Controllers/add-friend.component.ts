@@ -5,10 +5,7 @@ import { SearchApiService } from '../Services/Api/SearchApiService';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
-    styleUrls: ['../Styles/add-friend.scss',
-        '../Styles/button.scss',
-        '../Styles/reddot.scss']
-
+    styleUrls: ['../Styles/add-friend.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
 })
 export class AddFriendComponent implements OnInit {
     public results: SearchResult;
@@ -18,10 +15,7 @@ export class AddFriendComponent implements OnInit {
     public showUsers = true;
     public searchNumbers = 0;
 
-    constructor(
-        private searchApiService: SearchApiService
-    ) {
-    }
+    constructor(private searchApiService: SearchApiService) {}
 
     public ngOnInit(): void {
         const searchBar = document.querySelector('#searchBar') as HTMLTextAreaElement;

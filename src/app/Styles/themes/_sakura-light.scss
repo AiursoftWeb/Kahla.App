@@ -1,10 +1,10 @@
-@import "default-light";
+@import 'default-light';
 
 //
 // Light Theme
 //
 $primary-color-depth1: #f8bbd0;
-$primary-color-depth2: #FB7299;
+$primary-color-depth2: #fb7299;
 $primary-color-depth3: #cf4c78;
 
 body.theme-sakura-light {
@@ -12,5 +12,9 @@ body.theme-sakura-light {
   --primary-color-depth1: #{$primary-color-depth1};
   --primary-color-depth2: #{$primary-color-depth2};
   --primary-color-depth3: #{$primary-color-depth3};
-  --header-bg: linear-gradient(to bottom, #{$primary-color-depth3}, #{transparentize($primary-color-depth2, 0.4)});
+  --header-bg: linear-gradient(
+    to bottom,
+    #{$primary-color-depth3},
+    #{transparentize($primary-color-depth2, 0.4)}
+  );
 }

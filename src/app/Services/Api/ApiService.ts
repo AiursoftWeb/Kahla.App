@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/";
-import { ParamService } from "../ParamService";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { catchError } from "rxjs/operators";
-import { ServerConfig } from "../../Models/ServerConfig";
-import { environment } from "../../../environments/environment";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/';
+import { ParamService } from '../ParamService';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { ServerConfig } from '../../Models/ServerConfig';
+import { environment } from '../../../environments/environment';
 
 type paramDict = {
     [param: string]:
@@ -12,20 +12,24 @@ type paramDict = {
         | number
         | boolean
         | ReadonlyArray<string | number | boolean>
-        | undefined | null;
+        | undefined
+        | null;
 };
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class ApiService {
-    public readonly STORAGE_SERVER_CONFIG = "serverConfig";
+    public readonly STORAGE_SERVER_CONFIG = 'serverConfig';
 
     private _headers: HttpHeaders = new HttpHeaders({
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
     });
 
-    constructor(private http: HttpClient, private paramTool: ParamService) {}
+    constructor(
+        private http: HttpClient,
+        private paramTool: ParamService
+    ) {}
 
     public Get<T>(address: string, params?: paramDict): Observable<T> {
         return this.GetByFullUrl<T>(`${environment.serversProvider}${address}`, true, params);
@@ -47,7 +51,7 @@ export class ApiService {
 
     public processGetParams(params: paramDict): paramDict {
         // remove all undefined or null values
-        let result = {...params};
+        let result = { ...params };
         for (const key in result) {
             if (result[key] === undefined || result[key] === null) {
                 delete result[key];
@@ -59,40 +63,28 @@ export class ApiService {
 
     public Post<T>(address: string, data: any): Observable<T> {
         return this.http
-            .post<T>(
-                `${environment.serversProvider}${address}`,
-                this.paramTool.param(data),
-                {
-                    headers: this._headers,
-                    withCredentials: true,
-                }
-            )
+            .post<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
+                headers: this._headers,
+                withCredentials: true,
+            })
             .pipe(catchError(this.handleError));
     }
 
     public Put<T>(address: string, data: any): Observable<T> {
         return this.http
-            .put<T>(
-                `${environment.serversProvider}${address}`,
-                this.paramTool.param(data),
-                {
-                    headers: this._headers,
-                    withCredentials: true,
-                }
-            )
+            .put<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
+                headers: this._headers,
+                withCredentials: true,
+            })
             .pipe(catchError(this.handleError));
     }
 
     public Patch<T>(address: string, data: any): Observable<T> {
         return this.http
-            .patch<T>(
-                `${environment.serversProvider}${address}`,
-                this.paramTool.param(data),
-                {
-                    headers: this._headers,
-                    withCredentials: true,
-                }
-            )
+            .patch<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
+                headers: this._headers,
+                withCredentials: true,
+            })
             .pipe(catchError(this.handleError));
     }
 
@@ -101,6 +93,6 @@ export class ApiService {
     }
 
     public ServerInfo() {
-        return this.Get<ServerConfig>("/");
+        return this.Get<ServerConfig>('/');
     }
 }

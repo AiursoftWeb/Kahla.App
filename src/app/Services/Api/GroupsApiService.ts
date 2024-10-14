@@ -9,47 +9,48 @@ import { GroupsResult } from '../../Models/GroupsResults';
 export class GroupsApiService {
     private static serverPath = '/groups';
 
-    constructor(
-        private apiService: ApiService
-    ) {
-    }
+    constructor(private apiService: ApiService) {}
 
     public CreateGroup(groupName: string, password: string): Observable<AiurValue<number>> {
-        return this.apiService.Post(GroupsApiService.serverPath + '/CreateGroupConversation',
-            {
-                GroupName: groupName,
-                JoinPassword: password
-            });
+        return this.apiService.Post(GroupsApiService.serverPath + '/CreateGroupConversation', {
+            GroupName: groupName,
+            JoinPassword: password,
+        });
     }
 
     public JoinGroup(groupName: string, password: string): Observable<AiurProtocol> {
-        return this.apiService.Post(GroupsApiService.serverPath + '/JoinGroup',
-        {
+        return this.apiService.Post(GroupsApiService.serverPath + '/JoinGroup', {
             GroupName: groupName,
-            JoinPassword: password
+            JoinPassword: password,
         });
     }
 
     public LeaveGroup(groupName: string): Observable<AiurProtocol> {
-        return this.apiService.Post(GroupsApiService.serverPath + '/LeaveGroup', {GroupName: groupName});
+        return this.apiService.Post(GroupsApiService.serverPath + '/LeaveGroup', {
+            GroupName: groupName,
+        });
     }
 
     public MuteGroup(groupName: string, setMuted: boolean): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/SetGroupMuted', {
             groupName: groupName,
-            setMuted: setMuted
+            setMuted: setMuted,
         });
     }
 
     public TransferOwner(groupName: string, targetUserId: string): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/TransferGroupOwner', {
             groupName: groupName,
-            targetUserId: targetUserId
+            targetUserId: targetUserId,
         });
     }
 
-    public UpdateGroupInfo(groupName: string, listInSearchResult: boolean,
-                           avatarPath?: string, newName?: string): Observable<AiurProtocol> {
+    public UpdateGroupInfo(
+        groupName: string,
+        listInSearchResult: boolean,
+        avatarPath?: string,
+        newName?: string
+    ): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupInfo', {
             GroupName: groupName,
             AvatarPath: avatarPath,
@@ -58,29 +59,32 @@ export class GroupsApiService {
         });
     }
 
-    public UpdateGroupPassword(groupName: string, newJoinPassword?: string): Observable<AiurProtocol> {
+    public UpdateGroupPassword(
+        groupName: string,
+        newJoinPassword?: string
+    ): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/UpdateGroupPassword', {
             GroupName: groupName,
-            NewJoinPassword: newJoinPassword
+            NewJoinPassword: newJoinPassword,
         });
     }
 
     public KickMember(groupName: string, targetUserId: string): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/KickMember', {
             groupName: groupName,
-            targetUserId: targetUserId
+            targetUserId: targetUserId,
         });
     }
 
     public DissolveGroup(groupName: string): Observable<AiurProtocol> {
         return this.apiService.Post(GroupsApiService.serverPath + '/DissolveGroup', {
-            groupName: groupName
+            groupName: groupName,
         });
     }
 
     public GroupSummary(id: number): Observable<AiurValue<GroupsResult>> {
         return this.apiService.Post(GroupsApiService.serverPath + '/GroupSummary', {
-            id: id
+            id: id,
         });
     }
 }

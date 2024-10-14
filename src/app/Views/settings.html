@@ -2,22 +2,20 @@
 
 <div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
     <div class="user-img">
-        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=128&square=true">
+        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=128&square=true" />
         <!-- <div class="small-dot" *ngIf="cacheService.cachedData.me.isOnline !== null"
             [class.greendot]="cacheService.cachedData.me.isOnline"
             [class.graydot]="!cacheService.cachedData.me.isOnline"
             style="top:-11px; right:-43px;">
         </div> -->
     </div>
-    <div class="name">
-        {{ cacheService.cachedData.me.nickName }}
-    </div>
-    <div class="bio">
-        {{ cacheService.cachedData.me.bio }}
-    </div>
+    <div class="name">{{ cacheService.cachedData.me.nickName }}</div>
+    <div class="bio">{{ cacheService.cachedData.me.bio }}</div>
     <div class="email" *ngIf="cacheService.cachedData.me.email">
         {{ cacheService.cachedData.me.email }}
-        <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed">Verified</label>
+        <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed"
+            >Verified</label
+        >
     </div>
 </div>
 
@@ -35,8 +33,11 @@
 </div>
 <div class="menu-holder"></div>
 
-<div class="menu-button" *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
-     (click)="sendEmail()">
+<div
+    class="menu-button"
+    *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
+    (click)="sendEmail()"
+>
     <div class="img warning">
         <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
     </div>
@@ -58,7 +59,7 @@
 </div>
 <div class="menu-button" routerLink="/about">
     <div class="img">
-        <i class="fas fa-server "></i>
+        <i class="fas fa-server"></i>
     </div>
     <div class="text" i18n="@@AboutKahla">About</div>
 </div>

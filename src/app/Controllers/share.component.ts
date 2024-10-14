@@ -1,30 +1,30 @@
-import { Component, DoCheck, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Values } from "../values";
-import { MessageService } from "../Services/MessageService";
-import { CacheService } from "../Services/CacheService";
-import { KahlaUser } from "../Models/KahlaUser";
-import { GroupsResult } from "../Models/GroupsResults";
-import { ConversationApiService } from "../Services/Api/ConversationApiService";
-import { FriendsApiService } from "../Services/Api/FriendsApiService";
-import { SearchResult } from "../Models/SearchResult";
-import { uuid4 } from "../Helpers/Uuid";
-import { MessageFileRef } from "../Models/MessageFileRef";
-import { UploadService } from "../Services/UploadService";
-import { FilesApiService } from "../Services/Api/FilesApiService";
-import { Conversation } from "../Models/Conversation";
-import { Observable } from "rxjs";
-import { AiurValue } from "../Models/AiurValue";
-import { Message } from "../Models/Message";
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Values } from '../values';
+import { MessageService } from '../Services/MessageService';
+import { CacheService } from '../Services/CacheService';
+import { KahlaUser } from '../Models/KahlaUser';
+import { GroupsResult } from '../Models/GroupsResults';
+import { ConversationApiService } from '../Services/Api/ConversationApiService';
+import { FriendsApiService } from '../Services/Api/FriendsApiService';
+import { SearchResult } from '../Models/SearchResult';
+import { uuid4 } from '../Helpers/Uuid';
+import { MessageFileRef } from '../Models/MessageFileRef';
+import { UploadService } from '../Services/UploadService';
+import { FilesApiService } from '../Services/Api/FilesApiService';
+import { Conversation } from '../Models/Conversation';
+import { Observable } from 'rxjs';
+import { AiurValue } from '../Models/AiurValue';
+import { Message } from '../Models/Message';
 
 @Component({
-    templateUrl: "../Views/share.html",
+    templateUrl: '../Views/share.html',
     styleUrls: [
-        "../Styles/menu.scss",
-        "../Styles/add-friend.scss",
-        "../Styles/friends.scss",
-        "../Styles/button.scss",
-        "../Styles/badge.scss",
+        '../Styles/menu.scss',
+        '../Styles/add-friend.scss',
+        '../Styles/friends.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss',
     ],
 })
 export class ShareComponent implements OnInit, DoCheck {
@@ -36,7 +36,7 @@ export class ShareComponent implements OnInit, DoCheck {
     public srcConversation: number;
     public inApp = false;
     public results: SearchResult;
-    public searchTxt = "";
+    public searchTxt = '';
     public conversation: Conversation;
 
     constructor(
@@ -51,7 +51,7 @@ export class ShareComponent implements OnInit, DoCheck {
     ) {}
 
     public ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(param => {
             if (param.message) {
                 this.message = param.message;
                 this.inApp = true;
@@ -63,12 +63,12 @@ export class ShareComponent implements OnInit, DoCheck {
                 this.inApp = true;
             } else {
                 const parsedUrl = new URL(location.href);
-                const text = parsedUrl.searchParams.get("text");
-                const url = parsedUrl.searchParams.get("url");
-                this.message = `${text ?? ""} ${url ?? ""}`;
+                const text = parsedUrl.searchParams.get('text');
+                const url = parsedUrl.searchParams.get('url');
+                this.message = `${text ?? ''} ${url ?? ''}`;
             }
         });
-        this.search("");
+        this.search('');
     }
 
     public showUsersResults(selectUsers: boolean): void {

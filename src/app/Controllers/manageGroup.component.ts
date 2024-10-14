@@ -14,47 +14,52 @@ import { SwalToast } from '../Helpers/Toast';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',
-    styleUrls: ['../Styles/menu.scss',
+    styleUrls: [
+        '../Styles/menu.scss',
         '../Styles/userDetail.scss',
         '../Styles/button.scss',
-        '../Styles/toggleButton.scss'
-    ]
+        '../Styles/toggleButton.scss',
+    ],
 })
 export class ManageGroupComponent implements OnInit {
-
     public conversation: GroupConversation;
     @ViewChild('imageInput') public imageInput;
     public newGroupName: string;
 
-    constructor(public groupsApiService: GroupsApiService,
-                public messageService: MessageService,
-                public cacheService: CacheService,
-                public conversationApiService: ConversationApiService,
-                public route: ActivatedRoute,
-                private router: Router,
-                public uploadService: UploadService,
-                private probeService: ProbeService,
-    ) {
-
-    }
+    constructor(
+        public groupsApiService: GroupsApiService,
+        public messageService: MessageService,
+        public cacheService: CacheService,
+        public conversationApiService: ConversationApiService,
+        public route: ActivatedRoute,
+        private router: Router,
+        public uploadService: UploadService,
+        private probeService: ProbeService
+    ) {}
 
     ngOnInit(): void {
         if (!this.messageService.conversation) {
             this.route.params
                 .pipe(
-                    switchMap((params: Params) => this.conversationApiService.ConversationDetail(+params['id'])),
+                    switchMap((params: Params) =>
+                        this.conversationApiService.ConversationDetail(+params['id'])
+                    ),
                     filter(t => t.code === 0),
                     map(t => t.value)
                 )
                 .subscribe(conversation => {
                     this.messageService.conversation = conversation;
                     this.conversation = <GroupConversation>conversation;
-                    this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(this.conversation.groupImagePath);
+                    this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(
+                        this.conversation.groupImagePath
+                    );
                     this.newGroupName = this.conversation.groupName;
                 });
         } else {
             this.conversation = <GroupConversation>this.messageService.conversation;
-            this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(this.conversation.groupImagePath);
+            this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(
+                this.conversation.groupImagePath
+            );
             this.newGroupName = this.conversation.groupName;
         }
     }
@@ -71,22 +76,29 @@ export class ManageGroupComponent implements OnInit {
             title: 'Transfer owner to',
             input: 'select',
             inputOptions: inputOptions,
-            showCancelButton: true
-        }).then((willTransfer) => {
+            showCancelButton: true,
+        }).then(willTransfer => {
             if (willTransfer.value) {
                 Swal.fire({
                     title: 'Transfer ownership?',
-                    html: 'You are transferring your ownership to <br/> ' +
+                    html:
+                        'You are transferring your ownership to <br/> ' +
                         `<b>${inputOptions[willTransfer.value as string]}(id:${willTransfer.value})</b> <br/> ` +
                         'This operation CANNOT be undone! are you sure to continue?',
                     showCancelButton: true,
-                    icon: 'warning'
+                    icon: 'warning',
                 }).then(res => {
                     if (!res.dismiss) {
-                        this.groupsApiService.TransferOwner(this.conversation.groupName, willTransfer.value as string)
+                        this.groupsApiService
+                            .TransferOwner(
+                                this.conversation.groupName,
+                                willTransfer.value as string
+                            )
                             .subscribe(response => {
                                 if (response.code === 0) {
-                                    (this.messageService.conversation as GroupConversation).ownerId = willTransfer.value as string;
+                                    (
+                                        this.messageService.conversation as GroupConversation
+                                    ).ownerId = willTransfer.value as string;
                                     Swal.fire('Success', response.message, 'success');
                                     this.router.navigate(['/group', this.conversation.id]);
                                 } else {
@@ -95,7 +107,6 @@ export class ManageGroupComponent implements OnInit {
                             });
                     }
                 });
-
             }
         });
     }
@@ -106,20 +117,22 @@ export class ManageGroupComponent implements OnInit {
             text: 'leave the input box empty to remove the password.',
             input: 'text',
             inputAttributes: {
-                maxlength: '100'
+                maxlength: '100',
             },
-            showCancelButton: true
-        }).then((result) => {
+            showCancelButton: true,
+        }).then(result => {
             if (result.dismiss) {
                 return;
             }
-            this.groupsApiService.UpdateGroupPassword(this.conversation.groupName, result.value as string).subscribe(res => {
-                if (res.code === 0) {
-                    Swal.fire('Success', res.message, 'success');
-                } else {
-                    Swal.fire('Error', res.message, 'error');
-                }
-            });
+            this.groupsApiService
+                .UpdateGroupPassword(this.conversation.groupName, result.value as string)
+                .subscribe(res => {
+                    if (res.code === 0) {
+                        Swal.fire('Success', res.message, 'success');
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
+                });
         });
     }
 
@@ -133,14 +146,23 @@ export class ManageGroupComponent implements OnInit {
     }
 
     public saveInfo() {
-        this.groupsApiService.UpdateGroupInfo(this.conversation.groupName, this.conversation.listInSearchResult,
-            this.conversation.groupImagePath, this.newGroupName)
+        this.groupsApiService
+            .UpdateGroupInfo(
+                this.conversation.groupName,
+                this.conversation.listInSearchResult,
+                this.conversation.groupImagePath,
+                this.newGroupName
+            )
             .subscribe(res => {
                 if (res.code === 0) {
                     SwalToast.fire('Success', '', 'success');
                     this.conversation.groupName = this.newGroupName;
                 } else if (res.code === -10 && (res as AiurCollection<string>).items) {
-                    Swal.fire('Error', (res as AiurCollection<string>).items.join('<br/>'), 'error');
+                    Swal.fire(
+                        'Error',
+                        (res as AiurCollection<string>).items.join('<br/>'),
+                        'error'
+                    );
                 } else {
                     Swal.fire('Error', res.message, 'error');
                 }
@@ -159,18 +181,20 @@ export class ManageGroupComponent implements OnInit {
             title: 'Kick member',
             input: 'select',
             inputOptions: inputOptions,
-            showCancelButton: true
-        }).then((result) => {
+            showCancelButton: true,
+        }).then(result => {
             if (result.value) {
                 Swal.fire({
                     title: 'Kick member?',
-                    html: 'Are you sure to kick out ' +
+                    html:
+                        'Are you sure to kick out ' +
                         `<b>${inputOptions[result.value as string]}(id:${result.value})</b>?`,
                     showCancelButton: true,
-                    icon: 'warning'
+                    icon: 'warning',
                 }).then(confirmAlert => {
                     if (!confirmAlert.dismiss) {
-                        this.groupsApiService.KickMember(this.conversation.groupName, result.value as string)
+                        this.groupsApiService
+                            .KickMember(this.conversation.groupName, result.value as string)
                             .subscribe(response => {
                                 if (response.code === 0) {
                                     Swal.fire('Success', response.message, 'success');
@@ -180,7 +204,6 @@ export class ManageGroupComponent implements OnInit {
                             });
                     }
                 });
-
             }
         });
     }
@@ -194,14 +217,16 @@ export class ManageGroupComponent implements OnInit {
             focusCancel: true,
         }).then(alertConfirm => {
             if (!alertConfirm.dismiss) {
-                this.groupsApiService.DissolveGroup(this.conversation.groupName).subscribe(result => {
-                    if (result.code === 0) {
-                        Swal.fire('Success', result.message, 'success');
-                        this.router.navigate(['/home']);
-                    } else {
-                        Swal.fire('Error', result.message, 'error');
-                    }
-                });
+                this.groupsApiService
+                    .DissolveGroup(this.conversation.groupName)
+                    .subscribe(result => {
+                        if (result.code === 0) {
+                            Swal.fire('Success', result.message, 'success');
+                            this.router.navigate(['/home']);
+                        } else {
+                            Swal.fire('Error', result.message, 'error');
+                        }
+                    });
             }
         });
     }

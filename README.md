@@ -5,7 +5,7 @@
 </p>
 
 [![Build status](https://aiursoft.visualstudio.com/Star/_apis/build/status/Kahla%20App%20Build)](https://aiursoft.visualstudio.com/Star/_build/latest?definitionId=4)
-[![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]() 
+[![GitHub Release](https://img.shields.io/github/release/AiursoftWeb/Kahla.App.svg?style=flat)]()
 [![ManHours](https://manhours.aiursoft.cn/r/gitlab.aiursoft.cn/aiursoft/kahla.app.svg)](https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/commits/master?ref_type=heads)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b7d4a3f5746bcbbe99c1/maintainability)](https://codeclimate.com/github/AiursoftWeb/Kahla.App/maintainability)
 [![npm](https://img.shields.io/npm/v/kahla.svg?style=flat)](https://www.npmjs.com/package/kahla)
@@ -13,7 +13,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/AiursoftWeb/Kahla.App.svg?style=flat)](https://github.com/AiursoftWeb/Kahla.App/graphs/contributors)
 [![LICENSE](https://img.shields.io/github/license/AiursoftWeb/Kahla.App)](https://github.com/AiursoftWeb/Kahla.App/blob/dev/LICENSE)
 
-------
+---
 
 <p align="center">
 <img src="https://ui.aiursoft.com/images/kahla-demo-wide2.png" alt="screenshot" width="1000"/>
@@ -38,8 +38,8 @@ For our official website, please view [here](https://www.kahla.app).
 
 To develope Kahla, you need to install the following components:
 
-* Git
-* Nodejs and npm
+-   Git
+-   Nodejs and npm
 
 We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com) to develope this project.
 

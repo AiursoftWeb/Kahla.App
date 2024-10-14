@@ -6,8 +6,7 @@ import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/discover.html',
-    styleUrls: ['../Styles/add-friend.scss',
-        '../Styles/button.scss']
+    styleUrls: ['../Styles/add-friend.scss', '../Styles/button.scss'],
 })
 export class DiscoverComponent implements OnInit {
     private amount = 15;
@@ -18,9 +17,8 @@ export class DiscoverComponent implements OnInit {
 
     constructor(
         private friendsApiService: FriendsApiService,
-        private probeService: ProbeService,
-    ) {
-        }
+        private probeService: ProbeService
+    ) {}
 
     public ngOnInit(): void {
         this.loadMore();
@@ -28,20 +26,25 @@ export class DiscoverComponent implements OnInit {
 
     public loadMore(): void {
         this.loading = true;
-        this.friendsApiService.Discover(this.amount).subscribe(users => {
-            users.items.forEach(item => {
-                item.targetUser.avatarURL = this.probeService.encodeProbeFileUrl(item.targetUser.iconFilePath);
-            });
-            const top = window.scrollY;
-            this.users = users.items;
-            if (this.users.length < this.amount) {
-                this.noMoreUsers = true;
+        this.friendsApiService.Discover(this.amount).subscribe(
+            users => {
+                users.items.forEach(item => {
+                    item.targetUser.avatarURL = this.probeService.encodeProbeFileUrl(
+                        item.targetUser.iconFilePath
+                    );
+                });
+                const top = window.scrollY;
+                this.users = users.items;
+                if (this.users.length < this.amount) {
+                    this.noMoreUsers = true;
+                }
+                this.loading = false;
+                setTimeout(() => window.scrollTo(0, top), 0);
+                this.amount += 15;
+            },
+            () => {
+                this.loading = false;
             }
-            this.loading = false;
-            setTimeout(() => window.scrollTo(0, top), 0);
-            this.amount += 15;
-        }, () => {
-            this.loading = false;
-        });
+        );
     }
 }

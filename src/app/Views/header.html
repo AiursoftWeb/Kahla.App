@@ -1,7 +1,13 @@
 <div class="header" [ngClass]="{'shadow': shadow}">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()">
-        <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fas fa-times"></i>
-        <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fas fa-caret-left"></i>
+        <i
+            *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly"
+            class="fas fa-times"
+        ></i>
+        <i
+            *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)"
+            class="fas fa-caret-left"
+        ></i>
     </div>
     <div *ngIf="!returnButton"></div>
     <div class="text">
@@ -17,16 +23,23 @@
 
 <div class="header-holder"></div>
 
-<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled"
-     *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting)">
+<div
+    class="header-alert"
+    [class.in-widescreen]="homeService.wideScreenEnabled"
+    *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting)"
+>
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fas fa-spinner fa-spin"></i>
         Connecting...
     </div>
 </div>
 
-<div class="header-alert" [class.in-widescreen]="homeService.wideScreenEnabled" (click)="showDisconnectedDialog()"
-     *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && (eventService.errorOrClose && !eventService.connecting))">
+<div
+    class="header-alert"
+    [class.in-widescreen]="homeService.wideScreenEnabled"
+    (click)="showDisconnectedDialog()"
+    *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && (eventService.errorOrClose && !eventService.connecting))"
+>
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fas fa-cloud"></i>
         Disconnected

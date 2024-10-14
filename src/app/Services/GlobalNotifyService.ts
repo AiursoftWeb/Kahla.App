@@ -10,27 +10,32 @@ import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { MessageService } from './MessageService';
 import { HomeService } from './HomeService';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class GlobalNotifyService {
-
-    constructor(private eventService: EventService,
-                private cacheService: CacheService,
-                private messageService: MessageService,
-                private homeService: HomeService,
-                private router: Router) {
-    }
+    constructor(
+        private eventService: EventService,
+        private cacheService: CacheService,
+        private messageService: MessageService,
+        private homeService: HomeService,
+        private router: Router
+    ) {}
 
     private OnMessage(ev: AiurEvent) {
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
-                const conversationCacheIndex = this.cacheService.cachedData.conversations
-                    .findIndex(x => x.id === evt.message.conversationId);
+                const conversationCacheIndex = this.cacheService.cachedData.conversations.findIndex(
+                    x => x.id === evt.message.conversationId
+                );
                 if (conversationCacheIndex !== -1) {
-                    const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
+                    const conversationCache =
+                        this.cacheService.cachedData.conversations[conversationCacheIndex];
                     const latestMsg = Object.assign({}, evt.message);
                     conversationCache.latestMessage = latestMsg;
-                    if (this.messageService.conversation?.id !== evt.message.conversationId || !document.hasFocus()) {
+                    if (
+                        this.messageService.conversation?.id !== evt.message.conversationId ||
+                        !document.hasFocus()
+                    ) {
                         conversationCache.unReadAmount++;
                         if (evt.mentioned) {
                             conversationCache.someoneAtMe = true;
@@ -56,10 +61,15 @@ export class GlobalNotifyService {
             case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
                 if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
-                    Swal.fire('Oops, you have been kicked.',
-                        `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
-                            .find(x => x.id === evt.conversationId).name}.`,
-                        'warning');
+                    Swal.fire(
+                        'Oops, you have been kicked.',
+                        `You have been kicked by the owner of group ${
+                            this.cacheService.cachedData.conversations.find(
+                                x => x.id === evt.conversationId
+                            ).name
+                        }.`,
+                        'warning'
+                    );
                     this.cacheService.updateConversation();
                 }
                 break;

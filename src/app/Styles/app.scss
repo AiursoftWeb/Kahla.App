@@ -1,4 +1,3 @@
-
 .floating-home-wrapper {
   border-color: var(--alert-bg);
   width: calc(35% - 1px);
@@ -13,8 +12,8 @@
   left: 0;
   top: 0;
 
-  &::-webkit-scrollbar{
-    width: 0px!important;
+  &::-webkit-scrollbar {
+    width: 0px !important;
     background: transparent;
   }
 }
@@ -34,7 +33,7 @@
   width: 100%;
   position: relative;
   flex: auto;
-  box-shadow: -4px 0px 8px 0 rgba(0, 0, 0, .2);
+  box-shadow: -4px 0px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 11;
 
   &.in-widescreen {

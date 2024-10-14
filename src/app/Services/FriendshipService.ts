@@ -6,13 +6,13 @@ import { GroupsApiService } from './Api/GroupsApiService';
 import { Router } from '@angular/router';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class FriendshipService {
-
-    constructor(private cacheService: CacheService,
-                private groupsApiService: GroupsApiService,
-                private router: Router,
+    constructor(
+        private cacheService: CacheService,
+        private groupsApiService: GroupsApiService,
+        private router: Router
     ) {}
 
     public joinGroup(group: GroupsResult, askWhenNoPwd: boolean = false) {
@@ -21,16 +21,16 @@ export class FriendshipService {
                 title: 'Enter group password.',
                 input: 'text',
                 inputAttributes: {
-                    maxlength: '100'
+                    maxlength: '100',
                 },
-                inputValidator: (value) => {
+                inputValidator: value => {
                     if (!value) {
                         return 'You need to enter the join password.';
                     }
                 },
                 showCancelButton: true,
-                confirmButtonText: 'Join'
-            }).then((result) => {
+                confirmButtonText: 'Join',
+            }).then(result => {
                 if (result.value) {
                     this.joinGroupWithPassword(group.name, result.value as string, group.id);
                 }
@@ -40,7 +40,7 @@ export class FriendshipService {
                 title: 'Are you sure to join the group?',
                 text: group.name,
                 showCancelButton: true,
-                icon: 'question'
+                icon: 'question',
             }).then(result => {
                 if (!result.dismiss) {
                     this.joinGroupWithPassword(group.name, '', group.id);
@@ -52,7 +52,7 @@ export class FriendshipService {
     }
 
     private joinGroupWithPassword(groupName: string, password: string, id: number) {
-        this.groupsApiService.JoinGroup(groupName, password).subscribe((response) => {
+        this.groupsApiService.JoinGroup(groupName, password).subscribe(response => {
             if (response.code === 0) {
                 this.cacheService.updateConversation();
                 this.router.navigate(['/talking/' + id]);

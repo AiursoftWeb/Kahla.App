@@ -1,5 +1,5 @@
-@import "fixed_widescreen";
-@import "menus";
+@import 'fixed_widescreen';
+@import 'menus';
 
 .search-part {
   @extend %full-fixed-width;
@@ -16,7 +16,9 @@
       color: var(--default-textcolor);
       background-color: var(--text-input-bg);
       border-radius: 6px;
-      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      transition:
+        border-color ease-in-out 0.15s,
+        box-shadow ease-in-out 0.15s;
       box-shadow: none;
       width: 100%;
       height: 35px;
@@ -109,7 +111,6 @@
     height: 40px;
     border-radius: 4px;
   }
-
 
   .sender {
     font-size: 15px;
