@@ -50,7 +50,11 @@ export class CacheService {
         this.devicesApiService.MyDevices().subscribe(response => {
             let currentId = 0;
             if (localStorage.getItem('setting-pushSubscription')) {
-                currentId = (JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting).deviceId;
+                currentId = (
+                    JSON.parse(
+                        localStorage.getItem('setting-pushSubscription')
+                    ) as PushSubscriptionSetting
+                ).deviceId;
             }
             response.items.forEach(item => {
                 item.name = mapDeviceName(item.name) ?? 'Unknown device';

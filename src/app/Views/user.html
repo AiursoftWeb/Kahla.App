@@ -56,7 +56,7 @@
 </div>
 <div
     class="menu-button"
-    *ngIf="info && cacheService.cachedData.me && info.user.id != cacheService.cachedData.me.id"
+    *ngIf="info && cacheService.cachedData.me && info.user.id !== cacheService.cachedData.me.id"
 >
     <div class="img">
         <i class="fas fa-ban"></i>

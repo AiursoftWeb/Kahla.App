@@ -12,12 +12,8 @@ export class ThreadsRepository extends RepositoryBase<ThreadInfo> {
         super();
     }
 
-    protected get name(): string {
-        return 'threads';
-    }
-    protected get version(): number {
-        return 1;
-    }
+    protected readonly name = 'threads';
+    protected readonly version = 1;
     protected async requestOnline(take: number, skip: number): Promise<[ThreadInfo[], number]> {
         const resp = await lastValueFrom(this.threadsApiService.List(take, skip));
         return [resp.knownThreads, resp.totalCount];

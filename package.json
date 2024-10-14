@@ -14,7 +14,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build --base-href /",
-    "lint": "ng lint && tsc",
+    "lint": "ng lint",
     "format": "prettier -cw ."
   },
   "dependencies": {

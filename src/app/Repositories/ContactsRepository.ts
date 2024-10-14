@@ -12,12 +12,8 @@ export class ContactsRepository extends RepositoryBase<ContactInfo> {
         super();
     }
 
-    protected get name(): string {
-        return 'contacts';
-    }
-    protected get version(): number {
-        return 1;
-    }
+    protected readonly name = 'contacts';
+    protected readonly version = 1;
 
     protected async requestOnline(take: number, skip: number): Promise<[ContactInfo[], number]> {
         const resp = await lastValueFrom(this.contactsApiService.List(take, skip));

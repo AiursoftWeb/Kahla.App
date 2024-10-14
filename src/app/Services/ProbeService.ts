@@ -5,8 +5,6 @@ import { AccessToken } from '../Models/AccessToken';
     providedIn: 'root',
 })
 export class ProbeService {
-    constructor() {}
-
     public encodeProbeFileUrl(filePath: string, accessToken?: string, downloadAddr = false) {
         const encoded = encodeURIComponent(filePath).replace(/%2F/g, '/');
         const index = encoded.indexOf('/');

@@ -21,10 +21,7 @@ export class FilesApiService {
         return this.apiService.Get(FilesApiService.serverPath + '/InitIconUpload');
     }
 
-    public InitFileAccess(
-        conversationId: number,
-        upload = false
-    ): Observable<FileTokenApiModel> {
+    public InitFileAccess(conversationId: number, upload = false): Observable<FileTokenApiModel> {
         return this.apiService.Get(
             `${FilesApiService.serverPath}/InitFileAccess` +
                 `?ConversationId=${conversationId}&upload=${upload}&download=${!upload}`

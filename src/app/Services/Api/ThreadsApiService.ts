@@ -29,11 +29,7 @@ export class ThreadsApiService {
         return this.apiService.Get(ThreadsApiService.serverPath + `/details/${id}`);
     }
 
-    public Members(
-        id: number,
-        take = 20,
-        skip = 0
-    ): Observable<ContactsListApiResponse> {
+    public Members(id: number, take = 20, skip = 0): Observable<ContactsListApiResponse> {
         return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, {
             take,
             skip,

@@ -149,7 +149,7 @@ export class InitService {
             localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
         }
         if (!data.enabled && data.deviceId) {
-            this.devicesApiService.DropDevice(data.deviceId).subscribe(_t => {
+            this.devicesApiService.DropDevice(data.deviceId).subscribe(() => {
                 data.deviceId = 0;
                 localStorage.setItem('setting-pushSubscription', JSON.stringify(data));
             });

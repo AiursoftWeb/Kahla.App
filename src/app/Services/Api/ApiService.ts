@@ -6,12 +6,10 @@ import { catchError } from 'rxjs/operators';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 
-type paramDict = Record<string, | string
-        | number
-        | boolean
-        | readonly (string | number | boolean)[]
-        | undefined
-        | null>;
+type paramDict = Record<
+    string,
+    string | number | boolean | readonly (string | number | boolean)[] | undefined | null
+>;
 
 @Injectable({
     providedIn: 'root',

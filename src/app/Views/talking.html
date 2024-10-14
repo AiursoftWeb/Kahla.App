@@ -26,8 +26,8 @@
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li
         *ngFor="let message of takeMessages() as msg; trackBy: trackByMessages; last as isLast; let i = index"
-        [ngClass]="{'left': cacheService.cachedData.me && message.senderId != cacheService.cachedData.me.id,
-         'right': cacheService.cachedData.me && message.senderId == cacheService.cachedData.me.id}"
+        [ngClass]="{'left': cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id,
+         'right': cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id}"
     >
         <div *ngIf="message.lastRead">
             <div class="last-read-bar">LAST READ</div>
@@ -353,7 +353,7 @@
     <div class="chat-box">
         <div
             class="chat-part"
-            [class.empty]="content==undefined || content.trim().length === 0"
+            [class.empty]="content===undefined || content.trim().length === 0"
             [class.no-send-button]="cacheService.cachedData.options.enableEnterToSendMessage"
         >
             <i
