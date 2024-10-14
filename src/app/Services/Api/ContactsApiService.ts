@@ -6,6 +6,7 @@ import { ApiService } from './ApiService';
 import { SearchResult } from '../../Models/SearchResult';
 import { AiurValueNamed } from '../../Models/AiurValue';
 import { ContactInfo } from '../../Models/Contacts/ContactInfo';
+import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';
 
 @Injectable()
 export class ContactsApiService {
@@ -16,8 +17,13 @@ export class ContactsApiService {
     ) {
     }
 
-    public Mine(): Observable<AiurValueNamed<ContactInfo[], 'knownContacts'>> {
-        return this.apiService.Get(ContactsApiService.serverPath + '/mine');
+    public List(take: number = 20, skip: number = 0, searchInput?: string, excluding?: string): Observable<ContactsListApiResponse> {
+        return this.apiService.Get(ContactsApiService.serverPath + '/list', {
+            take,
+            skip,
+            searchInput,
+            excluding
+        });
     }
 
     public Add(id: string): Observable<AiurProtocol> {

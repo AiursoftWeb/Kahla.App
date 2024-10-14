@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { CacheModel } from "../Models/CacheModel";
-import { map } from "rxjs/operators";
 import { DevicesApiService } from "./Api/DevicesApiService";
 import { ConversationApiService } from "./Api/ConversationApiService";
 import { ProbeService } from "./ProbeService";
 import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
 import { ServerConfig } from "../Models/ServerConfig";
 import { ContactsApiService } from "./Api/ContactsApiService";
+import { mapDeviceName } from "../Helpers/UaMapper";
 
 @Injectable({
     providedIn: "root",
@@ -20,43 +20,36 @@ export class CacheService {
 
     constructor(
         private contactsApiService: ContactsApiService,
-        private devicesApiService: DevicesApiService,
-        private conversationApiService: ConversationApiService,
-        private probeService: ProbeService
+        private devicesApiService: DevicesApiService
     ) {}
 
     public reset() {
         this.cachedData = new CacheModel();
     }
 
-    public updateConversation(): void {
-        this.updatingConversation = true;
-        this.conversationApiService
-            .All()
-            .pipe(map((t) => t.items))
-            .subscribe((info) => {
-                this.updatingConversation = false;
-                info.forEach((e) => {
-                    if (e.latestMessage != null) {
-                        e.latestMessage.content = this.modifyMessage(
-                            e.latestMessage.content
-                        );
-                    }
-                    e.avatarURL = this.probeService.encodeProbeFileUrl(
-                        e.displayImagePath
-                    );
-                });
-                this.cachedData.conversations = info;
-                this.updateTotalUnread();
-                this.saveCache();
-            });
-    }
+    public updateThreads() {}
 
-    public updateFriends(): void {
-        this.contactsApiService.Mine().subscribe((result) => {
-            this.cachedData.contacts = result.knownContacts;
-            this.saveCache();
-        });
+    public updateConversation(): void {
+        // this.updatingConversation = true;
+        // this.conversationApiService
+        //     .All()
+        //     .pipe(map((t) => t.items))
+        //     .subscribe((info) => {
+        //         this.updatingConversation = false;
+        //         info.forEach((e) => {
+        //             if (e.latestMessage != null) {
+        //                 e.latestMessage.content = this.modifyMessage(
+        //                     e.latestMessage.content
+        //                 );
+        //             }
+        //             e.avatarURL = this.probeService.encodeProbeFileUrl(
+        //                 e.displayImagePath
+        //             );
+        //         });
+        //         this.cachedData.conversations = info;
+        //         this.updateTotalUnread();
+        //         this.saveCache();
+        //     });
     }
 
     public updateDevice(): void {
@@ -68,67 +61,9 @@ export class CacheService {
                 )).deviceId;
             }
             response.items.forEach((item) => {
-                if (item.name !== null && item.name.length >= 0) {
-                    const deviceName = [];
-                    // OS
-                    if (item.name.includes("Win")) {
-                        deviceName.push("Windows");
-                    } else if (item.name.includes("Android")) {
-                        deviceName.push("Android");
-                    } else if (item.name.includes("Linux")) {
-                        deviceName.push("Linux");
-                    } else if (
-                        item.name.includes("iPhone") ||
-                        item.name.includes("iPad")
-                    ) {
-                        deviceName.push("iOS");
-                    } else if (item.name.includes("Mac")) {
-                        deviceName.push("macOS");
-                    } else {
-                        deviceName.push("Unknown OS");
-                    }
-
-                    if (item.id === currentId) {
-                        deviceName[0] += "(Current device)";
-                    }
-
-                    // Browser Name
-                    if (
-                        item.name.includes("Firefox") &&
-                        !item.name.includes("Seamonkey")
-                    ) {
-                        deviceName.push("Firefox");
-                    } else if (item.name.includes("Seamonkey")) {
-                        deviceName.push("Seamonkey");
-                    } else if (item.name.includes("Edge")) {
-                        deviceName.push("Microsoft Edge");
-                    } else if (item.name.includes("Edg")) {
-                        deviceName.push("Edge Chromium");
-                    } else if (
-                        item.name.includes("Chrome") &&
-                        !item.name.includes("Chromium")
-                    ) {
-                        deviceName.push("Chrome");
-                    } else if (item.name.includes("Chromium")) {
-                        deviceName.push("Chromium");
-                    } else if (
-                        item.name.includes("Safari") &&
-                        (!item.name.includes("Chrome") ||
-                            !item.name.includes("Chromium"))
-                    ) {
-                        deviceName.push("Safari");
-                    } else if (
-                        item.name.includes("Opera") ||
-                        item.name.includes("OPR")
-                    ) {
-                        deviceName.push("Opera");
-                    } else if (item.name.match(/MSIE|Trident/)) {
-                        deviceName.push("Internet Explorer");
-                    } else {
-                        deviceName.push("Unknown browser");
-                    }
-
-                    item.name = deviceName.join("-");
+                item.name = mapDeviceName(item.name) ?? "Unknown device";
+                if (item.id === currentId) {
+                    item.name += "(Current device)";
                 }
             });
             this.cachedData.devices = response.items;

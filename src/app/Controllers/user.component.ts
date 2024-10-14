@@ -10,6 +10,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { ContactsRepository } from '../Repositories/ContactsRepository';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -27,6 +28,7 @@ export class UserComponent implements OnInit {
         private route: ActivatedRoute,
         private contactsApiService: ContactsApiService,
         private router: Router,
+        private contactsRepository: ContactsRepository,
         public cacheService: CacheService,
         public timerService: TimerService,
         public apiService: ApiService
@@ -64,8 +66,7 @@ export class UserComponent implements OnInit {
                     .subscribe(response => {
                         if (response.code === 0) {
                             SwalToast.fire('Success', '', 'success');
-                            this.cacheService.updateConversation();
-                            this.cacheService.updateFriends();
+                            this.contactsRepository.updateAll();
                             this.router.navigate(['/home']);
                         } else {
                             Swal.fire('Error', response.message, 'error');
@@ -80,6 +81,8 @@ export class UserComponent implements OnInit {
         try {
             await lastValueFrom(this.contactsApiService.Add(this.info.user.id));
             SwalToast.fire('Success', '', 'success');
+            this.updateFriendInfo(this.info.user.id);
+            this.contactsRepository.updateAll();
         } catch(err) {
             showCommonErrorDialog(err);
         }

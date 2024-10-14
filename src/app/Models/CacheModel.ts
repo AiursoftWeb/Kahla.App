@@ -13,7 +13,6 @@ export class CacheModel {
     public me: KahlaUser;
     public options: AppOptions;
     public conversations: ThreadInfo[];
-    public contacts: ContactInfo[];
     public requests: Request[];
     public devices: Device[];
     public conversationDetail: Map<number, Conversation> = new Map<number, Conversation>();

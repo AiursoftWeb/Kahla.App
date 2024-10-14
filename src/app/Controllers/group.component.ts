@@ -84,7 +84,6 @@ export class GroupComponent implements OnInit {
                         if (response.code === 0) {
                             SwalToast.fire('Success', '', 'success');
                             this.cacheService.updateConversation();
-                            this.cacheService.updateFriends();
                             this.router.navigate(['/home']);
                         } else {
                             Swal.fire('Error', response.message, 'error');

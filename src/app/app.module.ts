@@ -51,6 +51,7 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { MessagesApiService } from './Services/Api/MessagesApiService';
 import { ContactsApiService } from './Services/Api/ContactsApiService';
 import { SearchApiService } from './Services/Api/SearchApiService';
+import { ContactsRepository } from './Repositories/ContactsRepository';
 
 @NgModule({
     imports: [
@@ -107,6 +108,7 @@ import { SearchApiService } from './Services/Api/SearchApiService';
         GlobalNotifyService,
         ContactsApiService,
         SearchApiService,
+        ContactsRepository
     ],
     bootstrap: [AppComponent]
 })

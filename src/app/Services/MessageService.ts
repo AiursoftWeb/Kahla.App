@@ -31,6 +31,7 @@ import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Helpers/Toast';
+import { ContactsRepository } from '../Repositories/ContactsRepository';
 
 @Injectable({
     providedIn: 'root'
@@ -56,6 +57,7 @@ export class MessageService {
 
     constructor(
         private conversationApiService: ConversationApiService,
+        private contactsRepository: ContactsRepository,
         private filesApiService: FilesApiService,
         private cacheService: CacheService,
         private timerService: TimerService,
@@ -160,7 +162,7 @@ export class MessageService {
 
     public reconnectPull() {
         this.cacheService.updateConversation();
-        this.cacheService.updateFriends();
+        this.contactsRepository.updateAll();
         if (this.conversation) {
             this.getMessages(0, this.conversation.id, null, 15);
         }

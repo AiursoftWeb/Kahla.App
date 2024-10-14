@@ -13,10 +13,12 @@ export class SearchApiService {
     ) {
     }
 
-    public Search(searchInput: string, take: number): Observable<SearchResult> {
-        return this.apiService.Post(SearchApiService.serverPath + `/search-everything`, {
-            SearchInput: searchInput,
-            take
+    public Search(searchInput: string, take = 20, skip = 0, excluding ?:string): Observable<SearchResult> {
+        return this.apiService.Get(SearchApiService.serverPath + `/search-server`, {
+            searchInput,
+            take,
+            skip,
+            excluding
         });
     }
 }

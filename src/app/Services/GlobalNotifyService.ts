@@ -55,14 +55,6 @@ export class GlobalNotifyService {
                 }
                 break;
             }
-            case EventType.FriendDeletedEvent: {
-                if (fireAlert && (<FriendDeletedEvent>ev).trigger.id !== this.cacheService.cachedData.me.id) {
-                    Swal.fire('Were deleted', 'You were deleted by ' + (<FriendDeletedEvent>ev).trigger.nickName, 'info');
-                }
-                this.cacheService.updateConversation();
-                this.cacheService.updateFriends();
-                break;
-            }
             case EventType.SomeoneLeftEvent: {
                 const evt = ev as SomeoneLeftEvent;
                 if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
@@ -70,18 +62,15 @@ export class GlobalNotifyService {
                         `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
                             .find(x => x.conversationId === evt.conversationId).displayName}.`,
                         'warning');
-                    this.cacheService.updateFriends();
                     this.cacheService.updateConversation();
                 }
                 break;
             }
             case EventType.DissolveEvent: {
-                this.cacheService.updateFriends();
                 this.cacheService.updateConversation();
                 break;
             }
             case EventType.GroupJoinedEvent: {
-                this.cacheService.updateFriends();
                 this.cacheService.updateConversation();
                 break;
             }

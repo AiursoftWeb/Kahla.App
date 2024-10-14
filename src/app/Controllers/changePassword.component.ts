@@ -12,7 +12,6 @@ export class ChangePasswordComponent {
     public oldPassword = "";
     public newPassword = "";
     public confirmPassword = "";
-    public samePassword = false;
 
     constructor(private authApiServer: AuthApiService) {}
 
