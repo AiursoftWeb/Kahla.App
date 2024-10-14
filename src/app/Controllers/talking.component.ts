@@ -18,7 +18,7 @@ import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 
-declare var MediaRecorder: any;
+declare let MediaRecorder: any;
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -48,7 +48,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public Date = Date;
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
-    public matchedUsers: Array<KahlaUser> = [];
+    public matchedUsers: KahlaUser[] = [];
     public loadingMore: boolean;
 
     @ViewChild('imageInput') public imageInput;
@@ -144,7 +144,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             }
         } else if (this.content && e.key !== 'Backspace') {
             this.showUserList = false;
-            const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+            const input = document.getElementById('chatInput') as HTMLTextAreaElement;
             const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
             const typingWord = typingWords[typingWords.length - 1];
             if (typingWord.charAt(0) === '@') {
@@ -236,7 +236,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     private updateInputHeight(): void {
-        const inputElement = <HTMLElement>document.querySelector('#chatInput');
+        const inputElement = document.querySelector('#chatInput') as HTMLElement;
         setTimeout(() => {
             inputElement.style.height = inputElement.scrollHeight + 'px';
             this.chatInputHeight = inputElement.scrollHeight;
@@ -298,7 +298,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                         const unsentMessages = new Map(
                             JSON.parse(localStorage.getItem('unsentMessages'))
                         );
-                        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
+                        const tempArray = unsentMessages.get(this.conversationID) as Message[];
                         if (tempArray && tempArray.length > 0) {
                             tempArray.push(tempMessage);
                             unsentMessages.set(this.conversationID, tempArray);
@@ -327,7 +327,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 },
             });
         this.content = '';
-        const inputElement = <HTMLTextAreaElement>document.querySelector('#chatInput');
+        const inputElement = document.querySelector('#chatInput') as HTMLTextAreaElement;
         inputElement.focus();
         inputElement.style.height = 34 + 'px';
     }
@@ -354,7 +354,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             1
         );
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        const tempArray = <Array<Message>>unsentMessages.get(this.conversationID);
+        const tempArray = unsentMessages.get(this.conversationID) as Message[];
         const index = tempArray.findIndex(t => t.id === message.id);
         tempArray.splice(index, 1);
         unsentMessages.set(this.conversationID, tempArray);
@@ -550,7 +550,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public emoji(): void {
-        const chatBox = <HTMLElement>document.querySelector('.chat-box');
+        const chatBox = document.querySelector('.chat-box') as HTMLElement;
         if (!this.picker) {
             this.picker = new EmojiButton({
                 position: 'top-start',
@@ -567,7 +567,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public complete(nickname: string): void {
-        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        const input = document.getElementById('chatInput') as HTMLTextAreaElement;
         const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
         const typingWord = typingWords[typingWords.length - 1];
         const before = this.content.slice(
@@ -623,15 +623,15 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public shareClick(msg: Message): void {
         if (msg.contentRaw.startsWith('[user]') && msg.relatedData) {
-            this.router.navigate(['user', (<KahlaUser>msg.relatedData).id]);
+            this.router.navigate(['user', (msg.relatedData as KahlaUser).id]);
         } else if (msg.contentRaw.startsWith('[group]') && msg.relatedData) {
-            const group = <GroupsResult>msg.relatedData;
+            const group = msg.relatedData as GroupsResult;
             this.friendshipService.joinGroup(group, true);
         }
     }
 
     public insertToSelection(content: string) {
-        const input = <HTMLTextAreaElement>document.getElementById('chatInput');
+        const input = document.getElementById('chatInput') as HTMLTextAreaElement;
         this.content = this.content
             ? `${this.content.slice(
                   0,

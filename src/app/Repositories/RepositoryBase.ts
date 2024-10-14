@@ -55,7 +55,7 @@ export abstract class RepositoryBase<T> {
 
     public initCache() {
         if (localStorage.getItem(`cache-${this.name}`)) {
-            const data = <RepositoryCache<T>>JSON.parse(localStorage.getItem(`cache-${this.name}`));
+            const data = JSON.parse(localStorage.getItem(`cache-${this.name}`)) as RepositoryCache<T>;
             if (data.version !== this.version) {
                 this.data = [];
                 this.saveCache();

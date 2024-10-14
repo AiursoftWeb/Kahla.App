@@ -139,7 +139,7 @@ export class MessageService {
                 break;
             }
             case EventType.DissolveEvent: {
-                if (this.conversation.id === (<DissolveEvent>ev).conversationId) {
+                if (this.conversation.id === (ev as DissolveEvent).conversationId) {
                     Swal.fire(
                         'The group has been dissolved!',
                         `Group ${this.conversation.displayName} has been dissolved by the owner!`,
@@ -286,7 +286,7 @@ export class MessageService {
         return this.userColors.get(message.senderId);
     }
 
-    public searchUser(nickName: string, getMessage: boolean): Array<KahlaUser> {
+    public searchUser(nickName: string, getMessage: boolean): KahlaUser[] {
         if (typeof this.conversation.users !== 'undefined') {
             if (nickName.length === 0 && !getMessage) {
                 return this.conversation.users.map(x => x.user);
@@ -315,7 +315,7 @@ export class MessageService {
         return [];
     }
 
-    public getAtIDs(message: string): Array<string> {
+    public getAtIDs(message: string): string[] {
         const atUsers = [];
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
@@ -345,7 +345,7 @@ export class MessageService {
         if (this.conversation && this.cacheService.cachedData.me) {
             if (this.conversation.discriminator === 'GroupConversation') {
                 return (
-                    (<GroupConversation>this.conversation).ownerId ===
+                    (this.conversation as GroupConversation).ownerId ===
                     (id ? id : this.cacheService.cachedData.me.id)
                 );
             } else {
@@ -454,7 +454,7 @@ export class MessageService {
         setTimeout(() => {
             const links = document.getElementsByClassName('atLink');
             for (let i = 0; i < links.length; i++) {
-                (<HTMLAnchorElement>links.item(i)).onclick = (ev: MouseEvent) => {
+                (links.item(i) as HTMLAnchorElement).onclick = (ev: MouseEvent) => {
                     ev.preventDefault();
                     // noinspection JSIgnoredPromiseFromCall
                     this.router.navigateByUrl(links.item(i).getAttribute('href'));
@@ -522,7 +522,7 @@ export class MessageService {
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
         this.localMessages = this.localMessages.filter(m => !m.resend);
         if (unsentMessages.has(this.conversation.id)) {
-            (<Array<Message>>unsentMessages.get(this.conversation.id)).forEach(message => {
+            (unsentMessages.get(this.conversation.id) as Message[]).forEach(message => {
                 message.resend = true;
                 message.sendTimeDate = new Date(message.sendTime);
                 this.localMessages.push(message);

@@ -11,10 +11,10 @@ import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
     styleUrls: ['../Styles/signin.scss', '../Styles/button.scss'],
 })
 export class SignInComponent implements OnInit {
-    public userName: string = '';
-    public password: string = '';
-    public inRegister: boolean = false;
-    public confirmPassword: string = '';
+    public userName = '';
+    public password = '';
+    public inRegister = false;
+    public confirmPassword = '';
 
     constructor(
         public apiService: ApiService,

@@ -23,7 +23,7 @@ export class FilesApiService {
 
     public InitFileAccess(
         conversationId: number,
-        upload: boolean = false
+        upload = false
     ): Observable<FileTokenApiModel> {
         return this.apiService.Get(
             `${FilesApiService.serverPath}/InitFileAccess` +

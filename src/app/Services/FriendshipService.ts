@@ -15,7 +15,7 @@ export class FriendshipService {
         private router: Router
     ) {}
 
-    public joinGroup(group: GroupsResult, askWhenNoPwd: boolean = false) {
+    public joinGroup(group: GroupsResult, askWhenNoPwd = false) {
         if (group.hasPassword) {
             Swal.fire({
                 title: 'Enter group password.',

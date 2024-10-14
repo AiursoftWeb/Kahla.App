@@ -12,8 +12,8 @@ export class ThreadsApiService {
     constructor(private apiService: ApiService) {}
 
     public List(
-        take: number = 20,
-        skip: number = 0,
+        take = 20,
+        skip = 0,
         searchInput?: string,
         excluding?: string
     ): Observable<ThreadsListApiResponse> {
@@ -31,8 +31,8 @@ export class ThreadsApiService {
 
     public Members(
         id: number,
-        take: number = 20,
-        skip: number = 0
+        take = 20,
+        skip = 0
     ): Observable<ContactsListApiResponse> {
         return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, {
             take,

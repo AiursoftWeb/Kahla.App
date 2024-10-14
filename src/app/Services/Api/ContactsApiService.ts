@@ -12,8 +12,8 @@ export class ContactsApiService {
     constructor(private apiService: ApiService) {}
 
     public List(
-        take: number = 20,
-        skip: number = 0,
+        take = 20,
+        skip = 0,
         searchInput?: string,
         excluding?: string
     ): Observable<ContactsListApiResponse> {

@@ -6,15 +6,12 @@ import { catchError } from 'rxjs/operators';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 
-type paramDict = {
-    [param: string]:
-        | string
+type paramDict = Record<string, | string
         | number
         | boolean
-        | ReadonlyArray<string | number | boolean>
+        | readonly (string | number | boolean)[]
         | undefined
-        | null;
-};
+        | null>;
 
 @Injectable({
     providedIn: 'root',
@@ -51,7 +48,7 @@ export class ApiService {
 
     public processGetParams(params: paramDict): paramDict {
         // remove all undefined or null values
-        let result = { ...params };
+        const result = { ...params };
         for (const key in result) {
             if (result[key] === undefined || result[key] === null) {
                 delete result[key];

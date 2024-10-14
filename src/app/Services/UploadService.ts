@@ -138,9 +138,9 @@ export class UploadService {
     }
 
     private updateAlertProgress(progress: number): void {
-        (<HTMLProgressElement>Swal.getHtmlContainer().querySelector('#uploadProgress')).value =
+        (Swal.getHtmlContainer().querySelector('#uploadProgress') as HTMLProgressElement).value =
             progress;
-        (<HTMLDivElement>Swal.getHtmlContainer().querySelector('#progressText')).innerText =
+        (Swal.getHtmlContainer().querySelector('#progressText') as HTMLDivElement).innerText =
             `${progress}%`;
     }
 
@@ -205,9 +205,9 @@ export class UploadService {
                         .subscribe(res => {
                             if (Number(res)) {
                                 this.updateAlertProgress(Number(res));
-                            } else if (res != null && (<UploadFile>res).code === 0) {
+                            } else if (res != null && (res as UploadFile).code === 0) {
                                 Swal.close();
-                                user.iconFilePath = (<UploadFile>res).filePath;
+                                user.iconFilePath = (res as UploadFile).filePath;
                                 user.avatarURL = this.probeService.encodeProbeFileUrl(
                                     user.iconFilePath
                                 );
@@ -238,9 +238,9 @@ export class UploadService {
                         .subscribe(res => {
                             if (Number(res)) {
                                 this.updateAlertProgress(Number(res));
-                            } else if (res != null && (<UploadFile>res).code === 0) {
+                            } else if (res != null && (res as UploadFile).code === 0) {
                                 Swal.close();
-                                group.groupImagePath = (<UploadFile>res).filePath;
+                                group.groupImagePath = (res as UploadFile).filePath;
                                 group.avatarURL = this.probeService.encodeProbeFileUrl(
                                     group.groupImagePath
                                 );
@@ -281,14 +281,14 @@ export class UploadService {
         fileType: FileType,
         file: File
     ): Promise<MessageFileRef> {
-        if (!response || Number(response) || (<UploadFile>response).code !== 0) {
+        if (!response || Number(response) || (response as UploadFile).code !== 0) {
             return null;
         }
         return new Promise<MessageFileRef>(resolve => {
             const fileRef = new MessageFileRef();
-            fileRef.filePath = (<UploadFile>response).filePath;
+            fileRef.filePath = (response as UploadFile).filePath;
             fileRef.fileType = fileType;
-            fileRef.fileSize = this.probeService.getFileSizeText((<UploadFile>response).fileSize);
+            fileRef.fileSize = this.probeService.getFileSizeText((response as UploadFile).fileSize);
             fileRef.fileName = file.name;
             if (fileType === FileType.Image) {
                 loadImage(

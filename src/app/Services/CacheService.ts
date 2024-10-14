@@ -50,9 +50,7 @@ export class CacheService {
         this.devicesApiService.MyDevices().subscribe(response => {
             let currentId = 0;
             if (localStorage.getItem('setting-pushSubscription')) {
-                currentId = (<PushSubscriptionSetting>(
-                    JSON.parse(localStorage.getItem('setting-pushSubscription'))
-                )).deviceId;
+                currentId = (JSON.parse(localStorage.getItem('setting-pushSubscription')) as PushSubscriptionSetting).deviceId;
             }
             response.items.forEach(item => {
                 item.name = mapDeviceName(item.name) ?? 'Unknown device';
@@ -76,7 +74,7 @@ export class CacheService {
         });
     }
 
-    public modifyMessage(content: string, modifyText: boolean = false): string {
+    public modifyMessage(content: string, modifyText = false): string {
         if (content.startsWith('[img]')) {
             return 'Photo';
         } else if (content.startsWith('[video]')) {
@@ -105,7 +103,7 @@ export class CacheService {
 
     public initCache(): void {
         if (localStorage.getItem('global-cache')) {
-            this.cachedData = <CacheModel>JSON.parse(localStorage.getItem('global-cache'));
+            this.cachedData = JSON.parse(localStorage.getItem('global-cache')) as CacheModel;
             if (this.cachedData.version !== CacheModel.VERSION) {
                 this.cachedData = new CacheModel();
                 this.saveCache();

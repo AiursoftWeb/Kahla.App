@@ -40,7 +40,7 @@ export class ConversationApiService {
         conversationID: number,
         content: string,
         messageId: string,
-        userIDs: Array<string>
+        userIDs: string[]
     ): Observable<AiurValue<Message>> {
         const form = {
             Content: content,

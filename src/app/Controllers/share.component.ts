@@ -224,7 +224,7 @@ export class ShareComponent implements OnInit, DoCheck {
         );
     }
 
-    public search(term: string, keydown: boolean = false): void {
+    public search(term: string, keydown = false): void {
         // if (this.cacheService.cachedData.contacts) {
         //     this.results = Object.assign(
         //         {},

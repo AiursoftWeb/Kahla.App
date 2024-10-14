@@ -136,7 +136,7 @@ export class InitService {
         }
     }
 
-    public bindDevice(pushSubscription: PushSubscription, force: boolean = false) {
+    public bindDevice(pushSubscription: PushSubscription, force = false) {
         console.log(pushSubscription);
         let data: PushSubscriptionSetting = JSON.parse(
             localStorage.getItem('setting-pushSubscription')
