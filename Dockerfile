@@ -7,7 +7,7 @@ COPY . .
 RUN yarn run prod
 
 FROM hub.aiursoft.cn/aiursoft/static
-COPY --from=yarn-env /app/www/browser /data
+COPY --from=yarn-env /app/dist/browser /data
 
 
 ENTRYPOINT [ "/app/static", "--port", "5000", "--path", "/data", "--not-found-page", "/index.html" ]
