@@ -30,6 +30,7 @@ export abstract class RepositoryBase<T> {
             this.data = resp;
             this.total = total;
             this.status = "synced";
+            this.saveCache();
         } catch (err) {
             this.status = "error";
             throw err;
@@ -48,6 +49,7 @@ export abstract class RepositoryBase<T> {
             );
             this.data = this.data.concat(resp);
             this.total = total;
+            this.saveCache();
         } finally {
             // When on error, new items will be rejected, but the previous items will still be kept
             this.status = "synced";
@@ -57,7 +59,7 @@ export abstract class RepositoryBase<T> {
     public initCache() {
         if (localStorage.getItem(`cache-${this.name}`)) {
             const data = <RepositoryCache<T>>(
-                JSON.parse(localStorage.getItem("global-cache"))
+                JSON.parse(localStorage.getItem(`cache-${this.name}`))
             );
             if (data.version !== this.version) {
                 this.data = [];

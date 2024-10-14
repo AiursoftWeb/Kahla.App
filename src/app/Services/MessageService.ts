@@ -223,7 +223,7 @@ export class MessageService {
         this.updateAtLink();
         this.saveMessage();
         // clear red dot if necessary
-        const listItem = this.cacheService.cachedData.conversations.find(t => t.conversationId === this.conversation.id);
+        const listItem = this.cacheService.cachedData.conversations.find(t => t.id === this.conversation.id);
         if (listItem) {
             listItem.unReadAmount = 0;
         }

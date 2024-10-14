@@ -50,6 +50,7 @@ export class InitService {
             this.apiService.ServerInfo()
         );
         this.cacheService.initCache();
+        this.contactsRepository.initCache();
 
         if (this.cacheService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(

@@ -21,7 +21,6 @@ export class HeaderComponent {
     @Input() public buttonLink: string | number = '';
     @Input() public buttonIcon = '';
     @Input() public shadow = false;
-    @Input() public timer = false;
     @Input() public processing = false;
 
     constructor(

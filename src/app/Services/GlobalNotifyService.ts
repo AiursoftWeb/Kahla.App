@@ -27,7 +27,7 @@ export class GlobalNotifyService {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
                 const conversationCacheIndex = this.cacheService.cachedData.conversations
-                    .findIndex(x => x.conversationId === evt.message.conversationId);
+                    .findIndex(x => x.id === evt.message.conversationId);
                 if (conversationCacheIndex !== -1) {
                     const conversationCache = this.cacheService.cachedData.conversations[conversationCacheIndex];
                     const latestMsg = Object.assign({}, evt.message);
@@ -60,7 +60,7 @@ export class GlobalNotifyService {
                 if (evt.leftUser.id === this.cacheService.cachedData.me.id) {
                     Swal.fire('Oops, you have been kicked.',
                         `You have been kicked by the owner of group ${this.cacheService.cachedData.conversations
-                            .find(x => x.conversationId === evt.conversationId).displayName}.`,
+                            .find(x => x.id === evt.conversationId).name}.`,
                         'warning');
                     this.cacheService.updateConversation();
                 }

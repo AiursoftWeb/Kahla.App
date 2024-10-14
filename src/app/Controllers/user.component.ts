@@ -55,26 +55,24 @@ export class UserComponent implements OnInit {
         // });
     }
 
-    public delete(id: string): void {
-        Swal.fire({
+    public async delete(id: string) {
+        const resp = await Swal.fire({
             title: 'Are you sure to delete a friend?',
             icon: 'warning',
             showCancelButton: true
-        }).then((willDelete) => {
-            if (willDelete.value) {
-                this.contactsApiService.Remove(id)
-                    .subscribe(response => {
-                        if (response.code === 0) {
-                            SwalToast.fire('Success', '', 'success');
-                            this.contactsRepository.updateAll();
-                            this.router.navigate(['/home']);
-                        } else {
-                            Swal.fire('Error', response.message, 'error');
-                        }
-
-                    });
-            }
         });
+        if (!resp.value) return;
+        try {
+            await lastValueFrom(this.contactsApiService.Remove(id));
+        } catch (err) {
+            showCommonErrorDialog(err);
+            return;
+        }
+        SwalToast.fire('Success', '', 'success');
+        this.contactsRepository.updateAll();
+        this.router.navigate(['/home']);
+        
+
     }
 
     public async addAsContract() {

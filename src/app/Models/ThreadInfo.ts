@@ -1,15 +1,47 @@
-﻿import { Message } from './Message';
+﻿import { KahlaUser } from './KahlaUser';
+import { Message } from './Message';
 
 export interface ThreadInfo {
-    displayName: string;
-    displayImagePath: string;
+    name: string;
+    imagePath: string;
     latestMessage: Message;
     unReadAmount: number;
-    conversationId: number;
-    discriminator: 'GroupConversation' | 'PrivateConversation';
-    userId: string;
-    avatarURL: string;
+    id: number;
     muted: boolean;
     someoneAtMe: boolean;
+    
+    topTenMembers: KahlaUser[];
+    lastMessageTime: Date;
+    imAdmin: boolean;
+    imOwner: boolean;
+
+    allowSearchByName: boolean;
+    allowMembersSendMessages: boolean;
+    allowMembersEnlistAllMembers: boolean;
+    allowMemberSoftInvitation: boolean;
+    allowDirectJoinWithoutInvitation: boolean;
+
+    ownerId: string;
+    createTime: Date;
+    imInIt: boolean;
+
+
+
+
+    /**
+     * @deprecated
+     */
+    discriminator: 'GroupConversation' | 'PrivateConversation';
+    /**
+     * @deprecated
+     */
+    userId: string;
+    /**
+     * @deprecated
+     */
+    avatarURL: string;
+    /**
+     * @deprecated
+     */
     online?: boolean;
 }

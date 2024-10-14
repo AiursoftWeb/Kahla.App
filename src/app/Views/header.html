@@ -1,22 +1,14 @@
-<div class="header" [ngClass]="{'shadow': shadow, 'showTimer': timer }">
+<div class="header" [ngClass]="{'shadow': shadow}">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()">
         <i *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly" class="fas fa-times"></i>
         <i *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)" class="fas fa-caret-left"></i>
     </div>
-    <div *ngIf="timer"></div>
     <div *ngIf="!returnButton"></div>
     <div class="text">
         <div class="processing" [class.processing-open]="processing">
             <i class="fas fa-spinner fa-spin"></i>
         </div>
         {{title}}
-    </div>
-    <div *ngIf="timer && messageService.conversation" class="user-button headerButton"
-         (click)="(messageService.checkOwner()) && timerService.setTimer(messageService.conversation.id)">
-        <i class="far fa-clock"></i>
-        <div class="dot" [ngClass]="{'reddot': messageService.checkOwner(), 'graydot': !messageService.checkOwner()}">
-            {{timerService.destructTime}}
-        </div>
     </div>
     <div *ngIf="button" class="user-button headerButton" (click)="linkClicked()">
         <i class="fas fa-{{buttonIcon}}"></i>

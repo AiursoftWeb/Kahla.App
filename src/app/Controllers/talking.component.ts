@@ -222,10 +222,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
             } else {
                 const listItem =
                     this.cacheService.cachedData.conversations.find(
-                        (t) => t.conversationId === this.conversationID
+                        (t) => t.id === this.conversationID
                     );
                 if (listItem) {
-                    this.header.title = listItem.displayName;
+                    this.header.title = listItem.name;
                 } else {
                     this.header.title = "Loading...";
                 }
@@ -307,7 +307,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.header.buttonLink = `/group/${conversation.id}`;
         }
         this.timerService.updateDestructTime(conversation.maxLiveSeconds);
-        this.header.timer = this.timerService.destructTime !== "off";
     }
 
     public trackByMessages(_index: number, message: Message): string {
@@ -792,7 +791,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public onFocus() {
         const conversationCache =
             this.cacheService.cachedData.conversations.find(
-                (t) => t.conversationId === this.conversationID
+                (t) => t.id === this.conversationID
             );
         if (conversationCache) {
             conversationCache.unReadAmount = 0;

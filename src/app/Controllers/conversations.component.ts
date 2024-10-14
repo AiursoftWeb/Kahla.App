@@ -38,18 +38,18 @@ export class ConversationsComponent implements OnInit {
 
     public detail(info: ThreadInfo): void {
         if (info.discriminator === 'GroupConversation') {
-            this.router.navigate(['/group', info.conversationId]);
+            this.router.navigate(['/group', info.id]);
         } else {
             this.router.navigate(['/user', info.userId]);
         }
     }
 
     public current(info: ThreadInfo): boolean {
-        return new RegExp(`^.+\/${info.conversationId}(\/.*)*$`, 'g').test(this.router.url);
+        return new RegExp(`^.+\/${info.id}(\/.*)*$`, 'g').test(this.router.url);
     }
 
     public talk(id: number, unread: number): void {
-        const conversation = this.cacheService.cachedData.conversations.find(x => x.conversationId === id);
+        const conversation = this.cacheService.cachedData.conversations.find(x => x.id === id);
         conversation.unReadAmount = 0;
         conversation.someoneAtMe = false;
         this.cacheService.updateTotalUnread();
