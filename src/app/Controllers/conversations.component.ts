@@ -45,7 +45,7 @@ export class ConversationsComponent implements OnInit {
     }
 
     public current(info: ThreadInfo): boolean {
-        return new RegExp(`^.+\/${info.id}(\/.*)*$`, 'g').test(this.router.url);
+        return new RegExp(`^.+/${info.id}(/.*)*$`, 'g').test(this.router.url);
     }
 
     public talk(id: number, unread: number): void {

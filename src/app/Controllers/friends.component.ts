@@ -37,7 +37,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        const inputElement = <HTMLElement>document.querySelector('#searchBar');
+        const inputElement = document.querySelector('#searchBar') as HTMLElement;
         if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             inputElement.focus();
         }
@@ -114,7 +114,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         this.showUsers = selectUsers;
     }
 
-    public search(term: string, keydown: boolean = false): void {
+    public search(term: string, keydown = false): void {
         if (this.contactsRepository.data) {
             this.results = [...this.contactsRepository.data];
             if (term) {

@@ -45,7 +45,7 @@ export class HeaderComponent {
         if (Number(this.buttonLink)) {
             this.homeService.currentPage = Number(this.buttonLink);
         } else {
-            this.router.navigateByUrl(<string>this.buttonLink);
+            this.router.navigateByUrl((this.buttonLink as string));
         }
     }
 

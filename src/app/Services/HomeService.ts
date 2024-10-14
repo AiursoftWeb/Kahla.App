@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class HomeService {
     public currentPage = 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public pwaHomeScreenPrompt: any;
     public pwaHomeScreenSuccess = false;
 

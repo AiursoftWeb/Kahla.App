@@ -12,11 +12,9 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start": "ng serve --open",
+    "start": "ng serve",
     "build": "ng build --base-href /",
-    "lint": "ng lint --type-check && tsc",
-    "prod": "ng build --base-href / --output-hashing none",
-    "prod-zh": "ng build --base-href / --i18n-locale zh --i18n-file ./src/messages.zh.xlf"
+    "lint": "ng lint && tsc"
   },
   "dependencies": {
     "@angular/animations": "18.2.8",
@@ -46,8 +44,10 @@
     "@angular/compiler-cli": "^18.2.8",
     "@angular/language-service": "18.2.8",
     "@types/node": "^22.7.5",
-    "codelyzer": "^6.0.2",
-    "typescript": "~5.5.0"
+    "angular-eslint": "18.3.1",
+    "eslint": "^9.9.1",
+    "typescript": "~5.5.0",
+    "typescript-eslint": "8.2.0"
   },
   "main": "index.js",
   "repository": {

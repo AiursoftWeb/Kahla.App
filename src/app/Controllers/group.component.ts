@@ -47,9 +47,9 @@ export class GroupComponent implements OnInit {
             )
             .subscribe(conversation => {
                 this.messageService.conversation = conversation;
-                this.conversation = <GroupConversation>conversation;
+                this.conversation = conversation as GroupConversation;
                 this.groupMembers = conversation.users.length;
-                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl((<GroupConversation>this.conversation).groupImagePath);
+                this.conversation.avatarURL = this.probeService.encodeProbeFileUrl((this.conversation as GroupConversation).groupImagePath);
                 this.conversation.users.forEach(user => {
                     user.user.avatarURL = this.probeService.encodeProbeFileUrl(user.user.iconFilePath);
                     try {

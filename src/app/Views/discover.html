@@ -7,13 +7,13 @@
     </div>
     <p>{{ user.commonFriends }} common friends</p>
     <p>{{ user.commonGroups }} common groups</p>
-    <button *ngIf="!user.sentRequest" class="button primary" (click)="request($event, user.targetUser.id)">Send
+    <button *ngIf="!user.sentRequest" class="button primary">Send
         Request
     </button>
     <button *ngIf="user.sentRequest" class="button primary" disabled>Pending</button>
 </div>
 
-<div *ngIf="users && users.length == 0">
+<div *ngIf="users && users.length === 0">
     <h3>
         Search users or join groups to add more friends then try again.
     </h3>

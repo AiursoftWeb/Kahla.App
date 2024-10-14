@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
@@ -51,7 +51,7 @@ export class FileHistoryComponent implements OnInit {
         return !!fileName.substring(fileName.lastIndexOf('.') + 1).match(/png|jpg|jpeg|gif|webp|bmp/);
     }
 
-    public buildProbeUrl(file: ProbeFile, dir: FileHistoryApiModel, download: boolean = false): string {
+    public buildProbeUrl(file: ProbeFile, dir: FileHistoryApiModel, download = false): string {
         return this.probeService.encodeProbeFileUrl(`${dir.siteName}/${dir.rootPath}/${dir.showingDateUTC}/${file.fileName}`
             , this.accessToken, download);
     }
@@ -96,8 +96,4 @@ export class FileHistoryComponent implements OnInit {
         });
     }
 
-    @HostListener('window:onscroll')
-    public onScroll() {
-
-    }
 }

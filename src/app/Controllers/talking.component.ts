@@ -176,15 +176,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        const inputElement = <HTMLElement>document.querySelector("#chatInput");
+        const inputElement = document.querySelector("#chatInput") as HTMLElement;
         inputElement.addEventListener("input", () => {
             inputElement.style.height = "auto";
             inputElement.style.height = inputElement.scrollHeight + "px";
             this.chatInputHeight = inputElement.scrollHeight;
             if (document.querySelector("#scrollDown")) {
-                (<HTMLElement>(
-                    document.querySelector("#scrollDown")
-                )).style.bottom = inputElement.scrollHeight + 46 + "px";
+                (document.querySelector("#scrollDown") as HTMLElement).style.bottom = inputElement.scrollHeight + 46 + "px";
             }
         });
 

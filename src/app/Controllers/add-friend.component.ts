@@ -24,7 +24,7 @@ export class AddFriendComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        const searchBar = <HTMLTextAreaElement>document.querySelector('#searchBar');
+        const searchBar = document.querySelector('#searchBar') as HTMLTextAreaElement;
         searchBar.focus();
     }
 

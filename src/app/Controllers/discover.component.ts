@@ -3,8 +3,6 @@ import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { DiscoverUser } from '../Models/DiscoverUser';
 import { Values } from '../values';
 import { ProbeService } from '../Services/ProbeService';
-import { SwalToast } from '../Helpers/Toast';
-import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/discover.html',
@@ -45,24 +43,5 @@ export class DiscoverComponent implements OnInit {
         }, () => {
             this.loading = false;
         });
-    }
-
-    public request(event: any, id: string): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.friendsApiService.CreateRequest(id)
-            .subscribe(response => {
-                if (response.code === 0) {
-                    SwalToast.fire('Success', '', 'success');
-                    for (let index = 0; index < this.users.length; index++) {
-                        if (this.users[index].targetUser.id === id) {
-                            this.users[index].sentRequest = true;
-                            break;
-                        }
-                    }
-                } else {
-                    Swal.fire('Error', response.message, 'error');
-                }
-            });
     }
 }

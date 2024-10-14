@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
     }
 
     @HostListener('window:beforeinstallprompt', ['$event'])
-    onbeforeinstallprompt(e: any) {
+    onbeforeinstallprompt(e: unknown) {
         this.homeService.pwaHomeScreenPrompt = e;
     }
 
