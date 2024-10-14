@@ -11,7 +11,6 @@ import { Message } from "../Models/Message";
 import Swal from "sweetalert2";
 import { UploadService } from "../Services/UploadService";
 import { MessageService } from "../Services/MessageService";
-import { TimerService } from "../Services/TimerService";
 import { KahlaUser } from "../Models/KahlaUser";
 import { HeaderComponent } from "./header.component";
 import { GroupsResult } from "../Models/GroupsResults";
@@ -70,7 +69,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        public timerService: TimerService,
         private friendshipService: FriendshipService,
         private themeService: ThemeService,
         public probeService: ProbeService
@@ -306,7 +304,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.header.buttonIcon = `users`;
             this.header.buttonLink = `/group/${conversation.id}`;
         }
-        this.timerService.updateDestructTime(conversation.maxLiveSeconds);
     }
 
     public trackByMessages(_index: number, message: Message): string {

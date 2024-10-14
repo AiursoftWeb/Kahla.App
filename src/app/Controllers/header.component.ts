@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
-import { TimerService } from '../Services/TimerService';
 import { HomeService } from '../Services/HomeService';
 import { EventService } from '../Services/EventService';
 import Swal from 'sweetalert2';
@@ -25,7 +24,6 @@ export class HeaderComponent {
 
     constructor(
         private router: Router,
-        public timerService: TimerService,
         public messageService: MessageService,
         public homeService: HomeService,
         public eventService: EventService,

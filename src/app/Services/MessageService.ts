@@ -12,9 +12,6 @@ import { CacheService } from './CacheService';
 import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
-import { TimerUpdatedEvent } from '../Models/Events/TimerUpdatedEvent';
-import { TimerService } from './TimerService';
-import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
@@ -60,7 +57,6 @@ export class MessageService {
         private contactsRepository: ContactsRepository,
         private filesApiService: FilesApiService,
         private cacheService: CacheService,
-        private timerService: TimerService,
         private router: Router,
         private homeService: HomeService,
         private groupsApiService: GroupsApiService,
@@ -97,23 +93,6 @@ export class MessageService {
                     if (this.belowWindowPercent <= 0.2) {
                         setTimeout(() => this.scrollBottom(true), 0);
                     }
-                }
-                break;
-            }
-            case EventType.FriendDeletedEvent: {
-                if ((<FriendDeletedEvent>ev).conversationId === this.conversation.id) {
-                    this.router.navigate(['/home']);
-                }
-                break;
-            }
-            case EventType.TimerUpdatedEvent: {
-                const evt = ev as TimerUpdatedEvent;
-                if (this.conversation.id === evt.conversationId) {
-                    this.conversation.maxLiveSeconds = evt.newTimer;
-                    this.timerService.updateDestructTime(evt.newTimer);
-                    Swal.fire('Self-destruct timer updated!', 'Your current message life time is: ' +
-                        this.timerService.destructTime, 'info');
-                    this.cleanMessageByTimer();
                 }
                 break;
             }

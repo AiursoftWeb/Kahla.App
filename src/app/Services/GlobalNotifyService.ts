@@ -3,7 +3,6 @@ import { EventService } from './EventService';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import { EventType } from '../Models/Events/EventType';
 import Swal from 'sweetalert2';
-import { FriendDeletedEvent } from '../Models/Events/FriendDeletedEvent';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';

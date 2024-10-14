@@ -6,7 +6,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import Swal from 'sweetalert2';
-import { TimerService } from '../Services/TimerService';
 import { UploadService } from '../Services/UploadService';
 import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
@@ -33,7 +32,6 @@ export class ManageGroupComponent implements OnInit {
                 public conversationApiService: ConversationApiService,
                 public route: ActivatedRoute,
                 private router: Router,
-                public timerService: TimerService,
                 public uploadService: UploadService,
                 private probeService: ProbeService,
     ) {

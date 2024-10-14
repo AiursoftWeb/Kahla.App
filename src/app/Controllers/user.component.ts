@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
-import { TimerService } from '../Services/TimerService';
 import { SwalToast } from '../Helpers/Toast';
 import { ApiService } from '../Services/Api/ApiService';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
@@ -30,7 +29,6 @@ export class UserComponent implements OnInit {
         private router: Router,
         private contactsRepository: ContactsRepository,
         public cacheService: CacheService,
-        public timerService: TimerService,
         public apiService: ApiService
     ) {
     }

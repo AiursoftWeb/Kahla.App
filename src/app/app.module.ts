@@ -41,7 +41,6 @@ import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
 import { DevicesApiService } from './Services/Api/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
-import { TimerService } from './Services/TimerService';
 import { HomeService } from './Services/HomeService';
 import { FriendshipService } from './Services/FriendshipService';
 import { ProbeService } from './Services/ProbeService';
@@ -100,7 +99,6 @@ import { ContactsRepository } from './Repositories/ContactsRepository';
         InitService,
         DevicesApiService,
         ThemeService,
-        TimerService,
         HomeService,
         FriendshipService,
         ProbeService,
