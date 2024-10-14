@@ -21,7 +21,6 @@ export class GlobalNotifyService {
     }
 
     private OnMessage(ev: AiurEvent) {
-        const fireAlert = !localStorage.getItem('deviceID');
         switch (ev.type) {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;

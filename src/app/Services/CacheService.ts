@@ -1,11 +1,8 @@
 import { Injectable } from "@angular/core";
 import { CacheModel } from "../Models/CacheModel";
 import { DevicesApiService } from "./Api/DevicesApiService";
-import { ConversationApiService } from "./Api/ConversationApiService";
-import { ProbeService } from "./ProbeService";
 import { PushSubscriptionSetting } from "../Models/PushSubscriptionSetting";
 import { ServerConfig } from "../Models/ServerConfig";
-import { ContactsApiService } from "./Api/ContactsApiService";
 import { mapDeviceName } from "../Helpers/UaMapper";
 
 @Injectable({
@@ -19,7 +16,6 @@ export class CacheService {
     public serverConfig: ServerConfig;
 
     constructor(
-        private contactsApiService: ContactsApiService,
         private devicesApiService: DevicesApiService
     ) {}
 

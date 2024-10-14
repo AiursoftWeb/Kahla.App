@@ -2,7 +2,6 @@
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
-import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { ContactsRepository } from '../Repositories/ContactsRepository';
