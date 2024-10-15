@@ -52,6 +52,9 @@ import { ContactsApiService } from './Services/Api/ContactsApiService';
 import { SearchApiService } from './Services/Api/SearchApiService';
 import { MyContactsRepository } from './Repositories/MyContactsRepository';
 import { ContactListComponent } from './Controllers/contact-list.component';
+import { ThreadsListComponent } from './Controllers/threads-list.component';
+import { MyThreadsRepository } from './Repositories/ThreadsRepository';
+import { ThreadsApiService } from './Services/Api/ThreadsApiService';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
@@ -79,7 +82,8 @@ import { ContactListComponent } from './Controllers/contact-list.component';
         ShareComponent,
         FileHistoryComponent,
         VjsPlayerComponent,
-        ContactListComponent
+        ContactListComponent,
+        ThreadsListComponent
     ],
     providers: [
         ApiService,
@@ -104,6 +108,8 @@ import { ContactListComponent } from './Controllers/contact-list.component';
         ContactsApiService,
         SearchApiService,
         MyContactsRepository,
+        MyThreadsRepository,
+        ThreadsApiService
     ],
     bootstrap: [AppComponent],
 })

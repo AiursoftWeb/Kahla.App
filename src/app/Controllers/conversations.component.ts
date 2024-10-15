@@ -3,17 +3,12 @@ import { ThreadInfo } from '../Models/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
-import { HomeService } from '../Services/HomeService';
+import { MyThreadsRepository } from '../Repositories/ThreadsRepository';
 
 @Component({
     selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
-    styleUrls: [
-        '../Styles/conversations.scss',
-        '../Styles/reddot.scss',
-        '../Styles/button.scss',
-        '../Styles/badge.scss',
-    ],
+    styleUrls: [],
 })
 export class ConversationsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
@@ -21,20 +16,11 @@ export class ConversationsComponent implements OnInit {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private homeService: HomeService
+        public myThreadsRepository: MyThreadsRepository
     ) {}
 
     public ngOnInit(): void {
-        if (this.cacheService.cachedData.me) {
-            this.cacheService.updateConversation();
-        }
-        setTimeout(() => {
-            if (this.homeService.floatingHomeWrapper === null) {
-                document.body.scroll(0, 0);
-            } else {
-                this.homeService.floatingHomeWrapper.scroll(0, 0);
-            }
-        }, 0);
+        if (!this.myThreadsRepository.health) this.myThreadsRepository.updateAll();
     }
 
     public detail(info: ThreadInfo): void {

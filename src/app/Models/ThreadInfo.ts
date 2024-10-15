@@ -38,7 +38,7 @@ export interface ThreadInfo {
      */
     avatarURL: string;
     /**
-     * @deprecated
+     * @deprecated use online property in KahlaUser instead
      */
     online?: boolean;
 }
