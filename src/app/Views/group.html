@@ -2,18 +2,20 @@
 <div *ngIf="conversation" class="user">
     <a
         class="user-img groupGridRow"
-        href="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}"
+        href="{{ conversation.avatarURL ? conversation.avatarURL : loadingImgURL }}"
         target="_blank"
         rel="noopener noreferrer"
     >
         <img
             class="user-img groupGridRow"
-            src="{{conversation.avatarURL ? conversation.avatarURL : loadingImgURL}}?w=128&square=true"
+            src="{{
+                conversation.avatarURL ? conversation.avatarURL : loadingImgURL
+            }}?w=128&square=true"
         />
     </a>
-    <div class="name">{{conversation.displayName}}</div>
+    <div class="name">{{ conversation.displayName }}</div>
     <div class="create-time">
-        Create Time: {{conversation.conversationCreateTime | date:'mediumDate'}}
+        Create Time: {{ conversation.conversationCreateTime | date: 'mediumDate' }}
     </div>
 </div>
 <div class="menu-button" *ngIf="conversation" (click)="shareGroup()">
@@ -68,7 +70,7 @@
         <div>
             <img
                 class="img"
-                src="{{e.user.avatarURL ? e.user.avatarURL : loadingImgURL}}?w=128&square=true"
+                src="{{ e.user.avatarURL ? e.user.avatarURL : loadingImgURL }}?w=128&square=true"
             />
             <!-- <div class="small-dot"
                  style="top:29px; right:-42px;" *ngIf="e.user.isOnline !== null"
@@ -76,7 +78,7 @@
                  [class.graydot]="!e.user.isOnline">
             </div> -->
         </div>
-        <div class="text">{{e.user.nickName}}</div>
+        <div class="text">{{ e.user.nickName }}</div>
         <label class="badge badge-primary" *ngIf="messageService.checkOwner(e.userId)">Owner</label>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, model } from "@angular/core";
+import { Component, Input, model } from '@angular/core';
 
 export interface SearchTypeItem {
     className: string;
@@ -16,5 +16,4 @@ export class SearchTypeComponent {
     currentIndex = model(0);
 
     @Input() items: SearchTypeItem[] = [];
-
 }

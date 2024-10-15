@@ -20,19 +20,24 @@ export class SearchAreaComponent {
     private searchSubject = new Subject<string>();
 
     constructor() {
-        effect(() => {
-            if (this.searchTextInput().length == 0) {
-                this.searchText.set('');
+        effect(
+            () => {
+                if (this.searchTextInput().length == 0) {
+                    this.searchText.set('');
+                }
+                this.searchSubject.next(this.searchTextInput());
+            },
+            {
+                allowSignalWrites: true,
             }
-            this.searchSubject.next(this.searchTextInput());
-        }, {
-            allowSignalWrites: true
-        });
+        );
 
         effect(cleanup => {
-            const sub = this.searchSubject.pipe(debounceTime(this.debounceTime())).subscribe(term => {
-                this.searchText.set(term);
-            });
+            const sub = this.searchSubject
+                .pipe(debounceTime(this.debounceTime()))
+                .subscribe(term => {
+                    this.searchText.set(term);
+                });
             cleanup(() => {
                 sub.unsubscribe();
             });
@@ -43,6 +48,4 @@ export class SearchAreaComponent {
         this.searchText.set(this.searchTextInput());
         this.positiveClicked.emit();
     }
-
-    
 }

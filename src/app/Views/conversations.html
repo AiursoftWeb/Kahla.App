@@ -1,4 +1,12 @@
-<app-header title="Kahla" [processing]="cacheService.updatingConversation" [returnButton]="false"></app-header>
-<app-threads-list *ngIf="myThreadsRepository" [threadRepo]="myThreadsRepository" [highlightPredicate]="current.bind(this)"
+<app-header
+    title="Kahla"
+    [processing]="cacheService.updatingConversation"
+    [returnButton]="false"
+></app-header>
+<app-threads-list
+    *ngIf="myThreadsRepository"
+    [threadRepo]="myThreadsRepository"
+    [highlightPredicate]="current.bind(this)"
     (threadClicked)="talk($event.thread.id, $event.thread.unReadAmount)"
-    emptyMessage="Start talking by creating some conversations first. 💬" />
+    emptyMessage="Start talking by creating some conversations first. 💬"
+/>

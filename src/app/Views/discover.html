@@ -6,7 +6,9 @@
 >
     <img
         class="user-img"
-        src="{{user.targetUser.avatarURL ? user.targetUser.avatarURL : loadingImgURL}}?w=128&square=true"
+        src="{{
+            user.targetUser.avatarURL ? user.targetUser.avatarURL : loadingImgURL
+        }}?w=128&square=true"
     />
     <div class="sender">{{ user.targetUser.nickName }}</div>
     <p>{{ user.commonFriends }} common friends</p>

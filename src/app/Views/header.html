@@ -1,4 +1,4 @@
-<div class="header" [ngClass]="{'shadow': shadow}">
+<div class="header" [ngClass]="{ shadow: shadow }">
     <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()">
         <i
             *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly"
@@ -14,10 +14,10 @@
         <div class="processing" [class.processing-open]="processing">
             <i class="fas fa-spinner fa-spin"></i>
         </div>
-        {{title}}
+        {{ title }}
     </div>
     <div *ngIf="button" class="user-button headerButton" (click)="linkClicked()">
-        <i class="fas fa-{{buttonIcon}}"></i>
+        <i class="fas fa-{{ buttonIcon }}"></i>
     </div>
 </div>
 
@@ -26,7 +26,7 @@
 <div
     class="header-alert"
     [class.in-widescreen]="homeService.wideScreenEnabled"
-    *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting)"
+    *ngIf="(!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting"
 >
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fas fa-spinner fa-spin"></i>
@@ -38,7 +38,11 @@
     class="header-alert"
     [class.in-widescreen]="homeService.wideScreenEnabled"
     (click)="showDisconnectedDialog()"
-    *ngIf="((!this.returnButton || !homeService.wideScreenEnabled) && (eventService.errorOrClose && !eventService.connecting))"
+    *ngIf="
+        (!this.returnButton || !homeService.wideScreenEnabled) &&
+        eventService.errorOrClose &&
+        !eventService.connecting
+    "
 >
     <div class="words" i18n="@@Disconnectedfromserver">
         <i class="fas fa-cloud"></i>

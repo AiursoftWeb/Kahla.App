@@ -27,24 +27,32 @@
             <div class="words" i18n="@@CreateGroup">Blocked Users</div>
         </a>
     </div>
-    <app-search-area [(searchText)]="searchTxt" placeHolder="Search for your contacts and groups..."></app-search-area>
-    <app-search-type [items]="[
-        {
-            title: 'Contacts',
-            className: 'fas fa-user',
-            showDot: false,
-        },
-        {
-            title: 'Groups',
-            className: 'fas fa-users',
-            showDot: false,
-        }
-    ]"/>
+    <app-search-area
+        [(searchText)]="searchTxt"
+        placeHolder="Search for your contacts and groups..."
+    ></app-search-area>
+    <app-search-type
+        [items]="[
+            {
+                title: 'Contacts',
+                className: 'fas fa-user',
+                showDot: false,
+            },
+            {
+                title: 'Groups',
+                className: 'fas fa-users',
+                showDot: false,
+            },
+        ]"
+    />
 </div>
 <div class="header-space"></div>
-<app-contact-list *ngIf="showUsers && contactsRepo" [contacts]="contactsRepo"
+<app-contact-list
+    *ngIf="showUsers && contactsRepo"
+    [contacts]="contactsRepo"
     (contactClicked)="userClick($event.item, $event.secondary)"
-    emptyMessage="No contacts. Try adding someone first. 🍵" />
+    emptyMessage="No contacts. Try adding someone first. 🍵"
+/>
 <div *ngIf="!showUsers && this.contactsRepo">
     <!-- <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="user-img-group">

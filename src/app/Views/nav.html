@@ -13,7 +13,7 @@
                     *ngIf="cacheService.totalUnread > 0 && cacheService.totalUnread < 100"
                     class="dot reddot"
                 >
-                    {{cacheService.totalUnread}}
+                    {{ cacheService.totalUnread }}
                 </div>
                 <div *ngIf="cacheService.totalUnread > 99" class="dot reddot">99+</div>
             </div>
@@ -31,7 +31,7 @@
                     *ngIf="cacheService.totalRequests > 0 && cacheService.totalRequests < 100"
                     class="dot reddot"
                 >
-                    {{cacheService.totalRequests}}
+                    {{ cacheService.totalRequests }}
                 </div>
                 <div *ngIf="cacheService.totalRequests > 99" class="dot reddot">99+</div>
             </div>

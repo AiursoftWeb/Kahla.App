@@ -12,7 +12,10 @@
 </div>
 <div
     class="menu-button toggle-setting"
-    (click)="this.options.enableEnterToSendMessage = !this.options.enableEnterToSendMessage; updateSettings()"
+    (click)="
+        this.options.enableEnterToSendMessage = !this.options.enableEnterToSendMessage;
+        updateSettings()
+    "
     *ngIf="this.options"
 >
     <div class="img">
@@ -32,7 +35,10 @@
 <div class="menu-header">Privacy</div>
 <div
     class="menu-button toggle-setting"
-    (click)="this.options.enableHideMyOnlineStatus = !this.options.enableHideMyOnlineStatus; updateSettings()"
+    (click)="
+        this.options.enableHideMyOnlineStatus = !this.options.enableHideMyOnlineStatus;
+        updateSettings()
+    "
     *ngIf="this.options"
 >
     <div class="img">
@@ -87,7 +93,10 @@
 <div class="menu-header">Notification</div>
 <div
     class="menu-button toggle-setting"
-    (click)="this.options.enableEmailNotification = !this.options.enableEmailNotification; updateSettings()"
+    (click)="
+        this.options.enableEmailNotification = !this.options.enableEmailNotification;
+        updateSettings()
+    "
     *ngIf="this.me && me.emailConfirmed && this.options"
 >
     <div class="img">

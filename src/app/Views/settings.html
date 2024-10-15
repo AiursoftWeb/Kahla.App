@@ -2,7 +2,7 @@
 
 <div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
     <div class="user-img">
-        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL}}?w=128&square=true" />
+        <img class="user-img" src="{{ cacheService.cachedData.me.avatarURL }}?w=128&square=true" />
         <!-- <div class="small-dot" *ngIf="cacheService.cachedData.me.isOnline !== null"
             [class.greendot]="cacheService.cachedData.me.isOnline"
             [class.graydot]="!cacheService.cachedData.me.isOnline"

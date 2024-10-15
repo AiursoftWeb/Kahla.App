@@ -25,9 +25,16 @@
     </button>
     <button *ngIf="loadingMore" class="load-more" i18n="@@Loading">Loading...</button>
     <li
-        *ngFor="let message of takeMessages() as msg; trackBy: trackByMessages; last as isLast; let i = index"
-        [ngClass]="{'left': cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id,
-         'right': cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id}"
+        *ngFor="
+            let message of takeMessages() as msg;
+            trackBy: trackByMessages;
+            last as isLast;
+            let i = index
+        "
+        [ngClass]="{
+            left: cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id,
+            right: cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id,
+        }"
     >
         <div *ngIf="message.lastRead">
             <div class="last-read-bar">LAST READ</div>
@@ -35,17 +42,19 @@
         <div
             *ngIf="i === 0 || msg[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()"
         >
-            <div class="date-bar">{{message.sendTimeDate.toLocaleDateString()}}</div>
+            <div class="date-bar">{{ message.sendTimeDate.toLocaleDateString() }}</div>
         </div>
         <div class="message-line" [class.grouped]="message.groupWithPrevious" *ngIf="message.local">
             <div class="chat-avatar">
                 <div
                     class="chart-avatar-wrapper"
                     *ngIf="!message.groupWithPrevious"
-                    routerLink="/user/{{message.senderId}}"
+                    routerLink="/user/{{ message.senderId }}"
                 >
                     <img
-                        src="{{probeService.encodeProbeFileUrl(message.sender.iconFilePath)}}?w=128&square=true"
+                        src="{{
+                            probeService.encodeProbeFileUrl(message.sender.iconFilePath)
+                        }}?w=128&square=true"
                     />
                 </div>
             </div>
@@ -62,8 +71,13 @@
                     [class.balloon-grouped]="message.groupWithPrevious"
                 >
                     <span
-                        *ngIf="messageService.groupConversation && cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id && !message.groupWithPrevious"
-                        [ngStyle]="{'color': messageService.getGroupColor(message)}"
+                        *ngIf="
+                            messageService.groupConversation &&
+                            cacheService.cachedData.me &&
+                            message.senderId !== cacheService.cachedData.me.id &&
+                            !message.groupWithPrevious
+                        "
+                        [ngStyle]="{ color: messageService.getGroupColor(message) }"
                         >{{ message.sender.nickName }}
                         <label
                             class="badge badge-primary"
@@ -75,7 +89,12 @@
                         *ngIf="message.fileRef && message.fileRef.fileType === 0"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}"
+                        href="{{
+                            probeService.encodeProbeFileUrl(
+                                message.fileRef.filePath,
+                                messageService.fileAccessToken
+                            )
+                        }}"
                     >
                         <div
                             class="image-container"
@@ -84,7 +103,12 @@
                         >
                             <img
                                 *ngIf="messageService.fileAccessToken"
-                                src="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}"
+                                src="{{
+                                    probeService.encodeProbeFileUrl(
+                                        message.fileRef.filePath,
+                                        messageService.fileAccessToken
+                                    )
+                                }}"
                                 srcset="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) }},
                                 {{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) * 2 }} 2x"
                             />
@@ -95,10 +119,20 @@
                         *ngIf="message.fileRef && message.fileRef.fileType === 2"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href="{{probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken, true)}}"
+                        href="{{
+                            probeService.encodeProbeFileUrl(
+                                message.fileRef.filePath,
+                                messageService.fileAccessToken,
+                                true
+                            )
+                        }}"
                     >
                         <div
-                            [ngSwitch]="message.fileRef.fileName.substring(message.fileRef.fileName.indexOf('.') + 1)"
+                            [ngSwitch]="
+                                message.fileRef.fileName.substring(
+                                    message.fileRef.fileName.indexOf('.') + 1
+                                )
+                            "
                         >
                             <i *ngSwitchCase="'pdf'" class="far fa-file-pdf" aria-hidden="true"></i>
                             <i
@@ -248,20 +282,23 @@
                             ></i>
                             <i *ngSwitchDefault class="fas fa-file" aria-hidden="true"></i>
                         </div>
-                        <h5>{{message.fileRef.fileName}}</h5>
-                        <span>{{message.fileRef.fileSize}}</span>
+                        <h5>{{ message.fileRef.fileName }}</h5>
+                        <span>{{ message.fileRef.fileSize }}</span>
                     </a>
                     <a
                         class="share-item"
                         href="javascript:void(0);"
                         (click)="shareClick(message)"
-                        *ngIf="(message.content.startsWith('[share]')) && message.content.split('|').length === 4"
+                        *ngIf="
+                            message.content.startsWith('[share]') &&
+                            message.content.split('|').length === 4
+                        "
                     >
                         <div>
-                            <img src="{{message.content.split('|')[3]}}?w=128&square=true" />
+                            <img src="{{ message.content.split('|')[3] }}?w=128&square=true" />
                         </div>
-                        <h5>{{message.content.split('|')[1]}}</h5>
-                        <span>{{message.content.split('|')[2]}}</span>
+                        <h5>{{ message.content.split('|')[1] }}</h5>
+                        <span>{{ message.content.split('|')[2] }}</span>
                     </a>
                     <div
                         *ngIf="message.fileRef && message.fileRef.fileType === 1"
@@ -269,14 +306,29 @@
                     >
                         <app-vjs-player
                             *ngIf="messageService.fileAccessToken"
-                            [options]="{ sources: [{ src: probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken)}], height: messageService.videoHeight} //noinspection InvalidExpressionResultType"
+                            [options]="{
+                                sources: [
+                                    {
+                                        src: probeService.encodeProbeFileUrl(
+                                            message.fileRef.filePath,
+                                            messageService.fileAccessToken
+                                        ),
+                                    },
+                                ],
+                                height: messageService.videoHeight,
+                            } //noinspection InvalidExpressionResultType"
                         ></app-vjs-player>
                     </div>
                     <div *ngIf="message.content.startsWith('[audio]')">
                         <a
                             href="javascript:void(0)"
                             class="voicemsg"
-                            (click)="getAudio($event.currentTarget, message.fileRef.filePath) //noinspection ValidateTypes"
+                            (click)="
+                                getAudio(
+                                    $event.currentTarget,
+                                    message.fileRef.filePath
+                                ) //noinspection ValidateTypes
+                            "
                         >
                             <i class="fas fa-play"></i>
                             <span>Voice Message</span>
@@ -287,7 +339,9 @@
                         [innerHTML]="message.content"
                     ></p>
                     <div
-                        *ngIf="message.fileRef && message.fileRef.fileType !== 3 && message.contentRaw"
+                        *ngIf="
+                            message.fileRef && message.fileRef.fileType !== 3 && message.contentRaw
+                        "
                     >
                         <div class="message-action-button" (click)="shareToOther(message.fileRef)">
                             <i class="share fa fa-share-alt" aria-hidden="true"></i>
@@ -296,7 +350,13 @@
                         <a
                             class="message-action-button"
                             *ngIf="message.fileRef.fileType !== 2"
-                            href="{{probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken, true)}}"
+                            href="{{
+                                probeService.encodeProbeFileUrl(
+                                    message.fileRef.filePath,
+                                    messageService.fileAccessToken,
+                                    true
+                                )
+                            }}"
                         >
                             <i class="share fa fa-file-download" aria-hidden="true"></i>
                             Download
@@ -313,16 +373,19 @@
                     Sending...
                 </label>
                 <label *ngIf="!message.local || message.resend">
-                    {{message.sendTimeDate.toLocaleTimeString()}}
+                    {{ message.sendTimeDate.toLocaleTimeString() }}
                 </label>
             </p>
         </div>
     </li>
     <div class="message-list-placeholder"></div>
     <button
-        *ngIf="messageService.belowWindowPercent > 0.2 || (messageService.belowWindowPercent > 0.2 && messageService.newMessages)"
+        *ngIf="
+            messageService.belowWindowPercent > 0.2 ||
+            (messageService.belowWindowPercent > 0.2 && messageService.newMessages)
+        "
         id="scrollDown"
-        [ngClass]="{'active-button': showPanel, 'primary': messageService.newMessages}"
+        [ngClass]="{ 'active-button': showPanel, primary: messageService.newMessages }"
         class="button button--fab"
         (click)="messageService.scrollBottom(true)"
     >
@@ -335,7 +398,7 @@
     <ul
         *ngIf="showUserList"
         class="userList"
-        [ngClass]="{'oneResult': matchedUsers.length == 1}"
+        [ngClass]="{ oneResult: matchedUsers.length == 1 }"
         [style.max-height.px]="getAtListMaxHeight()"
     >
         <li
@@ -353,7 +416,7 @@
     <div class="chat-box">
         <div
             class="chat-part"
-            [class.empty]="content===undefined || content.trim().length === 0"
+            [class.empty]="content === undefined || content.trim().length === 0"
             [class.no-send-button]="cacheService.cachedData.options.enableEnterToSendMessage"
         >
             <i

@@ -7,7 +7,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
-import { UserSearchResult } from '../Models/SearchResult';
+import { UserSearchResult } from '../Models/Search/UserSearchResult';
 import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';

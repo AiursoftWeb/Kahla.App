@@ -3,18 +3,18 @@
     <app-search-area [(searchText)]="searchTerm" [debounceTime]="500" />
     <app-search-type
         [items]="[
-        {
-            title: 'Users',
-            className: 'fas fa-user',
-            showDot: !!contactsRepo,
-            dotValue: contactsRepo?.total ?? 0
-        },
-        {
-            title: 'Groups',
-            className: 'fas fa-users',
-            showDot: false
-        }
-    ]"
+            {
+                title: 'Users',
+                className: 'fas fa-user',
+                showDot: !!contactsRepo,
+                dotValue: contactsRepo?.total ?? 0,
+            },
+            {
+                title: 'Groups',
+                className: 'fas fa-users',
+                showDot: false,
+            },
+        ]"
     />
 </div>
 <div class="search-holder"></div>

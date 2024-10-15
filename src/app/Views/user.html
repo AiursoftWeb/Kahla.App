@@ -63,11 +63,7 @@
     </div>
     <div class="text" i18n="@@Report">Block</div>
 </div>
-<div
-    class="menu-button"
-    *ngIf="info && info.isKnownContact"
-    (click)="delete(info.user.id)"
->
+<div class="menu-button" *ngIf="info && info.isKnownContact" (click)="delete(info.user.id)">
     <div class="img">
         <i class="fas fa-trash warning"></i>
     </div>

@@ -47,7 +47,7 @@ export class FriendsComponent implements OnInit, AfterViewInit {
             } else {
                 this.contactsRepo = this.myContactsRepository;
             }
-        })
+        });
     }
 
     public ngOnInit(): void {

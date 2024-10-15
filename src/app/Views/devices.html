@@ -53,7 +53,10 @@
     <div class="img device-img">
         <i *ngIf="device.name.includes('Firefox')" class="fab fa-firefox" aria-hidden="true"></i>
         <i
-            *ngIf="(device.name.includes('Chromium') && !device.name.includes('Edge')) || device.name.includes('Chrome')"
+            *ngIf="
+                (device.name.includes('Chromium') && !device.name.includes('Edge')) ||
+                device.name.includes('Chrome')
+            "
             class="fab fa-chrome"
             aria-hidden="true"
         ></i>
@@ -67,5 +70,5 @@
         <i *ngIf="device.name.includes('Edge')" class="fab fa-edge" aria-hidden="true"></i>
     </div>
     <div class="text device-text">{{ device.name.split('-')[1] }}</div>
-    <div class="text device-text">{{ device.addTime | date:'mediumDate' }}</div>
+    <div class="text device-text">{{ device.addTime | date: 'mediumDate' }}</div>
 </div>

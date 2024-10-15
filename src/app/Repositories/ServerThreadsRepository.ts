@@ -1,9 +1,9 @@
 import { lastValueFrom } from 'rxjs';
-import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
+import { ThreadInfo } from '../Models/ThreadInfo';
 
-export class ServerContactsRepository extends RepositoryBase<ContactInfo> {
+export class ServerThreadsRepository extends RepositoryBase<ThreadInfo> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };
@@ -16,10 +16,10 @@ export class ServerContactsRepository extends RepositoryBase<ContactInfo> {
         super();
     }
 
-    protected async requestOnline(take: number, skip: number): Promise<[ContactInfo[], number]> {
+    protected async requestOnline(take: number, skip: number): Promise<[ThreadInfo[], number]> {
         const resp = await lastValueFrom(
-            this.searchApiService.SearchUsers(this.keyword, take, skip, this.keywordExclude)
+            this.searchApiService.SearchThreads(this.keyword, take, skip, this.keywordExclude)
         );
-        return [resp.users, resp.totalUsersCount];
+        return [resp.threads, resp.totalThreadsCount];
     }
 }

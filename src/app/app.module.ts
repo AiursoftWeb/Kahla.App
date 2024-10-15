@@ -87,7 +87,7 @@ import { SearchTypeComponent } from './Controllers/search-type.component';
         ContactListComponent,
         ThreadsListComponent,
         SearchAreaComponent,
-        SearchTypeComponent
+        SearchTypeComponent,
     ],
     providers: [
         ApiService,
@@ -113,7 +113,7 @@ import { SearchTypeComponent } from './Controllers/search-type.component';
         SearchApiService,
         MyContactsRepository,
         MyThreadsRepository,
-        ThreadsApiService
+        ThreadsApiService,
     ],
     bootstrap: [AppComponent],
 })

@@ -18,7 +18,9 @@ export class MyContactsRepositoryFiltered extends RepositoryBase<ContactInfo> {
     }
 
     protected async requestOnline(take: number, skip: number): Promise<[ContactInfo[], number]> {
-        const resp = await lastValueFrom(this.contactsApiService.List(take, skip, this.keyword, this.keywordExclude));
+        const resp = await lastValueFrom(
+            this.contactsApiService.List(take, skip, this.keyword, this.keywordExclude)
+        );
         return [resp.knownContacts, resp.totalKnownContacts];
     }
 }
@@ -36,7 +38,4 @@ export class MyContactsRepository extends MyContactsRepositoryFiltered {
     constructor(contactsApiService: ContactsApiService) {
         super(contactsApiService);
     }
-
 }
-
-

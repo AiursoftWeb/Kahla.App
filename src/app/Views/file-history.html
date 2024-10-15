@@ -1,19 +1,19 @@
 <app-header title="File History" [processing]="loading"></app-header>
 <div *ngIf="files.length > 0">
-    <div class="menu-hint">{{calcSummary()}}</div>
+    <div class="menu-hint">{{ calcSummary() }}</div>
     <div *ngFor="let dir of files">
-        <div class="menu-header">{{dir.showingDateUTC}}</div>
+        <div class="menu-header">{{ dir.showingDateUTC }}</div>
         <div class="file-tiles">
             <div *ngFor="let file of dir.items" class="file-item">
                 <a
-                    title="{{file.fileName}}"
-                    href="{{buildProbeUrl(file, dir)}}"
+                    title="{{ file.fileName }}"
+                    href="{{ buildProbeUrl(file, dir) }}"
                     target="_blank"
                     class="file-item-body"
                 >
                     <img
-                        *ngIf="isImage(file.fileName) else file_ico"
-                        src="{{buildProbeUrl(file, dir)}}&w=128"
+                        *ngIf="isImage(file.fileName); else file_ico"
+                        src="{{ buildProbeUrl(file, dir) }}&w=128"
                         class="icon"
                     />
                     <ng-template #file_ico>
@@ -170,15 +170,17 @@
                             <i *ngSwitchDefault class="fas fa-file" aria-hidden="true"></i>
                         </div>
                     </ng-template>
-                    <div class="title">{{file.fileName}}</div>
-                    <div class="detail">Size: {{probeService.getFileSizeText(file.fileSize)}}</div>
+                    <div class="title">{{ file.fileName }}</div>
+                    <div class="detail">
+                        Size: {{ probeService.getFileSizeText(file.fileSize) }}
+                    </div>
                 </a>
                 <div class="operate-button share" (click)="share(file, dir)" title="Share">
                     <i class="fas fa-share-alt"></i>
                 </div>
                 <a
                     class="operate-button download"
-                    href="{{buildProbeUrl(file, dir, true)}}"
+                    href="{{ buildProbeUrl(file, dir, true) }}"
                     title="Download"
                     ><i class="fas fa-arrow-down"></i
                 ></a>
@@ -199,7 +201,7 @@
     <div style="height: 20px"></div>
     <div class="buttons">
         <button class="button primary" [disabled]="loading" (click)="loadFiles()">
-            {{loading ? 'Loading...' : 'Load more'}}
+            {{ loading ? 'Loading...' : 'Load more' }}
         </button>
     </div>
 </ng-container>

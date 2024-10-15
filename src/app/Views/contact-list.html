@@ -1,17 +1,27 @@
-@for(contact of contacts.data; track contact.user.id) {
-<div class="contact-list" (click)="userClick(contact, $event.ctrlKey)" routerLink="/user/{{contact.user.id}}">
-    <div class="user-img-group">
-        <img class="user-img" src="{{contact.user.avatarURL ?? loadingImgURL}}?w=128&square=true"
-            (click)="$event.stopPropagation();userClick(contact, true)" />
-        <div class="small-dot" *ngIf="contact.online !== null" [class.greendot]="contact.online"
-            [class.graydot]="!contact.online"></div>
+@for (contact of contacts.data; track contact.user.id) {
+    <div
+        class="contact-list"
+        (click)="userClick(contact, $event.ctrlKey)"
+        routerLink="/user/{{ contact.user.id }}"
+    >
+        <div class="user-img-group">
+            <img
+                class="user-img"
+                src="{{ contact.user.avatarURL ?? loadingImgURL }}?w=128&square=true"
+                (click)="$event.stopPropagation(); userClick(contact, true)"
+            />
+            <div
+                class="small-dot"
+                *ngIf="contact.online !== null"
+                [class.greendot]="contact.online"
+                [class.graydot]="!contact.online"
+            ></div>
+        </div>
+        <div class="sender">{{ contact.user.nickName }}</div>
     </div>
-    <div class="sender">{{contact.user.nickName}}</div>
-</div>
 }
-
 @if (contacts.total === 0 && contacts.status === 'synced') {
-<div class="empty-result-notice">{{this.emptyMessage}}</div>
+    <div class="empty-result-notice">{{ this.emptyMessage }}</div>
 }
 
 <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
@@ -21,14 +31,11 @@
     Press <span class="badge badge-secondary">Enter</span> to talk.
 </div> -->
 @if (contacts.canLoadMore) {
-<div class="buttons">
-    @if(contacts.status === 'synced') {
-    <button class="button primary" (click)="contacts.loadMore(20)">
-        Load More
-    </button>
-    }
-    @else if (contacts.status === 'loading') {
-    <button class="button primary" disabled>Loading</button>
-    }
-</div>
+    <div class="buttons">
+        @if (contacts.status === 'synced') {
+            <button class="button primary" (click)="contacts.loadMore(20)">Load More</button>
+        } @else if (contacts.status === 'loading') {
+            <button class="button primary" disabled>Loading</button>
+        }
+    </div>
 }

@@ -20,7 +20,7 @@ export class AddFriendComponent implements OnInit {
             if (this.searchTerm().length > 0) {
                 this.search(this.searchTerm());
             }
-        })
+        });
     }
 
     public ngOnInit(): void {
@@ -35,6 +35,5 @@ export class AddFriendComponent implements OnInit {
         } catch (err) {
             showCommonErrorDialog(err);
         }
-        
     }
 }

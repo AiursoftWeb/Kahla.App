@@ -45,12 +45,12 @@ export class InitService {
                     'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
-        console.log("Welcome to Kahla.App!");
+        console.log('Welcome to Kahla.App!');
         // load server config
         this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
         this.cacheService.initCache();
         this.myContactsRepository.initCache();
-        console.log("[ OK ] Local cache initialized.");
+        console.log('[ OK ] Local cache initialized.');
 
         if (this.cacheService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(
@@ -67,10 +67,10 @@ export class InitService {
             }
 
             if (!signedIn) {
-                console.log("[WARN] User not signed in. Redirecting to signin page.");
+                console.log('[WARN] User not signed in. Redirecting to signin page.');
                 this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
-                console.log("[ OK ] User signed in.");
+                console.log('[ OK ] User signed in.');
                 if (this.router.isActive('/signin', false)) {
                     this.router.navigate(['/home'], { replaceUrl: true });
                 }
