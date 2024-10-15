@@ -4,7 +4,7 @@ COPY ./package.json ./yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
 
-RUN yarn run prod
+RUN yarn run build
 
 FROM hub.aiursoft.cn/aiursoft/static
 COPY --from=yarn-env /app/dist/browser /data
