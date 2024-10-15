@@ -1,13 +1,7 @@
-import { KahlaUser } from './KahlaUser';
 import { AiurProtocol } from './AiurProtocal';
-import { GroupsResult } from './GroupsResults';
+import { ContactInfo } from './Contacts/ContactInfo';
 
-export interface SearchResult extends AiurProtocol {
+export interface UserSearchResult extends AiurProtocol {
     totalUsersCount: number;
-    totalThreadsCount: number;
-    users: {
-        user: KahlaUser;
-        online: boolean;
-    }[];
-    threads: GroupsResult[];
+    users: ContactInfo[];
 }

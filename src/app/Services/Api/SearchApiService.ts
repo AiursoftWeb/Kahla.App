@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SearchResult } from '../../Models/SearchResult';
+import { UserSearchResult } from '../../Models/SearchResult';
 import { ApiService } from './ApiService';
 
 @Injectable()
@@ -9,13 +9,13 @@ export class SearchApiService {
 
     constructor(private apiService: ApiService) {}
 
-    public Search(
+    public SearchUsers(
         searchInput: string,
         take = 20,
         skip = 0,
         excluding?: string
-    ): Observable<SearchResult> {
-        return this.apiService.Get(SearchApiService.serverPath + `/search-server`, {
+    ): Observable<UserSearchResult> {
+        return this.apiService.Get(SearchApiService.serverPath + `/search-users`, {
             searchInput,
             take,
             skip,

@@ -5,21 +5,26 @@ interface RepositoryCache<T> {
 
 export type RepositoryStatus = 'loading' | 'synced' | 'error' | 'offline' | 'uninitialized';
 
-export abstract class RepositoryBase<T> {
-    protected abstract get name(): string;
-    protected abstract get version(): number;
+export interface RepositoryPersistConfig {
+    name?: string;
+    version?: number;
+    persist: boolean;
+}
 
-    public data: T[];
+export abstract class RepositoryBase<T> {
+    protected abstract get persistConfig(): RepositoryPersistConfig;
+
+    public data: T[] = [];
     public total: number;
     public status: RepositoryStatus = 'uninitialized';
 
     public saveCache(): void {
         localStorage.setItem(
-            `repo-cache-${this.name}`,
+            `repo-cache-${this.persistConfig.name!}`,
             JSON.stringify({
                 data: this.data,
-                version: this.version,
-            } as RepositoryCache<T>)
+                version: this.persistConfig.version!,
+            } satisfies RepositoryCache<T>)
         );
     }
 
@@ -54,11 +59,11 @@ export abstract class RepositoryBase<T> {
     }
 
     public initCache() {
-        if (localStorage.getItem(`cache-${this.name}`)) {
+        if (localStorage.getItem(`cache-${this.persistConfig.name!}`)) {
             const data = JSON.parse(
-                localStorage.getItem(`cache-${this.name}`)
+                localStorage.getItem(`cache-${this.persistConfig.name!}`)
             ) as RepositoryCache<T>;
-            if (data.version !== this.version) {
+            if (data.version !== this.persistConfig.version!) {
                 this.data = [];
                 this.saveCache();
             }
@@ -74,7 +79,7 @@ export abstract class RepositoryBase<T> {
     }
 
     public get canLoadMore(): boolean {
-        return this.status === 'synced' && this.data.length < this.total;
+        return this.data.length < this.total;
     }
 
     protected abstract requestOnline(take: number, skip: number): Promise<[T[], number]>;

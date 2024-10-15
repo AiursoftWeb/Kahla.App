@@ -4,7 +4,7 @@ import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
-import { ContactsRepository } from '../Repositories/ContactsRepository';
+import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
 @Component({
     selector: 'app-friends',
@@ -28,12 +28,12 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        private contactsRepository: ContactsRepository
+        public myContactsRepository: MyContactsRepository
     ) {}
 
     public ngOnInit(): void {
-        if (this.cacheService.cachedData.me && this.contactsRepository.health) {
-            this.contactsRepository.updateAll();
+        if (this.cacheService.cachedData.me && this.myContactsRepository.health) {
+            this.myContactsRepository.updateAll();
         }
     }
 
@@ -119,8 +119,8 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
     }
 
     public search(term: string, keydown = false): void {
-        if (this.contactsRepository.data) {
-            this.results = [...this.contactsRepository.data];
+        if (this.myContactsRepository.data) {
+            this.results = [...this.myContactsRepository.data];
             if (term) {
                 this.results.filter(u => {
                     const regex = RegExp(term, 'i');

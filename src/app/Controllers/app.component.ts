@@ -27,23 +27,20 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:load', [])
     onLoad() {
-        if ('Notification' in window && 'serviceWorker' in navigator) {
-            if (true) {
-                // TODO: ELECTRON
-                navigator.serviceWorker.register('/sw.js').then(
-                    function (registration) {
-                        // Registration was successful
-                        console.log(
-                            'ServiceWorker registration successful with scope: ',
-                            registration.scope
-                        );
-                    },
-                    function (err) {
-                        // registration failed :(
-                        console.error('ServiceWorker registration failed: ', err);
-                    }
-                );
-            }
+        if ('Notification' in window && 'serviceWorker' in navigator && !('__TAURI__' in window)) {
+            navigator.serviceWorker.register('/sw.js').then(
+                function (registration) {
+                    // Registration was successful
+                    console.log(
+                        'ServiceWorker registration successful with scope: ',
+                        registration.scope
+                    );
+                },
+                function (err) {
+                    // registration failed :(
+                    console.error('ServiceWorker registration failed: ', err);
+                }
+            );
 
             if (Notification.permission === 'default') {
                 Notification.requestPermission();

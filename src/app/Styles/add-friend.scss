@@ -84,56 +84,7 @@
   height: 97px;
 }
 
-.result {
-  @extend %menu-item-clickable;
-  height: 60px;
-  border-width: 1px;
-  border-bottom-style: solid;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  outline: none;
-  user-select: none;
-  transition: all ease-out 0.2s;
 
-  .user-img-group {
-    position: relative;
-
-    .small-dot {
-      top: 36px;
-      right: -4px;
-      position: absolute;
-    }
-  }
-
-  .user-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-  }
-
-  .sender {
-    font-size: 15px;
-    font-weight: 400;
-    position: relative;
-    word-break: break-all;
-  }
-
-  i {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    font-size: medium;
-  }
-
-  > * {
-    margin: auto;
-  }
-}
-
-h3 {
-  text-align: center;
-}
 
 .searchGroupImage {
   position: relative;
@@ -162,10 +113,4 @@ h3 {
   p:last-of-type {
     grid-row: 2;
   }
-}
-
-.empty-result-notice {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 14px;
 }

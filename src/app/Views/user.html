@@ -65,7 +65,7 @@
 </div>
 <div
     class="menu-button"
-    *ngIf="info && info.isKnownContact && cacheService.cachedData.me && info.user.id != cacheService.cachedData.me.id"
+    *ngIf="info && info.isKnownContact"
     (click)="delete(info.user.id)"
 >
     <div class="img">

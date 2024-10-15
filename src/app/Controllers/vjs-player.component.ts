@@ -28,8 +28,6 @@ export class VjsPlayerComponent implements OnInit, OnDestroy {
     @Input() options: Partial<VjsPluginOptions>;
     player: videojs.Player;
 
-    constructor() {}
-
     ngOnInit() {
         // instantiate Video.js
         this.player = videojs(this.target.nativeElement, this.options, null);

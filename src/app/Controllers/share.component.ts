@@ -7,7 +7,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
-import { SearchResult } from '../Models/SearchResult';
+import { UserSearchResult } from '../Models/SearchResult';
 import { uuid4 } from '../Helpers/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';
@@ -35,7 +35,7 @@ export class ShareComponent implements OnInit, DoCheck {
     public relativePath: boolean;
     public srcConversation: number;
     public inApp = false;
-    public results: SearchResult;
+    public results: UserSearchResult;
     public searchTxt = '';
     public conversation: Conversation;
 
@@ -263,15 +263,15 @@ export class ShareComponent implements OnInit, DoCheck {
 
     public goSingleSearch(): void {
         setTimeout(() => {
-            if (this.showUsers) {
-                if (this.results.users.length === 1) {
-                    this.share(this.results.users[0].user, false);
-                }
-            } else {
-                if (this.results.threads.length === 1) {
-                    this.share(this.results.threads[0], true);
-                }
-            }
+            // if (this.showUsers) {
+            //     if (this.results.users.length === 1) {
+            //         this.share(this.results.users[0].user, false);
+            //     }
+            // } else {
+            //     if (this.results.threads.length === 1) {
+            //         this.share(this.results.threads[0], true);
+            //     }
+            // }
         }, 0);
     }
 

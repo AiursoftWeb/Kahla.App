@@ -28,7 +28,7 @@ import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Helpers/Toast';
-import { ContactsRepository } from '../Repositories/ContactsRepository';
+import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
 @Injectable({
     providedIn: 'root',
@@ -53,7 +53,7 @@ export class MessageService {
 
     constructor(
         private conversationApiService: ConversationApiService,
-        private contactsRepository: ContactsRepository,
+        private myContactsRepository: MyContactsRepository,
         private filesApiService: FilesApiService,
         private cacheService: CacheService,
         private router: Router,
@@ -154,7 +154,7 @@ export class MessageService {
 
     public reconnectPull() {
         this.cacheService.updateConversation();
-        this.contactsRepository.updateAll();
+        this.myContactsRepository.updateAll();
         if (this.conversation) {
             this.getMessages(0, this.conversation.id, null, 15);
         }

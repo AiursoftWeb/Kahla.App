@@ -22,66 +22,30 @@
         </a>
     </div>
     <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt !== ''}">
-        <input
-            id="searchBar"
-            placeholder="Search for your friends and groups"
-            type="text"
-            #searchInput
-            (input)="search(searchInput.value, true)"
-            (keydown.enter)="goSingleSearch(false)"
-            (keydown.control.enter)="goSingleSearch(true)"
-            [(ngModel)]="searchTxt"
-        />
-        <button
-            class="button compact primary"
-            [ngClass]="{ 'd-none': searchTxt === '' }"
-            (click)="searchTxt = ''"
-        >
+        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
+            (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
+            (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt" />
+        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''">
             <i class="fas fa-times"></i>
         </button>
     </div>
     <div class="search-type">
         <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span
-                ><i class="fas fa-user"></i>
-                Users
+            <span><i class="fas fa-user"></i>
+                Contacts
             </span>
         </div>
         <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span
-                ><i class="fas fa-users"></i>
+            <span><i class="fas fa-users"></i>
                 Groups
             </span>
         </div>
     </div>
 </div>
 <div class="header-space"></div>
-<div *ngIf="showUsers && this.results">
-    <div class="result" *ngFor="let user of this.results" (click)="userClick(user, $event.ctrlKey)">
-        <div class="user-img-group">
-            <img
-                class="user-img"
-                src="{{user.user.avatarURL ?? loadingImgURL}}?w=128&square=true"
-                routerLink="/user/{{user.user.id}}"
-                (click)="$event.stopPropagation();"
-            />
-            <div
-                class="small-dot"
-                *ngIf="user.online !== null"
-                [class.greendot]="user.online"
-                [class.graydot]="!user.online"
-            ></div>
-        </div>
-        <div class="sender">{{user.user.nickName}}</div>
-    </div>
-    <div *ngIf="results.length === 0" class="empty-result-notice">No result.</div>
-    <!-- <div *ngIf="results.users.length !== 0" class="empty-result-notice">Hold <span
-        class="badge badge-secondary">Ctrl</span> to start talking directly.
-    </div> -->
-    <div *ngIf="results.length === 1" class="empty-result-notice">
-        Press <span class="badge badge-secondary">Enter</span> to talk.
-    </div>
-</div>
+<app-contact-list *ngIf="showUsers && this.results" [contacts]="myContactsRepository"
+    (contactClicked)="userClick($event.item, $event.secondary)"
+    emptyMessage="No contacts. Try adding someone first. 🍵" />
 <div *ngIf="!showUsers && this.results">
     <!-- <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="user-img-group">

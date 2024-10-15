@@ -9,7 +9,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
-import { ContactsRepository } from '../Repositories/ContactsRepository';
+import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -28,7 +28,7 @@ export class UserComponent implements OnInit {
         private route: ActivatedRoute,
         private contactsApiService: ContactsApiService,
         private router: Router,
-        private contactsRepository: ContactsRepository,
+        private myContactsRepository: MyContactsRepository,
         public cacheService: CacheService,
         public apiService: ApiService
     ) {}
@@ -67,7 +67,7 @@ export class UserComponent implements OnInit {
             return;
         }
         SwalToast.fire('Success', '', 'success');
-        this.contactsRepository.updateAll();
+        this.myContactsRepository.updateAll();
         this.router.navigate(['/home']);
     }
 
@@ -76,7 +76,7 @@ export class UserComponent implements OnInit {
             await lastValueFrom(this.contactsApiService.Add(this.info.user.id));
             SwalToast.fire('Success', '', 'success');
             this.updateFriendInfo(this.info.user.id);
-            this.contactsRepository.updateAll();
+            this.myContactsRepository.updateAll();
         } catch (err) {
             showCommonErrorDialog(err);
         }

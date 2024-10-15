@@ -11,7 +11,7 @@ import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { EventService } from './EventService';
 import { GlobalNotifyService } from './GlobalNotifyService';
 import { lastValueFrom } from 'rxjs';
-import { ContactsRepository } from '../Repositories/ContactsRepository';
+import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +32,7 @@ export class InitService {
         private devicesApiService: DevicesApiService,
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
-        private contactsRepository: ContactsRepository
+        private myContactsRepository: MyContactsRepository
     ) {}
 
     public async init(): Promise<void> {
@@ -48,7 +48,7 @@ export class InitService {
         // load server config
         this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
         this.cacheService.initCache();
-        this.contactsRepository.initCache();
+        this.myContactsRepository.initCache();
 
         if (this.cacheService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(
@@ -92,7 +92,7 @@ export class InitService {
                 //     this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
                 this.themeService.ApplyThemeFromRemote(this.cacheService.cachedData.options);
                 this.cacheService.updateConversation();
-                this.contactsRepository.updateAll();
+                this.myContactsRepository.updateAll();
             }
         } else {
             this.router.navigate(['/signin'], { replaceUrl: true });

@@ -50,7 +50,8 @@ import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { MessagesApiService } from './Services/Api/MessagesApiService';
 import { ContactsApiService } from './Services/Api/ContactsApiService';
 import { SearchApiService } from './Services/Api/SearchApiService';
-import { ContactsRepository } from './Repositories/ContactsRepository';
+import { MyContactsRepository } from './Repositories/MyContactsRepository';
+import { ContactListComponent } from './Controllers/contact-list.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
@@ -78,6 +79,7 @@ import { ContactsRepository } from './Repositories/ContactsRepository';
         ShareComponent,
         FileHistoryComponent,
         VjsPlayerComponent,
+        ContactListComponent
     ],
     providers: [
         ApiService,
@@ -101,7 +103,7 @@ import { ContactsRepository } from './Repositories/ContactsRepository';
         GlobalNotifyService,
         ContactsApiService,
         SearchApiService,
-        ContactsRepository,
+        MyContactsRepository,
     ],
     bootstrap: [AppComponent],
 })
