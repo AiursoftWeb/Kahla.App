@@ -1,4 +1,4 @@
-﻿import { KahlaUser } from './KahlaUser';
+﻿import { ContactInfo } from './Contacts/ContactInfo';
 import { Message } from './Message';
 
 export interface ThreadInfo {
@@ -10,7 +10,7 @@ export interface ThreadInfo {
     muted: boolean;
     someoneAtMe: boolean;
 
-    topTenMembers: KahlaUser[];
+    topTenMembers: ContactInfo[];
     lastMessageTime: Date;
     imAdmin: boolean;
     imOwner: boolean;
@@ -28,17 +28,5 @@ export interface ThreadInfo {
     /**
      * @deprecated
      */
-    discriminator: 'GroupConversation' | 'PrivateConversation';
-    /**
-     * @deprecated
-     */
-    userId: string;
-    /**
-     * @deprecated
-     */
     avatarURL: string;
-    /**
-     * @deprecated use online property in KahlaUser instead
-     */
-    online?: boolean;
 }

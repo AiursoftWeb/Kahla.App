@@ -22,7 +22,7 @@
     <!-- Show an empty component when no reasonable component to show. -->
     <div
         class="content-empty"
-        *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && cacheService.cachedData.me"
+        *ngIf="route.isActive('/home', false) && homeService.wideScreenEnabled && cacheService.cachedData?.me"
     >
         <h2>Welcome back, {{ cacheService.cachedData.me.nickName }}.</h2>
         <img

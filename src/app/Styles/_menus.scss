@@ -16,3 +16,9 @@
   @extend %menu-item;
   @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 }
+
+.empty-result-notice {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+}

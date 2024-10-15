@@ -45,10 +45,12 @@ export class InitService {
                     'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
             );
         }
+        console.log("Welcome to Kahla.App!");
         // load server config
         this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
         this.cacheService.initCache();
         this.myContactsRepository.initCache();
+        console.log("[ OK ] Local cache initialized.");
 
         if (this.cacheService.serverConfig) {
             this.options.applicationServerKey = this.urlBase64ToUint8Array(
@@ -65,8 +67,10 @@ export class InitService {
             }
 
             if (!signedIn) {
+                console.log("[WARN] User not signed in. Redirecting to signin page.");
                 this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
+                console.log("[ OK ] User signed in.");
                 if (this.router.isActive('/signin', false)) {
                     this.router.navigate(['/home'], { replaceUrl: true });
                 }
@@ -76,7 +80,6 @@ export class InitService {
                     // !this._electronService.isElectronApp && // TODO: ELECTRON
                     navigator.serviceWorker
                 ) {
-                    console.log('Start Webpush subscribe.');
                     this.subscribeUser();
                     this.updateSubscription();
                 }
@@ -115,20 +118,14 @@ export class InitService {
         ) {
             const _this = this;
             navigator.serviceWorker.ready.then(registration => {
-                console.log('Service worker responsed');
                 return registration.pushManager.getSubscription().then(sub => {
-                    console.log('Got subscription:');
-                    console.log(sub);
-
                     if (sub === null) {
                         return registration.pushManager
                             .subscribe(_this.options)
                             .then(function (pushSubscription) {
-                                console.log('Call bind device');
                                 _this.bindDevice(pushSubscription);
                             });
                     } else {
-                        console.log('Call bind device');
                         _this.bindDevice(sub);
                     }
                 });
@@ -137,7 +134,6 @@ export class InitService {
     }
 
     public bindDevice(pushSubscription: PushSubscription, force = false) {
-        console.log(pushSubscription);
         let data: PushSubscriptionSetting = JSON.parse(
             localStorage.getItem('setting-pushSubscription')
         );

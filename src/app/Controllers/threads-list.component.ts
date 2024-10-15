@@ -30,9 +30,20 @@ export class ThreadsListComponent {
         return thread.name.replace(
             '{THE OTHER USER}',
             thread.topTenMembers
-                .filter(t => !this.cacheService.cachedData.me || t.id !== this.cacheService.cachedData.me.id)
-                .map(t => t.nickName)
+                .filter(
+                    t =>
+                        !this.cacheService.cachedData.me ||
+                        t.user.id !== this.cacheService.cachedData.me.id
+                )
+                .map(t => t.user.nickName)
                 .join(', ')
         );
+    }
+
+    public onlineStatusOf(thread: ThreadInfo): boolean | null {
+        if (!this.cacheService?.cachedData?.me || thread.topTenMembers.length <= 1) return null;
+        return thread.topTenMembers
+            .filter(t => t.user.id !== this.cacheService.cachedData.me.id)
+            .some(t => t.online);
     }
 }

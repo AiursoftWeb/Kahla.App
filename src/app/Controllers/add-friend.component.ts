@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { Values } from '../values';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { ServerContactsRepository } from '../Repositories/ServerContactsRepository';
@@ -10,11 +10,18 @@ import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
 })
 export class AddFriendComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
-    public showUsers = true;
+
+    searchTerm = signal('');
 
     public contactsRepo?: ServerContactsRepository = null;
 
-    constructor(private searchApiService: SearchApiService) {}
+    constructor(private searchApiService: SearchApiService) {
+        effect(() => {
+            if (this.searchTerm().length > 0) {
+                this.search(this.searchTerm());
+            }
+        })
+    }
 
     public ngOnInit(): void {
         const searchBar = document.querySelector('#searchBar') as HTMLTextAreaElement;
@@ -29,16 +36,5 @@ export class AddFriendComponent implements OnInit {
             showCommonErrorDialog(err);
         }
         
-    }
-
-    public showUsersResults(selectUsers: boolean): void {
-        this.showUsers = selectUsers;
-    }
-
-    SearchBoxKeyUp(event: KeyboardEvent, value: string) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            this.search(value);
-        }
     }
 }

@@ -6,85 +6,11 @@
   position: fixed;
   z-index: 50;
   background-color: var(--header-action-bg);
-
-  .search-input {
-    padding: 7px;
-    display: flex;
-    margin-bottom: 8px;
-    input {
-      border: 1px solid var(--text-input-border-color);
-      color: var(--default-textcolor);
-      background-color: var(--text-input-bg);
-      border-radius: 6px;
-      transition:
-        border-color ease-in-out 0.15s,
-        box-shadow ease-in-out 0.15s;
-      box-shadow: none;
-      width: 100%;
-      height: 35px;
-      padding: 6px 12px;
-      font-size: 14px;
-      box-sizing: border-box;
-      outline: none;
-      flex: auto;
-    }
-
-    &.search-input-with-button {
-      button {
-        float: left;
-        border-radius: 0 6px 6px 0;
-        width: 100px;
-        height: 35px;
-        flex: none;
-
-        &.compact {
-          width: 50px;
-        }
-      }
-
-      input {
-        border-radius: 6px 0 0 6px;
-      }
-    }
-  }
-
-  .search-type {
-    width: 100%;
-    font-size: 18px;
-    height: 40px;
-
-    div {
-      width: 50%;
-      vertical-align: middle;
-      overflow: hidden;
-      text-align: center;
-      display: inline-block;
-      cursor: pointer;
-      transition: background-color ease-out 0.2s;
-      border-radius: 6px 6px 0 0;
-
-      .dot {
-        border-radius: 50%;
-        width: unset;
-        position: unset;
-      }
-
-      span {
-        line-height: 40px;
-      }
-
-      &.selected {
-        background-color: var(--selectable-bg);
-      }
-    }
-  }
 }
 
 .search-holder {
   height: 97px;
 }
-
-
 
 .searchGroupImage {
   position: relative;

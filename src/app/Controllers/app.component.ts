@@ -27,18 +27,19 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:load', [])
     onLoad() {
+        console.info('[ ** ] Registering service worker...');
         if ('Notification' in window && 'serviceWorker' in navigator && !('__TAURI__' in window)) {
             navigator.serviceWorker.register('/sw.js').then(
                 function (registration) {
                     // Registration was successful
                     console.log(
-                        'ServiceWorker registration successful with scope: ',
+                        '[ OK ] ServiceWorker registration successful with scope: ',
                         registration.scope
                     );
                 },
                 function (err) {
                     // registration failed :(
-                    console.error('ServiceWorker registration failed: ', err);
+                    console.error('[ERR!] ServiceWorker registration failed: ', err);
                 }
             );
 

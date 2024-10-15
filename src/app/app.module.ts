@@ -55,6 +55,8 @@ import { ContactListComponent } from './Controllers/contact-list.component';
 import { ThreadsListComponent } from './Controllers/threads-list.component';
 import { MyThreadsRepository } from './Repositories/ThreadsRepository';
 import { ThreadsApiService } from './Services/Api/ThreadsApiService';
+import { SearchAreaComponent } from './Controllers/search-area.component';
+import { SearchTypeComponent } from './Controllers/search-type.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
@@ -83,7 +85,9 @@ import { ThreadsApiService } from './Services/Api/ThreadsApiService';
         FileHistoryComponent,
         VjsPlayerComponent,
         ContactListComponent,
-        ThreadsListComponent
+        ThreadsListComponent,
+        SearchAreaComponent,
+        SearchTypeComponent
     ],
     providers: [
         ApiService,

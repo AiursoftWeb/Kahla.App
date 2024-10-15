@@ -1,0 +1,15 @@
+<div class="search-type">
+    @for (item of items; track $index; let idx = $index) {
+    <div (click)="currentIndex.set(idx)" [ngClass]="{ 'selected': currentIndex() === idx }">
+        <span>
+            <i [class]="item.className"></i>
+            {{item.title}}
+        </span>
+        @if(item.showDot) { @if (item.dotValue < 100) {
+        <div class="dot bluedot">{{item.dotValue}}</div>
+        } @else {
+        <div class="dot bluedot">99+</div>
+        } }
+    </div>
+    }
+</div>

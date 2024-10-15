@@ -21,26 +21,19 @@
             <div class="words" i18n="@@CreateGroup">Create Group</div>
         </a>
     </div>
-    <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt() !== ''}">
-        <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
-            (input)="search(searchInput.value)" (keydown.enter)="goSingleSearch(false)"
-            (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt" />
-        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt() === '' }" (click)="searchTxt.set('')">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <div class="search-type">
-        <div (click)="showUsersResults(true)" [ngClass]="{ 'selected': showUsers }">
-            <span><i class="fas fa-user"></i>
-                Contacts
-            </span>
-        </div>
-        <div (click)="showUsersResults(false)" [ngClass]="{ 'selected': !showUsers }">
-            <span><i class="fas fa-users"></i>
-                Groups
-            </span>
-        </div>
-    </div>
+    <app-search-area [(searchText)]="searchTxt" placeHolder="Search for your contacts and groups..."></app-search-area>
+    <app-search-type [items]="[
+        {
+            title: 'Contacts',
+            className: 'fas fa-user',
+            showDot: false,
+        },
+        {
+            title: 'Groups',
+            className: 'fas fa-users',
+            showDot: false,
+        }
+    ]"/>
 </div>
 <div class="header-space"></div>
 <app-contact-list *ngIf="showUsers && contactsRepo" [contacts]="contactsRepo"

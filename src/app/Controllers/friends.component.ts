@@ -10,7 +10,6 @@ import {
 } from '../Repositories/MyContactsRepository';
 import { RepositoryBase } from '../Repositories/RepositoryBase';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
-import { debounceTime, Subject } from 'rxjs';
 
 @Component({
     selector: 'app-friends',
@@ -29,9 +28,6 @@ export class FriendsComponent implements OnInit, AfterViewInit {
     public showUsers = true;
     public searchTxt = signal('');
 
-    public onlineSearchSubject = new Subject<string>();
-
-
     private detailLoading = false;
     public contactsRepo: RepositoryBase<ContactInfo>;
 
@@ -42,20 +38,16 @@ export class FriendsComponent implements OnInit, AfterViewInit {
         contactsApiService: ContactsApiService
     ) {
         effect(() => {
-            if (this.searchTxt().length === 0) {
-                this.contactsRepo = this.myContactsRepository;
-            }
-            this.onlineSearchSubject.next(this.searchTxt());
-        })
-        this.onlineSearchSubject.pipe(debounceTime(500)).subscribe(term => {
-            if (term.length > 0) {
+            if (this.searchTxt().length > 0) {
                 this.contactsRepo = new MyContactsRepositoryFiltered(
                     contactsApiService,
-                    term
+                    this.searchTxt()
                 );
                 this.contactsRepo.updateAll();
+            } else {
+                this.contactsRepo = this.myContactsRepository;
             }
-        });
+        })
     }
 
     public ngOnInit(): void {
@@ -145,9 +137,7 @@ export class FriendsComponent implements OnInit, AfterViewInit {
         this.showUsers = selectUsers;
     }
 
-    public search(term: string): void {}
-
-    public goSingleSearch(ctrl: boolean): void {
+    public goSingleSearch(): void {
         // TODO
         // if (this.showUsers) {
         //     if (this.results.users.length === 1) {

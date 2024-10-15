@@ -24,11 +24,7 @@ export class ConversationsComponent implements OnInit {
     }
 
     public detail(info: ThreadInfo): void {
-        if (info.discriminator === 'GroupConversation') {
-            this.router.navigate(['/group', info.id]);
-        } else {
-            this.router.navigate(['/user', info.userId]);
-        }
+        this.router.navigate(['/detail', info.id]);
     }
 
     public current(info: ThreadInfo): boolean {

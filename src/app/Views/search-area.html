@@ -1,0 +1,12 @@
+<div class="search-input" [ngClass]="{ 'search-input-with-button': searchTextInput() !== ''}">
+    <input id="searchBar" placeholder="Search for your friends and groups" type="text"
+        (keydown.enter)="onpositiveClicked()" [(ngModel)]="searchTextInput" />
+    <button class="button compact primary" [ngClass]="{ 'd-none': searchTextInput() === '' }"
+        (click)="searchTextInput.set('')">
+        <i class="fas fa-times"></i>
+    </button>
+    <!-- <button class="button primary" (click)="search(friendSearch.value)"
+            [disabled]="(contactsRepo && contactsRepo.status === 'loading') || friendSearch.value.length === 0">
+            <i class="fas fa-search"></i>
+        </button> -->
+</div>

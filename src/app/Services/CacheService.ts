@@ -21,8 +21,6 @@ export class CacheService {
         this.cachedData = new CacheModel();
     }
 
-    public updateThreads() {}
-
     public updateConversation(): void {
         // this.updatingConversation = true;
         // this.conversationApiService

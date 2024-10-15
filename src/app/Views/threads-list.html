@@ -1,33 +1,40 @@
-<div id="main">
-    <div class="conversation" *ngFor="let inf of threadRepo.data"
-        (click)="threadClicked.emit({thread: inf, secondary: $event.ctrlKey})"
-        [class.w-current]="highlightPredicate(inf)">
-        <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=128&square=true"
-            (click)="threadClicked.emit({thread: inf, secondary: true}); $event.stopPropagation();" />
-        <!-- <div class="small-dot" *ngIf="inf.online !== null" style="top: 52px; right: 7px" [class.greendot]="inf.online"
+@for (inf of threadRepo.data; track inf.id) {
+<div class="conversation" (click)="threadClicked.emit({thread: inf, secondary: $event.ctrlKey})"
+    [class.w-current]="highlightPredicate(inf)">
+
+    <img class="user-img" src="{{inf.avatarURL ? inf.avatarURL : loadingImgURL}}?w=128&square=true"
+        (click)="threadClicked.emit({thread: inf, secondary: true}); $event.stopPropagation();" />
+
+    @if(onlineStatusOf(inf) !== null) {
+    <div class="small-dot" style="top: 52px; right: 7px" [class.greendot]="onlineStatusOf(inf)"
+        [class.graydot]="!onlineStatusOf(inf)"></div>
+    }
+    <!-- <div class="small-dot" *ngIf="inf.online !== null" style="top: 52px; right: 7px" [class.greendot]="inf.online"
             [class.graydot]="!inf.online"></div> -->
-        <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="dot"
-            [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
-            {{inf.unReadAmount}}
+    <div *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100" class="dot"
+        [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
+        {{inf.unReadAmount}}
+    </div>
+    <div *ngIf="inf.unReadAmount > 99" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
+        99+
+    </div>
+    <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
+    <div class="sender">{{nameOf(inf)}}</div>
+    <ng-container *ngIf="inf.latestMessage !== null">
+        <div class="last-time">{{inf.latestMessage.sendTime | date:'shortTime'}}</div>
+        <div class="last-message" title="{{inf.latestMessage.content}}">
+            <i class="fas fa-angle-right"
+                *ngIf="inf.topTenMembers.length === 2 && cacheService.cachedData.me && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
+            <i class="fas fa-angle-left"
+                *ngIf="inf.topTenMembers.length === 2 && cacheService.cachedData.me && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
+            <b *ngIf="inf.topTenMembers.length > 2">{{inf.latestMessage.sender.nickName}}:</b>
+            {{inf.latestMessage.content}}
         </div>
-        <div *ngIf="inf.unReadAmount > 99" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
-            99+
-        </div>
-        <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
-        <div class="sender">{{nameOf(inf)}}</div>
-        <ng-container *ngIf="inf.latestMessage !== null">
-            <div class="last-time">{{inf.latestMessage.sendTime | date:'shortTime'}}</div>
-            <div class="last-message" title="{{inf.latestMessage.content}}">
-                <i class="fas fa-angle-right"
-                    *ngIf="inf.topTenMembers.length === 2 && cacheService.cachedData.me && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
-                <i class="fas fa-angle-left"
-                    *ngIf="inf.topTenMembers.length === 2 && cacheService.cachedData.me && inf.latestMessage.senderId === cacheService.cachedData.me.id"></i>
-                <b *ngIf="inf.topTenMembers.length > 2">{{inf.latestMessage.sender.nickName}}:</b>
-                {{inf.latestMessage.content}}
-            </div>
-        </ng-container>
-        <div class="last-message" *ngIf="inf.latestMessage === null" i18n="@@NoMessage">
-            No message. Start talking now!
-        </div>
+    </ng-container>
+    <div class="last-message" *ngIf="inf.latestMessage === null" i18n="@@NoMessage">
+        No message. Start talking now!
     </div>
 </div>
+}
+
+<div class="empty-result-notice" *ngIf="!threadRepo.total">{{emptyMessage}}</div>
