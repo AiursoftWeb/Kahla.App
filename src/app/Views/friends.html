@@ -21,11 +21,11 @@
             <div class="words" i18n="@@CreateGroup">Create Group</div>
         </a>
     </div>
-    <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt !== ''}">
+    <div class="search-input" [ngClass]="{ 'search-input-with-button':  searchTxt() !== ''}">
         <input id="searchBar" placeholder="Search for your friends and groups" type="text" #searchInput
-            (input)="search(searchInput.value, true)" (keydown.enter)="goSingleSearch(false)"
+            (input)="search(searchInput.value)" (keydown.enter)="goSingleSearch(false)"
             (keydown.control.enter)="goSingleSearch(true)" [(ngModel)]="searchTxt" />
-        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt === '' }" (click)="searchTxt = ''">
+        <button class="button compact primary" [ngClass]="{ 'd-none': searchTxt() === '' }" (click)="searchTxt.set('')">
             <i class="fas fa-times"></i>
         </button>
     </div>
@@ -43,10 +43,10 @@
     </div>
 </div>
 <div class="header-space"></div>
-<app-contact-list *ngIf="showUsers && this.results" [contacts]="myContactsRepository"
+<app-contact-list *ngIf="showUsers && contactsRepo" [contacts]="contactsRepo"
     (contactClicked)="userClick($event.item, $event.secondary)"
     emptyMessage="No contacts. Try adding someone first. 🍵" />
-<div *ngIf="!showUsers && this.results">
+<div *ngIf="!showUsers && this.contactsRepo">
     <!-- <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
         <div class="user-img-group">
             <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=128&square=true"

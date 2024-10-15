@@ -116,4 +116,11 @@ export class UserComponent implements OnInit {
     public shareUser() {
         // this.router.navigate(['/share-target', {message: `[user]${this.info.id}`}]);
     }
+
+    public message() {
+        if (this.info.commonThreads.length === 0) {
+            this.router.navigate(['/talking', this.info.commonThreads[0].id]);
+        }
+        
+    }
 }

@@ -1,10 +1,16 @@
-﻿import { AfterViewInit, Component, DoCheck, OnInit } from '@angular/core';
+﻿import { AfterViewInit, Component, effect, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
 import { GroupsResult } from '../Models/GroupsResults';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
-import { MyContactsRepository } from '../Repositories/MyContactsRepository';
+import {
+    MyContactsRepository,
+    MyContactsRepositoryFiltered,
+} from '../Repositories/MyContactsRepository';
+import { RepositoryBase } from '../Repositories/RepositoryBase';
+import { ContactsApiService } from '../Services/Api/ContactsApiService';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
     selector: 'app-friends',
@@ -18,18 +24,39 @@ import { MyContactsRepository } from '../Repositories/MyContactsRepository';
         '../Styles/badge.scss',
     ],
 })
-export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
+export class FriendsComponent implements OnInit, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
-    public results: ContactInfo[];
-    public searchTxt = '';
+    public searchTxt = signal('');
+
+    public onlineSearchSubject = new Subject<string>();
+
+
     private detailLoading = false;
+    public contactsRepo: RepositoryBase<ContactInfo>;
 
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        public myContactsRepository: MyContactsRepository
-    ) {}
+        public myContactsRepository: MyContactsRepository,
+        contactsApiService: ContactsApiService
+    ) {
+        effect(() => {
+            if (this.searchTxt().length === 0) {
+                this.contactsRepo = this.myContactsRepository;
+            }
+            this.onlineSearchSubject.next(this.searchTxt());
+        })
+        this.onlineSearchSubject.pipe(debounceTime(500)).subscribe(term => {
+            if (term.length > 0) {
+                this.contactsRepo = new MyContactsRepositoryFiltered(
+                    contactsApiService,
+                    term
+                );
+                this.contactsRepo.updateAll();
+            }
+        });
+    }
 
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me && this.myContactsRepository.health) {
@@ -118,38 +145,7 @@ export class FriendsComponent implements OnInit, DoCheck, AfterViewInit {
         this.showUsers = selectUsers;
     }
 
-    public search(term: string, keydown = false): void {
-        if (this.myContactsRepository.data) {
-            this.results = [...this.myContactsRepository.data];
-            if (term) {
-                this.results.filter(u => {
-                    const regex = RegExp(term, 'i');
-                    return (
-                        regex.test(u.user.nickName) || (u.user.email && regex.test(u.user.email))
-                    );
-                });
-                // this.results.users = this.results.users.filter(user => {
-                //     const regex = RegExp(term, 'i');
-                //     return regex.test(user.nickName) || (user.email && regex.test(user.email));
-                // });
-                // this.results.threads = this.results.threads.filter(group => {
-                //     const regex = RegExp(term, 'i');
-                //     return regex.test(group.name);
-                // });
-            }
-            // if (keydown) {
-            //     if (this.showUsers && this.results.users.length === 0 && this.results.threads.length !== 0) {
-            //         this.showUsers = false;
-            //     } else if (!this.showUsers && this.results.threads.length === 0 && this.results.users.length !== 0) {
-            //         this.showUsers = true;
-            //     }
-            // }
-        }
-    }
-
-    ngDoCheck(): void {
-        this.search(this.searchTxt);
-    }
+    public search(term: string): void {}
 
     public goSingleSearch(ctrl: boolean): void {
         // TODO
