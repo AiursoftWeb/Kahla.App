@@ -20,6 +20,12 @@
             </div>
             <div class="words" i18n="@@CreateGroup">Create Group</div>
         </a>
+        <a class="friends-button" (click)="createGroup()">
+            <div class="icon">
+                <i class="fas fa-ban"></i>
+            </div>
+            <div class="words" i18n="@@CreateGroup">Blocked Users</div>
+        </a>
     </div>
     <app-search-area [(searchText)]="searchTxt" placeHolder="Search for your contacts and groups..."></app-search-area>
     <app-search-type [items]="[

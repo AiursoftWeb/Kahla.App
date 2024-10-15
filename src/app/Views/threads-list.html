@@ -37,4 +37,19 @@
 </div>
 }
 
-<div class="empty-result-notice" *ngIf="!threadRepo.total">{{emptyMessage}}</div>
+@if (threadRepo.status === 'synced' && !threadRepo.total) {
+    <div class="empty-result-notice">{{emptyMessage}}</div>
+}
+
+@if (threadRepo.canLoadMore) {
+    <div class="buttons">
+        @if(threadRepo.status === 'synced') {
+        <button class="button primary" (click)="threadRepo.loadMore(20)">
+            Load More
+        </button>
+        }
+        @else if (threadRepo.status === 'loading') {
+        <button class="button primary" disabled>Loading</button>
+        }
+    </div>
+    }
