@@ -1,4 +1,8 @@
-﻿<app-header title="Friends" [returnButton]="false"></app-header>
+﻿<app-header
+    title="Friends"
+    [returnButton]="false"
+    [processing]="contactsRepo?.status === 'loading'"
+></app-header>
 
 <div class="search-part">
     <div class="friends-header" id="main">
@@ -20,7 +24,7 @@
             </div>
             <div class="words" i18n="@@CreateGroup">Create Group</div>
         </a>
-        <a class="friends-button" (click)="createGroup()">
+        <a class="friends-button" routerLink="/blocks">
             <div class="icon">
                 <i class="fas fa-ban"></i>
             </div>

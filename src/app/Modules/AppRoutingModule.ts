@@ -16,11 +16,13 @@ import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 import { HomeComponent } from '../Controllers/home.component';
 import { ShareComponent } from '../Controllers/share.component';
 import { FileHistoryComponent } from '../Controllers/file-history.component';
+import { BlocksListComponent } from '../Controllers/blocks-list.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'addfriend', component: AddFriendComponent },
+    { path: 'blocks', component: BlocksListComponent },
     { path: 'talking/:id', component: TalkingComponent },
     { path: 'file-history/:id', component: FileHistoryComponent },
     { path: 'talking/:id/:unread', component: TalkingComponent },

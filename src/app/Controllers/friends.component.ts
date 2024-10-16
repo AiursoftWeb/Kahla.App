@@ -17,7 +17,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
     styleUrls: [
         '../Styles/menu.scss',
         '../Styles/reddot.scss',
-        '../Styles/add-friend.scss',
+        '../Styles/search-part.scss',
         '../Styles/friends.scss',
         '../Styles/button.scss',
         '../Styles/badge.scss',

@@ -20,7 +20,7 @@ export class ConversationsComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        if (!this.myThreadsRepository.health) this.myThreadsRepository.updateAll();
+        this.myThreadsRepository.updateAll();
     }
 
     public detail(info: ThreadInfo): void {

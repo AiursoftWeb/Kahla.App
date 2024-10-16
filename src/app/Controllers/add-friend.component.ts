@@ -6,7 +6,7 @@ import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/add-friend.html',
-    styleUrls: ['../Styles/add-friend.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
+    styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
 })
 export class AddFriendComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;

@@ -1,6 +1,6 @@
 <app-header
     title="Kahla"
-    [processing]="cacheService.updatingConversation"
+    [processing]="myThreadsRepository?.status === 'loading'"
     [returnButton]="false"
 ></app-header>
 <app-threads-list

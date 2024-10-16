@@ -56,12 +56,13 @@
 </div>
 <div
     class="menu-button"
+    (click)="block()"
     *ngIf="info && cacheService.cachedData.me && info.user.id !== cacheService.cachedData.me.id"
 >
     <div class="img">
         <i class="fas fa-ban"></i>
     </div>
-    <div class="text" i18n="@@Report">Block</div>
+    <div class="text">{{ this.info.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
 </div>
 <div class="menu-button" *ngIf="info && info.isKnownContact" (click)="delete(info.user.id)">
     <div class="img">

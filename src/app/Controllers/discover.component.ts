@@ -6,7 +6,7 @@ import { ProbeService } from '../Services/ProbeService';
 
 @Component({
     templateUrl: '../Views/discover.html',
-    styleUrls: ['../Styles/add-friend.scss', '../Styles/button.scss'],
+    styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/discovers.scss'],
 })
 export class DiscoverComponent implements OnInit {
     private amount = 15;

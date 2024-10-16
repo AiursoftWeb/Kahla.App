@@ -1,0 +1,13 @@
+@import 'fixed_widescreen';
+@import 'menus';
+
+.search-part {
+  @extend %full-fixed-width;
+  position: fixed;
+  z-index: 50;
+  background-color: var(--header-action-bg);
+}
+
+.search-holder {
+  height: 97px;
+}

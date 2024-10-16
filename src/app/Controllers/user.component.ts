@@ -10,6 +10,7 @@ import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
+import { BlocksApiService } from '../Services/Api/BlocksApiService';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -27,6 +28,7 @@ export class UserComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private contactsApiService: ContactsApiService,
+        private blocksApiService: BlocksApiService,
         private router: Router,
         private myContactsRepository: MyContactsRepository,
         public cacheService: CacheService,
@@ -121,5 +123,27 @@ export class UserComponent implements OnInit {
         if (this.info.commonThreads.length === 0) {
             this.router.navigate(['/talking', this.info.commonThreads[0].id]);
         }
+    }
+
+    public async block() {
+        const resp = await Swal.fire({
+            title: `Are you sure to ${this.info.isBlockedByYou ? 'unblock' : 'block'} this user?`,
+            icon: 'warning',
+            showCancelButton: true,
+        });
+        if (!resp.value) return;
+        try {
+            await lastValueFrom(
+                this.info.isBlockedByYou
+                    ? this.blocksApiService.Remove(this.info.user.id)
+                    : this.blocksApiService.Block(this.info.user.id)
+            );
+        } catch (err) {
+            showCommonErrorDialog(err);
+            return;
+        }
+        SwalToast.fire('Success', '', 'success');
+        this.updateFriendInfo(this.info.user.id);
+        this.myContactsRepository.updateAll();
     }
 }

@@ -21,7 +21,7 @@ import { Message } from '../Models/Message';
     templateUrl: '../Views/share.html',
     styleUrls: [
         '../Styles/menu.scss',
-        '../Styles/add-friend.scss',
+        '../Styles/search-part.scss',
         '../Styles/friends.scss',
         '../Styles/button.scss',
         '../Styles/badge.scss',

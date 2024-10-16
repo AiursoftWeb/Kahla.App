@@ -57,6 +57,8 @@ import { MyThreadsRepository } from './Repositories/ThreadsRepository';
 import { ThreadsApiService } from './Services/Api/ThreadsApiService';
 import { SearchAreaComponent } from './Controllers/search-area.component';
 import { SearchTypeComponent } from './Controllers/search-type.component';
+import { BlocksApiService } from './Services/Api/BlocksApiService';
+import { BlocksListComponent } from './Controllers/blocks-list.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
@@ -88,6 +90,7 @@ import { SearchTypeComponent } from './Controllers/search-type.component';
         ThreadsListComponent,
         SearchAreaComponent,
         SearchTypeComponent,
+        BlocksListComponent,
     ],
     providers: [
         ApiService,
@@ -114,6 +117,7 @@ import { SearchTypeComponent } from './Controllers/search-type.component';
         MyContactsRepository,
         MyThreadsRepository,
         ThreadsApiService,
+        BlocksApiService,
     ],
     bootstrap: [AppComponent],
 })
