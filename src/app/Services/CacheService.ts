@@ -11,7 +11,6 @@ import { mapDeviceName } from '../Helpers/UaMapper';
 export class CacheService {
     public cachedData: CacheModel;
     public totalUnread = 0;
-    public totalRequests = 0;
     public updatingConversation = false;
     public serverConfig: ServerConfig;
 

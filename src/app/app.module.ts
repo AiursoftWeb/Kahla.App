@@ -59,9 +59,10 @@ import { SearchAreaComponent } from './Controllers/search-area.component';
 import { SearchTypeComponent } from './Controllers/search-type.component';
 import { BlocksApiService } from './Services/Api/BlocksApiService';
 import { BlocksListComponent } from './Controllers/blocks-list.component';
+import { TruncatedNumPipe } from './Pipes/truncated-num.pipe';
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, TruncatedNumPipe],
     declarations: [
         AboutComponent,
         AppComponent,

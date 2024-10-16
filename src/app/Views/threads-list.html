@@ -9,30 +9,31 @@
             src="{{ inf.avatarURL ? inf.avatarURL : loadingImgURL }}?w=128&square=true"
             (click)="threadClicked.emit({ thread: inf, secondary: true }); $event.stopPropagation()"
         />
-
-        @if (!publicAttributesOnly && onlineStatusOf(inf) !== null) {
+        @if (!externalView) {
+            @if (onlineStatusOf(inf) !== null) {
+                <div
+                    class="small-dot"
+                    style="top: 52px; right: 7px"
+                    [class.greendot]="onlineStatusOf(inf)"
+                    [class.graydot]="!onlineStatusOf(inf)"
+                ></div>
+            }
+            
             <div
-                class="small-dot"
-                style="top: 52px; right: 7px"
-                [class.greendot]="onlineStatusOf(inf)"
-                [class.graydot]="!onlineStatusOf(inf)"
-            ></div>
+                *ngIf="inf.unReadAmount > 0"
+                class="dot"
+                [ngClass]="inf.muted ? 'bluedot' : 'reddot'"
+            >
+                {{ inf.unReadAmount | truncatedNum }}
+            </div>
+            <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
         }
-        <!-- <div class="small-dot" *ngIf="inf.online !== null" style="top: 52px; right: 7px" [class.greendot]="inf.online"
-            [class.graydot]="!inf.online"></div> -->
-        <div
-            *ngIf="inf.unReadAmount > 0 && inf.unReadAmount < 100"
-            class="dot"
-            [ngClass]="inf.muted ? 'bluedot' : 'reddot'"
-        >
-            {{ inf.unReadAmount }}
-        </div>
-        <div *ngIf="inf.unReadAmount > 99" class="dot" [ngClass]="inf.muted ? 'bluedot' : 'reddot'">
-            99+
-        </div>
-        <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
         <div class="sender">{{ nameOf(inf) }}</div>
-        @if (inf.latestMessage) {
+        @if (externalView) {
+            <div class="last-message">
+                {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}
+            </div>
+        } @else if (inf.latestMessage) {
             <div class="last-time">{{ inf.latestMessage.sendTime | date: 'shortTime' }}</div>
             <div class="last-message" title="{{ inf.latestMessage.content }}">
                 @if (inf.topTenMembers.length === 2 && cacheService.cachedData.me) {

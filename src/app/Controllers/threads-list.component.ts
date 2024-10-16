@@ -16,7 +16,7 @@ export class ThreadsListComponent {
 
     @Input() public highlightPredicate: (item: ThreadInfo) => boolean = () => false;
 
-    @Input() public publicAttributesOnly = false;
+    @Input() public externalView = false;
 
     @Output() public threadClicked = new EventEmitter<{
         thread: ThreadInfo;
