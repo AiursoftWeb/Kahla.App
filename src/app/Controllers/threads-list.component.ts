@@ -43,7 +43,7 @@ export class ThreadsListComponent {
     }
 
     public onlineStatusOf(thread: ThreadInfo): boolean | null {
-        if (!this.cacheService?.cachedData?.me || thread.topTenMembers.length <= 1) return null;
+        if ((!this.cacheService?.cachedData?.me) || thread.topTenMembers.length <= 1) return null;
         return thread.topTenMembers
             .filter(t => t.user.id !== this.cacheService.cachedData.me.id)
             .some(t => t.online);
