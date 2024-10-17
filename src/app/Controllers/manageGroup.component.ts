@@ -10,7 +10,7 @@ import { UploadService } from '../Services/UploadService';
 import { AiurCollection } from '../Models/AiurCollection';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
-import { SwalToast } from '../Helpers/Toast';
+import { SwalToast } from '../Utils/Toast';
 
 @Component({
     templateUrl: '../Views/manageGroup.html',

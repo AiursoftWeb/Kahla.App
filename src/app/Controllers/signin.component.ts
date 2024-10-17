@@ -4,7 +4,7 @@ import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { lastValueFrom } from 'rxjs';
-import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/signin.html',

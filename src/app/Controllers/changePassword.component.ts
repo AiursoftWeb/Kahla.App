@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import Swal from 'sweetalert2';
 import { lastValueFrom } from 'rxjs';
-import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/changePassword.html',

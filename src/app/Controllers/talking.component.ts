@@ -13,7 +13,7 @@ import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
-import { uuid4 } from '../Helpers/Uuid';
+import { uuid4 } from '../Utils/Uuid';
 import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';

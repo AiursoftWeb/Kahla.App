@@ -8,7 +8,7 @@ import { GroupsResult } from '../Models/GroupsResults';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { UserSearchResult } from '../Models/Search/UserSearchResult';
-import { uuid4 } from '../Helpers/Uuid';
+import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';
 import { FilesApiService } from '../Services/Api/FilesApiService';

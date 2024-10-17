@@ -6,7 +6,7 @@ import { DevicesApiService } from '../Services/Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { InitService } from '../Services/InitService';
 import { lastValueFrom } from 'rxjs';
-import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/devices.html',

@@ -8,7 +8,7 @@ import * as loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
-import { uuid4 } from '../Helpers/Uuid';
+import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AiurValue } from '../Models/AiurValue';
 import { Message } from '../Models/Message';

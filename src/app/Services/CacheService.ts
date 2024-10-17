@@ -3,7 +3,7 @@ import { CacheModel } from '../Models/CacheModel';
 import { DevicesApiService } from './Api/DevicesApiService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ServerConfig } from '../Models/ServerConfig';
-import { mapDeviceName } from '../Helpers/UaMapper';
+import { mapDeviceName } from '../Utils/UaMapper';
 
 @Injectable({
     providedIn: 'root',

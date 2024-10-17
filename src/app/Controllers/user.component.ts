@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
-import { SwalToast } from '../Helpers/Toast';
+import { SwalToast } from '../Utils/Toast';
 import { ApiService } from '../Services/Api/ApiService';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
-import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { BlocksApiService } from '../Services/Api/BlocksApiService';
 

@@ -27,7 +27,7 @@ import { FilesApiService } from './Api/FilesApiService';
 import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
-import { SwalToast } from '../Helpers/Toast';
+import { SwalToast } from '../Utils/Toast';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
 @Injectable({

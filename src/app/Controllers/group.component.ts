@@ -9,7 +9,7 @@ import { GroupConversation } from '../Models/GroupConversation';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { MessageService } from '../Services/MessageService';
 import { ProbeService } from '../Services/ProbeService';
-import { SwalToast } from '../Helpers/Toast';
+import { SwalToast } from '../Utils/Toast';
 
 @Component({
     templateUrl: '../Views/group.html',

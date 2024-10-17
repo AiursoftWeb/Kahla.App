@@ -2,7 +2,7 @@ import { Component, effect, OnInit, signal } from '@angular/core';
 import { Values } from '../values';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { ServerContactsRepository } from '../Repositories/ServerContactsRepository';
-import { showCommonErrorDialog } from '../Helpers/CommonErrorDialog';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ServerThreadsRepository } from '../Repositories/ServerThreadsRepository';
 
 @Component({
