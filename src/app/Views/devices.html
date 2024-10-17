@@ -1,6 +1,6 @@
 <app-header title="Push Notification Settings"></app-header>
 <div class="menu-header">Status & Settings</div>
-<ng-container *ngIf="webpushSupported()">
+@if (webpushSupported()) {
     <div class="menu-button toggle-setting" (click)="setWebPushStatus(!webPushEnabled)">
         <div class="img"><i class="far fa-bell"></i></div>
         <div class="text">Enable web push notification</div>
@@ -13,7 +13,10 @@
         />
         <label for="toggleWebpush" class="tgl-btn"></label>
     </div>
-</ng-container>
+} @else {
+    <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
+}
+
 <!-- <ng-container *ngIf="electronService.isElectronApp">
     <div class="menu-button toggle-setting" (click)="setElectronNotify(!getElectronNotify())">
         <div class="img"><i class="fas fa-concierge-bell"></i></div>
@@ -28,10 +31,6 @@
     </div>
     <div class="text">Send test notification</div>
 </div>
-<ng-container *ngIf="!webpushSupported()">
-    <!--TODO: ELECTRON-->
-    <div class="menu-hint">Sorry, but your platform doesn't support receiving notifications.</div>
-</ng-container>
 <div class="menu-header">My web devices</div>
 <div
     class="menu-button device-menu-button"

@@ -33,7 +33,7 @@ export class ConversationsComponent implements OnInit {
 
     public talk(id: number, unread: number): void {
         const conversation = this.cacheService.cachedData.conversations.find(x => x.id === id);
-        conversation.unReadAmount = 0;
+        conversation.messageContext.unReadAmount = 0;
         conversation.someoneAtMe = false;
         this.cacheService.updateTotalUnread();
         if (this.router.isActive(`/talking/${id}`, false)) {

@@ -11,8 +11,10 @@ export interface ThreadInfo {
     imInIt: boolean;
 
     // private attributes (can access after joined)
-    latestMessage: Message;
-    unReadAmount: number;
+    messageContext: {
+        unReadAmount: number;
+        latestMessage: Message;
+    }
     muted: boolean;
     someoneAtMe: boolean;
     topTenMembers: ContactInfo[];

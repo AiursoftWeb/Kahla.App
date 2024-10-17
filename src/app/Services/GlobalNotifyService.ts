@@ -31,17 +31,17 @@ export class GlobalNotifyService {
                     const conversationCache =
                         this.cacheService.cachedData.conversations[conversationCacheIndex];
                     const latestMsg = Object.assign({}, evt.message);
-                    conversationCache.latestMessage = latestMsg;
+                    conversationCache.messageContext.latestMessage = latestMsg;
                     if (
                         this.messageService.conversation?.id !== evt.message.conversationId ||
                         !document.hasFocus()
                     ) {
-                        conversationCache.unReadAmount++;
+                        conversationCache.messageContext.unReadAmount++;
                         if (evt.mentioned) {
                             conversationCache.someoneAtMe = true;
                         }
                     } else {
-                        conversationCache.unReadAmount = 0; // clear red dot when something went wrong
+                        conversationCache.messageContext.unReadAmount = 0; // clear red dot when something went wrong
                     }
                     // move the new conversation to the top
                     this.cacheService.cachedData.conversations.splice(conversationCacheIndex, 1);

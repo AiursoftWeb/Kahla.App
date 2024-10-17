@@ -43,7 +43,7 @@ export class DevicesComponent implements OnInit {
     }
 
     public webpushSupported(): boolean {
-        return 'Notification' in window && 'serviceWorker' in navigator; // TODO: ELECTRON
+        return 'Notification' in window && 'serviceWorker' in navigator && !('__TAURI__' in window); // TODO: ELECTRON
     }
 
     public async testPush() {

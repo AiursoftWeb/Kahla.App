@@ -97,7 +97,7 @@ export class CacheService {
     public updateTotalUnread(): void {
         this.totalUnread = this.cachedData.conversations
             .filter(item => !item.muted)
-            .map(item => item.unReadAmount)
+            .map(item => item.messageContext.unReadAmount)
             .reduce((a, b) => a + b, 0);
         // this.themeService.NotifyIcon = this.totalUnread; // TODO: fix this
     }

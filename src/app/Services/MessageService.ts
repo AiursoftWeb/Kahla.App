@@ -224,7 +224,7 @@ export class MessageService {
             t => t.id === this.conversation.id
         );
         if (listItem) {
-            listItem.unReadAmount = 0;
+            listItem.messageContext.unReadAmount = 0;
         }
         this.cacheService.updateTotalUnread();
         this.showFailedMessages();

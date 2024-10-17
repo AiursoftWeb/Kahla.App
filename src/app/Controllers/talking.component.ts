@@ -693,7 +693,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             t => t.id === this.conversationID
         );
         if (conversationCache) {
-            conversationCache.unReadAmount = 0;
+            conversationCache.messageContext.unReadAmount = 0;
             this.cacheService.updateTotalUnread();
         }
     }

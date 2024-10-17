@@ -1,15 +1,16 @@
 <div class="header" [ngClass]="{ shadow: shadow }">
-    <div class="returnButton headerButton" *ngIf="returnButton" (click)="goBack()">
-        <i
-            *ngIf="this.homeService.wideScreenEnabled && this.closeDirectly"
-            class="fas fa-times"
-        ></i>
-        <i
-            *ngIf="!(this.homeService.wideScreenEnabled && this.closeDirectly)"
-            class="fas fa-caret-left"
-        ></i>
-    </div>
-    <div *ngIf="!returnButton"></div>
+    @if (returnButton) {
+        <div class="returnButton headerButton" (click)="goBack()">
+            @if (this.homeService.wideScreenEnabled && this.closeDirectly) {
+                <i class="fas fa-times"></i>
+            } @else {
+                <i class="fas fa-caret-left"></i>
+            }
+        </div>
+    } @else {
+        <div></div>
+        <!--placeholder for grid container-->
+    }
     <div class="text">
         <div class="processing" [class.processing-open]="processing">
             <i class="fas fa-spinner fa-spin"></i>
