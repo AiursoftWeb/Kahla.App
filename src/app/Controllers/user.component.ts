@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { SwalToast } from '../Utils/Toast';
-import { ApiService } from '../Services/Api/ApiService';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { BlocksApiService } from '../Services/Api/BlocksApiService';
+import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
+import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
+import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -23,36 +24,33 @@ import { BlocksApiService } from '../Services/Api/BlocksApiService';
 })
 export class UserComponent implements OnInit {
     public info: ContactInfo;
+    public response: UserDetailViewModel;
     public loadingImgURL = Values.loadingImgURL;
+    public isCommonThreadsShown = false;
+    public commonThreadsRepo?: CommonThreadRepository;
 
     constructor(
         private route: ActivatedRoute,
         private contactsApiService: ContactsApiService,
+        private threadsApiService: ThreadsApiService,
         private blocksApiService: BlocksApiService,
         private router: Router,
-        private myContactsRepository: MyContactsRepository,
-        public cacheService: CacheService,
-        public apiService: ApiService
+        private myContactsRepository: MyContactsRepository
     ) {}
 
     public ngOnInit(): void {
         this.route.params.subscribe(t => {
             this.updateFriendInfo(t.id);
+            this.isCommonThreadsShown = false;
+            this.commonThreadsRepo = null;
         });
     }
 
     public updateFriendInfo(userId: string) {
-        this.contactsApiService.Details(userId).subscribe(response => {
+        this.contactsApiService.Details(userId, 0, 0).subscribe(response => {
             this.info = response.searchedUser;
+            this.response = response;
         });
-        // this.friendsApiService.UserDetail(userId).subscribe(response => {
-        //     // this.info = response.user;
-        //     // this.areFriends = response.areFriends;
-        //     // this.conversationId = response.conversationId;
-        //     // this.sentRequest = response.sentRequest;
-        //     // this.pendingRequest = response.pendingRequest;
-        //     this.info.avatarURL = this.probeService.encodeProbeFileUrl(this.info.iconFilePath);
-        // });
     }
 
     public async delete(id: string) {
@@ -84,8 +82,8 @@ export class UserComponent implements OnInit {
         }
     }
 
-    public report(): void {
-        Swal.fire({
+    public async report() {
+        const resp = await Swal.fire({
             title: 'Report',
             input: 'textarea',
             inputPlaceholder: 'Type your reason here...',
@@ -100,19 +98,14 @@ export class UserComponent implements OnInit {
                     return "The reason's length should between five and two hundreds.";
                 }
             },
-        }).then(result => {
-            if (!result.dismiss) {
-                // this.friendsApiService.Report(this.info.id, result.value as string).subscribe(response => {
-                //     if (response.code === 0) {
-                //         Swal.fire('Success', response.message, 'success');
-                //     } else {
-                //         Swal.fire('Error', response.message, 'error');
-                //     }
-                // }, () => {
-                //     Swal.fire('Error', 'Report error.', 'error');
-                // });
-            }
         });
+        if (!resp.value) return;
+        try {
+            await lastValueFrom(this.contactsApiService.Report(this.info.user.id, resp.value));
+        } catch (err) {
+            showCommonErrorDialog(err);
+            return;
+        }
     }
 
     public shareUser() {
@@ -120,9 +113,14 @@ export class UserComponent implements OnInit {
     }
 
     public message() {
-        if (this.info.commonThreads.length === 0) {
-            this.router.navigate(['/talking', this.info.commonThreads[0].id]);
-        }
+        this.router.navigate([`/talking/${this.response.defaultThread!}`]);
+    }
+
+    public async newThread() {
+        // hard invite
+        const resp = await lastValueFrom(this.threadsApiService.HardInvite(this.info.user.id));
+        SwalToast.fire('Thread Created.', '', 'success');
+        this.router.navigate([`/talking/${resp.newThreadId}`]);
     }
 
     public async block() {
@@ -145,5 +143,13 @@ export class UserComponent implements OnInit {
         SwalToast.fire('Success', '', 'success');
         this.updateFriendInfo(this.info.user.id);
         this.myContactsRepository.updateAll();
+    }
+
+    public showCommonThreads() {
+        this.isCommonThreadsShown = !this.isCommonThreadsShown;
+        if (this.isCommonThreadsShown && !this.commonThreadsRepo) {
+            this.commonThreadsRepo = new CommonThreadRepository(this.contactsApiService, this.info.user.id);
+            this.commonThreadsRepo.updateAll();
+        }
     }
 }

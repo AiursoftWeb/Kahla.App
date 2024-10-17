@@ -83,20 +83,30 @@
     margin: auto;
   }
 
-  .img {
+  .img, .img-right {
     width: 36px;
     border-radius: 8px;
     text-align: center;
-    grid-column: 1 / 2;
-
+    transition: all 0.2s ease-in-out;
     i {
       font-size: 2em;
       transition: all 0.2s linear;
     }
+
+    &.hide i {
+      opacity: 0;
+    }
+    &.rev i {
+      transform: rotate(180deg);
+    }
   }
 
-  .checked {
-    grid-column: 3 / 3;
+  .img {
+    grid-column: 1 / 2;    
+  }
+
+  .img-right {
+    grid-column: 3 / 4;
   }
 
   .text {

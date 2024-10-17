@@ -6,4 +6,5 @@ export interface UserDetailViewModel extends AiurProtocol {
     searchedUser: ContactInfo;
     commonThreads: ThreadInfo[];
     commonThreadsCount: number;
+    defaultThread?: number; // id
 }

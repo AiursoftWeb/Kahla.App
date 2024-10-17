@@ -398,7 +398,7 @@
     <ul
         *ngIf="showUserList"
         class="userList"
-        [ngClass]="{ oneResult: matchedUsers.length == 1 }"
+        [ngClass]="{ oneResult: matchedUsers.length === 1 }"
         [style.max-height.px]="getAtListMaxHeight()"
     >
         <li

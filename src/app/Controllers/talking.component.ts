@@ -44,8 +44,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private oldContent: string;
     private chatInputHeight: number;
     private picker: EmojiButton;
-    public Math = Math;
-    public Date = Date;
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: KahlaUser[] = [];

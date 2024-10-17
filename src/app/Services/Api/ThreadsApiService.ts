@@ -4,6 +4,7 @@ import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel'
 import { ApiService } from './ApiService';
 import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';
 import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiResponse';
+import { AiurValueNamed } from '../../Models/AiurValue';
 
 @Injectable()
 export class ThreadsApiService {
@@ -25,8 +26,11 @@ export class ThreadsApiService {
         });
     }
 
-    public Details(id: string): Observable<UserDetailViewModel> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/details/${id}`);
+    public Details(id: string, take = 1, skip = 0): Observable<UserDetailViewModel> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details/${id}`, {
+            take,
+            skip,
+        });
     }
 
     public Members(id: number, take = 20, skip = 0): Observable<ContactsListApiResponse> {
@@ -36,7 +40,7 @@ export class ThreadsApiService {
         });
     }
 
-    public HardInvite(userId: string) {
+    public HardInvite(userId: string): Observable<AiurValueNamed<number, 'newThreadId'>> {
         return this.apiService.Post(ThreadsApiService.serverPath + `/hard-invite/${userId}`, {});
     }
 }

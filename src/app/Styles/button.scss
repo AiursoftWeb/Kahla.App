@@ -22,17 +22,7 @@ button,
   user-select: none;
   overflow: hidden;
   text-overflow: ellipsis;
-}
 
-.button--fab {
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  padding: 0;
-  line-height: normal;
-}
-
-.button {
   &:disabled {
     cursor: not-allowed;
   }
@@ -42,6 +32,10 @@ button,
 
     &:hover:enabled {
       background-color: #3c983c;
+    }
+
+    &:active:enabled {
+      background-color: #2b722b;
     }
 
     &:disabled {
@@ -56,8 +50,8 @@ button,
       background-color: var(--primary-color-depth3);
     }
 
-    &:active {
-      background-color: var(--primary-color-depth3);
+    &:active:enabled {
+      background-color: var(--primary-color-depth1);
     }
 
     &:disabled {
@@ -89,6 +83,19 @@ button,
       background-color: #bbb;
     }
   }
+
+  &.one-line {
+    display: block;
+    margin: 10px auto;
+  }
+}
+
+.button--fab {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  line-height: normal;
 }
 
 .inputButton {

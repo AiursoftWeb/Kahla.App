@@ -29,17 +29,21 @@ export class ThreadsListComponent {
 
     public nameOf(thread: ThreadInfo): string {
         if (!thread.name.includes('{THE OTHER USER}')) return thread.name;
-        return thread.name.replace(
+        const name = thread.name.replace(
             '{THE OTHER USER}',
             thread.topTenMembers
                 .filter(
                     t =>
-                        !this.cacheService.cachedData.me ||
+                        !this.cacheService?.cachedData?.me ||
                         t.user.id !== this.cacheService.cachedData.me.id
                 )
                 .map(t => t.user.nickName)
                 .join(', ')
         );
+        if (!name.trim()) {
+            return this.cacheService?.cachedData?.me?.nickName ?? 'You';
+        }
+        return name;
     }
 
     public onlineStatusOf(thread: ThreadInfo): boolean | null {
