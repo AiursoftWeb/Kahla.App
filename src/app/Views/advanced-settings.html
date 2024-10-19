@@ -3,125 +3,59 @@
     [closeDirectly]="true"
     [processing]="!!updatingSetting"
 ></app-header>
-<div class="menu-header">General</div>
-<div class="menu-button" (click)="todo()">
-    <div class="img">
-        <i class="fas fa-language"></i>
+@if (this.options) {
+    <div class="menu-header">General</div>
+    <div class="menu-button" (click)="todo()">
+        <div class="img">
+            <i class="fas fa-language"></i>
+        </div>
+        <div class="text" i18n="@@Language">Language</div>
     </div>
-    <div class="text" i18n="@@Language">Language</div>
-</div>
-<div
-    class="menu-button toggle-setting"
-    (click)="
-        this.options.enableEnterToSendMessage = !this.options.enableEnterToSendMessage;
-        updateSettings()
-    "
-    *ngIf="this.options"
->
-    <div class="img">
-        <i class="fas fa-exchange-alt"></i>
-    </div>
-    <div class="text" i18n="@@Notification">Use Enter to send message</div>
-    <input
-        id="toggleEnter"
-        class="tgl"
-        type="checkbox"
-        [checked]="this.options.enableEnterToSendMessage"
-        disabled="disabled"
+    <app-toggle-menu-item
+        title="Use Enter to send message"
+        [(value)]="this.options.enableEnterToSendMessage"
+        (valueChange)="updateSettings()"
+        iconClasses="fas fa-exchange-alt"
     />
-    <label for="toggleEnter" class="tgl-btn"></label>
-</div>
-<div class="menu-hint">You can still insert a line break with Ctrl+Enter if you enable it.</div>
-<div class="menu-header">Privacy</div>
-<div
-    class="menu-button toggle-setting"
-    (click)="
-        this.options.enableHideMyOnlineStatus = !this.options.enableHideMyOnlineStatus;
-        updateSettings()
-    "
-    *ngIf="this.options"
->
-    <div class="img">
-        <i class="fas fa-plug"></i>
-    </div>
-    <div class="text" i18n="@@Notification">Show my online status</div>
-    <input
-        id="toggleInvisible"
-        class="tgl"
-        type="checkbox"
-        [checked]="!this.options.enableHideMyOnlineStatus"
-        disabled="disabled"
+    <div class="menu-hint">You can still insert a line break with Ctrl+Enter if you enable it.</div>
+    <div class="menu-header">Privacy</div>
+    <app-toggle-menu-item
+        title="Show my online status"
+        [value]="!this.options.enableHideMyOnlineStatus"
+        (valueChange)="this.options.enableHideMyOnlineStatus = !$event; updateSettings()"
+        iconClasses="fas fa-plug"
     />
-    <label for="toggleInvisible" class="tgl-btn"></label>
-</div>
-<div
-    class="menu-button toggle-setting"
-    (click)="this.options.listInSearchResult = !this.options.listInSearchResult; updateSettings()"
-    *ngIf="this.me"
->
-    <div class="img">
-        <i class="fas fa-stream"></i>
-    </div>
-    <div class="text" i18n="@@Notification">List me in search result</div>
-    <input
-        id="toggleList"
-        class="tgl"
-        type="checkbox"
-        [checked]="this.options.listInSearchResult"
-        disabled="disabled"
+    <app-toggle-menu-item
+        title="List me in search result"
+        [(value)]="this.options.listInSearchResult"
+        (valueChange)="updateSettings()"
+        iconClasses="fas fa-stream"
     />
-    <label for="toggleList" class="tgl-btn"></label>
-</div>
-<div
-    class="menu-button toggle-setting"
-    (click)="this.options.allowHardInvitation = !this.options.allowHardInvitation; updateSettings()"
-    *ngIf="this.me"
->
-    <div class="img">
-        <i class="fas fa-lock"></i>
-    </div>
-    <div class="text">Private Account</div>
-    <input
-        id="toggleList"
-        class="tgl"
-        type="checkbox"
-        [checked]="!this.options.allowHardInvitation"
-        disabled="disabled"
+    <app-toggle-menu-item
+        title="Private Account"
+        [value]="!this.options.allowHardInvitation"
+        (valueChange)="this.options.allowHardInvitation = !$event; updateSettings()"
+        iconClasses="fas fa-lock"
     />
-    <label for="toggleList" class="tgl-btn"></label>
-</div>
-<div class="menu-header">Notification</div>
-<div
-    class="menu-button toggle-setting"
-    (click)="
-        this.options.enableEmailNotification = !this.options.enableEmailNotification;
-        updateSettings()
-    "
-    *ngIf="this.me && me.emailConfirmed && this.options"
->
-    <div class="img">
-        <i class="fas fa-envelope"></i>
+    <div class="menu-header">Notification</div>
+    <app-toggle-menu-item
+        title="Email notification"
+        [(value)]="this.options.enableEmailNotification"
+        (valueChange)="updateSettings()"
+        iconClasses="fas fa-envelope"
+        *ngIf="this.me && me.emailConfirmed && this.options"
+    ></app-toggle-menu-item>
+    <div class="menu-button" routerLink="/devices">
+        <div class="img">
+            <i class="far fa-bell" aria-hidden="true"></i>
+        </div>
+        <div class="text">Push notification settings</div>
     </div>
-    <div class="text" i18n="@@Notification">Email notification</div>
-    <input
-        id="toggleMute"
-        class="tgl"
-        type="checkbox"
-        [checked]="this.options.enableEmailNotification"
-        disabled="disabled"
-    />
-    <label for="toggleMute" class="tgl-btn"></label>
-</div>
-<div class="menu-button" routerLink="/devices">
-    <div class="img">
-        <i class="far fa-bell" aria-hidden="true"></i>
+    <div class="menu-header">Account</div>
+    <div class="menu-button" routerLink="/changepassword">
+        <div class="img">
+            <i class="fas fa-lock" aria-hidden="true"></i>
+        </div>
+        <div class="text">Change password</div>
     </div>
-    <div class="text">Push notification settings</div>
-</div>
-<div class="menu-header">Account</div>
-<div class="menu-button" routerLink="/changepassword">
-    <div class="img">
-        <i class="fas fa-lock" aria-hidden="true"></i>
-    </div>
-    <div class="text">Change password</div>
-</div>
+}

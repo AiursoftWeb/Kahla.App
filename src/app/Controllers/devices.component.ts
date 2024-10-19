@@ -10,7 +10,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/devices.html',
-    styleUrls: ['../Styles/menu.scss', '../Styles/toggleButton.scss'],
+    styleUrls: ['../Styles/menu.scss'],
 })
 export class DevicesComponent implements OnInit {
     constructor(

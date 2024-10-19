@@ -8,7 +8,7 @@ import { AppOptions } from '../Models/AppOptions';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
-    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss', '../Styles/toggleButton.scss'],
+    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss'],
 })
 export class AdvancedSettingComponent implements OnInit {
     public me: KahlaUser;
@@ -22,7 +22,7 @@ export class AdvancedSettingComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        if (this.cacheService.cachedData.me) {
+        if (this.cacheService?.cachedData?.me) {
             this.me = Object.assign({}, this.cacheService.cachedData.me);
             this.options = Object.assign({}, this.cacheService.cachedData.options);
         } else {
