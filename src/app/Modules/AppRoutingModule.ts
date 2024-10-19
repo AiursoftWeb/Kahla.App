@@ -17,12 +17,14 @@ import { HomeComponent } from '../Controllers/home.component';
 import { ShareComponent } from '../Controllers/share.component';
 import { FileHistoryComponent } from '../Controllers/file-history.component';
 import { BlocksListComponent } from '../Controllers/blocks-list.component';
+import { NewThreadComponent } from '../Controllers/new-thread.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'addfriend', component: AddFriendComponent },
     { path: 'blocks', component: BlocksListComponent },
+    {path: 'new-thread', component: NewThreadComponent},
     { path: 'talking/:id', component: TalkingComponent },
     { path: 'file-history/:id', component: FileHistoryComponent },
     { path: 'talking/:id/:unread', component: TalkingComponent },
@@ -41,6 +43,7 @@ const routes: Routes = [
     { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 @NgModule({
+    providers: [],
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })

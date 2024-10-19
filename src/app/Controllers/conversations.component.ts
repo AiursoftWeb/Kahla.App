@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { ThreadInfo } from '../Models/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
-import { MyThreadsRepository } from '../Repositories/ThreadsRepository';
+import {
+    MyThreadsRepository,
+    MyThreadsRepositoryFiltered,
+} from '../Repositories/ThreadsRepository';
+import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 
 @Component({
     selector: 'app-conversations',
@@ -12,12 +16,27 @@ import { MyThreadsRepository } from '../Repositories/ThreadsRepository';
 })
 export class ConversationsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
+    public threadsRepo?: MyThreadsRepositoryFiltered;
+    searchText = signal('');
 
     constructor(
         private router: Router,
         public cacheService: CacheService,
-        public myThreadsRepository: MyThreadsRepository
-    ) {}
+        public myThreadsRepository: MyThreadsRepository,
+        private threadsApiService: ThreadsApiService
+    ) {
+        effect(() => {
+            if (this.searchText()) {
+                this.threadsRepo = new MyThreadsRepositoryFiltered(
+                    this.threadsApiService,
+                    this.searchText()
+                );
+                this.threadsRepo.updateAll();
+            } else {
+                this.threadsRepo = this.myThreadsRepository;
+            }
+        });
+    }
 
     public ngOnInit(): void {
         this.myThreadsRepository.updateAll();

@@ -90,7 +90,7 @@
     transition: all 0.2s ease-in-out;
     i {
       font-size: 2em;
-      transition: all 0.2s linear;
+      transition: all 0.3s ease-out;
     }
 
     &.hide i {

@@ -60,6 +60,9 @@ import { SearchTypeComponent } from './Controllers/search-type.component';
 import { BlocksApiService } from './Services/Api/BlocksApiService';
 import { BlocksListComponent } from './Controllers/blocks-list.component';
 import { TruncatedNumPipe } from './Pipes/truncated-num.pipe';
+import { ThreadOptionsComponent } from './Controllers/thread-options.component';
+import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.component';
+import { NewThreadComponent } from './Controllers/new-thread.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, TruncatedNumPipe],
@@ -92,6 +95,9 @@ import { TruncatedNumPipe } from './Pipes/truncated-num.pipe';
         SearchAreaComponent,
         SearchTypeComponent,
         BlocksListComponent,
+        ThreadOptionsComponent,
+        ToggleMenuItemComponent,
+        NewThreadComponent
     ],
     providers: [
         ApiService,
