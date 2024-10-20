@@ -4,7 +4,7 @@
     [processing]="contactsRepo?.status === 'loading' || threadsRepo?.status === 'loading'"
 ></app-header>
 <div class="search-part" id="search-part">
-    <app-search-area [(searchText)]="searchTerm" [debounceTime]="500" />
+    <app-search-area [(searchText)]="searchTerm" [aggressive]="false" />
     <app-search-type
         [items]="[
             {

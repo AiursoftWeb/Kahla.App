@@ -1,4 +1,4 @@
-<div class="search-input" [ngClass]="{ 'search-input-with-button': !!textInput.value }">
+<div class="search-input" [ngClass]="{ 'search-input-with-button': !!textInput.value || !aggressive() }">
     <input
         id="searchBar"
         placeholder="Search for your friends and groups"
@@ -6,15 +6,21 @@
         (keydown.enter)="onpositiveClicked()"
         [formControl]="textInput"
     />
-    <button
-        class="button compact primary"
-        [ngClass]="{ 'd-none': !textInput.value }"
-        (click)="textInput.setValue('')"
-    >
-        <i class="fas fa-times"></i>
-    </button>
-    <!-- <button class="button primary" (click)="search(friendSearch.value)"
-            [disabled]="(contactsRepo && contactsRepo.status === 'loading') || friendSearch.value.length === 0">
+    @if (aggressive()) {
+        <button
+            class="button compact primary"
+            [ngClass]="{ 'd-none': !textInput.value }"
+            (click)="textInput.setValue('')"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+    } @else {
+        <button
+            class="button primary"
+            (click)="onpositiveClicked()"
+            [disabled]="!textInput.value"
+        >
             <i class="fas fa-search"></i>
-        </button> -->
+        </button>
+    }
 </div>

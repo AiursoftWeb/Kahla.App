@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, Input, model, Output } from '@angular/core';
+import { Component, effect, EventEmitter, input, Input, model, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 
@@ -16,18 +16,25 @@ export class SearchAreaComponent {
 
     debounceTime = input(500);
 
+    aggressive = input(true);
+
     textInput = new FormControl('');
 
     constructor() {
-        this.textInput.valueChanges
-            .pipe(
-                debounce(t => {
-                    return interval(t ? this.debounceTime() : 0);
-                })
-            )
-            .subscribe(term => {
-                this.searchText.set(term);
-            });
+        effect(cleanup => {
+            if (this.aggressive()) {
+                const sub = this.textInput.valueChanges
+                    .pipe(
+                        debounce(t => {
+                            return interval(t ? this.debounceTime() : 0);
+                        })
+                    )
+                    .subscribe(term => {
+                        this.searchText.set(term);
+                    });
+                cleanup(() => sub.unsubscribe());
+            }
+        });
     }
 
     onpositiveClicked() {
