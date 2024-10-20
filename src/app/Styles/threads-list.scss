@@ -7,11 +7,6 @@
 .conversation {
   @extend %menu-item-clickable;
   height: 70px;
-  border-width: 1px;
-  border-bottom-style: solid;
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease-out;
   position: relative;
 
   .user-img {

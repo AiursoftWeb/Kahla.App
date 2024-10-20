@@ -3,6 +3,11 @@
   background: var(--selectable-bg);
   border-color: var(--selectable-border-color);
 
+  border-width: 1px;
+  border-bottom-style: solid;
+  user-select: none;
+  text-decoration: none;
+
   .img,
   .img-right {
     color: var(--primary-color-depth2);
@@ -15,7 +20,11 @@
 
 %menu-item-clickable {
   @extend %menu-item;
+
   @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
+
+  cursor: pointer;
+  outline: none;
 }
 
 .empty-result-notice {

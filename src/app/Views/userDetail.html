@@ -8,15 +8,7 @@
                 src="{{ user.avatarURL ? user.avatarURL : loadingImgURL }}?w=256&square=true"
             />
         </a>
-        <label id="upload" class="button primary inputButton" for="image">Upload new avatar</label>
-        <input
-            type="file"
-            name="image"
-            id="image"
-            #imageInput
-            (change)="uploadAvatar()"
-            accept="image/png, image/jpeg, image/bmp"
-        />
+        <button class="button primary inputButton" (click)="uploadAvatar()">Upload new avatar</button>
     </div>
     <div class="profile">
         <label>Nick name</label>
@@ -37,6 +29,6 @@
         />
     </div>
     <div class="buttons">
-        <button id="save" class="button primary" (click)="save()" i18n="@@save">Save</button>
+        <button class="button primary" (click)="save()" [disabled]="saving">{{saving ? 'Saving...' : 'Save'}}</button>
     </div>
 </div>

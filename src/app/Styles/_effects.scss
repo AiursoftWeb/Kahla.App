@@ -1,4 +1,6 @@
 @mixin hover-effect($hover-col, $active-col) {
+  transition: all 0.2s ease-out;
+
   &:hover {
     background: #{$hover-col};
   }

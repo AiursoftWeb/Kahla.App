@@ -1,30 +1,28 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { AiurProtocol } from '../Models/AiurProtocal';
-import { AiurCollection } from '../Models/AiurCollection';
-import Swal from 'sweetalert2';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
+import { lastValueFrom } from 'rxjs';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
+import { SwalToast } from '../Utils/Toast';
+import { selectFiles } from '../Utils/SystemDialog';
 
 @Component({
     templateUrl: '../Views/userDetail.html',
     styleUrls: [
-        '../Styles/userDetail.scss',
+        '../Styles/menu-textbox.scss',
         '../Styles/button.scss',
-        '../Styles/toggleButton.scss',
     ],
 })
 export class UserDetailComponent implements OnInit {
     public user: KahlaUser;
     public loadingImgURL = Values.loadingImgURL;
-    @ViewChild('imageInput') public imageInput;
+    saving = false;
 
     constructor(
         private authApiService: AuthApiService,
-        private router: Router,
         public uploadService: UploadService,
         public cacheService: CacheService
     ) {}
@@ -40,36 +38,30 @@ export class UserDetailComponent implements OnInit {
         }
     }
 
-    public uploadAvatar(): void {
-        if (this.imageInput) {
-            const fileBrowser = this.imageInput.nativeElement;
-            if (fileBrowser.files && fileBrowser.files[0]) {
-                this.uploadService.uploadAvatar(this.user, fileBrowser.files[0]);
-            }
+    public async uploadAvatar() {
+        const files = await selectFiles();
+        if (!files) {
+            return;
         }
+        this.uploadService.uploadAvatar(this.user, files[0]);
     }
 
-    public save(): void {
-        const saveButton = document.querySelector('#save');
-        saveButton.textContent = 'Saving...';
-        this.authApiService
-            .UpdateMe({
-                nickName: this.user.nickName,
-                bio: this.user.bio,
-            })
-            .subscribe(response => {
-                if (response.code > 0) {
-                    this.cacheService.cachedData.me = Object.assign({}, this.user);
-                    this.cacheService.saveCache();
-                    this.router.navigate(['/home']);
-                } else {
-                    Swal.fire(
-                        'Error',
-                        (response as AiurProtocol as AiurCollection<string>).items.join('<br/>'),
-                        'error'
-                    );
-                }
-                saveButton.textContent = 'Save';
-            });
+    public async save() {
+        this.saving = true;
+        try {
+            await lastValueFrom(
+                this.authApiService.UpdateMe({
+                    nickName: this.user.nickName,
+                    bio: this.user.bio,
+                })
+            );
+            this.cacheService.cachedData.me = {...this.user};
+            this.cacheService.saveCache();
+            SwalToast.fire({ title: 'Profile saved.', icon: 'success' });
+        } catch (err) {
+            showCommonErrorDialog(err);
+        } finally {
+            this.saving = false;
+        }
     }
 }

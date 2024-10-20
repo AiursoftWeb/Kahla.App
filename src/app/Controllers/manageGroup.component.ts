@@ -16,7 +16,7 @@ import { SwalToast } from '../Utils/Toast';
     templateUrl: '../Views/manageGroup.html',
     styleUrls: [
         '../Styles/menu.scss',
-        '../Styles/userDetail.scss',
+        '../Styles/menu-textbox.scss',
         '../Styles/button.scss',
         '../Styles/toggleButton.scss',
     ],

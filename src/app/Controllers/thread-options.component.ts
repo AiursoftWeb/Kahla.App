@@ -5,7 +5,7 @@ import { PropertryNamesWithType } from '../Utils/Typing';
 @Component({
     selector: 'app-thread-options',
     templateUrl: '../Views/thread-options.html',
-    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss', '../Styles/toggleButton.scss'],
+    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss', '../Styles/menu-textbox.scss'],
 })
 export class ThreadOptionsComponent {
     @Input() public showAvatarOptions = false;

@@ -5,6 +5,7 @@ import { ApiService } from './ApiService';
 import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';
 import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiResponse';
 import { AiurValueNamed } from '../../Models/AiurValue';
+import { ThreadOptions } from '../../Models/Threads/ThreadOptions';
 
 @Injectable()
 export class ThreadsApiService {
@@ -42,5 +43,9 @@ export class ThreadsApiService {
 
     public HardInvite(userId: string): Observable<AiurValueNamed<number, 'newThreadId'>> {
         return this.apiService.Post(ThreadsApiService.serverPath + `/hard-invite/${userId}`, {});
+    }
+
+    public CreateScratch(options: Omit<ThreadOptions, 'iconFilePath'>): Observable<AiurValueNamed<number, 'newThreadId'>> {
+        return this.apiService.Post(ThreadsApiService.serverPath + '/create-scratch', options);
     }
 }

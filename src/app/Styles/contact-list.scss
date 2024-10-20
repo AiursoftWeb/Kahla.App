@@ -3,14 +3,8 @@
 .contact-list {
   @extend %menu-item-clickable;
   height: 60px;
-  border-width: 1px;
-  border-bottom-style: solid;
-  cursor: pointer;
   display: grid;
   grid-template-columns: 50% 50%;
-  outline: none;
-  user-select: none;
-  transition: all ease-out 0.2s;
 
   .user-img-group {
     position: relative;

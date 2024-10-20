@@ -1,22 +1,12 @@
+@import "inputs";
+
 .search-input {
   padding: 7px;
   display: flex;
   margin-bottom: 8px;
   input {
-    border: 1px solid var(--text-input-border-color);
-    color: var(--default-textcolor);
-    background-color: var(--text-input-bg);
-    border-radius: 6px;
-    transition:
-      border-color ease-in-out 0.15s,
-      box-shadow ease-in-out 0.15s;
-    box-shadow: none;
+    @extend %textbox;
     width: 100%;
-    height: 35px;
-    padding: 6px 12px;
-    font-size: 14px;
-    box-sizing: border-box;
-    outline: none;
     flex: auto;
   }
 

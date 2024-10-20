@@ -6,11 +6,7 @@
  ******************** */
 
 .user {
-  @extend %menu-item;
-  border-width: 1px;
-  border-bottom-style: solid;
-  outline: none;
-  cursor: pointer;
+  @extend %menu-item-clickable;
   display: grid;
   grid-template-columns: 25% auto;
   min-height: 70px;
@@ -67,12 +63,9 @@
   user-select: none;
   display: grid;
   grid-template-columns: 15% auto 15%;
-  transition: all 0.2s ease-out;
 
   &.menu-button {
     @extend %menu-item-clickable;
-    border-width: 1px;
-    border-bottom-style: solid;
   }
 
   &.menu-button-transparent {
