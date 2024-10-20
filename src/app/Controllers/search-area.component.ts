@@ -1,5 +1,13 @@
-import { Component, effect, EventEmitter, Input, model, Output, signal } from '@angular/core';
-import { debounceTime, Subject } from 'rxjs';
+import {
+    Component,
+    EventEmitter,
+    input,
+    Input,
+    model,
+    Output,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounce, interval } from 'rxjs';
 
 @Component({
     selector: 'app-search-area',
@@ -13,39 +21,20 @@ export class SearchAreaComponent {
 
     @Output() positiveClicked = new EventEmitter<void>();
 
-    debounceTime = model(500);
+    debounceTime = input(500);
 
-    searchTextInput = signal('');
-
-    private searchSubject = new Subject<string>();
+    textInput = new FormControl('');
 
     constructor() {
-        effect(
-            () => {
-                if (this.searchTextInput().length == 0) {
-                    this.searchText.set('');
-                }
-                this.searchSubject.next(this.searchTextInput());
-            },
-            {
-                allowSignalWrites: true,
-            }
-        );
-
-        effect(cleanup => {
-            const sub = this.searchSubject
-                .pipe(debounceTime(this.debounceTime()))
-                .subscribe(term => {
-                    this.searchText.set(term);
-                });
-            cleanup(() => {
-                sub.unsubscribe();
-            });
+        this.textInput.valueChanges.pipe(debounce(t => {
+            return interval(t ? this.debounceTime() : 0);
+        })).subscribe(term => {
+            this.searchText.set(term);
         });
     }
 
     onpositiveClicked() {
-        this.searchText.set(this.searchTextInput());
+        this.searchText.set(this.textInput.value);
         this.positiveClicked.emit();
     }
 }

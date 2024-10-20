@@ -2,7 +2,7 @@
 import { AppRoutingModule } from './Modules/AppRoutingModule';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // Component
 import { AppComponent } from './Controllers/app.component';
@@ -65,7 +65,7 @@ import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.componen
 import { NewThreadComponent } from './Controllers/new-thread.component';
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, TruncatedNumPipe],
+    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, TruncatedNumPipe, ReactiveFormsModule],
     declarations: [
         AboutComponent,
         AppComponent,

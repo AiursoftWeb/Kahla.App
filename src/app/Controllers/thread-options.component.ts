@@ -12,7 +12,7 @@ export class ThreadOptionsComponent {
 
     public threadOptions = model.required<ThreadOptions>();
 
-    public flipOption(name: PropertryNamesWithType<ThreadOptions, boolean>, newValue: boolean) {
+    public flipOption<T>(name: PropertryNamesWithType<ThreadOptions, T>, newValue: T) {
         this.threadOptions.set({
             ...this.threadOptions(),
             [name]: newValue,

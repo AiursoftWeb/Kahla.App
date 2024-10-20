@@ -10,8 +10,14 @@ export class CacheModel {
     public version = CacheModel.VERSION;
     public me: KahlaUser;
     public options: AppOptions;
+    /**
+     * @deprecated
+     */
     public conversations: ThreadInfo[];
     public devices: Device[];
+    /**
+     * @deprecated
+     */
     public conversationDetail: Map<number, Conversation> = new Map<number, Conversation>();
     public probeTokens: Map<number, AccessToken> = new Map<number, AccessToken>();
 }

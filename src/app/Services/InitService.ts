@@ -67,7 +67,7 @@ export class InitService {
             }
 
             if (!signedIn) {
-                console.log('[WARN] User not signed in. Redirecting to signin page.');
+                console.warn('[WARN] User not signed in. Redirecting to signin page.');
                 this.router.navigate(['/signin'], { replaceUrl: true });
             } else {
                 console.log('[ OK ] User signed in.');

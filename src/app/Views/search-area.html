@@ -1,15 +1,15 @@
-<div class="search-input" [ngClass]="{ 'search-input-with-button': searchTextInput() !== '' }">
+<div class="search-input" [ngClass]="{ 'search-input-with-button': !!textInput.value}">
     <input
         id="searchBar"
         placeholder="Search for your friends and groups"
         type="text"
         (keydown.enter)="onpositiveClicked()"
-        [(ngModel)]="searchTextInput"
+        [formControl]="textInput"
     />
     <button
         class="button compact primary"
-        [ngClass]="{ 'd-none': searchTextInput() === '' }"
-        (click)="searchTextInput.set('')"
+        [ngClass]="{ 'd-none': !textInput.value }"
+        (click)="textInput.setValue('')"
     >
         <i class="fas fa-times"></i>
     </button>

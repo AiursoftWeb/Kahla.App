@@ -42,7 +42,6 @@ export class ProbeService {
     }
 
     public resolveAccessToken(tokenRaw: string): AccessToken {
-        console.log(tokenRaw);
         const token = JSON.parse(atob(tokenRaw.split('.')[0])) as AccessToken;
         token.raw = tokenRaw;
         token.expiresDate = new Date(token.expires);
