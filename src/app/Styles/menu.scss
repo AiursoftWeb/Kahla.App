@@ -83,7 +83,8 @@
     margin: auto;
   }
 
-  .img, .img-right {
+  .img,
+  .img-right {
     width: 36px;
     border-radius: 8px;
     text-align: center;
@@ -102,7 +103,7 @@
   }
 
   .img {
-    grid-column: 1 / 2;    
+    grid-column: 1 / 2;
   }
 
   .img-right {

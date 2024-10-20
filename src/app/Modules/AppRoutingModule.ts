@@ -24,7 +24,7 @@ const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'addfriend', component: AddFriendComponent },
     { path: 'blocks', component: BlocksListComponent },
-    {path: 'new-thread', component: NewThreadComponent},
+    { path: 'new-thread', component: NewThreadComponent },
     { path: 'talking/:id', component: TalkingComponent },
     { path: 'file-history/:id', component: FileHistoryComponent },
     { path: 'talking/:id/:unread', component: TalkingComponent },

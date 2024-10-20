@@ -65,7 +65,14 @@ import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.componen
 import { NewThreadComponent } from './Controllers/new-thread.component';
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule, TruncatedNumPipe, ReactiveFormsModule],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        TruncatedNumPipe,
+        ReactiveFormsModule,
+    ],
     declarations: [
         AboutComponent,
         AppComponent,
@@ -97,7 +104,7 @@ import { NewThreadComponent } from './Controllers/new-thread.component';
         BlocksListComponent,
         ThreadOptionsComponent,
         ToggleMenuItemComponent,
-        NewThreadComponent
+        NewThreadComponent,
     ],
     providers: [
         ApiService,

@@ -3,7 +3,7 @@
     [processing]="myThreadsRepository?.status === 'loading'"
     [returnButton]="false"
 ></app-header>
-<app-search-area [(searchText)]="searchText"/>
+<app-search-area [(searchText)]="searchText" />
 <app-threads-list
     *ngIf="threadsRepo"
     [threadRepo]="threadsRepo"

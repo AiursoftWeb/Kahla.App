@@ -148,7 +148,10 @@ export class UserComponent implements OnInit {
     public showCommonThreads() {
         this.isCommonThreadsShown = !this.isCommonThreadsShown;
         if (this.isCommonThreadsShown && !this.commonThreadsRepo) {
-            this.commonThreadsRepo = new CommonThreadRepository(this.contactsApiService, this.info.user.id);
+            this.commonThreadsRepo = new CommonThreadRepository(
+                this.contactsApiService,
+                this.info.user.id
+            );
             this.commonThreadsRepo.updateAll();
         }
     }

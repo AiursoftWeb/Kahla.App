@@ -9,10 +9,7 @@
             <div class="icon">
                 <i class="fas fa-comment" *ngIf="homeService.currentPage === 0"></i>
                 <i class="far fa-comment" *ngIf="homeService.currentPage !== 0"></i>
-                <div
-                    *ngIf="cacheService.totalUnread > 0"
-                    class="dot reddot"
-                >
+                <div *ngIf="cacheService.totalUnread > 0" class="dot reddot">
                     {{ cacheService.totalUnread | truncatedNum }}
                 </div>
             </div>

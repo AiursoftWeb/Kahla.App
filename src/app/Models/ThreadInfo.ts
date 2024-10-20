@@ -14,7 +14,7 @@ export interface ThreadInfo {
     messageContext: {
         unReadAmount: number;
         latestMessage: Message;
-    }
+    };
     muted: boolean;
     someoneAtMe: boolean;
     topTenMembers: ContactInfo[];

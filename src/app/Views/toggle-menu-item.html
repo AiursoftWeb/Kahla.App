@@ -2,12 +2,7 @@
     <div class="img">
         <i [class]="iconClasses"></i>
     </div>
-    <div class="text">{{title}}</div>
-    <input
-        class="tgl"
-        type="checkbox"
-        disabled="disabled"
-        [ngModel]="value()"
-    />
+    <div class="text">{{ title }}</div>
+    <input class="tgl" type="checkbox" disabled="disabled" [ngModel]="value()" />
     <label class="tgl-btn"></label>
 </div>

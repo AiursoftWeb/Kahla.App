@@ -18,13 +18,13 @@
                     [class.graydot]="!onlineStatusOf(inf)"
                 ></div>
             }
-            
+
             <div
                 *ngIf="inf.messageContext.unReadAmount > 0"
                 class="dot"
                 [ngClass]="inf.muted ? 'bluedot' : 'reddot'"
             >
-                {{ inf.messageContext.unReadAmount| truncatedNum }}
+                {{ inf.messageContext.unReadAmount | truncatedNum }}
             </div>
             <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
         }
@@ -34,10 +34,14 @@
                 {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}
             </div>
         } @else if (inf.messageContext?.latestMessage) {
-            <div class="last-time">{{ inf.messageContext.latestMessage.sendTime | date: 'shortTime' }}</div>
+            <div class="last-time">
+                {{ inf.messageContext.latestMessage.sendTime | date: 'shortTime' }}
+            </div>
             <div class="last-message" title="{{ inf.messageContext.latestMessage.content }}">
                 @if (inf.topTenMembers.length === 2 && cacheService.cachedData.me) {
-                    @if (inf.messageContext.latestMessage.senderId === cacheService.cachedData.me.id) {
+                    @if (
+                        inf.messageContext.latestMessage.senderId === cacheService.cachedData.me.id
+                    ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {
                         <i class="fas fa-angle-left"></i>
