@@ -52,20 +52,4 @@
     emptyMessage="No contacts. Try adding someone first. 🍵"
 />
 <div *ngIf="!showUsers && this.contactsRepo">
-    <!-- <div class="result" *ngFor="let group of results.groups" (click)="groupClick(group, $event.ctrlKey)">
-        <div class="user-img-group">
-            <img class="user-img" src="{{group.avatarURL ? group.avatarURL : loadingImgURL}}?w=128&square=true"
-                 routerLink="/group/{{group.id}}" (click)="$event.stopPropagation();"/>
-        </div>
-        <div class="sender">
-            {{group.name}}
-        </div>
-    </div>-->
-    <!-- <div *ngIf="results.groups.length === 0" class="empty-result-notice">No result.</div> -->
-    <!-- <div *ngIf="results.groups.length !== 0" class="empty-result-notice">Hold <span
-        class="badge badge-secondary">Ctrl</span> to start talking directly.
-    </div> -->
-    <!-- <div *ngIf="results.groups.length === 1" class="empty-result-notice">Press <span
-        class="badge badge-secondary">Enter</span> to talk.
-    </div>  -->
 </div>
