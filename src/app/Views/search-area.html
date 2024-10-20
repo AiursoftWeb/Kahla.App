@@ -1,7 +1,7 @@
 <div class="search-input" [ngClass]="{ 'search-input-with-button': !!textInput.value || !aggressive() }">
     <input
         id="searchBar"
-        placeholder="Search for your friends and groups"
+        [placeholder]="placeHolder"
         type="text"
         (keydown.enter)="onpositiveClicked()"
         [formControl]="textInput"
