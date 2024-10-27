@@ -26,13 +26,12 @@
     box-shadow: 0 22px 50px 10px rgba(0, 0, 0, 0.37);
     user-select: none;
     backdrop-filter: blur(8px);
+    display: flex;
 
     .nav-item {
       color: var(--minor-textcolor);
       outline: none;
-      float: left;
-      width: 33.33333%;
-      height: 100%;
+      flex: 1 1;
       text-decoration: none;
       transition: all 0.2s ease-out;
       @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));

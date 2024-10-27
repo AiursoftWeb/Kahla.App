@@ -164,7 +164,7 @@ self.addEventListener('push', function (event) {
                         body: message,
                         icon: imageLink,
                         renotify: true,
-                        tag: data.message.conversationId.toString(),
+                        tag: data.threadId.toString(),
                         data: data,
                     });
                 }
