@@ -67,9 +67,9 @@ export abstract class RepositoryBase<T> {
     }
 
     public initCache() {
-        if (localStorage.getItem(`cache-${this.persistConfig.name!}`)) {
+        if (localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)) {
             const data = JSON.parse(
-                localStorage.getItem(`cache-${this.persistConfig.name!}`)
+                localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)
             ) as RepositoryCache<T>;
             if (data.version !== this.persistConfig.version!) {
                 this.data = [];
