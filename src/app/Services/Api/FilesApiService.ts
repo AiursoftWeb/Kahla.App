@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/';
 import { UploadFile } from '../../Models/Probe/UploadFile';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AiurValue } from '../../Models/AiurValue';
 import { FileTokenApiModel } from '../../Models/ApiModels/FileTokenApiModel';
 import { ForwardMediaApiModel } from '../../Models/ApiModels/ForwardMediaApiModel';
@@ -45,13 +45,13 @@ export class FilesApiService {
             reportProgress: true,
         });
 
-        return this.http.request(req).pipe(
-            map(event => this.getProgress(event)),
-            catchError(this.apiService.handleError)
+        return this.http.request<UploadFile>(req).pipe(
+            map(event => this.getProgress<UploadFile>(event))
+            // catchError(this.apiService.handleError)
         );
     }
 
-    private getProgress(event: HttpEvent<any>): number | UploadFile {
+    private getProgress<T>(event: HttpEvent<T>): number | T {
         switch (event.type) {
             case HttpEventType.UploadProgress:
                 return Math.round((100 * event.loaded) / event.total);

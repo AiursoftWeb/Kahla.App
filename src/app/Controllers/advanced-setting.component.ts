@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';
 import { Subscription } from 'rxjs';
 import { AppOptions } from '../Models/AppOptions';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/advanced-settings.html',
@@ -47,17 +48,18 @@ export class AdvancedSettingComponent implements OnInit {
                 listInSearchResult: this.options.listInSearchResult,
                 allowHardInvitation: this.options.allowHardInvitation,
             })
-            .subscribe(res => {
-                this.updatingSetting = null;
-
-                if (res.code > 0) {
+            .subscribe(
+                () => {
+                    this.updatingSetting = null;
                     this.cacheService.cachedData.me = Object.assign({}, this.me);
                     this.cacheService.cachedData.options = Object.assign({}, this.options);
                     this.cacheService.saveCache();
-                } else {
-                    Swal.fire('Error', res.message, 'error');
+                },
+                err => {
+                    this.updatingSetting = null;
+                    showCommonErrorDialog(err);
                 }
-            });
+            );
     }
 
     public todo(): void {

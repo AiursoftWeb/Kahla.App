@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
-import { ParamService } from '../ParamService';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 
@@ -21,10 +19,7 @@ export class ApiService {
         'Content-Type': 'application/x-www-form-urlencoded',
     });
 
-    constructor(
-        private http: HttpClient,
-        private paramTool: ParamService
-    ) {}
+    constructor(private http: HttpClient) {}
 
     public Get<T>(address: string, params?: paramDict): Observable<T> {
         return this.GetByFullUrl<T>(`${environment.serversProvider}${address}`, true, params);
@@ -35,16 +30,15 @@ export class ApiService {
         withCredentials = true,
         params?: paramDict
     ): Observable<T> {
-        return this.http
-            .get<T>(address, {
-                headers: this._headers,
-                withCredentials: withCredentials,
-                params: this.processGetParams(params),
-            })
-            .pipe(catchError(this.handleError));
+        return this.http.get<T>(address, {
+            headers: this._headers,
+            withCredentials: withCredentials,
+            params: this.processParamDict(params),
+        });
+        // .pipe(catchError(this.handleError));
     }
 
-    public processGetParams(params: paramDict): paramDict {
+    public processParamDict(params: paramDict): paramDict {
         // remove all undefined or null values
         const result = { ...params };
         for (const key in result) {
@@ -56,36 +50,37 @@ export class ApiService {
         return result;
     }
 
-    public Post<T>(address: string, data: any): Observable<T> {
-        return this.http
-            .post<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
-                headers: this._headers,
-                withCredentials: true,
-            })
-            .pipe(catchError(this.handleError));
+    public formBody(data: paramDict): HttpParams {
+        return new HttpParams({ fromObject: this.processParamDict(data) });
     }
 
-    public Put<T>(address: string, data: any): Observable<T> {
-        return this.http
-            .put<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
-                headers: this._headers,
-                withCredentials: true,
-            })
-            .pipe(catchError(this.handleError));
+    public Post<T>(address: string, data: paramDict): Observable<T> {
+        return this.http.post<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
+            headers: this._headers,
+            withCredentials: true,
+        });
+        // .pipe(catchError(this.handleError));
     }
 
-    public Patch<T>(address: string, data: any): Observable<T> {
-        return this.http
-            .patch<T>(`${environment.serversProvider}${address}`, this.paramTool.param(data), {
-                headers: this._headers,
-                withCredentials: true,
-            })
-            .pipe(catchError(this.handleError));
+    public Put<T>(address: string, data: paramDict): Observable<T> {
+        return this.http.put<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
+            headers: this._headers,
+            withCredentials: true,
+        });
+        // .pipe(catchError(this.handleError));
     }
 
-    public handleError(error: any): Promise<any> {
-        return Promise.reject(error);
+    public Patch<T>(address: string, data: paramDict): Observable<T> {
+        return this.http.patch<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
+            headers: this._headers,
+            withCredentials: true,
+        });
+        // .pipe(catchError(this.handleError));
     }
+
+    // public handleError(error: any): Promise<any> {
+    //     return Promise.reject(error);
+    // }
 
     public ServerInfo() {
         return this.Get<ServerConfig>('/');

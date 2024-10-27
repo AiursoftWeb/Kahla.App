@@ -5,6 +5,7 @@ import { ThemeService } from '../Services/ThemeService';
 import { Router } from '@angular/router';
 import { HomeService } from '../Services/HomeService';
 import { CacheService } from '../Services/CacheService';
+import { WebpushService } from '../Services/WebpushService';
 
 @Component({
     selector: 'app-kahla',
@@ -14,6 +15,7 @@ import { CacheService } from '../Services/CacheService';
 export class AppComponent implements OnInit {
     constructor(
         private initService: InitService,
+        private webpushService: WebpushService,
         private themeService: ThemeService,
         public cacheService: CacheService,
         public route: Router,
@@ -27,26 +29,7 @@ export class AppComponent implements OnInit {
 
     @HostListener('window:load', [])
     onLoad() {
-        console.info('[ ** ] Registering service worker...');
-        if ('Notification' in window && 'serviceWorker' in navigator && !('__TAURI__' in window)) {
-            navigator.serviceWorker.register('/sw.js').then(
-                function (registration) {
-                    // Registration was successful
-                    console.log(
-                        '[ OK ] ServiceWorker registration successful with scope: ',
-                        registration.scope
-                    );
-                },
-                function (err) {
-                    // registration failed :(
-                    console.error('[ERR!] ServiceWorker registration failed: ', err);
-                }
-            );
-
-            if (Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-        }
+        this.webpushService.registerServiceWorker();
     }
 
     @HostListener('window:beforeinstallprompt', ['$event'])

@@ -12,4 +12,12 @@
   font-size: 14px;
   box-sizing: border-box;
   outline: none;
+
+  &:focus {
+    border-color: var(--primary-color-depth2);
+  }
+
+  &:hover {
+    border-color: var(--primary-color-depth3);
+  }
 }

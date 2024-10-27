@@ -45,7 +45,9 @@ export class ThreadsApiService {
         return this.apiService.Post(ThreadsApiService.serverPath + `/hard-invite/${userId}`, {});
     }
 
-    public CreateScratch(options: Omit<ThreadOptions, 'iconFilePath'>): Observable<AiurValueNamed<number, 'newThreadId'>> {
+    public CreateScratch(
+        options: Omit<ThreadOptions, 'iconFilePath'>
+    ): Observable<AiurValueNamed<number, 'newThreadId'>> {
         return this.apiService.Post(ThreadsApiService.serverPath + '/create-scratch', options);
     }
 }

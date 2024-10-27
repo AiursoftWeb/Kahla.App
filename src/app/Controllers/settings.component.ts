@@ -6,6 +6,9 @@ import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';
 import { HomeService } from '../Services/HomeService';
+import { lastValueFrom } from 'rxjs';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
+import { WebpushService } from '../Services/WebpushService';
 
 @Component({
     selector: 'app-settings',
@@ -21,6 +24,7 @@ export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
         private authApiService: AuthApiService,
+        private webpushService: WebpushService,
         private router: Router,
         private initSerivce: InitService,
         public cacheService: CacheService,
@@ -50,51 +54,27 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    public SignOut(): void {
-        Swal.fire({
+    public async SignOut() {
+        const willSignOut = await Swal.fire({
             title: 'Are you sure to sign out?',
             icon: 'warning',
             showCancelButton: true,
-        }).then(willSignOut => {
-            if (willSignOut.value) {
-                let deviceID = localStorage.getItem('deviceID');
-                if (deviceID === null) {
-                    deviceID = '-1';
-                }
-                this.callLogOffAPI(Number(deviceID));
-                if (navigator.serviceWorker) {
-                    // TODO:electron
-                    const _this = this;
-                    navigator.serviceWorker.ready.then(
-                        function (reg) {
-                            return reg.pushManager.getSubscription().then(function (subscription) {
-                                if (subscription != null) {
-                                    subscription
-                                        .unsubscribe()
-                                        .then()
-                                        .catch(function (e) {
-                                            console.log(e);
-                                        });
-                                }
-                            });
-                        }.bind(_this)
-                    );
-                }
-            }
         });
-    }
 
-    private callLogOffAPI(deviceID: number): void {
-        const _this = this;
-        this.authApiService.Signout(Number(deviceID)).subscribe({
-            next() {
-                _this.initSerivce.destroy();
-                _this.router.navigate(['/signin'], { replaceUrl: true });
-            },
-            error(e) {
-                Swal.fire('Logoff error', e.message, 'error');
-            },
-        });
+        if (!willSignOut.value) return;
+
+        try {
+            await lastValueFrom(
+                this.authApiService.Signout(this.webpushService.pushSettings.deviceId)
+            );
+        } catch (err) {
+            showCommonErrorDialog(err);
+            return;
+        }
+
+        this.initSerivce.destroy();
+        this.router.navigate(['/signin'], { replaceUrl: true });
+        this.webpushService.unsubscribeUser();
     }
 
     public sendEmail(): void {

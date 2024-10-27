@@ -20,7 +20,10 @@ export class NewThreadComponent {
         allowSearchByName: false,
     });
 
-    constructor(private threadsApiService: ThreadsApiService, private router: Router) {}
+    constructor(
+        private threadsApiService: ThreadsApiService,
+        private router: Router
+    ) {}
 
     async create() {
         try {

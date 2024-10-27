@@ -1,4 +1,7 @@
-<div class="search-input" [ngClass]="{ 'search-input-with-button': !!textInput.value || !aggressive() }">
+<div
+    class="search-input"
+    [ngClass]="{ 'search-input-with-button': !!textInput.value || !aggressive() }"
+>
     <input
         id="searchBar"
         [placeholder]="placeHolder"
@@ -15,11 +18,7 @@
             <i class="fas fa-times"></i>
         </button>
     } @else {
-        <button
-            class="button primary"
-            (click)="onpositiveClicked()"
-            [disabled]="!textInput.value"
-        >
+        <button class="button primary" (click)="onpositiveClicked()" [disabled]="!textInput.value">
             <i class="fas fa-search"></i>
         </button>
     }

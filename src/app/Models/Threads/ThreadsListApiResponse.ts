@@ -1,6 +1,7 @@
+import { AiurProtocol } from '../AiurProtocal';
 import { ThreadInfo } from '../ThreadInfo';
 
-export class ThreadsListApiResponse {
-    public knownThreads: ThreadInfo[];
-    public totalCount: number;
+export interface ThreadsListApiResponse extends AiurProtocol {
+    knownThreads: ThreadInfo[];
+    totalCount: number;
 }

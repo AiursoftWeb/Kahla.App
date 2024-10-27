@@ -226,7 +226,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 this.messageService.initMessage(this.conversationID);
                 this.messageService.getMessages(unread, this.conversationID, null, load);
             }
-            this.messageService.cleanMessageByTimer();
             this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
             this.cacheService.saveCache();
         });

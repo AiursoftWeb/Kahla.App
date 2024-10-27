@@ -18,6 +18,8 @@ export abstract class RepositoryBase<T> {
     public total: number;
     public status: RepositoryStatus = 'uninitialized';
 
+    updatePromise?: Promise<void>;
+
     public saveCache(): void {
         localStorage.setItem(
             `repo-cache-${this.persistConfig.name!}`,
@@ -28,7 +30,11 @@ export abstract class RepositoryBase<T> {
         );
     }
 
-    public async updateAll(): Promise<void> {
+    public updateAll(): Promise<void> {
+        return this.updatePromise ?? (this.updatePromise = this.updateAllInternal());
+    }
+
+    private async updateAllInternal(): Promise<void> {
         this.status = 'loading';
         try {
             const [resp, total] = await this.requestOnline(20, 0);
@@ -39,6 +45,8 @@ export abstract class RepositoryBase<T> {
         } catch (err) {
             this.status = 'error';
             throw err;
+        } finally {
+            this.updatePromise = null;
         }
     }
 

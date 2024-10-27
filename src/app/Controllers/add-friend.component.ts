@@ -35,8 +35,7 @@ export class AddFriendComponent implements OnInit {
         this.contactsRepo = new ServerContactsRepository(this.searchApiService, term);
         this.threadsRepo = new ServerThreadsRepository(this.searchApiService, term);
         try {
-            await this.contactsRepo.updateAll();
-            await this.threadsRepo.updateAll();
+            await Promise.all([this.contactsRepo.updateAll(), this.threadsRepo.updateAll()]);
         } catch (err) {
             showCommonErrorDialog(err);
         }

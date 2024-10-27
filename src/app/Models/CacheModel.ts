@@ -1,5 +1,4 @@
 import { ThreadInfo } from './ThreadInfo';
-import { Device } from './Device';
 import { KahlaUser } from './KahlaUser';
 import { Conversation } from './Conversation';
 import { AccessToken } from './AccessToken';
@@ -14,7 +13,6 @@ export class CacheModel {
      * @deprecated
      */
     public conversations: ThreadInfo[];
-    public devices: Device[];
     /**
      * @deprecated
      */

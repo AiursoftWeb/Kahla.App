@@ -1,46 +1,39 @@
-export function mapDeviceName(ua: string) {
-    if (ua !== null && ua.length >= 0) {
-        const deviceName = [];
-        // OS
-        if (ua.includes('Win')) {
-            deviceName.push('Windows');
-        } else if (ua.includes('Android')) {
-            deviceName.push('Android');
-        } else if (ua.includes('Linux')) {
-            deviceName.push('Linux');
-        } else if (ua.includes('iPhone') || ua.includes('iPad')) {
-            deviceName.push('iOS');
-        } else if (ua.includes('Mac')) {
-            deviceName.push('macOS');
-        } else {
-            deviceName.push('Unknown OS');
-        }
-
-        // Browser Name
-        if (ua.includes('Firefox') && !ua.includes('Seamonkey')) {
-            deviceName.push('Firefox');
-        } else if (ua.includes('Seamonkey')) {
-            deviceName.push('Seamonkey');
-        } else if (ua.includes('Edge')) {
-            deviceName.push('Microsoft Edge');
-        } else if (ua.includes('Edg')) {
-            deviceName.push('Edge Chromium');
-        } else if (ua.includes('Chrome') && !ua.includes('Chromium')) {
-            deviceName.push('Chrome');
-        } else if (ua.includes('Chromium')) {
-            deviceName.push('Chromium');
-        } else if (ua.includes('Safari') && (!ua.includes('Chrome') || !ua.includes('Chromium'))) {
-            deviceName.push('Safari');
-        } else if (ua.includes('Opera') || ua.includes('OPR')) {
-            deviceName.push('Opera');
-        } else if (ua.match(/MSIE|Trident/)) {
-            deviceName.push('Internet Explorer');
-        } else {
-            deviceName.push('Unknown browser');
-        }
-
-        return deviceName.join('-');
+export function mapDeviceName(ua: string): [string, string] {
+    if (!ua) return null;
+    let os = 'Unknown OS';
+    // OS
+    if (ua.includes('Win')) {
+        os = 'Windows';
+    } else if (ua.includes('Android')) {
+        os = 'Android';
+    } else if (ua.includes('Linux')) {
+        os = 'Linux';
+    } else if (ua.includes('iPhone') || ua.includes('iPad')) {
+        os = 'iOS';
+    } else if (ua.includes('Mac')) {
+        os = 'macOS';
+    }
+    let browser = 'Unknown browser';
+    // Browser Name
+    if (ua.includes('Firefox') && !ua.includes('Seamonkey')) {
+        browser = 'Firefox';
+    } else if (ua.includes('Seamonkey')) {
+        browser = 'Seamonkey';
+    } else if (ua.includes('Edge')) {
+        browser = 'Microsoft Edge';
+    } else if (ua.includes('Edg')) {
+        browser = 'Edge Chromium';
+    } else if (ua.includes('Chrome') && !ua.includes('Chromium')) {
+        browser = 'Chrome';
+    } else if (ua.includes('Chromium')) {
+        browser = 'Chromium';
+    } else if (ua.includes('Safari') && (!ua.includes('Chrome') || !ua.includes('Chromium'))) {
+        browser = 'Safari';
+    } else if (ua.includes('Opera') || ua.includes('OPR')) {
+        browser = 'Opera';
+    } else if (ua.match(/MSIE|Trident/)) {
+        browser = 'Internet Explorer';
     }
 
-    return null;
+    return [os, browser];
 }

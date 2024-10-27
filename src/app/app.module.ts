@@ -29,7 +29,6 @@ import { ShareComponent } from './Controllers/share.component';
 import { FileHistoryComponent } from './Controllers/file-history.component';
 // Services
 import { ApiService } from './Services/Api/ApiService';
-import { ParamService } from './Services/ParamService';
 import { CacheService } from './Services/CacheService';
 import { UploadService } from './Services/UploadService';
 import { AuthApiService } from './Services/Api/AuthApiService';
@@ -63,6 +62,7 @@ import { TruncatedNumPipe } from './Pipes/truncated-num.pipe';
 import { ThreadOptionsComponent } from './Controllers/thread-options.component';
 import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.component';
 import { NewThreadComponent } from './Controllers/new-thread.component';
+import { IconForFilePipe } from './Pipes/icon-for-file.pipe';
 
 @NgModule({
     imports: [
@@ -71,6 +71,7 @@ import { NewThreadComponent } from './Controllers/new-thread.component';
         HttpClientModule,
         AppRoutingModule,
         TruncatedNumPipe,
+        IconForFilePipe,
         ReactiveFormsModule,
     ],
     declarations: [
@@ -108,7 +109,6 @@ import { NewThreadComponent } from './Controllers/new-thread.component';
     ],
     providers: [
         ApiService,
-        ParamService,
         CacheService,
         UploadService,
         AuthApiService,

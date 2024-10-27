@@ -11,10 +11,7 @@ import { selectFiles } from '../Utils/SystemDialog';
 
 @Component({
     templateUrl: '../Views/userDetail.html',
-    styleUrls: [
-        '../Styles/menu-textbox.scss',
-        '../Styles/button.scss',
-    ],
+    styleUrls: ['../Styles/menu-textbox.scss', '../Styles/button.scss'],
 })
 export class UserDetailComponent implements OnInit {
     public user: KahlaUser;
@@ -55,7 +52,7 @@ export class UserDetailComponent implements OnInit {
                     bio: this.user.bio,
                 })
             );
-            this.cacheService.cachedData.me = {...this.user};
+            this.cacheService.cachedData.me = { ...this.user };
             this.cacheService.saveCache();
             SwalToast.fire({ title: 'Profile saved.', icon: 'success' });
         } catch (err) {

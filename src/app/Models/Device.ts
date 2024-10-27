@@ -4,4 +4,7 @@ export interface Device {
     ipAddress: string;
     userID: string;
     addTime: string;
+
+    _os?: string;
+    _browser?: string;
 }

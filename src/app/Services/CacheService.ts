@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CacheModel } from '../Models/CacheModel';
-import { DevicesApiService } from './Api/DevicesApiService';
-import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 import { ServerConfig } from '../Models/ServerConfig';
-import { mapDeviceName } from '../Utils/UaMapper';
 
 @Injectable({
     providedIn: 'root',
@@ -14,66 +11,15 @@ export class CacheService {
     public updatingConversation = false;
     public serverConfig: ServerConfig;
 
-    constructor(private devicesApiService: DevicesApiService) {}
-
     public reset() {
         this.cachedData = new CacheModel();
     }
 
-    public updateConversation(): void {
-        // this.updatingConversation = true;
-        // this.conversationApiService
-        //     .All()
-        //     .pipe(map((t) => t.items))
-        //     .subscribe((info) => {
-        //         this.updatingConversation = false;
-        //         info.forEach((e) => {
-        //             if (e.latestMessage != null) {
-        //                 e.latestMessage.content = this.modifyMessage(
-        //                     e.latestMessage.content
-        //                 );
-        //             }
-        //             e.avatarURL = this.probeService.encodeProbeFileUrl(
-        //                 e.displayImagePath
-        //             );
-        //         });
-        //         this.cachedData.conversations = info;
-        //         this.updateTotalUnread();
-        //         this.saveCache();
-        //     });
-    }
-
-    public updateDevice(): void {
-        this.devicesApiService.MyDevices().subscribe(response => {
-            let currentId = 0;
-            if (localStorage.getItem('setting-pushSubscription')) {
-                currentId = (
-                    JSON.parse(
-                        localStorage.getItem('setting-pushSubscription')
-                    ) as PushSubscriptionSetting
-                ).deviceId;
-            }
-            response.items.forEach(item => {
-                item.name = mapDeviceName(item.name) ?? 'Unknown device';
-                if (item.id === currentId) {
-                    item.name += '(Current device)';
-                }
-            });
-            this.cachedData.devices = response.items;
-            // should check if current device id has already been invalid
-            if (localStorage.getItem('setting-pushSubscription')) {
-                const val = JSON.parse(
-                    localStorage.getItem('setting-pushSubscription')
-                ) as PushSubscriptionSetting;
-                if (val.deviceId && !this.cachedData.devices.find(t => t.id === val.deviceId)) {
-                    // invalid id, remove it
-                    val.deviceId = null;
-                    localStorage.setItem('setting-pushSubscription', JSON.stringify(val));
-                }
-            }
-            this.saveCache();
-        });
-    }
+    /**
+     * @deprecated
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public updateConversation(): void {}
 
     public modifyMessage(content: string, modifyText = false): string {
         if (content.startsWith('[img]')) {

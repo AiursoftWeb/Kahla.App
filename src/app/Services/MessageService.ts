@@ -496,28 +496,6 @@ export class MessageService {
         setTimeout(() => this.scrollBottom(false), 0);
     }
 
-    public cleanMessageByTimer(): void {
-        if (!this.conversation) {
-            return;
-        }
-        const firstIndex = this.rawMessages.findIndex(t => {
-            const timeStamp = new Date(t.sendTime).getTime();
-            return timeStamp + this.conversation.maxLiveSeconds * 1000 >= Date.now();
-        });
-        if (firstIndex === 0) {
-            return;
-        } else if (firstIndex === -1) {
-            this.rawMessages = [];
-            this.localMessages = [];
-        } else {
-            if (this.localMessages.length === this.rawMessages.length) {
-                this.localMessages = this.localMessages.splice(0, firstIndex);
-            }
-            this.rawMessages = this.rawMessages.splice(0, firstIndex);
-        }
-        this.saveMessage();
-    }
-
     public showFailedMessages(): void {
         const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
         this.localMessages = this.localMessages.filter(m => !m.resend);

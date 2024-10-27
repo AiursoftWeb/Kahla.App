@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CacheService } from '../Services/CacheService';
 import Swal from 'sweetalert2';
 import { Device } from '../Models/Device';
 import { DevicesApiService } from '../Services/Api/DevicesApiService';
-import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
-import { InitService } from '../Services/InitService';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
+import { WebpushService } from '../Services/WebpushService';
+import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -14,36 +13,32 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 })
 export class DevicesComponent implements OnInit {
     constructor(
-        public cacheService: CacheService,
-        public devicesApiService: DevicesApiService,
-        public initService: InitService
+        public webpushService: WebpushService,
+        public devicesApiService: DevicesApiService
     ) {}
 
-    public webPushEnabled: boolean;
+    public currentSettings: PushSubscriptionSetting;
+    public devices: Device[];
 
-    public ngOnInit(): void {
-        this.cacheService.updateDevice();
-        if (this.webpushSupported()) {
-            this.webPushEnabled = this.getWebPushStatus();
-        }
+    public ngOnInit() {
+        this.currentSettings = this.webpushService.pushSettings;
+        this.updateDeviceList();
+    }
+
+    public async updateDeviceList() {
+        this.devices = await this.webpushService.getDeviceList();
     }
 
     public detail(device: Device): void {
-        if (device !== null) {
-            Swal.fire({
-                title: 'Device detail',
-                html:
-                    '<table style="margin: auto;"><tr><th>Add IP</th><td>' +
-                    device.ipAddress +
-                    '</td></tr><tr><th>Add time</th><td>' +
-                    new Date(device.addTime).toLocaleString() +
-                    '</td></tr></table>',
-            });
-        }
-    }
-
-    public webpushSupported(): boolean {
-        return 'Notification' in window && 'serviceWorker' in navigator && !('__TAURI__' in window); // TODO: ELECTRON
+        Swal.fire({
+            title: 'Device detail',
+            html:
+                '<table style="margin: auto;"><tr><th>Add IP</th><td>' +
+                device.ipAddress +
+                '</td></tr><tr><th>Add time</th><td>' +
+                new Date(device.addTime).toLocaleString() +
+                '</td></tr></table>',
+        });
     }
 
     public async testPush() {
@@ -55,27 +50,10 @@ export class DevicesComponent implements OnInit {
         }
     }
 
-    public getWebPushStatus(): boolean {
-        if (!localStorage.getItem('setting-pushSubscription')) {
-            return true;
-        }
-        const status: PushSubscriptionSetting = JSON.parse(
-            localStorage.getItem('setting-pushSubscription')
-        );
-        return status.enabled;
-    }
-
-    public setWebPushStatus(value: boolean) {
-        const status: PushSubscriptionSetting = localStorage.getItem('setting-pushSubscription')
-            ? JSON.parse(localStorage.getItem('setting-pushSubscription'))
-            : {
-                  enabled: value,
-                  deviceId: 0,
-              };
-        status.enabled = value;
-        localStorage.setItem('setting-pushSubscription', JSON.stringify(status));
-        this.webPushEnabled = value;
-        this.initService.subscribeUser();
+    public async setWebPushStatus(value: boolean) {
+        await this.webpushService.updateEnabled(value);
+        this.currentSettings = this.webpushService.pushSettings;
+        this.updateDeviceList();
     }
 
     public getElectronNotify(): boolean {

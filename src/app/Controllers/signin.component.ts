@@ -10,7 +10,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
     templateUrl: '../Views/signin.html',
     styleUrls: ['../Styles/signin.scss', '../Styles/button.scss'],
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
     public userName = '';
     public password = '';
     public inRegister = false;
@@ -21,8 +21,6 @@ export class SignInComponent implements OnInit {
         public initService: InitService,
         public authApiService: AuthApiService
     ) {}
-
-    ngOnInit(): void {}
 
     async login() {
         try {

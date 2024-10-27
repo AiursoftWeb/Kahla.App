@@ -8,7 +8,9 @@
                 src="{{ user.avatarURL ? user.avatarURL : loadingImgURL }}?w=256&square=true"
             />
         </a>
-        <button class="button primary inputButton" (click)="uploadAvatar()">Upload new avatar</button>
+        <button class="button primary inputButton" (click)="uploadAvatar()">
+            Upload new avatar
+        </button>
     </div>
     <div class="profile">
         <label>Nick name</label>
@@ -29,6 +31,8 @@
         />
     </div>
     <div class="buttons">
-        <button class="button primary" (click)="save()" [disabled]="saving">{{saving ? 'Saving...' : 'Save'}}</button>
+        <button class="button primary" (click)="save()" [disabled]="saving">
+            {{ saving ? 'Saving...' : 'Save' }}
+        </button>
     </div>
 </div>
