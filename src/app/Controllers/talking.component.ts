@@ -18,8 +18,6 @@ import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 
-declare let MediaRecorder: any;
-
 @Component({
     templateUrl: '../Views/talking.html',
     styleUrls: [

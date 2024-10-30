@@ -63,6 +63,7 @@ import { ThreadOptionsComponent } from './Controllers/thread-options.component';
 import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.component';
 import { NewThreadComponent } from './Controllers/new-thread.component';
 import { IconForFilePipe } from './Pipes/icon-for-file.pipe';
+import { ThreadAvatarComponent } from './Controllers/thread-avatar.component';
 
 @NgModule({
     imports: [
@@ -106,6 +107,7 @@ import { IconForFilePipe } from './Pipes/icon-for-file.pipe';
         ThreadOptionsComponent,
         ToggleMenuItemComponent,
         NewThreadComponent,
+        ThreadAvatarComponent
     ],
     providers: [
         ApiService,

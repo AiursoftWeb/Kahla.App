@@ -85,14 +85,14 @@
 
     <div class="menu-holder"></div>
 
-    <div class="buttons">
+    <div class="buttons one-line">
         @if (!info.isKnownContact) {
-            <button class="button primary" (click)="addAsContract()">Add as contract</button>
+            <button class="primary" (click)="addAsContract()">Add as contract</button>
         }
         @if (response.defaultThread) {
-            <button class="button one-line primary" (click)="message()">Message</button>
+            <button class="primary" (click)="message()">Message</button>
         }
-        <button class="button one-line success" (click)="newThread()">Create new thread</button>
+        <button class="success" (click)="newThread()">Create new thread</button>
     </div>
 } @else {
     <div class="menu-hint">Loading...</div>

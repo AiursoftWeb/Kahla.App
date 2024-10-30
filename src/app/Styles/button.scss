@@ -1,6 +1,23 @@
 .buttons {
+  box-sizing: border-box;
   padding: 10px;
   text-align: center;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+
+  button, .button {
+    width: 100%;
+    flex: 1 1;
+  }
+
+  &.one-line {
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 }
 
 button,
@@ -10,7 +27,6 @@ button,
   border-radius: 4px;
   color: #fff;
   transition: all 0.2s ease;
-  width: 100%;
   max-width: 540px;
   height: 36px;
   line-height: 36px;
@@ -82,11 +98,6 @@ button,
     &:active {
       background-color: #bbb;
     }
-  }
-
-  &.one-line {
-    display: block;
-    margin: 10px auto;
   }
 }
 

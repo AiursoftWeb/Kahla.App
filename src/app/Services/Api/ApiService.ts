@@ -42,7 +42,7 @@ export class ApiService {
         // remove all undefined or null values
         const result = { ...params };
         for (const key in result) {
-            if (result[key] === undefined || result[key] === null) {
+            if (result[key] == null) {
                 delete result[key];
             }
         }
