@@ -147,12 +147,12 @@
     min-height: 17px;
     z-index: 1;
 
-    p {
-      text-align: left;
-      word-break: break-word;
-      margin: 0;
-      white-space: pre-wrap;
-    }
+    // p {
+    //   text-align: left;
+    //   word-break: break-word;
+    //   margin: 0;
+    //   white-space: pre-wrap;
+    // }
 
     &.balloon-grouped:after,
     &.single-emoji:after {

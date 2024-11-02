@@ -1,0 +1,29 @@
+<!-- <a
+*ngIf="message.fileRef && message.fileRef.fileType === 0"
+target="_blank"
+rel="noopener noreferrer"
+href="{{
+    probeService.encodeProbeFileUrl(
+        message.fileRef.filePath,
+        messageService.fileAccessToken
+    )
+}}"
+>
+<div
+    class="image-container"
+    [style.width.px]="message.fileRef.imgDisplayWidth"
+    [style.height.px]="message.fileRef.imgDisplayHeight"
+>
+    <img
+        *ngIf="messageService.fileAccessToken"
+        src="{{
+            probeService.encodeProbeFileUrl(
+                message.fileRef.filePath,
+                messageService.fileAccessToken
+            )
+        }}"
+        srcset="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) }},
+        {{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) * 2 }} 2x"
+    />
+</div>
+</a> -->
