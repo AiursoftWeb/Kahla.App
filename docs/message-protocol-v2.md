@@ -10,7 +10,9 @@
             "type": "image",
             "content": {
                 "file": "/path/to/probe/file",
-                "alt": "Image alt text (optional)"
+                "alt": "Image alt text (optional)",
+                "width": 100,
+                "height": 100
             }
         },
         {

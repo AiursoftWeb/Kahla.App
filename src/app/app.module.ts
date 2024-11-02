@@ -64,6 +64,12 @@ import { ToggleMenuItemComponent } from './Controllers/toggle-menu-item.componen
 import { NewThreadComponent } from './Controllers/new-thread.component';
 import { IconForFilePipe } from './Pipes/icon-for-file.pipe';
 import { ThreadAvatarComponent } from './Controllers/thread-avatar.component';
+import { MessageSegmentTextComponent } from './Controllers/MessageSegments/mseg-text.component';
+import { MessageSegmentImgComponent } from './Controllers/MessageSegments/mseg-img.component';
+import { MessageSegmentVideoComponent } from './Controllers/MessageSegments/mseg-video.component';
+import { MessageSegmentVoiceComponent } from './Controllers/MessageSegments/mseg-voice.component';
+import { MessageSegmentFileComponent } from './Controllers/MessageSegments/mseg-file.component';
+import { MessageComponent } from './Controllers/message.component';
 
 @NgModule({
     imports: [
@@ -107,7 +113,13 @@ import { ThreadAvatarComponent } from './Controllers/thread-avatar.component';
         ThreadOptionsComponent,
         ToggleMenuItemComponent,
         NewThreadComponent,
-        ThreadAvatarComponent
+        ThreadAvatarComponent,
+        MessageComponent,
+        MessageSegmentTextComponent,
+        MessageSegmentImgComponent,
+        MessageSegmentVideoComponent,
+        MessageSegmentVoiceComponent,
+        MessageSegmentFileComponent,
     ],
     providers: [
         ApiService,
