@@ -17,6 +17,7 @@ import { uuid4 } from '../Utils/Uuid';
 import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
+import { checkEmoji } from '../Utils/StringUtils';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -262,7 +263,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         const tempMessage = new Message();
         tempMessage.id = uuid4();
-        tempMessage.isEmoji = this.messageService.checkEmoji(this.content);
+        tempMessage.isEmoji = checkEmoji(this.content);
         tempMessage.content = this.content;
         tempMessage.senderId = this.cacheService.cachedData.me.id;
         tempMessage.sender = this.cacheService.cachedData.me;

@@ -9,7 +9,6 @@ import { ConversationApiService } from './Api/ConversationApiService';
 import { map } from 'rxjs/operators';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from './CacheService';
-import * as he from 'he';
 import Autolinker from 'autolinker';
 import { Values } from '../values';
 import { Router } from '@angular/router';
@@ -29,6 +28,7 @@ import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Utils/Toast';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
+import { checkEmoji } from '../Utils/StringUtils';
 
 @Injectable({
     providedIn: 'root',
@@ -320,7 +320,7 @@ export class MessageService {
         const newMessageArry = message.split(' ');
         message.split(' ').forEach((s, index) => {
             if (s.length > 0 && s[0] === '@') {
-                const searchResults = this.searchUser(he.decode(s.slice(1)), true);
+                const searchResults = this.searchUser(s.slice(1), true);
                 if (searchResults.length > 0) {
                     atUsers.push(searchResults[0].id);
                     newMessageArry[index] = `<a class="chat-inline-link atLink"
@@ -330,15 +330,6 @@ export class MessageService {
         });
         atUsers.unshift(newMessageArry.join(' '));
         return atUsers;
-    }
-
-    public checkEmoji(text: string): boolean {
-        if (text.length > 2) {
-            return false;
-        }
-        const regex =
-            /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
-        return regex.test(text);
     }
 
     public checkOwner(id?: string): boolean {
@@ -435,11 +426,11 @@ export class MessageService {
                 }
             });
         } else {
-            t.isEmoji = this.checkEmoji(t.content);
-            t.content = he.encode(t.content);
+            t.isEmoji = checkEmoji(t.content);
             t.content = Autolinker.link(t.content, {
                 stripPrefix: false,
                 className: 'chat-inline-link',
+                sanitizeHtml: true
             });
             t.content = this.getAtIDs(t.content)[0];
         }

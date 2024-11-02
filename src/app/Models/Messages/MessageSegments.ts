@@ -16,6 +16,10 @@ export interface MessageSegmentBase {
 export interface MessageSegmentText extends MessageSegmentBase {
     type: 'text';
     content: string;
+    ats: {
+        userId: string;
+        pos: number;
+    }[];
 }
 
 interface MessageSegmentFileLike<TName extends MessageSegmentTypes> extends MessageSegmentBase {

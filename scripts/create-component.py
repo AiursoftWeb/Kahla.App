@@ -34,7 +34,7 @@ def create_component(
 
     with open(component_path / f"{name}.component.ts", "w") as f:
         f.write(
-            f"""import {{ Component, input }} from "@angular/core";
+            f"""import {{ Component }} from "@angular/core";
 
 @Component({{
     selector: 'app-{name}',
