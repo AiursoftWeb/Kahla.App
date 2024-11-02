@@ -12,6 +12,7 @@ import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AiurValue } from '../Models/AiurValue';
 import { Message } from '../Models/Message';
+import { humanReadableBytes } from '../Utils/StringUtils';
 
 @Injectable({
     providedIn: 'root',
@@ -288,7 +289,7 @@ export class UploadService {
             const fileRef = new MessageFileRef();
             fileRef.filePath = (response as UploadFile).filePath;
             fileRef.fileType = fileType;
-            fileRef.fileSize = this.probeService.getFileSizeText((response as UploadFile).fileSize);
+            fileRef.fileSize = humanReadableBytes((response as UploadFile).fileSize);
             fileRef.fileName = file.name;
             if (fileType === FileType.Image) {
                 loadImage(

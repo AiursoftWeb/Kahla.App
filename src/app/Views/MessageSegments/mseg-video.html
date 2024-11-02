@@ -1,0 +1,12 @@
+<div [style.height.px]="homeService.videoHeight">
+    <app-vjs-player
+        [options]="{
+            sources: [
+                {
+                    src: context().url,
+                },
+            ],
+            height: homeService.videoHeight,
+        }"
+    ></app-vjs-player>
+</div>

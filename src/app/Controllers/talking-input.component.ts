@@ -1,9 +1,8 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-talking-input',
     templateUrl: '../Views/talking-input.html',
-    styleUrls: ['../Styles/talking-input.scss']
+    styleUrls: ['../Styles/talking-input.scss'],
 })
-export class TalkingInputComponent {
-}
+export class TalkingInputComponent {}

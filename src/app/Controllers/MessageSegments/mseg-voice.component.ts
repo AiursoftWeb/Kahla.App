@@ -1,11 +1,12 @@
-import { Component, input } from "@angular/core";
-import { MessageSegmentVoice } from "../../Models/Messages/MessageSegments";
+import { Component, input } from '@angular/core';
+import { MessageSegmentVoice } from '../../Models/Messages/MessageSegments';
 
 @Component({
     selector: 'app-mseg-voice',
     templateUrl: '../../Views/MessageSegments/mseg-voice.html',
-    // styleUrls: ['../../Styles/MessageSegments/message-segment-text.scss']
+    styleUrls: ['../../Styles/MessageSegments/mseg-voice.scss'],
 })
 export class MessageSegmentVoiceComponent {
     context = input.required<MessageSegmentVoice>();
+    audioPlaying = false;
 }

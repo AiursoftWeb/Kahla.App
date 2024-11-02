@@ -19,3 +19,14 @@ export function checkEmoji(text: string): boolean {
         /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
     return regex.test(text);
 }
+
+export function humanReadableBytes(bytes: number) {
+    const unit = ['', 'K', 'M', 'G', 'T'];
+    let current = 0;
+    while (current < unit.length && bytes > 1024) {
+        bytes /= 1024;
+        current++;
+    }
+
+    return `${bytes.toFixed(2)} ${unit[current]}B`;
+}

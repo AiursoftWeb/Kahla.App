@@ -70,6 +70,8 @@ import { MessageSegmentVideoComponent } from './Controllers/MessageSegments/mseg
 import { MessageSegmentVoiceComponent } from './Controllers/MessageSegments/mseg-voice.component';
 import { MessageSegmentFileComponent } from './Controllers/MessageSegments/mseg-file.component';
 import { MessageComponent } from './Controllers/message.component';
+import { HumanReadableSizePipe } from './Pipes/human-readable-size.pipe';
+import { StorageUrlPipe } from './Pipes/storage-url.pipe';
 
 @NgModule({
     imports: [
@@ -79,6 +81,8 @@ import { MessageComponent } from './Controllers/message.component';
         AppRoutingModule,
         TruncatedNumPipe,
         IconForFilePipe,
+        HumanReadableSizePipe,
+        StorageUrlPipe,
         ReactiveFormsModule,
     ],
     declarations: [

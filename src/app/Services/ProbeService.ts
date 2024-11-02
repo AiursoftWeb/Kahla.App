@@ -18,21 +18,6 @@ export class ProbeService {
         );
     }
 
-    public getFileSizeText(fileSize: number) {
-        const units = ['kB', 'MB', 'GB'];
-        const thresh = 1000;
-        if (fileSize < thresh) {
-            return `${fileSize} B`;
-        } else {
-            let index = -1;
-            do {
-                fileSize /= thresh;
-                index++;
-            } while (fileSize >= thresh && index < units.length - 1);
-            return fileSize.toFixed(1) + ' ' + units[index];
-        }
-    }
-
     public renameFile(originalFile: File, prefix: string): File {
         return new File(
             [originalFile],

@@ -7,8 +7,7 @@ export class VoiceRecorder {
     private forceStopTimeout: ReturnType<typeof setTimeout>;
     public gotAudio = new Subject<Blob>();
 
-    constructor(private maxSeconds: number) {
-    }
+    constructor(private maxSeconds: number) {}
 
     public async init() {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });

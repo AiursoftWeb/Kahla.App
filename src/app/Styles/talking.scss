@@ -284,16 +284,6 @@
   margin-bottom: 161px;
 }
 
-.image-container {
-  position: relative;
-  max-height: 500px;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-  }
-}
-
 .chat-action {
   @extend %full-fixed-width;
   display: inline-block;
@@ -521,22 +511,6 @@ i {
     margin: 0;
     font-size: 14px;
     word-break: break-all;
-  }
-}
-
-.message-list .message-balloon .voicemsg {
-  align-items: center;
-  display: grid;
-  grid-template-columns: 40px 2fr;
-  grid-template-rows: auto;
-
-  .fa {
-    text-align: center;
-  }
-
-  span {
-    font-size: 16px;
-    grid-column-start: 2;
   }
 }
 

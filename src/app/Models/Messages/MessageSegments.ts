@@ -47,9 +47,6 @@ export interface MessageSegmentFile extends MessageSegmentFileLike<'file'> {
 export interface MessageSegmentContact extends MessageSegmentBase {
     type: 'contact';
     id: string;
-    nickname: string;
-    avatarUrl: string;
-    bio: string;
 }
 
 export interface MessageSegmentThreadInvitation extends MessageSegmentBase {

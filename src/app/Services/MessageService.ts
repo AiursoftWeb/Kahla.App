@@ -430,7 +430,7 @@ export class MessageService {
             t.content = Autolinker.link(t.content, {
                 stripPrefix: false,
                 className: 'chat-inline-link',
-                sanitizeHtml: true
+                sanitizeHtml: true,
             });
             t.content = this.getAtIDs(t.content)[0];
         }

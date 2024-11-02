@@ -86,35 +86,6 @@
                         >
                     </span>
                     <a
-                        *ngIf="message.fileRef && message.fileRef.fileType === 0"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="{{
-                            probeService.encodeProbeFileUrl(
-                                message.fileRef.filePath,
-                                messageService.fileAccessToken
-                            )
-                        }}"
-                    >
-                        <div
-                            class="image-container"
-                            [style.width.px]="message.fileRef.imgDisplayWidth"
-                            [style.height.px]="message.fileRef.imgDisplayHeight"
-                        >
-                            <img
-                                *ngIf="messageService.fileAccessToken"
-                                src="{{
-                                    probeService.encodeProbeFileUrl(
-                                        message.fileRef.filePath,
-                                        messageService.fileAccessToken
-                                    )
-                                }}"
-                                srcset="{{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) }},
-                                {{ probeService.encodeProbeFileUrl(message.fileRef.filePath, messageService.fileAccessToken) }}&w={{ messageService.upperFloorImageSize(message.fileRef.imgDisplayWidth) * 2 }} 2x"
-                            />
-                        </div>
-                    </a>
-                    <a
                         class="share-item file"
                         *ngIf="message.fileRef && message.fileRef.fileType === 2"
                         target="_blank"
@@ -155,44 +126,6 @@
                         <h5>{{ message.content.split('|')[1] }}</h5>
                         <span>{{ message.content.split('|')[2] }}</span>
                     </a>
-                    <div
-                        *ngIf="message.fileRef && message.fileRef.fileType === 1"
-                        [style.height]="messageService.videoHeight"
-                    >
-                        <app-vjs-player
-                            *ngIf="messageService.fileAccessToken"
-                            [options]="{
-                                sources: [
-                                    {
-                                        src: probeService.encodeProbeFileUrl(
-                                            message.fileRef.filePath,
-                                            messageService.fileAccessToken
-                                        ),
-                                    },
-                                ],
-                                height: messageService.videoHeight,
-                            } //noinspection InvalidExpressionResultType"
-                        ></app-vjs-player>
-                    </div>
-                    <div *ngIf="message.content.startsWith('[audio]')">
-                        <a
-                            href="javascript:void(0)"
-                            class="voicemsg"
-                            (click)="
-                                getAudio(
-                                    $event.currentTarget,
-                                    message.fileRef.filePath
-                                ) //noinspection ValidateTypes
-                            "
-                        >
-                            <i class="fas fa-play"></i>
-                            <span>Voice Message</span>
-                        </a>
-                    </div>
-                    <p
-                        *ngIf="!message.fileRef && !message.content.startsWith('[share]')"
-                        [innerHTML]="message.content"
-                    ></p>
                     <div
                         *ngIf="
                             message.fileRef && message.fileRef.fileType !== 3 && message.contentRaw

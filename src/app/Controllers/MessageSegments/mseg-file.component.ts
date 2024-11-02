@@ -1,5 +1,5 @@
-import { Component, input } from "@angular/core";
-import { MessageSegmentFile } from "../../Models/Messages/MessageSegments";
+import { Component, input } from '@angular/core';
+import { MessageSegmentFile } from '../../Models/Messages/MessageSegments';
 
 @Component({
     selector: 'app-mseg-text',

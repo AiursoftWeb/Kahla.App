@@ -1,0 +1,27 @@
+audio {
+  max-width: 100%;
+}
+
+:host-context(.left) .voicemsg {
+  color: #9baec8;
+}
+
+:host-context(.right) .voicemsg {
+  color: #d9e1e8;
+}
+
+.voicemsg {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 40px 2fr;
+  grid-template-rows: auto;
+
+  .fa {
+    text-align: center;
+  }
+
+  span {
+    font-size: 16px;
+    grid-column-start: 2;
+  }
+}

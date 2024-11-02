@@ -21,4 +21,12 @@ export class HomeService {
     public get floatingHomeWrapper(): HTMLDivElement {
         return document.querySelector('#homeWrapper');
     }
+
+    public get imageMaxWidth(): number {
+        return Math.floor((this.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2);
+    }
+
+    public get videoHeight(): number {
+        return Math.max(Math.floor(Math.min((this.imageMaxWidth * 9) / 21, 400)), 170);
+    }
 }

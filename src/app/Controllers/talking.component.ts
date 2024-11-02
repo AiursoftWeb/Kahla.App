@@ -637,21 +637,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.updateInputHeight();
     }
 
-    public getAudio(target: EventTarget, filePath: string): void {
-        if (target instanceof HTMLElement) {
-            target.style.display = 'none';
-            const audioElement = document.createElement('audio');
-            audioElement.style.maxWidth = '100%';
-            audioElement.src = this.probeService.encodeProbeFileUrl(
-                filePath,
-                this.messageService.fileAccessToken
-            );
-            audioElement.controls = true;
-            target.parentElement.appendChild(audioElement);
-            audioElement.play();
-        }
-    }
-
     public async loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
         if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {

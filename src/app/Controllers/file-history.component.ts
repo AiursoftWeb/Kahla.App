@@ -8,6 +8,7 @@ import { FilesApiService } from '../Services/Api/FilesApiService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { FileType } from '../Models/FileType';
 import { MessageService } from '../Services/MessageService';
+import { humanReadableBytes } from '../Utils/StringUtils';
 
 @Component({
     selector: 'app-file-history',
@@ -66,7 +67,7 @@ export class FileHistoryComponent implements OnInit {
                 totalSize += t1.fileSize;
             });
         });
-        return `Showing ${count} files. Total Size:${this.probeService.getFileSizeText(totalSize)}`;
+        return `Showing ${count} files. Total Size:${humanReadableBytes(totalSize)}`;
     }
 
     public share(file: ProbeFile, dir: FileHistoryApiModel) {
@@ -74,7 +75,7 @@ export class FileHistoryComponent implements OnInit {
             filePath: `${dir.showingDateUTC}/${file.fileName}`,
             fileType: FileType.File,
             fileName: file.fileName,
-            fileSize: this.probeService.getFileSizeText(file.fileSize),
+            fileSize: humanReadableBytes(file.fileSize),
         } as MessageFileRef;
         this.router.navigate([
             'share-target',

@@ -171,9 +171,7 @@
                         </div>
                     </ng-template>
                     <div class="title">{{ file.fileName }}</div>
-                    <div class="detail">
-                        Size: {{ probeService.getFileSizeText(file.fileSize) }}
-                    </div>
+                    <div class="detail">Size: {{ file.fileSize | humanReadableSize }}</div>
                 </a>
                 <div class="operate-button share" (click)="share(file, dir)" title="Share">
                     <i class="fas fa-share-alt"></i>
