@@ -4,8 +4,8 @@ import { MessageSegmentFile } from '../../Models/Messages/MessageSegments';
 @Component({
     selector: 'app-mseg-text',
     templateUrl: '../../Views/MessageSegments/mseg-file.html',
-    // styleUrls: ['../../Styles/MessageSegments/message-segment-text.scss']
+    styleUrls: ['../../Styles/MessageSegments/mseg-file.scss']
 })
 export class MessageSegmentFileComponent {
-    context = input.required<MessageSegmentFile>();
+    content = input.required<MessageSegmentFile>();
 }

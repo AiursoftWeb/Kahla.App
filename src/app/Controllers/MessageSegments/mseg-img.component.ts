@@ -8,7 +8,7 @@ import { HomeService } from '../../Services/HomeService';
     styleUrls: ['../../Styles/MessageSegments/mseg-img.scss'],
 })
 export class MessageSegmentImgComponent implements OnInit {
-    context = input.required<MessageSegmentImage>();
+    content = input.required<MessageSegmentImage>();
 
     maxWidth = 0;
 

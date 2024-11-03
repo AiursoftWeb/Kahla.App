@@ -8,17 +8,17 @@ import Autolinker, { MentionMatch } from 'autolinker';
     styleUrls: ['../../Styles/MessageSegments/mseg-text.scss'],
 })
 export class MessageSegmentTextComponent {
-    context = input.required<MessageSegmentText>();
+    content = input.required<MessageSegmentText>();
 
-    contextEncoded = computed(() => {
-        return Autolinker.link(this.context().content, {
+    contentEncoded = computed(() => {
+        return Autolinker.link(this.content().content, {
             sanitizeHtml: true,
             stripPrefix: false,
             mention: 'twitter', // This is just for catching in replace fn, we don't actually support twitter mentions
             className: 'chat-inline-link',
             replaceFn: match => {
                 if (match.getType() === 'mention') {
-                    const usr = this.context().ats.find(t => t.pos === match.getOffset());
+                    const usr = this.content().ats.find(t => t.pos === match.getOffset());
                     if (!usr) return false;
                     return `<a class="chat-inline-link atLink" href="/user/${encodeURIComponent(usr.userId)}">${(match as MentionMatch).getMention()}</a>`;
                 }

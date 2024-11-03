@@ -9,8 +9,6 @@ import { ConversationApiService } from './Api/ConversationApiService';
 import { map } from 'rxjs/operators';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from './CacheService';
-import Autolinker from 'autolinker';
-import { Values } from '../values';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
@@ -18,17 +16,13 @@ import { NewMemberEvent } from '../Models/Events/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/Events/DissolveEvent';
 import { HomeService } from './HomeService';
-import { GroupsApiService } from './Api/GroupsApiService';
-import { FriendsApiService } from './Api/FriendsApiService';
 import { ProbeService } from './ProbeService';
 import { ThemeService } from './ThemeService';
 import { FilesApiService } from './Api/FilesApiService';
-import { FileType } from '../Models/FileType';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Utils/Toast';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
-import { checkEmoji } from '../Utils/StringUtils';
 
 @Injectable({
     providedIn: 'root',
@@ -58,8 +52,6 @@ export class MessageService {
         private cacheService: CacheService,
         private router: Router,
         private homeService: HomeService,
-        private groupsApiService: GroupsApiService,
-        private friendsApiService: FriendsApiService,
         private probeService: ProbeService,
         private themeService: ThemeService,
         private applicationRef: ApplicationRef
@@ -170,7 +162,6 @@ export class MessageService {
         if (!this.conversation || this.conversation.id !== id) {
             return;
         }
-        const modifiedMsg = messages.map(t => this.modifyMessage(Object.assign({}, t)));
         if (messages.length < take) {
             this.noMoreMessages = true;
         }
@@ -186,20 +177,20 @@ export class MessageService {
             if (this.localMessages.length > 0 && messages.length > 0) {
                 const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
                 if (index === -1) {
-                    this.localMessages = modifiedMsg;
+                    this.localMessages = messages;
                     this.rawMessages = messages;
                 } else {
                     const deleteCount = this.rawMessages.length - index;
-                    this.localMessages.splice(index, deleteCount, ...modifiedMsg);
+                    this.localMessages.splice(index, deleteCount, ...messages);
                     this.rawMessages.splice(index, deleteCount, ...messages);
                 }
             } else {
-                this.localMessages = modifiedMsg;
+                this.localMessages = messages;
                 this.rawMessages = messages;
             }
         } else {
             // load more
-            this.localMessages.unshift(...modifiedMsg);
+            this.localMessages.unshift(...messages);
             this.rawMessages.unshift(...messages);
         }
         if (unread >= 1) {
@@ -346,97 +337,6 @@ export class MessageService {
         return false;
     }
 
-    public modifyMessage(t: Message): Message {
-        t.contentRaw = t.content;
-        t.sendTimeDate = new Date(t.sendTime);
-        t.timeStamp = t.sendTimeDate.getTime();
-        const isFile = t.content.match(/^\[(video|img|file|audio)](.+)$/);
-        if (isFile) {
-            if (isFile[1] === 'img') {
-                const imgSplit = isFile[2].split('|');
-                if (imgSplit.length < 3) {
-                    t.content = 'Invalid';
-                    return t;
-                }
-                const imageWidth = Number(imgSplit[1]),
-                    imageHeight = Number(imgSplit[2]);
-                const ratio = imageHeight / imageWidth;
-                const realMaxWidth = Math.max(
-                    Math.min(this.maxImageWidth, Math.floor(500 / ratio)),
-                    Math.min(this.maxImageWidth, 100)
-                ); // for too long image, just cut half of it
-                t.fileRef = {
-                    imgWidth: imageWidth,
-                    imgHeight: imageHeight,
-                    imgDisplayWidth: imageWidth,
-                    imgDisplayHeight: imageHeight,
-                    fileType: FileType.Image,
-                    filePath: imgSplit[0],
-                } as MessageFileRef;
-                if (realMaxWidth < imageWidth) {
-                    t.fileRef.imgDisplayWidth = realMaxWidth;
-                    t.fileRef.imgDisplayHeight = Math.floor(realMaxWidth * ratio);
-                }
-            } else if (isFile[1] === 'file') {
-                const fileSplit = isFile[2].split('|');
-                if (fileSplit.length < 3) {
-                    t.content = 'Invalid';
-                    return t;
-                }
-                t.fileRef = {
-                    filePath: fileSplit[0],
-                    fileName: fileSplit[1],
-                    fileSize: fileSplit[2],
-                    fileType: FileType.File,
-                } as MessageFileRef;
-            } else {
-                if (!isFile[2]) {
-                    t.content = 'Invalid';
-                    return t;
-                }
-                t.fileRef = {
-                    filePath: isFile[2],
-                    fileType: isFile[1] === 'video' ? FileType.Video : FileType.Audio,
-                } as MessageFileRef;
-            }
-        } else if (t.content.startsWith('[group]')) {
-            const groupId = Number(t.content.substring(7));
-            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-            this.groupsApiService.GroupSummary(groupId).subscribe(p => {
-                if (p.value) {
-                    t.content =
-                        `[share]${p.value.id}|${p.value.name.replace(/\|/g, '')}|` +
-                        `${p.value.hasPassword ? 'Private' : 'Public'}|${this.probeService.encodeProbeFileUrl(p.value.imagePath)}`;
-                    t.relatedData = p.value;
-                } else {
-                    t.content = 'Invalid Group';
-                }
-            });
-        } else if (t.content.startsWith('[user]')) {
-            const userId = t.content.substring(6);
-            t.content = `[share]-|Loading...| |${Values.loadingImgURL}`;
-            this.friendsApiService.UserDetail(userId).subscribe(p => {
-                if (p?.searchedUser.user) {
-                    t.content =
-                        `[share]${p.searchedUser.user.id}|${p.searchedUser.user.nickName.replace(/\|/g, '')}|` +
-                        `${p.searchedUser.user.bio ? p.searchedUser.user.bio.replace(/\|/g, ' ') : ' '}|${this.probeService.encodeProbeFileUrl(p.searchedUser.user.iconFilePath)}`;
-                    t.relatedData = p.searchedUser.user;
-                } else {
-                    t.content = 'Invalid User';
-                }
-            });
-        } else {
-            t.isEmoji = checkEmoji(t.content);
-            t.content = Autolinker.link(t.content, {
-                stripPrefix: false,
-                className: 'chat-inline-link',
-                sanitizeHtml: true,
-            });
-            t.content = this.getAtIDs(t.content)[0];
-        }
-        return t;
-    }
-
     public reorderLocalMessages() {
         this.localMessages.sort((a, b) => a.timeStamp - b.timeStamp);
     }
@@ -463,7 +363,7 @@ export class MessageService {
         if (json) {
             this.rawMessages = JSON.parse(json);
         }
-        this.localMessages = this.rawMessages.map(t => this.modifyMessage(Object.assign({}, t)));
+        this.localMessages = this.rawMessages;
         this.showFailedMessages();
         this.reorderLocalMessages();
         this.updateAtLink();
@@ -527,7 +427,7 @@ export class MessageService {
             return;
         }
         this.rawMessages.push(p);
-        this.localMessages.push(this.modifyMessage(Object.assign({}, p)));
+        this.localMessages.push(p);
         this.reorderLocalMessages();
         this.updateAtLink();
         this.saveMessage();

@@ -86,32 +86,6 @@
                         >
                     </span>
                     <a
-                        class="share-item file"
-                        *ngIf="message.fileRef && message.fileRef.fileType === 2"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="{{
-                            probeService.encodeProbeFileUrl(
-                                message.fileRef.filePath,
-                                messageService.fileAccessToken,
-                                true
-                            )
-                        }}"
-                    >
-                        <div>
-                            <i
-                                class="{{
-                                    message.fileRef.fileName.substring(
-                                        message.fileRef.fileName.indexOf('.') + 1
-                                    ) | iconForFile
-                                }}"
-                                aria-hidden="true"
-                            ></i>
-                        </div>
-                        <h5>{{ message.fileRef.fileName }}</h5>
-                        <span>{{ message.fileRef.fileSize }}</span>
-                    </a>
-                    <a
                         class="share-item"
                         href="javascript:void(0);"
                         (click)="shareClick(message)"
@@ -167,19 +141,11 @@
         </div>
     </li>
     <div class="message-list-placeholder"></div>
-    <button
-        *ngIf="
-            messageService.belowWindowPercent > 0.2 ||
-            (messageService.belowWindowPercent > 0.2 && messageService.newMessages)
-        "
+    <app-scroll-button
         id="scrollDown"
         [ngClass]="{ 'active-button': showPanel, primary: messageService.newMessages }"
-        class="button button--fab"
-        (click)="messageService.scrollBottom(true)"
     >
-        <i class="fas fa-angle-down" aria-hidden="true"></i>
-        <div *ngIf="messageService.newMessages" class="dot reddot"></div>
-    </button>
+    </app-scroll-button>
 </ul>
 
 <div class="chat-action">

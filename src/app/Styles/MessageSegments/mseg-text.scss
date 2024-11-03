@@ -4,3 +4,11 @@ p {
   margin: 0;
   white-space: pre-wrap;
 }
+
+:host-context(.left) p ::ng-deep .chat-inline-link {
+  color: var(--left-a-color);
+}
+
+:host-context(.right) p ::ng-deep .chat-inline-link {
+  color: white;
+}

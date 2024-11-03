@@ -7,6 +7,6 @@ import { MessageSegmentVoice } from '../../Models/Messages/MessageSegments';
     styleUrls: ['../../Styles/MessageSegments/mseg-voice.scss'],
 })
 export class MessageSegmentVoiceComponent {
-    context = input.required<MessageSegmentVoice>();
+    content = input.required<MessageSegmentVoice>();
     audioPlaying = false;
 }

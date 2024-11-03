@@ -276,7 +276,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
         tempMessage.sendTime = new Date().toISOString();
         tempMessage.local = true;
-        this.messageService.modifyMessage(tempMessage);
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.messageService.scrollBottom(true);

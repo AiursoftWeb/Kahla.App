@@ -1,15 +1,15 @@
-<a target="_blank" rel="noopener noreferrer" href="{{ context().url | storageUrl }}">
+<a target="_blank" rel="noopener noreferrer" href="{{ content().url | storageUrl }}">
     <div
         class="image-container"
         [style]="{
-            '--image-width': context().width + 'px',
-            '--image-height': context().height + 'px',
+            '--image-width': content().width + 'px',
+            '--image-height': content().height + 'px',
         }"
     >
         <img
-            src="{{ context().url | storageUrl }}"
-            srcset="{{ context().url | storageUrl }}&w={{ maxWidth }},
-        {{context().url | storageUrl}}&w={{ maxWidth }} 2x"
+            src="{{ content().url | storageUrl }}"
+            srcset="{{ content().url | storageUrl }}&w={{ maxWidth }},
+        {{content().url | storageUrl}}&w={{ maxWidth }} 2x"
         />
     </div>
 </a>

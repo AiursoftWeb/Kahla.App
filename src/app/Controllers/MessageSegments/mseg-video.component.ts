@@ -7,7 +7,7 @@ import { HomeService } from '../../Services/HomeService';
     templateUrl: '../../Views/MessageSegments/mseg-video.html',
 })
 export class MessageSegmentVideoComponent {
-    context = input.required<MessageSegmentVideo>();
+    content = input.required<MessageSegmentVideo>();
 
     constructor(public homeService: HomeService) {}
 }
