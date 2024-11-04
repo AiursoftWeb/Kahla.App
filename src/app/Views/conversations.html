@@ -8,6 +8,6 @@
     *ngIf="threadsRepo"
     [threadRepo]="threadsRepo"
     [highlightPredicate]="current.bind(this)"
-    (threadClicked)="talk($event.thread.id, $event.thread.messageContext.unReadAmount)"
+    (threadClicked)="goTalking($event.thread.id)"
     emptyMessage="Start talking by creating some conversations first. 💬"
 />

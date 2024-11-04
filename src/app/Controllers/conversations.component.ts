@@ -50,18 +50,7 @@ export class ConversationsComponent implements OnInit {
         return new RegExp(`^.+/${info.id}(/.*)*$`, 'g').test(this.router.url);
     }
 
-    public talk(id: number, unread: number): void {
-        const conversation = this.cacheService.cachedData.conversations.find(x => x.id === id);
-        conversation.messageContext.unReadAmount = 0;
-        conversation.someoneAtMe = false;
-        this.cacheService.updateTotalUnread();
-        if (this.router.isActive(`/talking/${id}`, false)) {
-            return;
-        }
-        if (unread > 0 && unread <= 50) {
-            this.router.navigate(['/talking', id, unread]);
-        } else {
-            this.router.navigate(['/talking', id]);
-        }
+    public goTalking(id: number) {
+        this.router.navigate(['/talking', id]);
     }
 }
