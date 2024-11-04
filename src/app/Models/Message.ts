@@ -1,24 +1,15 @@
 ﻿import { KahlaUser } from './KahlaUser';
-import { MessageFileRef } from './MessageFileRef';
 
-export class Message {
-    public id: string;
-    public conversationId: number;
-    public senderId: string;
-    public sender: KahlaUser;
-    public sendTime: string;
-    public content: string;
-    public groupWithPrevious: boolean;
-
-    public sendTimeDate: Date;
-    public resend: boolean;
-    public contentRaw: string;
-    public isEmoji = false;
-    public read: boolean;
-    public local = false;
-    public avatarURL: string;
-    public timeStamp: number;
-    public lastRead = false;
-    public fileRef: MessageFileRef;
-    public relatedData: any;
+export interface Message {
+    id: string;
+    conversationId: number;
+    senderId: string;
+    sender: KahlaUser;
+    sendTime: string;
+    content: string;
+    groupWithPrevious: boolean;
+    sendTimeDate: Date;
+    resend: boolean;
+    local: boolean;
+    timeStamp: number;
 }

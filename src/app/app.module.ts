@@ -73,6 +73,7 @@ import { MessageComponent } from './Controllers/message.component';
 import { HumanReadableSizePipe } from './Pipes/human-readable-size.pipe';
 import { StorageUrlPipe } from './Pipes/storage-url.pipe';
 import { ScrollButtonComponent } from './Controllers/scroll-button.component';
+import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-sharing-buttons.component';
 
 @NgModule({
     imports: [
@@ -125,6 +126,7 @@ import { ScrollButtonComponent } from './Controllers/scroll-button.component';
         MessageSegmentVideoComponent,
         MessageSegmentVoiceComponent,
         MessageSegmentFileComponent,
+        FileSharingButtonsComponent,
         ScrollButtonComponent,
     ],
     providers: [

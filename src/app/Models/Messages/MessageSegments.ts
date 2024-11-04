@@ -11,6 +11,7 @@ export type MessageSegmentTypes = (
 
 export interface MessageSegmentBase {
     type: MessageSegmentTypes;
+    [otherOptions: string]: unknown;
 }
 
 export interface MessageSegmentText extends MessageSegmentBase {
@@ -22,24 +23,28 @@ export interface MessageSegmentText extends MessageSegmentBase {
     }[];
 }
 
-interface MessageSegmentFileLike<TName extends MessageSegmentTypes> extends MessageSegmentBase {
-    type: TName;
+export interface MessageSegmentFileLike extends MessageSegmentBase {
     url: string;
 }
 
-export interface MessageSegmentImage extends MessageSegmentFileLike<'image'> {
+export interface MessageSegmentImage extends MessageSegmentFileLike {
+    type: 'image';
     width: number;
     height: number;
     alt?: string;
 }
 
-export type MessageSegmentVideo = MessageSegmentFileLike<'video'>;
+export interface MessageSegmentVideo extends MessageSegmentFileLike {
+    type: 'video';
+}
 
-export interface MessageSegmentVoice extends MessageSegmentFileLike<'voice'> {
+export interface MessageSegmentVoice extends MessageSegmentFileLike {
+    type: 'voice';
     duration: number;
 }
 
-export interface MessageSegmentFile extends MessageSegmentFileLike<'file'> {
+export interface MessageSegmentFile extends MessageSegmentFileLike {
+    type: 'file';
     fileName: string;
     size: number;
 }

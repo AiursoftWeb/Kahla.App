@@ -31,114 +31,21 @@
             last as isLast;
             let i = index
         "
-        [ngClass]="{
-            left: cacheService.cachedData.me && message.senderId !== cacheService.cachedData.me.id,
-            right: cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id,
-        }"
     >
-        <div *ngIf="message.lastRead">
+        <!-- <div *ngIf="message.lastRead">
             <div class="last-read-bar">LAST READ</div>
-        </div>
+        </div> -->
         <div
             *ngIf="i === 0 || msg[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()"
         >
             <div class="date-bar">{{ message.sendTimeDate.toLocaleDateString() }}</div>
         </div>
-        <div class="message-line" [class.grouped]="message.groupWithPrevious" *ngIf="message.local">
-            <div class="chat-avatar">
-                <div
-                    class="chart-avatar-wrapper"
-                    *ngIf="!message.groupWithPrevious"
-                    routerLink="/user/{{ message.senderId }}"
-                >
-                    <img
-                        src="{{
-                            probeService.encodeProbeFileUrl(message.sender.iconFilePath)
-                        }}?w=128&square=true"
-                    />
-                </div>
-            </div>
-            <div class="message-block">
-                <button class="button button--fab" *ngIf="message.resend" (click)="resend(message)">
-                    <i class="fas fa-redo"></i>
-                </button>
-                <button class="button button--fab" *ngIf="message.resend" (click)="delete(message)">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-                <div
-                    class="message-balloon"
-                    [class.single-emoji]="message.isEmoji"
-                    [class.balloon-grouped]="message.groupWithPrevious"
-                >
-                    <span
-                        *ngIf="
-                            messageService.groupConversation &&
-                            cacheService.cachedData.me &&
-                            message.senderId !== cacheService.cachedData.me.id &&
-                            !message.groupWithPrevious
-                        "
-                        [ngStyle]="{ color: messageService.getGroupColor(message) }"
-                        >{{ message.sender.nickName }}
-                        <label
-                            class="badge badge-primary"
-                            *ngIf="messageService.checkOwner(message.senderId)"
-                            >Owner</label
-                        >
-                    </span>
-                    <a
-                        class="share-item"
-                        href="javascript:void(0);"
-                        (click)="shareClick(message)"
-                        *ngIf="
-                            message.content.startsWith('[share]') &&
-                            message.content.split('|').length === 4
-                        "
-                    >
-                        <div>
-                            <img src="{{ message.content.split('|')[3] }}?w=128&square=true" />
-                        </div>
-                        <h5>{{ message.content.split('|')[1] }}</h5>
-                        <span>{{ message.content.split('|')[2] }}</span>
-                    </a>
-                    <div
-                        *ngIf="
-                            message.fileRef && message.fileRef.fileType !== 3 && message.contentRaw
-                        "
-                    >
-                        <div class="message-action-button" (click)="shareToOther(message.fileRef)">
-                            <i class="share fa fa-share-alt" aria-hidden="true"></i>
-                            Share
-                        </div>
-                        <a
-                            class="message-action-button"
-                            *ngIf="message.fileRef.fileType !== 2"
-                            href="{{
-                                probeService.encodeProbeFileUrl(
-                                    message.fileRef.filePath,
-                                    messageService.fileAccessToken,
-                                    true
-                                )
-                            }}"
-                        >
-                            <i class="share fa fa-file-download" aria-hidden="true"></i>
-                            Download
-                        </a>
-                    </div>
-                </div>
-                <p class="sendFail" [class.last]="isLast" *ngIf="message.resend">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Send failed
-                </p>
-            </div>
-            <p class="sendTime" [class.show]="message.local && !message.resend">
-                <label *ngIf="message.local && !message.resend" i18n="@@Sending">
-                    Sending...
-                </label>
-                <label *ngIf="!message.local || message.resend">
-                    {{ message.sendTimeDate.toLocaleTimeString() }}
-                </label>
-            </p>
-        </div>
+        <app-message
+            [message]="message"
+            [isByMe]="
+                cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id
+            "
+        ></app-message>
     </li>
     <div class="message-list-placeholder"></div>
     <app-scroll-button
@@ -170,7 +77,7 @@
     <div class="chat-box">
         <div
             class="chat-part"
-            [class.empty]="content === undefined || content.trim().length === 0"
+            [class.empty]="!content || content.trim().length === 0"
             [class.no-send-button]="cacheService.cachedData.options.enableEnterToSendMessage"
         >
             <i

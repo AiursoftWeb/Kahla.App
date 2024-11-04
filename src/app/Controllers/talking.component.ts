@@ -18,6 +18,8 @@ import * as EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { checkEmoji } from '../Utils/StringUtils';
+import { isMobileDevice } from '../Utils/EnvironmentUtils';
+import { MessageContent } from '../Models/Messages/MessageContent';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -158,77 +160,68 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        const inputElement = document.querySelector('#chatInput') as HTMLElement;
-        inputElement.addEventListener('input', () => {
-            inputElement.style.height = 'auto';
-            inputElement.style.height = inputElement.scrollHeight + 'px';
-            this.chatInputHeight = inputElement.scrollHeight;
-            if (document.querySelector('#scrollDown')) {
-                (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
-                    inputElement.scrollHeight + 46 + 'px';
-            }
-        });
-
-        this.route.params.subscribe(async params => {
-            if (!this.messageService.talkingDestroyed) {
-                this.destroyCurrent();
-            }
-            this.messageService.talkingDestroyed = false;
-            this.messageService.updateMaxImageWidth();
-            this.conversationID = Number(params.id);
-            const unread = params.unread && params.unread <= 50 ? Number(params.unread) : 0;
-            const load = unread < 15 ? 15 : unread;
-            if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                this.updateConversation(
-                    this.cacheService.cachedData.conversationDetail[this.conversationID]
-                );
-                this.messageService.initMessage(this.conversationID);
-                this.messageService.getMessages(unread, this.conversationID, null, load);
-            } else {
-                const listItem = this.cacheService.cachedData.conversations.find(
-                    t => t.id === this.conversationID
-                );
-                if (listItem) {
-                    this.header.title = listItem.name;
-                } else {
-                    this.header.title = 'Loading...';
-                }
-            }
-
-            this.content = localStorage.getItem('draft' + this.conversationID);
-            this.autoSaveInterval = setInterval(() => {
-                if (this.content !== null) {
-                    localStorage.setItem('draft' + this.conversationID, this.content);
-                }
-            }, 1000);
-
-            this.updateInputHeight();
-
-            if (
-                !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                    navigator.userAgent
-                )
-            ) {
-                inputElement.focus();
-            }
-
-            const conversation = (
-                await this.conversationApiService
-                    .ConversationDetail(this.conversationID)
-                    .toPromise()
-            ).value;
-            if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
-                return;
-            }
-            this.updateConversation(conversation);
-            if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                this.messageService.initMessage(this.conversationID);
-                this.messageService.getMessages(unread, this.conversationID, null, load);
-            }
-            this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-            this.cacheService.saveCache();
-        });
-        this.windowInnerHeight = window.innerHeight;
+        // const inputElement = document.querySelector('#chatInput') as HTMLElement;
+        // inputElement.addEventListener('input', () => {
+        //     inputElement.style.height = 'auto';
+        //     inputElement.style.height = inputElement.scrollHeight + 'px';
+        //     this.chatInputHeight = inputElement.scrollHeight;
+        //     if (document.querySelector('#scrollDown')) {
+        //         (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
+        //             inputElement.scrollHeight + 46 + 'px';
+        //     }
+        // });
+        // this.route.params.subscribe(async params => {
+        //     if (!this.messageService.talkingDestroyed) {
+        //         this.destroyCurrent();
+        //     }
+        //     this.messageService.talkingDestroyed = false;
+        //     this.messageService.updateMaxImageWidth();
+        //     this.conversationID = Number(params.id);
+        //     const unread = params.unread && params.unread <= 50 ? Number(params.unread) : 0;
+        //     const load = unread < 15 ? 15 : unread;
+        //     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+        //         this.updateConversation(
+        //             this.cacheService.cachedData.conversationDetail[this.conversationID]
+        //         );
+        //         this.messageService.initMessage(this.conversationID);
+        //         this.messageService.getMessages(unread, this.conversationID, null, load);
+        //     } else {
+        //         const listItem = this.cacheService.cachedData.conversations.find(
+        //             t => t.id === this.conversationID
+        //         );
+        //         if (listItem) {
+        //             this.header.title = listItem.name;
+        //         } else {
+        //             this.header.title = 'Loading...';
+        //         }
+        //     }
+        //     this.content = localStorage.getItem('draft' + this.conversationID);
+        //     this.autoSaveInterval = setInterval(() => {
+        //         if (this.content !== null) {
+        //             localStorage.setItem('draft' + this.conversationID, this.content);
+        //         }
+        //     }, 1000);
+        //     this.updateInputHeight();
+        //     if (!isMobileDevice()) {
+        //         inputElement.focus();
+        //     }
+        //     const conversation = (
+        //         await this.conversationApiService
+        //             .ConversationDetail(this.conversationID)
+        //             .toPromise()
+        //     ).value;
+        //     if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
+        //         return;
+        //     }
+        //     this.updateConversation(conversation);
+        //     if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+        //         this.messageService.initMessage(this.conversationID);
+        //         this.messageService.getMessages(unread, this.conversationID, null, load);
+        //     }
+        //     this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+        //     this.cacheService.saveCache();
+        // });
+        // this.windowInnerHeight = window.innerHeight;
     }
 
     private updateInputHeight(): void {
@@ -261,12 +254,14 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.content.trim().length === 0) {
             return;
         }
-        const tempMessage = new Message();
-        tempMessage.id = uuid4();
-        tempMessage.isEmoji = checkEmoji(this.content);
-        tempMessage.content = this.content;
-        tempMessage.senderId = this.cacheService.cachedData.me.id;
-        tempMessage.sender = this.cacheService.cachedData.me;
+        const tempMessage: Message = {
+            id: uuid4(),
+            content: this.content,
+            senderId: this.cacheService.cachedData.me.id,
+            sender: this.cacheService.cachedData.me,
+            local: true,
+            sendTime: new Date().toISOString(),
+        } as Message;
         if (this.messageService.localMessages.length > 0) {
             const prevMsg =
                 this.messageService.localMessages[this.messageService.localMessages.length - 1];
@@ -274,8 +269,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
                 prevMsg.senderId === this.cacheService.cachedData.me.id &&
                 new Date().getTime() - prevMsg.timeStamp <= 3600000;
         }
-        tempMessage.sendTime = new Date().toISOString();
-        tempMessage.local = true;
         this.messageService.localMessages.push(tempMessage);
         setTimeout(() => {
             this.messageService.scrollBottom(true);
@@ -328,11 +321,11 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public resend(message: Message): void {
-        const messageIDArry = this.messageService.getAtIDs(message.contentRaw);
+        const messageIDArry = this.messageService.getAtIDs(message.content);
         this.conversationApiService
             .SendMessage(
                 this.messageService.conversation.id,
-                message.contentRaw,
+                message.content,
                 message.id,
                 messageIDArry.slice(1)
             )
@@ -616,15 +609,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         return window.innerHeight - this.chatInputHeight - 106;
     }
 
-    public shareClick(msg: Message): void {
-        if (msg.contentRaw.startsWith('[user]') && msg.relatedData) {
-            this.router.navigate(['user', (msg.relatedData as KahlaUser).id]);
-        } else if (msg.contentRaw.startsWith('[group]') && msg.relatedData) {
-            const group = msg.relatedData as GroupsResult;
-            this.friendshipService.joinGroup(group, true);
-        }
-    }
-
     public insertToSelection(content: string) {
         const input = document.getElementById('chatInput') as HTMLTextAreaElement;
         this.content = this.content
@@ -659,22 +643,48 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public takeMessages(): Message[] {
-        return this.messageService.localMessages.slice(
-            Math.max(
-                this.messageService.rawMessages.length - this.messageService.showMessagesCount,
-                0
-            )
-        );
+        // return this.messageService.localMessages.slice(
+        //     Math.max(
+        //         this.messageService.rawMessages.length - this.messageService.showMessagesCount,
+        //         0
+        //     )
+        // );
+
+        return [
+            {
+                id: uuid4(),
+                content: JSON.stringify({
+                    segments: [
+                        {
+                            type: 'text',
+                            content: 'hello world',
+                            ats: [],
+                        },
+                        {
+                            type: 'image',
+                            url: 'aaa',
+                            width: 500,
+                            height: 300,
+                        },
+                    ],
+                    v: 1,
+                } satisfies MessageContent),
+                senderId: this.cacheService.cachedData.me.id,
+                sender: this.cacheService.cachedData.me,
+                local: true,
+                sendTimeDate: new Date(),
+            } as Message,
+        ];
     }
 
-    @HostListener('window:focus')
-    public onFocus() {
-        const conversationCache = this.cacheService.cachedData.conversations.find(
-            t => t.id === this.conversationID
-        );
-        if (conversationCache) {
-            conversationCache.messageContext.unReadAmount = 0;
-            this.cacheService.updateTotalUnread();
-        }
-    }
+    // @HostListener('window:focus')
+    // public onFocus() {
+    //     const conversationCache = this.cacheService.cachedData.conversations.find(
+    //         t => t.id === this.conversationID
+    //     );
+    //     if (conversationCache) {
+    //         conversationCache.messageContext.unReadAmount = 0;
+    //         this.cacheService.updateTotalUnread();
+    //     }
+    // }
 }

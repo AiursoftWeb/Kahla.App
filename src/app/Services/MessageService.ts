@@ -196,8 +196,8 @@ export class MessageService {
         if (unread >= 1) {
             if (unread > 1) {
                 // add a last read bar
-                this.localMessages[this.localMessages.length - unread].lastRead = true;
-                this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
+                // this.localMessages[this.localMessages.length - unread].lastRead = true;
+                // this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
             }
             setTimeout(() => {
                 const lis = document.querySelector('#messageList').querySelectorAll('li');
