@@ -17,6 +17,10 @@
 
   &.left {
     flex-direction: row;
+
+    .sendTime {
+      transform: translateX(-30px);
+    }
   }
 
   &.right {
@@ -137,9 +141,6 @@
       }
     }
 
-    .sendTime {
-      transform: translateX(-30px);
-    }
   }
 
   &.right .message-block {

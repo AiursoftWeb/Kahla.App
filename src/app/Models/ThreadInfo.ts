@@ -9,6 +9,7 @@ export interface ThreadInfo {
     ownerId: string;
     createTime: Date;
     imInIt: boolean;
+    allowDirectJoinWithoutInvitation: boolean;
 
     // private attributes (can access after joined)
     messageContext: {
@@ -27,7 +28,7 @@ export interface ThreadInfo {
     allowMembersSendMessages: boolean;
     allowMembersEnlistAllMembers: boolean;
     allowMemberSoftInvitation: boolean;
-    allowDirectJoinWithoutInvitation: boolean;
+    
 
     /**
      * @deprecated

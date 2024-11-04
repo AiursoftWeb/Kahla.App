@@ -6,7 +6,6 @@ import { SignInComponent } from '../Controllers/signin.component';
 import { UserComponent } from '../Controllers/user.component';
 import { AboutComponent } from '../Controllers/about.component';
 import { UserDetailComponent } from '../Controllers/userDetail.component';
-import { GroupComponent } from '../Controllers/group.component';
 import { ChangePasswordComponent } from '../Controllers/changePassword.component';
 import { DiscoverComponent } from '../Controllers/discover.component';
 import { DevicesComponent } from '../Controllers/devices.component';
@@ -18,6 +17,7 @@ import { ShareComponent } from '../Controllers/share.component';
 import { FileHistoryComponent } from '../Controllers/file-history.component';
 import { BlocksListComponent } from '../Controllers/blocks-list.component';
 import { NewThreadComponent } from '../Controllers/new-thread.component';
+import { ThreadInfoComponent } from '../Controllers/thread-info.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -32,7 +32,7 @@ const routes: Routes = [
     { path: 'signin', component: SignInComponent },
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
-    { path: 'group/:id', component: GroupComponent },
+    { path: 'thread/:id', component: ThreadInfoComponent },
     { path: 'managegroup/:id', component: ManageGroupComponent },
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },

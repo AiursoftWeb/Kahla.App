@@ -1,0 +1,74 @@
+<app-header title="Thread Info"></app-header>
+@if (thread) {
+    <div class="user">
+        <!--TODO: replace with thread avatar-->
+        <a
+            class="user-img groupGridRow"
+            href="{{ thread.imagePath | storageUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <img
+                class="user-img groupGridRow"
+                src="{{ thread.imagePath | storageUrl }}?w=128&square=true"
+            />
+        </a>
+        <div class="name">{{ thread.name }}</div>
+        <div class="create-time">Create Time: {{ thread.createTime | date: 'mediumDate' }}</div>
+    </div>
+    <div class="menu-button">
+        <div class="img">
+            <i class="fas fa-share-alt"></i>
+        </div>
+        <div class="text">Invite</div>
+    </div>
+
+    <div class="menu-holder"></div>
+    <div class="menu-button" routerLink="/talking/{{ thread.id }}">
+        <div class="img">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="text" i18n="@@Message">Message</div>
+    </div>
+    <div class="menu-button" routerLink="/file-history/{{ thread.id }}">
+        <div class="img">
+            <i class="fas fa-history"></i>
+        </div>
+        <div class="text" i18n="@@Message">File History</div>
+    </div>
+    <app-toggle-menu-item
+        [value]="thread.muted"
+        (valueChange)="setMute($event)"
+        title="Mute Nitification"
+        iconClasses="fas fa-bell-slash"
+    ></app-toggle-menu-item>
+    <div class="menu-button" *ngIf="thread.imAdmin" routerLink="/managegroup/{{ thread.id }}">
+        <div class="img">
+            <i class="fas fa-cogs"></i>
+        </div>
+        <div class="text">Manage Group</div>
+    </div>
+    <div class="menu-holder"></div>
+    <div class="menu-button">
+        <div class="img">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="text">members</div>
+    </div>
+    <app-contact-list [contactsList]="thread.topTenMembers"></app-contact-list>
+    <div class="menu-button">
+        <div class="img">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="text">Show All</div>
+    </div>
+    <div class="menu-holder"></div>
+    <div class="menu-button">
+        <div class="img">
+            <i class="fas fa-sign-out-alt warning"></i>
+        </div>
+        <div class="text text-warning">Leave Thread</div>
+    </div>
+} @else {
+    <div class="menu-hint">Loading...</div>
+}

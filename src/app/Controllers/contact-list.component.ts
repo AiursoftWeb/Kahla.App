@@ -11,7 +11,9 @@ import { Values } from '../values';
 export class ContactListComponent {
     public loadingImgURL = Values.loadingImgURL;
 
-    @Input() public contacts: RepositoryBase<ContactInfo>;
+    @Input() public contacts?: RepositoryBase<ContactInfo> = null;
+
+    @Input() public contactsList?: ContactInfo[] = null;
 
     @Input() public emptyMessage = 'No results.';
 

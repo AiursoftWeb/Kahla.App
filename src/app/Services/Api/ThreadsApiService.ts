@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
-import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
 import { ApiService } from './ApiService';
 import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';
 import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiResponse';
 import { AiurValueNamed } from '../../Models/AiurValue';
 import { ThreadOptions } from '../../Models/Threads/ThreadOptions';
+import { ThreadInfo } from '../../Models/ThreadInfo';
+import { AiurProtocol } from '../../Models/AiurProtocal';
 
 @Injectable()
 export class ThreadsApiService {
@@ -27,8 +28,15 @@ export class ThreadsApiService {
         });
     }
 
-    public Details(id: string, take = 1, skip = 0): Observable<UserDetailViewModel> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/details/${id}`, {
+    public DetailsJoined(id: string, take = 1, skip = 0): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {
+            take,
+            skip,
+        });
+    }
+
+    public DetailsAnnoymous(id: string, take = 1, skip = 0): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details-annoymous/${id}`, {
             take,
             skip,
         });
@@ -49,5 +57,9 @@ export class ThreadsApiService {
         options: Omit<ThreadOptions, 'iconFilePath'>
     ): Observable<AiurValueNamed<number, 'newThreadId'>> {
         return this.apiService.Post(ThreadsApiService.serverPath + '/create-scratch', options);
+    }
+
+    public SetMute(id: number, value: boolean): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/set-mute/${id}`, { mute: value });
     }
 }

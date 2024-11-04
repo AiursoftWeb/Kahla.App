@@ -1,4 +1,4 @@
-@for (contact of contacts.data; track contact.user.id) {
+@for (contact of (contacts?.data ?? contactsList); track contact.user.id) {
     <div
         class="contact-list"
         (click)="userClick(contact, $event.ctrlKey)"
@@ -20,7 +20,7 @@
         <div class="sender">{{ contact.user.nickName }}</div>
     </div>
 }
-@if (contacts.total === 0 && contacts.status === 'synced') {
+@if ((contacts && contacts.total === 0 && contacts.status === 'synced') || (!contacts && !contactsList)) {
     <div class="empty-result-notice">{{ this.emptyMessage }}</div>
 }
 
@@ -30,7 +30,7 @@
 <!-- <div *ngIf="contacts.data.length === 1" class="empty-result-notice">
     Press <span class="badge badge-secondary">Enter</span> to talk.
 </div> -->
-@if (contacts.canLoadMore) {
+@if (contacts?.canLoadMore) {
     <div class="buttons">
         @if (contacts.status === 'synced') {
             <button class="button primary" (click)="contacts.loadMore(20)">Load More</button>

@@ -18,7 +18,6 @@ import { HeaderComponent } from './Controllers/header.component';
 import { UserComponent } from './Controllers/user.component';
 import { AboutComponent } from './Controllers/about.component';
 import { UserDetailComponent } from './Controllers/userDetail.component';
-import { GroupComponent } from './Controllers/group.component';
 import { ChangePasswordComponent } from './Controllers/changePassword.component';
 import { DevicesComponent } from './Controllers/devices.component';
 import { ThemeComponent } from './Controllers/theme.component';
@@ -74,6 +73,7 @@ import { HumanReadableSizePipe } from './Pipes/human-readable-size.pipe';
 import { StorageUrlPipe } from './Pipes/storage-url.pipe';
 import { ScrollButtonComponent } from './Controllers/scroll-button.component';
 import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-sharing-buttons.component';
+import { ThreadInfoComponent } from './Controllers/thread-info.component';
 
 @NgModule({
     imports: [
@@ -101,7 +101,7 @@ import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-
         HeaderComponent,
         UserComponent,
         UserDetailComponent,
-        GroupComponent,
+        ThreadInfoComponent,
         ChangePasswordComponent,
         DevicesComponent,
         ThemeComponent,
