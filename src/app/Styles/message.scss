@@ -67,9 +67,11 @@
       color: white;
       padding: 10px;
       position: relative;
-      display: inline-block;
       min-height: 17px;
       z-index: 1;
+
+      display: flex;
+      flex-direction: column;
   
       &.balloon-grouped:after,
       &.single-emoji:after {
@@ -133,10 +135,6 @@
         top: 20px;
         border-right-color: var(--talking-chat-bg);
       }
-  
-      .message-action-button {
-        @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
-      }
     }
 
     .sendTime {
@@ -159,10 +157,6 @@
         border-left-color: var(--primary-color-depth3);
         left: 100%;
         top: 20px;
-      }
-  
-      .message-action-button {
-        @include hover-effect(transparentize(#fff, 0.8), transparentize(#fff, 0.6));
       }
     }
   }

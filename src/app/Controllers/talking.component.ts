@@ -657,14 +657,31 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     segments: [
                         {
                             type: 'text',
-                            content: 'hello world',
+                            content: 'A text message',
+                            ats: [],
+                        },
+                    ],
+                    v: 1,
+                } satisfies MessageContent),
+                senderId: this.cacheService.cachedData.me.id,
+                sender: this.cacheService.cachedData.me,
+                local: true,
+                sendTimeDate: new Date(),
+            } as Message,
+            {
+                id: uuid4(),
+                content: JSON.stringify({
+                    segments: [
+                        {
+                            type: 'text',
+                            content: 'A image message with a text',
                             ats: [],
                         },
                         {
                             type: 'image',
                             url: 'aaa',
-                            width: 500,
-                            height: 300,
+                            width: 3840,
+                            height: 2160,
                         },
                     ],
                     v: 1,

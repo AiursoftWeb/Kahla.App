@@ -1,12 +1,27 @@
+@import '../effects';
+
 .message-action-button {
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
-    height: 25px;
-    padding: 2px 4px 2px 4px;
-    transition: all 0.2s ease-in-out;
-    margin: 2px;
-    border-radius: 4px;
-    outline: 0;
-    color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  height: 25px;
+  padding: 2px 4px 2px 4px;
+  transition: all 0.2s ease-in-out;
+  margin: 2px;
+  border-radius: 4px;
+  outline: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+:host-context(.left) {
+  .message-action-button {
+    @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
   }
+}
+
+:host-context(.right) {
+  .message-action-button {
+    @include hover-effect(transparentize(#fff, 0.8), transparentize(#fff, 0.6));
+  }
+}
