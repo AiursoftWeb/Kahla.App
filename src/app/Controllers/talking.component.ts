@@ -20,6 +20,7 @@ import { MessageFileRef } from '../Models/MessageFileRef';
 import { checkEmoji } from '../Utils/StringUtils';
 import { isMobileDevice } from '../Utils/EnvironmentUtils';
 import { MessageContent } from '../Models/Messages/MessageContent';
+import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -642,6 +643,8 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }, 0);
     }
 
+    temp_demo_msg: Message[] = [];
+
     public takeMessages(): Message[] {
         // return this.messageService.localMessages.slice(
         //     Math.max(
@@ -649,49 +652,76 @@ export class TalkingComponent implements OnInit, OnDestroy {
         //         0
         //     )
         // );
-
-        return [
-            {
-                id: uuid4(),
-                content: JSON.stringify({
-                    segments: [
-                        {
-                            type: 'text',
-                            content: 'A text message',
-                            ats: [],
-                        },
-                    ],
-                    v: 1,
-                } satisfies MessageContent),
-                senderId: this.cacheService.cachedData.me.id,
-                sender: this.cacheService.cachedData.me,
-                local: true,
-                sendTimeDate: new Date(),
-            } as Message,
-            {
-                id: uuid4(),
-                content: JSON.stringify({
-                    segments: [
-                        {
-                            type: 'text',
-                            content: 'A image message with a text',
-                            ats: [],
-                        },
-                        {
-                            type: 'image',
-                            url: 'aaa',
-                            width: 3840,
-                            height: 2160,
-                        },
-                    ],
-                    v: 1,
-                } satisfies MessageContent),
-                senderId: this.cacheService.cachedData.me.id,
-                sender: this.cacheService.cachedData.me,
-                local: true,
-                sendTimeDate: new Date(),
-            } as Message,
-        ];
+        if (!this.cacheService?.cachedData?.me) return [];
+        if (this.temp_demo_msg.length === 0) {
+            this.temp_demo_msg = [
+                {
+                    id: uuid4(),
+                    content: JSON.stringify({
+                        segments: [
+                            {
+                                type: 'text',
+                                content:
+                                    'A text message. \nAutolinker test: https://google.com \nA loooooooong text the quick brown fox jumps over the lazy dog. \n There are a lot of space between                                here.\nLoren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. ',
+                                ats: [],
+                            },
+                        ],
+                        v: 1,
+                    } satisfies MessageContent),
+                    senderId: uuid4(),
+                    sender: this.cacheService.cachedData.me,
+                    local: true,
+                    sendTimeDate: new Date(),
+                } as Message,
+                {
+                    id: uuid4(),
+                    content: JSON.stringify({
+                        segments: [
+                            {
+                                type: 'text',
+                                content: 'A image message with a text',
+                                ats: [],
+                            },
+                            {
+                                type: 'image',
+                                url: 'aaa',
+                                width: 3840,
+                                height: 2160,
+                            },
+                        ],
+                        v: 1,
+                    } satisfies MessageContent),
+                    senderId: this.cacheService.cachedData.me.id,
+                    sender: this.cacheService.cachedData.me,
+                    local: true,
+                    sendTimeDate: new Date(),
+                } as Message,
+                {
+                    id: uuid4(),
+                    content: JSON.stringify({
+                        segments: [
+                            {
+                                type: 'text',
+                                content: 'A file message with a text',
+                                ats: [],
+                            },
+                            {
+                                type: 'file',
+                                size: 123456789,
+                                fileName: 'test.txt',
+                                url: 'aaa'
+                            } satisfies MessageSegmentFile,
+                        ],
+                        v: 1,
+                    } satisfies MessageContent),
+                    senderId: this.cacheService.cachedData.me.id,
+                    sender: this.cacheService.cachedData.me,
+                    local: true,
+                    sendTimeDate: new Date(),
+                } as Message,
+            ];
+        }
+        return this.temp_demo_msg;
     }
 
     // @HostListener('window:focus')
