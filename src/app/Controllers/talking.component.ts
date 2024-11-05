@@ -709,7 +709,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                                 type: 'file',
                                 size: 123456789,
                                 fileName: 'test.txt',
-                                url: 'aaa'
+                                url: 'aaa',
                             } satisfies MessageSegmentFile,
                         ],
                         v: 1,

@@ -33,6 +33,5 @@ export class ThreadInfoComponent {
         } catch (err) {
             showCommonErrorDialog(err);
         }
-        
     }
 }

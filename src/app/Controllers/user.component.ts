@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     public isCommonThreadsShown = false;
     public commonThreadsRepo?: CommonThreadRepository;
+    public contextThreadId?: number;
 
     constructor(
         private route: ActivatedRoute,

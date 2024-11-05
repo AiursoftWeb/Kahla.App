@@ -18,6 +18,7 @@ import { FileHistoryComponent } from '../Controllers/file-history.component';
 import { BlocksListComponent } from '../Controllers/blocks-list.component';
 import { NewThreadComponent } from '../Controllers/new-thread.component';
 import { ThreadInfoComponent } from '../Controllers/thread-info.component';
+import { ThreadMembersComponent } from '../Controllers/thread-members.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
     { path: 'thread/:id', component: ThreadInfoComponent },
+    { path: 'thread-members/:id', component: ThreadMembersComponent },
     { path: 'managegroup/:id', component: ManageGroupComponent },
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'discover', component: DiscoverComponent },

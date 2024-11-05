@@ -1,7 +1,14 @@
 import { Component, computed, input } from '@angular/core';
 import { Message } from '../Models/Message';
 import { MessageContent } from '../Models/Messages/MessageContent';
-import { MessageSegmentBase, MessageSegmentFile, MessageSegmentImage, MessageSegmentText, MessageSegmentVideo, MessageSegmentVoice } from '../Models/Messages/MessageSegments';
+import {
+    MessageSegmentBase,
+    MessageSegmentFile,
+    MessageSegmentImage,
+    MessageSegmentText,
+    MessageSegmentVideo,
+    MessageSegmentVoice,
+} from '../Models/Messages/MessageSegments';
 
 @Component({
     selector: 'app-message',
@@ -78,5 +85,4 @@ export class MessageComponent {
         }
         return seg as MessageSegmentFile;
     }
-    
 }

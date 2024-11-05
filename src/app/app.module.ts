@@ -74,6 +74,7 @@ import { StorageUrlPipe } from './Pipes/storage-url.pipe';
 import { ScrollButtonComponent } from './Controllers/scroll-button.component';
 import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-sharing-buttons.component';
 import { ThreadInfoComponent } from './Controllers/thread-info.component';
+import { ThreadMembersComponent } from './Controllers/thread-members.component';
 
 @NgModule({
     imports: [
@@ -102,6 +103,7 @@ import { ThreadInfoComponent } from './Controllers/thread-info.component';
         UserComponent,
         UserDetailComponent,
         ThreadInfoComponent,
+        ThreadMembersComponent,
         ChangePasswordComponent,
         DevicesComponent,
         ThemeComponent,

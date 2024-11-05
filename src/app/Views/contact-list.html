@@ -1,4 +1,4 @@
-@for (contact of (contacts?.data ?? contactsList); track contact.user.id) {
+@for (contact of contacts?.data ?? contactsList; track contact.user.id) {
     <div
         class="contact-list"
         (click)="userClick(contact, $event.ctrlKey)"
@@ -20,7 +20,10 @@
         <div class="sender">{{ contact.user.nickName }}</div>
     </div>
 }
-@if ((contacts && contacts.total === 0 && contacts.status === 'synced') || (!contacts && !contactsList)) {
+@if (
+    (contacts && contacts.total === 0 && contacts.status === 'synced') ||
+    (!contacts && !contactsList)
+) {
     <div class="empty-result-notice">{{ this.emptyMessage }}</div>
 }
 

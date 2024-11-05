@@ -77,26 +77,26 @@
       display: flex;
       gap: 4px;
       flex-direction: column;
-  
+
       &.balloon-grouped:after,
       &.single-emoji:after {
         border-left: unset !important;
         border-right: unset !important;
       }
-  
+
       &.single-emoji {
         background: transparent !important;
         color: var(--default-textcolor) !important;
-  
+
         p {
           font-size: 64px;
         }
       }
-  
+
       .loading {
         color: #eeeeee;
       }
-  
+
       &:after {
         content: ' ';
         height: 0;
@@ -106,7 +106,7 @@
         border: 5px solid transparent;
         margin-top: -5px;
       }
-  
+
       span {
         font-weight: bold;
       }
@@ -134,14 +134,13 @@
       border-color: var(--talking-chat-bg);
       color: var(--default-textcolor);
       background: var(--talking-chat-bg);
-  
+
       &::after {
         right: 100%;
         top: 20px;
         border-right-color: var(--talking-chat-bg);
       }
     }
-
   }
 
   &.right .message-block {
@@ -154,7 +153,7 @@
         var(--primary-color-depth3) 0%,
         var(--primary-color-depth2) 100%
       );
-  
+
       &::after {
         border-left-color: var(--primary-color-depth3);
         left: 100%;

@@ -37,7 +37,6 @@ export class SettingsComponent implements OnInit {
                 if (p.code === 0) {
                     this.cacheService.cachedData.me = p.user;
                     this.cacheService.cachedData.options = p.privateSettings;
-                    // this.cacheService.cachedData.me.avatarURL = this.probeService.encodeProbeFileUrl(p.value.iconFilePath);
                     this.cacheService.saveCache();
                 }
             });

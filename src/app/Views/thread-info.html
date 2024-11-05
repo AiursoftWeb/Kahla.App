@@ -46,7 +46,7 @@
         <div class="img">
             <i class="fas fa-cogs"></i>
         </div>
-        <div class="text">Manage Group</div>
+        <div class="text">Manage Thread</div>
     </div>
     <div class="menu-holder"></div>
     <div class="menu-button">
@@ -56,7 +56,7 @@
         <div class="text">members</div>
     </div>
     <app-contact-list [contactsList]="thread.topTenMembers"></app-contact-list>
-    <div class="menu-button">
+    <div class="menu-button" routerLink="/thread-members/{{ thread.id }}">
         <div class="img">
             <i class="fas fa-users"></i>
         </div>
