@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { ThemeService } from '../Services/ThemeService';
@@ -12,7 +12,7 @@ import { WebpushService } from '../Services/WebpushService';
     templateUrl: '../Views/app.html',
     styleUrls: ['../Styles/app.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     constructor(
         private initService: InitService,
         private webpushService: WebpushService,
@@ -20,7 +20,11 @@ export class AppComponent implements OnInit {
         public cacheService: CacheService,
         public route: Router,
         public homeService: HomeService
-    ) {}
+    ) {
+        // Temporary apply the local theme setting
+        this.themeService.ApplyThemeFromLocal();
+        this.initService.init();
+    }
 
     @HostListener('window:popstate', [])
     onPopstate() {
@@ -35,11 +39,5 @@ export class AppComponent implements OnInit {
     @HostListener('window:beforeinstallprompt', ['$event'])
     onbeforeinstallprompt(e: unknown) {
         this.homeService.pwaHomeScreenPrompt = e;
-    }
-
-    public ngOnInit(): void {
-        // Temporary apply the local theme setting
-        this.themeService.ApplyThemeFromLocal();
-        this.initService.init();
     }
 }

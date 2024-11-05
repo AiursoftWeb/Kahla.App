@@ -42,12 +42,14 @@ export class InitService {
             );
         }
         console.log('Welcome to Kahla.App!');
-        // load server config
-        this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
+
         this.cacheService.initCache();
         this.myContactsRepository.initCache();
         this.myThreadsRepository.initCache();
         console.log('[ OK ] Local cache initialized.');
+
+        // load server config
+        this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
 
         if (this.cacheService.serverConfig) {
             let signedIn = false;

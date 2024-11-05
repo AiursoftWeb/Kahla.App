@@ -75,6 +75,7 @@ import { ScrollButtonComponent } from './Controllers/scroll-button.component';
 import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-sharing-buttons.component';
 import { ThreadInfoComponent } from './Controllers/thread-info.component';
 import { ThreadMembersComponent } from './Controllers/thread-members.component';
+import { LoadMoreButtonComponent } from './Controllers/load-more-button.component';
 
 @NgModule({
     imports: [
@@ -130,6 +131,7 @@ import { ThreadMembersComponent } from './Controllers/thread-members.component';
         MessageSegmentFileComponent,
         FileSharingButtonsComponent,
         ScrollButtonComponent,
+        LoadMoreButtonComponent,
     ],
     providers: [
         ApiService,

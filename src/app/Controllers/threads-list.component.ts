@@ -7,7 +7,7 @@ import { Values } from '../values';
 @Component({
     selector: 'app-threads-list',
     templateUrl: '../Views/threads-list.html',
-    styleUrls: ['../Styles/threads-list.scss', '../Styles/reddot.scss', '../Styles/button.scss'],
+    styleUrls: ['../Styles/threads-list.scss', '../Styles/reddot.scss'],
 })
 export class ThreadsListComponent {
     @Input() public threadRepo: RepositoryBase<ThreadInfo>;
@@ -17,6 +17,10 @@ export class ThreadsListComponent {
     @Input() public highlightPredicate: (item: ThreadInfo) => boolean = () => false;
 
     @Input() public externalView = false;
+
+    @Input() public scrollingContainer?: HTMLElement;
+
+    @Input() public autoLoadMore = false;
 
     @Output() public threadClicked = new EventEmitter<{
         thread: ThreadInfo;

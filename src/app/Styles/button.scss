@@ -1,4 +1,4 @@
-.buttons {
+%buttonGroupBase {
   box-sizing: border-box;
   padding: 10px;
   text-align: center;
@@ -19,6 +19,10 @@
     flex-direction: column;
     flex-wrap: nowrap;
   }
+}
+
+.buttons {
+  @extend %buttonGroupBase;
 }
 
 button,

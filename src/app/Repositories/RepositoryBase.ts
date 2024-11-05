@@ -51,7 +51,7 @@ export abstract class RepositoryBase<T> {
     }
 
     public async loadMore(take: number): Promise<void> {
-        if (this.data.length >= this.total) {
+        if (!this.canLoadMore) {
             return;
         }
         try {
