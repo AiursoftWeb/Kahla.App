@@ -4,7 +4,7 @@ import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import { ConversationApiService } from './Api/ConversationApiService';
-import * as loadImage from 'blueimp-load-image';
+import loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';

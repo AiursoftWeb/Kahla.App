@@ -10,6 +10,6 @@ export class MessagesApiService {
     constructor(private apiService: ApiService) {}
 
     public InitWebsocket(): Observable<InitWebsocketViewModel> {
-        return this.apiService.Get(MessagesApiService.serverPath + '/init-websocket');
+        return this.apiService.Post(MessagesApiService.serverPath + '/init-websocket', {});
     }
 }

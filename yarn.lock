@@ -2880,6 +2880,13 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+aiur-version-control@^0.1.1:
+  version "0.1.1"
+  resolved "https://npm.aiursoft.cn/aiur-version-control/-/aiur-version-control-0.1.1.tgz#ce75dcf49ef1e300d7f1a20eece4c37bbee84a2d"
+  integrity sha512-AFM2jB2BGyb4sEVCL00bLqDbVG+ZUTMcvZxX8U6/fjbOhQ15k6af5Eb8P3nc/SdUOVFQZEkS1qgz2uyJS5dkWQ==
+  dependencies:
+    rxjs "^7.8.1"
+
 ajv-formats@3.0.1:
   version "3.0.1"
   resolved "https://npm.aiursoft.cn/ajv-formats/-/ajv-formats-3.0.1.tgz#3d5dc762bca17679c3c2ea7e90ad6b7532309578"
