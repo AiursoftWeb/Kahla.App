@@ -16,7 +16,6 @@ import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
-import { isMobileDevice } from '../Utils/EnvironmentUtils';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -155,63 +154,63 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        const inputElement = document.querySelector('#chatInput') as HTMLElement;
-        inputElement.addEventListener('input', () => {
-            inputElement.style.height = 'auto';
-            inputElement.style.height = inputElement.scrollHeight + 'px';
-            this.chatInputHeight = inputElement.scrollHeight;
-            if (document.querySelector('#scrollDown')) {
-                (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
-                    inputElement.scrollHeight + 46 + 'px';
-            }
-        });
-        this.route.params.subscribe(async params => {
-            if (!this.messageService.talkingDestroyed) {
-                this.destroyCurrent();
-            }
-            this.messageService.talkingDestroyed = false;
-            this.conversationID = Number(params.id);
-            if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                this.updateConversation(
-                    this.cacheService.cachedData.conversationDetail[this.conversationID]
-                );
-                this.messageService.initMessage(this.conversationID);
-            } else {
-                const listItem = this.cacheService.cachedData.conversations.find(
-                    t => t.id === this.conversationID
-                );
-                if (listItem) {
-                    this.header.title = listItem.name;
-                } else {
-                    this.header.title = 'Loading...';
-                }
-            }
-            this.content = localStorage.getItem('draft' + this.conversationID);
-            this.autoSaveInterval = setInterval(() => {
-                if (this.content !== null) {
-                    localStorage.setItem('draft' + this.conversationID, this.content);
-                }
-            }, 1000);
-            this.updateInputHeight();
-            if (!isMobileDevice()) {
-                inputElement.focus();
-            }
-            const conversation = (
-                await this.conversationApiService
-                    .ConversationDetail(this.conversationID)
-                    .toPromise()
-            ).value;
-            if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
-                return;
-            }
-            this.updateConversation(conversation);
-            if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-                this.messageService.initMessage(this.conversationID);
-            }
-            this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-            this.cacheService.saveCache();
-        });
-        this.windowInnerHeight = window.innerHeight;
+        // const inputElement = document.querySelector('#chatInput') as HTMLElement;
+        // inputElement.addEventListener('input', () => {
+        //     inputElement.style.height = 'auto';
+        //     inputElement.style.height = inputElement.scrollHeight + 'px';
+        //     this.chatInputHeight = inputElement.scrollHeight;
+        //     if (document.querySelector('#scrollDown')) {
+        //         (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
+        //             inputElement.scrollHeight + 46 + 'px';
+        //     }
+        // });
+        // this.route.params.subscribe(async params => {
+        //     if (!this.messageService.talkingDestroyed) {
+        //         this.destroyCurrent();
+        //     }
+        //     this.messageService.talkingDestroyed = false;
+        //     this.conversationID = Number(params.id);
+        //     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+        //         this.updateConversation(
+        //             this.cacheService.cachedData.conversationDetail[this.conversationID]
+        //         );
+        //         this.messageService.initMessage(this.conversationID);
+        //     } else {
+        //         const listItem = this.cacheService.cachedData.conversations.find(
+        //             t => t.id === this.conversationID
+        //         );
+        //         if (listItem) {
+        //             this.header.title = listItem.name;
+        //         } else {
+        //             this.header.title = 'Loading...';
+        //         }
+        //     }
+        //     this.content = localStorage.getItem('draft' + this.conversationID);
+        //     this.autoSaveInterval = setInterval(() => {
+        //         if (this.content !== null) {
+        //             localStorage.setItem('draft' + this.conversationID, this.content);
+        //         }
+        //     }, 1000);
+        //     this.updateInputHeight();
+        //     if (!isMobileDevice()) {
+        //         inputElement.focus();
+        //     }
+        //     const conversation = (
+        //         await this.conversationApiService
+        //             .ConversationDetail(this.conversationID)
+        //             .toPromise()
+        //     ).value;
+        //     if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
+        //         return;
+        //     }
+        //     this.updateConversation(conversation);
+        //     if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+        //         this.messageService.initMessage(this.conversationID);
+        //     }
+        //     this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+        //     this.cacheService.saveCache();
+        // });
+        // this.windowInnerHeight = window.innerHeight;
     }
 
     private updateInputHeight(): void {
@@ -233,10 +232,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.header.buttonIcon = `users`;
             this.header.buttonLink = `/group/${conversation.id}`;
         }
-    }
-
-    public trackByMessages(_index: number, message: Message): string {
-        return message.id;
     }
 
     public send(): void {

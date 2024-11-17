@@ -76,6 +76,7 @@ import { FileSharingButtonsComponent } from './Controllers/MessageSegments/file-
 import { ThreadInfoComponent } from './Controllers/thread-info.component';
 import { ThreadMembersComponent } from './Controllers/thread-members.component';
 import { LoadMoreButtonComponent } from './Controllers/load-more-button.component';
+import { MessageListComponent } from './Controllers/message-list.component';
 
 @NgModule({
     imports: [
@@ -123,6 +124,7 @@ import { LoadMoreButtonComponent } from './Controllers/load-more-button.componen
         ToggleMenuItemComponent,
         NewThreadComponent,
         ThreadAvatarComponent,
+        MessageListComponent,
         MessageComponent,
         MessageSegmentTextComponent,
         MessageSegmentImgComponent,

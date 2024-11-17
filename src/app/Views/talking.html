@@ -6,50 +6,21 @@
     [processing]="messageService.messageLoading"
 >
 </app-header>
-<ul
-    id="messageList"
-    class="message-list"
-    [class.active-list]="showPanel"
-    (click)="hideUserList()"
+<button
+    *ngIf="!loadingMore && !messageService.noMoreMessages"
+    class="load-more"
+    (click)="loadMore()"
 >
-    <button
-        *ngIf="!loadingMore && !messageService.noMoreMessages"
-        class="load-more"
-        (click)="loadMore()"
-    >
-        Click to load more
-    </button>
-    <button *ngIf="loadingMore" class="load-more">Loading...</button>
-    <li
-        *ngFor="
-            let message of takeMessages() as msg;
-            trackBy: trackByMessages;
-            last as isLast;
-            let i = index
-        "
-    >
-        <!-- <div *ngIf="message.lastRead">
-            <div class="last-read-bar">LAST READ</div>
-        </div> -->
-        <div
-            *ngIf="i === 0 || msg[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()"
-        >
-            <div class="date-bar">{{ message.sendTimeDate.toLocaleDateString() }}</div>
-        </div>
-        <app-message
-            [message]="message"
-            [isByMe]="
-                cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id
-            "
-        ></app-message>
-    </li>
-    <div class="message-list-placeholder"></div>
-    <app-scroll-button
-        id="scrollDown"
-        [ngClass]="{ 'active-button': showPanel, primary: messageService.newMessages }"
-    >
-    </app-scroll-button>
-</ul>
+    Click to load more
+</button>
+<button *ngIf="loadingMore" class="load-more">Loading...</button>
+<app-message-list [messages]="takeMessages()"/>
+<div class="message-list-placeholder" [class.active-list]="showPanel"></div>
+<app-scroll-button
+    id="scrollDown"
+    [ngClass]="{ 'active-button': showPanel, primary: messageService.newMessages }"
+>
+</app-scroll-button>
 
 <div class="chat-action">
     <ul

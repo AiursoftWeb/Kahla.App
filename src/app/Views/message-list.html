@@ -1,1 +1,23 @@
-<!-- view for message-list -->
+<ul class="message-list">
+    @for (message of messages(); track message.id; let first = $first, i = $index) {
+        <li>
+            <!-- <div *ngIf="message.lastRead">
+            <div class="last-read-bar">LAST READ</div>
+        </div> -->
+            <div
+                *ngIf="
+                    first ||
+                    messages()[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()
+                "
+            >
+                <div class="date-bar">{{ message.sendTimeDate | date }}</div>
+            </div>
+            <app-message
+                [message]="message"
+                [isByMe]="
+                    cacheService.cachedData.me && message.senderId === cacheService.cachedData.me.id
+                "
+            ></app-message>
+        </li>
+    }
+</ul>
