@@ -2,12 +2,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { Message } from '../Models/Message';
-import Swal from 'sweetalert2';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { HeaderComponent } from './header.component';
-import { FriendshipService } from '../Services/FriendshipService';
 import { CacheService } from '../Services/CacheService';
 import { Conversation } from '../Models/Conversation';
 import { FileType } from '../Models/FileType';
@@ -18,6 +16,7 @@ import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
+import { isMobileDevice } from '../Utils/EnvironmentUtils';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -60,14 +59,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        private friendshipService: FriendshipService,
         private themeService: ThemeService,
         public probeService: ProbeService
     ) {}
 
     @HostListener('window:resize', [])
     onResize() {
-        this.messageService.updateMaxImageWidth();
         if (window.innerHeight < this.windowInnerHeight) {
             this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
             window.scroll(0, window.scrollY + this.keyBoardHeight);
@@ -158,68 +155,63 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        // const inputElement = document.querySelector('#chatInput') as HTMLElement;
-        // inputElement.addEventListener('input', () => {
-        //     inputElement.style.height = 'auto';
-        //     inputElement.style.height = inputElement.scrollHeight + 'px';
-        //     this.chatInputHeight = inputElement.scrollHeight;
-        //     if (document.querySelector('#scrollDown')) {
-        //         (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
-        //             inputElement.scrollHeight + 46 + 'px';
-        //     }
-        // });
-        // this.route.params.subscribe(async params => {
-        //     if (!this.messageService.talkingDestroyed) {
-        //         this.destroyCurrent();
-        //     }
-        //     this.messageService.talkingDestroyed = false;
-        //     this.messageService.updateMaxImageWidth();
-        //     this.conversationID = Number(params.id);
-        //     const unread = params.unread && params.unread <= 50 ? Number(params.unread) : 0;
-        //     const load = unread < 15 ? 15 : unread;
-        //     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-        //         this.updateConversation(
-        //             this.cacheService.cachedData.conversationDetail[this.conversationID]
-        //         );
-        //         this.messageService.initMessage(this.conversationID);
-        //         this.messageService.getMessages(unread, this.conversationID, null, load);
-        //     } else {
-        //         const listItem = this.cacheService.cachedData.conversations.find(
-        //             t => t.id === this.conversationID
-        //         );
-        //         if (listItem) {
-        //             this.header.title = listItem.name;
-        //         } else {
-        //             this.header.title = 'Loading...';
-        //         }
-        //     }
-        //     this.content = localStorage.getItem('draft' + this.conversationID);
-        //     this.autoSaveInterval = setInterval(() => {
-        //         if (this.content !== null) {
-        //             localStorage.setItem('draft' + this.conversationID, this.content);
-        //         }
-        //     }, 1000);
-        //     this.updateInputHeight();
-        //     if (!isMobileDevice()) {
-        //         inputElement.focus();
-        //     }
-        //     const conversation = (
-        //         await this.conversationApiService
-        //             .ConversationDetail(this.conversationID)
-        //             .toPromise()
-        //     ).value;
-        //     if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
-        //         return;
-        //     }
-        //     this.updateConversation(conversation);
-        //     if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-        //         this.messageService.initMessage(this.conversationID);
-        //         this.messageService.getMessages(unread, this.conversationID, null, load);
-        //     }
-        //     this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-        //     this.cacheService.saveCache();
-        // });
-        // this.windowInnerHeight = window.innerHeight;
+        const inputElement = document.querySelector('#chatInput') as HTMLElement;
+        inputElement.addEventListener('input', () => {
+            inputElement.style.height = 'auto';
+            inputElement.style.height = inputElement.scrollHeight + 'px';
+            this.chatInputHeight = inputElement.scrollHeight;
+            if (document.querySelector('#scrollDown')) {
+                (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
+                    inputElement.scrollHeight + 46 + 'px';
+            }
+        });
+        this.route.params.subscribe(async params => {
+            if (!this.messageService.talkingDestroyed) {
+                this.destroyCurrent();
+            }
+            this.messageService.talkingDestroyed = false;
+            this.conversationID = Number(params.id);
+            if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                this.updateConversation(
+                    this.cacheService.cachedData.conversationDetail[this.conversationID]
+                );
+                this.messageService.initMessage(this.conversationID);
+            } else {
+                const listItem = this.cacheService.cachedData.conversations.find(
+                    t => t.id === this.conversationID
+                );
+                if (listItem) {
+                    this.header.title = listItem.name;
+                } else {
+                    this.header.title = 'Loading...';
+                }
+            }
+            this.content = localStorage.getItem('draft' + this.conversationID);
+            this.autoSaveInterval = setInterval(() => {
+                if (this.content !== null) {
+                    localStorage.setItem('draft' + this.conversationID, this.content);
+                }
+            }, 1000);
+            this.updateInputHeight();
+            if (!isMobileDevice()) {
+                inputElement.focus();
+            }
+            const conversation = (
+                await this.conversationApiService
+                    .ConversationDetail(this.conversationID)
+                    .toPromise()
+            ).value;
+            if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
+                return;
+            }
+            this.updateConversation(conversation);
+            if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
+                this.messageService.initMessage(this.conversationID);
+            }
+            this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
+            this.cacheService.saveCache();
+        });
+        this.windowInnerHeight = window.innerHeight;
     }
 
     private updateInputHeight(): void {
@@ -232,7 +224,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public updateConversation(conversation: Conversation): void {
         this.messageService.conversation = conversation;
-        this.messageService.groupConversation = conversation.discriminator === 'GroupConversation';
         this.header.title = conversation.displayName;
         this.header.button = true;
         if (conversation.anotherUserId) {
@@ -252,66 +243,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.content.trim().length === 0) {
             return;
         }
-        const tempMessage: Message = {
-            id: uuid4(),
-            content: this.content,
-            senderId: this.cacheService.cachedData.me.id,
-            sender: this.cacheService.cachedData.me,
-            local: true,
-            sendTime: new Date().toISOString(),
-        } as Message;
-        if (this.messageService.localMessages.length > 0) {
-            const prevMsg =
-                this.messageService.localMessages[this.messageService.localMessages.length - 1];
-            tempMessage.groupWithPrevious =
-                prevMsg.senderId === this.cacheService.cachedData.me.id &&
-                new Date().getTime() - prevMsg.timeStamp <= 3600000;
-        }
-        this.messageService.localMessages.push(tempMessage);
-        setTimeout(() => {
-            this.messageService.scrollBottom(true);
-        }, 0);
-        this.conversationApiService
-            .SendMessage(
-                this.messageService.conversation.id,
-                this.content,
-                tempMessage.id,
-                this.messageService.getAtIDs(this.content).slice(1)
-            )
-            .subscribe({
-                error: e => {
-                    if (e.status === 0 || e.status === 503) {
-                        const unsentMessages = new Map(
-                            JSON.parse(localStorage.getItem('unsentMessages'))
-                        );
-                        const tempArray = unsentMessages.get(this.conversationID) as Message[];
-                        if (tempArray && tempArray.length > 0) {
-                            tempArray.push(tempMessage);
-                            unsentMessages.set(this.conversationID, tempArray);
-                        } else {
-                            unsentMessages.set(this.conversationID, [tempMessage]);
-                        }
-                        localStorage.setItem(
-                            'unsentMessages',
-                            JSON.stringify(Array.from(unsentMessages))
-                        );
-                        this.messageService.localMessages.splice(
-                            this.messageService.localMessages.indexOf(tempMessage),
-                            1
-                        );
-                        this.messageService.showFailedMessages();
-                        this.messageService.reorderLocalMessages();
-                        this.messageService.scrollBottom(false);
-                    }
-                },
-                next: p => {
-                    const index = this.messageService.localMessages.indexOf(tempMessage);
-                    if (index !== -1) {
-                        this.messageService.localMessages.splice(index, 1);
-                        this.messageService.insertMessage(p.value);
-                    }
-                },
-            });
+        // TODO: Send message
         this.content = '';
         const inputElement = document.querySelector('#chatInput') as HTMLTextAreaElement;
         inputElement.focus();
@@ -370,131 +302,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    public uploadInput(fileType: FileType): void {
-        this.showPanel = false;
-        document.querySelector('.message-list').classList.remove('active-list');
-        let files;
-        if (this.fileInput.nativeElement.files.length > 0) {
-            files = this.fileInput.nativeElement.files[0];
-        }
-        if (this.videoInput.nativeElement.files.length > 0) {
-            files = this.videoInput.nativeElement.files[0];
-        }
-        if (this.imageInput.nativeElement.files.length > 0) {
-            files = this.imageInput.nativeElement.files[0];
-        }
-        if (files) {
-            if (fileType !== FileType.File) {
-                files = this.probeService.renameFile(
-                    files,
-                    fileType === FileType.Image ? 'img_' : 'video_'
-                );
-            }
-            this.uploadService
-                .upload(files, this.messageService.conversation.id, fileType)
-                ?.then(t => {
-                    this.messageService.insertMessage(t.value);
-                    setTimeout(() => this.messageService.scrollBottom(true), 0);
-                });
-        }
-    }
-
-    public paste(event: ClipboardEvent): void {
-        const items = event.clipboardData.items;
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].kind === 'file') {
-                this.preventDefault(event);
-                const originalFile = items[i].getAsFile();
-                const blob = this.probeService.renameFile(originalFile, 'clipboardImg_');
-                if (blob != null) {
-                    const urlString = URL.createObjectURL(blob);
-                    Swal.fire({
-                        title: 'Are you sure to post this image?',
-                        imageUrl: urlString,
-                        showCancelButton: true,
-                    }).then(send => {
-                        if (send.value) {
-                            this.uploadService
-                                .upload(blob, this.messageService.conversation.id, FileType.Image)
-                                ?.then(t => {
-                                    this.messageService.insertMessage(t.value);
-                                    setTimeout(() => this.messageService.scrollBottom(true), 0);
-                                });
-                        }
-                        URL.revokeObjectURL(urlString);
-                    });
-                }
-            }
-        }
-    }
-
-    public drop(event: DragEvent): void {
-        this.preventDefault(event);
-        const fileList: File[] = [];
-        if (event.dataTransfer.items != null) {
-            const items = event.dataTransfer.items;
-            for (let i = 0; i < items.length; i++) {
-                fileList.push(items[i].getAsFile());
-            }
-        } else {
-            const files = event.dataTransfer.files;
-            for (let i = 0; i < files.length; i++) {
-                fileList.push(files[i]);
-            }
-        }
-        fileList.forEach(async t => {
-            let fileType = FileType.File;
-            if (
-                this.uploadService.validImageType(t, false) &&
-                (
-                    await Swal.fire({
-                        title: `Send "${t.name}" as`,
-                        confirmButtonText: 'Image',
-                        cancelButtonText: 'File',
-                        icon: 'question',
-                        showCancelButton: true,
-                    })
-                ).value
-            ) {
-                fileType = FileType.Image;
-            }
-            if (
-                this.uploadService.validVideoType(t) &&
-                (
-                    await Swal.fire({
-                        title: `Send "${t.name}" as`,
-                        confirmButtonText: 'Video',
-                        cancelButtonText: 'File',
-                        icon: 'question',
-                        showCancelButton: true,
-                    })
-                ).value
-            ) {
-                fileType = FileType.Video;
-            }
-
-            this.uploadService
-                .upload(t, this.messageService.conversation.id, fileType)
-                ?.then(msg => {
-                    this.messageService.insertMessage(msg.value);
-                    setTimeout(() => this.messageService.scrollBottom(true), 0);
-                });
-        });
-        this.removeDragData(event);
-    }
-
-    public preventDefault(event: DragEvent | ClipboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    private removeDragData(event: DragEvent): void {
-        if (event.dataTransfer.items) {
-            event.dataTransfer.items.clear();
-        } else {
-            event.dataTransfer.clearData();
-        }
-    }
+    public uploadInput(fileType: FileType): void {}
 
     public record(): void {
         if (this.recording) {
@@ -623,13 +431,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {
             this.messageService.showMessagesCount += 15;
         } else if (!this.messageService.noMoreMessages) {
-            this.loadingMore = true;
-            await this.messageService.getMessages(
-                -1,
-                this.messageService.conversation.id,
-                this.messageService.localMessages[0].id,
-                15
-            );
             this.loadingMore = false;
             this.messageService.showMessagesCount = this.messageService.localMessages.length;
         } else {

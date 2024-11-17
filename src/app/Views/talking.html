@@ -10,9 +10,6 @@
     id="messageList"
     class="message-list"
     [class.active-list]="showPanel"
-    (paste)="paste($event)"
-    (drop)="drop($event)"
-    (dragover)="preventDefault($event)"
     (click)="hideUserList()"
 >
     <button
@@ -92,9 +89,6 @@
                 (click)="startInput()"
                 rows="1"
                 maxlength="500"
-                (paste)="paste($event)"
-                (drop)="drop($event)"
-                (dragover)="preventDefault($event)"
             ></textarea>
             <button
                 class="button primary"

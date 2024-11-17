@@ -1,12 +1,10 @@
-import { ApplicationRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EventType } from '../Models/Events/EventType';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import Swal from 'sweetalert2';
-import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { Conversation } from '../Models/Conversation';
 import { Message } from '../Models/Message';
 import { ConversationApiService } from './Api/ConversationApiService';
-import { map } from 'rxjs/operators';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';
@@ -15,12 +13,8 @@ import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { NewMemberEvent } from '../Models/Events/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/Events/DissolveEvent';
-import { HomeService } from './HomeService';
-import { ProbeService } from './ProbeService';
 import { ThemeService } from './ThemeService';
-import { FilesApiService } from './Api/FilesApiService';
 import { MessageFileRef } from '../Models/MessageFileRef';
-import { AccessToken } from '../Models/AccessToken';
 import { SwalToast } from '../Utils/Toast';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 
@@ -34,13 +28,10 @@ export class MessageService {
     public noMoreMessages = false;
     public belowWindowPercent = 0;
     public newMessages = false;
-    public maxImageWidth = 0;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
-    public groupConversation = false;
     public messageLoading = false;
     public fileAccessToken: string;
-    public accessTokenUpdateSchedule: any;
     public shareRef: MessageFileRef;
     public talkingDestroyed = false;
     public showMessagesCount = 15;
@@ -48,13 +39,9 @@ export class MessageService {
     constructor(
         private conversationApiService: ConversationApiService,
         private myContactsRepository: MyContactsRepository,
-        private filesApiService: FilesApiService,
         private cacheService: CacheService,
         private router: Router,
-        private homeService: HomeService,
-        private probeService: ProbeService,
         private themeService: ThemeService,
-        private applicationRef: ApplicationRef
     ) {}
 
     public async OnMessage(ev: AiurEvent) {
@@ -63,37 +50,6 @@ export class MessageService {
         }
         switch (ev.type) {
             case EventType.NewMessage: {
-                const evt = ev as NewMessageEvent;
-                if (
-                    this.conversation.id === evt.message.conversationId &&
-                    this.rawMessages.findIndex(t => t.id === evt.message.id) === -1
-                ) {
-                    if (
-                        evt.previousMessageId ===
-                            this.rawMessages[this.rawMessages.length - 1].id ||
-                        evt.previousMessageId === '00000000-0000-0000-0000-000000000000'
-                    ) {
-                        if (evt.message.senderId === this.cacheService.cachedData.me.id) {
-                            // the temp message should still exist
-                            const index = this.localMessages.findIndex(
-                                t => t.id === evt.message.id && t.local
-                            );
-                            if (index !== -1) {
-                                this.localMessages.splice(index);
-                            }
-                        }
-                        this.insertMessage(evt.message);
-                        this.conversationApiService
-                            .GetMessage(this.conversation.id, null, 0)
-                            .subscribe();
-                    } else {
-                        // lost some message.
-                        await this.getMessages(0, this.conversation.id, null, 15);
-                    }
-                    if (this.belowWindowPercent <= 0.2) {
-                        setTimeout(() => this.scrollBottom(true), 0);
-                    }
-                }
                 break;
             }
             case EventType.NewMemberEvent: {
@@ -147,80 +103,6 @@ export class MessageService {
     public reconnectPull() {
         this.cacheService.updateConversation();
         this.myContactsRepository.updateAll();
-        if (this.conversation) {
-            this.getMessages(0, this.conversation.id, null, 15);
-        }
-    }
-
-    public async getMessages(unread: number, id: number, skipFrom: string, take: number) {
-        this.messageLoading = true;
-        this.localMessages = this.localMessages.filter(t => !t.local);
-        const messages = await this.conversationApiService
-            .GetMessage(id, skipFrom, take)
-            .pipe(map(t => t.items))
-            .toPromise();
-        if (!this.conversation || this.conversation.id !== id) {
-            return;
-        }
-        if (messages.length < take) {
-            this.noMoreMessages = true;
-        }
-        if (this.localMessages.length > 0 && messages.length > 0) {
-            this.newMessages =
-                this.cacheService.cachedData.me &&
-                messages[messages.length - 1].senderId !== this.cacheService.cachedData.me.id &&
-                take === 1 &&
-                this.belowWindowPercent > 0;
-        }
-        // Load new
-        if (!skipFrom) {
-            if (this.localMessages.length > 0 && messages.length > 0) {
-                const index = this.rawMessages.findIndex(t => t.id === messages[0].id);
-                if (index === -1) {
-                    this.localMessages = messages;
-                    this.rawMessages = messages;
-                } else {
-                    const deleteCount = this.rawMessages.length - index;
-                    this.localMessages.splice(index, deleteCount, ...messages);
-                    this.rawMessages.splice(index, deleteCount, ...messages);
-                }
-            } else {
-                this.localMessages = messages;
-                this.rawMessages = messages;
-            }
-        } else {
-            // load more
-            this.localMessages.unshift(...messages);
-            this.rawMessages.unshift(...messages);
-        }
-        if (unread >= 1) {
-            if (unread > 1) {
-                // add a last read bar
-                // this.localMessages[this.localMessages.length - unread].lastRead = true;
-                // this.localMessages[this.localMessages.length - unread].groupWithPrevious = false;
-            }
-            setTimeout(() => {
-                const lis = document.querySelector('#messageList').querySelectorAll('li');
-                window.scrollTo({
-                    top: lis[lis.length - unread].offsetTop,
-                    left: 0,
-                    behavior: 'smooth',
-                });
-            }, 0);
-        }
-        this.updateAtLink();
-        this.saveMessage();
-        // clear red dot if necessary
-        const listItem = this.cacheService.cachedData.conversations.find(
-            t => t.id === this.conversation.id
-        );
-        if (listItem) {
-            listItem.messageContext.unReadAmount = 0;
-        }
-        this.cacheService.updateTotalUnread();
-        this.showFailedMessages();
-        this.reorderLocalMessages();
-        this.messageLoading = false;
     }
 
     public updateBelowWindowPercent(): void {
@@ -231,13 +113,6 @@ export class MessageService {
             document.documentElement.clientHeight;
     }
 
-    public updateMaxImageWidth(): void {
-        this.maxImageWidth = Math.floor(
-            (this.homeService.contentWrapper.clientWidth - 40) * 0.7 - 20 - 2
-        );
-        this.videoHeight = Math.max(Math.floor(Math.min((this.maxImageWidth * 9) / 21, 400)), 170);
-    }
-
     public resetVariables(): void {
         this.conversation = null;
         this.localMessages = [];
@@ -245,14 +120,8 @@ export class MessageService {
         this.noMoreMessages = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
-        this.maxImageWidth = 0;
         this.userColors.clear();
-        this.groupConversation = false;
         this.fileAccessToken = null;
-        if (this.accessTokenUpdateSchedule) {
-            clearInterval(this.accessTokenUpdateSchedule);
-            this.accessTokenUpdateSchedule = null;
-        }
     }
 
     public getRandomColor(darkColor: boolean): string {
@@ -337,10 +206,6 @@ export class MessageService {
         return false;
     }
 
-    public reorderLocalMessages() {
-        this.localMessages.sort((a, b) => a.timeStamp - b.timeStamp);
-    }
-
     public updateAtLink() {
         setTimeout(() => {
             const links = document.getElementsByClassName('atLink');
@@ -364,76 +229,12 @@ export class MessageService {
             this.rawMessages = JSON.parse(json);
         }
         this.localMessages = this.rawMessages;
-        this.showFailedMessages();
-        this.reorderLocalMessages();
         this.updateAtLink();
-        // init accessToken
-        const localToken: AccessToken = this.cacheService.cachedData.probeTokens[conversationId];
-        if (localToken) {
-            localToken.expiresDate = new Date(localToken.expires);
-            if (localToken.expiresDate.getTime() < Date.now() + 5000) {
-                this.updateAccessToken();
-            } else {
-                this.fileAccessToken = localToken.raw;
-                this.accessTokenUpdateSchedule = setTimeout(
-                    () => this.updateAccessToken(),
-                    localToken.expiresDate.getTime() - Date.now() - 5000
-                );
-            }
-        } else {
-            this.updateAccessToken();
-        }
-
         setTimeout(() => this.scrollBottom(false), 0);
-    }
-
-    public showFailedMessages(): void {
-        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        this.localMessages = this.localMessages.filter(m => !m.resend);
-        if (unsentMessages.has(this.conversation.id)) {
-            (unsentMessages.get(this.conversation.id) as Message[]).forEach(message => {
-                message.resend = true;
-                message.sendTimeDate = new Date(message.sendTime);
-                this.localMessages.push(message);
-            }, this);
-        }
     }
 
     public upperFloorImageSize(width: number) {
         return Math.pow(2, Math.ceil(Math.log2(width)));
-    }
-
-    public updateAccessToken() {
-        const id = this.conversation.id;
-        this.filesApiService.InitFileAccess(id).subscribe(t => {
-            if (this.conversation.id !== id) {
-                return;
-            }
-            this.fileAccessToken = t.value;
-            const token = this.probeService.resolveAccessToken(t.value);
-            this.cacheService.cachedData.probeTokens[id] = token;
-            this.cacheService.saveCache();
-            // schedule the next update
-            this.accessTokenUpdateSchedule = setTimeout(
-                () => this.updateAccessToken(),
-                token.expiresDate.getTime() - Date.now() - 5000
-            );
-            this.applicationRef.tick();
-        });
-    }
-
-    public insertMessage(p: Message) {
-        if (this.rawMessages.find(t => t.id === p.id)) {
-            return;
-        }
-        this.rawMessages.push(p);
-        this.localMessages.push(p);
-        this.reorderLocalMessages();
-        this.updateAtLink();
-        this.saveMessage();
-        if (!p.local) {
-            this.showMessagesCount++;
-        }
     }
 
     public scrollBottom(smooth: boolean): void {
