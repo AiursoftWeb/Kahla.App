@@ -29,7 +29,7 @@
     [class.in-widescreen]="homeService.wideScreenEnabled"
     *ngIf="(!this.returnButton || !homeService.wideScreenEnabled) && eventService.connecting"
 >
-    <div class="words" i18n="@@Disconnectedfromserver">
+    <div class="words">
         <i class="fas fa-spinner fa-spin"></i>
         Connecting...
     </div>
@@ -45,7 +45,7 @@
         !eventService.connecting
     "
 >
-    <div class="words" i18n="@@Disconnectedfromserver">
+    <div class="words">
         <i class="fas fa-cloud"></i>
         Disconnected
     </div>

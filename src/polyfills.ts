@@ -1,7 +1,7 @@
 /***************************************************************************************************
  * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
  */
-import '@angular/localize/init';
+// import '@angular/localize/init';
 /** Evergreen browsers require these. **/
 // import 'core-js/es/reflect';
 // import smoothscroll from 'smoothscroll-polyfill';

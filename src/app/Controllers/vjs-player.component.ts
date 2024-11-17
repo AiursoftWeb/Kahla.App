@@ -26,7 +26,7 @@ export class VjsPlayerComponent implements OnInit, OnDestroy {
     @ViewChild('target', { static: true }) target: ElementRef;
     // see options: https://github.com/videojs/video.js/blob/master/docs/guides/options.md
     @Input() options: Partial<VjsPluginOptions>;
-    player: videojs.Player;
+    player: ReturnType<typeof videojs>; // workaround to get the type of the player (https://github.com/videojs/video.js/issues/8242)
 
     ngOnInit() {
         // instantiate Video.js
