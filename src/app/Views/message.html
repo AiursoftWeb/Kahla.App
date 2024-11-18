@@ -1,7 +1,7 @@
 <div class="chat-avatar">
     @if (!groupWithPrevious()) {
         <div class="chart-avatar-wrapper" routerLink="/user/{{ message().senderId }}">
-            <img src="{{ message().sender.iconFilePath | storageUrl }}?w=128&square=true" />
+            <img src="{{ userInfo?.iconFilePath | storageUrl }}?w=128&square=true" />
         </div>
     }
 </div>
@@ -13,8 +13,8 @@
             <i class="fas fa-trash-alt"></i>
         </button> -->
     <div class="message-balloon" [class.balloon-grouped]="groupWithPrevious()">
-        <span *ngIf="showNickNames()">{{ message().sender.nickName }} </span>
-        @for (item of parsedContent().segments; track $index) {
+        <span *ngIf="showNickNames()">{{ userInfo?.nickName ?? 'Loading...' }} </span>
+        @for (item of message().parsedContent.segments; track $index) {
             @switch (item.type) {
                 @case ('text') {
                     <app-mseg-text [content]="asTextSeg(item)"></app-mseg-text>
@@ -62,7 +62,7 @@
         <label> Sending... </label>
     } @else {
         <label>
-            {{ message().sendTimeDate | date: 'shortTime' }}
+            {{ message().sendTime | date: 'shortTime' }}
         </label>
     }
 </p>

@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, effect, input } from '@angular/core';
 import { Message } from '../Models/Message';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import {
@@ -9,6 +9,9 @@ import {
     MessageSegmentVideo,
     MessageSegmentVoice,
 } from '../Models/Messages/MessageSegments';
+import { ParsedMessage } from '../Models/Messages/ParsedMessage';
+import { UserInfoCacheDictionary } from '../CachedDictionary/UserInfoCacheDictionary';
+import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     selector: 'app-message',
@@ -21,35 +24,21 @@ import {
     },
 })
 export class MessageComponent {
-    message = input.required<Message>();
+    message = input.required<ParsedMessage>();
     isByMe = input<boolean>(false);
     groupWithPrevious = input<boolean>(false);
     isSending = input<boolean>(false);
     isFailed = input<boolean>(false);
     showNickNames = input<boolean>(false);
 
-    parsedContent = computed<MessageContent>(() => {
-        try {
-            const json = JSON.parse(this.message().content) as MessageContent;
-            if (json.v !== 1) {
-                throw new Error('Unsupported version');
-            }
-            return json;
-        } catch {
-            // fallback to plaintext
-            return {
-                preview: this.message().content,
-                segments: [
-                    {
-                        type: 'text',
-                        content: this.message().content,
-                        ats: [],
-                    } satisfies MessageSegmentText,
-                ],
-                v: 1,
-            };
-        }
-    });
+    userInfo?: KahlaUser;
+
+    constructor(userInfoCacheDictionary: UserInfoCacheDictionary) {
+        effect(async () => {
+            console.log("Get user info");
+            this.userInfo = await userInfoCacheDictionary.get(this.message().senderId);
+        })
+    }
 
     public asTextSeg(seg: MessageSegmentBase): MessageSegmentText {
         if (seg.type !== 'text') {

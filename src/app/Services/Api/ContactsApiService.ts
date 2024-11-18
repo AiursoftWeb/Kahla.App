@@ -4,6 +4,7 @@ import { AiurProtocol } from '../../Models/AiurProtocal';
 import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
 import { ApiService } from './ApiService';
 import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';
+import { UserInfoViewModel } from '../../Models/ApiModels/UserInfoViewModel';
 
 @Injectable()
 export class ContactsApiService {
@@ -38,6 +39,10 @@ export class ContactsApiService {
             take,
             skip,
         });
+    }
+
+    public Info(id: string): Observable<UserInfoViewModel> {
+        return this.apiService.Get(ContactsApiService.serverPath + `/info/${id}`, {});
     }
 
     public Report(targetUserId: string, reason: string): Observable<AiurProtocol> {

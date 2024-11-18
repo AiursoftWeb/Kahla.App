@@ -7,10 +7,10 @@
             <div
                 *ngIf="
                     first ||
-                    messages()[i - 1].sendTimeDate.getDate() !== message.sendTimeDate.getDate()
+                    messages()[i - 1].sendTime.getDate() !== message.sendTime.getDate()
                 "
             >
-                <div class="date-bar">{{ message.sendTimeDate | date }}</div>
+                <div class="date-bar">{{ message.sendTime | date }}</div>
             </div>
             <app-message
                 [message]="message"

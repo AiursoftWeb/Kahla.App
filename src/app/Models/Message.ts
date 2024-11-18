@@ -1,5 +1,6 @@
 ﻿import { KahlaUser } from './KahlaUser';
 
+/** @deprecated */
 export interface Message {
     id: string;
     conversationId: number;
@@ -9,7 +10,4 @@ export interface Message {
     content: string;
     groupWithPrevious: boolean;
     sendTimeDate: Date;
-    resend: boolean;
-    local: boolean;
-    timeStamp: number;
 }

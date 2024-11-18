@@ -2867,10 +2867,10 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-aiur-version-control@^0.2.0:
-  version "0.2.0"
-  resolved "https://npm.aiursoft.cn/aiur-version-control/-/aiur-version-control-0.2.0.tgz#44258f19a882a839bca876cc2415d2ce21e9c15b"
-  integrity sha512-sX6842tuU0Yc4yy1+EkfNbnaaI7LBlHHI215FAVJLlVJTwXYPFzgLtRB411fk6S2SMnY99927PvWuTWIhY4ZPw==
+aiur-version-control@^0.2.2:
+  version "0.2.2"
+  resolved "https://npm.aiursoft.cn/aiur-version-control/-/aiur-version-control-0.2.2.tgz#3b79b257cbe0c9fccde81d544cdefe36cabc1e02"
+  integrity sha512-ev++ynQ5YzjRgoLo9qEMvdae4U0CL+bJ8/ZixS5rqb9JFZNhvQhqYiXYPIsgRR3O3jOzO8SO+Y8xoNS+PJbGCw==
   dependencies:
     rxjs "^7.8.1"
 

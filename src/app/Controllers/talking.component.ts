@@ -10,6 +10,7 @@ import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
+import { ParsedMessage } from '../Models/Messages/ParsedMessage';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -184,9 +185,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }, 0);
     }
 
-    temp_demo_msg: Message[] = [];
+    temp_demo_msg: ParsedMessage[] = [];
 
-    public takeMessages(): Message[] {
+    public takeMessages(): ParsedMessage[] {
         // return this.messageService.localMessages.slice(
         //     Math.max(
         //         this.messageService.rawMessages.length - this.messageService.showMessagesCount,
@@ -196,9 +197,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (!this.cacheService?.cachedData?.me) return [];
         if (this.temp_demo_msg.length === 0) {
             this.temp_demo_msg = [
-                {
-                    id: uuid4(),
-                    content: JSON.stringify({
+                new ParsedMessage(
+                    uuid4(),
+                    {
                         segments: [
                             {
                                 type: 'text',
@@ -208,15 +209,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             },
                         ],
                         v: 1,
-                    } satisfies MessageContent),
-                    senderId: uuid4(),
-                    sender: this.cacheService.cachedData.me,
-                    local: true,
-                    sendTimeDate: new Date(),
-                } as Message,
-                {
-                    id: uuid4(),
-                    content: JSON.stringify({
+                    },
+                    'b09aa925-68af-425a-8af9-96d347b8208f',
+                    new Date()
+                ),
+                new ParsedMessage(
+                    uuid4(),
+                    {
                         segments: [
                             {
                                 type: 'text',
@@ -231,15 +230,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             },
                         ],
                         v: 1,
-                    } satisfies MessageContent),
-                    senderId: this.cacheService.cachedData.me.id,
-                    sender: this.cacheService.cachedData.me,
-                    local: true,
-                    sendTimeDate: new Date(),
-                } as Message,
-                {
-                    id: uuid4(),
-                    content: JSON.stringify({
+                    },
+                    this.cacheService.cachedData.me.id,
+                    new Date()
+                ),
+                new ParsedMessage(
+                    uuid4(),
+                    {
                         segments: [
                             {
                                 type: 'text',
@@ -254,26 +251,19 @@ export class TalkingComponent implements OnInit, OnDestroy {
                             } satisfies MessageSegmentFile,
                         ],
                         v: 1,
-                    } satisfies MessageContent),
-                    senderId: this.cacheService.cachedData.me.id,
-                    sender: this.cacheService.cachedData.me,
-                    local: true,
-                    sendTimeDate: new Date(),
-                } as Message,
+                    },
+                    this.cacheService.cachedData.me.id,
+                    new Date()
+                ),
             ];
         }
         return this.temp_demo_msg;
     }
 
     public send({ content }: { content: MessageContent }) {
-        this.temp_demo_msg.push({
-            id: uuid4(),
-            content: JSON.stringify(content),
-            senderId: this.cacheService.cachedData.me.id,
-            sender: this.cacheService.cachedData.me,
-            local: true,
-            sendTimeDate: new Date(),
-        } as Message);
+        this.temp_demo_msg.push(
+            new ParsedMessage(uuid4(), content, this.cacheService.cachedData.me.id, new Date())
+        );
     }
 
     // @HostListener('window:focus')

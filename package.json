@@ -29,7 +29,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@joeattardi/emoji-button": "^3.0.3",
     "@videojs/themes": "^1.0.0",
-    "aiur-version-control": "^0.2.0",
+    "aiur-version-control": "^0.2.2",
     "autolinker": "^4.0.0",
     "blueimp-load-image": "^5.11.0",
     "rxjs": "^7.8.1",

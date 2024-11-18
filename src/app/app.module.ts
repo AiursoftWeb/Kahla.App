@@ -78,6 +78,7 @@ import { ThreadMembersComponent } from './Controllers/thread-members.component';
 import { LoadMoreButtonComponent } from './Controllers/load-more-button.component';
 import { MessageListComponent } from './Controllers/message-list.component';
 import { TalkingInputComponent } from './Controllers/talking-input.component';
+import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDictionary';
 
 @NgModule({
     imports: [
@@ -162,6 +163,7 @@ import { TalkingInputComponent } from './Controllers/talking-input.component';
         MyThreadsRepository,
         ThreadsApiService,
         BlocksApiService,
+        UserInfoCacheDictionary,
     ],
     bootstrap: [AppComponent],
 })

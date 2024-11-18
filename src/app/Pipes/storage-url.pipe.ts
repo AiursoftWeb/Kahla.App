@@ -6,7 +6,7 @@ import { Values } from '../values';
 })
 export class StorageUrlPipe implements PipeTransform {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    transform(value: string): string {
+    transform(value?: string): string {
         return Values.loadingImgURL; // TODO: Implement the new OSS
     }
 }
