@@ -1,5 +1,7 @@
 @import 'effects';
 
+@include kf-shake;
+
 :host {
   display: flex;
   width: 100%;

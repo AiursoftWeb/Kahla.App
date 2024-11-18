@@ -2,16 +2,23 @@ import { Subject } from 'rxjs';
 
 export class VoiceRecorder {
     private audioChunks = [];
-    private stream: MediaStream;
-    private recorder: MediaRecorder;
-    private forceStopTimeout: ReturnType<typeof setTimeout>;
+    private recorder?: MediaRecorder;
+    private forceStopTimeout?: ReturnType<typeof setTimeout>;
     public gotAudio = new Subject<Blob>();
+    public get recording(): boolean {
+        return this.recorder && this.recorder.state === 'recording';
+    }
+
+    private inited = false;
 
     constructor(private maxSeconds: number) {}
 
     public async init() {
-        this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        this.recorder = new MediaRecorder(this.stream);
+        if (this.inited) {
+            return;
+        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        this.recorder = new MediaRecorder(stream);
 
         this.recorder.addEventListener('dataavailable', event => {
             this.audioChunks.push(event.data);
@@ -20,19 +27,26 @@ export class VoiceRecorder {
             this.gotAudio.next(new Blob(this.audioChunks));
             this.audioChunks = [];
         });
+        this.inited = true;
     }
 
     public startRecording() {
-        this.recorder.start();
-        this.forceStopTimeout = setTimeout(() => {
-            this.stopRecording();
-        }, this.maxSeconds * 1000);
+        if (!this.recorder) {
+            this.recorder.start();
+            this.forceStopTimeout = setTimeout(() => {
+                this.stopRecording();
+            }, this.maxSeconds * 1000);
+        }
     }
 
     public stopRecording() {
-        if (this.recorder.state === 'recording') {
+        if (this.recording) {
             this.recorder.stop();
         }
-        clearTimeout(this.forceStopTimeout);
+
+        if (this.forceStopTimeout) {
+            clearTimeout(this.forceStopTimeout);
+            this.forceStopTimeout = undefined;
+        }
     }
 }

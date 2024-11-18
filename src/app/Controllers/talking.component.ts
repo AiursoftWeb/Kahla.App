@@ -52,13 +52,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     @ViewChild('header', { static: true }) public header: HeaderComponent;
 
     constructor(
-        private route: ActivatedRoute,
         private router: Router,
-        private conversationApiService: ConversationApiService,
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        private themeService: ThemeService,
         public probeService: ProbeService
     ) {}
 
@@ -108,62 +105,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         }
     }
 
-    @HostListener('keydown', ['$event'])
-    onKeydown(e: KeyboardEvent) {
-        if (e.key === 'Enter' && !this.showUserList) {
-            e.preventDefault();
-            if (
-                (e.altKey || e.ctrlKey || e.shiftKey) ===
-                this.cacheService.cachedData.options.enableEnterToSendMessage
-            ) {
-                this.insertToSelection('\n');
-                this.oldContent = ''; // prevent send message on keyup
-            } else {
-                this.oldContent = this.content;
-            }
-        }
-    }
-
-    @HostListener('keyup', ['$event'])
-    onKeyup(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (this.showUserList) {
-                // accept default suggestion
-                this.complete(this.matchedUsers[0].nickName);
-            } else if (this.oldContent === this.content) {
-                this.send();
-                this.showUserList = false;
-            }
-        } else if (this.content && e.key !== 'Backspace') {
-            this.showUserList = false;
-            const input = document.getElementById('chatInput') as HTMLTextAreaElement;
-            const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
-            const typingWord = typingWords[typingWords.length - 1];
-            if (typingWord.charAt(0) === '@') {
-                const searchName = typingWord.slice(1).toLowerCase();
-                const searchResults = this.messageService.searchUser(searchName, false);
-                if (searchResults.length > 0) {
-                    this.matchedUsers = searchResults;
-                    this.showUserList = true;
-                }
-            }
-        } else {
-            this.showUserList = false;
-        }
-    }
-
     public ngOnInit(): void {
-        // const inputElement = document.querySelector('#chatInput') as HTMLElement;
-        // inputElement.addEventListener('input', () => {
-        //     inputElement.style.height = 'auto';
-        //     inputElement.style.height = inputElement.scrollHeight + 'px';
-        //     this.chatInputHeight = inputElement.scrollHeight;
-        //     if (document.querySelector('#scrollDown')) {
-        //         (document.querySelector('#scrollDown') as HTMLElement).style.bottom =
-        //             inputElement.scrollHeight + 46 + 'px';
-        //     }
-        // });
         // this.route.params.subscribe(async params => {
         //     if (!this.messageService.talkingDestroyed) {
         //         this.destroyCurrent();
@@ -213,14 +155,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         // this.windowInnerHeight = window.innerHeight;
     }
 
-    private updateInputHeight(): void {
-        const inputElement = document.querySelector('#chatInput') as HTMLElement;
-        setTimeout(() => {
-            inputElement.style.height = inputElement.scrollHeight + 'px';
-            this.chatInputHeight = inputElement.scrollHeight;
-        }, 0);
-    }
-
     public updateConversation(conversation: Conversation): void {
         this.messageService.conversation = conversation;
         this.header.title = conversation.displayName;
@@ -232,127 +166,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             this.header.buttonIcon = `users`;
             this.header.buttonLink = `/group/${conversation.id}`;
         }
-    }
-
-    public send(): void {
-        if (this.content.trim().length === 0) {
-            return;
-        }
-        // TODO: Send message
-        this.content = '';
-        const inputElement = document.querySelector('#chatInput') as HTMLTextAreaElement;
-        inputElement.focus();
-        inputElement.style.height = 34 + 'px';
-    }
-
-    public resend(message: Message): void {
-        const messageIDArry = this.messageService.getAtIDs(message.content);
-        this.conversationApiService
-            .SendMessage(
-                this.messageService.conversation.id,
-                message.content,
-                message.id,
-                messageIDArry.slice(1)
-            )
-            .subscribe(result => {
-                if (result.code === 0) {
-                    this.delete(message);
-                }
-            });
-    }
-
-    public delete(message: Message): void {
-        this.messageService.localMessages.splice(
-            this.messageService.localMessages.indexOf(message),
-            1
-        );
-        const unsentMessages = new Map(JSON.parse(localStorage.getItem('unsentMessages')));
-        const tempArray = unsentMessages.get(this.conversationID) as Message[];
-        const index = tempArray.findIndex(t => t.id === message.id);
-        tempArray.splice(index, 1);
-        unsentMessages.set(this.conversationID, tempArray);
-        localStorage.setItem('unsentMessages', JSON.stringify(Array.from(unsentMessages)));
-    }
-
-    public startInput(): void {
-        if (this.showPanel) {
-            this.showPanel = false;
-            document.querySelector('.message-list').classList.remove('active-list');
-            if (this.messageService.belowWindowPercent > 0) {
-                window.scroll(0, window.scrollY - 105);
-            }
-        }
-    }
-
-    public togglePanel(): void {
-        this.showPanel = !this.showPanel;
-        if (this.showPanel) {
-            window.scroll(0, window.scrollY + 105);
-        } else {
-            if (this.messageService.belowWindowPercent <= 0.2) {
-                this.messageService.scrollBottom(false);
-            } else {
-                window.scroll(0, window.scrollY - 105);
-            }
-        }
-    }
-
-    public uploadInput(fileType: FileType): void {}
-
-    public record(): void {
-        if (this.recording) {
-            this.mediaRecorder.stop();
-        } else {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(
-                stream => {
-                    this.recording = true;
-                    this.mediaRecorder = new MediaRecorder(stream);
-                    this.mediaRecorder.start();
-                    const audioChunks = [];
-                    this.mediaRecorder.addEventListener('dataavailable', event => {
-                        audioChunks.push(event.data);
-                    });
-                    this.mediaRecorder.addEventListener('stop', () => {
-                        this.recording = false;
-                        const audioBlob = new File(
-                            audioChunks,
-                            `voiceMsg_${new Date().getTime()}.opus`
-                        );
-                        this.uploadService
-                            .upload(audioBlob, this.conversationID, FileType.Audio)
-                            .then(() => this.messageService.scrollBottom(true));
-                        clearTimeout(this.forceStopTimeout);
-                        stream.getTracks().forEach(track => track.stop());
-                    });
-                    this.forceStopTimeout = setTimeout(
-                        () => {
-                            this.mediaRecorder.stop();
-                        },
-                        1000 * 60 * 5
-                    );
-                },
-                () => {
-                    return;
-                }
-            );
-        }
-    }
-
-    public emoji(): void {
-        const chatBox = document.querySelector('.chat-box') as HTMLElement;
-        if (!this.picker) {
-            this.picker = new EmojiButton({
-                position: 'top-start',
-                zIndex: 20,
-                theme: this.themeService.IsDarkTheme() ? 'dark' : 'light',
-                autoFocusSearch: false,
-                showSearch: false,
-            });
-            this.picker.on('emoji', emoji => {
-                this.insertToSelection(emoji);
-            });
-        }
-        this.picker.togglePicker(chatBox);
     }
 
     public complete(nickname: string): void {
@@ -373,10 +186,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
             input.setSelectionRange(pointerPos, pointerPos);
             input.focus();
         }, 0);
-    }
-
-    public hideUserList(): void {
-        this.showUserList = false;
     }
 
     public ngOnDestroy(): void {
@@ -408,17 +217,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public getAtListMaxHeight(): number {
         return window.innerHeight - this.chatInputHeight - 106;
-    }
-
-    public insertToSelection(content: string) {
-        const input = document.getElementById('chatInput') as HTMLTextAreaElement;
-        this.content = this.content
-            ? `${this.content.slice(
-                  0,
-                  input.selectionStart
-              )}${content}${this.content.slice(input.selectionStart)}`
-            : content;
-        this.updateInputHeight();
     }
 
     public async loadMore() {
@@ -515,6 +313,17 @@ export class TalkingComponent implements OnInit, OnDestroy {
             ];
         }
         return this.temp_demo_msg;
+    }
+
+    public send({ content }: { content: MessageContent }) {
+        this.temp_demo_msg.push({
+            id: uuid4(),
+            content: JSON.stringify(content),
+            senderId: this.cacheService.cachedData.me.id,
+            sender: this.cacheService.cachedData.me,
+            local: true,
+            sendTimeDate: new Date(),
+        } as Message);
     }
 
     // @HostListener('window:focus')

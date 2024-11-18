@@ -1,1 +1,96 @@
-<!-- view for talking-input -->
+<!-- <ul
+        *ngIf="showUserList"
+        class="userList"
+        [ngClass]="{ oneResult: matchedUsers.length === 1 }"
+        [style.max-height.px]="getAtListMaxHeight()"
+    >
+        <li
+            *ngFor="let user of matchedUsers"
+            (click)="complete(user.nickName)"
+            class="menu-button-transparent"
+        >
+            <img
+                class="img"
+                src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=128&square=true"
+            />
+            <div class="text">{{ user.nickName }}</div>
+        </li>
+    </ul> -->
+<div class="chat-box" #chatBox>
+    <div
+        class="chat-part"
+        [class.empty]="!textContent() || textContent().trim().length === 0"
+        [class.no-send-button]="cacheService.cachedData?.options?.enableEnterToSendMessage"
+    >
+        <i
+            class="far fa-smile-wink"
+            aria-hidden="true"
+            (click)="emoji()"
+            style="margin-right: 7px; margin-top: 2px"
+        ></i>
+        <textarea
+            id="chatInput"
+            #chatInput
+            [(ngModel)]="textContent"
+            type="text"
+            (click)="startInput()"
+            (keydown)="inputKeydown($event)"
+            rows="1"
+            maxlength="500"
+        ></textarea>
+        <button
+            class="button primary"
+            (click)="send()"
+            *ngIf="!cacheService.cachedData.options.enableEnterToSendMessage"
+        >
+            Send
+        </button>
+        <i
+            class="fas fa-microphone auto-hide"
+            aria-hidden="true"
+            (click)="record()"
+            [class.active]="recorder.recording"
+        ></i>
+        <i class="icon fa fa-plus-circle auto-hide" (click)="showPanel.set(!showPanel())"></i>
+    </div>
+    @if (showPanel()) {
+        <div class="more-panel">
+            <!--Refactor to tool class-->
+            <div class="of4">
+                <input
+                    type="file"
+                    name="image"
+                    id="image"
+                    class="inputfile"
+                    #imageInput
+                    accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml"
+                />
+                <label for="image"
+                    ><i style="color: #ff9800" class="far fa-file-image"></i>
+                    <div class="text">Send Image</div>
+                </label>
+            </div>
+            <div class="of4">
+                <input
+                    type="file"
+                    name="video"
+                    id="video"
+                    class="inputfile"
+                    #videoInput
+                    accept="video/mp4, video/x-m4v, video/*"
+                />
+                <label for="video"
+                    ><i style="color: #00cc9c" class="far fa-file-video"></i>
+                    <div class="text">Send Video</div>
+                </label>
+            </div>
+            <div class="of4">
+                <input type="file" name="file" id="file" class="inputfile" #fileInput />
+                <label for="file"
+                    ><i style="color: #4694f6" class="far fa-file-alt"></i>
+                    <div class="text">Send File</div>
+                </label>
+            </div>
+        </div>
+    }
+</div>
