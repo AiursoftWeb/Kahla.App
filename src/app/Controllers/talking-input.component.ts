@@ -3,6 +3,7 @@ import {
     effect,
     ElementRef,
     EventEmitter,
+    model,
     Output,
     signal,
     viewChild,
@@ -21,7 +22,7 @@ import { MessageSegmentText } from '../Models/Messages/MessageSegments';
 })
 export class TalkingInputComponent {
     textContent = signal('');
-    showPanel = signal(false);
+    showPanel = model(false);
 
     private picker: EmojiButton;
 
@@ -42,12 +43,13 @@ export class TalkingInputComponent {
             this.textContent();
             if (this.chatInput()) {
                 //wordaround https://stackoverflow.com/questions/2803880/is-there-a-way-to-get-a-textarea-to-stretch-to-fit-its-content-without-using-php
-                setTimeout(
-                    () =>
-                        (this.chatInput().nativeElement.style['--contentHeight'] =
-                            this.chatInput().nativeElement.scrollHeight + 'px'),
-                    0
-                );
+                setTimeout(() => {
+                    this.chatInput().nativeElement.style.setProperty('--content-height', '');
+                    this.chatInput().nativeElement.style.setProperty(
+                        '--content-height',
+                        this.chatInput().nativeElement.scrollHeight + 'px'
+                    );
+                }, 0);
             }
         });
     }
@@ -167,5 +169,26 @@ export class TalkingInputComponent {
     //     } else {
     //         this.showUserList = false;
     //     }
+    // }
+
+    
+    // public complete(nickname: string): void {
+    //     const input = document.getElementById('chatInput') as HTMLTextAreaElement;
+    //     const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
+    //     const typingWord = typingWords[typingWords.length - 1];
+    //     const before = this.content.slice(
+    //         0,
+    //         input.selectionStart - typingWord.length + typingWord.indexOf('@')
+    //     );
+    //     this.content = `${before}@${nickname.replace(
+    //         / /g,
+    //         ''
+    //     )} ${this.content.slice(input.selectionStart)}`;
+    //     this.showUserList = false;
+    //     const pointerPos = before.length + nickname.replace(/ /g, '').length + 2;
+    //     setTimeout(() => {
+    //         input.setSelectionRange(pointerPos, pointerPos);
+    //         input.focus();
+    //     }, 0);
     // }
 }

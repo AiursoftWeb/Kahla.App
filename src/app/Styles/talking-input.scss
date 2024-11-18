@@ -66,6 +66,7 @@
         background-color: var(--text-input-bg);
         color: var(--default-textcolor);
         flex: 1 1 auto;
+        height: clamp(34px, var(--content-height), 300px);
       }
 
       button {

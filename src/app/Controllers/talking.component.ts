@@ -1,18 +1,12 @@
-﻿import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConversationApiService } from '../Services/Api/ConversationApiService';
+﻿import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Message } from '../Models/Message';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { HeaderComponent } from './header.component';
 import { CacheService } from '../Services/CacheService';
-import { Conversation } from '../Models/Conversation';
-import { FileType } from '../Models/FileType';
 import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Utils/Uuid';
-import EmojiButton from '@joeattardi/emoji-button';
-import { ThemeService } from '../Services/ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
@@ -28,28 +22,18 @@ import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
     ],
 })
 export class TalkingComponent implements OnInit, OnDestroy {
-    public content = '';
-    public showPanel = false;
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
     private conversationID = 0;
     public autoSaveInterval;
-    public recording = false;
-    private mediaRecorder;
-    private forceStopTimeout;
-    private oldContent: string;
     private chatInputHeight: number;
-    private picker: EmojiButton;
     public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
     public matchedUsers: KahlaUser[] = [];
     public loadingMore: boolean;
 
-    @ViewChild('imageInput') public imageInput;
-    @ViewChild('videoInput') public videoInput;
-    @ViewChild('fileInput') public fileInput;
-    @ViewChild('header', { static: true }) public header: HeaderComponent;
+    public showPanel = signal(false);
 
     constructor(
         private router: Router,
@@ -155,46 +139,12 @@ export class TalkingComponent implements OnInit, OnDestroy {
         // this.windowInnerHeight = window.innerHeight;
     }
 
-    public updateConversation(conversation: Conversation): void {
-        this.messageService.conversation = conversation;
-        this.header.title = conversation.displayName;
-        this.header.button = true;
-        if (conversation.anotherUserId) {
-            this.header.buttonIcon = 'user';
-            this.header.buttonLink = `/user/${conversation.anotherUserId}`;
-        } else {
-            this.header.buttonIcon = `users`;
-            this.header.buttonLink = `/group/${conversation.id}`;
-        }
-    }
-
-    public complete(nickname: string): void {
-        const input = document.getElementById('chatInput') as HTMLTextAreaElement;
-        const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
-        const typingWord = typingWords[typingWords.length - 1];
-        const before = this.content.slice(
-            0,
-            input.selectionStart - typingWord.length + typingWord.indexOf('@')
-        );
-        this.content = `${before}@${nickname.replace(
-            / /g,
-            ''
-        )} ${this.content.slice(input.selectionStart)}`;
-        this.showUserList = false;
-        const pointerPos = before.length + nickname.replace(/ /g, '').length + 2;
-        setTimeout(() => {
-            input.setSelectionRange(pointerPos, pointerPos);
-            input.focus();
-        }, 0);
-    }
-
     public ngOnDestroy(): void {
         this.destroyCurrent();
     }
 
     public destroyCurrent() {
         this.messageService.talkingDestroyed = true;
-        this.content = null;
         this.showPanel = null;
         this.messageService.resetVariables();
         this.conversationID = null;

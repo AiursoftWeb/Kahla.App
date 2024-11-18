@@ -1,6 +1,7 @@
 .message-list {
   list-style: none;
   overflow-x: hidden;
+  overflow-y: clip;
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
