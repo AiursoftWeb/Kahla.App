@@ -23,15 +23,11 @@ import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 })
 export class MessageService {
     public conversation: Conversation;
-    public localMessages: Message[] = [];
-    public rawMessages: Message[] = [];
-    public noMoreMessages = false;
     public belowWindowPercent = 0;
     public newMessages = false;
     public videoHeight = 0;
     private userColors = new Map<string, string>();
     public messageLoading = false;
-    public fileAccessToken: string;
     public shareRef: MessageFileRef;
     public talkingDestroyed = false;
     public showMessagesCount = 15;
@@ -115,13 +111,9 @@ export class MessageService {
 
     public resetVariables(): void {
         this.conversation = null;
-        this.localMessages = [];
-        this.rawMessages = [];
-        this.noMoreMessages = false;
         this.belowWindowPercent = 0;
         this.newMessages = false;
         this.userColors.clear();
-        this.fileAccessToken = null;
     }
 
     public getRandomColor(darkColor: boolean): string {
@@ -217,20 +209,6 @@ export class MessageService {
                 };
             }
         }, 0);
-    }
-
-    public saveMessage(): void {
-        localStorage.setItem(`cache-log-${this.conversation.id}`, JSON.stringify(this.rawMessages));
-    }
-
-    public initMessage(conversationId: number): void {
-        const json = localStorage.getItem(`cache-log-${conversationId}`);
-        if (json) {
-            this.rawMessages = JSON.parse(json);
-        }
-        this.localMessages = this.rawMessages;
-        this.updateAtLink();
-        setTimeout(() => this.scrollBottom(false), 0);
     }
 
     public upperFloorImageSize(width: number) {

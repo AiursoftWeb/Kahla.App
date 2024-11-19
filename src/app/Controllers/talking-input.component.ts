@@ -128,7 +128,7 @@ export class TalkingInputComponent {
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {
-                    preview: this.textContent(),
+                    preview: this.textContent().slice(0, 50),
                     v: 1,
                     segments: [
                         {
