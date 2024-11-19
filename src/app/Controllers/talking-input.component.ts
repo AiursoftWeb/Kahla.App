@@ -14,6 +14,7 @@ import EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { VoiceRecorder } from '../Utils/VoiceRecord';
 import { MessageSegmentText } from '../Models/Messages/MessageSegments';
+import { truncateUTF8Bytes } from '../Utils/StringUtils';
 
 @Component({
     selector: 'app-talking-input',
@@ -128,7 +129,7 @@ export class TalkingInputComponent {
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {
-                    preview: this.textContent().slice(0, 50),
+                    preview: truncateUTF8Bytes(this.textContent(), 57, true),
                     v: 1,
                     segments: [
                         {
@@ -192,3 +193,4 @@ export class TalkingInputComponent {
     //     }, 0);
     // }
 }
+
