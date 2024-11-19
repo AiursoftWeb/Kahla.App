@@ -12,4 +12,8 @@ export class MessagesApiService {
     public InitWebsocket(): Observable<InitWebsocketViewModel> {
         return this.apiService.Post(MessagesApiService.serverPath + '/init-websocket', {});
     }
+
+    public InitThreadWebsocket(threadId: number): Observable<InitWebsocketViewModel> {
+        return this.apiService.Post(MessagesApiService.serverPath + `/init-thread-websocket/${threadId}`, {});
+    }
 }

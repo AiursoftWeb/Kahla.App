@@ -46,11 +46,12 @@
     .chat-part {
       transition: all 0.15s ease-in-out;
       display: flex;
+      align-items: end;
 
       textarea {
         width: 100%;
         border: none;
-        border-radius: 6px 0 0 6px;
+        border-radius: 6px min(calc(var(--content-height) - 34px), 6px) 0 6px;
         transition:
           border-color ease-in-out 0.15s,
           box-shadow ease-in-out 0.15s,

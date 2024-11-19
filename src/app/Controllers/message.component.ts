@@ -35,7 +35,6 @@ export class MessageComponent {
 
     constructor(userInfoCacheDictionary: UserInfoCacheDictionary) {
         effect(async () => {
-            console.log("Get user info");
             this.userInfo = await userInfoCacheDictionary.get(this.message().senderId);
         })
     }

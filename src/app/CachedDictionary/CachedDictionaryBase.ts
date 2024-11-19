@@ -1,5 +1,5 @@
 interface CacheEntry<T> {
-    item: T;
+    item: Promise<T>;
     cachedTime: Date;
 }
 
@@ -13,20 +13,20 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
             this.cache.has(key) &&
             new Date().getTime() - this.cache.get(key).cachedTime.getTime() < this.ttlSeconds * 1000
         ) {
-            return this.cache.get(key).item;
+            return await this.cache.get(key).item;
         } else {
-            const value = await this.cacheMiss(key);
+            const value = this.cacheMiss(key);
             this.cache.set(key, {
                 item: value,
                 cachedTime: new Date(),
             });
-            return value;
+            return await value;
         }
     }
 
     public set(key: TKey, value: TValue) {
         this.cache.set(key, {
-            item: value,
+            item: Promise.resolve(value),
             cachedTime: new Date(),
         });
     }

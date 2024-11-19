@@ -1,5 +1,5 @@
 ﻿import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from '../Models/Message';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
@@ -9,8 +9,21 @@ import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
-import { MessageSegmentFile } from '../Models/Messages/MessageSegments';
+import {
+    MessageSegmentFile,
+    MessageSegmentImage,
+    MessageSegmentText,
+} from '../Models/Messages/MessageSegments';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
+import {
+    AVCArrayStorage,
+    AVCCommit,
+    AVCRepository,
+    AVCWebsocketRemote,
+} from 'aiur-version-control';
+import { MessageCommit } from '../Models/Messages/MessageCommit';
+import { lastValueFrom, map } from 'rxjs';
+import { MessagesApiService } from '../Services/Api/MessagesApiService';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -27,22 +40,41 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
     private conversationID = 0;
-    public autoSaveInterval;
     private chatInputHeight: number;
-    public showUserList = false;
     public lastAutoLoadMoreTimestamp = 0;
-    public matchedUsers: KahlaUser[] = [];
     public loadingMore: boolean;
+
+    public repo?: AVCRepository<MessageCommit>;
+    public remote?: AVCWebsocketRemote<MessageCommit>;
+    public parsedMessages: ParsedMessage[] = [];
 
     public showPanel = signal(false);
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        public probeService: ProbeService
-    ) {}
+        public probeService: ProbeService,
+        private messageApiService: MessagesApiService
+    ) {
+        this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
+            this.parsedMessages = [];
+            this.repo = new AVCRepository(new AVCArrayStorage());
+            // Obtain the websocket connection token
+            const resp = await lastValueFrom(messageApiService.InitThreadWebsocket(id));
+            this.remote = new AVCWebsocketRemote<MessageCommit>(resp.webSocketEndpoint);
+            this.remote.attach(this.repo, true, true);
+            this.repo.commitsStorage.onAdded.subscribe(event => {
+                this.parsedMessages.splice(
+                    event.afterIdx + 1,
+                    0,
+                    ...event.newEntries.map(t => ParsedMessage.fromCommit(t))
+                );
+            });
+        });
+    }
 
     @HostListener('window:resize', [])
     onResize() {
@@ -149,8 +181,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         this.showPanel = null;
         this.messageService.resetVariables();
         this.conversationID = null;
-        clearInterval(this.autoSaveInterval);
-        this.autoSaveInterval = null;
     }
 
     public shareToOther(fileRef: MessageFileRef): void {
@@ -206,7 +236,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                                 content:
                                     'A text message. \nAutolinker test: https://google.com \nA loooooooong text the quick brown fox jumps over the lazy dog. \n There are a lot of space between                                here.\nLoren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. ',
                                 ats: [],
-                            },
+                            } satisfies MessageSegmentText,
                         ],
                         v: 1,
                     },
@@ -221,13 +251,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
                                 type: 'text',
                                 content: 'A image message with a text',
                                 ats: [],
-                            },
+                            } satisfies MessageSegmentText,
                             {
                                 type: 'image',
                                 url: 'aaa',
                                 width: 3840,
                                 height: 2160,
-                            },
+                            } satisfies MessageSegmentImage,
                         ],
                         v: 1,
                     },
@@ -242,7 +272,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
                                 type: 'text',
                                 content: 'A file message with a text',
                                 ats: [],
-                            },
+                            } satisfies MessageSegmentText,
                             {
                                 type: 'file',
                                 size: 123456789,
@@ -261,9 +291,13 @@ export class TalkingComponent implements OnInit, OnDestroy {
     }
 
     public send({ content }: { content: MessageContent }) {
-        this.temp_demo_msg.push(
-            new ParsedMessage(uuid4(), content, this.cacheService.cachedData.me.id, new Date())
-        );
+        // this.temp_demo_msg.push(
+        //     new ParsedMessage(uuid4(), content, this.cacheService.cachedData.me.id, new Date())
+        // );
+        this.repo.commit({
+            content: JSON.stringify(content),
+            senderId: this.cacheService.cachedData.me.id ?? uuid4()
+        });
     }
 
     // @HostListener('window:focus')
