@@ -1,10 +1,10 @@
 FROM hub.aiursoft.cn/node:latest as yarn-env
 WORKDIR /app
-COPY ./package.json ./yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY ./package.json ./yarn.lock ./yarnrc.yml ./
+RUN corepack enable && corepack yarn install --immutable
 COPY . .
 
-RUN yarn run build
+RUN corepack yarn run build
 
 FROM hub.aiursoft.cn/aiursoft/static
 COPY --from=yarn-env /app/dist/browser /data

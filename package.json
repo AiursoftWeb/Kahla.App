@@ -62,5 +62,5 @@
   },
   "homepage": "https://www.kahla.app",
   "release": "build",
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.5.1"
 }
