@@ -8,6 +8,7 @@ import { Values } from '../values';
     selector: 'app-threads-list',
     templateUrl: '../Views/threads-list.html',
     styleUrls: ['../Styles/threads-list.scss', '../Styles/reddot.scss'],
+    standalone: false
 })
 export class ThreadsListComponent {
     @Input() public threadRepo: RepositoryBase<ThreadInfo>;

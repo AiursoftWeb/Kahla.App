@@ -7,6 +7,7 @@ import { Values } from '../values';
     selector: 'app-contact-list',
     templateUrl: '../Views/contact-list.html',
     styleUrls: ['../Styles/contact-list.scss', '../Styles/reddot.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class ContactListComponent {
     public loadingImgURL = Values.loadingImgURL;

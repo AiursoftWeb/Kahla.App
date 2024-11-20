@@ -22,6 +22,7 @@ import { KahlaUser } from '../Models/KahlaUser';
         '[class.left]': '!isByMe()',
         '[class.right]': 'isByMe()',
     },
+    standalone: false
 })
 export class MessageComponent {
     message = input.required<ParsedMessage>();

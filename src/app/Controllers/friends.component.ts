@@ -22,6 +22,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
         '../Styles/button.scss',
         '../Styles/badge.scss',
     ],
+    standalone: false
 })
 export class FriendsComponent implements OnInit, AfterViewInit {
     public loadingImgURL = Values.loadingImgURL;

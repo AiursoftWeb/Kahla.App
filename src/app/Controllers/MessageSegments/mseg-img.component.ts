@@ -6,6 +6,7 @@ import { HomeService } from '../../Services/HomeService';
     selector: 'app-mseg-img',
     templateUrl: '../../Views/MessageSegments/mseg-img.html',
     styleUrls: ['../../Styles/MessageSegments/mseg-img.scss'],
+    standalone: false
 })
 export class MessageSegmentImgComponent implements OnInit {
     content = input.required<MessageSegmentImage>();

@@ -14,6 +14,7 @@ import { humanReadableBytes } from '../Utils/StringUtils';
     selector: 'app-file-history',
     templateUrl: '../Views/file-history.html',
     styleUrls: ['../Styles/menu.scss', '../Styles/file-list.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class FileHistoryComponent implements OnInit {
     public files: FileHistoryApiModel[] = [];

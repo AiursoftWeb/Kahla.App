@@ -20,6 +20,7 @@ import { SwalToast } from '../Utils/Toast';
         '../Styles/button.scss',
         '../Styles/toggleButton.scss',
     ],
+    standalone: false
 })
 export class ManageGroupComponent implements OnInit {
     public conversation: GroupConversation;

@@ -7,6 +7,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 @Component({
     templateUrl: '../Views/changePassword.html',
     styleUrls: ['../Styles/menu-textbox.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class ChangePasswordComponent {
     public oldPassword = '';

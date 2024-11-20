@@ -8,6 +8,7 @@ import { ThreadInfo } from '../Models/ThreadInfo';
 @Component({
     templateUrl: '../Views/thread-info.html',
     styleUrls: ['../Styles/thread-info.scss', '../Styles/menu.scss'],
+    standalone: false
 })
 export class ThreadInfoComponent {
     thread?: ThreadInfo = null;

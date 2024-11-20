@@ -34,6 +34,7 @@ import { MessagesApiService } from '../Services/Api/MessagesApiService';
         '../Styles/menu.scss',
         '../Styles/badge.scss',
     ],
+    standalone: false
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
@@ -98,28 +99,27 @@ export class TalkingComponent implements OnInit, OnDestroy {
         if (this.messageService.belowWindowPercent <= 0) {
             this.messageService.newMessages = false;
         }
-        if (
-            window.scrollY <= 0 &&
-            document.documentElement.scrollHeight > document.documentElement.clientHeight + 100 &&
-            this.messageService.conversation &&
-            !this.messageService.messageLoading &&
-            !this.messageService.noMoreMessages
-        ) {
-            const now = Date.now();
-            const interval =
-                this.messageService.showMessagesCount < this.messageService.localMessages.length
-                    ? 10
-                    : 2000;
-            if (this.lastAutoLoadMoreTimestamp + interval < now) {
-                this.loadMore();
-                this.lastAutoLoadMoreTimestamp = now;
-            } else {
-                setTimeout(
-                    () => this.onScroll(),
-                    this.lastAutoLoadMoreTimestamp + interval + 10 - now
-                );
-            }
-        }
+        // if (
+        //     window.scrollY <= 0 &&
+        //     document.documentElement.scrollHeight > document.documentElement.clientHeight + 100 &&
+        //     this.messageService.conversation &&
+        //     !this.messageService.messageLoading
+        // ) {
+        //     const now = Date.now();
+        //     const interval =
+        //         this.messageService.showMessagesCount < this.messageService.localMessages.length
+        //             ? 10
+        //             : 2000;
+        //     if (this.lastAutoLoadMoreTimestamp + interval < now) {
+        //         this.loadMore();
+        //         this.lastAutoLoadMoreTimestamp = now;
+        //     } else {
+        //         setTimeout(
+        //             () => this.onScroll(),
+        //             this.lastAutoLoadMoreTimestamp + interval + 10 - now
+        //         );
+        //     }
+        // }
     }
 
     public ngOnInit(): void {
@@ -202,14 +202,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public async loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
-        if (this.messageService.showMessagesCount < this.messageService.localMessages.length) {
-            this.messageService.showMessagesCount += 15;
-        } else if (!this.messageService.noMoreMessages) {
-            this.loadingMore = false;
-            this.messageService.showMessagesCount = this.messageService.localMessages.length;
-        } else {
-            return;
-        }
         setTimeout(() => {
             window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
         }, 0);

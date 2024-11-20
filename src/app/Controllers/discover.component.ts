@@ -7,6 +7,7 @@ import { ProbeService } from '../Services/ProbeService';
 @Component({
     templateUrl: '../Views/discover.html',
     styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/discovers.scss'],
+    standalone: false
 })
 export class DiscoverComponent implements OnInit {
     private amount = 15;

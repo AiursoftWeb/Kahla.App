@@ -6,6 +6,7 @@ import { HomeService } from '../Services/HomeService';
     selector: 'app-nav',
     templateUrl: '../Views/nav.html',
     styleUrls: ['../Styles/nav.scss', '../Styles/reddot.scss'],
+    standalone: false
 })
 export class NavComponent {
     constructor(

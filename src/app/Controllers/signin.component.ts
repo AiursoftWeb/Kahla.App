@@ -9,6 +9,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 @Component({
     templateUrl: '../Views/signin.html',
     styleUrls: ['../Styles/signin.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class SignInComponent {
     public userName = '';

@@ -20,6 +20,7 @@ import { truncateUTF8Bytes } from '../Utils/StringUtils';
     selector: 'app-talking-input',
     templateUrl: '../Views/talking-input.html',
     styleUrls: ['../Styles/talking-input.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class TalkingInputComponent {
     textContent = signal('');

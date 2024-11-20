@@ -6,6 +6,7 @@ import Autolinker, { MentionMatch } from 'autolinker';
     selector: 'app-mseg-text',
     templateUrl: '../../Views/MessageSegments/mseg-text.html',
     styleUrls: ['../../Styles/MessageSegments/mseg-text.scss'],
+    standalone: false
 })
 export class MessageSegmentTextComponent {
     content = input.required<MessageSegmentText>();

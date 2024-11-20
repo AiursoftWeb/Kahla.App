@@ -10,6 +10,7 @@ import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
 @Component({
     templateUrl: '../Views/devices.html',
     styleUrls: ['../Styles/menu.scss'],
+    standalone: false
 })
 export class DevicesComponent implements OnInit {
     constructor(

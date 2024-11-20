@@ -5,6 +5,7 @@ import { scrollTop } from '../Utils/Scrolling';
     selector: 'app-scroll-button',
     templateUrl: '../Views/scroll-button.html',
     styleUrls: ['../Styles/scroll-button.scss', '../Styles/button.scss'],
+    standalone: false
 })
 export class ScrollButtonComponent implements OnInit {
     emphasis = input<boolean>(false);

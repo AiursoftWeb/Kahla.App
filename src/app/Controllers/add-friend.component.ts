@@ -8,6 +8,7 @@ import { ServerThreadsRepository } from '../Repositories/ServerThreadsRepository
 @Component({
     templateUrl: '../Views/add-friend.html',
     styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
+    standalone: false
 })
 export class AddFriendComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;

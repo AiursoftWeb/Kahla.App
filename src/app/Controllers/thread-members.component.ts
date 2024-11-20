@@ -8,6 +8,7 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
     selector: 'app-thread-members',
     templateUrl: '../Views/thread-members.html',
     styleUrls: ['../Styles/thread-members.scss'],
+    standalone: false
 })
 export class ThreadMembersComponent {
     repo?: ThreadMembersRepository;

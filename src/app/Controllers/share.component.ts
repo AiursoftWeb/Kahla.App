@@ -26,6 +26,7 @@ import { Message } from '../Models/Message';
         '../Styles/button.scss',
         '../Styles/badge.scss',
     ],
+    standalone: false
 })
 export class ShareComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;

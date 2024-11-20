@@ -13,6 +13,7 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
     selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
     styleUrls: [],
+    standalone: false
 })
 export class ConversationsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;

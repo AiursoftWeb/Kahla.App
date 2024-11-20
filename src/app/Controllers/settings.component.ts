@@ -19,6 +19,7 @@ import { WebpushService } from '../Services/WebpushService';
         '../Styles/button.scss',
         '../Styles/badge.scss',
     ],
+    standalone: false
 })
 export class SettingsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
