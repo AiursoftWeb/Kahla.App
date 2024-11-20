@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GroupsApiService } from '../Services/Api/GroupsApiService';
 import { MessageService } from '../Services/MessageService';
-import { filter, map, switchMap } from 'rxjs/operators';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GroupConversation } from '../Models/GroupConversation';
-import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import Swal from 'sweetalert2';
 import { UploadService } from '../Services/UploadService';
 import { AiurCollection } from '../Models/AiurCollection';
@@ -20,7 +18,7 @@ import { SwalToast } from '../Utils/Toast';
         '../Styles/button.scss',
         '../Styles/toggleButton.scss',
     ],
-    standalone: false
+    standalone: false,
 })
 export class ManageGroupComponent implements OnInit {
     public conversation: GroupConversation;
@@ -31,7 +29,6 @@ export class ManageGroupComponent implements OnInit {
         public groupsApiService: GroupsApiService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        public conversationApiService: ConversationApiService,
         public route: ActivatedRoute,
         private router: Router,
         public uploadService: UploadService,
@@ -40,22 +37,22 @@ export class ManageGroupComponent implements OnInit {
 
     ngOnInit(): void {
         if (!this.messageService.conversation) {
-            this.route.params
-                .pipe(
-                    switchMap((params: Params) =>
-                        this.conversationApiService.ConversationDetail(+params['id'])
-                    ),
-                    filter(t => t.code === 0),
-                    map(t => t.value)
-                )
-                .subscribe(conversation => {
-                    this.messageService.conversation = conversation;
-                    this.conversation = conversation as GroupConversation;
-                    this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(
-                        this.conversation.groupImagePath
-                    );
-                    this.newGroupName = this.conversation.groupName;
-                });
+            // this.route.params
+            //     .pipe(
+            //         switchMap((params: Params) =>
+            //             this.conversationApiService.ConversationDetail(+params['id'])
+            //         ),
+            //         filter(t => t.code === 0),
+            //         map(t => t.value)
+            //     )
+            //     .subscribe(conversation => {
+            //         this.messageService.conversation = conversation;
+            //         this.conversation = conversation as GroupConversation;
+            //         this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(
+            //             this.conversation.groupImagePath
+            //         );
+            //         this.newGroupName = this.conversation.groupName;
+            //     });
         } else {
             this.conversation = this.messageService.conversation as GroupConversation;
             this.conversation.avatarURL = this.probeService.encodeProbeFileUrl(

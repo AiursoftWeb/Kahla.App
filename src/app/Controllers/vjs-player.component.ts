@@ -21,7 +21,7 @@ import videojs from 'video.js';
     ></video>`,
     styleUrls: ['../Styles/vjs-module.scss'],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    standalone: false,
 })
 export class VjsPlayerComponent implements OnInit, OnDestroy {
     @ViewChild('target', { static: true }) target: ElementRef;

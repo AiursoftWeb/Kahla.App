@@ -1,6 +1,4 @@
-import { Component, computed, effect, input } from '@angular/core';
-import { Message } from '../Models/Message';
-import { MessageContent } from '../Models/Messages/MessageContent';
+import { Component, effect, input } from '@angular/core';
 import {
     MessageSegmentBase,
     MessageSegmentFile,
@@ -22,7 +20,7 @@ import { KahlaUser } from '../Models/KahlaUser';
         '[class.left]': '!isByMe()',
         '[class.right]': 'isByMe()',
     },
-    standalone: false
+    standalone: false,
 })
 export class MessageComponent {
     message = input.required<ParsedMessage>();
@@ -37,7 +35,7 @@ export class MessageComponent {
     constructor(userInfoCacheDictionary: UserInfoCacheDictionary) {
         effect(async () => {
             this.userInfo = await userInfoCacheDictionary.get(this.message().senderId);
-        })
+        });
     }
 
     public asTextSeg(seg: MessageSegmentBase): MessageSegmentText {

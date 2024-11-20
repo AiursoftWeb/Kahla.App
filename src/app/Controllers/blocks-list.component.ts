@@ -4,7 +4,7 @@ import { MyBlocksRepository } from '../Repositories/MyBlocksRepository';
 
 @Component({
     templateUrl: '../Views/blocks-list.html',
-    standalone: false
+    standalone: false,
 })
 export class BlocksListComponent {
     blockedRepo: MyBlocksRepository;

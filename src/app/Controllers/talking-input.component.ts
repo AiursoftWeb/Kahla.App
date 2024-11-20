@@ -20,7 +20,7 @@ import { truncateUTF8Bytes } from '../Utils/StringUtils';
     selector: 'app-talking-input',
     templateUrl: '../Views/talking-input.html',
     styleUrls: ['../Styles/talking-input.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class TalkingInputComponent {
     textContent = signal('');
@@ -173,7 +173,6 @@ export class TalkingInputComponent {
     //     }
     // }
 
-    
     // public complete(nickname: string): void {
     //     const input = document.getElementById('chatInput') as HTMLTextAreaElement;
     //     const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
@@ -194,4 +193,3 @@ export class TalkingInputComponent {
     //     }, 0);
     // }
 }
-

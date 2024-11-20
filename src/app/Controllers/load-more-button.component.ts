@@ -24,10 +24,9 @@ function isNearBottom(element: HTMLElement, threshold = 100, reverse = false) {
     selector: 'app-load-more-button',
     templateUrl: '../Views/load-more-button.html',
     styleUrls: ['../Styles/load-more-button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class LoadMoreButtonComponent {
-    
     @Output() requestLoadMore = new EventEmitter<void>();
 
     private lastAutoLoadMoreTimestamp = 0;

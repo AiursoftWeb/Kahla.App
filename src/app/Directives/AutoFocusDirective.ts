@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 import { isMobileDevice } from '../Utils/EnvironmentUtils';
 
 @Directive({

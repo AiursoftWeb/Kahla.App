@@ -9,7 +9,7 @@ import { SwalToast } from '../Utils/Toast';
 @Component({
     templateUrl: '../Views/new-thread.html',
     styleUrls: ['../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class NewThreadComponent {
     options = signal<ThreadOptions>({

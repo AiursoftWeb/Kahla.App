@@ -44,12 +44,12 @@
     "@angular/compiler": "^19.0.0",
     "@angular/compiler-cli": "^19.0.0",
     "@angular/language-service": "19.0.0",
-    "@types/node": "^22.9.0",
-    "angular-eslint": "18.4.0",
+    "@types/node": "^22.9.1",
+    "angular-eslint": "18.4.1",
     "eslint": "^9.15.0",
     "prettier": "^3.3.3",
-    "typescript": "~5.5.0",
-    "typescript-eslint": "8.14.0"
+    "typescript": "~5.6.3",
+    "typescript-eslint": "8.15.0"
   },
   "main": "index.js",
   "repository": {

@@ -1,7 +1,15 @@
 @use 'fixed_widescreen';
 @use 'effects';
 
-:host {
+.chatbox-placeholder {
+  height: 60px;
+
+  &.active-list {
+    height: 221px;
+  }
+}
+
+.chatbox-wrapper {
   @extend %full-fixed-width;
   display: inline-block;
   position: fixed;

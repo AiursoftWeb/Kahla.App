@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { Values } from '../values';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { ServerContactsRepository } from '../Repositories/ServerContactsRepository';
@@ -8,9 +8,9 @@ import { ServerThreadsRepository } from '../Repositories/ServerThreadsRepository
 @Component({
     templateUrl: '../Views/add-friend.html',
     styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
-    standalone: false
+    standalone: false,
 })
-export class AddFriendComponent implements OnInit {
+export class AddFriendComponent {
     public loadingImgURL = Values.loadingImgURL;
 
     searchTerm = signal('');
@@ -25,9 +25,6 @@ export class AddFriendComponent implements OnInit {
                 this.search(this.searchTerm());
             }
         });
-    }
-
-    public ngOnInit(): void {
     }
 
     public async search(term: string) {

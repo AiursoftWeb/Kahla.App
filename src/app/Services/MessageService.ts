@@ -3,17 +3,13 @@ import { EventType } from '../Models/Events/EventType';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import Swal from 'sweetalert2';
 import { Conversation } from '../Models/Conversation';
-import { Message } from '../Models/Message';
-import { ConversationApiService } from './Api/ConversationApiService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';
 import { UserGroupRelation } from '../Models/UserGroupRelation';
 import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
-import { NewMemberEvent } from '../Models/Events/NewMemberEvent';
 import { GroupConversation } from '../Models/GroupConversation';
 import { DissolveEvent } from '../Models/Events/DissolveEvent';
-import { ThemeService } from './ThemeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { SwalToast } from '../Utils/Toast';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
@@ -32,10 +28,9 @@ export class MessageService {
     public showMessagesCount = 15;
 
     constructor(
-        private conversationApiService: ConversationApiService,
         private myContactsRepository: MyContactsRepository,
         private cacheService: CacheService,
-        private router: Router,
+        private router: Router
     ) {}
 
     public async OnMessage(ev: AiurEvent) {
@@ -47,19 +42,19 @@ export class MessageService {
                 break;
             }
             case EventType.NewMemberEvent: {
-                const evt = ev as NewMemberEvent;
-                if (this.conversation.id === evt.conversationId) {
-                    this.conversationApiService
-                        .ConversationDetail(evt.conversationId)
-                        .subscribe(updated => {
-                            this.conversation = updated.value;
-                        });
-                    SwalToast.fire({
-                        title: `${evt.newMember.nickName} joined the group.`,
-                        icon: 'info',
-                        position: 'bottom',
-                    });
-                }
+                // const evt = ev as NewMemberEvent;
+                // if (this.conversation.id === evt.conversationId) {
+                //     this.conversationApiService
+                //         .ConversationDetail(evt.conversationId)
+                //         .subscribe(updated => {
+                //             this.conversation = updated.value;
+                //         });
+                //     SwalToast.fire({
+                //         title: `${evt.newMember.nickName} joined the group.`,
+                //         icon: 'info',
+                //         position: 'bottom',
+                //     });
+                // }
                 break;
             }
             case EventType.SomeoneLeftEvent: {

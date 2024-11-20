@@ -1,8 +1,8 @@
 ﻿import { AiurEvent } from './AiurEvent';
-import { Message } from '../Message';
+import { MessagePreview } from '../Message';
 
 export interface NewMessageEvent extends AiurEvent {
-    message: Message;
+    message: MessagePreview;
     previousMessageId: string;
     muted: boolean;
     mentioned: boolean;

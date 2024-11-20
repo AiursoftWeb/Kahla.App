@@ -25,7 +25,7 @@ export class GlobalNotifyService {
             case EventType.NewMessage: {
                 const evt = ev as NewMessageEvent;
                 const conversationCacheIndex = this.cacheService.cachedData.conversations.findIndex(
-                    x => x.id === evt.message.conversationId
+                    x => x.id === evt.message.threadId
                 );
                 if (conversationCacheIndex !== -1) {
                     const conversationCache =
@@ -33,7 +33,7 @@ export class GlobalNotifyService {
                     const latestMsg = Object.assign({}, evt.message);
                     conversationCache.messageContext.latestMessage = latestMsg;
                     if (
-                        this.messageService.conversation?.id !== evt.message.conversationId ||
+                        this.messageService.conversation?.id !== evt.message.threadId ||
                         !document.hasFocus()
                     ) {
                         conversationCache.messageContext.unReadAmount++;
@@ -53,7 +53,7 @@ export class GlobalNotifyService {
                         setTimeout(() => this.cacheService.updateConversation(), 1000);
                     }
                 }
-                if (this.messageService.conversation?.id !== evt.message.conversationId) {
+                if (this.messageService.conversation?.id !== evt.message.threadId) {
                     this.showNotification(evt);
                 }
                 break;

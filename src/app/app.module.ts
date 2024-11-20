@@ -31,7 +31,6 @@ import { ApiService } from './Services/Api/ApiService';
 import { CacheService } from './Services/CacheService';
 import { UploadService } from './Services/UploadService';
 import { AuthApiService } from './Services/Api/AuthApiService';
-import { ConversationApiService } from './Services/Api/ConversationApiService';
 import { FilesApiService } from './Services/Api/FilesApiService';
 import { FriendsApiService } from './Services/Api/FriendsApiService';
 import { GroupsApiService } from './Services/Api/GroupsApiService';
@@ -92,7 +91,7 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
         HumanReadableSizePipe,
         StorageUrlPipe,
         ReactiveFormsModule,
-        AutofocusDirective
+        AutofocusDirective,
     ],
     declarations: [
         AboutComponent,
@@ -146,7 +145,6 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
         UploadService,
         AuthApiService,
         MessagesApiService,
-        ConversationApiService,
         FilesApiService,
         FriendsApiService,
         GroupsApiService,

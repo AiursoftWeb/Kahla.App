@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 @use '../effects';
 
 .message-action-button {
@@ -23,6 +23,9 @@
 
 :host-context(.right) {
   .message-action-button {
-    @include effects.hover-effect(color.adjust(#fff, $alpha: -0.8), color.adjust(#fff, $alpha: -0.6));
+    @include effects.hover-effect(
+      color.adjust(#fff, $alpha: -0.8),
+      color.adjust(#fff, $alpha: -0.6)
+    );
   }
 }

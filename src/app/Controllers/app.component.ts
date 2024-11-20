@@ -11,7 +11,7 @@ import { WebpushService } from '../Services/WebpushService';
     selector: 'app-kahla',
     templateUrl: '../Views/app.html',
     styleUrls: ['../Styles/app.scss'],
-    standalone: false
+    standalone: false,
 })
 export class AppComponent {
     constructor(

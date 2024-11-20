@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from '../Services/Api/ApiService';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 @Component({
     templateUrl: '../Views/signin.html',
     styleUrls: ['../Styles/signin.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class SignInComponent {
     public userName = '';

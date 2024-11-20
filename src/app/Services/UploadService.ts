@@ -3,15 +3,13 @@ import { FilesApiService } from './Api/FilesApiService';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
-import { ConversationApiService } from './Api/ConversationApiService';
 import loadImage from 'blueimp-load-image';
 import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
-import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AiurValue } from '../Models/AiurValue';
-import { Message } from '../Models/Message';
+import { MessagePreview } from '../Models/Message';
 import { humanReadableBytes } from '../Utils/StringUtils';
 
 @Injectable({
@@ -20,7 +18,6 @@ import { humanReadableBytes } from '../Utils/StringUtils';
 export class UploadService {
     constructor(
         private filesApiService: FilesApiService,
-        private conversationApiService: ConversationApiService,
         private probeService: ProbeService
     ) {}
 
@@ -28,7 +25,7 @@ export class UploadService {
         file: File,
         conversationID: number,
         fileType: FileType
-    ): Promise<AiurValue<Message>> {
+    ): Promise<AiurValue<MessagePreview>> {
         if (!this.validateFileSize(file)) {
             Swal.fire(
                 'Error',
@@ -87,7 +84,7 @@ export class UploadService {
             const alert = this.fireUploadingAlert(
                 `Uploading your ${fileType === FileType.Image ? 'image' : fileType === FileType.Video ? 'video' : 'file'}...`
             );
-            return new Promise<AiurValue<Message>>((resolve, reject) => {
+            return new Promise<AiurValue<MessagePreview>>((resolve, reject) => {
                 this.filesApiService.InitFileAccess(conversationID, true).subscribe(response => {
                     if (response.code === 0) {
                         const mission = this.filesApiService
@@ -148,42 +145,11 @@ export class UploadService {
     public encryptThenSend(
         fileRef: MessageFileRef,
         conversationID: number
-    ): Promise<AiurValue<Message>> {
+    ): Promise<AiurValue<MessagePreview>> {
         if (!fileRef) {
             return null;
         }
-        switch (fileRef.fileType) {
-            case FileType.Image:
-                return this.sendMessage(
-                    `[img]${fileRef.filePath}|${fileRef.imgWidth}|${fileRef.imgHeight}`,
-                    conversationID
-                );
-            case FileType.Video:
-                return this.sendMessage(`[video]${fileRef.filePath}`, conversationID);
-            case FileType.File:
-                return this.sendMessage(
-                    `[file]${fileRef.filePath}|${fileRef.fileName}|${fileRef.fileSize}`,
-                    conversationID
-                );
-            case FileType.Audio:
-                return this.sendMessage(`[audio]${fileRef.filePath}`, conversationID);
-            default:
-                return null;
-        }
-    }
-
-    private sendMessage(message: string, conversationID: number): Promise<AiurValue<Message>> {
-        return new Promise((resolve, reject) => {
-            this.conversationApiService.SendMessage(conversationID, message, uuid4(), []).subscribe(
-                t => {
-                    resolve(t);
-                },
-                () => {
-                    Swal.fire('Send Failed.', 'Please check your network connection.', 'error');
-                    reject();
-                }
-            );
-        });
+        throw new Error('Method not implemented.');
     }
 
     private validateFileSize(file: File): boolean {

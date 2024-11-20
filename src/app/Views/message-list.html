@@ -5,10 +5,7 @@
             <div class="last-read-bar">LAST READ</div>
         </div> -->
             <div
-                *ngIf="
-                    first ||
-                    messages()[i - 1].sendTime.getDate() !== message.sendTime.getDate()
-                "
+                *ngIf="first || messages()[i - 1].sendTime.getDate() !== message.sendTime.getDate()"
             >
                 <div class="date-bar">{{ message.sendTime | date }}</div>
             </div>

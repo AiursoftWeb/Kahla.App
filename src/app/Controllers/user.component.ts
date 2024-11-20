@@ -21,7 +21,7 @@ import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository'
         '../Styles/reddot.scss',
         '../Styles/badge.scss',
     ],
-    standalone: false
+    standalone: false,
 })
 export class UserComponent implements OnInit {
     public info: ContactInfo;

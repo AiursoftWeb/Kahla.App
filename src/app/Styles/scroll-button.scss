@@ -4,7 +4,7 @@
 }
 
 button {
-    pointer-events: auto;
+  pointer-events: auto;
   &.hide {
     transform: translateX(100px);
     opacity: 0;

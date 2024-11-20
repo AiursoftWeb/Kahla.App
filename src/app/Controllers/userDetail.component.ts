@@ -12,7 +12,7 @@ import { selectFiles } from '../Utils/SystemDialog';
 @Component({
     templateUrl: '../Views/userDetail.html',
     styleUrls: ['../Styles/menu-textbox.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class UserDetailComponent implements OnInit {
     public user: KahlaUser;

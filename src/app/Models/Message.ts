@@ -1,13 +1,9 @@
 ﻿import { KahlaUser } from './KahlaUser';
 
-/** @deprecated */
-export interface Message {
+export interface MessagePreview {
     id: string;
-    conversationId: number;
-    senderId: string;
+    threadId: number;
     sender: KahlaUser;
     sendTime: string;
     content: string;
-    groupWithPrevious: boolean;
-    sendTimeDate: Date;
 }

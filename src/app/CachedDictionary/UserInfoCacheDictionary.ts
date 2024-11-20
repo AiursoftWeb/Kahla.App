@@ -1,11 +1,11 @@
-import { lastValueFrom } from "rxjs";
-import { KahlaUser } from "../Models/KahlaUser";
-import { ContactsApiService } from "../Services/Api/ContactsApiService";
-import { CachedDictionaryBase } from "./CachedDictionaryBase";
-import { Injectable } from "@angular/core";
+import { lastValueFrom } from 'rxjs';
+import { KahlaUser } from '../Models/KahlaUser';
+import { ContactsApiService } from '../Services/Api/ContactsApiService';
+import { CachedDictionaryBase } from './CachedDictionaryBase';
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UserInfoCacheDictionary extends CachedDictionaryBase<string, KahlaUser> {
     constructor(private contactsApiService: ContactsApiService) {

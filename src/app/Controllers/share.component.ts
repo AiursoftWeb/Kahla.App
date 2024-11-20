@@ -5,17 +5,12 @@ import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import { KahlaUser } from '../Models/KahlaUser';
 import { GroupsResult } from '../Models/GroupsResults';
-import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { UserSearchResult } from '../Models/Search/UserSearchResult';
-import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { UploadService } from '../Services/UploadService';
 import { FilesApiService } from '../Services/Api/FilesApiService';
 import { Conversation } from '../Models/Conversation';
-import { Observable } from 'rxjs';
-import { AiurValue } from '../Models/AiurValue';
-import { Message } from '../Models/Message';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -26,7 +21,7 @@ import { Message } from '../Models/Message';
         '../Styles/button.scss',
         '../Styles/badge.scss',
     ],
-    standalone: false
+    standalone: false,
 })
 export class ShareComponent implements OnInit, DoCheck {
     public loadingImgURL = Values.loadingImgURL;
@@ -45,7 +40,6 @@ export class ShareComponent implements OnInit, DoCheck {
         private route: ActivatedRoute,
         private messageService: MessageService,
         public cacheService: CacheService,
-        private conversationApiService: ConversationApiService,
         private friendsApiService: FriendsApiService,
         private uploadService: UploadService,
         private filesApiService: FilesApiService
@@ -213,16 +207,6 @@ export class ShareComponent implements OnInit, DoCheck {
         //         showLoaderOnConfirm: true,
         //     });
         // }
-    }
-
-    private sendMessage(content: string): Observable<AiurValue<Message>> {
-        const messageIDArry = this.messageService.getAtIDs(content);
-        return this.conversationApiService.SendMessage(
-            this.conversation.id,
-            content,
-            uuid4(),
-            messageIDArry.slice(1)
-        );
     }
 
     public search(term: string, keydown = false): void {

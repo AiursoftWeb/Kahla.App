@@ -7,7 +7,7 @@ import { CacheService } from '../Services/CacheService';
 @Component({
     templateUrl: '../Views/about.html',
     styleUrls: ['../Styles/about.scss', '../Styles/menu.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class AboutComponent {
     public sourceCodeURL = Values.sourceCodeURL;

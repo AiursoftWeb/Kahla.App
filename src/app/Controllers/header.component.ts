@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
     selector: 'app-header',
     templateUrl: '../Views/header.html',
     styleUrls: ['../Styles/header.scss', '../Styles/reddot.scss'],
-    standalone: false
+    standalone: false,
 })
 export class HeaderComponent {
     @Input() public title = 'Kahla';

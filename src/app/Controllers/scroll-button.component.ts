@@ -23,7 +23,7 @@ export class ScrollButtonComponent implements AfterViewInit {
         //         window.scrollY -
         //         document.documentElement.clientHeight) /
         //     document.documentElement.clientHeight;
-        
+
         if (this.direction() === 'up') {
             const upperPixels = window.scrollY;
             console.log(upperPixels);

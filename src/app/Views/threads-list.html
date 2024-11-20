@@ -35,12 +35,12 @@
             </div>
         } @else if (inf.messageContext?.latestMessage) {
             <div class="last-time">
-                {{ inf.messageContext.latestMessage.sendTimeDate | date: 'shortTime' }}
+                {{ inf.messageContext.latestMessage.sendTime | date: 'shortTime' }}
             </div>
             <div class="last-message" title="{{ inf.messageContext.latestMessage.content }}">
                 @if (inf.topTenMembers.length === 2 && cacheService.cachedData.me) {
                     @if (
-                        inf.messageContext.latestMessage.senderId === cacheService.cachedData.me.id
+                        inf.messageContext.latestMessage.sender.id === cacheService.cachedData.me.id
                     ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {

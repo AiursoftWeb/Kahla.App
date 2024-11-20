@@ -6,7 +6,7 @@ import { debounce, interval } from 'rxjs';
     selector: 'app-search-area',
     templateUrl: '../Views/search-area.html',
     styleUrls: ['../Styles/search-area.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class SearchAreaComponent {
     searchText = model('');

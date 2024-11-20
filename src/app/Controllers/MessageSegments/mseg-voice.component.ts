@@ -5,7 +5,7 @@ import { MessageSegmentVoice } from '../../Models/Messages/MessageSegments';
     selector: 'app-mseg-voice',
     templateUrl: '../../Views/MessageSegments/mseg-voice.html',
     styleUrls: ['../../Styles/MessageSegments/mseg-voice.scss'],
-    standalone: false
+    standalone: false,
 })
 export class MessageSegmentVoiceComponent {
     content = input.required<MessageSegmentVoice>();

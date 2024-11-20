@@ -1,5 +1,5 @@
 ﻿import { ContactInfo } from './Contacts/ContactInfo';
-import { Message } from './Message';
+import { MessagePreview } from './Message';
 
 export interface ThreadInfo {
     // public attributes (can access anytime)
@@ -14,7 +14,7 @@ export interface ThreadInfo {
     // private attributes (can access after joined)
     messageContext: {
         unReadAmount: number;
-        latestMessage: Message;
+        latestMessage: MessagePreview;
     };
     muted: boolean;
     someoneAtMe: boolean;

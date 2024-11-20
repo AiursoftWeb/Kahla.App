@@ -10,7 +10,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 @Component({
     templateUrl: '../Views/advanced-settings.html',
     styleUrls: ['../Styles/menu.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class AdvancedSettingComponent implements OnInit {
     public me: KahlaUser;

@@ -11,7 +11,7 @@ export interface SearchTypeItem {
     selector: 'app-search-type',
     templateUrl: '../Views/search-type.html',
     styleUrls: ['../Styles/search-type.scss', '../Styles/reddot.scss'],
-    standalone: false
+    standalone: false,
 })
 export class SearchTypeComponent {
     currentIndex = model(0);

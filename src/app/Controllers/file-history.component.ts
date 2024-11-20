@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
-import { ConversationApiService } from '../Services/Api/ConversationApiService';
 import { ProbeFile } from '../Models/Probe/ProbeFile';
 import { ProbeService } from '../Services/ProbeService';
 import { FilesApiService } from '../Services/Api/FilesApiService';
@@ -14,7 +13,7 @@ import { humanReadableBytes } from '../Utils/StringUtils';
     selector: 'app-file-history',
     templateUrl: '../Views/file-history.html',
     styleUrls: ['../Styles/menu.scss', '../Styles/file-list.scss', '../Styles/button.scss'],
-    standalone: false
+    standalone: false,
 })
 export class FileHistoryComponent implements OnInit {
     public files: FileHistoryApiModel[] = [];
@@ -26,7 +25,6 @@ export class FileHistoryComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private conversationApiService: ConversationApiService,
         private filesApiService: FilesApiService,
         private messageService: MessageService,
         public probeService: ProbeService,
@@ -92,15 +90,15 @@ export class FileHistoryComponent implements OnInit {
             return;
         }
         this.loading = true;
-        this.conversationApiService
-            .FileHistory(this.conversationId, this.currentSkip++)
-            .subscribe(t => {
-                this.loading = false;
-                if (t.code === 0) {
-                    this.files.push(t);
-                } else if (t.code === -3) {
-                    this.noMoreFiles = true;
-                }
-            });
+        // this.conversationApiService
+        //     .FileHistory(this.conversationId, this.currentSkip++)
+        //     .subscribe(t => {
+        //         this.loading = false;
+        //         if (t.code === 0) {
+        //             this.files.push(t);
+        //         } else if (t.code === -3) {
+        //             this.noMoreFiles = true;
+        //         }
+        //     });
     }
 }
