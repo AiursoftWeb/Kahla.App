@@ -26,7 +26,6 @@ export class MessageService {
     public belowWindowPercent = 0;
     public newMessages = false;
     public videoHeight = 0;
-    private userColors = new Map<string, string>();
     public messageLoading = false;
     public shareRef: MessageFileRef;
     public talkingDestroyed = false;
@@ -37,7 +36,6 @@ export class MessageService {
         private myContactsRepository: MyContactsRepository,
         private cacheService: CacheService,
         private router: Router,
-        private themeService: ThemeService,
     ) {}
 
     public async OnMessage(ev: AiurEvent) {
@@ -112,30 +110,6 @@ export class MessageService {
     public resetVariables(): void {
         this.conversation = null;
         this.belowWindowPercent = 0;
-        this.newMessages = false;
-        this.userColors.clear();
-    }
-
-    public getRandomColor(darkColor: boolean): string {
-        let r = Math.floor(Math.random() * 128);
-        let g = Math.floor(Math.random() * 128);
-        let b = Math.floor(Math.random() * 128);
-        if (!darkColor) {
-            r = Math.max(r + 127, 200);
-            g = Math.max(g + 127, 200);
-            b = Math.max(b + 127, 200);
-        }
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    public getGroupColor(message: Message): string {
-        if (!this.userColors.has(message.senderId)) {
-            this.userColors.set(
-                message.senderId,
-                this.getRandomColor(!this.themeService.IsDarkTheme())
-            );
-        }
-        return this.userColors.get(message.senderId);
     }
 
     public searchUser(nickName: string, getMessage: boolean): KahlaUser[] {
@@ -196,19 +170,6 @@ export class MessageService {
             }
         }
         return false;
-    }
-
-    public updateAtLink() {
-        setTimeout(() => {
-            const links = document.getElementsByClassName('atLink');
-            for (let i = 0; i < links.length; i++) {
-                (links.item(i) as HTMLAnchorElement).onclick = (ev: MouseEvent) => {
-                    ev.preventDefault();
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigateByUrl(links.item(i).getAttribute('href'));
-                };
-            }
-        }, 0);
     }
 
     public upperFloorImageSize(width: number) {

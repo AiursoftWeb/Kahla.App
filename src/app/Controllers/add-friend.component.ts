@@ -28,8 +28,6 @@ export class AddFriendComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        const searchBar = document.querySelector('#searchBar') as HTMLTextAreaElement;
-        searchBar.focus();
     }
 
     public async search(term: string) {

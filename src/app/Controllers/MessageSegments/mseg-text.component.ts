@@ -1,12 +1,20 @@
-import { Component, computed, input } from '@angular/core';
+import {
+    afterRenderEffect,
+    Component,
+    computed,
+    ElementRef,
+    input,
+    viewChild,
+} from '@angular/core';
 import { MessageSegmentText } from '../../Models/Messages/MessageSegments';
 import Autolinker, { MentionMatch } from 'autolinker';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-mseg-text',
     templateUrl: '../../Views/MessageSegments/mseg-text.html',
     styleUrls: ['../../Styles/MessageSegments/mseg-text.scss'],
-    standalone: false
+    standalone: false,
 })
 export class MessageSegmentTextComponent {
     content = input.required<MessageSegmentText>();
@@ -27,4 +35,19 @@ export class MessageSegmentTextComponent {
             },
         });
     });
+
+    textContainer = viewChild<ElementRef<HTMLElement>>('textContainer');
+
+    constructor(private router: Router) {
+        afterRenderEffect(() => {
+            if (!this.contentEncoded() || !this.textContainer()) return;
+            const links = this.textContainer().nativeElement.getElementsByClassName('atLink');
+            for (let i = 0; i < links.length; i++) {
+                (links.item(i) as HTMLAnchorElement).onclick = (ev: MouseEvent) => {
+                    ev.preventDefault();
+                    this.router.navigateByUrl(links.item(i).getAttribute('href'));
+                };
+            }
+        });
+    }
 }

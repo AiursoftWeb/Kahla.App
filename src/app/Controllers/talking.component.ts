@@ -1,23 +1,15 @@
 ﻿import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Message } from '../Models/Message';
 import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
-import { KahlaUser } from '../Models/KahlaUser';
 import { CacheService } from '../Services/CacheService';
 import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
-import {
-    MessageSegmentFile,
-    MessageSegmentImage,
-    MessageSegmentText,
-} from '../Models/Messages/MessageSegments';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
 import {
     AVCArrayStorage,
-    AVCCommit,
     AVCRepository,
     AVCWebsocketRemote,
 } from 'aiur-version-control';
@@ -205,81 +197,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
         }, 0);
-    }
-
-    temp_demo_msg: ParsedMessage[] = [];
-
-    public takeMessages(): ParsedMessage[] {
-        // return this.messageService.localMessages.slice(
-        //     Math.max(
-        //         this.messageService.rawMessages.length - this.messageService.showMessagesCount,
-        //         0
-        //     )
-        // );
-        if (!this.cacheService?.cachedData?.me) return [];
-        if (this.temp_demo_msg.length === 0) {
-            this.temp_demo_msg = [
-                new ParsedMessage(
-                    uuid4(),
-                    {
-                        segments: [
-                            {
-                                type: 'text',
-                                content:
-                                    'A text message. \nAutolinker test: https://google.com \nA loooooooong text the quick brown fox jumps over the lazy dog. \n There are a lot of space between                                here.\nLoren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. Loren ipsum dolor sit amet, consectetur adipiscing elit. ',
-                                ats: [],
-                            } satisfies MessageSegmentText,
-                        ],
-                        v: 1,
-                    },
-                    'b09aa925-68af-425a-8af9-96d347b8208f',
-                    new Date()
-                ),
-                new ParsedMessage(
-                    uuid4(),
-                    {
-                        segments: [
-                            {
-                                type: 'text',
-                                content: 'A image message with a text',
-                                ats: [],
-                            } satisfies MessageSegmentText,
-                            {
-                                type: 'image',
-                                url: 'aaa',
-                                width: 3840,
-                                height: 2160,
-                            } satisfies MessageSegmentImage,
-                        ],
-                        v: 1,
-                    },
-                    this.cacheService.cachedData.me.id,
-                    new Date()
-                ),
-                new ParsedMessage(
-                    uuid4(),
-                    {
-                        segments: [
-                            {
-                                type: 'text',
-                                content: 'A file message with a text',
-                                ats: [],
-                            } satisfies MessageSegmentText,
-                            {
-                                type: 'file',
-                                size: 123456789,
-                                fileName: 'test.txt',
-                                url: 'aaa',
-                            } satisfies MessageSegmentFile,
-                        ],
-                        v: 1,
-                    },
-                    this.cacheService.cachedData.me.id,
-                    new Date()
-                ),
-            ];
-        }
-        return this.temp_demo_msg;
     }
 
     public send({ content }: { content: MessageContent }) {

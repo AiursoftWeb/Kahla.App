@@ -19,12 +19,11 @@
 }
 
 %menu-item-clickable {
+  cursor: pointer;
+  outline: none;
   @extend %menu-item;
 
   @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
-
-  cursor: pointer;
-  outline: none;
 }
 
 .empty-result-notice {

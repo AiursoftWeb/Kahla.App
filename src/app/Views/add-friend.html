@@ -3,7 +3,7 @@
     [closeDirectly]="true"
     [processing]="contactsRepo?.status === 'loading' || threadsRepo?.status === 'loading'"
 ></app-header>
-<div class="search-part" id="search-part">
+<div class="search-part">
     <app-search-area [(searchText)]="searchTerm" [aggressive]="false" />
     <app-search-type
         [items]="[

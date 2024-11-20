@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, effect, OnInit, signal } from '@angular/core';
+﻿import { Component, effect, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
@@ -24,7 +24,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
     ],
     standalone: false
 })
-export class FriendsComponent implements OnInit, AfterViewInit {
+export class FriendsComponent implements OnInit {
     public loadingImgURL = Values.loadingImgURL;
     public showUsers = true;
     public searchTxt = signal('');
@@ -54,17 +54,6 @@ export class FriendsComponent implements OnInit, AfterViewInit {
     public ngOnInit(): void {
         if (this.cacheService.cachedData.me && this.myContactsRepository.health) {
             this.myContactsRepository.updateAll();
-        }
-    }
-
-    ngAfterViewInit(): void {
-        const inputElement = document.querySelector('#searchBar') as HTMLElement;
-        if (
-            !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                navigator.userAgent
-            )
-        ) {
-            inputElement.focus();
         }
     }
 

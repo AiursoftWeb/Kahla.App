@@ -3,11 +3,11 @@
     [ngClass]="{ 'search-input-with-button': !!textInput.value || !aggressive() }"
 >
     <input
-        id="searchBar"
         [placeholder]="placeHolder"
         type="text"
         (keydown.enter)="onpositiveClicked()"
         [formControl]="textInput"
+        appAutofocus
     />
     @if (aggressive()) {
         <button

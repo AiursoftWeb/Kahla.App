@@ -79,6 +79,7 @@ import { LoadMoreButtonComponent } from './Controllers/load-more-button.componen
 import { MessageListComponent } from './Controllers/message-list.component';
 import { TalkingInputComponent } from './Controllers/talking-input.component';
 import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDictionary';
+import { AutofocusDirective } from './Directives/AutoFocusDirective';
 
 @NgModule({
     imports: [
@@ -91,6 +92,7 @@ import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDiction
         HumanReadableSizePipe,
         StorageUrlPipe,
         ReactiveFormsModule,
+        AutofocusDirective
     ],
     declarations: [
         AboutComponent,
