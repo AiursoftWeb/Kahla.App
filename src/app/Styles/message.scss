@@ -1,6 +1,6 @@
-@import 'effects';
+@use 'effects';
 
-@include kf-shake;
+@include effects.kf-shake;
 
 :host {
   display: flex;

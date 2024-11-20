@@ -1,4 +1,4 @@
-@import 'menus';
+@use 'menus';
 
 .contact-list {
   @extend %menu-item-clickable;

@@ -1,4 +1,4 @@
-@import 'msg_segments';
+@use 'msg_segments';
 
 .file-share-item {
   @extend %share-item;

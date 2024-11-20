@@ -1,11 +1,11 @@
 // define new themes by adding `@import` here.
-@import 'themes/light';
-@import 'themes/dark';
-@import 'themes/sakura-light';
-@import 'themes/sakura-dark';
-@import 'themes/violet-light';
-@import 'themes/violet-dark';
-@import 'themes/communist-light';
-@import 'themes/communist-dark';
-@import 'themes/grass-light';
-@import 'themes/grass-dark';
+@use 'themes/light';
+@use 'themes/dark';
+@use 'themes/sakura-light';
+@use 'themes/sakura-dark';
+@use 'themes/violet-light';
+@use 'themes/violet-dark';
+@use 'themes/communist-light';
+@use 'themes/communist-dark';
+@use 'themes/grass-light';
+@use 'themes/grass-dark';

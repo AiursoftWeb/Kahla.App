@@ -1,4 +1,4 @@
-@import 'effects';
+@use 'effects';
 %menu-item {
   background: var(--selectable-bg);
   border-color: var(--selectable-border-color);
@@ -23,7 +23,7 @@
   outline: none;
   @extend %menu-item;
 
-  @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
+  @include effects.hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 }
 
 .empty-result-notice {

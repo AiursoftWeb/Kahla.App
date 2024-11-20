@@ -1,4 +1,5 @@
-@import 'default-dark';
+@use "sass:color";
+@use 'default-dark';
 
 //
 // Dark Theme
@@ -15,6 +16,6 @@ body.theme-communist-dark {
   --header-bg: linear-gradient(
     to bottom,
     #{$primary-color-depth3},
-    #{transparentize($primary-color-depth2, 0.4)}
+    #{color.adjust($primary-color-depth2, $alpha: -0.4)}
   );
 }

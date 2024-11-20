@@ -1,4 +1,4 @@
-@import './button.scss';
+@use 'button.scss';
 
 :host {
   @extend %buttonGroupBase;

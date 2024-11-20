@@ -1,4 +1,5 @@
-@import '../effects';
+@use "sass:color";
+@use '../effects';
 
 .message-action-button {
   cursor: pointer;
@@ -16,12 +17,12 @@
 
 :host-context(.left) {
   .message-action-button {
-    @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
+    @include effects.hover-effect(var(--default-foreground-20), var(--default-foreground-40));
   }
 }
 
 :host-context(.right) {
   .message-action-button {
-    @include hover-effect(transparentize(#fff, 0.8), transparentize(#fff, 0.6));
+    @include effects.hover-effect(color.adjust(#fff, $alpha: -0.8), color.adjust(#fff, $alpha: -0.6));
   }
 }

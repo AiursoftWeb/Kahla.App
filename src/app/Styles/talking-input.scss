@@ -1,5 +1,5 @@
-@import 'fixed_widescreen';
-@import 'effects';
+@use 'fixed_widescreen';
+@use 'effects';
 
 :host {
   @extend %full-fixed-width;
@@ -144,7 +144,7 @@
         }
 
         label {
-          @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
+          @include effects.hover-effect(var(--default-foreground-20), var(--default-foreground-40));
           text-align: center;
           padding: 10px;
           margin-top: 15px;

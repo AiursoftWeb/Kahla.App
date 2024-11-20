@@ -1,5 +1,5 @@
-@import 'menus';
-@import 'effects';
+@use 'menus';
+@use 'effects';
 
 /******************
  *    User
@@ -69,7 +69,7 @@
   }
 
   &.menu-button-transparent {
-    @include hover-effect(var(--default-foreground-20), var(--default-foreground-40));
+    @include effects.hover-effect(var(--default-foreground-20), var(--default-foreground-40));
   }
 
   > * {
@@ -171,7 +171,7 @@ a {
   user-select: none;
   font-size: 15px;
   transition: all 0.2s ease-in-out;
-  @include hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
+  @include effects.hover-effect(var(--selectable-hover-bg), var(--selectable-active-bg));
 
   .checked {
     visibility: hidden;
