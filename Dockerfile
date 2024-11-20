@@ -1,6 +1,6 @@
 FROM hub.aiursoft.cn/node:latest as yarn-env
 WORKDIR /app
-COPY ./package.json ./yarn.lock ./yarnrc.yml ./
+COPY ./package.json ./yarn.lock ./.yarnrc.yml ./
 RUN corepack enable && corepack yarn install --immutable
 COPY . .
 
