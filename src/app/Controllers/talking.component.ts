@@ -1,32 +1,28 @@
-﻿import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+﻿import {
+    afterRenderEffect,
+    Component,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UploadService } from '../Services/UploadService';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
-import { ProbeService } from '../Services/ProbeService';
 import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
-import {
-    AVCArrayStorage,
-    AVCRepository,
-    AVCWebsocketRemote,
-} from 'aiur-version-control';
+import { AVCArrayStorage, AVCRepository, AVCWebsocketRemote } from 'aiur-version-control';
 import { MessageCommit } from '../Models/Messages/MessageCommit';
 import { lastValueFrom, map } from 'rxjs';
 import { MessagesApiService } from '../Services/Api/MessagesApiService';
+import { scrollBottom } from '../Utils/Scrolling';
 
 @Component({
     templateUrl: '../Views/talking.html',
-    styleUrls: [
-        '../Styles/talking.scss',
-        '../Styles/button.scss',
-        '../Styles/reddot.scss',
-        '../Styles/menu.scss',
-        '../Styles/badge.scss',
-    ],
-    standalone: false
+    styleUrls: ['../Styles/talking.scss'],
+    standalone: false,
 })
 export class TalkingComponent implements OnInit, OnDestroy {
     private windowInnerHeight = 0;
@@ -39,33 +35,38 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     public repo?: AVCRepository<MessageCommit>;
     public remote?: AVCWebsocketRemote<MessageCommit>;
-    public parsedMessages: ParsedMessage[] = [];
+    public parsedMessages = signal<ParsedMessage[]>([]);
 
     public showPanel = signal(false);
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        public uploadService: UploadService,
         public messageService: MessageService,
         public cacheService: CacheService,
-        public probeService: ProbeService,
         private messageApiService: MessagesApiService
     ) {
         this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
-            this.parsedMessages = [];
+            this.parsedMessages.set([]);
             this.repo = new AVCRepository(new AVCArrayStorage());
             // Obtain the websocket connection token
             const resp = await lastValueFrom(messageApiService.InitThreadWebsocket(id));
             this.remote = new AVCWebsocketRemote<MessageCommit>(resp.webSocketEndpoint);
             this.remote.attach(this.repo, true, true);
             this.repo.commitsStorage.onAdded.subscribe(event => {
-                this.parsedMessages.splice(
+                const newMessages = [...this.parsedMessages()];
+                newMessages.splice(
                     event.afterIdx + 1,
                     0,
                     ...event.newEntries.map(t => ParsedMessage.fromCommit(t))
                 );
+                this.parsedMessages.set(newMessages);
             });
+        });
+
+        afterRenderEffect(() => {
+            this.parsedMessages();
+            scrollBottom(true, 500);
         });
     }
 
@@ -205,7 +206,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
         // );
         this.repo.commit({
             content: JSON.stringify(content),
-            senderId: this.cacheService.cachedData.me.id ?? uuid4()
+            senderId: this.cacheService.cachedData.me.id ?? uuid4(),
         });
     }
 

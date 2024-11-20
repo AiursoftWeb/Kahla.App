@@ -6,10 +6,11 @@
 >
 </app-header>
 <!-- <app-load-more-button></app-load-more-button> -->
-<app-message-list [messages]="parsedMessages" />
+<app-message-list [messages]="parsedMessages()" />
 <div class="message-list-placeholder" [class.active-list]="showPanel()"></div>
 <app-scroll-button
     id="scrollDown"
+    direction="down"
     [ngClass]="{ 'active-button': showPanel(), primary: messageService.newMessages }"
 >
 </app-scroll-button>
