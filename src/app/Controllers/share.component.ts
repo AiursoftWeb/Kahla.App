@@ -3,14 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Values } from '../values';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
-import { KahlaUser } from '../Models/KahlaUser';
-import { GroupsResult } from '../Models/GroupsResults';
-import { FriendsApiService } from '../Services/Api/FriendsApiService';
 import { UserSearchResult } from '../Models/Search/UserSearchResult';
 import { MessageFileRef } from '../Models/MessageFileRef';
-import { UploadService } from '../Services/UploadService';
-import { FilesApiService } from '../Services/Api/FilesApiService';
-import { Conversation } from '../Models/Conversation';
 
 @Component({
     templateUrl: '../Views/share.html',
@@ -33,16 +27,12 @@ export class ShareComponent implements OnInit, DoCheck {
     public inApp = false;
     public results: UserSearchResult;
     public searchTxt = '';
-    public conversation: Conversation;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
         public cacheService: CacheService,
-        private friendsApiService: FriendsApiService,
-        private uploadService: UploadService,
-        private filesApiService: FilesApiService
     ) {}
 
     public ngOnInit(): void {
@@ -70,7 +60,7 @@ export class ShareComponent implements OnInit, DoCheck {
         this.showUsers = selectUsers;
     }
 
-    public share(user: KahlaUser | GroupsResult, group: boolean): void {
+    public share(user: unknown, group: boolean): void {
         // let conversationID = group ? (<GroupsResult>user).id : 0;
         // if (!group) {
         //     this.friendsApiService

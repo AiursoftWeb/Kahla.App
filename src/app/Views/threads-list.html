@@ -6,7 +6,7 @@
     >
         <img
             class="user-img"
-            src="{{ inf.avatarURL ? inf.avatarURL : loadingImgURL }}?w=128&square=true"
+            src="{{ inf.imagePath || loadingImgURL }}?w=128&square=true"
             (click)="threadClicked.emit({ thread: inf, secondary: true }); $event.stopPropagation()"
         />
         @if (!externalView) {

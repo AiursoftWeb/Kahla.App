@@ -2,7 +2,7 @@
     class="file-share-item"
     target="_blank"
     rel="noopener noreferrer"
-    href="{{ content().url | storageUrl }}"
+    [href]="content().url | storageUrl"
 >
     <div>
         <i class="{{ content().fileName | iconForFile }}" aria-hidden="true"></i>

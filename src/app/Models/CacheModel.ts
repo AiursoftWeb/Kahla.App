@@ -1,6 +1,5 @@
 import { ThreadInfo } from './ThreadInfo';
 import { KahlaUser } from './KahlaUser';
-import { Conversation } from './Conversation';
 import { AccessToken } from './AccessToken';
 import { AppOptions } from './AppOptions';
 
@@ -16,6 +15,5 @@ export class CacheModel {
     /**
      * @deprecated
      */
-    public conversationDetail: Map<number, Conversation> = new Map<number, Conversation>();
     public probeTokens: Map<number, AccessToken> = new Map<number, AccessToken>();
 }

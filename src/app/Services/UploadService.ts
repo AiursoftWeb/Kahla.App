@@ -4,7 +4,6 @@ import Swal, { SweetAlertResult } from 'sweetalert2';
 import { UploadFile } from '../Models/Probe/UploadFile';
 import { KahlaUser } from '../Models/KahlaUser';
 import loadImage from 'blueimp-load-image';
-import { GroupConversation } from '../Models/GroupConversation';
 import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
@@ -192,37 +191,37 @@ export class UploadService {
         }
     }
 
-    public uploadGroupAvater(group: GroupConversation, file: File): void {
-        if (this.validImageType(file, true)) {
-            const formData = new FormData();
-            formData.append('image', file);
-            const alert = this.fireUploadingAlert('Uploading group avatar...');
+    public uploadGroupAvater(group: unknown, file: File): void {
+        // if (this.validImageType(file, true)) {
+        //     const formData = new FormData();
+        //     formData.append('image', file);
+        //     const alert = this.fireUploadingAlert('Uploading group avatar...');
 
-            this.filesApiService.InitIconUpload().subscribe(response => {
-                if (response.code === 0) {
-                    const mission = this.filesApiService
-                        .UploadFile(formData, response.value)
-                        .subscribe(res => {
-                            if (Number(res)) {
-                                this.updateAlertProgress(Number(res));
-                            } else if (res != null && (res as UploadFile).code === 0) {
-                                Swal.close();
-                                group.groupImagePath = (res as UploadFile).filePath;
-                                group.avatarURL = this.probeService.encodeProbeFileUrl(
-                                    group.groupImagePath
-                                );
-                            }
-                        });
-                    alert.then(result => {
-                        if (result.dismiss) {
-                            mission.unsubscribe();
-                        }
-                    });
-                }
-            });
-        } else {
-            Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
-        }
+        //     this.filesApiService.InitIconUpload().subscribe(response => {
+        //         if (response.code === 0) {
+        //             const mission = this.filesApiService
+        //                 .UploadFile(formData, response.value)
+        //                 .subscribe(res => {
+        //                     if (Number(res)) {
+        //                         this.updateAlertProgress(Number(res));
+        //                     } else if (res != null && (res as UploadFile).code === 0) {
+        //                         Swal.close();
+        //                         group.groupImagePath = (res as UploadFile).filePath;
+        //                         group.avatarURL = this.probeService.encodeProbeFileUrl(
+        //                             group.groupImagePath
+        //                         );
+        //                     }
+        //                 });
+        //             alert.then(result => {
+        //                 if (result.dismiss) {
+        //                     mission.unsubscribe();
+        //                 }
+        //             });
+        //         }
+        //     });
+        // } else {
+        //     Swal.fire('Try again', 'Only support .png, .jpg, .jpeg or .bmp file', 'error');
+        // }
     }
 
     public validImageType(file: File, avatar: boolean): boolean {

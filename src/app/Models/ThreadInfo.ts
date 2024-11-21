@@ -28,9 +28,4 @@ export interface ThreadInfo {
     allowMembersSendMessages: boolean;
     allowMembersEnlistAllMembers: boolean;
     allowMemberSoftInvitation: boolean;
-
-    /**
-     * @deprecated
-     */
-    avatarURL: string;
 }

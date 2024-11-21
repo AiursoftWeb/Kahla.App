@@ -2,7 +2,6 @@
 import { Router } from '@angular/router';
 import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
-import { GroupsResult } from '../Models/GroupsResults';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import {
     MyContactsRepository,
@@ -89,11 +88,4 @@ export class FriendsComponent implements OnInit {
         }
     }
 
-    public groupClick(group: GroupsResult, ctrl: boolean) {
-        if (ctrl) {
-            this.router.navigate(['/group', group.id]);
-        } else {
-            this.router.navigate(['/talking', group.id]);
-        }
-    }
 }

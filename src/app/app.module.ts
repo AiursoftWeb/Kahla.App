@@ -11,7 +11,6 @@ import { FriendsComponent } from './Controllers/friends.component';
 import { AddFriendComponent } from './Controllers/add-friend.component';
 import { SettingsComponent } from './Controllers/settings.component';
 import { TalkingComponent } from './Controllers/talking.component';
-import { DiscoverComponent } from './Controllers/discover.component';
 import { SignInComponent } from './Controllers/signin.component';
 import { NavComponent } from './Controllers/nav.component';
 import { HeaderComponent } from './Controllers/header.component';
@@ -32,14 +31,11 @@ import { CacheService } from './Services/CacheService';
 import { UploadService } from './Services/UploadService';
 import { AuthApiService } from './Services/Api/AuthApiService';
 import { FilesApiService } from './Services/Api/FilesApiService';
-import { FriendsApiService } from './Services/Api/FriendsApiService';
-import { GroupsApiService } from './Services/Api/GroupsApiService';
 import { MessageService } from './Services/MessageService';
 import { InitService } from './Services/InitService';
 import { DevicesApiService } from './Services/Api/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { HomeService } from './Services/HomeService';
-import { FriendshipService } from './Services/FriendshipService';
 import { ProbeService } from './Services/ProbeService';
 import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
@@ -101,7 +97,6 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
         AddFriendComponent,
         SettingsComponent,
         TalkingComponent,
-        DiscoverComponent,
         SignInComponent,
         NavComponent,
         HeaderComponent,
@@ -146,14 +141,11 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
         AuthApiService,
         MessagesApiService,
         FilesApiService,
-        FriendsApiService,
-        GroupsApiService,
         MessageService,
         InitService,
         DevicesApiService,
         ThemeService,
         HomeService,
-        FriendshipService,
         ProbeService,
         EventService,
         GlobalNotifyService,

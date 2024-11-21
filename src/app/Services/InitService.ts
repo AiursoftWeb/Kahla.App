@@ -32,15 +32,6 @@ export class InitService {
     ) {}
 
     public async init(): Promise<void> {
-        if (navigator.userAgent.match(/MSIE|Trident/)) {
-            Swal.fire(
-                'Oops, it seems that you are opening Kahla in IE.',
-                "Please note that Kahla doesn't support IE :(<br/>" +
-                    'We recommend upgrading to the latest <a href="https://mozilla.org/firefox/">Firefox</a>, ' +
-                    '<a href="https://chrome.google.com">Google Chrome, </a>' +
-                    'or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.'
-            );
-        }
         console.log('Welcome to Kahla.App!');
 
         this.cacheService.initCache();
@@ -76,8 +67,6 @@ export class InitService {
 
                 // Init stargate push
                 this.eventService.initPusher();
-                this.eventService.onMessage.subscribe(t => this.messageService.OnMessage(t));
-                this.eventService.onReconnect.subscribe(() => this.messageService.reconnectPull());
                 this.globalNotifyService.init();
 
                 // Load User Info
