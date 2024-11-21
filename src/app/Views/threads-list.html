@@ -6,7 +6,7 @@
     >
         <img
             class="user-img"
-            src="{{ inf.imagePath || loadingImgURL }}?w=128&square=true"
+            src="{{ inf.imagePath || loadingImgURL | storageUrl }}?w=128&square=true"
             (click)="threadClicked.emit({ thread: inf, secondary: true }); $event.stopPropagation()"
         />
         @if (!externalView) {
@@ -28,7 +28,7 @@
             </div>
             <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
         }
-        <div class="sender">{{ nameOf(inf) }}</div>
+        <div class="sender">{{ inf | threadName }}</div>
         @if (externalView) {
             <div class="last-message">
                 {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}

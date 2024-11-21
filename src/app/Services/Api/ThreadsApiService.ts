@@ -29,7 +29,7 @@ export class ThreadsApiService {
     }
 
     public DetailsJoined(
-        id: string,
+        id: number,
         take = 1,
         skip = 0
     ): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
@@ -40,7 +40,7 @@ export class ThreadsApiService {
     }
 
     public DetailsAnnoymous(
-        id: string,
+        id: number,
         take = 1,
         skip = 0
     ): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {

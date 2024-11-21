@@ -2,7 +2,11 @@
     [returnButton]="true"
     [shadow]="true"
     [closeDirectly]="true"
-    [processing]="messageService.messageLoading"
+    [processing]="!remote"
+    [title]="threadInfo.value() | threadName"
+    [button]="true"
+    buttonIcon="fas fa-ellipsis"
+    [buttonLink]="'/thread/' + threadId()"
 >
 </app-header>
 <!-- <app-load-more-button></app-load-more-button> -->

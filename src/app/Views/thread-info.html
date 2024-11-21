@@ -13,7 +13,7 @@
                 src="{{ thread.imagePath | storageUrl }}?w=128&square=true"
             />
         </a>
-        <div class="name">{{ thread.name }}</div>
+        <div class="name">{{ thread | threadName }}</div>
         <div class="create-time">Create Time: {{ thread.createTime | date: 'mediumDate' }}</div>
     </div>
     <div class="menu-button">

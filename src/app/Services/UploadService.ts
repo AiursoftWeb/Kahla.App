@@ -196,7 +196,6 @@ export class UploadService {
         //     const formData = new FormData();
         //     formData.append('image', file);
         //     const alert = this.fireUploadingAlert('Uploading group avatar...');
-
         //     this.filesApiService.InitIconUpload().subscribe(response => {
         //         if (response.code === 0) {
         //             const mission = this.filesApiService

@@ -29,8 +29,7 @@ export class ManageGroupComponent implements OnInit {
         private probeService: ProbeService
     ) {}
 
-    ngOnInit(): void {
-    }
+    ngOnInit(): void {}
 
     public transferOwner(): void {
         const inputOptions = {};
@@ -57,7 +56,6 @@ export class ManageGroupComponent implements OnInit {
                     icon: 'warning',
                 }).then(res => {
                     if (!res.dismiss) {
-                        
                     }
                 });
             }

@@ -32,7 +32,7 @@ export class ShareComponent implements OnInit, DoCheck {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
-        public cacheService: CacheService,
+        public cacheService: CacheService
     ) {}
 
     public ngOnInit(): void {

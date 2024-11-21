@@ -75,6 +75,7 @@ import { MessageListComponent } from './Controllers/message-list.component';
 import { TalkingInputComponent } from './Controllers/talking-input.component';
 import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDictionary';
 import { AutofocusDirective } from './Directives/AutoFocusDirective';
+import { ThreadNamePipe } from './Pipes/thread-name.pipe';
 
 @NgModule({
     imports: [
@@ -88,6 +89,7 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
         StorageUrlPipe,
         ReactiveFormsModule,
         AutofocusDirective,
+        ThreadNamePipe,
     ],
     declarations: [
         AboutComponent,

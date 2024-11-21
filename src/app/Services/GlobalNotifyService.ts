@@ -7,9 +7,7 @@ import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalNotifyService {
-    constructor(
-        private eventService: EventService,
-    ) {}
+    constructor(private eventService: EventService) {}
 
     private OnMessage(ev: AiurEvent) {
         switch (ev.type) {

@@ -1,9 +1,11 @@
 ﻿import {
     afterRenderEffect,
     Component,
+    effect,
     HostListener,
     OnDestroy,
     OnInit,
+    resource,
     signal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +20,7 @@ import { MessageCommit } from '../Models/Messages/MessageCommit';
 import { lastValueFrom, map } from 'rxjs';
 import { MessagesApiService } from '../Services/Api/MessagesApiService';
 import { scrollBottom } from '../Utils/Scrolling';
+import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -31,29 +34,44 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private conversationID = 0;
     private chatInputHeight: number;
     public lastAutoLoadMoreTimestamp = 0;
-    public loadingMore: boolean;
 
     public repo?: AVCRepository<MessageCommit>;
     public remote?: AVCWebsocketRemote<MessageCommit>;
     public parsedMessages = signal<ParsedMessage[]>([]);
-
     public showPanel = signal(false);
+    public threadId = signal(0);
+
+    public threadInfo = resource({
+        request: () => this.threadId(),
+        loader: async ({ request }) => {
+            if (request)
+                return (await lastValueFrom(this.threadApiService.DetailsJoined(request))).thread;
+        },
+    });
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         public messageService: MessageService,
         public cacheService: CacheService,
-        private messageApiService: MessagesApiService
+        private messageApiService: MessagesApiService,
+        public threadApiService: ThreadsApiService
     ) {
         this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
+            this.threadId.set(id);
+        });
+
+        effect(async cleanup => {
+            if (!this.threadId()) return;
             this.parsedMessages.set([]);
             this.repo = new AVCRepository(new AVCArrayStorage());
             // Obtain the websocket connection token
-            const resp = await lastValueFrom(messageApiService.InitThreadWebsocket(id));
+            const resp = await lastValueFrom(
+                messageApiService.InitThreadWebsocket(this.threadId())
+            );
             this.remote = new AVCWebsocketRemote<MessageCommit>(resp.webSocketEndpoint);
             this.remote.attach(this.repo, true, true);
-            this.repo.commitsStorage.onAdded.subscribe(event => {
+            const sub = this.repo.commitsStorage.onAdded.subscribe(event => {
                 const newMessages = [...this.parsedMessages()];
                 newMessages.splice(
                     event.afterIdx + 1,
@@ -61,6 +79,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
                     ...event.newEntries.map(t => ParsedMessage.fromCommit(t))
                 );
                 this.parsedMessages.set(newMessages);
+            });
+            cleanup(() => {
+                sub.unsubscribe();
+                this.remote.detach();
             });
         });
 

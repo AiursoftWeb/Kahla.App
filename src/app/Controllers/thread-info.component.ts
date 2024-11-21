@@ -17,7 +17,7 @@ export class ThreadInfoComponent {
         route: ActivatedRoute,
         private threadsApiService: ThreadsApiService
     ) {
-        route.params.pipe(map(t => t['id'] as string)).subscribe(async id => {
+        route.params.pipe(map(t => Number(t['id']))).subscribe(async id => {
             try {
                 const resp = await lastValueFrom(this.threadsApiService.DetailsJoined(id));
                 this.thread = resp.thread;
