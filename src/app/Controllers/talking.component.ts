@@ -3,6 +3,7 @@
     Component,
     effect,
     HostListener,
+    input,
     OnDestroy,
     OnInit,
     resource,
@@ -39,7 +40,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
     public remote?: AVCWebsocketRemote<MessageCommit>;
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
-    public threadId = signal(0);
+    // route input
+    public threadId = input.required<number>({
+        alias: 'id',
+    });
 
     public threadInfo = resource({
         request: () => this.threadId(),
@@ -57,9 +61,9 @@ export class TalkingComponent implements OnInit, OnDestroy {
         private messageApiService: MessagesApiService,
         public threadApiService: ThreadsApiService
     ) {
-        this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
-            this.threadId.set(id);
-        });
+        // this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
+        //     this.threadId.set(id);
+        // });
 
         effect(async cleanup => {
             if (!this.threadId()) return;
@@ -83,6 +87,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
             cleanup(() => {
                 sub.unsubscribe();
                 this.remote.detach();
+                this.remote = null;
             });
         });
 

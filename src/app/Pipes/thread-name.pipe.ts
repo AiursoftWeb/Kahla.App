@@ -7,7 +7,6 @@ import { CacheService } from '../Services/CacheService';
 })
 export class ThreadNamePipe implements PipeTransform {
     constructor(private cacheService: CacheService) {}
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     transform(thread?: ThreadInfo): string {
         if (!thread) return 'Thread';
         if (!thread.name.includes('{THE OTHER USER}')) return thread.name;

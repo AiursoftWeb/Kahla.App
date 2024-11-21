@@ -13,7 +13,7 @@ def create_component(
     name: str,
     className: Annotated[str, typer.Option()] = None,
     subpath: Annotated[str, typer.Option()] = None,
-    create_style: Annotated[bool, typer.Option()] = False,
+    create_style: Annotated[bool, typer.Option("--style", "-s")] = False,
 ):
     component_path = Path(f"src/app/Controllers")
     views_path = Path(f"src/app/Views")
@@ -39,7 +39,8 @@ def create_component(
 @Component({{
     selector: 'app-{name}',
     templateUrl: '{'../' * (len(component_path.parents) - 2)}{view_file_url_posix}',
-    {f"styleUrls: ['{'../' * (len(component_path.parents) - 2)}{style_file_url_posix}']" if create_style else ""}
+    {f"styleUrls: ['{'../' * (len(component_path.parents) - 2)}{style_file_url_posix}']," if create_style else ""}
+    standalone: false
 }})
 export class {className or toPascalCase(name)}Component {{
 }}
