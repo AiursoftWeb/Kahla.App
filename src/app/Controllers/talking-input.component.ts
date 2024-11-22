@@ -14,7 +14,6 @@ import EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { VoiceRecorder } from '../Utils/VoiceRecord';
 import { MessageSegmentText } from '../Models/Messages/MessageSegments';
-import { truncateUTF8Bytes } from '../Utils/StringUtils';
 
 @Component({
     selector: 'app-talking-input',

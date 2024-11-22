@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { Component, computed, effect, input } from '@angular/core';
 import { ThreadMembersRepository } from '../Repositories/ThreadMembersRepository';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 
@@ -11,12 +9,12 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
     standalone: false,
 })
 export class ThreadMembersComponent {
-    repo?: ThreadMembersRepository;
+    id = input.required<number>();
+    repo = computed(() => new ThreadMembersRepository(this.threadsApiService, this.id()));
 
-    constructor(route: ActivatedRoute, threadsApiService: ThreadsApiService) {
-        route.params.pipe(map(p => p.id as number)).subscribe(id => {
-            this.repo = new ThreadMembersRepository(threadsApiService, id);
-            this.repo.updateAll();
+    constructor(private threadsApiService: ThreadsApiService) {
+        effect(() => {
+            this.repo().updateAll();
         });
     }
 }

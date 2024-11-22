@@ -1,5 +1,5 @@
 <app-header
-    title="{{ repo?.total ?? '' }} Members"
-    [processing]="!repo || repo.status === 'loading'"
+    title="{{ repo()?.total ?? '' }} Members"
+    [processing]="!repo() || repo().status === 'loading'"
 ></app-header>
-<app-contact-list [contacts]="repo" emptyMessage="No members in this thread."></app-contact-list>
+<app-contact-list [contacts]="repo()" emptyMessage="No members in this thread."></app-contact-list>

@@ -7,14 +7,12 @@
     [button]="true"
     buttonIcon="fas fa-ellipsis"
     [buttonLink]="'/thread/' + threadId()"
->
-</app-header>
+/>
 <!-- <app-load-more-button></app-load-more-button> -->
 <app-message-list [messages]="parsedMessages()" />
 <app-scroll-button
     id="scrollDown"
     direction="down"
     [ngClass]="{ 'active-button': showPanel(), primary: messageService.newMessages }"
->
-</app-scroll-button>
-<app-talking-input [(showPanel)]="showPanel" (sendMessage)="send($event)"></app-talking-input>
+/>
+<app-talking-input [(showPanel)]="showPanel" (sendMessage)="send($event)" />

@@ -11,8 +11,6 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 export class ThreadInfoComponent {
     id = input.required<number>();
 
-    // thread?: ThreadInfo = null;
-
     thread = resource({
         request: () => this.id(),
         loader: async ({ request }) => {
