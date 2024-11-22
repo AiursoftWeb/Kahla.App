@@ -26,12 +26,10 @@ export class ScrollButtonComponent implements AfterViewInit {
 
         if (this.direction() === 'up') {
             const upperPixels = window.scrollY;
-            console.log(upperPixels);
             this.hide.set(upperPixels < 300);
         } else {
             const h = document.documentElement.scrollHeight;
             const y = window.scrollY;
-            console.log(y + window.innerHeight - h);
             this.hide.set(y + window.innerHeight > h - 300);
         }
     }

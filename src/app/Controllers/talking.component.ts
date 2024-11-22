@@ -4,16 +4,12 @@
     effect,
     HostListener,
     input,
-    OnDestroy,
-    OnInit,
     resource,
     signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import { uuid4 } from '../Utils/Uuid';
-import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
 import { lastValueFrom } from 'rxjs';
@@ -27,11 +23,10 @@ import { KahlaMessagesRepo } from '@aiursoft/kahla-sdk.js';
     styleUrls: ['../Styles/talking.scss'],
     standalone: false,
 })
-export class TalkingComponent implements OnInit, OnDestroy {
+export class TalkingComponent {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    private conversationID = 0;
     private chatInputHeight: number;
     public lastAutoLoadMoreTimestamp = 0;
 
@@ -52,7 +47,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
     });
 
     constructor(
-        private router: Router,
         public messageService: MessageService,
         public cacheService: CacheService,
         private messageApiService: MessagesApiService,
@@ -149,79 +143,6 @@ export class TalkingComponent implements OnInit, OnDestroy {
         // }
     }
 
-    public ngOnInit(): void {
-        // this.route.params.subscribe(async params => {
-        //     if (!this.messageService.talkingDestroyed) {
-        //         this.destroyCurrent();
-        //     }
-        //     this.messageService.talkingDestroyed = false;
-        //     this.conversationID = Number(params.id);
-        //     if (this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-        //         this.updateConversation(
-        //             this.cacheService.cachedData.conversationDetail[this.conversationID]
-        //         );
-        //         this.messageService.initMessage(this.conversationID);
-        //     } else {
-        //         const listItem = this.cacheService.cachedData.conversations.find(
-        //             t => t.id === this.conversationID
-        //         );
-        //         if (listItem) {
-        //             this.header.title = listItem.name;
-        //         } else {
-        //             this.header.title = 'Loading...';
-        //         }
-        //     }
-        //     this.content = localStorage.getItem('draft' + this.conversationID);
-        //     this.autoSaveInterval = setInterval(() => {
-        //         if (this.content !== null) {
-        //             localStorage.setItem('draft' + this.conversationID, this.content);
-        //         }
-        //     }, 1000);
-        //     this.updateInputHeight();
-        //     if (!isMobileDevice()) {
-        //         inputElement.focus();
-        //     }
-        //     const conversation = (
-        //         await this.conversationApiService
-        //             .ConversationDetail(this.conversationID)
-        //             .toPromise()
-        //     ).value;
-        //     if (this.conversationID !== conversation.id || this.messageService.talkingDestroyed) {
-        //         return;
-        //     }
-        //     this.updateConversation(conversation);
-        //     if (!this.cacheService.cachedData.conversationDetail[this.conversationID]) {
-        //         this.messageService.initMessage(this.conversationID);
-        //     }
-        //     this.cacheService.cachedData.conversationDetail[this.conversationID] = conversation;
-        //     this.cacheService.saveCache();
-        // });
-        // this.windowInnerHeight = window.innerHeight;
-    }
-
-    public ngOnDestroy(): void {
-        this.destroyCurrent();
-    }
-
-    public destroyCurrent() {
-        this.messageService.talkingDestroyed = true;
-        this.showPanel = null;
-        this.messageService.resetVariables();
-        this.conversationID = null;
-    }
-
-    public shareToOther(fileRef: MessageFileRef): void {
-        this.messageService.shareRef = fileRef;
-        this.router.navigate(
-            [
-                'share-target',
-                {
-                    srcConversation: this.conversationID,
-                },
-            ],
-            { skipLocationChange: true }
-        );
-    }
 
     public getAtListMaxHeight(): number {
         return window.innerHeight - this.chatInputHeight - 106;
@@ -244,15 +165,4 @@ export class TalkingComponent implements OnInit, OnDestroy {
             preview: this.messageService.buildPreview(content),
         });
     }
-
-    // @HostListener('window:focus')
-    // public onFocus() {
-    //     const conversationCache = this.cacheService.cachedData.conversations.find(
-    //         t => t.id === this.conversationID
-    //     );
-    //     if (conversationCache) {
-    //         conversationCache.messageContext.unReadAmount = 0;
-    //         this.cacheService.updateTotalUnread();
-    //     }
-    // }
 }

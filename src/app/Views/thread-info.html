@@ -1,20 +1,20 @@
 <app-header title="Thread Info"></app-header>
-@if (thread) {
+@if (thread.hasValue()) {
     <div class="user">
         <!--TODO: replace with thread avatar-->
         <a
             class="user-img groupGridRow"
-            href="{{ thread.imagePath | storageUrl }}"
+            href="{{ thread.value().imagePath | storageUrl }}"
             target="_blank"
             rel="noopener noreferrer"
         >
             <img
                 class="user-img groupGridRow"
-                src="{{ thread.imagePath | storageUrl }}?w=128&square=true"
+                src="{{ thread.value().imagePath | storageUrl }}?w=128&square=true"
             />
         </a>
-        <div class="name">{{ thread | threadName }}</div>
-        <div class="create-time">Create Time: {{ thread.createTime | date: 'mediumDate' }}</div>
+        <div class="name">{{ thread.value() | threadName }}</div>
+        <div class="create-time">Create Time: {{ thread.value().createTime | date: 'mediumDate' }}</div>
     </div>
     <div class="menu-button">
         <div class="img">
@@ -24,25 +24,25 @@
     </div>
 
     <div class="menu-holder"></div>
-    <div class="menu-button" routerLink="/talking/{{ thread.id }}">
+    <div class="menu-button" routerLink="/talking/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-comments"></i>
         </div>
         <div class="text">Message</div>
     </div>
-    <div class="menu-button" routerLink="/file-history/{{ thread.id }}">
+    <div class="menu-button" routerLink="/file-history/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-history"></i>
         </div>
         <div class="text">File History</div>
     </div>
     <app-toggle-menu-item
-        [value]="thread.muted"
+        [value]="thread.value().muted"
         (valueChange)="setMute($event)"
         title="Mute Nitification"
         iconClasses="fas fa-bell-slash"
     ></app-toggle-menu-item>
-    <div class="menu-button" *ngIf="thread.imAdmin" routerLink="/managegroup/{{ thread.id }}">
+    <div class="menu-button" *ngIf="thread.value().imAdmin" routerLink="/managegroup/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-cogs"></i>
         </div>
@@ -55,8 +55,8 @@
         </div>
         <div class="text">members</div>
     </div>
-    <app-contact-list [contactsList]="thread.topTenMembers"></app-contact-list>
-    <div class="menu-button" routerLink="/thread-members/{{ thread.id }}">
+    <app-contact-list [contactsList]="thread.value().topTenMembers"></app-contact-list>
+    <div class="menu-button" routerLink="/thread-members/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-users"></i>
         </div>

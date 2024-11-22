@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { lastValueFrom, map } from 'rxjs';
+import { Component, input, resource } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
-import { ThreadInfo } from '../Models/ThreadInfo';
 
 @Component({
     templateUrl: '../Views/thread-info.html',
@@ -11,26 +9,31 @@ import { ThreadInfo } from '../Models/ThreadInfo';
     standalone: false,
 })
 export class ThreadInfoComponent {
-    thread?: ThreadInfo = null;
+    id = input.required<number>();
 
-    constructor(
-        route: ActivatedRoute,
-        private threadsApiService: ThreadsApiService
-    ) {
-        route.params.pipe(map(t => Number(t['id']))).subscribe(async id => {
+    // thread?: ThreadInfo = null;
+
+    thread = resource({
+        request: () => this.id(),
+        loader: async ({ request }) => {
             try {
-                const resp = await lastValueFrom(this.threadsApiService.DetailsJoined(id));
-                this.thread = resp.thread;
+                const resp = await lastValueFrom(this.threadsApiService.DetailsJoined(request));
+                return resp.thread;
             } catch (err) {
                 showCommonErrorDialog(err);
             }
-        });
+        },
+    });
+
+    constructor(
+        private threadsApiService: ThreadsApiService
+    ) {
     }
 
     public async setMute(value: boolean) {
         try {
-            await lastValueFrom(this.threadsApiService.SetMute(this.thread.id, value));
-            this.thread.muted = value;
+            await lastValueFrom(this.threadsApiService.SetMute(this.thread.value().id, value));
+            this.thread.set({ ...this.thread.value(), muted: value });
         } catch (err) {
             showCommonErrorDialog(err);
         }
