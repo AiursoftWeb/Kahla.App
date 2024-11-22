@@ -130,7 +130,6 @@ export class TalkingInputComponent {
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {
-                    preview: truncateUTF8Bytes(this.textContent(), 57, true),
                     v: 1,
                     segments: [
                         {

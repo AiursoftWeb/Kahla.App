@@ -63,12 +63,14 @@
         </div>
         <div class="text">{{ info.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
     </div>
-    <div class="menu-button" *ngIf="info.isKnownContact" (click)="delete(info.user.id)">
-        <div class="img">
-            <i class="fas fa-trash warning"></i>
+    @if (info.isKnownContact) {
+        <div class="menu-button" (click)="delete(info.user.id)">
+            <div class="img">
+                <i class="fas fa-trash warning"></i>
+            </div>
+            <div class="text warning">Delete</div>
         </div>
-        <div class="text warning">Delete</div>
-    </div>
+    }
     <div class="menu-holder"></div>
     <div class="menu-button" (click)="showCommonThreads()">
         <div class="img">

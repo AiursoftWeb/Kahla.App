@@ -37,7 +37,7 @@
             <div class="last-time">
                 {{ inf.messageContext.latestMessage.sendTime | date: 'shortTime' }}
             </div>
-            <div class="last-message" title="{{ inf.messageContext.latestMessage.content }}">
+            <div class="last-message" title="{{ inf.messageContext.latestMessage.preview }}">
                 @if (inf.topTenMembers.length === 2 && cacheService.cachedData.me) {
                     @if (
                         inf.messageContext.latestMessage.sender.id === cacheService.cachedData.me.id
@@ -49,7 +49,7 @@
                 } @else if (inf.topTenMembers.length > 2) {
                     <b>{{ inf.messageContext.latestMessage.sender.nickName }}:</b>
                 }
-                {{ inf.messageContext.latestMessage.content }}
+                {{ inf.messageContext.latestMessage.preview }}
             </div>
         } @else {
             <div class="last-message">No message. Start talking now!</div>

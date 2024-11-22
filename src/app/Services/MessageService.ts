@@ -3,9 +3,10 @@ import { EventType } from '../Models/Events/EventType';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import { CacheService } from './CacheService';
 import { Router } from '@angular/router';
-import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
+import { MessageContent } from '../Models/Messages/MessageContent';
+import { truncateUTF8Bytes } from '../Utils/StringUtils';
 
 @Injectable({
     providedIn: 'root',
@@ -47,7 +48,6 @@ export class MessageService {
                 break;
             }
             case EventType.SomeoneLeftEvent: {
-                const evt = ev as SomeoneLeftEvent;
                 break;
             }
             case EventType.DissolveEvent: {
@@ -75,5 +75,19 @@ export class MessageService {
 
     public upperFloorImageSize(width: number) {
         return Math.pow(2, Math.ceil(Math.log2(width)));
+    }
+
+    public buildPreview(content: MessageContent) {
+        const previewCandidates = content.segments.map(t => {
+            switch(t.type) {
+                case 'text':
+                    return t.content;
+                default:
+                    return `[${t.type}]`;
+            }
+        }).join(' ');
+
+
+        return truncateUTF8Bytes(previewCandidates, 47, true);
     }
 }

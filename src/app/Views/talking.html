@@ -2,7 +2,7 @@
     [returnButton]="true"
     [shadow]="true"
     [closeDirectly]="true"
-    [processing]="!remote"
+    [processing]="!repo || !repo.health"
     [title]="threadInfo.value() | threadName"
     [button]="true"
     buttonIcon="fas fa-ellipsis"

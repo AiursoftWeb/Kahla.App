@@ -8,7 +8,7 @@ import { FileType } from '../Models/FileType';
 import { ProbeService } from './ProbeService';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { AiurValue } from '../Models/AiurValue';
-import { MessagePreview } from '../Models/Message';
+import { MessagePreview } from '../Models/MessagePreview';
 import { humanReadableBytes } from '../Utils/StringUtils';
 
 @Injectable({

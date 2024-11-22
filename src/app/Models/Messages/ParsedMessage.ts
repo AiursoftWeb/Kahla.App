@@ -1,7 +1,6 @@
-import { AVCCommit } from 'aiur-version-control';
-import { MessageCommit } from './MessageCommit';
 import { MessageContent } from './MessageContent';
 import { MessageSegmentText } from './MessageSegments';
+import { ChatMessage, KahlaCommit } from '@aiursoft/kahla-sdk.js';
 
 export class ParsedMessage {
     constructor(
@@ -11,7 +10,7 @@ export class ParsedMessage {
         public sendTime: Date
     ) {}
 
-    public static fromCommit(commit: AVCCommit<MessageCommit>): ParsedMessage {
+    public static fromCommit(commit: KahlaCommit<ChatMessage>): ParsedMessage {
         return new ParsedMessage(
             commit.id,
             ParsedMessage.parseContent(commit.item.content),
@@ -30,7 +29,6 @@ export class ParsedMessage {
         } catch {
             // fallback to plaintext
             return {
-                preview: content,
                 segments: [
                     {
                         type: 'text',

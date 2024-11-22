@@ -9,19 +9,18 @@
     resource,
     signal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
 import { uuid4 } from '../Utils/Uuid';
 import { MessageFileRef } from '../Models/MessageFileRef';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
-import { AVCArrayStorage, AVCRepository, AVCWebsocketRemote } from 'aiur-version-control';
-import { MessageCommit } from '../Models/Messages/MessageCommit';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { MessagesApiService } from '../Services/Api/MessagesApiService';
 import { scrollBottom } from '../Utils/Scrolling';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
+import { KahlaMessagesRepo } from '@aiursoft/kahla-sdk.js';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -36,8 +35,7 @@ export class TalkingComponent implements OnInit, OnDestroy {
     private chatInputHeight: number;
     public lastAutoLoadMoreTimestamp = 0;
 
-    public repo?: AVCRepository<MessageCommit>;
-    public remote?: AVCWebsocketRemote<MessageCommit>;
+    public repo?: KahlaMessagesRepo;
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
     // route input
@@ -55,39 +53,48 @@ export class TalkingComponent implements OnInit, OnDestroy {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         public messageService: MessageService,
         public cacheService: CacheService,
         private messageApiService: MessagesApiService,
         public threadApiService: ThreadsApiService
     ) {
-        // this.route.params.pipe(map(t => Number(t.id))).subscribe(async id => {
-        //     this.threadId.set(id);
-        // });
-
         effect(async cleanup => {
             if (!this.threadId()) return;
             this.parsedMessages.set([]);
-            this.repo = new AVCRepository(new AVCArrayStorage());
             // Obtain the websocket connection token
             const resp = await lastValueFrom(
                 messageApiService.InitThreadWebsocket(this.threadId())
             );
-            this.remote = new AVCWebsocketRemote<MessageCommit>(resp.webSocketEndpoint);
-            this.remote.attach(this.repo, true, true);
-            const sub = this.repo.commitsStorage.onAdded.subscribe(event => {
-                const newMessages = [...this.parsedMessages()];
-                newMessages.splice(
-                    event.afterIdx + 1,
-                    0,
-                    ...event.newEntries.map(t => ParsedMessage.fromCommit(t))
-                );
-                this.parsedMessages.set(newMessages);
+            this.repo = new KahlaMessagesRepo(resp.webSocketEndpoint, true);
+            const sub = this.repo.messages.messages.onChange.subscribe(event => {
+                const newItem = ParsedMessage.fromCommit(event.newNode.value);
+                switch (event.type) {
+                    case 'addFirst':
+                        this.parsedMessages.set([newItem, ...this.parsedMessages()]);
+                        break;
+                    case 'addLast':
+                        this.parsedMessages.set([...this.parsedMessages(), newItem]);
+                        break;
+                    case 'addBefore':
+                        {
+                            const lastIndex = this.parsedMessages().findLastIndex(
+                                t => t.id === event.refNode!.value.id
+                            );
+                            if (lastIndex !== -1) {
+                                this.parsedMessages.set([
+                                    ...this.parsedMessages().slice(0, lastIndex),
+                                    newItem,
+                                    ...this.parsedMessages().slice(lastIndex),
+                                ]);
+                            }
+                        }
+                        break;
+                }
             });
+            this.repo.connect();
             cleanup(() => {
                 sub.unsubscribe();
-                this.remote.detach();
-                this.remote = null;
+                this.repo.disconnect();
             });
         });
 
@@ -231,9 +238,10 @@ export class TalkingComponent implements OnInit, OnDestroy {
         // this.temp_demo_msg.push(
         //     new ParsedMessage(uuid4(), content, this.cacheService.cachedData.me.id, new Date())
         // );
-        this.repo.commit({
+        this.repo.send({
             content: JSON.stringify(content),
             senderId: this.cacheService.cachedData.me.id ?? uuid4(),
+            preview: this.messageService.buildPreview(content),
         });
     }
 

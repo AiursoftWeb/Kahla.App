@@ -5,6 +5,15 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@aiursoft/kahla-sdk.js@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@aiursoft/kahla-sdk.js@npm:0.2.1"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+  checksum: 10c0/e2cc4aeaa6febea6ff52853f0f9f2a44ec0416010b0154854410b7746df8e780ffecc4f8dfa5c42acd695734fc333592274f42baed0cf1a67e4f62c248cba0d0
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:2.3.0, @ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -4609,6 +4618,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kahla@workspace:."
   dependencies:
+    "@aiursoft/kahla-sdk.js": "npm:^0.2.1"
     "@angular-devkit/core": "npm:^19.0.0"
     "@angular/animations": "npm:19.0.0"
     "@angular/build": "npm:^19.0.0"

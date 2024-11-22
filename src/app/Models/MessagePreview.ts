@@ -5,5 +5,5 @@ export interface MessagePreview {
     threadId: number;
     sender: KahlaUser;
     sendTime: string;
-    content: string;
+    preview: string;
 }
