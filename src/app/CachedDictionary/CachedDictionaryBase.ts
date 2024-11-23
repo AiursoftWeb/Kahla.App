@@ -86,6 +86,12 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
 
     public set(key: TKey, value: TValue) {
         this.cache.set(key, new CacheEntry<TValue>(value));
+        this.savePersist$.next();
+    }
+
+    public delete(key: TKey) {
+        this.cache.delete(key);
+        this.savePersist$.next();
     }
 
     public saveToStorage() {

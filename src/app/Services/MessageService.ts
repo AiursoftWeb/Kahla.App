@@ -48,7 +48,6 @@ export class MessageService {
     }
 
     public reconnectPull() {
-        this.cacheService.updateConversation();
         this.myContactsRepository.updateAll();
     }
 

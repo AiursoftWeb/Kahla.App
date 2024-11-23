@@ -19,7 +19,7 @@ export class MyThreadsRepositoryFiltered extends RepositoryListBase<ThreadInfoJo
 
     protected async requestOnline(take: number, skip: number): Promise<[ThreadInfoJoined[], number]> {
         const resp = await lastValueFrom(
-            this.threadsApiService.List(take, skip, this.keyword, this.keywordExclude)
+            this.threadsApiService.Search(take, skip, this.keyword, this.keywordExclude)
         );
         return [resp.knownThreads, resp.totalCount];
     }

@@ -18,6 +18,7 @@ export interface ThreadInfoJoined extends ThreadInfo {
         unReadAmount: number;
         latestMessage: MessagePreview;
     };
+    totalMessages: number;
     muted: boolean;
     someoneAtMe: boolean;
     topTenMembers: ContactInfo[];

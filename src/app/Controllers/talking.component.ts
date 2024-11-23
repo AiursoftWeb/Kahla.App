@@ -17,6 +17,8 @@ import { MessagesApiService } from '../Services/Api/MessagesApiService';
 import { scrollBottom } from '../Utils/Scrolling';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { KahlaMessagesRepo } from '@aiursoft/kahla-sdk.js';
+import { ThreadInfoCacheDictionary } from '../CachedDictionary/ThreadInfoCacheDictionary';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -42,56 +44,64 @@ export class TalkingComponent {
 
     public threadInfo = resource({
         request: () => this.threadId(),
-        loader: async ({ request }) => {
-            if (request)
-                return (await lastValueFrom(this.threadApiService.DetailsJoined(request))).thread;
+        loader: ({ request }) => {
+            try {
+                return this.threadInfoCacheDictionary.get(request);
+            } catch (err) {
+                showCommonErrorDialog(err);
+            }
         },
     });
 
     constructor(
         public messageService: MessageService,
         public cacheService: CacheService,
-        private messageApiService: MessagesApiService,
-        public threadApiService: ThreadsApiService
+        messageApiService: MessagesApiService,
+        public threadApiService: ThreadsApiService,
+        public threadInfoCacheDictionary: ThreadInfoCacheDictionary
     ) {
         effect(async cleanup => {
             if (!this.threadId()) return;
             this.parsedMessages.set([]);
             // Obtain the websocket connection token
-            const resp = await lastValueFrom(
-                messageApiService.InitThreadWebsocket(this.threadId())
-            );
-            this.repo = new KahlaMessagesRepo(resp.webSocketEndpoint, true);
-            const sub = this.repo.messages.messages.onChange.subscribe(event => {
-                const newItem = ParsedMessage.fromCommit(event.newNode.value);
-                switch (event.type) {
-                    case 'addFirst':
-                        this.parsedMessages.set([newItem, ...this.parsedMessages()]);
-                        break;
-                    case 'addLast':
-                        this.parsedMessages.set([...this.parsedMessages(), newItem]);
-                        break;
-                    case 'addBefore':
-                        {
-                            const lastIndex = this.parsedMessages().findLastIndex(
-                                t => t.id === event.refNode!.value.id
-                            );
-                            if (lastIndex !== -1) {
-                                this.parsedMessages.set([
-                                    ...this.parsedMessages().slice(0, lastIndex),
-                                    newItem,
-                                    ...this.parsedMessages().slice(lastIndex),
-                                ]);
+            try {
+                const resp = await lastValueFrom(
+                    messageApiService.InitThreadWebsocket(this.threadId())
+                );
+                this.repo = new KahlaMessagesRepo(resp.webSocketEndpoint, true);
+                const sub = this.repo.messages.messages.onChange.subscribe(event => {
+                    const newItem = ParsedMessage.fromCommit(event.newNode.value);
+                    switch (event.type) {
+                        case 'addFirst':
+                            this.parsedMessages.set([newItem, ...this.parsedMessages()]);
+                            break;
+                        case 'addLast':
+                            this.parsedMessages.set([...this.parsedMessages(), newItem]);
+                            break;
+                        case 'addBefore':
+                            {
+                                const lastIndex = this.parsedMessages().findLastIndex(
+                                    t => t.id === event.refNode!.value.id
+                                );
+                                if (lastIndex !== -1) {
+                                    this.parsedMessages.set([
+                                        ...this.parsedMessages().slice(0, lastIndex),
+                                        newItem,
+                                        ...this.parsedMessages().slice(lastIndex),
+                                    ]);
+                                }
                             }
-                        }
-                        break;
-                }
-            });
-            this.repo.connect();
-            cleanup(() => {
-                sub.unsubscribe();
-                this.repo.disconnect();
-            });
+                            break;
+                    }
+                });
+                this.repo.connect();
+                cleanup(() => {
+                    sub.unsubscribe();
+                    this.repo.disconnect();
+                });
+            } catch (err) {
+                showCommonErrorDialog(err);
+            }
         });
 
         afterRenderEffect(() => {
@@ -147,7 +157,6 @@ export class TalkingComponent {
         //     }
         // }
     }
-
 
     public getAtListMaxHeight(): number {
         return window.innerHeight - this.chatInputHeight - 106;

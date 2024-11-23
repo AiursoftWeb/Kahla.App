@@ -15,31 +15,6 @@ export class CacheService {
         this.cachedData = new CacheModel();
     }
 
-    /**
-     * @deprecated
-     */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    public updateConversation(): void {}
-
-    public modifyMessage(content: string, modifyText = false): string {
-        if (content.startsWith('[img]')) {
-            return 'Photo';
-        } else if (content.startsWith('[video]')) {
-            return 'Video';
-        } else if (content.startsWith('[file]')) {
-            return 'File';
-        } else if (content.startsWith('[audio]')) {
-            return 'Audio';
-        } else if (content.startsWith('[group]')) {
-            return 'Group Invitation';
-        } else if (content.startsWith('[user]')) {
-            return 'Contact card';
-        } else if (modifyText) {
-            return 'Text';
-        }
-        return content;
-    }
-
     public initCache(): void {
         if (localStorage.getItem('global-cache')) {
             this.cachedData = JSON.parse(localStorage.getItem('global-cache')) as CacheModel;

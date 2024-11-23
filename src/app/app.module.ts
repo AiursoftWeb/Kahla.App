@@ -76,6 +76,7 @@ import { TalkingInputComponent } from './Controllers/talking-input.component';
 import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDictionary';
 import { AutofocusDirective } from './Directives/AutoFocusDirective';
 import { ThreadNamePipe } from './Pipes/thread-name.pipe';
+import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDictionary';
 
 @NgModule({
     imports: [
@@ -158,6 +159,7 @@ import { ThreadNamePipe } from './Pipes/thread-name.pipe';
         ThreadsApiService,
         BlocksApiService,
         UserInfoCacheDictionary,
+        ThreadInfoCacheDictionary
     ],
     bootstrap: [AppComponent],
 })

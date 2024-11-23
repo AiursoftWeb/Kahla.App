@@ -20,7 +20,6 @@ export class AdvancedSettingComponent implements OnInit {
     constructor(
         private authApiService: AuthApiService,
         private cacheService: CacheService
-        // private probeService: ProbeService,
     ) {}
 
     ngOnInit(): void {

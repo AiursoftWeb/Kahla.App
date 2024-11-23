@@ -14,13 +14,13 @@ export class ThreadsApiService {
 
     constructor(private apiService: ApiService) {}
 
-    public List(
+    public Search(
         take = 20,
         skip = 0,
         searchInput?: string,
         excluding?: string
     ): Observable<ThreadsListApiResponse> {
-        return this.apiService.Get(ThreadsApiService.serverPath + '/list', {
+        return this.apiService.Get(ThreadsApiService.serverPath + '/search', {
             take,
             skip,
             searchInput,
@@ -28,26 +28,12 @@ export class ThreadsApiService {
         });
     }
 
-    public DetailsJoined(
-        id: number,
-        take = 1,
-        skip = 0
-    ): Observable<AiurValueNamed<ThreadInfoJoined, 'thread'>> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {
-            take,
-            skip,
-        });
+    public DetailsJoined(id: number): Observable<AiurValueNamed<ThreadInfoJoined, 'thread'>> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {});
     }
 
-    public DetailsAnnoymous(
-        id: number,
-        take = 1,
-        skip = 0
-    ): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/details-annoymous/${id}`, {
-            take,
-            skip,
-        });
+    public DetailsAnnoymous(id: number): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details-annoymous/${id}`, {});
     }
 
     public HardInvite(userId: string): Observable<AiurValueNamed<number, 'newThreadId'>> {
@@ -68,5 +54,19 @@ export class ThreadsApiService {
 
     public Members(id: number, take: number, skip: number): Observable<ThreadMembersApiResponse> {
         return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, { take, skip });
+    }
+
+    public Leave(id: number): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/leave/${id}`, {});
+    }
+
+    public Dissolve(id: number): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/dissolve/${id}`, {});
+    }
+
+    public Transfer(id: number, targetUserId: string): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/transfer-ownership/${id}`, {
+            targetUserId,
+        });
     }
 }
