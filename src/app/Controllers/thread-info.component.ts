@@ -19,7 +19,7 @@ export class ThreadInfoComponent {
         request: () => this.id(),
         loader: async ({ request }) => {
             try {
-                return this.threadInfoCacheDictionary.get(request);
+                return this.threadInfoCacheDictionary.get(request, true);
             } catch (err) {
                 showCommonErrorDialog(err);
             }
@@ -56,7 +56,8 @@ export class ThreadInfoComponent {
         if (isOwner && memberCount > 2) {
             Swal.fire({
                 icon: 'error',
-                title: 'You are the owner of the thread. You are not allowed to leave this group.'
+                title: 'You are not allowed to leave this group.',
+                text: 'You are the owner of the thread. Consider transferring the ownership to others or dissolve the thread.'
             });
             return;
         }

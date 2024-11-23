@@ -69,9 +69,9 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
         }
     }
 
-    public async get(key: TKey): Promise<TValue> {
+    public async get(key: TKey, forceRenew = false): Promise<TValue> {
         if (
-            this.cache.has(key) &&
+            this.cache.has(key) && !forceRenew &&
             new Date().getTime() - this.cache.get(key).cachedTime.getTime() < this.ttlSeconds * 1000
         ) {
             return await this.cache.get(key).getAsync();
@@ -90,6 +90,7 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
     }
 
     public delete(key: TKey) {
+        if (!this.cache.has(key)) return;
         this.cache.delete(key);
         this.savePersist$.next();
     }
