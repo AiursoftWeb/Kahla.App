@@ -3,14 +3,14 @@
     <div *ngIf="info" class="user">
         <a
             class="user-img"
-            href="{{ info.user.avatarURL ? info.user.avatarURL : loadingImgURL }}"
+            href="{{ info.user.iconFilePath | storageUrl }}"
             target="_blank"
             rel="noopener noreferrer"
         >
             <img
                 class="user-img"
                 src="{{
-                    info.user.avatarURL ? info.user.avatarURL : loadingImgURL
+                    info.user.iconFilePath | storageUrl
                 }}?w=128&square=true"
             />
             <div

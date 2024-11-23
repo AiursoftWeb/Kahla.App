@@ -36,21 +36,6 @@
                 }
             }
         }
-        <!--TODO: resolved segments-->
-        <!-- <a
-                class="share-item"
-                href="javascript:void(0);"
-                (click)="shareClick(message)"
-                *ngIf="
-                    message.content.startsWith('[share]') && message.content.split('|').length === 4
-                "
-            >
-                <div>
-                    <img src="{{ message.content.split('|')[3] }}?w=128&square=true" />
-                </div>
-                <h5>{{ message.content.split('|')[1] }}</h5>
-                <span>{{ message.content.split('|')[2] }}</span>
-            </a> -->
     </div>
     <!-- <p class="sendFail" [class.last]="isLast" *ngIf="message.resend">
             <i class="fas fa-exclamation-triangle"></i>

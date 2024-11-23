@@ -31,7 +31,7 @@
         <h2>Welcome back, {{ cacheService.cachedData.me.nickName }}.</h2>
         <img
             style="width: 100px"
-            src="{{ cacheService.cachedData.me.avatarURL }}?w=256&square=true"
+            src="{{ cacheService.cachedData.me.iconFilePath | storageUrl }}?w=256&square=true"
             (click)="homeService.currentPage = 2"
         />
         <h3>Start talking now!</h3>

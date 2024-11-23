@@ -11,5 +11,7 @@ import { ParsedMessage } from '../Models/Messages/ParsedMessage';
 export class MessageListComponent {
     messages = input.required<ParsedMessage[]>();
 
+    lastReadIndex = input<number>(-1);
+
     constructor(public cacheService: CacheService) {}
 }

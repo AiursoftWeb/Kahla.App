@@ -174,9 +174,6 @@ export class UploadService {
                             } else if (res != null && (res as UploadFile).code === 0) {
                                 Swal.close();
                                 user.iconFilePath = (res as UploadFile).filePath;
-                                user.avatarURL = this.probeService.encodeProbeFileUrl(
-                                    user.iconFilePath
-                                );
                             }
                         });
                     alert.then(result => {

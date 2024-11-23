@@ -2,10 +2,10 @@
 <div *ngIf="user">
     <div class="profile avatar">
         <label>Avatar</label>
-        <a class="user-img" href="{{ user ? user.avatarURL : loadingImgURL }}" target="_blank">
+        <a class="user-img" href="{{ user?.iconFilePath | storageUrl }}" target="_blank">
             <img
                 class="user-img"
-                src="{{ user.avatarURL ? user.avatarURL : loadingImgURL }}?w=256&square=true"
+                src="{{ user?.iconFilePath | storageUrl }}?w=256&square=true"
             />
         </a>
         <button class="button primary inputButton" (click)="uploadAvatar()">

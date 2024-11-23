@@ -7,7 +7,7 @@
         <div class="user-img-group">
             <img
                 class="user-img"
-                src="{{ contact.user.avatarURL ?? loadingImgURL }}?w=128&square=true"
+                src="{{ contact.user.iconFilePath | storageUrl }}?w=128&square=true"
                 (click)="$event.stopPropagation(); userClick(contact, true)"
             />
             <div
