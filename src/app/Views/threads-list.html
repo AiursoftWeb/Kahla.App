@@ -10,46 +10,48 @@
             (click)="threadClicked.emit({ thread: inf, secondary: true }); $event.stopPropagation()"
         />
         @if (!externalView) {
-            @if (onlineStatusOf(inf) !== null) {
+            @let infJoined = asJoined(inf);
+            @if (onlineStatusOf(infJoined) !== null) {
                 <div
                     class="small-dot"
                     style="top: 52px; right: 7px"
-                    [class.greendot]="onlineStatusOf(inf)"
-                    [class.graydot]="!onlineStatusOf(inf)"
+                    [class.greendot]="onlineStatusOf(infJoined)"
+                    [class.graydot]="!onlineStatusOf(infJoined)"
                 ></div>
             }
 
             <div
-                *ngIf="inf.messageContext.unReadAmount > 0"
+                *ngIf="infJoined.messageContext.unReadAmount > 0"
                 class="dot"
-                [ngClass]="inf.muted ? 'bluedot' : 'reddot'"
+                [ngClass]="infJoined.muted ? 'bluedot' : 'reddot'"
             >
-                {{ inf.messageContext.unReadAmount | truncatedNum }}
+                {{ infJoined.messageContext.unReadAmount | truncatedNum }}
             </div>
-            <div *ngIf="inf.someoneAtMe" class="dot at-dot">&#64;</div>
+            <div *ngIf="infJoined.someoneAtMe" class="dot at-dot">&#64;</div>
         }
         <div class="sender">{{ inf | threadName }}</div>
         @if (externalView) {
             <div class="last-message">
                 {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}
             </div>
-        } @else if (inf.messageContext?.latestMessage) {
+        } @else if (asJoined(inf).messageContext?.latestMessage) {
+            @let infJoined = asJoined(inf);
             <div class="last-time">
-                {{ inf.messageContext.latestMessage.sendTime | date: 'shortTime' }}
+                {{ infJoined.messageContext.latestMessage.sendTime | date: 'shortTime' }}
             </div>
-            <div class="last-message" title="{{ inf.messageContext.latestMessage.preview }}">
-                @if (inf.topTenMembers.length === 2 && cacheService.cachedData.me) {
+            <div class="last-message" title="{{ infJoined.messageContext.latestMessage.preview }}">
+                @if (infJoined.topTenMembers.length === 2 && cacheService.cachedData.me) {
                     @if (
-                        inf.messageContext.latestMessage.sender.id === cacheService.cachedData.me.id
+                        infJoined.messageContext.latestMessage.sender.id === cacheService.cachedData.me.id
                     ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {
                         <i class="fas fa-angle-left"></i>
                     }
-                } @else if (inf.topTenMembers.length > 2) {
-                    <b>{{ inf.messageContext.latestMessage.sender.nickName }}:</b>
+                } @else if (infJoined.topTenMembers.length > 2) {
+                    <b>{{ infJoined.messageContext.latestMessage.sender.nickName }}:</b>
                 }
-                {{ inf.messageContext.latestMessage.preview }}
+                {{ infJoined.messageContext.latestMessage.preview }}
             </div>
         } @else {
             <div class="last-message">No message. Start talking now!</div>

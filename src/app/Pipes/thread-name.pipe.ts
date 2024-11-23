@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../Models/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
 @Pipe({
     name: 'threadName',
@@ -7,12 +7,13 @@ import { CacheService } from '../Services/CacheService';
 })
 export class ThreadNamePipe implements PipeTransform {
     constructor(private cacheService: CacheService) {}
-    transform(thread?: ThreadInfo): string {
+    transform(thread?: ThreadInfo | ThreadInfoJoined): string {
         if (!thread) return 'Thread';
         if (!thread.name.includes('{THE OTHER USER}')) return thread.name;
+        if (!(thread as ThreadInfoJoined).topTenMembers) return thread.name;
         const name = thread.name.replace(
             '{THE OTHER USER}',
-            thread.topTenMembers
+            (thread as ThreadInfoJoined).topTenMembers
                 .filter(
                     t =>
                         !this.cacheService?.cachedData?.me ||

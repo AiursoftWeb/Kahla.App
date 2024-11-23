@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { EventService } from './EventService';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import { EventType } from '../Models/Events/EventType';
-import { SomeoneLeftEvent } from '../Models/Events/SomeoneLeftEvent';
 import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 
 @Injectable({ providedIn: 'root' })

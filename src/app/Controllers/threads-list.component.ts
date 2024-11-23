@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RepositoryBase } from '../Repositories/RepositoryBase';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../Models/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
 
@@ -32,10 +32,14 @@ export class ThreadsListComponent {
 
     constructor(public cacheService: CacheService) {}
 
-    public onlineStatusOf(thread: ThreadInfo): boolean | null {
+    public onlineStatusOf(thread: ThreadInfoJoined): boolean | null {
         if (!this.cacheService?.cachedData?.me || thread.topTenMembers.length <= 1) return null;
         return thread.topTenMembers
             .filter(t => t.user.id !== this.cacheService.cachedData.me.id)
             .some(t => t.online);
+    }
+
+    public asJoined(thread: ThreadInfo): ThreadInfoJoined {
+        return thread as ThreadInfoJoined;
     }
 }

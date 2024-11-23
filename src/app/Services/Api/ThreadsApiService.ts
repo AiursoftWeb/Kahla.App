@@ -4,7 +4,7 @@ import { ApiService } from './ApiService';
 import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiResponse';
 import { AiurValueNamed } from '../../Models/AiurValue';
 import { ThreadOptions } from '../../Models/Threads/ThreadOptions';
-import { ThreadInfo } from '../../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../../Models/ThreadInfo';
 import { AiurProtocol } from '../../Models/AiurProtocal';
 import { ThreadMembersApiResponse } from '../../Models/Threads/ThreadMembersApiResponse';
 
@@ -32,7 +32,7 @@ export class ThreadsApiService {
         id: number,
         take = 1,
         skip = 0
-    ): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
+    ): Observable<AiurValueNamed<ThreadInfoJoined, 'thread'>> {
         return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {
             take,
             skip,

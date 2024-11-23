@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfoJoined } from '../Models/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
 import { lastValueFrom } from 'rxjs';
 
-export class MyThreadsRepositoryFiltered extends RepositoryBase<ThreadInfo> {
+export class MyThreadsRepositoryFiltered extends RepositoryBase<ThreadInfoJoined> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };
@@ -17,7 +17,7 @@ export class MyThreadsRepositoryFiltered extends RepositoryBase<ThreadInfo> {
         super();
     }
 
-    protected async requestOnline(take: number, skip: number): Promise<[ThreadInfo[], number]> {
+    protected async requestOnline(take: number, skip: number): Promise<[ThreadInfoJoined[], number]> {
         const resp = await lastValueFrom(
             this.threadsApiService.List(take, skip, this.keyword, this.keywordExclude)
         );

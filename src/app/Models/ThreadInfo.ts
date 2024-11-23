@@ -10,7 +10,9 @@ export interface ThreadInfo {
     createTime: Date;
     imInIt: boolean;
     allowDirectJoinWithoutInvitation: boolean;
+}
 
+export interface ThreadInfoJoined extends ThreadInfo {
     // private attributes (can access after joined)
     messageContext: {
         unReadAmount: number;

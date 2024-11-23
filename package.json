@@ -14,7 +14,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build --base-href /",
-    "lint": "ng lint",
+    "lint": "tsc && ng lint",
     "format": "prettier -cw .",
     "create-component": "python ./scripts/create-component.py"
   },

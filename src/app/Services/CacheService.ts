@@ -40,14 +40,6 @@ export class CacheService {
         return content;
     }
 
-    public updateTotalUnread(): void {
-        this.totalUnread = this.cachedData.conversations
-            .filter(item => !item.muted)
-            .map(item => item.messageContext.unReadAmount)
-            .reduce((a, b) => a + b, 0);
-        // this.themeService.NotifyIcon = this.totalUnread; // TODO: fix this
-    }
-
     public initCache(): void {
         if (localStorage.getItem('global-cache')) {
             this.cachedData = JSON.parse(localStorage.getItem('global-cache')) as CacheModel;
