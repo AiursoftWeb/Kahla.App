@@ -1,9 +1,9 @@
 import { lastValueFrom } from 'rxjs';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { SearchApiService } from '../Services/Api/SearchApiService';
-import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
+import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 
-export class ServerContactsRepository extends RepositoryBase<ContactInfo> {
+export class ServerContactsRepository extends RepositoryListBase<ContactInfo> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
-import { RepositoryBase } from '../Repositories/RepositoryBase';
+import { RepositoryListBase } from '../Repositories/RepositoryBase';
 import { Values } from '../values';
 
 @Component({
@@ -12,7 +12,7 @@ import { Values } from '../values';
 export class ContactListComponent {
     public loadingImgURL = Values.loadingImgURL;
 
-    @Input() public contacts?: RepositoryBase<ContactInfo> = null;
+    @Input() public contacts?: RepositoryListBase<ContactInfo> = null;
 
     @Input() public contactsList?: ContactInfo[] = null;
 

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ThreadInfoJoined } from '../Models/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
-import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
+import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 import { lastValueFrom } from 'rxjs';
 
-export class MyThreadsRepositoryFiltered extends RepositoryBase<ThreadInfoJoined> {
+export class MyThreadsRepositoryFiltered extends RepositoryListBase<ThreadInfoJoined> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };

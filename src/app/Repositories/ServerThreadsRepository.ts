@@ -1,9 +1,9 @@
 import { lastValueFrom } from 'rxjs';
 import { SearchApiService } from '../Services/Api/SearchApiService';
-import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
+import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 import { ThreadInfo } from '../Models/ThreadInfo';
 
-export class ServerThreadsRepository extends RepositoryBase<ThreadInfo> {
+export class ServerThreadsRepository extends RepositoryListBase<ThreadInfo> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };

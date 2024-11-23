@@ -1,10 +1,10 @@
 import { lastValueFrom } from 'rxjs';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
-import { RepositoryBase, RepositoryPersistConfig } from './RepositoryBase';
+import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 import { Injectable } from '@angular/core';
 
-export class MyContactsRepositoryFiltered extends RepositoryBase<ContactInfo> {
+export class MyContactsRepositoryFiltered extends RepositoryListBase<ContactInfo> {
     protected readonly persistConfig: RepositoryPersistConfig = {
         persist: false,
     };

@@ -7,7 +7,7 @@ import {
     MyContactsRepository,
     MyContactsRepositoryFiltered,
 } from '../Repositories/MyContactsRepository';
-import { RepositoryBase } from '../Repositories/RepositoryBase';
+import { RepositoryListBase } from '../Repositories/RepositoryBase';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 
 @Component({
@@ -29,7 +29,7 @@ export class FriendsComponent implements OnInit {
     public searchTxt = signal('');
 
     private detailLoading = false;
-    public contactsRepo: RepositoryBase<ContactInfo>;
+    public contactsRepo: RepositoryListBase<ContactInfo>;
 
     constructor(
         private router: Router,

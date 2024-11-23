@@ -13,12 +13,8 @@ export interface RepositoryPersistConfig {
 
 export abstract class RepositoryBase<T> {
     protected abstract get persistConfig(): RepositoryPersistConfig;
-
     public data: T[] = [];
-    public total: number;
     public status: RepositoryStatus = 'uninitialized';
-
-    updatePromise?: Promise<void>;
 
     public saveCache(): void {
         localStorage.setItem(
@@ -30,11 +26,43 @@ export abstract class RepositoryBase<T> {
         );
     }
 
+    public initCache() {
+        if (localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)) {
+            const data = JSON.parse(
+                localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)
+            ) as RepositoryCache<T>;
+            if (data.version !== this.persistConfig.version!) {
+                this.data = [];
+                this.saveCache();
+            }
+            this.data = data.data;
+            this.status = 'offline';
+        } else {
+            this.data = [];
+        }
+    }
+
+    public get health(): boolean {
+        return this.status === 'synced' || this.status === 'loading';
+    }
+
+    protected updatePromise?: Promise<void>;
+
     public updateAll(): Promise<void> {
         return this.updatePromise ?? (this.updatePromise = this.updateAllInternal());
     }
 
-    private async updateAllInternal(): Promise<void> {
+    protected abstract updateAllInternal(): Promise<void>;
+
+    protected abstract loadMore(take: number): Promise<void>;
+
+    public abstract canLoadMore: boolean;
+}
+
+export abstract class RepositoryListBase<T> extends RepositoryBase<T> {
+    public total: number;
+
+    protected async updateAllInternal(): Promise<void> {
         this.status = 'loading';
         try {
             const [resp, total] = await this.requestOnline(20, 0);
@@ -66,28 +94,9 @@ export abstract class RepositoryBase<T> {
         }
     }
 
-    public initCache() {
-        if (localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)) {
-            const data = JSON.parse(
-                localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)
-            ) as RepositoryCache<T>;
-            if (data.version !== this.persistConfig.version!) {
-                this.data = [];
-                this.saveCache();
-            }
-            this.data = data.data;
-            this.status = 'offline';
-        } else {
-            this.data = [];
-        }
-    }
-
-    public get health(): boolean {
-        return this.status === 'synced' || this.status === 'loading';
-    }
-
     public get canLoadMore(): boolean {
-        return this.data.length < this.total;
+        // Total = -1: The repo is just restore from localstorage, we don't know the total
+        return this.total === -1 || this.data.length < this.total;
     }
 
     protected abstract requestOnline(take: number, skip: number): Promise<[T[], number]>;
