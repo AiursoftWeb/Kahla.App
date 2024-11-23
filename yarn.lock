@@ -5,12 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@aiursoft/kahla-sdk.js@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "@aiursoft/kahla-sdk.js@npm:0.2.2"
+"@aiursoft/kahla-sdk.js@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@aiursoft/kahla-sdk.js@npm:0.2.3"
   dependencies:
     rxjs: "npm:^7.8.1"
-  checksum: 10c0/bb275a96a6fe42f94b75b3c84b6e4a6ffedf8b567ec14b40a986174207f0d44ed68dcc866f4cae6210a7983d89f09e3b1260d0012fc4e50bb5a4e2aa3c5690fe
+  checksum: 10c0/d9175a48f62471e6c7314fd7d7a0135b54c5c1efcc8332636009b1fd00e2176b17e3daeafedbf3e817f0bf7c16fe1fdb04a855f080178a25c57a19bd7d958834
   languageName: node
   linkType: hard
 
@@ -4618,7 +4618,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kahla@workspace:."
   dependencies:
-    "@aiursoft/kahla-sdk.js": "npm:^0.2.2"
+    "@aiursoft/kahla-sdk.js": "npm:^0.2.3"
     "@angular-devkit/core": "npm:^19.0.0"
     "@angular/animations": "npm:19.0.0"
     "@angular/build": "npm:^19.0.0"

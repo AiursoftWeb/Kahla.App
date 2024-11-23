@@ -19,7 +19,7 @@
     "create-component": "python ./scripts/create-component.py"
   },
   "dependencies": {
-    "@aiursoft/kahla-sdk.js": "^0.2.2",
+    "@aiursoft/kahla-sdk.js": "^0.2.3",
     "@angular/animations": "19.0.0",
     "@angular/common": "19.0.0",
     "@angular/core": "19.0.0",

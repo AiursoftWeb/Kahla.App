@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 })
 export class UserInfoCacheDictionary extends CachedDictionaryBase<string, KahlaUser> {
     constructor(private contactsApiService: ContactsApiService) {
-        super(3600);
+        super(3600, 'user-brief-info');
     }
 
     protected async cacheMiss(key: string): Promise<KahlaUser> {
