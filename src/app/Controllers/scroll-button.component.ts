@@ -4,7 +4,7 @@ import { scrollBottom, scrollTop } from '../Utils/Scrolling';
 @Component({
     selector: 'app-scroll-button',
     templateUrl: '../Views/scroll-button.html',
-    styleUrls: ['../Styles/scroll-button.scss', '../Styles/button.scss'],
+    styleUrls: ['../Styles/scroll-button.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
     standalone: false,
 })
 export class ScrollButtonComponent implements AfterViewInit {

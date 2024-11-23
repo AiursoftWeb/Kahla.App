@@ -33,6 +33,8 @@ export class TalkingComponent {
     public repo?: KahlaMessagesRepo;
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
+
+    public hasNewMessages = signal(false);
     // route input
     public threadId = input.required<number>({
         alias: 'id',
@@ -94,7 +96,10 @@ export class TalkingComponent {
 
         afterRenderEffect(() => {
             this.parsedMessages();
-            scrollBottom(true, 500);
+            if (!scrollBottom(true, 500)) {
+                // User ignored new messages
+                this.hasNewMessages.set(true);
+            }
         });
     }
 
@@ -118,7 +123,7 @@ export class TalkingComponent {
     onScroll() {
         this.messageService.updateBelowWindowPercent();
         if (this.messageService.belowWindowPercent <= 0) {
-            this.messageService.newMessages = false;
+            this.hasNewMessages.set(false);
         }
         // if (
         //     window.scrollY <= 0 &&

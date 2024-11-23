@@ -70,12 +70,12 @@ export class FileHistoryComponent implements OnInit {
     }
 
     public share(file: ProbeFile, dir: FileHistoryApiModel) {
-        this.messageService.shareRef = {
-            filePath: `${dir.showingDateUTC}/${file.fileName}`,
-            fileType: FileType.File,
-            fileName: file.fileName,
-            fileSize: humanReadableBytes(file.fileSize),
-        } as MessageFileRef;
+        // this.messageService.shareRef = {
+        //     filePath: `${dir.showingDateUTC}/${file.fileName}`,
+        //     fileType: FileType.File,
+        //     fileName: file.fileName,
+        //     fileSize: humanReadableBytes(file.fileSize),
+        // } as MessageFileRef;
         this.router.navigate([
             'share-target',
             {

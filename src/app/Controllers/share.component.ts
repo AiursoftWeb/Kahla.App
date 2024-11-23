@@ -42,8 +42,8 @@ export class ShareComponent implements OnInit, DoCheck {
                 this.inApp = true;
             } else if (param.srcConversation) {
                 this.srcConversation = param.srcConversation;
-                this.fileRef = this.messageService.shareRef;
-                this.messageService.shareRef = null;
+                // this.fileRef = this.messageService.shareRef;
+                // this.messageService.shareRef = null;
                 this.relativePath = !!param.relativePath;
                 this.inApp = true;
             } else {

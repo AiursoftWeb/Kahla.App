@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { EventType } from '../Models/Events/EventType';
 import { AiurEvent } from '../Models/Events/AiurEvent';
 import { CacheService } from './CacheService';
-import { Router } from '@angular/router';
-import { MessageFileRef } from '../Models/MessageFileRef';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { truncateUTF8Bytes } from '../Utils/StringUtils';
@@ -13,17 +11,10 @@ import { truncateUTF8Bytes } from '../Utils/StringUtils';
 })
 export class MessageService {
     public belowWindowPercent = 0;
-    public newMessages = false;
-    public videoHeight = 0;
-    public messageLoading = false;
-    public shareRef: MessageFileRef;
-    public talkingDestroyed = false;
-    public showMessagesCount = 15;
 
     constructor(
         private myContactsRepository: MyContactsRepository,
         private cacheService: CacheService,
-        private router: Router
     ) {}
 
     public async OnMessage(ev: AiurEvent) {
