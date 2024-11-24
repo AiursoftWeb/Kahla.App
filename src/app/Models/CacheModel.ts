@@ -1,4 +1,4 @@
-import { ThreadInfo } from './ThreadInfo';
+import { ThreadInfo } from './Threads/ThreadInfo';
 import { KahlaUser } from './KahlaUser';
 import { AccessToken } from './AccessToken';
 import { AppOptions } from './AppOptions';

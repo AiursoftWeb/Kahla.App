@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ThreadInfoJoined } from '../Models/ThreadInfo';
+import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 import { lastValueFrom } from 'rxjs';

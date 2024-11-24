@@ -4,7 +4,7 @@ import { ApiService } from './ApiService';
 import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiResponse';
 import { AiurValueNamed } from '../../Models/AiurValue';
 import { ThreadOptions } from '../../Models/Threads/ThreadOptions';
-import { ThreadInfo, ThreadInfoJoined } from '../../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../../Models/Threads/ThreadInfo';
 import { AiurProtocol } from '../../Models/AiurProtocal';
 import { ThreadMembersApiResponse } from '../../Models/Threads/ThreadMembersApiResponse';
 
@@ -68,5 +68,9 @@ export class ThreadsApiService {
         return this.apiService.Post(ThreadsApiService.serverPath + `/transfer-ownership/${id}`, {
             targetUserId,
         });
+    }
+
+    public UpdateThread(id: number, options: ThreadOptions): Observable<AiurProtocol> {
+        return this.apiService.Patch(ThreadsApiService.serverPath + `/update-thread/${id}`, {...options});
     }
 }

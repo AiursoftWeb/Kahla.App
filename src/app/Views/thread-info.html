@@ -42,7 +42,7 @@
         title="Mute Nitification"
         iconClasses="fas fa-bell-slash"
     ></app-toggle-menu-item>
-    <div class="menu-button" *ngIf="thread.value().imAdmin" routerLink="/managegroup/{{ thread.value().id }}">
+    <div class="menu-button" *ngIf="thread.value().imAdmin" routerLink="/manage-thread/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-cogs"></i>
         </div>

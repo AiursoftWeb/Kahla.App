@@ -1,4 +1,4 @@
-import { ThreadInfoJoined } from "../Models/ThreadInfo";
+import { ThreadInfoJoined } from "../Models/Threads/ThreadInfo";
 import { RepositoryBase } from "./RepositoryBase";
 
 export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined> {

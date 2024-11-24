@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RepositoryListBase } from '../Repositories/RepositoryBase';
-import { ThreadInfo, ThreadInfoJoined } from '../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
 

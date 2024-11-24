@@ -1,5 +1,5 @@
 import { lastValueFrom } from 'rxjs';
-import { ThreadInfoJoined } from '../Models/ThreadInfo';
+import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 

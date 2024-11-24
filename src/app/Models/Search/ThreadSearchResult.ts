@@ -1,5 +1,5 @@
 import { AiurProtocol } from '../AiurProtocal';
-import { ThreadInfo } from '../ThreadInfo';
+import { ThreadInfo } from '../Threads/ThreadInfo';
 
 export interface ThreadSearchResult extends AiurProtocol {
     totalThreadsCount: number;

@@ -1,5 +1,5 @@
 import { Component, effect, OnInit, signal } from '@angular/core';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfo } from '../Models/Threads/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';

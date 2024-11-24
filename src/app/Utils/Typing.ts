@@ -10,4 +10,4 @@ export type PropertiesWithType<T, P> = {
  * Example input: `<{a: string, b: boolean, c: number, d: boolean}, boolean>`
  * Example output: `'b' | 'd'`
  */
-export type PropertryNamesWithType<T, P> = keyof PropertiesWithType<T, P>;
+export type PropertyNamesWithType<T, P> = keyof PropertiesWithType<T, P>;

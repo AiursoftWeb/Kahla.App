@@ -1,6 +1,6 @@
 import { Component, Input, model } from '@angular/core';
 import { ThreadOptions } from '../Models/Threads/ThreadOptions';
-import { PropertryNamesWithType } from '../Utils/Typing';
+import { PropertyNamesWithType } from '../Utils/Typing';
 
 @Component({
     selector: 'app-thread-options',
@@ -13,7 +13,7 @@ export class ThreadOptionsComponent {
 
     public threadOptions = model.required<ThreadOptions>();
 
-    public flipOption<T>(name: PropertryNamesWithType<ThreadOptions, T>, newValue: T) {
+    public flipOption<T>(name: PropertyNamesWithType<ThreadOptions, T>, newValue: T) {
         this.threadOptions.set({
             ...this.threadOptions(),
             [name]: newValue,

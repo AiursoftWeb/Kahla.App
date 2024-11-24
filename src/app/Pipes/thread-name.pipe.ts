@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ThreadInfo, ThreadInfoJoined } from '../Models/ThreadInfo';
+import { ThreadInfo, ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
 @Pipe({
     name: 'threadName',

@@ -22,6 +22,7 @@ export class ThreadInfoComponent {
                 return this.threadInfoCacheDictionary.get(request, true);
             } catch (err) {
                 showCommonErrorDialog(err);
+                return null;
             }
         },
     });

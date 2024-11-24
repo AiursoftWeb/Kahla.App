@@ -1,5 +1,5 @@
-﻿import { ContactInfo } from './Contacts/ContactInfo';
-import { MessagePreview } from './MessagePreview';
+﻿import { ContactInfo } from '../Contacts/ContactInfo';
+import { MessagePreview } from '../MessagePreview';
 
 export interface ThreadInfo {
     // public attributes (can access anytime)

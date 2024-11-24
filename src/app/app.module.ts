@@ -76,6 +76,7 @@ import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDiction
 import { AutofocusDirective } from './Directives/AutoFocusDirective';
 import { ThreadNamePipe } from './Pipes/thread-name.pipe';
 import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDictionary';
+import { ManageThreadComponent } from './Controllers/manage-thread.component';
 
 @NgModule({
     imports: [
@@ -130,12 +131,11 @@ import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDic
         MessageComponent,
         MessageSegmentTextComponent,
         MessageSegmentImgComponent,
-
         MessageSegmentVoiceComponent,
         MessageSegmentFileComponent,
-
         ScrollButtonComponent,
         LoadMoreButtonComponent,
+        ManageThreadComponent,
     ],
     providers: [
         ApiService,

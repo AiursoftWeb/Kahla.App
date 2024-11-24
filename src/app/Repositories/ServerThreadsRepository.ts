@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { RepositoryListBase, RepositoryPersistConfig } from './RepositoryBase';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfo } from '../Models/Threads/ThreadInfo';
 
 export class ServerThreadsRepository extends RepositoryListBase<ThreadInfo> {
     protected readonly persistConfig: RepositoryPersistConfig = {

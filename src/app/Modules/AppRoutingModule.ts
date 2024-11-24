@@ -10,7 +10,6 @@ import { ChangePasswordComponent } from '../Controllers/changePassword.component
 import { DevicesComponent } from '../Controllers/devices.component';
 import { ThemeComponent } from '../Controllers/theme.component';
 import { AdvancedSettingComponent } from '../Controllers/advanced-setting.component';
-import { ManageGroupComponent } from '../Controllers/manageGroup.component';
 import { HomeComponent } from '../Controllers/home.component';
 import { ShareComponent } from '../Controllers/share.component';
 import { FileHistoryComponent } from '../Controllers/file-history.component';
@@ -18,6 +17,7 @@ import { BlocksListComponent } from '../Controllers/blocks-list.component';
 import { NewThreadComponent } from '../Controllers/new-thread.component';
 import { ThreadInfoComponent } from '../Controllers/thread-info.component';
 import { ThreadMembersComponent } from '../Controllers/thread-members.component';
+import { ManageThreadComponent } from '../Controllers/manage-thread.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -34,7 +34,7 @@ const routes: Routes = [
     { path: 'userInfo', component: UserDetailComponent },
     { path: 'thread/:id', component: ThreadInfoComponent },
     { path: 'thread-members/:id', component: ThreadMembersComponent },
-    { path: 'managegroup/:id', component: ManageGroupComponent },
+    { path: 'manage-thread/:id', component: ManageThreadComponent },
     { path: 'changepassword', component: ChangePasswordComponent },
     { path: 'devices', component: DevicesComponent },
     { path: 'theme', component: ThemeComponent },

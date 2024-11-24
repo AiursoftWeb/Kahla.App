@@ -1,5 +1,5 @@
 import { lastValueFrom } from 'rxjs';
-import { ThreadInfoJoined } from '../Models/ThreadInfo';
+import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { CachedDictionaryBase } from './CachedDictionaryBase';
 import { Injectable } from '@angular/core';

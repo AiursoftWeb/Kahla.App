@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { ThreadInfo } from '../Models/ThreadInfo';
+import { ThreadInfo } from '../Models/Threads/ThreadInfo';
 
 @Component({
     selector: 'app-thread-avatar',
