@@ -128,6 +128,7 @@ export class UserComponent implements OnInit {
     public async block() {
         const resp = await Swal.fire({
             title: `Are you sure to ${this.info.isBlockedByYou ? 'unblock' : 'block'} this user?`,
+            text: `Blocked user will not be able to create new threads with you.`,
             icon: 'warning',
             showCancelButton: true,
         });
