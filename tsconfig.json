@@ -18,5 +18,6 @@
   "angularCompilerOptions": {
     "strictTemplates": true,
     "strictInjectionParameters": true
-  }
+  },
+  "include": ["src/**/*"]
 }

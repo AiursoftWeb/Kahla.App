@@ -13,7 +13,8 @@
   "license": "MIT",
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --base-href /",
+    "build": "ng build --base-href / && tsc -p ./service_worker/ && workbox generateSW workbox-config.js",
+    "clean": "rm -rf dist",
     "lint": "tsc && ng lint",
     "format": "prettier -cw .",
     "create-component": "python ./scripts/create-component.py"
@@ -50,7 +51,8 @@
     "eslint": "^9.15.0",
     "prettier": "^3.3.3",
     "typescript": "~5.6.3",
-    "typescript-eslint": "8.15.0"
+    "typescript-eslint": "8.15.0",
+    "workbox-cli": "^7.3.0"
   },
   "main": "index.js",
   "repository": {
