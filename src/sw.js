@@ -1,4 +1,4 @@
-const CACHE = 'v6';
+const CACHE = 'v7';
 const UPDATE_REQUIRED = '__Update_Required__';
 const UPDATE_COMPLETED = '__Update_Completed__';
 const self_scope = self.registration.scope;
@@ -10,6 +10,8 @@ function installCache() {
         let requests = [
             '/index.html',
             '/main.js',
+            '/chunk-B4IXS433.js',
+            '/chunk-QCWUH4UN.js',
             '/manifest.json',
             '/polyfills.js',
             '/styles.css',
@@ -170,33 +172,6 @@ self.addEventListener('push', function (event) {
                 }
             })
         );
-    } else if (data.type == 1) {
-        // new friend request
-        self.registration.showNotification(pushTitle, {
-            body: 'You have got a new friend request!',
-            icon: imageLink,
-            renotify: true,
-            tag: -1,
-            data: data,
-        });
-    } else if (data.type == 2) {
-        // were deleted event
-        self.registration.showNotification(pushTitle, {
-            body: 'You were deleted by one of your friends from his friend list.',
-            icon: imageLink,
-            renotify: true,
-            tag: -1,
-            data: data,
-        });
-    } else if (data.type == 3) {
-        // friend accepted event
-        self.registration.showNotification(pushTitle, {
-            body: 'Your friend request was accepted!',
-            icon: imageLink,
-            renotify: true,
-            tag: -1,
-            data: data,
-        });
     }
 });
 

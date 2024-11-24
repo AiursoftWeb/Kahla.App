@@ -5,7 +5,7 @@ import { MessageSegmentFileLike } from '../../Models/Messages/MessageSegments';
     selector: 'app-file-sharing-buttons',
     templateUrl: '../../Views/MessageSegments/file-sharing-buttons.html',
     styleUrls: ['../../Styles/MessageSegments/file-sharing-buttons.scss'],
-    standalone: false,
+    standalone: true,
 })
 export class FileSharingButtonsComponent {
     content = input.required<MessageSegmentFileLike>();

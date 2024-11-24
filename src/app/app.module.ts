@@ -37,7 +37,6 @@ import { DevicesApiService } from './Services/Api/DevicesApiService';
 import { ThemeService } from './Services/ThemeService';
 import { HomeService } from './Services/HomeService';
 import { ProbeService } from './Services/ProbeService';
-import { VjsPlayerComponent } from './Controllers/vjs-player.component';
 import { EventService } from './Services/EventService';
 import { GlobalNotifyService } from './Services/GlobalNotifyService';
 import { MessagesApiService } from './Services/Api/MessagesApiService';
@@ -91,6 +90,8 @@ import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDic
         ReactiveFormsModule,
         AutofocusDirective,
         ThreadNamePipe,
+        MessageSegmentVideoComponent,
+        FileSharingButtonsComponent,
     ],
     declarations: [
         AboutComponent,
@@ -115,7 +116,6 @@ import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDic
         HomeComponent,
         ShareComponent,
         FileHistoryComponent,
-        VjsPlayerComponent,
         ContactListComponent,
         ThreadsListComponent,
         SearchAreaComponent,
@@ -130,10 +130,10 @@ import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDic
         MessageComponent,
         MessageSegmentTextComponent,
         MessageSegmentImgComponent,
-        MessageSegmentVideoComponent,
+
         MessageSegmentVoiceComponent,
         MessageSegmentFileComponent,
-        FileSharingButtonsComponent,
+
         ScrollButtonComponent,
         LoadMoreButtonComponent,
     ],
@@ -159,7 +159,7 @@ import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDic
         ThreadsApiService,
         BlocksApiService,
         UserInfoCacheDictionary,
-        ThreadInfoCacheDictionary
+        ThreadInfoCacheDictionary,
     ],
     bootstrap: [AppComponent],
 })

@@ -1,5 +1,6 @@
 <div [style.height.px]="homeService.videoHeight">
-    <app-vjs-player
+    @defer {
+        <app-vjs-player
         [options]="{
             sources: [
                 {
@@ -9,5 +10,6 @@
             height: homeService.videoHeight,
         }"
     ></app-vjs-player>
+    }
 </div>
 <app-file-sharing-buttons [content]="content()"></app-file-sharing-buttons>
