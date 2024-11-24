@@ -1,18 +1,19 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
+    "noEmit": true,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "es2022",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2023", "dom"],
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "rootDir": "src"
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
