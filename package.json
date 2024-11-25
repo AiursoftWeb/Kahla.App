@@ -11,6 +11,7 @@
     "l2dy@macports.org"
   ],
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "yarn build:sw-base && ng serve",
     "build:sw-base": "tsc -p ./sw-base/",

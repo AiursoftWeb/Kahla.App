@@ -1,18 +1,18 @@
 // @ts-check
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const angular = require('angular-eslint');
+import js from '@eslint/js';
+import tsEslint from 'typescript-eslint';
+import ngEslint from 'angular-eslint';
 
-module.exports = tseslint.config(
+export default tsEslint.config(
     {
         files: ['**/*.ts'],
         extends: [
-            eslint.configs.recommended,
-            ...tseslint.configs.recommended,
-            ...tseslint.configs.stylistic,
-            ...angular.configs.tsRecommended,
+            js.configs.recommended,
+            ...tsEslint.configs.recommended,
+            ...tsEslint.configs.stylistic,
+            ...ngEslint.configs.tsRecommended,
         ],
-        processor: angular.processInlineTemplates,
+        processor: ngEslint.processInlineTemplates,
         rules: {
             '@angular-eslint/directive-selector': [
                 'error',
@@ -34,7 +34,10 @@ module.exports = tseslint.config(
     },
     {
         files: ['**/*.html'],
-        extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
+        extends: [
+            ...ngEslint.configs.templateRecommended,
+            ...ngEslint.configs.templateAccessibility,
+        ],
         rules: {
             '@angular-eslint/template/label-has-associated-control': ['off'],
             '@angular-eslint/template/click-events-have-key-events': ['off'],
