@@ -21,7 +21,7 @@ import { WebpushService } from '../Services/WebpushService';
     ],
     standalone: false,
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
     public loadingImgURL = Values.loadingImgURL;
     constructor(
         private authApiService: AuthApiService,
@@ -31,18 +31,6 @@ export class SettingsComponent implements OnInit {
         public cacheService: CacheService,
         public homeService: HomeService
     ) {}
-
-    public ngOnInit(): void {
-        if (!this.cacheService.cachedData.me) {
-            this.authApiService.Me().subscribe(p => {
-                if (p.code === 0) {
-                    this.cacheService.cachedData.me = p.user;
-                    this.cacheService.cachedData.options = p.privateSettings;
-                    this.cacheService.saveCache();
-                }
-            });
-        }
-    }
 
     public pwaAddHomeScreen(): void {
         this.homeService.pwaHomeScreenPrompt.prompt();
@@ -80,8 +68,8 @@ export class SettingsComponent implements OnInit {
     public sendEmail(): void {
         this.authApiService.Me().subscribe(p => {
             if (p.code === 0) {
-                this.cacheService.cachedData.me.emailConfirmed = p.user.emailConfirmed;
-                if (!this.cacheService.cachedData.me.emailConfirmed) {
+                this.cacheService.mine().me.emailConfirmed = p.user.emailConfirmed;
+                if (!this.cacheService.mine().me.emailConfirmed) {
                     Swal.fire({
                         title: 'Please verify your email.',
                         text: "Please confirm your email as soon as possible! Or you may lose access \
@@ -91,16 +79,16 @@ export class SettingsComponent implements OnInit {
                         confirmButtonText: 'Send Email',
                         showCancelButton: true,
                     }).then(sendEmail => {
-                        if (sendEmail.value && this.cacheService.cachedData.me) {
+                        if (sendEmail.value && this.cacheService.mine().me) {
                             this.authApiService
-                                .SendMail(this.cacheService.cachedData.me.email)
+                                .SendMail(this.cacheService.mine().me.email)
                                 .subscribe(result => {
                                     if (result.code === 0) {
                                         Swal.fire({
                                             title: 'Please check your inbox.',
                                             text:
                                                 'Email was send to ' +
-                                                this.cacheService.cachedData.me.email,
+                                                this.cacheService.mine().me.email,
                                             icon: 'success',
                                         });
                                     } else {

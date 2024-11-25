@@ -40,10 +40,10 @@
                 {{ infJoined.messageContext.latestMessage.sendTime | date: 'shortTime' }}
             </div>
             <div class="last-message" title="{{ infJoined.messageContext.latestMessage.preview }}">
-                @if (infJoined.topTenMembers.length === 2 && cacheService.cachedData.me) {
+                @if (infJoined.topTenMembers.length === 2 && cacheService.mine().me) {
                     @if (
                         infJoined.messageContext.latestMessage.sender.id ===
-                        cacheService.cachedData.me.id
+                        cacheService.mine().me.id
                     ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {

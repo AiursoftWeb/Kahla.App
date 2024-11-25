@@ -105,7 +105,7 @@ export class ThemeService {
     }
 
     public SetRemoteThemeSetting(theme: Theme): void {
-        this.cacheService.cachedData.options.themeId = theme;
+        this.cacheService.mine().privateSettings.themeId = theme;
         this.authApiService
             .UpdateMe({
                 themeId: theme,

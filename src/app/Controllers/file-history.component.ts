@@ -4,8 +4,6 @@ import { FileHistoryApiModel } from '../Models/ApiModels/FileHistoryApiModel';
 import { ProbeFile } from '../Models/Probe/ProbeFile';
 import { ProbeService } from '../Services/ProbeService';
 import { FilesApiService } from '../Services/Api/FilesApiService';
-import { MessageFileRef } from '../Models/MessageFileRef';
-import { FileType } from '../Models/FileType';
 import { MessageService } from '../Services/MessageService';
 import { humanReadableBytes } from '../Utils/StringUtils';
 

@@ -17,7 +17,7 @@ import { MessagesApiService } from '../Services/Api/MessagesApiService';
 import { scrollBottom } from '../Utils/Scrolling';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { KahlaMessagesRepo } from '@aiursoft/kahla-sdk.js';
-import { ThreadInfoCacheDictionary } from '../CachedDictionary/ThreadInfoCacheDictionary';
+import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
@@ -175,7 +175,7 @@ export class TalkingComponent {
         // );
         this.repo.send({
             content: JSON.stringify(content),
-            senderId: this.cacheService.cachedData.me.id ?? uuid4(),
+            senderId: this.cacheService.mine().me.id ?? uuid4(),
             preview: this.messageService.buildPreview(content),
         });
     }

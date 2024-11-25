@@ -16,14 +16,14 @@ export class ThreadNamePipe implements PipeTransform {
             (thread as ThreadInfoJoined).topTenMembers
                 .filter(
                     t =>
-                        !this.cacheService?.cachedData?.me ||
-                        t.user.id !== this.cacheService.cachedData.me.id
+                        !this.cacheService?.mine()?.me ||
+                        t.user.id !== this.cacheService.mine().me.id
                 )
                 .map(t => t.user.nickName)
                 .join(', ')
         );
         if (!name.trim()) {
-            return this.cacheService?.cachedData?.me?.nickName ?? 'You';
+            return this.cacheService?.mine()?.me?.nickName ?? 'You';
         }
         return name;
     }

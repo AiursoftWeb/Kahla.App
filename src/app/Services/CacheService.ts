@@ -1,33 +1,28 @@
-import { Injectable } from '@angular/core';
-import { CacheModel } from '../Models/CacheModel';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { ServerConfig } from '../Models/ServerConfig';
+import { CachedObject } from '../Caching/CachedObject';
+import { AuthApiService } from './Api/AuthApiService';
+import { lastValueFrom } from 'rxjs';
+import { MeCacheModel } from '../Models/CacheModel';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CacheService {
-    public cachedData: CacheModel;
+    public mine: WritableSignal<MeCacheModel>;
+    public mineCache: CachedObject<MeCacheModel>;
     public totalUnread = 0;
-    public updatingConversation = false;
     public serverConfig: ServerConfig;
 
-    public reset() {
-        this.cachedData = new CacheModel();
-    }
-
-    public initCache(): void {
-        if (localStorage.getItem('global-cache')) {
-            this.cachedData = JSON.parse(localStorage.getItem('global-cache')) as CacheModel;
-            if (this.cachedData.version !== CacheModel.VERSION) {
-                this.cachedData = new CacheModel();
-                this.saveCache();
-            }
-        } else {
-            this.cachedData = new CacheModel();
-        }
-    }
-
-    public saveCache(): void {
-        localStorage.setItem('global-cache', JSON.stringify(this.cachedData));
+    constructor(authApiService: AuthApiService) {
+        this.mineCache = new CachedObject('mine', async () => {
+            const resp = await lastValueFrom(authApiService.Me());
+            return {
+                me: resp.user,
+                privateSettings: resp.privateSettings,
+            };
+        });
+        this.mine = signal(this.mineCache.getSync());
+        this.mineCache.itemUpdated$.subscribe(t => this.mine.set(t));
     }
 }

@@ -115,7 +115,7 @@ export class TalkingInputComponent {
             e.preventDefault();
             if (
                 (e.altKey || e.ctrlKey || e.shiftKey) ===
-                this.cacheService.cachedData.options.enableEnterToSendMessage
+                this.cacheService.mine().privateSettings.enableEnterToSendMessage
             ) {
                 this.insertToSelection('\n');
             } else {

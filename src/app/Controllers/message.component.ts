@@ -8,7 +8,7 @@ import {
     MessageSegmentVoice,
 } from '../Models/Messages/MessageSegments';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
-import { UserInfoCacheDictionary } from '../CachedDictionary/UserInfoCacheDictionary';
+import { UserInfoCacheDictionary } from '../Caching/UserInfoCacheDictionary';
 import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({

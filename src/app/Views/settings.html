@@ -1,22 +1,22 @@
 <app-header title="Me" [returnButton]="false"></app-header>
 
-<div class="user" routerLink="/userInfo" *ngIf="cacheService.cachedData.me">
+<div class="user" routerLink="/userInfo" *ngIf="cacheService.mine().me">
     <div class="user-img">
         <img
             class="user-img"
-            src="{{ cacheService.cachedData.me.iconFilePath | storageUrl }}?w=128&square=true"
+            src="{{ cacheService.mine().me.iconFilePath | storageUrl }}?w=128&square=true"
         />
-        <!-- <div class="small-dot" *ngIf="cacheService.cachedData.me.isOnline !== null"
-            [class.greendot]="cacheService.cachedData.me.isOnline"
-            [class.graydot]="!cacheService.cachedData.me.isOnline"
+        <!-- <div class="small-dot" *ngIf="cacheService.mine().me.isOnline !== null"
+            [class.greendot]="cacheService.mine().me.isOnline"
+            [class.graydot]="!cacheService.mine().me.isOnline"
             style="top:-11px; right:-43px;">
         </div> -->
     </div>
-    <div class="name">{{ cacheService.cachedData.me.nickName }}</div>
-    <div class="bio">{{ cacheService.cachedData.me.bio }}</div>
-    <div class="email" *ngIf="cacheService.cachedData.me.email">
-        {{ cacheService.cachedData.me.email }}
-        <label class="badge badge-success" *ngIf="cacheService.cachedData.me.emailConfirmed"
+    <div class="name">{{ cacheService.mine().me.nickName }}</div>
+    <div class="bio">{{ cacheService.mine().me.bio }}</div>
+    <div class="email" *ngIf="cacheService.mine().me.email">
+        {{ cacheService.mine().me.email }}
+        <label class="badge badge-success" *ngIf="cacheService.mine().me.emailConfirmed"
             >Verified</label
         >
     </div>
@@ -38,7 +38,7 @@
 
 <div
     class="menu-button"
-    *ngIf="cacheService.cachedData.me && !cacheService.cachedData.me.emailConfirmed"
+    *ngIf="cacheService.mine().me && !cacheService.mine().me.emailConfirmed"
     (click)="sendEmail()"
 >
     <div class="img warning">

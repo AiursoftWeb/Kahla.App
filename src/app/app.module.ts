@@ -72,10 +72,10 @@ import { ThreadMembersComponent } from './Controllers/thread-members.component';
 import { LoadMoreButtonComponent } from './Controllers/load-more-button.component';
 import { MessageListComponent } from './Controllers/message-list.component';
 import { TalkingInputComponent } from './Controllers/talking-input.component';
-import { UserInfoCacheDictionary } from './CachedDictionary/UserInfoCacheDictionary';
+import { UserInfoCacheDictionary } from './Caching/UserInfoCacheDictionary';
 import { AutofocusDirective } from './Directives/AutoFocusDirective';
 import { ThreadNamePipe } from './Pipes/thread-name.pipe';
-import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDictionary';
+import { ThreadInfoCacheDictionary } from './Caching/ThreadInfoCacheDictionary';
 import { ManageThreadComponent } from './Controllers/manage-thread.component';
 import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepository';
 

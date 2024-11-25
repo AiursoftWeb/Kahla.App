@@ -25,13 +25,13 @@
         *ngIf="
             route.isActive('/home', false) &&
             homeService.wideScreenEnabled &&
-            cacheService.cachedData?.me
+            cacheService.mine()?.me
         "
     >
-        <h2>Welcome back, {{ cacheService.cachedData.me.nickName }}.</h2>
+        <h2>Welcome back, {{ cacheService.mine().me.nickName }}.</h2>
         <img
             style="width: 100px"
-            src="{{ cacheService.cachedData.me.iconFilePath | storageUrl }}?w=256&square=true"
+            src="{{ cacheService.mine().me.iconFilePath | storageUrl }}?w=256&square=true"
             (click)="homeService.currentPage = 2"
         />
         <h3>Start talking now!</h3>

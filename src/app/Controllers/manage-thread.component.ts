@@ -1,5 +1,5 @@
 import { Component, input, linkedSignal, resource } from '@angular/core';
-import { ThreadInfoCacheDictionary } from '../CachedDictionary/ThreadInfoCacheDictionary';
+import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ThreadOptions } from '../Models/Threads/ThreadOptions';
 import { pickProperties } from '../Utils/ObjectUtils';

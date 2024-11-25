@@ -51,7 +51,7 @@ export class FriendsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        if (this.cacheService.cachedData.me && this.myContactsRepository.health) {
+        if (this.cacheService.mine().me && this.myContactsRepository.health) {
             this.myContactsRepository.updateAll();
         }
     }

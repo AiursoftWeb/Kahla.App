@@ -2,7 +2,7 @@ import { Component, input, resource } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
-import { ThreadInfoCacheDictionary } from '../CachedDictionary/ThreadInfoCacheDictionary';
+import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
 import { SwalToast } from '../Utils/Toast';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';

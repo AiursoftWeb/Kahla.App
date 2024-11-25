@@ -22,17 +22,10 @@ export class AdvancedSettingComponent implements OnInit {
         private cacheService: CacheService
     ) {}
 
-    ngOnInit(): void {
-        if (this.cacheService?.cachedData?.me) {
-            this.me = Object.assign({}, this.cacheService.cachedData.me);
-            this.options = Object.assign({}, this.cacheService.cachedData.options);
-        } else {
-            this.authApiService.Me().subscribe(p => {
-                this.me = p.user;
-                this.options = p.privateSettings;
-                // this.me.avatarURL = this.probeService.encodeProbeFileUrl(this.me.iconFilePath);
-            });
-        }
+    async ngOnInit() {
+        const res = await this.cacheService?.mineCache.get();
+        this.me = Object.assign({}, res.me);
+        this.options = Object.assign({}, res.privateSettings);
     }
 
     public updateSettings(): void {
@@ -51,8 +44,7 @@ export class AdvancedSettingComponent implements OnInit {
             .subscribe(
                 () => {
                     this.updatingSetting = null;
-                    this.cacheService.cachedData.options = Object.assign({}, this.options);
-                    this.cacheService.saveCache();
+                    this.cacheService.mineCache.set({me: this.me, privateSettings: this.options});
                 },
                 err => {
                     this.updatingSetting = null;

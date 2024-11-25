@@ -26,13 +26,13 @@ export class UserDetailComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        if (!this.cacheService.cachedData.me) {
+        if (!this.cacheService.mine().me) {
             this.authApiService.Me().subscribe(p => {
                 this.user = p.user;
                 // this.user.avatarURL = this.probeService.encodeProbeFileUrl(this.user.iconFilePath);
             });
         } else {
-            this.user = Object.assign({}, this.cacheService.cachedData.me);
+            this.user = Object.assign({}, this.cacheService.mine().me);
         }
     }
 
@@ -53,8 +53,7 @@ export class UserDetailComponent implements OnInit {
                     bio: this.user.bio,
                 })
             );
-            this.cacheService.cachedData.me = { ...this.user };
-            this.cacheService.saveCache();
+            this.cacheService.mineCache.update();
             SwalToast.fire({ title: 'Profile saved.', icon: 'success' });
         } catch (err) {
             showCommonErrorDialog(err);

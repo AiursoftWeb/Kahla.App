@@ -16,7 +16,7 @@ import { ProbeService } from '../Services/ProbeService';
     ],
     standalone: false,
 })
-export class ManageGroupComponent implements OnInit {
+export class ManageGroupComponent{
     @ViewChild('imageInput') public imageInput;
     public newGroupName: string;
 
@@ -29,7 +29,6 @@ export class ManageGroupComponent implements OnInit {
         private probeService: ProbeService
     ) {}
 
-    ngOnInit(): void {}
 
     public transferOwner(): void {
         const inputOptions = {};
