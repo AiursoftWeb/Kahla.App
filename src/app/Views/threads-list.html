@@ -59,7 +59,7 @@
         }
     </div>
 }
-@if (threadRepo.status === 'synced' && !threadRepo.total) {
+@if (threadRepo.status === 'synced' && !threadRepo.data.length) {
     <div class="empty-result-notice">{{ emptyMessage }}</div>
 }
 @if (

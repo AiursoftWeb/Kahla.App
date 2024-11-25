@@ -28,6 +28,13 @@ export class ThreadsApiService {
         });
     }
 
+    public Mine(take = 20, skipTillThreadId?: number): Observable<ThreadsListApiResponse> {
+        return this.apiService.Get(ThreadsApiService.serverPath + '/mine', {
+            take,
+            skipTillThreadId,
+        });
+    }
+
     public DetailsJoined(id: number): Observable<AiurValueNamed<ThreadInfoJoined, 'thread'>> {
         return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {});
     }

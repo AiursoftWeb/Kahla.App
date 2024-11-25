@@ -1,6 +1,6 @@
 <app-header
     title="Kahla"
-    [processing]="myThreadsRepository?.status === 'loading'"
+    [processing]="threadsRepo?.status === 'loading'"
     [returnButton]="false"
 ></app-header>
 <app-search-area [(searchText)]="searchText" />

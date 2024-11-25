@@ -47,14 +47,47 @@ export abstract class RepositoryBase<T> {
     }
 
     protected updatePromise?: Promise<void>;
+    protected loadMorePromise?: Promise<void>;
 
     public updateAll(): Promise<void> {
-        return this.updatePromise ?? (this.updatePromise = this.updateAllInternal());
+        return (
+            this.updatePromise ??
+            (this.updatePromise = (async () => {
+                this.status = 'loading';
+                try {
+                    await this.updateAllInternal();
+                    this.status = 'synced';
+                    this.saveCache();
+                } catch (err) {
+                    this.status = 'error';
+                    throw err;
+                } finally {
+                    this.updatePromise = null;
+                }
+            })())
+        );
+    }
+
+    public loadMore(take: number): Promise<void> {
+        if (!this.canLoadMore) return;
+        return (
+            this.loadMorePromise ??
+            (this.loadMorePromise = (async () => {
+                try {
+                    this.status = 'loading';
+                    await this.loadMoreInternal(take);
+                    this.saveCache();
+                } finally {
+                    // When on error, new items will be rejected, but the previous items will still be kept
+                    this.status = 'synced';
+                }
+            })())
+        );
     }
 
     protected abstract updateAllInternal(): Promise<void>;
 
-    protected abstract loadMore(take: number): Promise<void>;
+    protected abstract loadMoreInternal(take: number): Promise<void>;
 
     public abstract canLoadMore: boolean;
 }
@@ -63,35 +96,15 @@ export abstract class RepositoryListBase<T> extends RepositoryBase<T> {
     public total: number;
 
     protected async updateAllInternal(): Promise<void> {
-        this.status = 'loading';
-        try {
-            const [resp, total] = await this.requestOnline(20, 0);
-            this.data = resp;
-            this.total = total;
-            this.status = 'synced';
-            this.saveCache();
-        } catch (err) {
-            this.status = 'error';
-            throw err;
-        } finally {
-            this.updatePromise = null;
-        }
+        const [resp, total] = await this.requestOnline(20, 0);
+        this.data = resp;
+        this.total = total;
     }
 
-    public async loadMore(take: number): Promise<void> {
-        if (!this.canLoadMore) {
-            return;
-        }
-        try {
-            this.status = 'loading';
-            const [resp, total] = await this.requestOnline(take, this.data.length);
-            this.data = this.data.concat(resp);
-            this.total = total;
-            this.saveCache();
-        } finally {
-            // When on error, new items will be rejected, but the previous items will still be kept
-            this.status = 'synced';
-        }
+    protected async loadMoreInternal(take: number): Promise<void> {
+        const [resp, total] = await this.requestOnline(take, this.data.length);
+        this.data = this.data.concat(resp);
+        this.total = total;
     }
 
     public get canLoadMore(): boolean {

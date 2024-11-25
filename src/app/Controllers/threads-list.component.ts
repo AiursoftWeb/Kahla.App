@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RepositoryListBase } from '../Repositories/RepositoryBase';
+import { RepositoryBase } from '../Repositories/RepositoryBase';
 import { ThreadInfo, ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
@@ -11,7 +11,7 @@ import { Values } from '../values';
     standalone: false,
 })
 export class ThreadsListComponent {
-    @Input() public threadRepo: RepositoryListBase<ThreadInfo>;
+    @Input() public threadRepo: RepositoryBase<ThreadInfo>;
 
     @Input() public emptyMessage = 'No results.';
 

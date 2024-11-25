@@ -77,6 +77,7 @@ import { AutofocusDirective } from './Directives/AutoFocusDirective';
 import { ThreadNamePipe } from './Pipes/thread-name.pipe';
 import { ThreadInfoCacheDictionary } from './CachedDictionary/ThreadInfoCacheDictionary';
 import { ManageThreadComponent } from './Controllers/manage-thread.component';
+import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepository';
 
 @NgModule({
     imports: [
@@ -160,6 +161,7 @@ import { ManageThreadComponent } from './Controllers/manage-thread.component';
         BlocksApiService,
         UserInfoCacheDictionary,
         ThreadInfoCacheDictionary,
+        MyThreadsOrderedRepository,
     ],
     bootstrap: [AppComponent],
 })
