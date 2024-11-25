@@ -15,7 +15,7 @@
   "scripts": {
     "start": "yarn build:sw-base && ng serve",
     "build:sw-base": "tsc -p ./sw-base/",
-    "build": "yarn run build:sw-base && ng build --base-href / && workbox generateSW workbox-config.js",
+    "build": "yarn run build:sw-base && ng build --base-href / && workbox generateSW workbox-config.cjs",
     "clean": "rm -rf dist && rm -rf sw-base/dist",
     "lint": "tsc && ng lint",
     "format": "prettier -cw .",
