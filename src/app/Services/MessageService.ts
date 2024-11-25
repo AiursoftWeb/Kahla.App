@@ -14,7 +14,7 @@ export class MessageService {
 
     constructor(
         private myContactsRepository: MyContactsRepository,
-        private cacheService: CacheService,
+        private cacheService: CacheService
     ) {}
 
     public async OnMessage(ev: AiurEvent) {
@@ -68,15 +68,16 @@ export class MessageService {
     }
 
     public buildPreview(content: MessageContent) {
-        const previewCandidates = content.segments.map(t => {
-            switch(t.type) {
-                case 'text':
-                    return t.content;
-                default:
-                    return `[${t.type}]`;
-            }
-        }).join(' ');
-
+        const previewCandidates = content.segments
+            .map(t => {
+                switch (t.type) {
+                    case 'text':
+                        return t.content;
+                    default:
+                        return `[${t.type}]`;
+                }
+            })
+            .join(' ');
 
         return truncateUTF8Bytes(previewCandidates, 47, true);
     }

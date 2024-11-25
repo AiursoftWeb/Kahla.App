@@ -12,9 +12,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start": "ng serve",
-    "build": "ng build --base-href / && tsc -p ./service_worker/ && workbox generateSW workbox-config.js",
-    "clean": "rm -rf dist",
+    "start": "yarn build:sw-base && ng serve",
+    "build:sw-base": "tsc -p ./sw-base/",
+    "build": "yarn run build:sw-base && ng build --base-href / && workbox generateSW workbox-config.js",
+    "clean": "rm -rf dist && rm -rf sw-base/dist",
     "lint": "tsc && ng lint",
     "format": "prettier -cw .",
     "create-component": "python ./scripts/create-component.py"

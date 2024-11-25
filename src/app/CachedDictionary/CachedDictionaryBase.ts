@@ -1,4 +1,4 @@
-import { debounceTime, Subject } from "rxjs";
+import { debounceTime, Subject } from 'rxjs';
 
 class CacheEntry<T> {
     getAsync(): Promise<T> {
@@ -71,7 +71,8 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
 
     public async get(key: TKey, forceRenew = false): Promise<TValue> {
         if (
-            this.cache.has(key) && !forceRenew &&
+            this.cache.has(key) &&
+            !forceRenew &&
             new Date().getTime() - this.cache.get(key).cachedTime.getTime() < this.ttlSeconds * 1000
         ) {
             return await this.cache.get(key).getAsync();
@@ -109,7 +110,10 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
                 });
         });
 
-        localStorage.setItem('cache-dict-' + this.persistKey, JSON.stringify(Array.from(persistCache.entries())));
+        localStorage.setItem(
+            'cache-dict-' + this.persistKey,
+            JSON.stringify(Array.from(persistCache.entries()))
+        );
     }
 
     protected abstract cacheMiss(key: TKey): Promise<TValue>;

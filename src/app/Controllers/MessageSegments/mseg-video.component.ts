@@ -8,7 +8,7 @@ import { FileSharingButtonsComponent } from './file-sharing-buttons.component';
     selector: 'app-mseg-video',
     templateUrl: '../../Views/MessageSegments/mseg-video.html',
     standalone: true,
-    imports: [VjsPlayerComponent, FileSharingButtonsComponent]
+    imports: [VjsPlayerComponent, FileSharingButtonsComponent],
 })
 export class MessageSegmentVideoComponent {
     content = input.required<MessageSegmentVideo>();

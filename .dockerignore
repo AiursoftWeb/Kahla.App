@@ -13,7 +13,7 @@
 /bin
 /bld
 /dist
-
+/sw-base/dist
 
 # dependencies
 /node_modules

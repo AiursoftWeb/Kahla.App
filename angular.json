@@ -26,7 +26,8 @@
             "polyfills": ["src/polyfills.ts"],
             "inlineStyleLanguage": "scss",
             "assets": [
-              {"glob": "**/*", "input": "./public", "output": "./"}
+              { "glob": "**/*", "input": "./public", "output": "./" },
+              { "glob": "sw_notifications.js", "input": "./sw-base/dist/", "output": "./" }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",

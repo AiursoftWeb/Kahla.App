@@ -14,6 +14,6 @@
     id="scrollDown"
     direction="down"
     [emphasis]="hasNewMessages()"
-    [ngClass]="{ 'active-button': showPanel()}"
+    [ngClass]="{ 'active-button': showPanel() }"
 />
 <app-talking-input [(showPanel)]="showPanel" (sendMessage)="send($event)" />

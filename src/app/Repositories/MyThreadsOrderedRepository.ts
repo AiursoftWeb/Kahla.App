@@ -1,12 +1,11 @@
-import { ThreadInfoJoined } from "../Models/Threads/ThreadInfo";
-import { RepositoryBase } from "./RepositoryBase";
+import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
+import { RepositoryBase } from './RepositoryBase';
 
 export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined> {
-    
     protected updateAllInternal(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
-    
+
     protected readonly persistConfig = {
         name: 'mythreads-ordered',
         version: 1,
@@ -18,7 +17,6 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
     }
 
     protected loadMore(take: number): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
-
 }

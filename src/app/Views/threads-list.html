@@ -42,7 +42,8 @@
             <div class="last-message" title="{{ infJoined.messageContext.latestMessage.preview }}">
                 @if (infJoined.topTenMembers.length === 2 && cacheService.cachedData.me) {
                     @if (
-                        infJoined.messageContext.latestMessage.sender.id === cacheService.cachedData.me.id
+                        infJoined.messageContext.latestMessage.sender.id ===
+                        cacheService.cachedData.me.id
                     ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {

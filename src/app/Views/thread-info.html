@@ -14,7 +14,9 @@
             />
         </a>
         <div class="name">{{ thread.value() | threadName }}</div>
-        <div class="create-time">Create Time: {{ thread.value().createTime | date: 'mediumDate' }}</div>
+        <div class="create-time">
+            Create Time: {{ thread.value().createTime | date: 'mediumDate' }}
+        </div>
     </div>
     <div class="menu-button">
         <div class="img">
@@ -42,7 +44,11 @@
         title="Mute Nitification"
         iconClasses="fas fa-bell-slash"
     ></app-toggle-menu-item>
-    <div class="menu-button" *ngIf="thread.value().imAdmin" routerLink="/manage-thread/{{ thread.value().id }}">
+    <div
+        class="menu-button"
+        *ngIf="thread.value().imAdmin"
+        routerLink="/manage-thread/{{ thread.value().id }}"
+    >
         <div class="img">
             <i class="fas fa-cogs"></i>
         </div>

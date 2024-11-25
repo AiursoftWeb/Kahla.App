@@ -58,16 +58,13 @@ export class ThreadInfoComponent {
             Swal.fire({
                 icon: 'error',
                 title: 'You are not allowed to leave this thread.',
-                text: 'You are the owner of the thread. Consider transferring the ownership to others or dissolve the thread.'
+                text: 'You are the owner of the thread. Consider transferring the ownership to others or dissolve the thread.',
             });
             return;
         }
 
         const confirmResult = await Swal.fire({
-            title:
-                isOwner && memberCount === 1
-                    ? 'Dissolve this thread?'
-                    : 'Leave this thread?',
+            title: isOwner && memberCount === 1 ? 'Dissolve this thread?' : 'Leave this thread?',
             text: 'You will not be able to undo this action.',
             icon: 'warning',
             showCancelButton: true,
@@ -97,9 +94,7 @@ export class ThreadInfoComponent {
                     m => m.user.id !== threadValue.ownerId
                 );
                 try {
-                    await lastValueFrom(
-                        this.threadsApiService.Transfer(threadId, target.user.id)
-                    );
+                    await lastValueFrom(this.threadsApiService.Transfer(threadId, target.user.id));
                 } catch (err) {
                     showCommonErrorDialog(err);
                     return;

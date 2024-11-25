@@ -41,17 +41,21 @@ export class ManageThreadComponent {
         };
     });
 
-    constructor(private threadInfoCacheDictionary: ThreadInfoCacheDictionary, private threadsApiService: ThreadsApiService) {}
+    constructor(
+        private threadInfoCacheDictionary: ThreadInfoCacheDictionary,
+        private threadsApiService: ThreadsApiService
+    ) {}
 
     public async saveProfile() {
         try {
-            await lastValueFrom(this.threadsApiService.UpdateThread(this.id(), this.threadProfile()));
+            await lastValueFrom(
+                this.threadsApiService.UpdateThread(this.id(), this.threadProfile())
+            );
             SwalToast.fire('Saved!', '', 'success');
             this.threadInfoCacheDictionary.delete(this.id());
             this.threadInfo.reload();
         } catch (err) {
             showCommonErrorDialog(err);
         }
-        
     }
 }

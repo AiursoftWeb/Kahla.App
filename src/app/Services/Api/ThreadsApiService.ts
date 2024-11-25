@@ -71,6 +71,8 @@ export class ThreadsApiService {
     }
 
     public UpdateThread(id: number, options: ThreadOptions): Observable<AiurProtocol> {
-        return this.apiService.Patch(ThreadsApiService.serverPath + `/update-thread/${id}`, {...options});
+        return this.apiService.Patch(ThreadsApiService.serverPath + `/update-thread/${id}`, {
+            ...options,
+        });
     }
 }

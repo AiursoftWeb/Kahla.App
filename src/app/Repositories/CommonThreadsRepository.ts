@@ -15,7 +15,10 @@ export class CommonThreadRepository extends RepositoryListBase<ThreadInfoJoined>
         super();
     }
 
-    protected async requestOnline(take: number, skip: number): Promise<[ThreadInfoJoined[], number]> {
+    protected async requestOnline(
+        take: number,
+        skip: number
+    ): Promise<[ThreadInfoJoined[], number]> {
         const resp = await lastValueFrom(this.contactsApiService.Details(this.userId, take, skip));
         return [resp.commonThreads, resp.commonThreadsCount];
     }

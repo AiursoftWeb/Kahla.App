@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noEmit": false,
+    "lib": ["WebWorker", "ES2022", "WebWorker.ImportScripts"],
+    "target": "ES2022",
+    "module": "es2022",
+    "rootDir": "src",
+    "sourceMap": false
+  },
+  "include": ["**/*.ts"]
+}
