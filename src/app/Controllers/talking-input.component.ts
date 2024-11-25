@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
 import { MessageContent } from '../Models/Messages/MessageContent';
-import EmojiButton from '@joeattardi/emoji-button';
+import type EmojiButton from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { VoiceRecorder } from '../Utils/VoiceRecord';
 import { MessageSegmentText } from '../Models/Messages/MessageSegments';
@@ -55,8 +55,9 @@ export class TalkingInputComponent {
         });
     }
 
-    public emoji(): void {
+    public async emoji() {
         if (!this.picker) {
+            const EmojiButton = (await import('@joeattardi/emoji-button')).default; 
             this.picker = new EmojiButton({
                 position: 'top-start',
                 zIndex: 20,
