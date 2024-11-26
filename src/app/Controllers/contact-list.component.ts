@@ -18,7 +18,7 @@ export class ContactListComponent {
 
     @Input() public emptyMessage = 'No results.';
 
-    public multiSelect = input(false);
+    public selectable = input<'single' | 'multi' | null>(null);
     public selectedIds = model<string[]>([]);
 
     @Output() public contactClicked = new EventEmitter<{
@@ -31,11 +31,15 @@ export class ContactListComponent {
             item: contact,
             secondary,
         });
-        if (this.multiSelect()) {
+        if (this.selectable()) {
             if (this.selectedIds().includes(contact.user.id)) {
                 this.selectedIds.set(this.selectedIds().filter((id) => id !== contact.user.id));
             } else {
-                this.selectedIds.set([...this.selectedIds(), contact.user.id]);
+                if (this.selectable() === 'single') {
+                    this.selectedIds.set([contact.user.id]);
+                } else {
+                    this.selectedIds.set([...this.selectedIds(), contact.user.id]);
+                }
             }
         }
     }

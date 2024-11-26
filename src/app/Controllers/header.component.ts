@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from '../Services/MessageService';
 import { HomeService } from '../Services/HomeService';
@@ -12,15 +12,18 @@ import Swal from 'sweetalert2';
     standalone: false,
 })
 export class HeaderComponent {
-    @Input() public title = 'Kahla';
-    @Input() public returnButton = true;
-    @Input() public floatingHome = -1;
-    @Input() public closeDirectly = false;
-    @Input() public button = false;
-    @Input() public buttonLink: string | number = '';
-    @Input() public buttonIcon = '';
-    @Input() public shadow = false;
-    @Input() public processing = false;
+    public readonly title = input('Kahla');
+    public readonly returnButton = input(true);
+    public readonly returnButtonPreventDefault = input(false);
+    public readonly closeDirectly = input(false);
+    public readonly button = input(false);
+    public readonly buttonLink = input<string>('');
+    public readonly buttonIcon = input('');
+    public readonly shadow = input(false);
+    public readonly processing = input(false);
+
+    public readonly returnButtonClicked = output();
+    public readonly toolButtonClicked = output();
 
     constructor(
         private router: Router,
@@ -30,14 +33,12 @@ export class HeaderComponent {
     ) {}
 
     public goBack(): void {
-        if (this.floatingHome !== -1) {
-            this.homeService.currentPage = this.floatingHome;
-            return;
-        }
+        this.returnButtonClicked.emit();
+        if (this.returnButtonPreventDefault) return;
         if (
             history.length === 1 ||
             history.state.navigationId === 1 ||
-            (this.homeService.wideScreenEnabled && this.closeDirectly)
+            (this.homeService.wideScreenEnabled && this.closeDirectly())
         ) {
             this.router.navigate(['/home']);
         } else {
@@ -46,11 +47,7 @@ export class HeaderComponent {
     }
 
     public linkClicked() {
-        if (Number(this.buttonLink)) {
-            this.homeService.currentPage = Number(this.buttonLink);
-        } else {
-            this.router.navigateByUrl(this.buttonLink as string);
-        }
+        this.toolButtonClicked.emit();
     }
 
     public async showDisconnectedDialog() {
