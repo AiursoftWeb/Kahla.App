@@ -1,6 +1,6 @@
 @for (contact of contacts?.data ?? contactsList; track contact.user.id) {
     <div
-        class="contact-list"
+        class="contact-list" [class.multiple]="multiSelect()"
         (click)="userClick(contact, $event.ctrlKey)"
         routerLink="/user/{{ contact.user.id }}"
     >
@@ -17,7 +17,10 @@
                 [class.graydot]="!contact.online"
             ></div>
         </div>
-        <div class="sender">{{ contact.user.nickName }}</div>
+        <div class="user-name">{{ contact.user.nickName }}</div>
+        @if (multiSelect() && selectedIds().includes(contact.user.id)) {
+            <i class="fas fa-check"></i>
+        }
     </div>
 }
 @if (

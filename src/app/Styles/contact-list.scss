@@ -4,7 +4,11 @@
   @extend %menu-item-clickable;
   height: 60px;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 1fr;
+
+  &.multiple {
+    grid-template-columns: 1fr 1fr 50px;
+  }
 
   .user-img-group {
     position: relative;
@@ -14,26 +18,25 @@
       right: -4px;
       position: absolute;
     }
+
+    .user-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+    }
   }
 
-  .user-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-  }
-
-  .sender {
+  .user-name {
     font-size: 15px;
     font-weight: 400;
     position: relative;
     word-break: break-all;
   }
 
+  // The check mark
   i {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    font-size: medium;
+    font-size: 2em;
+    color: var(--primary-color-depth2);
   }
 
   > * {

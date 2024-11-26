@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, model, Output } from '@angular/core';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { RepositoryListBase } from '../Repositories/RepositoryBase';
 import { Values } from '../values';
@@ -18,6 +18,9 @@ export class ContactListComponent {
 
     @Input() public emptyMessage = 'No results.';
 
+    public multiSelect = input(false);
+    public selectedIds = model<string[]>([]);
+
     @Output() public contactClicked = new EventEmitter<{
         item: ContactInfo;
         secondary: boolean;
@@ -28,5 +31,12 @@ export class ContactListComponent {
             item: contact,
             secondary,
         });
+        if (this.multiSelect()) {
+            if (this.selectedIds().includes(contact.user.id)) {
+                this.selectedIds.set(this.selectedIds().filter((id) => id !== contact.user.id));
+            } else {
+                this.selectedIds.set([...this.selectedIds(), contact.user.id]);
+            }
+        }
     }
 }

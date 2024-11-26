@@ -30,7 +30,7 @@
     padding: 0;
     margin: 0;
     overflow-y: scroll;
-    background-color: var(--talking-action-bg);
+    background-color: var(--fixed-toolbars-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 
@@ -47,7 +47,7 @@
     z-index: 50;
     bottom: 0;
     box-shadow: 0 23px 50px 10px rgba(0, 0, 0, 0.37);
-    background-color: var(--talking-action-bg);
+    background-color: var(--fixed-toolbars-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 

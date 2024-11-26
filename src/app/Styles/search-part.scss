@@ -5,7 +5,8 @@
   @extend %full-fixed-width;
   position: fixed;
   z-index: 50;
-  background-color: var(--header-action-bg);
+  background-color: var(--fixed-toolbars-bg);
+  backdrop-filter: blur(8px);
 }
 
 .search-holder {
