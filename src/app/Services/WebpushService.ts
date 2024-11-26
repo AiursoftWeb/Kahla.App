@@ -5,6 +5,7 @@ import { CacheService } from './CacheService';
 import { urlBase64ToUint8Array } from '../Utils/StringUtils';
 import { lastValueFrom } from 'rxjs';
 import { mapDeviceName } from '../Utils/UaMapper';
+import { SwalToast } from '../Utils/Toast';
 
 @Injectable({
     providedIn: 'root',
@@ -156,6 +157,19 @@ export class WebpushService {
                 '[ OK ] ServiceWorker registration successful with scope: ',
                 registration.scope
             );
+            if (registration.waiting && registration.active) {
+                console.log('[WARN] ServiceWorker update detected.');
+                setTimeout(() => {
+                    SwalToast.fire({
+                        icon: 'info',
+                        position: 'bottom-right',
+                        title: 'A new version of the Kahla is ready.',
+                        text: 'Please close and reopen all the page of the app to update.\nJust reloading the page cannot update the app.',
+                    });
+                }, 1000); // Delay fire to ensure the page is fully loaded and not to disturb the user
+
+            }
+            
         } catch (err) {
             console.error('[ERR!] ServiceWorker registration failed: ', err);
             return;

@@ -1,15 +1,16 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
 import { ServerConfig } from '../Models/ServerConfig';
 import { CachedObject } from '../Caching/CachedObject';
 import { AuthApiService } from './Api/AuthApiService';
 import { lastValueFrom } from 'rxjs';
 import { MeCacheModel } from '../Models/CacheModel';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CacheService {
-    public mine: WritableSignal<MeCacheModel>;
+    public mine: Signal<MeCacheModel>;
     public mineCache: CachedObject<MeCacheModel>;
     public totalUnread = 0;
     public serverConfig: ServerConfig;
@@ -22,7 +23,6 @@ export class CacheService {
                 privateSettings: resp.privateSettings,
             };
         });
-        this.mine = signal(this.mineCache.getSync());
-        this.mineCache.itemUpdated$.subscribe(t => this.mine.set(t));
+        this.mine = toSignal(this.mineCache.itemUpdated$, {requireSync: true});
     }
 }
