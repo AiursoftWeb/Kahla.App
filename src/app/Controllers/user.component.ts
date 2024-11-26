@@ -18,8 +18,6 @@ import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository'
     styleUrls: [
         '../Styles/menu.scss',
         '../Styles/button.scss',
-        '../Styles/reddot.scss',
-        '../Styles/badge.scss',
     ],
     standalone: false,
 })

@@ -39,8 +39,8 @@ export class ThreadsApiService {
         return this.apiService.Get(ThreadsApiService.serverPath + `/details-joined/${id}`, {});
     }
 
-    public DetailsAnnoymous(id: number): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/details-annoymous/${id}`, {});
+    public DetailsAnonymous(id: number): Observable<AiurValueNamed<ThreadInfo, 'thread'>> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/details-anonymous/${id}`, {});
     }
 
     public HardInvite(userId: string): Observable<AiurValueNamed<number, 'newThreadId'>> {

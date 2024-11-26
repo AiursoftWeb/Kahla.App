@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { Router } from '@angular/router';
 import { Values } from '../values';
@@ -15,9 +15,7 @@ import { WebpushService } from '../Services/WebpushService';
     templateUrl: '../Views/settings.html',
     styleUrls: [
         '../Styles/menu.scss',
-        '../Styles/reddot.scss',
         '../Styles/button.scss',
-        '../Styles/badge.scss',
     ],
     standalone: false,
 })

@@ -18,6 +18,7 @@ import { NewThreadComponent } from '../Controllers/new-thread.component';
 import { ThreadInfoComponent } from '../Controllers/thread-info.component';
 import { ThreadMembersComponent } from '../Controllers/thread-members.component';
 import { ManageThreadComponent } from '../Controllers/manage-thread.component';
+import { ThreadInfoPublicComponent } from '../Controllers/thread-info-public.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'userInfo', component: UserDetailComponent },
     { path: 'thread/:id', component: ThreadInfoComponent },
+    { path: 'thread-public/:id', component: ThreadInfoPublicComponent },
     { path: 'thread-members/:id', component: ThreadMembersComponent },
     { path: 'manage-thread/:id', component: ManageThreadComponent },
     { path: 'changepassword', component: ChangePasswordComponent },

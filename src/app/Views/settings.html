@@ -1,27 +1,11 @@
 <app-header title="Me" [returnButton]="false"></app-header>
-
-<div class="user" routerLink="/userInfo" *ngIf="cacheService.mine().me">
-    <div class="user-img">
-        <img
-            class="user-img"
-            src="{{ cacheService.mine().me.iconFilePath | storageUrl }}?w=128&square=true"
-        />
-        <!-- <div class="small-dot" *ngIf="cacheService.mine().me.isOnline !== null"
-            [class.greendot]="cacheService.mine().me.isOnline"
-            [class.graydot]="!cacheService.mine().me.isOnline"
-            style="top:-11px; right:-43px;">
-        </div> -->
-    </div>
-    <div class="name">{{ cacheService.mine().me.nickName }}</div>
-    <div class="bio">{{ cacheService.mine().me.bio }}</div>
-    <div class="email" *ngIf="cacheService.mine().me.email">
-        {{ cacheService.mine().me.email }}
-        <label class="badge badge-success" *ngIf="cacheService.mine().me.emailConfirmed"
-            >Verified</label
-        >
-    </div>
-</div>
-
+@if (cacheService.mine()) {
+    <app-user-basic-info
+        routerLink="/userInfo"
+        [user]="cacheService.mine().me"
+        [online]="cacheService.mine().privateSettings.enableHideMyOnlineStatus ? undefined : true"
+    />
+}
 <div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
     <div class="img">
         <i class="fas fa-thumbtack" aria-hidden="true"></i>

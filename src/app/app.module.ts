@@ -78,6 +78,9 @@ import { ThreadNamePipe } from './Pipes/thread-name.pipe';
 import { ThreadInfoCacheDictionary } from './Caching/ThreadInfoCacheDictionary';
 import { ManageThreadComponent } from './Controllers/manage-thread.component';
 import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepository';
+import { ThreadInfoPublicComponent } from './Controllers/thread-info-public.component';
+import { ThreadBasicInfoComponent } from './Controllers/thread-basic-info.component';
+import { UserBasicInfoComponent } from './Controllers/user-basic-info.component';
 
 @NgModule({
     imports: [
@@ -137,6 +140,9 @@ import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepos
         ScrollButtonComponent,
         LoadMoreButtonComponent,
         ManageThreadComponent,
+        ThreadInfoPublicComponent,
+        ThreadBasicInfoComponent,
+        UserBasicInfoComponent,
     ],
     providers: [
         ApiService,

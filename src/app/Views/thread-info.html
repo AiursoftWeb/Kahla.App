@@ -1,23 +1,7 @@
 <app-header title="Thread Info"></app-header>
 @if (thread.hasValue()) {
-    <div class="user">
-        <!--TODO: replace with thread avatar-->
-        <a
-            class="user-img groupGridRow"
-            href="{{ thread.value().imagePath | storageUrl }}"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <img
-                class="user-img groupGridRow"
-                src="{{ thread.value().imagePath | storageUrl }}?w=128&square=true"
-            />
-        </a>
-        <div class="name">{{ thread.value() | threadName }}</div>
-        <div class="create-time">
-            Create Time: {{ thread.value().createTime | date: 'mediumDate' }}
-        </div>
-    </div>
+    <app-thread-basic-info [threadInfo]="thread.value()"/>
+    
     <div class="menu-button">
         <div class="img">
             <i class="fas fa-share-alt"></i>

@@ -1,1 +1,7 @@
-<!-- view for thread-info-public -->
+<app-header title="Thread Info" />
+@if (threadInfo.value()) {
+    <app-thread-basic-info [threadInfo]="threadInfo.value()"/>
+}
+@if (ownerInfo.value()) {
+    <app-user-basic-info [user]="ownerInfo.value().searchedUser.user" [online]="ownerInfo.value().searchedUser.online"/>
+}

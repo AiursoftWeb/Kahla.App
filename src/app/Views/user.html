@@ -1,32 +1,6 @@
 <app-header title="Profile" [processing]="!info"></app-header>
 @if (info) {
-    <div *ngIf="info" class="user">
-        <a
-            class="user-img"
-            href="{{ info.user.iconFilePath | storageUrl }}"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <img
-                class="user-img"
-                src="{{ info.user.iconFilePath | storageUrl }}?w=128&square=true"
-            />
-            <div
-                class="small-dot greendot"
-                *ngIf="info.online !== null"
-                [class.greendot]="info.online"
-                [class.graydot]="!info.online"
-                style="top: -11px; right: -43px"
-            ></div>
-        </a>
-        <div class="name">{{ info.user.nickName }}</div>
-        <div class="bio">{{ info.user.bio }}</div>
-        <div class="email">
-            {{ info.user.email }}
-            <label class="badge badge-success" *ngIf="info.user.emailConfirmed">Verified</label>
-        </div>
-    </div>
-
+    <app-user-basic-info [user]="info.user" [online]="info.online"/>
     <div class="menu-button" *ngIf="!info.user.emailConfirmed">
         <div class="img warning">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
