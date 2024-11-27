@@ -1,7 +1,7 @@
 <app-header
     title="Member Detail"
     [returnButtonPreventDefault]="true"
-    (returnButtonClicked)="returnButtonClicked.emit()"
+    (returnButtonClicked)="returned.emit()"
 ></app-header>
 <app-user-basic-info [user]="memberInfo().user" routerLink="/user/{{ memberInfo().user.id }}" />
 <div class="menu-gap"></div>

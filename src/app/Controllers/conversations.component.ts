@@ -11,7 +11,7 @@ import { RepositoryBase } from '../Repositories/RepositoryBase';
 @Component({
     selector: 'app-conversations',
     templateUrl: '../Views/conversations.html',
-    styleUrls: [],
+    styleUrls: ['../Styles/search-part.scss'],
     standalone: false,
 })
 export class ConversationsComponent implements OnInit {

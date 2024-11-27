@@ -5,6 +5,8 @@ import { ThreadsApiService } from '../../Services/Api/ThreadsApiService';
 import Swal from 'sweetalert2';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../../Utils/CommonErrorDialog';
+import { SwalToast } from '../../Utils/Toast';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-thread-member-detail-fragment',
@@ -16,9 +18,9 @@ export class ThreadMemberDetailFragmentComponent {
     threadInfo = input.required<ThreadInfoJoined>();
     memberInfo = input.required<ThreadMemberInfo>();
 
-    returnButtonClicked = output();
+    returned = output();
 
-    constructor(private threadsApiService: ThreadsApiService) {}
+    constructor(private threadsApiService: ThreadsApiService, private router: Router) {}
 
     async removeMember() {
         if (
@@ -36,6 +38,9 @@ export class ThreadMemberDetailFragmentComponent {
             await lastValueFrom(
                 this.threadsApiService.KickMember(this.threadInfo().id, this.memberInfo().user.id)
             );
+
+            SwalToast.fire('Member removed!');
+            this.returned.emit();
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -61,6 +66,9 @@ export class ThreadMemberDetailFragmentComponent {
                     promote
                 )
             );
+            SwalToast.fire(`Member ${promote ? 'promoted' : 'demoted'}!`);
+            this.memberInfo().isAdmin = promote;
+
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -85,6 +93,9 @@ export class ThreadMemberDetailFragmentComponent {
                     this.memberInfo().user.id
                 )
             );
+            SwalToast.fire('Ownership transferred!');
+            this.router.navigate(['/thread', this.threadInfo().id], {replaceUrl: true});
+
         } catch (err) {
             showCommonErrorDialog(err);
         }
