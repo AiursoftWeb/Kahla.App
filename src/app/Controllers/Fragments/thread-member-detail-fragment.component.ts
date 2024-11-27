@@ -55,7 +55,11 @@ export class ThreadMemberDetailFragmentComponent {
             return;
         try {
             await lastValueFrom(
-                this.threadsApiService.PromoteAdmin(this.threadInfo().id, this.memberInfo().user.id, promote)
+                this.threadsApiService.PromoteAdmin(
+                    this.threadInfo().id,
+                    this.memberInfo().user.id,
+                    promote
+                )
             );
         } catch (err) {
             showCommonErrorDialog(err);
@@ -76,11 +80,13 @@ export class ThreadMemberDetailFragmentComponent {
             return;
         try {
             await lastValueFrom(
-                this.threadsApiService.TransferOwnership(this.threadInfo().id, this.memberInfo().user.id)
+                this.threadsApiService.TransferOwnership(
+                    this.threadInfo().id,
+                    this.memberInfo().user.id
+                )
             );
         } catch (err) {
             showCommonErrorDialog(err);
         }
     }
-
 }

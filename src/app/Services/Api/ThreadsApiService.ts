@@ -89,16 +89,23 @@ export class ThreadsApiService {
         });
     }
 
-    public PromoteAdmin(threadId: number, targetUserId: string, promote: boolean): Observable<AiurProtocol> {
+    public PromoteAdmin(
+        threadId: number,
+        targetUserId: string,
+        promote: boolean
+    ): Observable<AiurProtocol> {
         return this.apiService.Post(ThreadsApiService.serverPath + `/promote-admin/${threadId}`, {
             targetUserId,
-            promote
+            promote,
         });
     }
 
     public TransferOwnership(threadId: number, targetUserId: string): Observable<AiurProtocol> {
-        return this.apiService.Post(ThreadsApiService.serverPath + `/transfer-ownership/${threadId}`, {
-            targetUserId
-        });
+        return this.apiService.Post(
+            ThreadsApiService.serverPath + `/transfer-ownership/${threadId}`,
+            {
+                targetUserId,
+            }
+        );
     }
 }

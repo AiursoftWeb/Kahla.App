@@ -9,9 +9,7 @@
             }
             <app-message
                 [message]="message"
-                [isByMe]="
-                    cacheService.mine().me && message.senderId === cacheService.mine().me.id
-                "
+                [isByMe]="cacheService.mine().me && message.senderId === cacheService.mine().me.id"
                 [groupWithPrevious]="
                     i > 0 &&
                     messages()[i - 1].senderId === message.senderId &&

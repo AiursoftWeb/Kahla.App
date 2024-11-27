@@ -1,6 +1,6 @@
 <app-header title="Profile" [processing]="!info"></app-header>
 @if (info) {
-    <app-user-basic-info [user]="info.user" [online]="info.online"/>
+    <app-user-basic-info [user]="info.user" [online]="info.online" />
     <div class="menu-button" *ngIf="!info.user.emailConfirmed">
         <div class="img warning">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>

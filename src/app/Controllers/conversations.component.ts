@@ -3,9 +3,7 @@ import { ThreadInfo } from '../Models/Threads/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
 import { Values } from '../values';
-import {
-    MyThreadsRepositoryFiltered,
-} from '../Repositories/ThreadsRepository';
+import { MyThreadsRepositoryFiltered } from '../Repositories/ThreadsRepository';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { MyThreadsOrderedRepository } from '../Repositories/MyThreadsOrderedRepository';
 import { RepositoryBase } from '../Repositories/RepositoryBase';

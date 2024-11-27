@@ -15,10 +15,7 @@ import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository'
 
 @Component({
     templateUrl: '../Views/user.html',
-    styleUrls: [
-        '../Styles/menu.scss',
-        '../Styles/button.scss',
-    ],
+    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss'],
     standalone: false,
 })
 export class UserComponent implements OnInit {

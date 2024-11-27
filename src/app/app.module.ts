@@ -144,7 +144,7 @@ import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thr
         ThreadInfoPublicComponent,
         ThreadBasicInfoComponent,
         UserBasicInfoComponent,
-        ThreadMemberDetailFragmentComponent
+        ThreadMemberDetailFragmentComponent,
     ],
     providers: [
         ApiService,

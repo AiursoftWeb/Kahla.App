@@ -17,7 +17,12 @@
         </div>
         {{ title() }}
     </div>
-    <div *ngIf="button()" class="user-button headerButton" [routerLink]="buttonLink()" (click)="linkClicked()">
+    <div
+        *ngIf="button()"
+        class="user-button headerButton"
+        [routerLink]="buttonLink()"
+        (click)="linkClicked()"
+    >
         <i class="fas fa-{{ buttonIcon() }}"></i>
     </div>
 </div>

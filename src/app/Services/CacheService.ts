@@ -23,6 +23,6 @@ export class CacheService {
                 privateSettings: resp.privateSettings,
             };
         });
-        this.mine = toSignal(this.mineCache.itemUpdated$, {requireSync: true});
+        this.mine = toSignal(this.mineCache.itemUpdated$, { requireSync: true });
     }
 }

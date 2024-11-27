@@ -167,9 +167,7 @@ export class WebpushService {
                         text: 'Please close and reopen all the page of the app to update.\nJust reloading the page cannot update the app.',
                     });
                 }, 1000); // Delay fire to ensure the page is fully loaded and not to disturb the user
-
             }
-            
         } catch (err) {
             console.error('[ERR!] ServiceWorker registration failed: ', err);
             return;

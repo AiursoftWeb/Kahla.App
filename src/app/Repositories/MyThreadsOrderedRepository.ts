@@ -5,7 +5,7 @@ import { RepositoryBase } from './RepositoryBase';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined> {
     protected readonly persistConfig = {

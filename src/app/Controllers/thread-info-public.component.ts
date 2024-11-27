@@ -17,7 +17,8 @@ export class ThreadInfoPublicComponent {
         request: () => this.id(),
         loader: async ({ request }) => {
             try {
-                return (await lastValueFrom(this.threadsApiService.DetailsAnonymous(request))).thread;
+                return (await lastValueFrom(this.threadsApiService.DetailsAnonymous(request)))
+                    .thread;
             } catch (err) {
                 showCommonErrorDialog(err);
             }
@@ -29,12 +30,15 @@ export class ThreadInfoPublicComponent {
         loader: async ({ request }) => {
             if (!request) return null;
             try {
-                return (await lastValueFrom(this.contactsApiService.Details(request, 1)));
+                return await lastValueFrom(this.contactsApiService.Details(request, 1));
             } catch (err) {
                 showCommonErrorDialog(err);
             }
         },
-    })
+    });
 
-    constructor(private threadsApiService: ThreadsApiService, private contactsApiService: ContactsApiService) {}
+    constructor(
+        private threadsApiService: ThreadsApiService,
+        private contactsApiService: ContactsApiService
+    ) {}
 }

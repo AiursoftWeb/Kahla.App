@@ -16,7 +16,7 @@ import { ProbeService } from '../Services/ProbeService';
     ],
     standalone: false,
 })
-export class ManageGroupComponent{
+export class ManageGroupComponent {
     @ViewChild('imageInput') public imageInput;
     public newGroupName: string;
 
@@ -28,7 +28,6 @@ export class ManageGroupComponent{
         public uploadService: UploadService,
         private probeService: ProbeService
     ) {}
-
 
     public transferOwner(): void {
         const inputOptions = {};

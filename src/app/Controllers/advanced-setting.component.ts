@@ -44,7 +44,7 @@ export class AdvancedSettingComponent implements OnInit {
             .subscribe(
                 () => {
                     this.updatingSetting = null;
-                    this.cacheService.mineCache.set({me: this.me, privateSettings: this.options});
+                    this.cacheService.mineCache.set({ me: this.me, privateSettings: this.options });
                 },
                 err => {
                     this.updatingSetting = null;

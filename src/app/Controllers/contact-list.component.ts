@@ -34,7 +34,7 @@ export class ContactListComponent {
         });
         if (this.selectable()) {
             if (this.selectedIds().includes(contact.user.id)) {
-                this.selectedIds.set(this.selectedIds().filter((id) => id !== contact.user.id));
+                this.selectedIds.set(this.selectedIds().filter(id => id !== contact.user.id));
             } else {
                 if (this.selectable() === 'single') {
                     this.selectedIds.set([contact.user.id]);

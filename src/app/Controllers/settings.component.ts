@@ -13,10 +13,7 @@ import { WebpushService } from '../Services/WebpushService';
 @Component({
     selector: 'app-settings',
     templateUrl: '../Views/settings.html',
-    styleUrls: [
-        '../Styles/menu.scss',
-        '../Styles/button.scss',
-    ],
+    styleUrls: ['../Styles/menu.scss', '../Styles/button.scss'],
     standalone: false,
 })
 export class SettingsComponent {
