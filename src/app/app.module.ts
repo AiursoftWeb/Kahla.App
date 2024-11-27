@@ -21,7 +21,6 @@ import { ChangePasswordComponent } from './Controllers/changePassword.component'
 import { DevicesComponent } from './Controllers/devices.component';
 import { ThemeComponent } from './Controllers/theme.component';
 import { AdvancedSettingComponent } from './Controllers/advanced-setting.component';
-import { ManageGroupComponent } from './Controllers/manageGroup.component';
 import { HomeComponent } from './Controllers/home.component';
 import { ShareComponent } from './Controllers/share.component';
 import { FileHistoryComponent } from './Controllers/file-history.component';
@@ -118,7 +117,6 @@ import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thr
         DevicesComponent,
         ThemeComponent,
         AdvancedSettingComponent,
-        ManageGroupComponent,
         HomeComponent,
         ShareComponent,
         FileHistoryComponent,
