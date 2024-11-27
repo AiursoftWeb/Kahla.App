@@ -57,7 +57,7 @@ export class TalkingInputComponent {
 
     public async emoji() {
         if (!this.picker) {
-            const EmojiButton = (await import('@joeattardi/emoji-button')).default.EmojiButton;
+            const EmojiButton = (await import('@joeattardi/emoji-button')).EmojiButton;
             this.picker = new EmojiButton({
                 position: 'top-start',
                 zIndex: 20,
@@ -66,7 +66,7 @@ export class TalkingInputComponent {
                 showSearch: false,
             });
             this.picker.on('emoji', emoji => {
-                this.insertToSelection(emoji);
+                this.insertToSelection(emoji.emoji);
             });
         }
         this.picker.togglePicker(this.chatBox().nativeElement);
