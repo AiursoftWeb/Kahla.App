@@ -34,7 +34,7 @@ export class HeaderComponent {
 
     public goBack(): void {
         this.returnButtonClicked.emit();
-        if (this.returnButtonPreventDefault) return;
+        if (this.returnButtonPreventDefault()) return;
         if (
             history.length === 1 ||
             history.state.navigationId === 1 ||

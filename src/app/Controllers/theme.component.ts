@@ -4,7 +4,7 @@ import { ThemeService } from '../Services/ThemeService';
 
 @Component({
     templateUrl: '../Views/theme.html',
-    styleUrls: ['../Styles/menu.scss'],
+    styleUrls: ['../Styles/menu.scss','../Styles/chip-button.scss'],
     standalone: false,
 })
 export class ThemeComponent implements OnInit {

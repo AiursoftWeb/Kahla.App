@@ -81,6 +81,7 @@ import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepos
 import { ThreadInfoPublicComponent } from './Controllers/thread-info-public.component';
 import { ThreadBasicInfoComponent } from './Controllers/thread-basic-info.component';
 import { UserBasicInfoComponent } from './Controllers/user-basic-info.component';
+import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thread-member-detail-fragment.component';
 
 @NgModule({
     imports: [
@@ -143,6 +144,7 @@ import { UserBasicInfoComponent } from './Controllers/user-basic-info.component'
         ThreadInfoPublicComponent,
         ThreadBasicInfoComponent,
         UserBasicInfoComponent,
+        ThreadMemberDetailFragmentComponent
     ],
     providers: [
         ApiService,

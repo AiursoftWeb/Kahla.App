@@ -2,7 +2,7 @@
     <div
         class="contact-list" [class.multiple]="selectable()"
         (click)="userClick(contact, $event.ctrlKey)"
-        routerLink="/user/{{ contact.user.id }}"
+        [routerLink]="preventDefault() ? undefined : ['/user', contact.user.id]"
     >
         <div class="user-img-group">
             <img

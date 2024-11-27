@@ -20,6 +20,7 @@ export class ContactListComponent {
 
     public selectable = input<'single' | 'multi' | null>(null);
     public selectedIds = model<string[]>([]);
+    public preventDefault = input<boolean>(false);
 
     @Output() public contactClicked = new EventEmitter<{
         item: ContactInfo;

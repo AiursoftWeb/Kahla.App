@@ -1,5 +1,22 @@
-<app-header
-    title="{{ repo()?.total ?? '' }} Members"
-    [processing]="!repo() || repo().status === 'loading'"
-></app-header>
-<app-contact-list [contacts]="repo()" emptyMessage="No members in this thread."></app-contact-list>
+@if (viewingDetail()) {
+    <app-thread-member-detail-fragment
+        [memberInfo]="viewingDetail()"
+        [threadInfo]="threadInfo.value()"
+        (returnButtonClicked)="this.viewingDetail.set(null)"
+    />
+} @else {
+    <app-header
+        title="{{ repo.value()?.total ?? '' }} Members"
+        [processing]="!repo.value() || repo.value().status === 'loading'"
+    ></app-header>
+    @if (repo.value()) {
+        <app-contact-list
+            [contacts]="repo.value()"
+            emptyMessage="No members in this thread."
+            [preventDefault]="true"
+            (contactClicked)="viewDetail($event.item)"
+        ></app-contact-list>
+    } @else {
+        <div class="menu-hint">Loading...</div>
+    }
+}

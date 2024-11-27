@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
 
-export function showCommonErrorDialog(err: unknown) {
+export function showCommonErrorDialog(err: unknown): undefined {
     console.error(err);
     if (err instanceof HttpErrorResponse) {
         if (err.status) {

@@ -1,0 +1,46 @@
+<app-header
+    title="Member Detail"
+    [returnButtonPreventDefault]="true"
+    (returnButtonClicked)="returnButtonClicked.emit()"
+></app-header>
+<app-user-basic-info [user]="memberInfo().user" routerLink="/user/{{ memberInfo().user.id }}" />
+<div class="menu-gap"></div>
+
+<div class="menu-button-disabled">
+    <div class="img">
+        <i class="fas fa-clock"></i>
+    </div>
+    <div class="text">Join Time: {{ memberInfo().joinTime | date }}</div>
+</div>
+<a class="menu-button" routerLink="/user/{{ memberInfo().user.id }}">
+    <div class="img">
+        <i class="fas fa-circle-user"></i>
+    </div>
+    <div class="text">View Profile</div>
+</a>
+
+@if (threadInfo().imAdmin) {
+    <div class="menu-header">Admin Actions</div>
+    <div class="menu-button" (click)="removeMember()">
+        <div class="img">
+            <i class="fas fa-user-times"></i>
+        </div>
+        <div class="text">Remove from thread</div>
+    </div>
+}
+
+@if (threadInfo().imOwner) {
+    <div class="menu-header">Owner Actions</div>
+    <div class="menu-button" (click)="promoteAdmin(!memberInfo().isAdmin)">
+        <div class="img">
+            <i class="fas fa-user-gear"></i>
+        </div>
+        <div class="text">{{ memberInfo().isAdmin ? 'Demote' : 'Promote' }} admin</div>
+    </div>
+    <div class="menu-button" (click)="transferOwnership()">
+        <div class="img">
+            <i class="fas fa-right-left"></i>
+        </div>
+        <div class="text">Transfer ownership</div>
+    </div>
+}

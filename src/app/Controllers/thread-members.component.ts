@@ -1,6 +1,10 @@
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, input, resource, signal } from '@angular/core';
 import { ThreadMembersRepository } from '../Repositories/ThreadMembersRepository';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
+import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
+import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
+import { ContactInfo } from '../Models/Contacts/ContactInfo';
 
 @Component({
     selector: 'app-thread-members',
@@ -10,11 +14,30 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 })
 export class ThreadMembersComponent {
     id = input.required<number>();
-    repo = computed(() => new ThreadMembersRepository(this.threadsApiService, this.id()));
+    repo = resource({
+        request: () => this.id(),
+        loader: async ({ request: id }) => {
+            const repo = new ThreadMembersRepository(this.threadsApiService, id);
+            await repo.updateAll().catch(showCommonErrorDialog);
+            return repo;
+        },
+    });
 
-    constructor(private threadsApiService: ThreadsApiService) {
-        effect(() => {
-            this.repo().updateAll();
-        });
+    threadInfo = resource({
+        request: () => this.id(),
+        loader: async ({ request: id }) => {
+            return await this.threadInfoCacheDictionary.get(id).catch(showCommonErrorDialog);
+        },
+    });
+
+    viewingDetail = signal<ThreadMemberInfo>(null);
+
+    viewDetail(inf: ContactInfo) {
+        this.viewingDetail.set(inf as ThreadMemberInfo);
     }
+
+    constructor(
+        private threadsApiService: ThreadsApiService,
+        private threadInfoCacheDictionary: ThreadInfoCacheDictionary
+    ) {}
 }
