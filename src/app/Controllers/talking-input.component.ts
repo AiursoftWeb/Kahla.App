@@ -43,7 +43,7 @@ export class TalkingInputComponent {
         effect(() => {
             this.textContent();
             if (this.chatInput()) {
-                //wordaround https://stackoverflow.com/questions/2803880/is-there-a-way-to-get-a-textarea-to-stretch-to-fit-its-content-without-using-php
+                //workaround https://stackoverflow.com/questions/2803880/is-there-a-way-to-get-a-textarea-to-stretch-to-fit-its-content-without-using-php
                 setTimeout(() => {
                     this.chatInput().nativeElement.style.setProperty('--content-height', '');
                     this.chatInput().nativeElement.style.setProperty(

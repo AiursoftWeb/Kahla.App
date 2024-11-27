@@ -20,6 +20,10 @@ export class WebpushService {
         return 'serviceWorker' in navigator && !('__TAURI__' in window);
     }
 
+    public get requireUserApproval(): boolean {
+        return 'Notification' in window && Notification.permission === 'default';
+    }
+
     public get notificationAvail(): boolean {
         return (
             this.serviceWorkerAvailable &&
@@ -208,6 +212,16 @@ export class WebpushService {
             this.bindDevice(sub, true);
             console.log('[ OK ] Push subscription updated');
         });
+    }
+
+    public async requestUserApproval() {
+        if (!this.requireUserApproval) return;
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            console.log('[ OK ] Notification permission granted.');
+        } else {
+            console.error('[ERR!] Notification permission denied.');
+        }
     }
 
     //#endregion
