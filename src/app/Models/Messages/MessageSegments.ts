@@ -56,9 +56,10 @@ export interface MessageSegmentContact extends MessageSegmentBase {
 
 export interface MessageSegmentThreadInvitation extends MessageSegmentBase {
     type: 'thread-invitation';
-    id: string;
+    id: number;
+    targetUserId: string; // UUID
     token: string;
-    validTo: Date;
+    validTo: number; // Timestamp
 }
 
 export interface MessageSegmentThreadJoinRequest extends MessageSegmentBase {

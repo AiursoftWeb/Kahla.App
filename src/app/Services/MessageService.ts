@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
-import { EventType } from '../Models/Events/EventType';
-import { AiurEvent } from '../Models/Events/AiurEvent';
-import { CacheService } from './CacheService';
-import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { truncateUTF8Bytes } from '../Utils/StringUtils';
 
@@ -11,45 +7,6 @@ import { truncateUTF8Bytes } from '../Utils/StringUtils';
 })
 export class MessageService {
     public belowWindowPercent = 0;
-
-    constructor(
-        private myContactsRepository: MyContactsRepository,
-        private cacheService: CacheService
-    ) {}
-
-    public async OnMessage(ev: AiurEvent) {
-        switch (ev.type) {
-            case EventType.NewMessage: {
-                break;
-            }
-            case EventType.NewMemberEvent: {
-                // const evt = ev as NewMemberEvent;
-                // if (this.conversation.id === evt.conversationId) {
-                //     this.conversationApiService
-                //         .ConversationDetail(evt.conversationId)
-                //         .subscribe(updated => {
-                //             this.conversation = updated.value;
-                //         });
-                //     SwalToast.fire({
-                //         title: `${evt.newMember.nickName} joined the group.`,
-                //         icon: 'info',
-                //         position: 'bottom',
-                //     });
-                // }
-                break;
-            }
-            case EventType.SomeoneLeftEvent: {
-                break;
-            }
-            case EventType.DissolveEvent: {
-                break;
-            }
-        }
-    }
-
-    public reconnectPull() {
-        this.myContactsRepository.updateAll();
-    }
 
     public updateBelowWindowPercent(): void {
         this.belowWindowPercent =

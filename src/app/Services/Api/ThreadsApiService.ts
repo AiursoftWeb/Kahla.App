@@ -108,4 +108,10 @@ export class ThreadsApiService {
             }
         );
     }
+
+    public CompleteSoftInvite(token: string): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/soft-invite-complete`, {
+            token
+        });
+    }
 }

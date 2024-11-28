@@ -19,6 +19,7 @@ import { ThreadInfoComponent } from '../Controllers/thread-info.component';
 import { ThreadMembersComponent } from '../Controllers/thread-members.component';
 import { ManageThreadComponent } from '../Controllers/manage-thread.component';
 import { ThreadInfoPublicComponent } from '../Controllers/thread-info-public.component';
+import { InviteMemberComponent } from '../Controllers/invite-member.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -42,6 +43,7 @@ const routes: Routes = [
     { path: 'theme', component: ThemeComponent },
     { path: 'advanced-setting', component: AdvancedSettingComponent },
     { path: 'share-target', component: ShareComponent },
+    { path: 'thread-invite/:id', component: InviteMemberComponent },
     { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 @NgModule({

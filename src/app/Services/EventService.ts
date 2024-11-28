@@ -16,7 +16,7 @@ export class EventService {
     public onReconnect: Subject<void> = new Subject<void>();
 
     private timeoutNumber = 1000;
-    private reconnectAttemptTimeout;
+    private reconnectAttemptTimeout: ReturnType<typeof setTimeout>;
     private closeWebSocket = false;
 
     constructor(private messagesApiService: MessagesApiService) {}

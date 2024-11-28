@@ -81,6 +81,8 @@ import { ThreadInfoPublicComponent } from './Controllers/thread-info-public.comp
 import { ThreadBasicInfoComponent } from './Controllers/thread-basic-info.component';
 import { UserBasicInfoComponent } from './Controllers/user-basic-info.component';
 import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thread-member-detail-fragment.component';
+import { InviteMemberComponent } from './Controllers/invite-member.component';
+import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCacheDictionary';
 
 @NgModule({
     imports: [
@@ -143,6 +145,7 @@ import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thr
         ThreadBasicInfoComponent,
         UserBasicInfoComponent,
         ThreadMemberDetailFragmentComponent,
+        InviteMemberComponent,
     ],
     providers: [
         ApiService,
@@ -168,6 +171,7 @@ import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thr
         UserInfoCacheDictionary,
         ThreadInfoCacheDictionary,
         MyThreadsOrderedRepository,
+        ThreadInfoPublicCacheDictionary
     ],
     bootstrap: [AppComponent],
 })
