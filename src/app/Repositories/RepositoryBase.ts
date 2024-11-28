@@ -11,7 +11,18 @@ export interface RepositoryPersistConfig {
     persist: boolean;
 }
 
-export abstract class RepositoryBase<T> {
+export interface RepositoryLike<T> {
+    data: T[];
+    status: RepositoryStatus;
+    saveCache(): void;
+    initCache(): void;
+    updateAll(): Promise<void>;
+    loadMore(take: number): Promise<void>;
+    canLoadMore: boolean;
+    health: boolean;
+}
+
+export abstract class RepositoryBase<T> implements RepositoryLike<T> {
     protected abstract get persistConfig(): RepositoryPersistConfig;
     public data: T[] = [];
     public status: RepositoryStatus = 'uninitialized';
@@ -113,4 +124,54 @@ export abstract class RepositoryListBase<T> extends RepositoryBase<T> {
     }
 
     protected abstract requestOnline(take: number, skip: number): Promise<[T[], number]>;
+}
+
+export class MappedRepository<TDest, TSrc> implements RepositoryLike<TDest> {
+    constructor(
+        private srcRepo: RepositoryLike<TSrc>,
+        private mapFunc: (src: TSrc) => TDest
+    ) {}
+    public get data(): TDest[] {
+        return this.srcRepo.data.map(this.mapFunc);
+    }
+    public get status(): RepositoryStatus {
+        return this.srcRepo.status;
+    }
+    saveCache(): void {
+        this.srcRepo.saveCache();
+    }
+    initCache(): void {
+        this.srcRepo.initCache();
+    }
+    updateAll(): Promise<void> {
+        return this.srcRepo.updateAll();
+    }
+    loadMore(take: number): Promise<void> {
+        return this.srcRepo.loadMore(take);
+    }
+    get canLoadMore(): boolean {
+        return this.srcRepo.canLoadMore;
+    }
+    get health(): boolean {
+        return this.srcRepo.health;
+    }
+}
+
+export class StaticRepository<T> implements RepositoryLike<T> {
+    constructor(public data: T[]) {}
+    public readonly status = 'synced';
+    saveCache(): void {
+        // Do nothing
+    }
+    initCache(): void {
+        // Do nothing
+    }
+    updateAll(): Promise<void> {
+        return Promise.resolve();
+    }
+    loadMore(): Promise<void> {
+        return Promise.resolve();
+    }
+    readonly canLoadMore = false;
+    readonly health = true;
 }

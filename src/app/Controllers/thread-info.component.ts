@@ -1,4 +1,4 @@
-import { Component, input, resource } from '@angular/core';
+import { Component, computed, input, resource } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
@@ -6,6 +6,9 @@ import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary'
 import { SwalToast } from '../Utils/Toast';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { MappedRepository, StaticRepository } from '../Repositories/RepositoryBase';
+import { ContactListItem } from './contact-list.component';
+import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
 
 @Component({
     templateUrl: '../Views/thread-info.html',
@@ -26,6 +29,16 @@ export class ThreadInfoComponent {
             }
         },
     });
+
+    topTenRepo = computed(() => {
+        return new MappedRepository<ContactListItem, ThreadMemberInfo>(new StaticRepository(this.thread.value()?.topTenMembers), t => ({
+            ...t,
+            tags: [
+                ...(t.isOwner ? [{ desc: 'Owner', type: 'owner' }] as const : []),
+                ...(t.isAdmin ? [{ desc: 'Admin', type: 'admin' }] as const : []),
+            ]
+        }));
+    })
 
     constructor(
         private threadsApiService: ThreadsApiService,

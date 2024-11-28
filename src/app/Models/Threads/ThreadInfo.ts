@@ -1,5 +1,5 @@
-﻿import { ContactInfo } from '../Contacts/ContactInfo';
-import { MessagePreview } from '../MessagePreview';
+﻿import { MessagePreview } from '../MessagePreview';
+import { ThreadMemberInfo } from './ThreadMemberInfo';
 
 export interface ThreadInfo {
     // public attributes (can access anytime)
@@ -21,7 +21,7 @@ export interface ThreadInfoJoined extends ThreadInfo {
     totalMessages: number;
     muted: boolean;
     someoneAtMe: boolean;
-    topTenMembers: ContactInfo[];
+    topTenMembers: ThreadMemberInfo[];
     lastMessageTime: Date;
     imAdmin: boolean;
     imOwner: boolean;

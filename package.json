@@ -24,6 +24,7 @@
   "dependencies": {
     "@aiursoft/kahla-sdk.js": "^0.2.3",
     "@angular/animations": "19.0.0",
+    "@angular/cdk": "^19.0.1",
     "@angular/common": "19.0.0",
     "@angular/core": "19.0.0",
     "@angular/forms": "19.0.0",

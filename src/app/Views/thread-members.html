@@ -9,9 +9,9 @@
         title="{{ repo.value()?.total ?? '' }} Members"
         [processing]="!repo.value() || repo.value().status === 'loading'"
     ></app-header>
-    @if (repo.value()) {
+    @if (mappedRepo()) {
         <app-contact-list
-            [contacts]="repo.value()"
+            [contacts]="mappedRepo()"
             emptyMessage="No members in this thread."
             [preventDefault]="true"
             (contactClicked)="viewDetail($event.item)"

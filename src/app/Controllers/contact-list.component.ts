@@ -1,20 +1,25 @@
 import { Component, EventEmitter, input, Input, model, Output } from '@angular/core';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
-import { RepositoryListBase } from '../Repositories/RepositoryBase';
+import { RepositoryLike } from '../Repositories/RepositoryBase';
 import { Values } from '../values';
+
+export interface ContactListItem extends ContactInfo {
+    tags?: {
+        desc: string;
+        type: 'owner' | 'admin'; // Add new types here, then add the corresponding CSS class in badge.scss
+    }[];
+}
 
 @Component({
     selector: 'app-contact-list',
     templateUrl: '../Views/contact-list.html',
-    styleUrls: ['../Styles/contact-list.scss', '../Styles/reddot.scss', '../Styles/button.scss'],
+    styleUrls: ['../Styles/contact-list.scss', '../Styles/reddot.scss', '../Styles/button.scss', '../Styles/badge.scss'],
     standalone: false,
 })
 export class ContactListComponent {
     public loadingImgURL = Values.loadingImgURL;
 
-    @Input() public contacts?: RepositoryListBase<ContactInfo> = null;
-
-    @Input() public contactsList?: ContactInfo[] = null;
+    @Input() public contacts?: RepositoryLike<ContactListItem> = null;
 
     @Input() public emptyMessage = 'No results.';
 

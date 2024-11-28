@@ -177,10 +177,7 @@ export class WebpushService {
             return;
         }
 
-        if ('Notification' in window && Notification.permission === 'default') {
-            console.log('[ ** ] Requesting notification permission...');
-            Notification.requestPermission();
-        }
+        this.requestUserApproval();
     }
 
     public async subscribeUser() {

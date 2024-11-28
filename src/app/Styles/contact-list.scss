@@ -4,14 +4,17 @@
   @extend %menu-item-clickable;
   height: 60px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 15% 1fr;
+  // gap: 16px;
+  align-items: center;
 
   &.multiple {
-    grid-template-columns: 1fr 1fr 50px;
+    grid-template-columns: 15% 1fr 15%;
   }
 
   .user-img-group {
     position: relative;
+    justify-self: center;
 
     .small-dot {
       top: 36px;
@@ -39,7 +42,4 @@
     color: var(--primary-color-depth2);
   }
 
-  > * {
-    margin: auto;
-  }
 }

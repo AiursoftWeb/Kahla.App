@@ -45,7 +45,7 @@
         </div>
         <div class="text">members</div>
     </div>
-    <app-contact-list [contactsList]="thread.value().topTenMembers"></app-contact-list>
+    <app-contact-list [contacts]="topTenRepo()"></app-contact-list>
     <div class="menu-button" routerLink="/thread-members/{{ thread.value().id }}">
         <div class="img">
             <i class="fas fa-users"></i>
