@@ -171,7 +171,7 @@ import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCache
         UserInfoCacheDictionary,
         ThreadInfoCacheDictionary,
         MyThreadsOrderedRepository,
-        ThreadInfoPublicCacheDictionary
+        ThreadInfoPublicCacheDictionary,
     ],
     bootstrap: [AppComponent],
 })

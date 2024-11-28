@@ -13,7 +13,12 @@ export interface ContactListItem extends ContactInfo {
 @Component({
     selector: 'app-contact-list',
     templateUrl: '../Views/contact-list.html',
-    styleUrls: ['../Styles/contact-list.scss', '../Styles/reddot.scss', '../Styles/button.scss', '../Styles/badge.scss'],
+    styleUrls: [
+        '../Styles/contact-list.scss',
+        '../Styles/reddot.scss',
+        '../Styles/button.scss',
+        '../Styles/badge.scss',
+    ],
     standalone: false,
 })
 export class ContactListComponent {

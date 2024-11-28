@@ -27,16 +27,18 @@ export class ThreadMembersComponent {
 
     mappedRepo = computed(() => {
         if (this.repo.value()) {
-            return new MappedRepository<ContactListItem, ThreadMemberInfo>(this.repo.value(), t => ({
-                ...t,
-                tags: [
-                    ...(t.isOwner ? [{ desc: 'Owner', type: 'owner' }] as const : []),
-                    ...(t.isAdmin ? [{ desc: 'Admin', type: 'admin' }] as const : []),
-                ]
-            }));
+            return new MappedRepository<ContactListItem, ThreadMemberInfo>(
+                this.repo.value(),
+                t => ({
+                    ...t,
+                    tags: [
+                        ...(t.isOwner ? ([{ desc: 'Owner', type: 'owner' }] as const) : []),
+                        ...(t.isAdmin ? ([{ desc: 'Admin', type: 'admin' }] as const) : []),
+                    ],
+                })
+            );
         }
-        
-    })
+    });
 
     threadInfo = resource({
         request: () => this.id(),

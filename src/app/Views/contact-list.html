@@ -22,7 +22,7 @@
             {{ contact.user.nickName }}
             @if (contact.tags) {
                 @for (item of contact.tags; track $index) {
-                    <span class="badge badge-{{item.type}}">{{ item.desc }}</span>
+                    <span class="badge badge-{{ item.type }}">{{ item.desc }}</span>
                 }
             }
         </div>

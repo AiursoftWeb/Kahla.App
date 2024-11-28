@@ -31,14 +31,17 @@ export class ThreadInfoComponent {
     });
 
     topTenRepo = computed(() => {
-        return new MappedRepository<ContactListItem, ThreadMemberInfo>(new StaticRepository(this.thread.value()?.topTenMembers), t => ({
-            ...t,
-            tags: [
-                ...(t.isOwner ? [{ desc: 'Owner', type: 'owner' }] as const : []),
-                ...(t.isAdmin ? [{ desc: 'Admin', type: 'admin' }] as const : []),
-            ]
-        }));
-    })
+        return new MappedRepository<ContactListItem, ThreadMemberInfo>(
+            new StaticRepository(this.thread.value()?.topTenMembers),
+            t => ({
+                ...t,
+                tags: [
+                    ...(t.isOwner ? ([{ desc: 'Owner', type: 'owner' }] as const) : []),
+                    ...(t.isAdmin ? ([{ desc: 'Admin', type: 'admin' }] as const) : []),
+                ],
+            })
+        );
+    });
 
     constructor(
         private threadsApiService: ThreadsApiService,

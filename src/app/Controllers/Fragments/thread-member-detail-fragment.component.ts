@@ -20,7 +20,10 @@ export class ThreadMemberDetailFragmentComponent {
 
     returned = output();
 
-    constructor(private threadsApiService: ThreadsApiService, private router: Router) {}
+    constructor(
+        private threadsApiService: ThreadsApiService,
+        private router: Router
+    ) {}
 
     async removeMember() {
         if (
@@ -68,7 +71,6 @@ export class ThreadMemberDetailFragmentComponent {
             );
             SwalToast.fire(`Member ${promote ? 'promoted' : 'demoted'}!`);
             this.memberInfo().isAdmin = promote;
-
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -94,8 +96,7 @@ export class ThreadMemberDetailFragmentComponent {
                 )
             );
             SwalToast.fire('Ownership transferred!');
-            this.router.navigate(['/thread', this.threadInfo().id], {replaceUrl: true});
-
+            this.router.navigate(['/thread', this.threadInfo().id], { replaceUrl: true });
         } catch (err) {
             showCommonErrorDialog(err);
         }

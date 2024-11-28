@@ -126,12 +126,12 @@ export abstract class RepositoryListBase<T> extends RepositoryBase<T> {
     protected abstract requestOnline(take: number, skip: number): Promise<[T[], number]>;
 }
 
-export class MappedRepository<TDest, TSrc> implements RepositoryLike<TDest> {
+export class MappedRepository<TOut, TIn> implements RepositoryLike<TOut> {
     constructor(
-        private srcRepo: RepositoryLike<TSrc>,
-        private mapFunc: (src: TSrc) => TDest
+        private srcRepo: RepositoryLike<TIn>,
+        private mapFunc: (src: TIn) => TOut
     ) {}
-    public get data(): TDest[] {
+    public get data(): TOut[] {
         return this.srcRepo.data.map(this.mapFunc);
     }
     public get status(): RepositoryStatus {
