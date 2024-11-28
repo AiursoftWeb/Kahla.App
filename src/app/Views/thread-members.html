@@ -2,7 +2,7 @@
     <app-thread-member-detail-fragment
         [memberInfo]="viewingDetail()"
         [threadInfo]="threadInfo.value()"
-        (returnButtonClicked)="this.viewingDetail.set(null)"
+        (returned)="this.viewingDetail.set(null)"
     />
 } @else {
     <app-header
