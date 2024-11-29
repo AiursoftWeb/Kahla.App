@@ -2,10 +2,12 @@
     @for (message of messages(); track message.id; let first = $first, i = $index) {
         <li>
             @if (i === lastReadIndex()) {
-                <div class="last-read-bar">LAST READ</div>
+                <div><div class="last-read-bar">LAST READ</div></div>
             }
             @if (first || messages()[i - 1].sendTime.getDate() !== message.sendTime.getDate()) {
-                <div class="date-bar">{{ message.sendTime | date }}</div>
+                <div>
+                    <div class="date-bar">{{ message.sendTime | date }}</div>
+                </div>
             }
             <app-message
                 [message]="message"

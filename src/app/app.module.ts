@@ -83,6 +83,7 @@ import { UserBasicInfoComponent } from './Controllers/user-basic-info.component'
 import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thread-member-detail-fragment.component';
 import { InviteMemberComponent } from './Controllers/invite-member.component';
 import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCacheDictionary';
+import { CdkMenuModule } from '@angular/cdk/menu';
 
 @NgModule({
     imports: [
@@ -99,6 +100,7 @@ import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCache
         ThreadNamePipe,
         MessageSegmentVideoComponent,
         FileSharingButtonsComponent,
+        CdkMenuModule
     ],
     declarations: [
         AboutComponent,
