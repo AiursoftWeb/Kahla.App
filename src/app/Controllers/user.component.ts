@@ -1,4 +1,4 @@
-import { Component, effect, input, OnInit, resource } from '@angular/core';
+import { Component, computed, effect, input, linkedSignal, resource } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SwalToast } from '../Utils/Toast';
@@ -15,10 +15,9 @@ import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository'
     styleUrls: ['../Styles/menu.scss', '../Styles/button.scss'],
     standalone: false,
 })
-export class UserComponent implements OnInit {
-    id = input.required<string>();
-
-    public info = resource({
+export class UserComponent {
+    readonly id = input.required<string>();
+    readonly info = resource({
         request: () => this.id(),
         loader: async ({ request: id }) => {
             try {
@@ -29,8 +28,14 @@ export class UserComponent implements OnInit {
             }
         },
     });
-    public isCommonThreadsShown = false;
-    public commonThreadsRepo?: CommonThreadRepository;
+    readonly isCommonThreadsShown = linkedSignal<boolean>(() => !!this.info.value() && false);
+    readonly commonThreadsRepo = computed(
+        () =>
+            new CommonThreadRepository(
+                this.contactsApiService,
+                this.info.value().searchedUser.user.id
+            )
+    );
 
     constructor(
         private contactsApiService: ContactsApiService,
@@ -38,13 +43,11 @@ export class UserComponent implements OnInit {
         private blocksApiService: BlocksApiService,
         private router: Router,
         private myContactsRepository: MyContactsRepository
-    ) {}
-
-    public ngOnInit(): void {
+    ) {
         effect(() => {
-            this.id();
-            this.isCommonThreadsShown = false;
-            this.commonThreadsRepo = null;
+            if (this.isCommonThreadsShown() && this.commonThreadsRepo().status === 'uninitialized') {
+                this.commonThreadsRepo().updateAll();
+            }
         });
     }
 
@@ -145,16 +148,5 @@ export class UserComponent implements OnInit {
         SwalToast.fire('Success', '', 'success');
         this.info.reload();
         this.myContactsRepository.updateAll();
-    }
-
-    public showCommonThreads() {
-        this.isCommonThreadsShown = !this.isCommonThreadsShown;
-        if (this.isCommonThreadsShown && !this.commonThreadsRepo) {
-            this.commonThreadsRepo = new CommonThreadRepository(
-                this.contactsApiService,
-                this.info.value().searchedUser.user.id
-            );
-            this.commonThreadsRepo.updateAll();
-        }
     }
 }

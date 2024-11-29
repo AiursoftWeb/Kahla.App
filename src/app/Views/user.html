@@ -44,17 +44,17 @@
         </div>
     }
     <div class="menu-gap"></div>
-    <div class="menu-button" (click)="showCommonThreads()">
+    <div class="menu-button" (click)="isCommonThreadsShown.set(!isCommonThreadsShown())">
         <div class="img">
             <i class="fas fa-users"></i>
         </div>
         <div class="text">Common Threads</div>
-        <div class="img-right" [class.rev]="isCommonThreadsShown">
+        <div class="img-right" [class.rev]="isCommonThreadsShown()">
             <i class="fas fa-chevron-down"></i>
         </div>
     </div>
-    @if (isCommonThreadsShown && commonThreadsRepo) {
-        <app-threads-list [threadRepo]="commonThreadsRepo" />
+    @if (isCommonThreadsShown() && commonThreadsRepo) {
+        <app-threads-list [threadRepo]="commonThreadsRepo()" />
     }
 
     <div class="menu-gap"></div>
