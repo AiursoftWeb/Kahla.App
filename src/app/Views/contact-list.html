@@ -1,7 +1,7 @@
 @for (contact of contacts?.data; track contact.user.id) {
     <div
         class="contact-list"
-        [class.multiple]="selectable()"
+        [class.multiple]="selectable() || contextMenu()"
         (click)="userClick(contact, $event.ctrlKey)"
         [routerLink]="preventDefault() ? undefined : ['/user', contact.user.id]"
     >
@@ -26,7 +26,11 @@
                 }
             }
         </div>
-        @if (selectable() && selectedIds().includes(contact.user.id)) {
+        @if (contextMenu()) {
+            <button [cdkMenuTriggerFor]="contextMenu()" (click)="$event.stopPropagation(); contextMenuClicked.emit(contact)">
+                <i class="fas fa-ellipsis"></i>
+            </button>
+        } @else if (selectable() && selectedIds().includes(contact.user.id)) {
             <i class="fas fa-check"></i>
         }
     </div>

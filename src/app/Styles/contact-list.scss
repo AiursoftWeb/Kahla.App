@@ -1,4 +1,5 @@
 @use 'menus';
+@use 'button_effects';
 
 .contact-list {
   @extend %menu-item-clickable;
@@ -40,5 +41,17 @@
   i {
     font-size: 2em;
     color: var(--primary-color-depth2);
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    @extend %transparent-button;
+    max-width: 80px;
+    border-radius: 8px;
+    height: 80%;
+    margin: 0;
+    justify-self: center;
+    width: 100%;
   }
 }

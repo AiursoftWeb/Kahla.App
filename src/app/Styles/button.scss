@@ -14,6 +14,10 @@
     flex: 1 1;
   }
 
+  button {
+    @extend %buttonBase;
+  }
+
   &.one-line {
     align-items: center;
     flex-direction: column;
@@ -21,12 +25,7 @@
   }
 }
 
-.buttons {
-  @extend %buttonGroupBase;
-}
-
-button,
-.button {
+%buttonBase {
   border: none;
   outline: none;
   border-radius: 4px;
@@ -104,6 +103,14 @@ button,
       background-color: #bbb;
     }
   }
+}
+
+.buttons {
+  @extend %buttonGroupBase;
+}
+
+.button {
+  @extend %buttonBase;
 }
 
 .button--fab {

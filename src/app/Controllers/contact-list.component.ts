@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, Input, model, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, model, output, Output, TemplateRef } from '@angular/core';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { RepositoryLike } from '../Repositories/RepositoryBase';
 import { Values } from '../values';
@@ -28,6 +28,8 @@ export class ContactListComponent {
 
     @Input() public emptyMessage = 'No results.';
 
+    
+    public contextMenu = input<TemplateRef<unknown>>(null);
     public selectable = input<'single' | 'multi' | null>(null);
     public selectedIds = model<string[]>([]);
     public preventDefault = input<boolean>(false);
@@ -36,6 +38,8 @@ export class ContactListComponent {
         item: ContactInfo;
         secondary: boolean;
     }>();
+
+    public contextMenuClicked = output<ContactListItem>();
 
     public userClick(contact: ContactInfo, secondary: boolean) {
         this.contactClicked.emit({

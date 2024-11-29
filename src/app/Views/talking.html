@@ -9,7 +9,7 @@
     [buttonLink]="'/thread/' + id()"
 />
 <!-- <app-load-more-button></app-load-more-button> -->
-<app-message-list [messages]="parsedMessages()" [lastReadIndex]="threadInfo.value().messageContext.unReadAmount" />
+<app-message-list [messages]="parsedMessages()" [lastReadIndex]="threadInfo.value()?.messageContext.unReadAmount" />
 <app-scroll-button
     id="scrollDown"
     direction="down"

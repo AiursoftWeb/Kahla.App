@@ -80,7 +80,6 @@ import { MyThreadsOrderedRepository } from './Repositories/MyThreadsOrderedRepos
 import { ThreadInfoPublicComponent } from './Controllers/thread-info-public.component';
 import { ThreadBasicInfoComponent } from './Controllers/thread-basic-info.component';
 import { UserBasicInfoComponent } from './Controllers/user-basic-info.component';
-import { ThreadMemberDetailFragmentComponent } from './Controllers/Fragments/thread-member-detail-fragment.component';
 import { InviteMemberComponent } from './Controllers/invite-member.component';
 import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCacheDictionary';
 import { CdkMenuModule } from '@angular/cdk/menu';
@@ -146,7 +145,6 @@ import { CdkMenuModule } from '@angular/cdk/menu';
         ThreadInfoPublicComponent,
         ThreadBasicInfoComponent,
         UserBasicInfoComponent,
-        ThreadMemberDetailFragmentComponent,
         InviteMemberComponent,
     ],
     providers: [
