@@ -5,16 +5,16 @@
  *    Header
  ******************** */
 
-.phone-statusbar-mask {
-  @extend %full-fixed-width;
-  position: fixed;
+// .phone-statusbar-mask {
+//   @extend %full-fixed-width;
+//   position: fixed;
 
-  background: var(--primary-color-depth3);
-  height: 200px;
-  top: -200px;
-  z-index: 999;
+//   background: var(--primary-color-depth3);
+//   height: 200px;
+//   top: -200px;
+//   z-index: 999;
   
-}
+// }
 
 .header {
   @extend %full-fixed-width;
@@ -32,6 +32,7 @@
   text-align: center;
   user-select: none;
   padding-right: 1px;
+  padding-top: env(safe-area-inset-top);
 
   &.shadow {
     box-shadow: 0 20px 29px -13px rgba(0, 0, 0, 0.41);
@@ -39,7 +40,7 @@
 }
 
 .header-holder {
-  height: 45px;
+  height: calc(45px + env(safe-area-inset-top));
 }
 
 .header {
