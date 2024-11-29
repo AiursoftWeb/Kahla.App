@@ -1,7 +1,7 @@
 <app-header title="Profile" [processing]="!info"></app-header>
-@if (info) {
-    <app-user-basic-info [user]="info.user" [online]="info.online" />
-    <div class="menu-button" *ngIf="!info.user.emailConfirmed">
+@if (info.value()) {
+    <app-user-basic-info [user]="info.value().searchedUser.user" [online]="info.value().searchedUser.online" />
+    <div class="menu-button" *ngIf="!info.value().searchedUser.user.emailConfirmed">
         <div class="img warning">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
         </div>
@@ -33,10 +33,10 @@
         <div class="img">
             <i class="fas fa-ban"></i>
         </div>
-        <div class="text">{{ info.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
+        <div class="text">{{ info.value().searchedUser.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
     </div>
-    @if (info.isKnownContact) {
-        <div class="menu-button" (click)="delete(info.user.id)">
+    @if (info.value().searchedUser.isKnownContact) {
+        <div class="menu-button" (click)="delete(info.value().searchedUser.user.id)">
             <div class="img">
                 <i class="fas fa-trash warning"></i>
             </div>
@@ -60,10 +60,10 @@
     <div class="menu-gap"></div>
 
     <div class="buttons one-line">
-        @if (!info.isKnownContact) {
+        @if (!info.value().searchedUser.isKnownContact) {
             <button class="primary" (click)="addAsContract()">Add as contract</button>
         }
-        @if (response.defaultThread) {
+        @if (info.value().defaultThread) {
             <button class="primary" (click)="message()">Message</button>
         }
         <button class="success" (click)="newThread()">Create new thread</button>

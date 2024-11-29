@@ -2,14 +2,14 @@
     <div
         class="conversation"
         (click)="threadClicked.emit({ thread: inf, secondary: $event.ctrlKey })"
-        [class.w-current]="highlightPredicate(inf)"
+        [class.w-current]="highlightPredicate()(inf)"
     >
         <img
             class="user-img"
             src="{{ inf.imagePath || loadingImgURL | storageUrl }}?w=128&square=true"
             (click)="threadClicked.emit({ thread: inf, secondary: true }); $event.stopPropagation()"
         />
-        @if (!externalView) {
+        @if (!externalView()) {
             @let infJoined = asJoined(inf);
             @if (onlineStatusOf(infJoined) !== null) {
                 <div
@@ -30,7 +30,7 @@
             <div *ngIf="infJoined.someoneAtMe" class="dot at-dot">&#64;</div>
         }
         <div class="sender">{{ inf | threadName }}</div>
-        @if (externalView) {
+        @if (externalView()) {
             <div class="last-message">
                 {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}
             </div>
@@ -60,14 +60,14 @@
     </div>
 }
 @if (threadRepo.status === 'synced' && !threadRepo.data.length) {
-    <div class="empty-result-notice">{{ emptyMessage }}</div>
+    <div class="empty-result-notice">{{ emptyMessage() }}</div>
 }
 @if (
     threadRepo.canLoadMore && (threadRepo.status === 'synced' || threadRepo.status === 'loading')
 ) {
     <app-load-more-button
-        [autoLoad]="autoLoadMore"
-        [scrollHostElement]="scrollingContainer"
+        [autoLoad]="autoLoadMore()"
+        [scrollHostElement]="scrollingContainer()"
         (requestLoadMore)="threadRepo.loadMore(20)"
         [loading]="threadRepo.status === 'loading'"
     ></app-load-more-button>

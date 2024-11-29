@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { RepositoryBase } from '../Repositories/RepositoryBase';
 import { ThreadInfo, ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
@@ -13,15 +13,11 @@ import { Values } from '../values';
 export class ThreadsListComponent {
     @Input() public threadRepo: RepositoryBase<ThreadInfo>;
 
-    @Input() public emptyMessage = 'No results.';
-
-    @Input() public highlightPredicate: (item: ThreadInfo) => boolean = () => false;
-
-    @Input() public externalView = false;
-
-    @Input() public scrollingContainer?: HTMLElement;
-
-    @Input() public autoLoadMore = false;
+    public readonly emptyMessage = input('No results.');
+    public readonly highlightPredicate = input<(item: ThreadInfo) => boolean>(() => false);
+    public readonly externalView = input(false);
+    public readonly scrollingContainer = input<HTMLElement>(undefined);
+    public readonly autoLoadMore = input(false);
 
     @Output() public threadClicked = new EventEmitter<{
         thread: ThreadInfo;

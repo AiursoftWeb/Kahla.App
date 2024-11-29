@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, effect, input, OnInit, resource } from '@angular/core';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Values } from '../values';
 import { SwalToast } from '../Utils/Toast';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
-import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { BlocksApiService } from '../Services/Api/BlocksApiService';
-import { UserDetailViewModel } from '../Models/ApiModels/UserDetailViewModel';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository';
 
@@ -19,15 +16,23 @@ import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository'
     standalone: false,
 })
 export class UserComponent implements OnInit {
-    public info: ContactInfo;
-    public response: UserDetailViewModel;
-    public loadingImgURL = Values.loadingImgURL;
+    id = input.required<string>();
+
+    public info = resource({
+        request: () => this.id(),
+        loader: async ({ request: id }) => {
+            try {
+                return await lastValueFrom(this.contactsApiService.Details(id, 0, 0));
+            } catch (err) {
+                showCommonErrorDialog(err);
+                return null;
+            }
+        },
+    });
     public isCommonThreadsShown = false;
     public commonThreadsRepo?: CommonThreadRepository;
-    public contextThreadId?: number;
 
     constructor(
-        private route: ActivatedRoute,
         private contactsApiService: ContactsApiService,
         private threadsApiService: ThreadsApiService,
         private blocksApiService: BlocksApiService,
@@ -36,17 +41,10 @@ export class UserComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        this.route.params.subscribe(t => {
-            this.updateFriendInfo(t.id);
+        effect(() => {
+            this.id();
             this.isCommonThreadsShown = false;
             this.commonThreadsRepo = null;
-        });
-    }
-
-    public updateFriendInfo(userId: string) {
-        this.contactsApiService.Details(userId, 0, 0).subscribe(response => {
-            this.info = response.searchedUser;
-            this.response = response;
         });
     }
 
@@ -70,9 +68,11 @@ export class UserComponent implements OnInit {
 
     public async addAsContract() {
         try {
-            await lastValueFrom(this.contactsApiService.Add(this.info.user.id));
+            await lastValueFrom(
+                this.contactsApiService.Add(this.info.value().searchedUser.user.id)
+            );
             SwalToast.fire('Success', '', 'success');
-            this.updateFriendInfo(this.info.user.id);
+            this.info.reload();
             this.myContactsRepository.updateAll();
         } catch (err) {
             showCommonErrorDialog(err);
@@ -98,7 +98,9 @@ export class UserComponent implements OnInit {
         });
         if (!resp.value) return;
         try {
-            await lastValueFrom(this.contactsApiService.Report(this.info.user.id, resp.value));
+            await lastValueFrom(
+                this.contactsApiService.Report(this.info.value().searchedUser.user.id, resp.value)
+            );
         } catch (err) {
             showCommonErrorDialog(err);
             return;
@@ -110,19 +112,21 @@ export class UserComponent implements OnInit {
     }
 
     public message() {
-        this.router.navigate([`/talking/${this.response.defaultThread!}`]);
+        this.router.navigate([`/talking/${this.info.value().defaultThread!}`]);
     }
 
     public async newThread() {
         // hard invite
-        const resp = await lastValueFrom(this.threadsApiService.HardInvite(this.info.user.id));
+        const resp = await lastValueFrom(
+            this.threadsApiService.HardInvite(this.info.value().searchedUser.user.id)
+        );
         SwalToast.fire('Thread Created.', '', 'success');
         this.router.navigate([`/talking/${resp.newThreadId}`]);
     }
 
     public async block() {
         const resp = await Swal.fire({
-            title: `Are you sure to ${this.info.isBlockedByYou ? 'unblock' : 'block'} this user?`,
+            title: `Are you sure to ${this.info.value().searchedUser.isBlockedByYou ? 'unblock' : 'block'} this user?`,
             text: `Blocked user will not be able to create new threads with you.`,
             icon: 'warning',
             showCancelButton: true,
@@ -130,16 +134,16 @@ export class UserComponent implements OnInit {
         if (!resp.value) return;
         try {
             await lastValueFrom(
-                this.info.isBlockedByYou
-                    ? this.blocksApiService.Remove(this.info.user.id)
-                    : this.blocksApiService.Block(this.info.user.id)
+                this.info.value().searchedUser.isBlockedByYou
+                    ? this.blocksApiService.Remove(this.info.value().searchedUser.user.id)
+                    : this.blocksApiService.Block(this.info.value().searchedUser.user.id)
             );
         } catch (err) {
             showCommonErrorDialog(err);
             return;
         }
         SwalToast.fire('Success', '', 'success');
-        this.updateFriendInfo(this.info.user.id);
+        this.info.reload();
         this.myContactsRepository.updateAll();
     }
 
@@ -148,7 +152,7 @@ export class UserComponent implements OnInit {
         if (this.isCommonThreadsShown && !this.commonThreadsRepo) {
             this.commonThreadsRepo = new CommonThreadRepository(
                 this.contactsApiService,
-                this.info.user.id
+                this.info.value().searchedUser.user.id
             );
             this.commonThreadsRepo.updateAll();
         }

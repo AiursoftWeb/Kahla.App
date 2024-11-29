@@ -1,4 +1,4 @@
-import { Component, Input, model } from '@angular/core';
+import { Component, model, input } from '@angular/core';
 
 @Component({
     selector: 'app-toggle-menu-item',
@@ -7,7 +7,7 @@ import { Component, Input, model } from '@angular/core';
     standalone: false,
 })
 export class ToggleMenuItemComponent {
-    @Input() title = 'option';
-    @Input() iconClasses = 'fas fa-cogs';
+    readonly title = input('option');
+    readonly iconClasses = input('fas fa-cogs');
     value = model.required<boolean>();
 }
