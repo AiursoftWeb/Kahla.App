@@ -7,7 +7,7 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
 @Component({
     selector: 'app-thread-info-public',
     templateUrl: '../Views/thread-info-public.html',
-    styleUrls: ['../Styles/thread-info-public.scss'],
+    styleUrls: ['../Styles/thread-info-public.scss', '../Styles/menu.scss', '../Styles/button.scss'],
     standalone: false,
 })
 export class ThreadInfoPublicComponent {

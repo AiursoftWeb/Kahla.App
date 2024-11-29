@@ -33,7 +33,8 @@ export class ThreadsListComponent {
     constructor(public cacheService: CacheService) {}
 
     public onlineStatusOf(thread: ThreadInfoJoined): boolean | null {
-        if (!this.cacheService?.mine()?.me || thread.topTenMembers.length <= 1) return null;
+        if (!this.cacheService?.mine()?.me || thread.topTenMembers.length > 2) return null;
+        if (thread.topTenMembers.length === 1) return true;
         return thread.topTenMembers
             .filter(t => t.user.id !== this.cacheService.mine().me.id)
             .some(t => t.online);

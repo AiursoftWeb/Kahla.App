@@ -2,6 +2,7 @@
 @if (threadInfo.value()) {
     <app-thread-basic-info [threadInfo]="threadInfo.value()" />
 }
+<div class="menu-header">Owner</div>
 @if (ownerInfo.value()) {
     <app-user-basic-info
         [user]="ownerInfo.value().searchedUser.user"
