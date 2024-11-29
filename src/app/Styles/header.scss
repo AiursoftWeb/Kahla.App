@@ -5,6 +5,17 @@
  *    Header
  ******************** */
 
+.phone-statusbar-mask {
+  @extend %full-fixed-width;
+  position: fixed;
+
+  background: var(--primary-color-depth3);
+  height: 200px;
+  top: -200px;
+  z-index: 999;
+  
+}
+
 .header {
   @extend %full-fixed-width;
   position: fixed;
@@ -13,7 +24,7 @@
   background: var(--header-bg);
   backdrop-filter: blur(8px);
   height: 45px;
-  top: 0;
+  top: 0px;
   overflow: auto;
   z-index: 999;
   display: grid;
