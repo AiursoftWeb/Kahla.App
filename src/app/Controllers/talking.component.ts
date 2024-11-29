@@ -30,20 +30,17 @@ export class TalkingComponent {
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
     private chatInputHeight: number;
-    public lastAutoLoadMoreTimestamp = 0;
 
     public repo?: KahlaMessagesRepo;
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
-
     public hasNewMessages = signal(false);
+
     // route input
-    public threadId = input.required<number>({
-        alias: 'id',
-    });
+    public id = input.required<number>();
 
     public threadInfo = resource({
-        request: () => this.threadId(),
+        request: () => this.id(),
         loader: ({ request }) => {
             try {
                 return this.threadInfoCacheDictionary.get(request);
@@ -61,12 +58,12 @@ export class TalkingComponent {
         public threadInfoCacheDictionary: ThreadInfoCacheDictionary
     ) {
         effect(async cleanup => {
-            if (!this.threadId()) return;
+            if (!this.id()) return;
             this.parsedMessages.set([]);
             // Obtain the websocket connection token
             try {
                 const resp = await lastValueFrom(
-                    messageApiService.InitThreadWebsocket(this.threadId())
+                    messageApiService.InitThreadWebsocket(this.id())
                 );
                 this.repo = new KahlaMessagesRepo(resp.webSocketEndpoint, true);
                 const sub = this.repo.messages.messages.onChange.subscribe(event => {
@@ -170,9 +167,6 @@ export class TalkingComponent {
     }
 
     public send({ content }: { content: MessageContent }) {
-        // this.temp_demo_msg.push(
-        //     new ParsedMessage(uuid4(), content, this.cacheService.cachedData.me.id, new Date())
-        // );
         this.repo.send({
             content: JSON.stringify(content),
             senderId: this.cacheService.mine().me.id ?? uuid4(),

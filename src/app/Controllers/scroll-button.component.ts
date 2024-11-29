@@ -18,12 +18,6 @@ export class ScrollButtonComponent implements AfterViewInit {
 
     @HostListener('window:scroll', [])
     onScroll() {
-        // const belowWindowPercent =
-        //     (document.documentElement.scrollHeight -
-        //         window.scrollY -
-        //         document.documentElement.clientHeight) /
-        //     document.documentElement.clientHeight;
-
         if (this.direction() === 'up') {
             const upperPixels = window.scrollY;
             this.hide.set(upperPixels < 300);

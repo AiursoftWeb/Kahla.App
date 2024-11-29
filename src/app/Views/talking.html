@@ -6,10 +6,10 @@
     [title]="threadInfo.value() | threadName"
     [button]="true"
     buttonIcon="fas fa-ellipsis"
-    [buttonLink]="'/thread/' + threadId()"
+    [buttonLink]="'/thread/' + id()"
 />
 <!-- <app-load-more-button></app-load-more-button> -->
-<app-message-list [messages]="parsedMessages()" />
+<app-message-list [messages]="parsedMessages()" [lastReadIndex]="threadInfo.value().messageContext.unReadAmount" />
 <app-scroll-button
     id="scrollDown"
     direction="down"
