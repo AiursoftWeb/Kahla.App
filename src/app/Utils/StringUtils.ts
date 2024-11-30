@@ -11,7 +11,7 @@ export function urlBase64ToUint8Array(base64String: string): Uint8Array {
     return outputArray;
 }
 
-export function checkEmoji(text: string): boolean {
+export function checkSingleEmoji(text: string): boolean {
     if (text.length > 2) {
         return false;
     }

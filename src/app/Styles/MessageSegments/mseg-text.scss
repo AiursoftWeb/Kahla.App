@@ -3,6 +3,10 @@ p {
   word-break: break-word;
   margin: 0;
   white-space: pre-wrap;
+
+  &.emoji {
+    font-size: 6em;
+  }
 }
 
 :host-context(.left) p ::ng-deep .chat-inline-link {

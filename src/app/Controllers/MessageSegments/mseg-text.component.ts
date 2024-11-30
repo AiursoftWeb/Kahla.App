@@ -9,6 +9,7 @@ import {
 import { MessageSegmentText } from '../../Models/Messages/MessageSegments';
 import Autolinker, { MentionMatch } from 'autolinker';
 import { Router } from '@angular/router';
+import { checkSingleEmoji } from '../../Utils/StringUtils';
 
 @Component({
     selector: 'app-mseg-text',
@@ -35,6 +36,8 @@ export class MessageSegmentTextComponent {
             },
         });
     });
+
+    singleEmoji = computed(() => checkSingleEmoji(this.content().content));
 
     textContainer = viewChild<ElementRef<HTMLElement>>('textContainer');
 
