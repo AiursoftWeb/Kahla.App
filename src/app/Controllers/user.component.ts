@@ -1,7 +1,6 @@
 import { Component, computed, effect, input, linkedSignal, resource } from '@angular/core';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
-import { SwalToast } from '../Utils/Toast';
+import { SwalToast, YesNoDialog } from '../Utils/Toast';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
@@ -9,6 +8,7 @@ import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { BlocksApiService } from '../Services/Api/BlocksApiService';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { CommonThreadRepository } from '../Repositories/CommonThreadsRepository';
+import Swal from 'sweetalert2';
 
 @Component({
     templateUrl: '../Views/user.html',
@@ -45,17 +45,18 @@ export class UserComponent {
         private myContactsRepository: MyContactsRepository
     ) {
         effect(() => {
-            if (this.isCommonThreadsShown() && this.commonThreadsRepo().status === 'uninitialized') {
+            if (
+                this.isCommonThreadsShown() &&
+                this.commonThreadsRepo().status === 'uninitialized'
+            ) {
                 this.commonThreadsRepo().updateAll();
             }
         });
     }
 
     public async delete(id: string) {
-        const resp = await Swal.fire({
+        const resp = await YesNoDialog.fire({
             title: 'Are you sure to delete a friend?',
-            icon: 'warning',
-            showCancelButton: true,
         });
         if (!resp.value) return;
         try {
@@ -128,11 +129,9 @@ export class UserComponent {
     }
 
     public async block() {
-        const resp = await Swal.fire({
+        const resp = await YesNoDialog.fire({
             title: `Are you sure to ${this.info.value().searchedUser.isBlockedByYou ? 'unblock' : 'block'} this user?`,
             text: `Blocked user will not be able to create new threads with you.`,
-            icon: 'warning',
-            showCancelButton: true,
         });
         if (!resp.value) return;
         try {
@@ -145,7 +144,7 @@ export class UserComponent {
             showCommonErrorDialog(err);
             return;
         }
-        SwalToast.fire('Success', '', 'success');
+        SwalToast.fire();
         this.info.reload();
         this.myContactsRepository.updateAll();
     }

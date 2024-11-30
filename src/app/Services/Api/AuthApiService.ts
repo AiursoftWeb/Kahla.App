@@ -21,7 +21,7 @@ export class AuthApiService {
         enableEmailNotification?: boolean;
         enableEnterToSendMessage?: boolean;
         enableHideMyOnlineStatus?: boolean;
-        listInSearchResult?: boolean;
+        allowSearchByName?: boolean;
         allowHardInvitation?: boolean;
     }): Observable<AiurProtocol> {
         return this.apiService.Patch(AuthApiService.serverPath + '/update-me', updateModel);

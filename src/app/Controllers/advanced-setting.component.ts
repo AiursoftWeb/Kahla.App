@@ -38,7 +38,7 @@ export class AdvancedSettingComponent implements OnInit {
                 enableEmailNotification: this.options.enableEmailNotification,
                 enableEnterToSendMessage: this.options.enableEnterToSendMessage,
                 enableHideMyOnlineStatus: this.options.enableHideMyOnlineStatus,
-                listInSearchResult: this.options.listInSearchResult,
+                allowSearchByName: this.options.allowSearchByName,
                 allowHardInvitation: this.options.allowHardInvitation,
             })
             .subscribe(

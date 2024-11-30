@@ -9,6 +9,7 @@ import { HomeService } from '../Services/HomeService';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { WebpushService } from '../Services/WebpushService';
+import { YesNoDialog } from '../Utils/Toast';
 
 @Component({
     selector: 'app-settings',
@@ -38,10 +39,8 @@ export class SettingsComponent {
     }
 
     public async SignOut() {
-        const willSignOut = await Swal.fire({
+        const willSignOut = await YesNoDialog.fire({
             title: 'Are you sure to sign out?',
-            icon: 'warning',
-            showCancelButton: true,
         });
 
         if (!willSignOut.value) return;

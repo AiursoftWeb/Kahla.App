@@ -3,6 +3,6 @@ export interface AppOptions {
     enableEmailNotification: boolean;
     enableEnterToSendMessage: boolean;
     enableHideMyOnlineStatus: boolean;
-    listInSearchResult: boolean;
+    allowSearchByName: boolean;
     allowHardInvitation: boolean;
 }

@@ -3,7 +3,7 @@ import { lastValueFrom } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
-import { SwalToast } from '../Utils/Toast';
+import { SwalToast, YesNoDialog } from '../Utils/Toast';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MappedRepository, StaticRepository } from '../Repositories/RepositoryBase';
@@ -79,11 +79,9 @@ export class ThreadInfoComponent {
             return;
         }
 
-        const confirmResult = await Swal.fire({
+        const confirmResult = await YesNoDialog.fire({
             title: isOwner && memberCount === 1 ? 'Dissolve this thread?' : 'Leave this thread?',
             text: 'You will not be able to undo this action.',
-            icon: 'warning',
-            showCancelButton: true,
         });
 
         if (confirmResult.isDismissed) {
