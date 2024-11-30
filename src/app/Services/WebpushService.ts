@@ -129,7 +129,7 @@ export class WebpushService {
             enabled: enabled,
         });
         if (enabled) {
-            await this.subscribeUser();
+            await this.subscribeUser(true);
         } else {
             await this.unbindDevice();
         }
@@ -180,10 +180,14 @@ export class WebpushService {
         this.requestUserApproval();
     }
 
-    public async subscribeUser() {
+    public async subscribeUser(forceUpdate= false) {
         if (!this.notificationAvail) return;
         const registration = await navigator.serviceWorker.ready;
         let sub = await registration.pushManager.getSubscription();
+        if (sub && forceUpdate) {
+            await sub.unsubscribe();
+            sub = null;
+        }
         if (!sub) {
             sub = await registration.pushManager.subscribe(this.pushServerMetadata);
             console.log('[ OK ] Push subscription not exists, created new one.');
