@@ -10,5 +10,19 @@ export const SwalToast = Swal.mixin({
     didOpen: toast => {
         toast.addEventListener('mouseenter', Swal.stopTimer);
         toast.addEventListener('mouseleave', Swal.resumeTimer);
-    },
+    }
+});
+
+export const YesNoDialog = Swal.mixin({
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+});
+
+export const YesNoDialogSerious = YesNoDialog.mixin({
+    input: 'checkbox',
+    inputValue: 0,
+    inputPlaceholder: 'Yes, I know what I am doing.',
+    inputValidator: result => !result && 'You must confirm that you know what you are doing.',
 });
