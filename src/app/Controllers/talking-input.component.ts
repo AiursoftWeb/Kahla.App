@@ -1,6 +1,6 @@
 import {
+    afterRenderEffect,
     Component,
-    effect,
     ElementRef,
     EventEmitter,
     model,
@@ -42,17 +42,15 @@ export class TalkingInputComponent {
         public cacheService: CacheService,
         private themeService: ThemeService
     ) {
-        effect(() => {
+        afterRenderEffect(() => {
             this.textContent();
             if (this.chatInput()) {
                 //workaround https://stackoverflow.com/questions/2803880/is-there-a-way-to-get-a-textarea-to-stretch-to-fit-its-content-without-using-php
-                setTimeout(() => {
-                    this.chatInput().nativeElement.style.setProperty('--content-height', '');
-                    this.chatInput().nativeElement.style.setProperty(
-                        '--content-height',
-                        this.chatInput().nativeElement.scrollHeight + 'px'
-                    );
-                }, 0);
+                this.chatInput().nativeElement.style.setProperty('--content-height', '');
+                this.chatInput().nativeElement.style.setProperty(
+                    '--content-height',
+                    this.chatInput().nativeElement.scrollHeight + 'px'
+                );
             }
         });
     }

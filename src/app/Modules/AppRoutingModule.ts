@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddFriendComponent } from '../Controllers/add-friend.component';
+import { SearchServerComponent } from '../Controllers/search-server.component';
 import { TalkingComponent } from '../Controllers/talking.component';
 import { SignInComponent } from '../Controllers/signin.component';
 import { UserComponent } from '../Controllers/user.component';
@@ -24,7 +24,7 @@ import { InviteMemberComponent } from '../Controllers/invite-member.component';
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'addfriend', component: AddFriendComponent },
+    { path: 'search-server', component: SearchServerComponent },
     { path: 'blocks', component: BlocksListComponent },
     { path: 'new-thread', component: NewThreadComponent },
     { path: 'talking/:id', component: TalkingComponent },

@@ -180,7 +180,7 @@ export class WebpushService {
         this.requestUserApproval();
     }
 
-    public async subscribeUser(forceUpdate= false) {
+    public async subscribeUser(forceUpdate = false) {
         if (!this.notificationAvail) return;
         const registration = await navigator.serviceWorker.ready;
         let sub = await registration.pushManager.getSubscription();

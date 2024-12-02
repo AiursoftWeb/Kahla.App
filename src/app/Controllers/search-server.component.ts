@@ -6,11 +6,11 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ServerThreadsRepository } from '../Repositories/ServerThreadsRepository';
 
 @Component({
-    templateUrl: '../Views/add-friend.html',
+    templateUrl: '../Views/search-server.html',
     styleUrls: ['../Styles/search-part.scss', '../Styles/button.scss', '../Styles/reddot.scss'],
     standalone: false,
 })
-export class AddFriendComponent {
+export class SearchServerComponent {
     public loadingImgURL = Values.loadingImgURL;
 
     searchTerm = signal('');

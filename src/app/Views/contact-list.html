@@ -27,7 +27,10 @@
             }
         </div>
         @if (contextMenu()) {
-            <button [cdkMenuTriggerFor]="contextMenu()" (click)="$event.stopPropagation(); contextMenuClicked.emit(contact)">
+            <button
+                [cdkMenuTriggerFor]="contextMenu()"
+                (click)="$event.stopPropagation(); contextMenuClicked.emit(contact)"
+            >
                 <i class="fas fa-ellipsis"></i>
             </button>
         } @else if (selectable() && selectedIds().includes(contact.user.id)) {

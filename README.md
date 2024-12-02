@@ -38,8 +38,8 @@ For our official website, please view [here](https://www.kahla.app).
 
 To develope Kahla, you need to install the following components:
 
--   Git
--   Nodejs and npm
+- Git
+- Nodejs and npm
 
 We **strongly suggest** using [Visual Studio Code](https://code.visualstudio.com) to develope this project.
 

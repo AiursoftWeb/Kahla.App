@@ -1,12 +1,12 @@
 // vjs-player.component.ts
 import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-  viewChild,
-  input
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewEncapsulation,
+    viewChild,
+    input,
 } from '@angular/core';
 import videojs from 'video.js';
 

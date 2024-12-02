@@ -1,6 +1,9 @@
 <app-header title="Profile" [processing]="!info"></app-header>
 @if (info.value()) {
-    <app-user-basic-info [user]="info.value().searchedUser.user" [online]="info.value().searchedUser.online" />
+    <app-user-basic-info
+        [user]="info.value().searchedUser.user"
+        [online]="info.value().searchedUser.online"
+    />
     <div class="menu-button" *ngIf="!info.value().searchedUser.user.emailConfirmed">
         <div class="img warning">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>

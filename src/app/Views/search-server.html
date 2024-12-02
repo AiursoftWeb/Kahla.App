@@ -1,5 +1,5 @@
 ﻿<app-header
-    title="Add New"
+    title="Search Server"
     [closeDirectly]="true"
     [processing]="contactsRepo?.status === 'loading' || threadsRepo?.status === 'loading'"
 ></app-header>
@@ -14,7 +14,7 @@
                 dotValue: contactsRepo?.total ?? 0,
             },
             {
-                title: 'Groups',
+                title: 'Threads',
                 className: 'fas fa-users',
                 showDot: !!threadsRepo,
                 dotValue: threadsRepo?.total ?? 0,

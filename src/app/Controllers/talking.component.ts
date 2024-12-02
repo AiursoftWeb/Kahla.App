@@ -29,7 +29,6 @@ export class TalkingComponent {
     private windowInnerHeight = 0;
     private formerWindowInnerHeight = 0;
     private keyBoardHeight = 0;
-    private chatInputHeight: number;
 
     public repo?: KahlaMessagesRepo;
     public parsedMessages = signal<ParsedMessage[]>([]);
@@ -62,9 +61,7 @@ export class TalkingComponent {
             this.parsedMessages.set([]);
             // Obtain the websocket connection token
             try {
-                const resp = await lastValueFrom(
-                    messageApiService.InitThreadWebsocket(this.id())
-                );
+                const resp = await lastValueFrom(messageApiService.InitThreadWebsocket(this.id()));
                 this.repo = new KahlaMessagesRepo(resp.webSocketEndpoint, true);
                 const sub = this.repo.messages.messages.onChange.subscribe(event => {
                     const newItem = ParsedMessage.fromCommit(event.newNode.value);
@@ -153,10 +150,6 @@ export class TalkingComponent {
         //         );
         //     }
         // }
-    }
-
-    public getAtListMaxHeight(): number {
-        return window.innerHeight - this.chatInputHeight - 106;
     }
 
     public async loadMore() {

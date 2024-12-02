@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './Controllers/app.component';
 import { ConversationsComponent } from './Controllers/conversations.component';
 import { FriendsComponent } from './Controllers/friends.component';
-import { AddFriendComponent } from './Controllers/add-friend.component';
+import { SearchServerComponent } from './Controllers/search-server.component';
 import { SettingsComponent } from './Controllers/settings.component';
 import { TalkingComponent } from './Controllers/talking.component';
 import { SignInComponent } from './Controllers/signin.component';
@@ -101,14 +101,14 @@ import { DropFileDirective } from './Directives/DropFileDirective';
         MessageSegmentVideoComponent,
         FileSharingButtonsComponent,
         CdkMenuModule,
-        DropFileDirective
+        DropFileDirective,
     ],
     declarations: [
         AboutComponent,
         AppComponent,
         ConversationsComponent,
         FriendsComponent,
-        AddFriendComponent,
+        SearchServerComponent,
         SettingsComponent,
         TalkingComponent,
         SignInComponent,
