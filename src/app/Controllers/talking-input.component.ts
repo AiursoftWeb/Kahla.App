@@ -2,9 +2,8 @@ import {
     afterRenderEffect,
     Component,
     ElementRef,
-    EventEmitter,
     model,
-    Output,
+    output,
     signal,
     viewChild,
 } from '@angular/core';
@@ -26,17 +25,15 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 export class TalkingInputComponent {
     textContent = signal('');
     showPanel = model(false);
+    sendMessage = output<{
+        content: MessageContent;
+    }>();
 
     private picker: EmojiButton;
-
     private chatBox = viewChild<ElementRef<HTMLElement>>('chatBox');
     private chatInput = viewChild<ElementRef<HTMLTextAreaElement>>('chatInput');
 
     recorder = new VoiceRecorder(180);
-
-    @Output() sendMessage = new EventEmitter<{
-        content: MessageContent;
-    }>();
 
     constructor(
         public cacheService: CacheService,

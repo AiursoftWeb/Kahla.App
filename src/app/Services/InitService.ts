@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthApiService } from './Api/AuthApiService';
 import { Router } from '@angular/router';
-import { MessageService } from './MessageService';
 import { CacheService } from './CacheService';
 import { ThemeService } from './ThemeService';
 import Swal from 'sweetalert2';
@@ -20,9 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class InitService {
     constructor(
         private apiService: ApiService,
-        private authApiService: AuthApiService,
         private router: Router,
-        private messageService: MessageService,
         private cacheService: CacheService,
         private themeService: ThemeService,
         private webpushService: WebpushService,
@@ -85,7 +81,6 @@ export class InitService {
 
     public destroy(): void {
         this.eventService.destroyConnection();
-        this.messageService.resetVariables();
         localStorage.clear();
     }
 }

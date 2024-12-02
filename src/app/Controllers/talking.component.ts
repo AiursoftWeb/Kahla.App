@@ -26,10 +26,6 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
     standalone: false,
 })
 export class TalkingComponent {
-    private windowInnerHeight = 0;
-    private formerWindowInnerHeight = 0;
-    private keyBoardHeight = 0;
-
     public repo?: KahlaMessagesRepo;
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
@@ -107,49 +103,16 @@ export class TalkingComponent {
         });
     }
 
-    @HostListener('window:resize', [])
-    onResize() {
-        if (window.innerHeight < this.windowInnerHeight) {
-            this.keyBoardHeight = this.windowInnerHeight - window.innerHeight;
-            window.scroll(0, window.scrollY + this.keyBoardHeight);
-        } else if (
-            window.innerHeight - this.formerWindowInnerHeight > 100 &&
-            this.messageService.belowWindowPercent > 0.2
-        ) {
-            window.scroll(0, window.scrollY - this.keyBoardHeight);
-        } else if (window.innerHeight - this.formerWindowInnerHeight > 100) {
-            window.scroll(0, window.scrollY);
-        }
-        this.formerWindowInnerHeight = window.innerHeight;
-    }
-
     @HostListener('window:scroll', [])
     onScroll() {
-        this.messageService.updateBelowWindowPercent();
-        if (this.messageService.belowWindowPercent <= 0) {
+        const belowWindowPercent =
+            (document.documentElement.scrollHeight -
+                window.scrollY -
+                document.documentElement.clientHeight) /
+            document.documentElement.clientHeight;
+        if (belowWindowPercent <= 0) {
             this.hasNewMessages.set(false);
         }
-        // if (
-        //     window.scrollY <= 0 &&
-        //     document.documentElement.scrollHeight > document.documentElement.clientHeight + 100 &&
-        //     this.messageService.conversation &&
-        //     !this.messageService.messageLoading
-        // ) {
-        //     const now = Date.now();
-        //     const interval =
-        //         this.messageService.showMessagesCount < this.messageService.localMessages.length
-        //             ? 10
-        //             : 2000;
-        //     if (this.lastAutoLoadMoreTimestamp + interval < now) {
-        //         this.loadMore();
-        //         this.lastAutoLoadMoreTimestamp = now;
-        //     } else {
-        //         setTimeout(
-        //             () => this.onScroll(),
-        //             this.lastAutoLoadMoreTimestamp + interval + 10 - now
-        //         );
-        //     }
-        // }
     }
 
     public async loadMore() {
