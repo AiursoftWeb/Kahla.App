@@ -14,6 +14,8 @@ import type { EmojiButton } from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { VoiceRecorder } from '../Utils/VoiceRecord';
 import { MessageSegmentText } from '../Models/Messages/MessageSegments';
+import Swal from 'sweetalert2';
+import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 
 @Component({
     selector: 'app-talking-input',
@@ -142,6 +144,33 @@ export class TalkingInputComponent {
             });
             this.textContent.set('');
         }
+    }
+
+    fileDropped(items: [File, string][]) {
+        Swal.fire({
+            title: 'Dropped files',
+            text: items.map(([, name]) => name).join('\n'),
+        });
+    }
+
+    async selectFile(type: 'img' | 'video' | 'file') {
+        let accept: string[] | '*/*' = '*/*';
+        switch (type) {
+            case 'img':
+                accept = imageFileTypes;
+                break;
+            case 'video':
+                accept = ['video/mp4', 'video/webm'];
+                break;
+        }
+
+        const res = await selectFiles(true, accept);
+        if (!res) return;
+        console.log(res);
+        Swal.fire({
+            title: 'Selected files',
+            text: res.map(t => t.name).join('\n'),
+        });
     }
 
     // inputKeyup(e: KeyboardEvent) {

@@ -40,7 +40,7 @@ export function useFileDropper(
             )
         )
             .flat()
-            .filter(t => fileAccept.includes(t[0].type));
+            .filter(t => fileAccept.includes(t[0].type) || fileAccept.includes('*/*'));
 
         if (files.length > 0) {
             onSuccess?.(files);

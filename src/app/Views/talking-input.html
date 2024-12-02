@@ -17,7 +17,7 @@
         </li>
     </ul> -->
 <div class="chatbox-placeholder" [class.active-list]="showPanel()"></div>
-<div class="chatbox-wrapper">
+<div class="chatbox-wrapper" appDropFile (droppedFiles)="fileDropped($event)">
     <div class="chat-box" #chatBox>
         <div
             class="chat-part"
@@ -59,41 +59,18 @@
         @if (showPanel()) {
             <div class="more-panel">
                 <!--Refactor to tool class-->
-                <div class="of4">
-                    <input
-                        type="file"
-                        name="image"
-                        id="image"
-                        class="inputfile"
-                        #imageInput
-                        accept="image/png, image/jpeg, image/bmp, image/gif, image/svg+xml"
-                    />
-                    <label for="image"
-                        ><i style="color: #ff9800" class="far fa-file-image"></i>
-                        <div class="text">Send Image</div>
-                    </label>
-                </div>
-                <div class="of4">
-                    <input
-                        type="file"
-                        name="video"
-                        id="video"
-                        class="inputfile"
-                        #videoInput
-                        accept="video/mp4, video/x-m4v, video/*"
-                    />
-                    <label for="video"
-                        ><i style="color: #00cc9c" class="far fa-file-video"></i>
-                        <div class="text">Send Video</div>
-                    </label>
-                </div>
-                <div class="of4">
-                    <input type="file" name="file" id="file" class="inputfile" #fileInput />
-                    <label for="file"
-                        ><i style="color: #4694f6" class="far fa-file-alt"></i>
-                        <div class="text">Send File</div>
-                    </label>
-                </div>
+                <button (click)="selectFile('img')">
+                    <i style="color: #ff9800" class="far fa-file-image"></i>
+                    <div class="text">Send Image</div>
+                </button>
+                <button (click)="selectFile('video')">
+                    <i style="color: #00cc9c" class="far fa-file-video"></i>
+                    <div class="text">Send Video</div>
+                </button>
+                <button (click)="selectFile('file')">
+                    <i style="color: #4694f6" class="far fa-file-alt"></i>
+                    <div class="text">Send File</div>
+                </button>
             </div>
         }
     </div>

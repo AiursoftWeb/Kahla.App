@@ -83,6 +83,7 @@ import { UserBasicInfoComponent } from './Controllers/user-basic-info.component'
 import { InviteMemberComponent } from './Controllers/invite-member.component';
 import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCacheDictionary';
 import { CdkMenuModule } from '@angular/cdk/menu';
+import { DropFileDirective } from './Directives/DropFileDirective';
 
 @NgModule({
     imports: [
@@ -99,7 +100,8 @@ import { CdkMenuModule } from '@angular/cdk/menu';
         ThreadNamePipe,
         MessageSegmentVideoComponent,
         FileSharingButtonsComponent,
-        CdkMenuModule
+        CdkMenuModule,
+        DropFileDirective
     ],
     declarations: [
         AboutComponent,

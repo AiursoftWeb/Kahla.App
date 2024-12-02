@@ -135,34 +135,28 @@
     }
 
     .more-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
       width: 100%;
+      margin-top: 15px;
 
-      .of4 {
-        text-align: center;
+      button {
+        background: transparent;
+        border: none;
+        padding: 10px;
+        height: 90px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        width: 100px;
+        @include effects.hover-effect(var(--default-foreground-20), var(--default-foreground-40));
 
-        .inputfile {
-          width: 0.1px;
-          height: 0.1px;
-          opacity: 0;
-          overflow: hidden;
-          position: absolute;
-          z-index: -1;
-        }
-
-        label {
-          @include effects.hover-effect(var(--default-foreground-20), var(--default-foreground-40));
-          text-align: center;
-          padding: 10px;
+        .text {
           margin-top: 15px;
-          height: 70px;
-          border-radius: 5px;
-          color: white;
-          display: inline-block;
-          cursor: pointer;
-          width: 80px;
-          transition: all 0.15s ease-out;
+          color: #727272;
+          user-select: none;
+          font-size: 12px;
         }
       }
     }
@@ -171,12 +165,6 @@
 
 i {
   font-size: 1.5rem;
-}
-
-.of4 .text {
-  margin-top: 15px;
-  color: #727272;
-  user-select: none;
 }
 
 .oneResult {
