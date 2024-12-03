@@ -1,1 +1,15 @@
-<p #textContainer [innerHTML]="contentEncoded()" [class.emoji]="singleEmoji()"></p>
+@for (item of textSegments(); track $index) {
+    @if (asMentionAnnotation(item); as itemMention) {
+        <a class="content" routerLink="/user/{{ itemMention.targetId }}">
+            {{ itemMention.content }}
+        </a>
+    }
+    @else {
+        <p
+        class="content"
+        [innerHTML]="asPureText(item) | autoEncodeLink: 'chat-inline-link'"
+        [class.emoji]="singleEmoji()"
+    ></p>
+    }
+    
+}

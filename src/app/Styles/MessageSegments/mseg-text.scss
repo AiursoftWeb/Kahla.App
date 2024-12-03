@@ -1,5 +1,9 @@
-p {
+:host {
   text-align: left;
+}
+
+.content {
+  display: inline;
   word-break: break-word;
   margin: 0;
   white-space: pre-wrap;
@@ -9,10 +13,10 @@ p {
   }
 }
 
-:host-context(.left) p ::ng-deep .chat-inline-link {
+:host-context(.left) .content ::ng-deep .chat-inline-link {
   color: var(--left-a-color);
 }
 
-:host-context(.right) p ::ng-deep .chat-inline-link {
+:host-context(.right) .content ::ng-deep .chat-inline-link {
   color: white;
 }
