@@ -103,22 +103,9 @@ export class MessageTextInputDirective {
         }
     }
 
-    insertToCaret(text: string) {
-        if (!this.caretInfo) {
-            // just append to the end
-            this.elementRef.nativeElement.appendChild(document.createTextNode(text));
-        }
-
-        this.caretInfo.deleteContents();
-        this.caretInfo.insertNode(document.createTextNode(text));
-        this.caretInfo.collapse(false);
-
-        this.backward();
-    }
-
-    selectionChanged() {
+    private getCurrentCaret(): Range | null {
         const selection = window.getSelection();
-        if (!selection.rangeCount) return;
+        if (!selection.rangeCount) return null;
 
         const range = selection.getRangeAt(0);
         // check if selection is in the current element
@@ -126,7 +113,30 @@ export class MessageTextInputDirective {
             range.startContainer &&
             checkIfChildOf(range.startContainer, this.elementRef.nativeElement)
         ) {
-            this.caretInfo = range.cloneRange();
+            return range;
+        }
+
+        return null;
+    }
+
+    insertToCaret(text: string) {
+        const caret = this.getCurrentCaret() ?? this.caretInfo;
+        if (!caret) {
+            // just append to the end
+            this.elementRef.nativeElement.appendChild(document.createTextNode(text));
+        }
+
+        caret.deleteContents();
+        caret.insertNode(document.createTextNode(text));
+        caret.collapse(false);
+
+        this.backward();
+    }
+
+    selectionChanged() {
+        const caret = this.getCurrentCaret();
+        if (caret) {
+            this.caretInfo = caret.cloneRange();
         }
     }
 }

@@ -48,6 +48,7 @@
                 #chatInput="appMessageTextInput"
                 [(textContent)]="textContent"
                 (click)="startInput()"
+                (keydown)="inputKeydown($event)"
             ></div>
             <button
                 class="button primary"
