@@ -21,7 +21,7 @@
     <div class="chat-box" #chatBox>
         <div
             class="chat-part"
-            [class.empty]="!textContent() || textContent().trim().length === 0"
+            [class.empty]="textContent().length === 0"
             [class.no-send-button]="cacheService.mine()?.privateSettings?.enableEnterToSendMessage"
         >
             <i
@@ -30,7 +30,7 @@
                 (click)="emoji()"
                 style="margin-right: 7px; margin-top: 2px"
             ></i>
-            <textarea
+            <!-- <textarea
                 id="chatInput"
                 #chatInput
                 appAutofocus
@@ -40,7 +40,15 @@
                 (keydown)="inputKeydown($event)"
                 rows="1"
                 maxlength="2048"
-            ></textarea>
+            ></textarea> -->
+            <div
+                class="text-input"
+                appMessageTextInput
+                appAutofocus
+                #chatInput="appMessageTextInput"
+                [(textContent)]="textContent"
+                (click)="startInput()"
+            ></div>
             <button
                 class="button primary"
                 (click)="send()"

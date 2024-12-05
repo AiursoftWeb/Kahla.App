@@ -85,7 +85,7 @@ import { ThreadInfoPublicCacheDictionary } from './Caching/ThreadInfoPublicCache
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { DropFileDirective } from './Directives/DropFileDirective';
 import { AutoEncodeLinkPipe } from './Pipes/auto-encode-links.pipe';
-import { TalkingTextInputComponent } from './Controllers/talking-text-input.component';
+import { MessageTextInputDirective } from './Directives/MessageTextInputDirective';
 
 @NgModule({
     imports: [
@@ -104,7 +104,8 @@ import { TalkingTextInputComponent } from './Controllers/talking-text-input.comp
         FileSharingButtonsComponent,
         CdkMenuModule,
         DropFileDirective,
-        AutoEncodeLinkPipe
+        AutoEncodeLinkPipe,
+        MessageTextInputDirective,
     ],
     declarations: [
         AboutComponent,
@@ -151,7 +152,6 @@ import { TalkingTextInputComponent } from './Controllers/talking-text-input.comp
         ThreadBasicInfoComponent,
         UserBasicInfoComponent,
         InviteMemberComponent,
-        TalkingTextInputComponent,
     ],
     providers: [
         ApiService,

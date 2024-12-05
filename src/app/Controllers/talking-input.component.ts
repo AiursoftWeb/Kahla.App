@@ -1,5 +1,4 @@
 import {
-    afterRenderEffect,
     Component,
     ElementRef,
     model,
@@ -12,9 +11,10 @@ import { MessageContent } from '../Models/Messages/MessageContent';
 import type { EmojiButton } from '@joeattardi/emoji-button';
 import { ThemeService } from '../Services/ThemeService';
 import { VoiceRecorder } from '../Utils/VoiceRecord';
-import { MessageSegmentText } from '../Models/Messages/MessageSegments';
+import { MessageSegmentText, MessageTextWithAnnotate } from '../Models/Messages/MessageSegments';
 import Swal from 'sweetalert2';
 import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
+import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 
 @Component({
     selector: 'app-talking-input',
@@ -23,7 +23,7 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
     standalone: false,
 })
 export class TalkingInputComponent {
-    textContent = signal('');
+    textContent = signal<MessageTextWithAnnotate[]>([]);
     showPanel = model(false);
     sendMessage = output<{
         content: MessageContent;
@@ -31,26 +31,14 @@ export class TalkingInputComponent {
 
     private picker: EmojiButton;
     private chatBox = viewChild<ElementRef<HTMLElement>>('chatBox');
-    private chatInput = viewChild<ElementRef<HTMLTextAreaElement>>('chatInput');
+    private chatInput = viewChild<MessageTextInputDirective>('chatInput');
 
     recorder = new VoiceRecorder(180);
 
     constructor(
         public cacheService: CacheService,
         private themeService: ThemeService
-    ) {
-        afterRenderEffect(() => {
-            this.textContent();
-            if (this.chatInput()) {
-                //workaround https://stackoverflow.com/questions/2803880/is-there-a-way-to-get-a-textarea-to-stretch-to-fit-its-content-without-using-php
-                this.chatInput().nativeElement.style.setProperty('--content-height', '');
-                this.chatInput().nativeElement.style.setProperty(
-                    '--content-height',
-                    this.chatInput().nativeElement.scrollHeight + 'px'
-                );
-            }
-        });
-    }
+    ) {}
 
     public async emoji() {
         if (!this.picker) {
@@ -70,15 +58,7 @@ export class TalkingInputComponent {
     }
 
     public insertToSelection(content: string) {
-        this.textContent.set(
-            this.textContent()
-                ? `${this.textContent().slice(
-                      0,
-                      this.chatInput().nativeElement.selectionStart
-                  )}${content}${this.textContent().slice(this.chatInput().nativeElement.selectionStart)}`
-                : content
-        );
-        // this.updateInputHeight();
+        this.chatInput().insertToCaret(content);
     }
 
     public async record() {
@@ -137,7 +117,8 @@ export class TalkingInputComponent {
                     ],
                 },
             });
-            this.textContent.set('');
+            this.textContent.set([]);
+            this.chatInput().forward();
         }
     }
 

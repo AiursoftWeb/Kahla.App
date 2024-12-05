@@ -1,4 +1,4 @@
-import { MessageTextAnnotatedMention } from './MessageTextAnnotated';
+import { MessageTextAnnotated, MessageTextAnnotatedMention } from './MessageTextAnnotated';
 
 export type MessageSegmentTypes = (
     | MessageSegmentText
@@ -16,9 +16,11 @@ export interface MessageSegmentBase {
     [otherOptions: string]: unknown;
 }
 
+export type MessageTextWithAnnotate = string | MessageTextAnnotated;
+
 export interface MessageSegmentText extends MessageSegmentBase {
     type: 'text';
-    content: string | (string | MessageTextAnnotatedMention)[];
+    content: string | MessageTextWithAnnotate[];
 }
 
 export interface MessageSegmentFileLike extends MessageSegmentBase {

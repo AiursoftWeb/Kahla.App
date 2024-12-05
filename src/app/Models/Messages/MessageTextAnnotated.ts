@@ -5,6 +5,8 @@ export type MessageTextAnnotatedTypes = (
 export interface MessageTextAnnotated {
     annotated: MessageTextAnnotatedTypes;
     content: string;
+    
+    [otherOptions: string]: unknown;
 }
 
 export interface MessageTextAnnotatedMention extends MessageTextAnnotated {

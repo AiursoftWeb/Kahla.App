@@ -56,10 +56,10 @@
       display: flex;
       align-items: end;
 
-      textarea {
+      .text-input {
         width: 100%;
         border: none;
-        border-radius: 6px min(calc(var(--content-height) - 34px), 6px) 0 6px;
+        border-radius: 6px min(calc(100% - 34px), 6px) 0 6px;
         transition:
           border-color ease-in-out 0.15s,
           box-shadow ease-in-out 0.15s,
@@ -75,7 +75,7 @@
         background-color: var(--text-input-bg);
         color: var(--default-textcolor);
         flex: 1 1 auto;
-        height: clamp(34px, var(--content-height), 300px);
+        max-height: 350px;
       }
 
       button {
@@ -117,7 +117,7 @@
           opacity: 0;
         }
 
-        textarea {
+        .text-input {
           border-radius: 6px;
         }
 
@@ -128,7 +128,7 @@
       }
 
       &.no-send-button {
-        textarea {
+        .text-input {
           border-radius: 6px;
         }
       }

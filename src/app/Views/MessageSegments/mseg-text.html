@@ -3,13 +3,11 @@
         <a class="content" routerLink="/user/{{ itemMention.targetId }}">
             {{ itemMention.content }}
         </a>
-    }
-    @else {
+    } @else {
         <p
-        class="content"
-        [innerHTML]="asPureText(item) | autoEncodeLink: 'chat-inline-link'"
-        [class.emoji]="singleEmoji()"
-    ></p>
+            class="content"
+            [innerHTML]="asPureText(item) | autoEncodeLink: 'chat-inline-link'"
+            [class.emoji]="singleEmoji()"
+        ></p>
     }
-    
 }

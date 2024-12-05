@@ -1,8 +1,7 @@
 import { Component, computed, ElementRef, input, viewChild } from '@angular/core';
-import { MessageSegmentText } from '../../Models/Messages/MessageSegments';
+import { MessageSegmentText, MessageTextWithAnnotate } from '../../Models/Messages/MessageSegments';
 import { checkSingleEmoji } from '../../Utils/StringUtils';
 import {
-    MessageTextAnnotated,
     MessageTextAnnotatedMention,
 } from '../../Models/Messages/MessageTextAnnotated';
 
@@ -15,11 +14,11 @@ import {
 export class MessageSegmentTextComponent {
     content = input.required<MessageSegmentText>();
 
-    textSegments = computed<(string | MessageTextAnnotated)[]>(() => {
+    textSegments = computed<MessageTextWithAnnotate[]>(() => {
         if (typeof this.content().content === 'string') {
             return [this.content().content as string];
         } else {
-            return this.content().content as (string | MessageTextAnnotated)[];
+            return this.content().content as MessageTextWithAnnotate[];
         }
     });
 
@@ -31,11 +30,11 @@ export class MessageSegmentTextComponent {
 
     textContainer = viewChild<ElementRef<HTMLElement>>('textContainer');
 
-    asPureText(para: MessageTextAnnotated | string): string {
+    asPureText(para: MessageTextWithAnnotate): string {
         return typeof para === 'string' ? para : para.content;
     }
 
-    asMentionAnnotation(para: MessageTextAnnotated | string): MessageTextAnnotatedMention {
+    asMentionAnnotation(para: MessageTextWithAnnotate): MessageTextAnnotatedMention {
         return typeof para !== 'string' && para.annotated === 'mention'
             ? (para as MessageTextAnnotatedMention)
             : null;
