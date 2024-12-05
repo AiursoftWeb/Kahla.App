@@ -1,6 +1,6 @@
 <div class="chat-avatar">
     @if (!groupWithPrevious()) {
-        <div class="chart-avatar-wrapper" routerLink="/user/{{ message().senderId }}">
+        <div class="chart-avatar-wrapper" [cdkMenuTriggerFor]="menu">
             <img src="{{ userInfo?.iconFilePath | storageUrl }}?w=128&square=true" />
         </div>
     }
@@ -51,3 +51,18 @@
         </label>
     }
 </p>
+
+<ng-template #menu>
+    <div class="popup-menu" cdkMenu>
+        <button cdkMenuItem [routerLink]="['/user', this.message().senderId]">
+            <i class="fas fa-info"></i>
+            <div>View Detail</div>
+        </button>
+        @if (this.userInfo) {
+            <button cdkMenuItem (click)="mention.emit(this.userInfo)">
+                <i class="fas fa-at"></i>
+                <div>Mention</div>
+            </button>
+        }
+    </div>
+</ng-template>

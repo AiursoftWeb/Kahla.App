@@ -30,24 +30,13 @@
                 (click)="emoji()"
                 style="margin-right: 7px; margin-top: 2px"
             ></i>
-            <!-- <textarea
-                id="chatInput"
-                #chatInput
-                appAutofocus
-                [(ngModel)]="textContent"
-                type="text"
-                (click)="startInput()"
-                (keydown)="inputKeydown($event)"
-                rows="1"
-                maxlength="2048"
-            ></textarea> -->
             <div
                 class="text-input"
                 appMessageTextInput
                 appAutofocus
                 #chatInput="appMessageTextInput"
                 [(textContent)]="textContent"
-                (click)="startInput()"
+                (focus)="startInput()"
                 (keydown)="inputKeydown($event)"
             ></div>
             <button

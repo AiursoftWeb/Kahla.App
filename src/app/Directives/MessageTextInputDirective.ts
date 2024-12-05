@@ -2,6 +2,7 @@ import { Directive, ElementRef, model } from '@angular/core';
 import { MessageTextWithAnnotate } from '../Models/Messages/MessageSegments';
 import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnotated';
 import { checkIfChildOf } from '../Utils/DomUtils';
+import { KahlaUser } from '../Models/KahlaUser';
 
 @Directive({
     selector: '[appMessageTextInput]',
@@ -30,17 +31,17 @@ export class MessageTextInputDirective {
     }
 
     private forwardInternal() {
+        // We cannot use angular component to render since angular relies on the assumption that the DOM is immutable outside angular.
         const container = this.elementRef.nativeElement;
         container.innerHTML = '';
         for (const item of this.textContent()) {
             if (typeof item !== 'string' && item.annotated === 'mention') {
-                const mentionSpan = document.createElement('span');
-                mentionSpan.contentEditable = 'false';
-                mentionSpan.className = 'mention-tag';
-                mentionSpan.setAttribute('data-mention', '');
-                mentionSpan.setAttribute('data-mention-id', `/user/${item.targetId}`);
-                mentionSpan.textContent = item.content;
-                container.appendChild(mentionSpan);
+                container.appendChild(
+                    this.createMentionNode(
+                        (item as MessageTextAnnotatedMention).targetId,
+                        item.content
+                    )
+                );
             } else {
                 const textSpan = document.createElement('span');
                 textSpan.textContent = this.asPureText(item);
@@ -60,9 +61,6 @@ export class MessageTextInputDirective {
             this.backwardNodes(child, results);
             child = child.nextSibling;
         }
-
-        if (results.at(-1) === '\n') results.pop();
-
         this.textContent.set(results);
     }
 
@@ -119,18 +117,36 @@ export class MessageTextInputDirective {
         return null;
     }
 
-    insertToCaret(text: string) {
+    insertTextToCaret(text: string) {
+        this.insertNodeToCaret(document.createTextNode(text));
+    }
+
+    insertMentionToCaret({ id, nickName }: KahlaUser) {
+        this.insertNodeToCaret(this.createMentionNode(id, `@${nickName}`));
+    }
+
+    insertNodeToCaret(node: Node) {
         const caret = this.getCurrentCaret() ?? this.caretInfo;
         if (!caret) {
             // just append to the end
-            this.elementRef.nativeElement.appendChild(document.createTextNode(text));
+            this.elementRef.nativeElement.appendChild(node);
         }
 
         caret.deleteContents();
-        caret.insertNode(document.createTextNode(text));
+        caret.insertNode(node);
         caret.collapse(false);
 
         this.backward();
+    }
+
+    private createMentionNode(id: string, content: string) {
+        const mentionSpan = document.createElement('span');
+        mentionSpan.contentEditable = 'false';
+        mentionSpan.className = 'mention-tag';
+        mentionSpan.setAttribute('data-mention', '');
+        mentionSpan.setAttribute('data-mention-id', id);
+        mentionSpan.textContent = content;
+        return mentionSpan;
     }
 
     selectionChanged() {

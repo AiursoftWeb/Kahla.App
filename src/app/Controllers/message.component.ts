@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import {
     MessageSegmentBase,
     MessageSegmentFile,
@@ -14,7 +14,7 @@ import { KahlaUser } from '../Models/KahlaUser';
 @Component({
     selector: 'app-message',
     templateUrl: '../Views/message.html',
-    styleUrls: ['../Styles/message.scss'],
+    styleUrls: ['../Styles/message.scss', '../Styles/popups.scss'],
     host: {
         '[class.grouped]': 'groupWithPrevious()',
         '[class.left]': '!isByMe()',
@@ -29,6 +29,9 @@ export class MessageComponent {
     isSending = input<boolean>(false);
     isFailed = input<boolean>(false);
     showNickNames = input<boolean>(false);
+
+    mention = output<KahlaUser>();
+    reply = output();
 
     userInfo?: KahlaUser;
 

@@ -15,6 +15,7 @@ import { MessageSegmentText, MessageTextWithAnnotate } from '../Models/Messages/
 import Swal from 'sweetalert2';
 import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
+import { KahlaUser } from '../Models/KahlaUser';
 
 @Component({
     selector: 'app-talking-input',
@@ -58,7 +59,7 @@ export class TalkingInputComponent {
     }
 
     public insertToSelection(content: string) {
-        this.chatInput().insertToCaret(content);
+        this.chatInput().insertTextToCaret(content);
     }
 
     public async record() {
@@ -149,6 +150,10 @@ export class TalkingInputComponent {
         });
     }
 
+    public mention(targetUser: KahlaUser) {
+        this.chatInput().insertMentionToCaret(targetUser);
+    }
+
     // inputKeyup(e: KeyboardEvent) {
     //     if (e.key === 'Enter') {
     //         e.preventDefault();
@@ -175,25 +180,5 @@ export class TalkingInputComponent {
     //     } else {
     //         this.showUserList = false;
     //     }
-    // }
-
-    // public complete(nickname: string): void {
-    //     const input = document.getElementById('chatInput') as HTMLTextAreaElement;
-    //     const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
-    //     const typingWord = typingWords[typingWords.length - 1];
-    //     const before = this.content.slice(
-    //         0,
-    //         input.selectionStart - typingWord.length + typingWord.indexOf('@')
-    //     );
-    //     this.content = `${before}@${nickname.replace(
-    //         / /g,
-    //         ''
-    //     )} ${this.content.slice(input.selectionStart)}`;
-    //     this.showUserList = false;
-    //     const pointerPos = before.length + nickname.replace(/ /g, '').length + 2;
-    //     setTimeout(() => {
-    //         input.setSelectionRange(pointerPos, pointerPos);
-    //         input.focus();
-    //     }, 0);
     // }
 }

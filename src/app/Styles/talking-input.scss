@@ -58,24 +58,22 @@
 
       .text-input {
         width: 100%;
-        border: none;
         border-radius: 6px min(calc(100% - 34px), 6px) 0 6px;
         transition:
           border-color ease-in-out 0.15s,
           box-shadow ease-in-out 0.15s,
           width ease-in-out 0.15s;
-        box-shadow: none;
         min-height: 34px;
         padding: 6px 12px;
         font-size: 14px;
         box-sizing: border-box;
         outline: none;
-        resize: none;
         overflow-x: hidden;
         background-color: var(--text-input-bg);
         color: var(--default-textcolor);
         flex: 1 1 auto;
         max-height: 350px;
+        white-space: pre-wrap;
       }
 
       button {

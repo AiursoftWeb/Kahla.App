@@ -12,6 +12,7 @@
 <app-message-list
     [messages]="parsedMessages()"
     [lastReadIndex]="threadInfo.value()?.messageContext.unReadAmount"
+    (mention)="talkingInput.mention($event)"
 />
 <app-scroll-button
     id="scrollDown"
@@ -19,4 +20,4 @@
     [emphasis]="hasNewMessages()"
     [ngClass]="{ 'active-button': showPanel() }"
 />
-<app-talking-input [(showPanel)]="showPanel" (sendMessage)="send($event)" />
+<app-talking-input #talkingInput [(showPanel)]="showPanel" (sendMessage)="send($event)" />
