@@ -28,7 +28,7 @@
                 class="far fa-smile-wink"
                 aria-hidden="true"
                 (click)="emoji()"
-                style="margin-right: 7px; margin-top: 2px"
+                style="margin-right: 7px"
             ></i>
             <div
                 class="text-input"
@@ -56,7 +56,6 @@
         </div>
         @if (showPanel()) {
             <div class="more-panel">
-                <!--Refactor to tool class-->
                 <button (click)="selectFile('img')">
                     <i style="color: #ff9800" class="far fa-file-image"></i>
                     <div class="text">Send Image</div>
