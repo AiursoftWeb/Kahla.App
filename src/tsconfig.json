@@ -20,5 +20,6 @@
     "strictTemplates": true,
     "strictInjectionParameters": true
   },
-  "include": ["**/*", "../sw-base/tsconfig.json"]
+  "include": ["**/*"],
+  "exclude": ["service-worker/**/*"]
 }

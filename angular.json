@@ -19,7 +19,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/ng",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -27,7 +27,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               { "glob": "**/*", "input": "./public", "output": "./" },
-              { "glob": "sw_notifications.js", "input": "./sw-base/dist/", "output": "./" }
+              { "glob": "sw_notifications.js", "input": "./dist/sw-base/", "output": "./" }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",

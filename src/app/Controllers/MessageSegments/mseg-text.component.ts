@@ -1,9 +1,7 @@
 import { Component, computed, ElementRef, input, viewChild } from '@angular/core';
 import { MessageSegmentText, MessageTextWithAnnotate } from '../../Models/Messages/MessageSegments';
 import { checkSingleEmoji } from '../../Utils/StringUtils';
-import {
-    MessageTextAnnotatedMention,
-} from '../../Models/Messages/MessageTextAnnotated';
+import { MessageTextAnnotatedMention } from '../../Models/Messages/MessageTextAnnotated';
 
 @Component({
     selector: 'app-mseg-text',

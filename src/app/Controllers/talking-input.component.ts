@@ -1,11 +1,4 @@
-import {
-    Component,
-    ElementRef,
-    model,
-    output,
-    signal,
-    viewChild,
-} from '@angular/core';
+import { Component, ElementRef, model, output, signal, viewChild } from '@angular/core';
 import { CacheService } from '../Services/CacheService';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import type { EmojiButton } from '@joeattardi/emoji-button';

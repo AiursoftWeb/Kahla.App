@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
-    "outDir": "dist/out-tsc/app",
+    "outDir": "../dist/out-tsc/app"
   },
   "exclude": ["test.ts", "**/*.spec.ts", "service-worker/**/*"]
 }
