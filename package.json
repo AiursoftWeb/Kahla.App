@@ -14,10 +14,10 @@
   "type": "module",
   "scripts": {
     "start": "yarn build:sw-base && ng serve",
-    "build:sw-base": "tsc -p src/service-worker/tsconfig.json && esbuild src/service-worker/sw_notifications.ts --bundle --minify '--define:process.env.NODE_ENV=\"production\"' --outfile='dist/sw-base/sw_notifications.js'",
+    "build:sw-base": "tsc -p src/service-worker && esbuild src/service-worker/sw_notifications.ts --bundle --minify '--define:process.env.NODE_ENV=\"production\"' --outfile='dist/sw-base/sw_notifications.js'",
     "build": "yarn run build:sw-base && ng build --base-href / && workbox generateSW workbox-config.cjs",
     "clean": "rm -rf dist",
-    "lint": "tsc -p src/ && tsc -p src/service-worker && ng lint",
+    "lint": "tsc -p src && tsc -p src/service-worker && ng lint",
     "format": "prettier -cw .",
     "create-component": "python ./scripts/create-component.py"
   },
