@@ -26,3 +26,15 @@ export const YesNoDialogSerious = YesNoDialog.mixin({
     inputPlaceholder: 'Yes, I know what I am doing.',
     inputValidator: result => !result && 'You must confirm that you know what you are doing.',
 });
+
+export const WorkingDialog = Swal.mixin({
+    title: 'Updating...',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    showCancelButton: false,
+    didOpen: () => {
+        Swal.showLoading();
+    },
+    icon: 'info',
+});

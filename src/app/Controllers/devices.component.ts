@@ -6,6 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { WebpushService } from '../Services/WebpushService';
 import { PushSubscriptionSetting } from '../Models/PushSubscriptionSetting';
+import { SwalToast, WorkingDialog } from '../Utils/Toast';
 
 @Component({
     templateUrl: '../Views/devices.html',
@@ -46,13 +47,26 @@ export class DevicesComponent implements OnInit {
         try {
             const result = await lastValueFrom(this.devicesApiService.PushTestMessage());
             void Swal.fire('Successfully sent!', result.message, 'info');
+            setTimeout(() => {
+                void this.updateDeviceList();
+            }, 1000);
         } catch (err) {
             showCommonErrorDialog(err);
         }
     }
 
     public async setWebPushStatus(value: boolean) {
+        if (value) {
+            void WorkingDialog.fire({
+                title: 'Subscribing you to webpush notification...',
+                text: 'Please don\'t close the page.',
+            });
+        }
         await this.webpushService.updateEnabled(value);
+        if (value) {
+            Swal.close();
+        }
+        void SwalToast.fire("Updated!");
         this.currentSettings = this.webpushService.pushSettings;
         void this.updateDeviceList();
     }
