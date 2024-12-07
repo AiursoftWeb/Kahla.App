@@ -13,8 +13,15 @@ sw.addEventListener('notificationclick', event =>
         (async () => {
             const data = event.notification.data;
             const clients = await getWindowClients();
-            if (clients.length) clients[0].focus();
-            else await sw.clients.openWindow(data.preferredUrl);
+            if (clients.length) {
+                clients[0].focus();
+                clients[0].postMessage({
+                    type: 'navigate',
+                    threadId: data.preferredUrl,
+                });
+            } else {
+                await sw.clients.openWindow(data.preferredUrl);
+            }
             event.notification.close();
         })()
     )
@@ -42,7 +49,8 @@ sw.addEventListener('push', event =>
                         preferredUrl: `/talking/${data.message.threadId}`,
                     },
                 });
-            } else if (data === 19) { // hard invited
+            } else if (data === 19) {
+                // hard invited
                 const ownerNickname = data.thread.topTenMembers.find(t => t.isOwner)?.nickName;
                 const title = `You are invited to ${ownerNickname}'s thread`;
                 const message = data.thread.name;
