@@ -1,25 +1,16 @@
 import { Injectable } from '@angular/core';
 import { EventService } from './EventService';
-import { AiurEvent } from '../Models/Events/AiurEvent';
-import { EventType } from '../Models/Events/EventType';
+import { KahlaEvent } from '../Models/Events/KahlaEvent';
+import { KahlaEventType } from '../Models/Events/EventType';
 import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalNotifyService {
     constructor(private eventService: EventService) {}
 
-    private OnMessage(ev: AiurEvent) {
+    private OnMessage(ev: KahlaEvent) {
         switch (ev.type) {
-            case EventType.NewMessage: {
-                break;
-            }
-            case EventType.SomeoneLeftEvent: {
-                break;
-            }
-            case EventType.DissolveEvent: {
-                break;
-            }
-            case EventType.GroupJoinedEvent: {
+            case KahlaEventType.NewMessage: {
                 break;
             }
             default:

@@ -37,10 +37,9 @@ export class HeaderComponent {
         if (this.returnButtonPreventDefault()) return;
         if (
             history.length === 1 ||
-            history.state.navigationId === 1 ||
             (this.homeService.wideScreenEnabled && this.closeDirectly())
         ) {
-            this.router.navigate(['/home']);
+            void this.router.navigate(['/home']);
         } else {
             history.back();
         }

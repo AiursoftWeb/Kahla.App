@@ -15,7 +15,7 @@ import { selectFiles } from '../Utils/SystemDialog';
     standalone: false,
 })
 export class UserDetailComponent implements OnInit {
-    public user: KahlaUser;
+    public user?: KahlaUser;
     public loadingImgURL = Values.loadingImgURL;
     saving = false;
 
@@ -49,8 +49,8 @@ export class UserDetailComponent implements OnInit {
         try {
             await lastValueFrom(
                 this.authApiService.UpdateMe({
-                    nickName: this.user.nickName,
-                    bio: this.user.bio,
+                    nickName: this.user!.nickName,
+                    bio: this.user!.bio,
                 })
             );
             void this.cacheService.mineCache.update();

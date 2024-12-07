@@ -29,7 +29,7 @@ export class FriendsComponent implements OnInit {
     public searchTxt = signal('');
 
     private detailLoading = false;
-    public contactsRepo: RepositoryListBase<ContactInfo>;
+    public contactsRepo?: RepositoryListBase<ContactInfo>;
 
     constructor(
         private router: Router,
@@ -75,7 +75,7 @@ export class FriendsComponent implements OnInit {
 
     public userClick(user: ContactInfo, ctrl: boolean) {
         if (ctrl) {
-            this.router.navigate(['/user', user.user.id]);
+            void this.router.navigate(['/user', user.user.id]);
         } else {
             if (this.detailLoading) {
                 return;

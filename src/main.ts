@@ -6,4 +6,4 @@ import { AppModule } from './app/app.module';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 document.body.addEventListener('touchstart', () => {}, false);
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+void platformBrowserDynamic().bootstrapModule(AppModule);

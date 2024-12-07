@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Subject } from 'rxjs';
-import { AiurEvent } from '../Models/Events/AiurEvent';
+import { KahlaEvent } from '../Models/Events/KahlaEvent';
 import { MessagesApiService } from './Api/MessagesApiService';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class EventService {
     public connecting = false;
     public errorOrClose: boolean;
 
-    public onMessage: Subject<AiurEvent> = new Subject<AiurEvent>();
+    public onMessage: Subject<KahlaEvent> = new Subject<KahlaEvent>();
     public onErrorOrClose: Subject<boolean> = new Subject<boolean>();
     public onReconnect: Subject<void> = new Subject<void>();
 
@@ -42,7 +42,7 @@ export class EventService {
                 }
             };
             this.ws.onmessage = evt => {
-                this.onMessage.next(JSON.parse(evt.data as string) as AiurEvent);
+                this.onMessage.next(JSON.parse(evt.data as string) as KahlaEvent);
             };
             this.ws.onerror = () => {
                 this.errorOrClosedFunc();

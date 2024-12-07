@@ -23,7 +23,7 @@ export class DevicesComponent implements OnInit {
 
     public ngOnInit() {
         this.currentSettings = this.webpushService.pushSettings;
-        this.updateDeviceList();
+        void this.updateDeviceList();
     }
 
     public async updateDeviceList() {
@@ -31,7 +31,7 @@ export class DevicesComponent implements OnInit {
     }
 
     public detail(device: Device): void {
-        Swal.fire({
+        void Swal.fire({
             title: 'Device detail',
             html:
                 '<table style="margin: auto;"><tr><th>Add IP</th><td>' +
@@ -45,7 +45,7 @@ export class DevicesComponent implements OnInit {
     public async testPush() {
         try {
             const result = await lastValueFrom(this.devicesApiService.PushTestMessage());
-            Swal.fire('Successfully sent!', result.message, 'info');
+            void Swal.fire('Successfully sent!', result.message, 'info');
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -54,7 +54,7 @@ export class DevicesComponent implements OnInit {
     public async setWebPushStatus(value: boolean) {
         await this.webpushService.updateEnabled(value);
         this.currentSettings = this.webpushService.pushSettings;
-        this.updateDeviceList();
+        void this.updateDeviceList();
     }
 
     public getElectronNotify(): boolean {

@@ -29,8 +29,8 @@ export class NewThreadComponent {
     async create() {
         try {
             const resp = await lastValueFrom(this.threadsApiService.CreateScratch(this.options()));
-            SwalToast.fire({ title: 'Thread created.', icon: 'success' });
-            this.router.navigate([`/talking/${resp.newThreadId}`]);
+            void SwalToast.fire({ title: 'Thread created.', icon: 'success' });
+            void this.router.navigate([`/talking/${resp.newThreadId}`]);
         } catch (err) {
             showCommonErrorDialog(err);
         }

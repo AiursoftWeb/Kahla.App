@@ -1,3 +1,10 @@
+import { KahlaEvent } from '../app/Models/Events/KahlaEvent';
+import {
+    eventNotificationDescription,
+    eventNotificationUrl,
+} from '../app/Models/Events/EventUtils';
+import { KahlaEventType } from '../app/Models/Events/EventType';
+
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
 async function getWindowClients() {
@@ -8,17 +15,21 @@ async function getWindowClients() {
     return clients;
 }
 
+export interface NotificationContext {
+    preferredUrl: string;
+}
+
 sw.addEventListener('notificationclick', event =>
     event.waitUntil(
         (async () => {
-            const data = event.notification.data;
+            const data = event.notification.data as NotificationContext;
             const clients = await getWindowClients();
             if (clients.length) {
-                clients[0].focus();
                 clients[0].postMessage({
                     type: 'navigate',
                     threadId: data.preferredUrl,
                 });
+                await clients[0].focus();
             } else {
                 await sw.clients.openWindow(data.preferredUrl);
             }
@@ -30,39 +41,25 @@ sw.addEventListener('notificationclick', event =>
 sw.addEventListener('push', event =>
     event.waitUntil(
         (async () => {
-            const data = event.data!.json();
-            if (data.type === 0) {
+            const data = event.data!.json() as KahlaEvent;
+            const [title, description] = eventNotificationDescription(data);
+            const url = eventNotificationUrl(data);
+            if (data.type === KahlaEventType.NewMessage) {
                 // new message
-                const title =
-                    (data.mentioned ? '[Mentioned you] ' : '') + data.message.sender.nickName;
-                const message = data.message.preview;
-
                 const bypassNotification = (await getWindowClients())
                     .filter(t => t.focused)
-                    .some(t => t.url === `/talking/${data.message.threadId}`);
+                    .some(t => t.url.startsWith(url));
 
                 if (bypassNotification) return;
-                await sw.registration.showNotification(title, {
-                    body: message,
-                    tag: data.message.threadId.toString(),
-                    data: {
-                        preferredUrl: `/talking/${data.message.threadId}`,
-                    },
-                });
-            } else if (data.type === 19) {
-                // hard invited
-                const ownerNickname = data.thread.topTenMembers.find(t => t.isOwner)?.nickName;
-                const title = `You are invited to ${ownerNickname}'s thread`;
-                const message = data.thread.name;
-
-                await sw.registration.showNotification(title, {
-                    body: message,
-                    tag: data.thread.id.toString(),
-                    data: {
-                        preferredUrl: `/talking/${data.thread.id}`,
-                    },
-                });
             }
+
+            await sw.registration.showNotification(title, {
+                body: description,
+                tag: url,
+                data: {
+                    preferredUrl: url,
+                },
+            });
         })()
     )
 );

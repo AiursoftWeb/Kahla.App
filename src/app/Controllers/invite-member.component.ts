@@ -26,7 +26,7 @@ export class InviteMemberComponent {
                     contactsApiService,
                     this.searchText()
                 );
-                this.contactsRepo.updateAll();
+                void this.contactsRepo.updateAll();
             } else {
                 this.contactsRepo = myContactsRepo;
             }

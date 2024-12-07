@@ -8,7 +8,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
     standalone: false,
 })
 export class BlocksListComponent {
-    blockedRepo: MyBlocksRepository;
+    blockedRepo?: MyBlocksRepository;
 
     keywords = signal('');
 

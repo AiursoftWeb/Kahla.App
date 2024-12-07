@@ -1,9 +1,9 @@
-﻿import { AiurEvent } from './AiurEvent';
+﻿import { KahlaEvent } from './KahlaEvent';
 import { MessagePreview } from '../MessagePreview';
+import { KahlaEventType } from './EventType';
 
-export interface NewMessageEvent extends AiurEvent {
+export interface NewMessageEvent extends KahlaEvent {
+    type: KahlaEventType.NewMessage;
     message: MessagePreview;
-    previousMessageId: string;
-    muted: boolean;
     mentioned: boolean;
 }
