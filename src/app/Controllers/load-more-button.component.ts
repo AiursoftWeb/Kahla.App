@@ -1,6 +1,6 @@
 import { Component, effect, EventEmitter, input, Output } from '@angular/core';
 
-function isNearBottom(element: HTMLElement, threshold = 100, reverse = false) {
+function isNearBottom(element: HTMLElement | null, threshold = 100, reverse = false) {
     let scrollTop: number, clientHeight: number, scrollHeight: number;
 
     if (!element) {
@@ -42,7 +42,7 @@ export class LoadMoreButtonComponent {
         effect(cleanup => {
             if (this.autoLoad()) {
                 const scrollEventTarget: EventTarget = this.scrollHostElement()
-                    ? this.scrollHostElement()
+                    ? this.scrollHostElement()!
                     : window;
                 scrollEventTarget.addEventListener('scroll', this.scrollHandler);
                 cleanup(() => scrollEventTarget.removeEventListener('scroll', this.scrollHandler));

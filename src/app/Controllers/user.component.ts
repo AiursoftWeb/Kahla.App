@@ -29,12 +29,13 @@ export class UserComponent {
         },
     });
     readonly isCommonThreadsShown = linkedSignal<boolean>(() => !!this.info.value() && false);
-    readonly commonThreadsRepo = computed(
-        () =>
-            new CommonThreadRepository(
-                this.contactsApiService,
-                this.info.value().searchedUser.user.id
-            )
+    readonly commonThreadsRepo = computed(() =>
+        this.info.value()
+            ? new CommonThreadRepository(
+                  this.contactsApiService,
+                  this.info.value()!.searchedUser.user.id
+              )
+            : null
     );
 
     constructor(
@@ -47,9 +48,9 @@ export class UserComponent {
         effect(() => {
             if (
                 this.isCommonThreadsShown() &&
-                this.commonThreadsRepo().status === 'uninitialized'
+                this.commonThreadsRepo()?.status === 'uninitialized'
             ) {
-                this.commonThreadsRepo().updateAll();
+                void this.commonThreadsRepo()!.updateAll();
             }
         });
     }
@@ -65,19 +66,19 @@ export class UserComponent {
             showCommonErrorDialog(err);
             return;
         }
-        SwalToast.fire('Success', '', 'success');
-        this.myContactsRepository.updateAll();
-        this.router.navigate(['/home']);
+        void SwalToast.fire('Success', '', 'success');
+        void this.myContactsRepository.updateAll();
+        void this.router.navigate(['/home']);
     }
 
     public async addAsContract() {
         try {
             await lastValueFrom(
-                this.contactsApiService.Add(this.info.value().searchedUser.user.id)
+                this.contactsApiService.Add(this.info.value()!.searchedUser.user.id)
             );
-            SwalToast.fire('Success', '', 'success');
+            void SwalToast.fire('Success', '', 'success');
             this.info.reload();
-            this.myContactsRepository.updateAll();
+            void this.myContactsRepository.updateAll();
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -103,7 +104,10 @@ export class UserComponent {
         if (!resp.value) return;
         try {
             await lastValueFrom(
-                this.contactsApiService.Report(this.info.value().searchedUser.user.id, resp.value)
+                this.contactsApiService.Report(
+                    this.info.value()!.searchedUser.user.id,
+                    resp.value as string
+                )
             );
         } catch (err) {
             showCommonErrorDialog(err);
@@ -116,36 +120,36 @@ export class UserComponent {
     }
 
     public message() {
-        this.router.navigate([`/talking/${this.info.value().defaultThread!}`]);
+        void this.router.navigate([`/talking/${this.info.value()!.defaultThread!}`]);
     }
 
     public async newThread() {
         // hard invite
         const resp = await lastValueFrom(
-            this.threadsApiService.HardInvite(this.info.value().searchedUser.user.id)
+            this.threadsApiService.HardInvite(this.info.value()!.searchedUser.user.id)
         );
-        SwalToast.fire('Thread Created.', '', 'success');
-        this.router.navigate([`/talking/${resp.newThreadId}`]);
+        void SwalToast.fire('Thread Created.', '', 'success');
+        void this.router.navigate([`/talking/${resp.newThreadId}`]);
     }
 
     public async block() {
         const resp = await YesNoDialog.fire({
-            title: `Are you sure to ${this.info.value().searchedUser.isBlockedByYou ? 'unblock' : 'block'} this user?`,
+            title: `Are you sure to ${this.info.value()!.searchedUser.isBlockedByYou ? 'unblock' : 'block'} this user?`,
             text: `Blocked user will not be able to create new threads with you.`,
         });
         if (!resp.value) return;
         try {
             await lastValueFrom(
-                this.info.value().searchedUser.isBlockedByYou
-                    ? this.blocksApiService.Remove(this.info.value().searchedUser.user.id)
-                    : this.blocksApiService.Block(this.info.value().searchedUser.user.id)
+                this.info.value()!.searchedUser.isBlockedByYou
+                    ? this.blocksApiService.Remove(this.info.value()!.searchedUser.user.id)
+                    : this.blocksApiService.Block(this.info.value()!.searchedUser.user.id)
             );
         } catch (err) {
             showCommonErrorDialog(err);
             return;
         }
-        SwalToast.fire();
+        void SwalToast.fire();
         this.info.reload();
-        this.myContactsRepository.updateAll();
+        void this.myContactsRepository.updateAll();
     }
 }

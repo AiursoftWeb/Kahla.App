@@ -2,8 +2,8 @@
 @if (cacheService.mine()) {
     <app-user-basic-info
         routerLink="/userInfo"
-        [user]="cacheService.mine().me"
-        [online]="cacheService.mine().privateSettings.enableHideMyOnlineStatus ? undefined : true"
+        [user]="cacheService.mine()!.me"
+        [online]="cacheService.mine()!.privateSettings.enableHideMyOnlineStatus ? undefined : true"
     />
 }
 <div class="menu-button" *ngIf="homeService.pwaHomeScreenPrompt" (click)="pwaAddHomeScreen()">
@@ -22,7 +22,7 @@
 
 <div
     class="menu-button"
-    *ngIf="cacheService.mine().me && !cacheService.mine().me.emailConfirmed"
+    *ngIf="cacheService.mine() && !cacheService.mine()!.me.emailConfirmed"
     (click)="sendEmail()"
 >
     <div class="img warning">

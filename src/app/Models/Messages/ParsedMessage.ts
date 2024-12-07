@@ -14,7 +14,7 @@ export class ParsedMessage {
         return new ParsedMessage(
             commit.id,
             ParsedMessage.parseContent(commit.item.content),
-            commit.item.senderId,
+            commit.item.senderId!,
             new Date(commit.commitTime)
         );
     }

@@ -15,7 +15,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 export class AdvancedSettingComponent implements OnInit {
     public me: KahlaUser;
     public options: AppOptions;
-    public updatingSetting: Subscription;
+    public updatingSetting?: Subscription;
 
     constructor(
         private authApiService: AuthApiService,
@@ -31,7 +31,7 @@ export class AdvancedSettingComponent implements OnInit {
     public updateSettings(): void {
         if (this.updatingSetting && !this.updatingSetting.closed) {
             this.updatingSetting.unsubscribe();
-            this.updatingSetting = null;
+            this.updatingSetting = undefined;
         }
         this.updatingSetting = this.authApiService
             .UpdateMe({
@@ -43,17 +43,21 @@ export class AdvancedSettingComponent implements OnInit {
             })
             .subscribe(
                 () => {
-                    this.updatingSetting = null;
+                    this.updatingSetting = undefined;
                     this.cacheService.mineCache.set({ me: this.me, privateSettings: this.options });
                 },
                 err => {
-                    this.updatingSetting = null;
+                    this.updatingSetting = undefined;
                     showCommonErrorDialog(err);
                 }
             );
     }
 
     public todo(): void {
-        Swal.fire('Under development', 'This features is still under development ^_^.', 'info');
+        void Swal.fire(
+            'Under development',
+            'This features is still under development ^_^.',
+            'info'
+        );
     }
 }

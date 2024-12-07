@@ -31,7 +31,7 @@ export class ThreadMembersComponent {
     mappedRepo = computed(() => {
         if (this.repo.value()) {
             return new MappedRepository<ContactListItem, ThreadMemberInfo>(
-                this.repo.value(),
+                this.repo.value()!,
                 t => ({
                     ...t,
                     tags: [
@@ -49,7 +49,7 @@ export class ThreadMembersComponent {
             await this.threadInfoCacheDictionary.get(id).catch(showCommonErrorDialog),
     });
 
-    viewingDetail = signal<ThreadMemberInfo>(null);
+    viewingDetail = signal<ThreadMemberInfo | null>(null);
 
     viewDetail(inf: ContactInfo) {
         this.viewingDetail.set(inf as ThreadMemberInfo);
@@ -62,38 +62,40 @@ export class ThreadMembersComponent {
     ) {}
 
     async removeMember() {
+        const threadInfo = this.threadInfo.value();
+        if (!threadInfo) return;
+
         if (
             (
                 await YesNoDialog.fire({
                     title: 'Remove Member',
-                    text: `Are you sure you want to remove ${this.viewingDetail().user.nickName} (id: ${this.viewingDetail().user.id}) from the thread?`,
+                    text: `Are you sure you want to remove ${this.viewingDetail()!.user.nickName} (id: ${this.viewingDetail()!.user.id}) from the thread?`,
                 })
             ).isDismissed
         )
             return;
         try {
             await lastValueFrom(
-                this.threadsApiService.KickMember(
-                    this.threadInfo.value().id,
-                    this.viewingDetail().user.id
-                )
+                this.threadsApiService.KickMember(threadInfo.id, this.viewingDetail()!.user.id)
             );
-            SwalToast.fire('Member removed!');
-            this.repo.value().data = this.repo
-                .value()
-                .data.filter(x => x.user.id !== this.viewingDetail().user.id);
-            this.repo.value().total--;
+            void SwalToast.fire('Member removed!');
+            this.repo.value()!.data = this.repo
+                .value()!
+                .data.filter(x => x.user.id !== this.viewingDetail()!.user.id);
+            this.repo.value()!.total--;
         } catch (err) {
             showCommonErrorDialog(err);
         }
     }
 
     async promoteAdmin(promote: boolean) {
+        const threadInfo = this.threadInfo.value();
+        if (!threadInfo) return;
         if (
             (
                 await YesNoDialog.fire({
                     title: promote ? 'Promote to Admin' : 'Demote from Admin',
-                    text: `Are you sure you want to ${promote ? 'promote' : 'demote'} ${this.viewingDetail().user.nickName} (id: ${this.viewingDetail().user.id})?`,
+                    text: `Are you sure you want to ${promote ? 'promote' : 'demote'} ${this.viewingDetail()!.user.nickName} (id: ${this.viewingDetail()!.user.id})?`,
                 })
             ).isDismissed
         )
@@ -101,25 +103,28 @@ export class ThreadMembersComponent {
         try {
             await lastValueFrom(
                 this.threadsApiService.PromoteAdmin(
-                    this.threadInfo.value().id,
-                    this.viewingDetail().user.id,
+                    threadInfo.id,
+                    this.viewingDetail()!.user.id,
                     promote
                 )
             );
-            SwalToast.fire(`Member ${promote ? 'promoted' : 'demoted'}!`);
-            this.repo.value().data.find(x => x.user.id === this.viewingDetail().user.id).isAdmin =
-                promote;
+            void SwalToast.fire(`Member ${promote ? 'promoted' : 'demoted'}!`);
+            this.repo
+                .value()!
+                .data.find(x => x.user.id === this.viewingDetail()!.user.id)!.isAdmin = promote;
         } catch (err) {
             showCommonErrorDialog(err);
         }
     }
 
     async transferOwnership() {
+        const threadInfo = this.threadInfo.value();
+        if (!threadInfo) return;
         if (
             (
                 await YesNoDialogSerious.fire({
                     title: 'Transfer Ownership',
-                    text: `Are you sure you want to transfer ownership to ${this.viewingDetail().user.nickName} (id: ${this.viewingDetail().user.id})?`,
+                    text: `Are you sure you want to transfer ownership to ${this.viewingDetail()!.user.nickName} (id: ${this.viewingDetail()!.user.id})?`,
                 })
             ).isDismissed
         )
@@ -127,12 +132,14 @@ export class ThreadMembersComponent {
         try {
             await lastValueFrom(
                 this.threadsApiService.TransferOwnership(
-                    this.threadInfo.value().id,
-                    this.viewingDetail().user.id
+                    threadInfo.id,
+                    this.viewingDetail()!.user.id
                 )
             );
-            SwalToast.fire('Ownership transferred!');
-            this.router.navigate(['/thread', this.threadInfo.value().id], { replaceUrl: true });
+            void SwalToast.fire('Ownership transferred!');
+            void this.router.navigate(['/thread', threadInfo.id], {
+                replaceUrl: true,
+            });
         } catch (err) {
             showCommonErrorDialog(err);
         }

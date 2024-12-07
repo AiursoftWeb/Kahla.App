@@ -4,10 +4,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ServerConfig } from '../../Models/ServerConfig';
 import { environment } from '../../../environments/environment';
 
-type paramDict = Record<
+type ParamDictStrict = Record<
     string,
-    string | number | boolean | readonly (string | number | boolean)[] | undefined | null
+    string | number | boolean | readonly (string | number | boolean)[]
 >;
+
+type ParamDict = Partial<ParamDictStrict>;
 
 @Injectable({
     providedIn: 'root',
@@ -21,24 +23,24 @@ export class ApiService {
 
     constructor(private http: HttpClient) {}
 
-    public Get<T>(address: string, params?: paramDict): Observable<T> {
+    public Get<T>(address: string, params?: ParamDict): Observable<T> {
         return this.GetByFullUrl<T>(`${environment.serversProvider}${address}`, true, params);
     }
 
     public GetByFullUrl<T>(
         address: string,
         withCredentials = true,
-        params?: paramDict
+        params?: ParamDict
     ): Observable<T> {
         return this.http.get<T>(address, {
             headers: this._headers,
             withCredentials: withCredentials,
-            params: this.processParamDict(params),
+            params: this.processParamDict(params ?? {}),
         });
         // .pipe(catchError(this.handleError));
     }
 
-    public processParamDict(params: paramDict): paramDict {
+    public processParamDict(params: ParamDict): ParamDictStrict {
         // remove all undefined or null values
         const result = { ...params };
         for (const key in result) {
@@ -47,14 +49,14 @@ export class ApiService {
             }
         }
 
-        return result;
+        return result as ParamDictStrict;
     }
 
-    public formBody(data: paramDict): HttpParams {
+    public formBody(data: ParamDict): HttpParams {
         return new HttpParams({ fromObject: this.processParamDict(data) });
     }
 
-    public Post<T>(address: string, data: paramDict): Observable<T> {
+    public Post<T>(address: string, data: ParamDict): Observable<T> {
         return this.http.post<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
             headers: this._headers,
             withCredentials: true,
@@ -62,7 +64,7 @@ export class ApiService {
         // .pipe(catchError(this.handleError));
     }
 
-    public Put<T>(address: string, data: paramDict): Observable<T> {
+    public Put<T>(address: string, data: ParamDict): Observable<T> {
         return this.http.put<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
             headers: this._headers,
             withCredentials: true,
@@ -70,7 +72,7 @@ export class ApiService {
         // .pipe(catchError(this.handleError));
     }
 
-    public Patch<T>(address: string, data: paramDict): Observable<T> {
+    public Patch<T>(address: string, data: ParamDict): Observable<T> {
         return this.http.patch<T>(`${environment.serversProvider}${address}`, this.formBody(data), {
             headers: this._headers,
             withCredentials: true,

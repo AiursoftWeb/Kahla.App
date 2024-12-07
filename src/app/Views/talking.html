@@ -11,7 +11,7 @@
 <!-- <app-load-more-button></app-load-more-button> -->
 <app-message-list
     [messages]="parsedMessages()"
-    [lastReadIndex]="threadInfo.value()?.messageContext.unReadAmount"
+    [lastReadIndex]="threadInfo.value()?.messageContext?.unReadAmount ?? 0"
     (mention)="talkingInput.mention($event)"
 />
 <app-scroll-button

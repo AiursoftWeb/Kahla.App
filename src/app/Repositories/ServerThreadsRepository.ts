@@ -10,7 +10,7 @@ export class ServerThreadsRepository extends RepositoryListBase<ThreadInfo> {
 
     constructor(
         private searchApiService: SearchApiService,
-        private keyword?: string,
+        private keyword: string,
         private keywordExclude?: string
     ) {
         super();

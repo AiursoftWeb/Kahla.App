@@ -10,7 +10,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     providedIn: 'root',
 })
 export class CacheService {
-    public mine: Signal<MeCacheModel>;
+    public mine: Signal<MeCacheModel | null>;
     public mineCache: CachedObject<MeCacheModel>;
     public totalUnread = 0;
     public serverConfig: ServerConfig;

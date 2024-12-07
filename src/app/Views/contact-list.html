@@ -38,7 +38,7 @@
         }
     </div>
 }
-@if (!contacts || (!contacts.data?.length && contacts.status === 'synced')) {
+@if (!contacts || (!contacts.data.length && contacts.status === 'synced')) {
     <div class="empty-result-notice">{{ this.emptyMessage }}</div>
 }
 
@@ -50,9 +50,9 @@
 </div> -->
 @if (contacts?.canLoadMore) {
     <div class="buttons">
-        @if (contacts.status === 'synced') {
-            <button class="button primary" (click)="contacts.loadMore(20)">Load More</button>
-        } @else if (contacts.status === 'loading') {
+        @if (contacts!.status === 'synced') {
+            <button class="button primary" (click)="contacts!.loadMore(20)">Load More</button>
+        } @else if (contacts!.status === 'loading') {
             <button class="button primary" disabled>Loading</button>
         }
     </div>

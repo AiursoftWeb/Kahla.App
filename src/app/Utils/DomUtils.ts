@@ -1,5 +1,5 @@
 export function checkIfChildOf(child: Node, parent: Node): boolean {
-    let current = child;
+    let current: Node | null = child;
     while (current) {
         if (current === parent) return true;
         current = current.parentNode;

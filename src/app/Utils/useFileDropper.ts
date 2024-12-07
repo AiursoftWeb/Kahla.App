@@ -25,7 +25,7 @@ export function useFileDropper(
     onSuccess?: (files: [File, string][]) => void,
     onIncorrectType?: () => void
 ) {
-    async function processList(items: DataTransferItemList) {
+    async function processList(items?: DataTransferItemList) {
         const files = (
             await Promise.all(
                 Array.from(items ?? [])
@@ -52,13 +52,13 @@ export function useFileDropper(
     return {
         async onDrop(e: DragEvent) {
             e.preventDefault();
-            await processList(e.dataTransfer.items);
+            await processList(e.dataTransfer?.items);
         },
         onDragOver(e: DragEvent) {
             e.preventDefault();
         },
         async onPaste(e: ClipboardEvent) {
-            await processList(e.clipboardData.items);
+            await processList(e.clipboardData?.items);
         },
     };
 }

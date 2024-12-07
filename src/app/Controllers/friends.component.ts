@@ -43,7 +43,7 @@ export class FriendsComponent implements OnInit {
                     contactsApiService,
                     this.searchTxt()
                 );
-                this.contactsRepo.updateAll();
+                void this.contactsRepo.updateAll();
             } else {
                 this.contactsRepo = this.myContactsRepository;
             }
@@ -51,8 +51,8 @@ export class FriendsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        if (this.cacheService.mine().me && this.myContactsRepository.health) {
-            this.myContactsRepository.updateAll();
+        if (this.cacheService.mine() && this.myContactsRepository.health) {
+            void this.myContactsRepository.updateAll();
         }
     }
 

@@ -40,7 +40,7 @@ export abstract class RepositoryBase<T> implements RepositoryLike<T> {
     public initCache() {
         if (localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)) {
             const data = JSON.parse(
-                localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)
+                localStorage.getItem(`repo-cache-${this.persistConfig.name!}`)!
             ) as RepositoryCache<T>;
             if (data.version !== this.persistConfig.version!) {
                 this.data = [];
@@ -73,14 +73,14 @@ export abstract class RepositoryBase<T> implements RepositoryLike<T> {
                     this.status = 'error';
                     throw err;
                 } finally {
-                    this.updatePromise = null;
+                    this.updatePromise = undefined;
                 }
             })())
         );
     }
 
     public loadMore(take: number): Promise<void> {
-        if (!this.canLoadMore) return;
+        if (!this.canLoadMore) throw new Error('Cannot load more');
         return (
             this.loadMorePromise ??
             (this.loadMorePromise = (async () => {

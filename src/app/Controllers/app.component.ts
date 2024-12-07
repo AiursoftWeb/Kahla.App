@@ -24,7 +24,7 @@ export class AppComponent {
     ) {
         // Temporary apply the local theme setting
         this.themeService.ApplyThemeFromLocal();
-        this.initService.init();
+        void this.initService.init();
     }
 
     @HostListener('window:popstate', [])
@@ -34,7 +34,7 @@ export class AppComponent {
 
     @HostListener('window:load', [])
     onLoad() {
-        this.webpushService.registerServiceWorker();
+        void this.webpushService.registerServiceWorker();
     }
 
     @HostListener('window:beforeinstallprompt', ['$event'])

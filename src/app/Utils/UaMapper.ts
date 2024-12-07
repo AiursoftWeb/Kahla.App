@@ -1,5 +1,4 @@
 export function mapDeviceName(ua: string): [string, string] {
-    if (!ua) return null;
     let os = 'Unknown OS';
     // OS
     if (ua.includes('Win')) {
@@ -31,7 +30,7 @@ export function mapDeviceName(ua: string): [string, string] {
         browser = 'Safari';
     } else if (ua.includes('Opera') || ua.includes('OPR')) {
         browser = 'Opera';
-    } else if (ua.match(/MSIE|Trident/)) {
+    } else if (/MSIE|Trident/.exec(ua)) {
         browser = 'Internet Explorer';
     }
 

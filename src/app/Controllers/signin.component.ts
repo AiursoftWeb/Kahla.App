@@ -26,7 +26,7 @@ export class SignInComponent {
     async login() {
         try {
             await lastValueFrom(this.authApiService.SignIn(this.userName, this.password));
-            this.initService.init();
+            void this.initService.init();
         } catch (err) {
             showCommonErrorDialog(err);
         }
@@ -34,28 +34,28 @@ export class SignInComponent {
 
     async register() {
         if (this.password !== this.confirmPassword) {
-            Swal.fire('Password does not match', '', 'error');
+            void Swal.fire('Password does not match', '', 'error');
             return;
         }
         if (this.password.length < 6) {
-            Swal.fire('Password is too short', '', 'error');
+            void Swal.fire('Password is too short', '', 'error');
             return;
         }
         if (this.userName.length < 4) {
-            Swal.fire('Username is too short', '', 'error');
+            void Swal.fire('Username is too short', '', 'error');
             return;
         }
 
         try {
             await lastValueFrom(this.authApiService.Register(this.userName, this.password));
-            Swal.fire('Register success', '', 'success');
-            this.initService.init();
+            void Swal.fire('Register success', '', 'success');
+            void this.initService.init();
         } catch (err) {
             showCommonErrorDialog(err);
         }
     }
 
     forgetPassword() {
-        Swal.fire('Forget Password', 'Please contact your administrator', 'info');
+        void Swal.fire('Forget Password', 'Please contact your administrator', 'info');
     }
 }

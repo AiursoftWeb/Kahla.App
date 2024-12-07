@@ -5,7 +5,7 @@ import { isMobileDevice } from '../Utils/EnvironmentUtils';
     selector: '[appAutofocus]',
 })
 export class AutofocusDirective implements AfterViewInit {
-    constructor(private el: ElementRef) {}
+    constructor(private el: ElementRef<HTMLElement>) {}
 
     ngAfterViewInit() {
         // window.setTimeout(() => {

@@ -18,14 +18,14 @@ export class ChangePasswordComponent {
 
     public async onSubmit(): Promise<void> {
         if (this.newPassword !== this.confirmPassword) {
-            Swal.fire('Passwords are not same!', 'error');
+            void Swal.fire('Passwords are not same!', 'error');
             return;
         }
         try {
             const result = await lastValueFrom(
                 this.authApiServer.ChangePassword(this.oldPassword, this.newPassword)
             );
-            Swal.fire('All set', result.message, 'success');
+            void Swal.fire('All set', result.message, 'success');
         } catch (err) {
             showCommonErrorDialog(err);
         }

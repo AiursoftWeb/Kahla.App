@@ -10,7 +10,7 @@ export class ServerContactsRepository extends RepositoryListBase<ContactInfo> {
 
     constructor(
         private searchApiService: SearchApiService,
-        private keyword?: string,
+        private keyword: string,
         private keywordExclude?: string
     ) {
         super();

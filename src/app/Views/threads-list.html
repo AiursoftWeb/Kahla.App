@@ -34,16 +34,16 @@
             <div class="last-message">
                 {{ inf.allowDirectJoinWithoutInvitation ? 'Public' : 'Private' }}
             </div>
-        } @else if (asJoined(inf).messageContext?.latestMessage) {
+        } @else if (asJoined(inf).messageContext.latestMessage) {
             @let infJoined = asJoined(inf);
             <div class="last-time">
                 {{ infJoined.messageContext.latestMessage.sendTime | date: 'shortTime' }}
             </div>
             <div class="last-message" title="{{ infJoined.messageContext.latestMessage.preview }}">
-                @if (infJoined.topTenMembers.length === 2 && cacheService.mine().me) {
+                @if (infJoined.topTenMembers.length === 2 && cacheService.mine()) {
                     @if (
                         infJoined.messageContext.latestMessage.sender.id ===
-                        cacheService.mine().me.id
+                        cacheService.mine()!.me.id
                     ) {
                         <i class="fas fa-angle-right"></i>
                     } @else {

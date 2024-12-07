@@ -4,7 +4,7 @@ export class CachedObject<T> {
     private item?: T;
     private updatePromise?: Promise<void>;
 
-    public itemUpdated$ = new BehaviorSubject<T>(null);
+    public itemUpdated$ = new BehaviorSubject<T | null>(null);
 
     constructor(
         private cacheKey: string,
@@ -13,12 +13,12 @@ export class CachedObject<T> {
     ) {
         if (localStorage.getItem('cache-obj-' + cacheKey)) {
             this.itemUpdated$.next(
-                parseTransform(JSON.parse(localStorage.getItem('cache-obj-' + cacheKey)) as T)
+                parseTransform(JSON.parse(localStorage.getItem('cache-obj-' + cacheKey)!) as T)
             );
         }
 
-        this.itemUpdated$.subscribe(t => (this.item = t));
-        this.itemUpdated$.pipe(skip(1), debounceTime(1000)).subscribe(t => this.saveToStorage(t));
+        this.itemUpdated$.subscribe(t => (this.item = t ?? undefined));
+        this.itemUpdated$.pipe(skip(1), debounceTime(1000)).subscribe(t => this.saveToStorage(t!));
     }
 
     public update(): Promise<void> {
@@ -29,10 +29,11 @@ export class CachedObject<T> {
     }
 
     private async updateInternal() {
+        if (this.updater == null) return;
         try {
             this.itemUpdated$.next(await this.updater());
         } finally {
-            this.updatePromise = null;
+            this.updatePromise = undefined;
         }
     }
 
@@ -46,7 +47,7 @@ export class CachedObject<T> {
         }
 
         await this.update();
-        return this.item;
+        return this.item!;
     }
 
     public getSync(): T | null {

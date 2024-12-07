@@ -1,10 +1,10 @@
 <app-header title="Profile" [processing]="!info"></app-header>
-@if (info.value()) {
+@if (info.value(); as infoVal) {
     <app-user-basic-info
-        [user]="info.value().searchedUser.user"
-        [online]="info.value().searchedUser.online"
+        [user]="infoVal.searchedUser.user"
+        [online]="infoVal.searchedUser.online"
     />
-    <div class="menu-button" *ngIf="!info.value().searchedUser.user.emailConfirmed">
+    <div class="menu-button" *ngIf="!infoVal.searchedUser.user.emailConfirmed">
         <div class="img warning">
             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
         </div>
@@ -36,10 +36,10 @@
         <div class="img">
             <i class="fas fa-ban"></i>
         </div>
-        <div class="text">{{ info.value().searchedUser.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
+        <div class="text">{{ infoVal.searchedUser.isBlockedByYou ? 'Unblock' : 'Block' }}</div>
     </div>
-    @if (info.value().searchedUser.isKnownContact) {
-        <div class="menu-button" (click)="delete(info.value().searchedUser.user.id)">
+    @if (infoVal.searchedUser.isKnownContact) {
+        <div class="menu-button" (click)="delete(infoVal.searchedUser.user.id)">
             <div class="img">
                 <i class="fas fa-trash warning"></i>
             </div>
@@ -56,17 +56,17 @@
             <i class="fas fa-chevron-down"></i>
         </div>
     </div>
-    @if (isCommonThreadsShown() && commonThreadsRepo) {
-        <app-threads-list [threadRepo]="commonThreadsRepo()" />
+    @if (isCommonThreadsShown() && commonThreadsRepo()) {
+        <app-threads-list [threadRepo]="commonThreadsRepo()!" />
     }
 
     <div class="menu-gap"></div>
 
     <div class="buttons one-line">
-        @if (!info.value().searchedUser.isKnownContact) {
+        @if (!infoVal.searchedUser.isKnownContact) {
             <button class="primary" (click)="addAsContract()">Add as contract</button>
         }
-        @if (info.value().defaultThread) {
+        @if (infoVal.defaultThread) {
             <button class="primary" (click)="message()">Message</button>
         }
         <button class="success" (click)="newThread()">Create new thread</button>

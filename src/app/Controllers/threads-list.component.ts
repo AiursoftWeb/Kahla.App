@@ -16,7 +16,7 @@ export class ThreadsListComponent {
     public readonly emptyMessage = input('No results.');
     public readonly highlightPredicate = input<(item: ThreadInfo) => boolean>(() => false);
     public readonly externalView = input(false);
-    public readonly scrollingContainer = input<HTMLElement>(undefined);
+    public readonly scrollingContainer = input<HTMLElement | null>(null);
     public readonly autoLoadMore = input(false);
 
     @Output() public threadClicked = new EventEmitter<{
@@ -32,7 +32,7 @@ export class ThreadsListComponent {
         if (!this.cacheService?.mine()?.me || thread.topTenMembers.length > 2) return null;
         if (thread.topTenMembers.length === 1) return true;
         return thread.topTenMembers
-            .filter(t => t.user.id !== this.cacheService.mine().me.id)
+            .filter(t => t.user.id !== this.cacheService.mine()?.me?.id)
             .some(t => t.online);
     }
 

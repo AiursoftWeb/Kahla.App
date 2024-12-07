@@ -14,7 +14,7 @@ import { KahlaUser } from '../Models/KahlaUser';
     exportAs: 'appMessageTextInput',
 })
 export class MessageTextInputDirective {
-    constructor(private elementRef: ElementRef) {}
+    constructor(private elementRef: ElementRef<HTMLElement>) {}
 
     /**
      * The textContent will not be render to the DOM directly,
@@ -24,7 +24,7 @@ export class MessageTextInputDirective {
      */
     textContent = model<MessageTextWithAnnotate[]>([]);
 
-    private caretInfo?: Range = null;
+    private caretInfo?: Range = undefined;
 
     public forward() {
         setTimeout(() => this.forwardInternal(), 0);
@@ -68,21 +68,21 @@ export class MessageTextInputDirective {
         function appendText(text: string, results: MessageTextWithAnnotate[]) {
             if (!text) return;
             if (results.length && typeof results[results.length - 1] === 'string') {
-                results[results.length - 1] += text;
+                (results[results.length - 1] as string) += text;
             } else {
                 results.push(text);
             }
         }
 
         if (node.nodeType === Node.TEXT_NODE) {
-            appendText(node.nodeValue, results);
+            appendText(node.nodeValue!, results);
         } else if (node.nodeType === Node.ELEMENT_NODE) {
             const element = node as HTMLElement;
             if (element.hasAttribute('data-mention')) {
                 const mentionId = element.getAttribute('data-mention-id');
                 results.push({
                     annotated: 'mention',
-                    targetId: mentionId,
+                    targetId: mentionId!,
                     content: element.innerText,
                 } satisfies MessageTextAnnotatedMention);
             } else if (element.tagName === 'BR') {
@@ -94,7 +94,7 @@ export class MessageTextInputDirective {
                     child = child.nextSibling;
                 }
 
-                if (element.computedStyleMap().get('display').toString() === 'block') {
+                if (element.computedStyleMap().get('display')?.toString() === 'block') {
                     appendText('\n', results);
                 }
             }
@@ -103,7 +103,7 @@ export class MessageTextInputDirective {
 
     private getCurrentCaret(): Range | null {
         const selection = window.getSelection();
-        if (!selection.rangeCount) return null;
+        if (!selection?.rangeCount) return null;
 
         const range = selection.getRangeAt(0);
         // check if selection is in the current element
@@ -130,6 +130,7 @@ export class MessageTextInputDirective {
         if (!caret) {
             // just append to the end
             this.elementRef.nativeElement.appendChild(node);
+            return;
         }
 
         caret.deleteContents();

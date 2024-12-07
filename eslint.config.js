@@ -8,8 +8,8 @@ export default tsEslint.config(
         files: ['**/*.ts'],
         extends: [
             js.configs.recommended,
-            ...tsEslint.configs.recommended,
-            ...tsEslint.configs.stylistic,
+            ...tsEslint.configs.recommendedTypeChecked,
+            ...tsEslint.configs.stylisticTypeChecked,
             ...ngEslint.configs.tsRecommended,
         ],
         processor: ngEslint.processInlineTemplates,
@@ -30,6 +30,14 @@ export default tsEslint.config(
                     style: 'kebab-case',
                 },
             ],
+            '@angular-eslint/prefer-standalone': ['off'],
+            '@typescript-eslint/no-misused-promises': ['off'],
+        },
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
         },
     },
     {

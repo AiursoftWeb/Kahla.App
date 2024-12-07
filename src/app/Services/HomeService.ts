@@ -14,12 +14,12 @@ export class HomeService {
     }
 
     public get contentWrapper(): HTMLDivElement {
-        return document.querySelector('#contentWrapper');
+        return document.querySelector('#contentWrapper')!;
     }
 
     // Nullable
     public get floatingHomeWrapper(): HTMLDivElement {
-        return document.querySelector('#homeWrapper');
+        return document.querySelector('#homeWrapper')!;
     }
 
     public get imageMaxWidth(): number {

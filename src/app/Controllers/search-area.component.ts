@@ -31,7 +31,7 @@ export class SearchAreaComponent {
                         })
                     )
                     .subscribe(term => {
-                        this.searchText.set(term);
+                        this.searchText.set(term ?? '');
                     });
                 cleanup(() => sub.unsubscribe());
             }
@@ -39,7 +39,7 @@ export class SearchAreaComponent {
     }
 
     onpositiveClicked() {
-        this.searchText.set(this.textInput.value);
+        this.searchText.set(this.textInput.value ?? '');
         this.positiveClicked.emit();
     }
 }

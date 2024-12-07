@@ -33,11 +33,11 @@ export interface ContactListItem extends ContactInfo {
 export class ContactListComponent {
     public loadingImgURL = Values.loadingImgURL;
 
-    @Input() public contacts?: RepositoryLike<ContactListItem> = null;
+    @Input() public contacts?: RepositoryLike<ContactListItem>;
 
     @Input() public emptyMessage = 'No results.';
 
-    public contextMenu = input<TemplateRef<unknown>>(null);
+    public contextMenu = input<TemplateRef<unknown> | null>(null);
     public selectable = input<'single' | 'multi' | null>(null);
     public selectedIds = model<string[]>([]);
     public preventDefault = input<boolean>(false);

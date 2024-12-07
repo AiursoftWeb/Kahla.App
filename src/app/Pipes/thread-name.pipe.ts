@@ -17,7 +17,7 @@ export class ThreadNamePipe implements PipeTransform {
                 .filter(
                     t =>
                         !this.cacheService.mine()?.me ||
-                        t.user.id !== this.cacheService.mine().me.id
+                        t.user.id !== this.cacheService.mine()!.me.id
                 )
                 .map(t => t.user.nickName)
                 .join(', ')

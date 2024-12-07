@@ -32,7 +32,7 @@ export class MessageSegmentTextComponent {
         return typeof para === 'string' ? para : para.content;
     }
 
-    asMentionAnnotation(para: MessageTextWithAnnotate): MessageTextAnnotatedMention {
+    asMentionAnnotation(para: MessageTextWithAnnotate): MessageTextAnnotatedMention | null {
         return typeof para !== 'string' && para.annotated === 'mention'
             ? (para as MessageTextAnnotatedMention)
             : null;

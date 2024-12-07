@@ -1,4 +1,4 @@
-import { MessageTextAnnotated, MessageTextAnnotatedMention } from './MessageTextAnnotated';
+import { MessageTextAnnotated } from './MessageTextAnnotated';
 
 export type MessageSegmentTypes = (
     | MessageSegmentText

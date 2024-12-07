@@ -24,14 +24,14 @@ import videojs from 'video.js';
     standalone: true,
 })
 export class VjsPlayerComponent implements OnInit, OnDestroy {
-    readonly target = viewChild.required<ElementRef>('target');
+    readonly target = viewChild.required<ElementRef<HTMLVideoElement>>('target');
     // see options: https://github.com/videojs/video.js/blob/master/docs/guides/options.md
-    readonly options = input<Partial<VjsPluginOptions>>(undefined);
+    readonly options = input<Partial<VjsPluginOptions>>({});
     player: ReturnType<typeof videojs>; // workaround to get the type of the player (https://github.com/videojs/video.js/issues/8242)
 
     ngOnInit() {
         // instantiate Video.js
-        this.player = videojs(this.target().nativeElement, this.options(), null);
+        this.player = videojs(this.target().nativeElement, this.options());
     }
 
     ngOnDestroy() {

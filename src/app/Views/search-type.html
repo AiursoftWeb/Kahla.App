@@ -6,7 +6,7 @@
                 {{ item.title }}
             </span>
             @if (item.showDot) {
-                <div class="dot bluedot">{{ item.dotValue | truncatedNum }}</div>
+                <div class="dot bluedot">{{ item.dotValue! | truncatedNum }}</div>
             }
         </div>
     }

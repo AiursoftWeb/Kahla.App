@@ -24,8 +24,8 @@ export class TalkingInputComponent {
     }>();
 
     private picker: EmojiButton;
-    private chatBox = viewChild<ElementRef<HTMLElement>>('chatBox');
-    private chatInput = viewChild<MessageTextInputDirective>('chatInput');
+    private chatBox = viewChild.required<ElementRef<HTMLElement>>('chatBox');
+    private chatInput = viewChild.required<MessageTextInputDirective>('chatInput');
 
     recorder = new VoiceRecorder(180);
 
@@ -45,7 +45,8 @@ export class TalkingInputComponent {
                 showSearch: false,
             });
             this.picker.on('emoji', emoji => {
-                this.insertToSelection(emoji.emoji);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                this.insertToSelection(emoji.emoji as string);
             });
         }
         this.picker.togglePicker(this.chatBox().nativeElement);
@@ -86,7 +87,7 @@ export class TalkingInputComponent {
             e.preventDefault();
             if (
                 (e.altKey || e.ctrlKey || e.shiftKey) ===
-                this.cacheService.mine().privateSettings.enableEnterToSendMessage
+                this.cacheService.mine()?.privateSettings?.enableEnterToSendMessage
             ) {
                 this.insertToSelection('\n');
             } else {
@@ -117,7 +118,7 @@ export class TalkingInputComponent {
     }
 
     fileDropped(items: [File, string][]) {
-        Swal.fire({
+        void Swal.fire({
             title: 'Dropped files',
             text: items.map(([, name]) => name).join('\n'),
         });
@@ -137,7 +138,7 @@ export class TalkingInputComponent {
         const res = await selectFiles(true, accept);
         if (!res) return;
         console.log(res);
-        Swal.fire({
+        void Swal.fire({
             title: 'Selected files',
             text: res.map(t => t.name).join('\n'),
         });

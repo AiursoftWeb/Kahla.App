@@ -42,7 +42,7 @@
             <button
                 class="button primary"
                 (click)="send()"
-                *ngIf="!cacheService.mine().privateSettings.enableEnterToSendMessage"
+                *ngIf="!cacheService.mine()?.privateSettings?.enableEnterToSendMessage"
             >
                 Send
             </button>

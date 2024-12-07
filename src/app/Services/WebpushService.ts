@@ -34,7 +34,7 @@ export class WebpushService {
 
     public get pushSettings(): PushSubscriptionSetting {
         const storage = JSON.parse(
-            localStorage.getItem('setting-pushSubscription')
+            localStorage.getItem('setting-pushSubscription') ?? 'null'
         ) as PushSubscriptionSetting | null;
         if (!storage) {
             return {
@@ -60,8 +60,8 @@ export class WebpushService {
                     settings.deviceId,
                     navigator.userAgent,
                     pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth
+                    pushSubscription.toJSON().keys!.p256dh,
+                    pushSubscription.toJSON().keys!.auth
                 )
             );
             console.log('[ OK ] Device updated.');
@@ -71,8 +71,8 @@ export class WebpushService {
                 this.devicesApiService.AddDevice(
                     navigator.userAgent,
                     pushSubscription.endpoint,
-                    pushSubscription.toJSON().keys.p256dh,
-                    pushSubscription.toJSON().keys.auth
+                    pushSubscription.toJSON().keys!.p256dh,
+                    pushSubscription.toJSON().keys!.auth
                 )
             );
             this.updatePushSettings({
@@ -112,7 +112,7 @@ export class WebpushService {
                 deviceId: 0,
             });
             console.log('[ ** ] Device id invalid, rotating.');
-            this.subscribeUser(); // Re subscribe to rebind the device; Fire and forget
+            void this.subscribeUser(); // Re subscribe to rebind the device; Fire and forget
         }
         return resp.items;
     }
@@ -120,7 +120,7 @@ export class WebpushService {
     public async webpushInit() {
         if (!this.notificationAvail || !this.pushSettings.enabled) return;
         await this.subscribeUser();
-        await this.initSubscriptionUpdater();
+        this.initSubscriptionUpdater();
     }
 
     public async updateEnabled(enabled: boolean) {
@@ -164,7 +164,7 @@ export class WebpushService {
             if (registration.waiting && registration.active) {
                 console.log('[WARN] ServiceWorker update detected.');
                 setTimeout(() => {
-                    SwalToast.fire({
+                    void SwalToast.fire({
                         icon: 'info',
                         position: 'bottom-right',
                         title: 'A new version of the Kahla is ready.',
@@ -177,7 +177,7 @@ export class WebpushService {
             return;
         }
 
-        this.requestUserApproval();
+        void this.requestUserApproval();
     }
 
     public async subscribeUser(forceUpdate = false) {
@@ -204,13 +204,13 @@ export class WebpushService {
         }
     }
 
-    public async initSubscriptionUpdater() {
+    public initSubscriptionUpdater() {
         if (!this.notificationAvail) return;
         navigator.serviceWorker.addEventListener('pushsubscriptionchange', async () => {
             console.log('[ ** ] Push subscription changed');
             const registration = await navigator.serviceWorker.ready;
             const sub = await registration.pushManager.subscribe(this.pushServerMetadata);
-            this.bindDevice(sub, true);
+            await this.bindDevice(sub, true);
             console.log('[ OK ] Push subscription updated');
         });
     }

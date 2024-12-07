@@ -42,7 +42,7 @@ export class EventService {
                 }
             };
             this.ws.onmessage = evt => {
-                this.onMessage.next(JSON.parse(evt.data) as AiurEvent);
+                this.onMessage.next(JSON.parse(evt.data as string) as AiurEvent);
             };
             this.ws.onerror = () => {
                 this.errorOrClosedFunc();
@@ -77,7 +77,7 @@ export class EventService {
 
     public attemptReconnect() {
         if (this.errorOrClose) {
-            this.initPusher();
+            void this.initPusher();
         }
     }
 

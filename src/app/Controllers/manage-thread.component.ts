@@ -21,13 +21,13 @@ export class ManageThreadComponent {
         loader: ({ request }) =>
             this.threadInfoCacheDictionary
                 .get(request)
-                .catch<null>(err => void showCommonErrorDialog(err)),
+                .catch(err => void showCommonErrorDialog(err)),
     });
 
     threadProfile = linkedSignal<ThreadOptions>(() => {
-        if (!this.threadInfo.value()) return null;
+        if (!this.threadInfo.value()) return {} as ThreadOptions;
         const picked = pickProperties(
-            this.threadInfo.value(),
+            this.threadInfo.value()!,
             'name',
             'allowDirectJoinWithoutInvitation',
             'allowMemberSoftInvitation',
@@ -37,7 +37,7 @@ export class ManageThreadComponent {
         );
         return {
             ...picked,
-            iconFilePath: this.threadInfo.value().imagePath,
+            iconFilePath: this.threadInfo.value()!.imagePath,
         };
     });
 
@@ -51,7 +51,7 @@ export class ManageThreadComponent {
             await lastValueFrom(
                 this.threadsApiService.UpdateThread(this.id(), this.threadProfile())
             );
-            SwalToast.fire('Saved!', '', 'success');
+            void SwalToast.fire('Saved!', '', 'success');
             this.threadInfoCacheDictionary.delete(this.id());
             this.threadInfo.reload();
         } catch (err) {

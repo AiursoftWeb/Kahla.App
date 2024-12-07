@@ -9,7 +9,6 @@
 } from '@angular/core';
 import { MessageService } from '../Services/MessageService';
 import { CacheService } from '../Services/CacheService';
-import { uuid4 } from '../Utils/Uuid';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { ParsedMessage } from '../Models/Messages/ParsedMessage';
 import { lastValueFrom } from 'rxjs';
@@ -41,6 +40,7 @@ export class TalkingComponent {
                 return this.threadInfoCacheDictionary.get(request);
             } catch (err) {
                 showCommonErrorDialog(err);
+                throw err;
             }
         },
     });
@@ -87,7 +87,7 @@ export class TalkingComponent {
                 this.repo.connect();
                 cleanup(() => {
                     sub.unsubscribe();
-                    this.repo.disconnect();
+                    this.repo?.disconnect();
                 });
             } catch (err) {
                 showCommonErrorDialog(err);
@@ -115,7 +115,7 @@ export class TalkingComponent {
         }
     }
 
-    public async loadMore() {
+    public loadMore() {
         const oldScrollHeight = document.documentElement.scrollHeight;
         setTimeout(() => {
             window.scroll(0, document.documentElement.scrollHeight - oldScrollHeight);
@@ -123,9 +123,10 @@ export class TalkingComponent {
     }
 
     public send({ content }: { content: MessageContent }) {
-        this.repo.send({
+        if (!this.repo || !this.cacheService.mine()) return;
+        this.repo?.send({
             content: JSON.stringify(content),
-            senderId: this.cacheService.mine().me.id ?? uuid4(),
+            senderId: this.cacheService.mine()!.me.id,
             preview: this.messageService.buildPreview(content),
         });
     }

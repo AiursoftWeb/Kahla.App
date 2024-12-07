@@ -1,11 +1,11 @@
 import { debounceTime, Subject } from 'rxjs';
 
 class CacheEntry<T> {
-    getAsync(): Promise<T> {
+    getAsync(): Promise<T | null> {
         if (this.item != null) {
             return Promise.resolve(this.item);
         } else {
-            return this.itemLoader;
+            return this.itemLoader ?? Promise.resolve(null);
         }
     }
 
@@ -27,10 +27,16 @@ class CacheEntry<T> {
         }
 
         if (itemLoader != null) {
-            itemLoader.then(value => {
-                this.item = value;
-                this.itemLoader = null;
-            });
+            itemLoader
+                .then(value => {
+                    this.item = value;
+                    this.itemLoader = undefined;
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.item = undefined;
+                    this.itemLoader = undefined;
+                });
         }
     }
 }
@@ -53,12 +59,12 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
             const persistCache = localStorage.getItem('cache-dict-' + this.persistKey);
             if (persistCache) {
                 const cacheEntries = new Map<TKey, PersistCacheEntry<TValue>>(
-                    JSON.parse(persistCache)
+                    JSON.parse(persistCache) as [TKey, PersistCacheEntry<TValue>][]
                 );
                 cacheEntries.forEach((value, key) => {
                     this.cache.set(
                         key,
-                        new CacheEntry<TValue>(value.value, null, new Date(value.cachedTime))
+                        new CacheEntry<TValue>(value.value, undefined, new Date(value.cachedTime))
                     );
                 });
             }
@@ -73,16 +79,17 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
         if (
             this.cache.has(key) &&
             !forceRenew &&
-            new Date().getTime() - this.cache.get(key).cachedTime.getTime() < this.ttlSeconds * 1000
+            new Date().getTime() - this.cache.get(key)!.cachedTime.getTime() <
+                this.ttlSeconds * 1000
         ) {
-            return await this.cache.get(key).getAsync();
-        } else {
-            const value = this.cacheMiss(key);
-            this.cache.set(key, new CacheEntry<TValue>(null, value));
-            const valComputed = await value;
-            this.savePersist$.next();
-            return valComputed;
+            const res = await this.cache.get(key)!.getAsync();
+            if (res != null) return res;
         }
+        const value = this.cacheMiss(key);
+        this.cache.set(key, new CacheEntry<TValue>(undefined, value));
+        const valComputed = await value;
+        this.savePersist$.next();
+        return valComputed;
     }
 
     public set(key: TKey, value: TValue) {
@@ -105,7 +112,7 @@ export abstract class CachedDictionaryBase<TKey, TValue> {
                 new Date().getTime() - value.cachedTime.getTime() < this.ttlSeconds * 1000
             )
                 persistCache.set(key, {
-                    value: value.getSync(),
+                    value: value.getSync()!,
                     cachedTime: value.cachedTime.getTime(),
                 });
         });

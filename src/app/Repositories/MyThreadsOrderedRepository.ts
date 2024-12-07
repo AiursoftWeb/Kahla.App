@@ -29,7 +29,7 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
     }
 
     protected async loadMoreInternal(take: number): Promise<void> {
-        const lastId = this.data.at(-1).id;
+        const lastId = this.data.at(-1)?.id;
         const newData = await lastValueFrom(this.threadsApiService.Mine(take, lastId));
         // the data might be changed since then
         // find the lastId, and append the new data after it. Discard any items after the lastId

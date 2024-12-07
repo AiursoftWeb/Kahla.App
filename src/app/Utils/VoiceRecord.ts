@@ -1,12 +1,12 @@
 import { Subject } from 'rxjs';
 
 export class VoiceRecorder {
-    private audioChunks = [];
+    private audioChunks: Blob[] = [];
     private recorder?: MediaRecorder;
     private forceStopTimeout?: ReturnType<typeof setTimeout>;
     public gotAudio = new Subject<Blob>();
     public get recording(): boolean {
-        return this.recorder && this.recorder.state === 'recording';
+        return !!(this.recorder && this.recorder.state === 'recording');
     }
 
     private inited = false;
@@ -31,7 +31,7 @@ export class VoiceRecorder {
     }
 
     public startRecording() {
-        if (!this.recorder) {
+        if (this.recorder) {
             this.recorder.start();
             this.forceStopTimeout = setTimeout(() => {
                 this.stopRecording();
@@ -41,7 +41,7 @@ export class VoiceRecorder {
 
     public stopRecording() {
         if (this.recording) {
-            this.recorder.stop();
+            this.recorder!.stop();
         }
 
         if (this.forceStopTimeout) {

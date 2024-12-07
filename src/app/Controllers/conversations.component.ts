@@ -7,6 +7,7 @@ import { MyThreadsRepositoryFiltered } from '../Repositories/ThreadsRepository';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { MyThreadsOrderedRepository } from '../Repositories/MyThreadsOrderedRepository';
 import { RepositoryBase } from '../Repositories/RepositoryBase';
+import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 
 @Component({
     selector: 'app-conversations',
@@ -31,7 +32,7 @@ export class ConversationsComponent implements OnInit {
                     this.threadsApiService,
                     this.searchText()
                 );
-                this.threadsRepo.updateAll();
+                this.threadsRepo.updateAll().catch(showCommonErrorDialog);
             } else {
                 this.threadsRepo = this.myThreadsOrderedRepository;
             }
@@ -39,11 +40,11 @@ export class ConversationsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.myThreadsOrderedRepository.updateAll();
+        this.myThreadsOrderedRepository.updateAll().catch(showCommonErrorDialog);
     }
 
     public detail(info: ThreadInfo): void {
-        this.router.navigate(['/detail', info.id]);
+        void this.router.navigate(['/detail', info.id]);
     }
 
     public current(info: ThreadInfo): boolean {
@@ -51,6 +52,6 @@ export class ConversationsComponent implements OnInit {
     }
 
     public goTalking(id: number) {
-        this.router.navigate(['/talking', id]);
+        void this.router.navigate(['/talking', id]);
     }
 }

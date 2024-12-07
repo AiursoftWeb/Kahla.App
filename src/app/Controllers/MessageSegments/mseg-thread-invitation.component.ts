@@ -16,7 +16,7 @@ import { SwalToast } from '../../Utils/Toast';
 export class MessageSegmentThreadInvitationComponent {
     readonly content = input.required<MessageSegmentThreadInvitation>();
     readonly targetMe = computed(
-        () => this.content().targetUserId === this.cacheService.mine().me.id
+        () => this.content().targetUserId === this.cacheService.mine()?.me.id
     );
     readonly expired = computed(() => this.content().validTo < new Date().getTime());
     readonly valid = computed(() => !this.expired() && this.targetMe);
@@ -36,7 +36,7 @@ export class MessageSegmentThreadInvitationComponent {
         if (!this.valid()) return;
         try {
             await lastValueFrom(this.threadsApiService.CompleteSoftInvite(this.content().token));
-            SwalToast.fire('Accepted invitation!');
+            void SwalToast.fire('Accepted invitation!');
         } catch (err) {
             showCommonErrorDialog(err);
         }

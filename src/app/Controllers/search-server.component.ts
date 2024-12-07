@@ -16,13 +16,13 @@ export class SearchServerComponent {
     searchTerm = signal('');
     selectedTab = signal(0);
 
-    public contactsRepo?: ServerContactsRepository = null;
-    public threadsRepo?: ServerThreadsRepository = null;
+    public contactsRepo?: ServerContactsRepository = undefined;
+    public threadsRepo?: ServerThreadsRepository = undefined;
 
     constructor(private searchApiService: SearchApiService) {
         effect(() => {
             if (this.searchTerm().length > 0) {
-                this.search(this.searchTerm());
+                void this.search(this.searchTerm());
             }
         });
     }

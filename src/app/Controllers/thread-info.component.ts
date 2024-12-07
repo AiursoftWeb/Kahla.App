@@ -32,7 +32,7 @@ export class ThreadInfoComponent {
 
     topTenRepo = computed(() => {
         return new MappedRepository<ContactListItem, ThreadMemberInfo>(
-            new StaticRepository(this.thread.value()?.topTenMembers),
+            new StaticRepository(this.thread.value()?.topTenMembers ?? []),
             t => ({
                 ...t,
                 tags: [
@@ -51,8 +51,11 @@ export class ThreadInfoComponent {
 
     public async setMute(value: boolean) {
         try {
-            await lastValueFrom(this.threadsApiService.SetMute(this.thread.value().id, value));
-            this.threadInfoCacheDictionary.set(this.id(), { ...this.thread.value(), muted: value });
+            await lastValueFrom(this.threadsApiService.SetMute(this.thread.value()!.id, value));
+            this.threadInfoCacheDictionary.set(this.id(), {
+                ...this.thread.value()!,
+                muted: value,
+            });
             this.thread.reload();
         } catch (err) {
             showCommonErrorDialog(err);
@@ -60,7 +63,7 @@ export class ThreadInfoComponent {
     }
 
     async leaveThread() {
-        const threadValue = this.thread.value();
+        const threadValue = this.thread.value()!;
         const isOwner = threadValue.imOwner;
         const memberCount = threadValue.topTenMembers.length;
         const threadId = threadValue.id;
@@ -71,7 +74,7 @@ export class ThreadInfoComponent {
         // >2 users: error
 
         if (isOwner && memberCount > 2) {
-            Swal.fire({
+            void Swal.fire({
                 icon: 'error',
                 title: 'You are not allowed to leave this thread.',
                 text: 'You are the owner of the thread. Consider transferring the ownership to others or dissolve the thread.',
@@ -93,11 +96,11 @@ export class ThreadInfoComponent {
                 try {
                     await lastValueFrom(this.threadsApiService.Dissolve(threadId));
                     this.threadInfoCacheDictionary.delete(this.id());
-                    SwalToast.fire({
+                    void SwalToast.fire({
                         icon: 'success',
                         title: 'Dissolved successfully.',
                     });
-                    this.router.navigate(['/home'], { replaceUrl: true });
+                    void this.router.navigate(['/home'], { replaceUrl: true });
                     return;
                 } catch (err) {
                     showCommonErrorDialog(err);
@@ -108,7 +111,7 @@ export class ThreadInfoComponent {
                     m => m.user.id !== threadValue.ownerId
                 );
                 try {
-                    await lastValueFrom(this.threadsApiService.Transfer(threadId, target.user.id));
+                    await lastValueFrom(this.threadsApiService.Transfer(threadId, target!.user.id));
                 } catch (err) {
                     showCommonErrorDialog(err);
                     return;
@@ -119,11 +122,11 @@ export class ThreadInfoComponent {
         try {
             await lastValueFrom(this.threadsApiService.Leave(threadId));
             this.threadInfoCacheDictionary.delete(this.id());
-            SwalToast.fire({
+            void SwalToast.fire({
                 icon: 'success',
                 title: 'Left successfully.',
             });
-            this.router.navigate(['/home'], { replaceUrl: true });
+            void this.router.navigate(['/home'], { replaceUrl: true });
         } catch (err) {
             showCommonErrorDialog(err);
         }

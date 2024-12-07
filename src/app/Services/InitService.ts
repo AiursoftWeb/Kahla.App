@@ -46,7 +46,7 @@ export class InitService {
                 if (error instanceof HttpErrorResponse && error.status === 401) {
                     // Unauthorized, user not sign in
                     console.warn('[WARN] User not signed in. Redirecting to signin page.');
-                    this.router.navigate(['/signin'], { replaceUrl: true });
+                    void this.router.navigate(['/signin'], { replaceUrl: true });
                     return;
                 } else {
                     console.warn('[WARN] Network not avail. Cannot update my info.');
@@ -55,27 +55,27 @@ export class InitService {
 
             console.log('[ OK ] User signed in.');
             if (this.router.isActive('/signin', false)) {
-                this.router.navigate(['/home'], { replaceUrl: true });
+                void this.router.navigate(['/home'], { replaceUrl: true });
             }
 
             // Webpush Service
-            this.webpushService.webpushInit();
+            void this.webpushService.webpushInit();
 
             // Init global push
-            this.eventService.initPusher();
+            void this.eventService.initPusher();
             this.globalNotifyService.init();
 
             // Load User Info
             // this.cacheService.cachedData.me.avatarURL =
             //     this.probeService.encodeProbeFileUrl(this.cacheService.cachedData.me.iconFilePath);
-            this.themeService.ApplyThemeFromRemote(this.cacheService.mine().privateSettings);
+            this.themeService.ApplyThemeFromRemote(this.cacheService.mine()!.privateSettings);
 
             // Fire and forget updates
-            this.myContactsRepository.updateAll();
-            this.myThreadsOrderedRepository.updateAll();
+            void this.myContactsRepository.updateAll();
+            void this.myThreadsOrderedRepository.updateAll();
         } else {
-            this.router.navigate(['/signin'], { replaceUrl: true });
-            Swal.fire('Server is not available', 'Please try again later.', 'error');
+            void this.router.navigate(['/signin'], { replaceUrl: true });
+            void Swal.fire('Server is not available', 'Please try again later.', 'error');
         }
     }
 

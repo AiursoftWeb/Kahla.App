@@ -30,7 +30,7 @@ sw.addEventListener('notificationclick', event =>
 sw.addEventListener('push', event =>
     event.waitUntil(
         (async () => {
-            const data = event.data.json();
+            const data = event.data!.json();
             if (data.type === 0) {
                 // new message
                 const title =

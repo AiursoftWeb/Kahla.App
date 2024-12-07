@@ -13,12 +13,12 @@ export class ThemeService {
         private cacheService: CacheService
     ) {}
 
-    public mediaListener: MediaQueryList;
+    public mediaListener?: MediaQueryList;
     public readonly TITLE = 'Kahla - Aiursoft';
 
     public ApplyThemeFromRemote(remoteInfo: AppOptions) {
-        if (this.LocalThemeSetting !== remoteInfo.themeId) {
-            this.LocalThemeSetting = remoteInfo.themeId;
+        if (this.LocalThemeSetting !== (remoteInfo.themeId as Theme)) {
+            this.LocalThemeSetting = remoteInfo.themeId as Theme;
         }
         this.ApplyTheme(remoteInfo.themeId);
     }
@@ -43,50 +43,70 @@ export class ThemeService {
             // make sure all media listener detached
             if (this.mediaListener) {
                 this.mediaListener.onchange = null;
-                this.mediaListener = null;
+                this.mediaListener = undefined;
             }
         }
         switch (themeComputed) {
             case Theme.sakuraLight:
                 document.body.className = 'theme-sakura-light';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#cf4c78');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#cf4c78');
                 break;
             case Theme.sakuraDark:
                 document.body.className = 'theme-sakura-dark';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#cf4c78');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#cf4c78');
                 break;
             case Theme.violetLight:
                 document.body.className = 'theme-violet-light';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#5F4B8B');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#5F4B8B');
                 break;
             case Theme.violetDark:
                 document.body.className = 'theme-violet-dark';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#5F4B8B');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#5F4B8B');
                 break;
             case Theme.communistLight:
                 document.body.className = 'theme-communist-light';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#df2710');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#df2710');
                 break;
             case Theme.communistDark:
                 document.body.className = 'theme-communist-dark';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#df2710');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#df2710');
                 break;
             case Theme.grassLight:
                 document.body.className = 'theme-grass-light';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#409344');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#409344');
                 break;
             case Theme.grassDark:
                 document.body.className = 'theme-grass-dark';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#409344');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#409344');
                 break;
             case Theme.kahlaDark:
                 document.body.className = 'theme-dark';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#18a4f9');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#18a4f9');
                 break;
             case Theme.kahlaLight:
             default:
                 document.body.className = 'theme-light';
-                document.querySelector('meta[name=theme-color]').setAttribute('content', '#18a4f9');
+                document
+                    .querySelector('meta[name=theme-color]')
+                    ?.setAttribute('content', '#18a4f9');
                 break;
         }
     }
@@ -105,7 +125,7 @@ export class ThemeService {
     }
 
     public SetRemoteThemeSetting(theme: Theme): void {
-        this.cacheService.mine().privateSettings.themeId = theme;
+        this.cacheService.mine()!.privateSettings.themeId = theme;
         this.authApiService
             .UpdateMe({
                 themeId: theme,
@@ -131,10 +151,10 @@ export class ThemeService {
     public set NotifyIcon(value: number) {
         if (value !== 0) {
             document.title = `(${value}) ${this.TITLE}`;
-            document.querySelector('link[rel=icon]').setAttribute('href', 'favicon_notify.ico');
+            document.querySelector('link[rel=icon]')?.setAttribute('href', 'favicon_notify.ico');
         } else {
             document.title = this.TITLE;
-            document.querySelector('link[rel=icon]').setAttribute('href', 'favicon.ico');
+            document.querySelector('link[rel=icon]')?.setAttribute('href', 'favicon.ico');
         }
     }
 }

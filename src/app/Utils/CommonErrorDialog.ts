@@ -8,18 +8,19 @@ export function showCommonErrorDialog(err: unknown): undefined {
         if (err.status) {
             const error = err.error as AiurCollection<string>;
             if (error.code === -10) {
-                Swal.fire(error.message, error.items.join('\n'), 'error');
+                void Swal.fire(error.message, error.items.join('\n'), 'error');
             } else {
-                Swal.fire(
+                void Swal.fire(
                     Math.floor(err.status / 100) === 4 ? 'Client Error' : 'Server Error', // 4xx are client errors, 5xx are server errors
                     error.message,
                     'error'
                 );
             }
         } else {
-            Swal.fire('Network error', err.message, 'error');
+            void Swal.fire('Network error', err.message, 'error');
         }
     } else {
-        Swal.fire('Unknown error', err.toString(), 'error');
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        void Swal.fire('Unknown error', err!.toString(), 'error');
     }
 }

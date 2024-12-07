@@ -14,12 +14,13 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "rootDir": "."
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
     "strictInjectionParameters": true
   },
-  "include": ["**/*"],
+  "include": ["**/*.ts"],
   "exclude": ["service-worker/**/*"]
 }

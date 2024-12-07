@@ -1,6 +1,6 @@
 <app-header title="Thread Info"></app-header>
-@if (thread.hasValue()) {
-    <app-thread-basic-info [threadInfo]="thread.value()" />
+@if (thread.value(); as threadVal) {
+    <app-thread-basic-info [threadInfo]="threadVal" />
 
     <div class="menu-button">
         <div class="img">
@@ -10,28 +10,28 @@
     </div>
 
     <div class="menu-gap"></div>
-    <div class="menu-button" routerLink="/talking/{{ thread.value().id }}">
+    <div class="menu-button" routerLink="/talking/{{ threadVal.id }}">
         <div class="img">
             <i class="fas fa-comments"></i>
         </div>
         <div class="text">Message</div>
     </div>
-    <div class="menu-button" routerLink="/file-history/{{ thread.value().id }}">
+    <div class="menu-button" routerLink="/file-history/{{ threadVal.id }}">
         <div class="img">
             <i class="fas fa-history"></i>
         </div>
         <div class="text">File History</div>
     </div>
     <app-toggle-menu-item
-        [value]="thread.value().muted"
+        [value]="threadVal.muted"
         (valueChange)="setMute($event)"
         title="Mute Nitification"
         iconClasses="fas fa-bell-slash"
     ></app-toggle-menu-item>
     <div
         class="menu-button"
-        *ngIf="thread.value().imAdmin"
-        routerLink="/manage-thread/{{ thread.value().id }}"
+        *ngIf="threadVal.imAdmin"
+        routerLink="/manage-thread/{{ threadVal.id }}"
     >
         <div class="img">
             <i class="fas fa-cogs"></i>
@@ -46,7 +46,7 @@
         <div class="text">members</div>
     </div>
     <app-contact-list [contacts]="topTenRepo()"></app-contact-list>
-    <div class="menu-button" routerLink="/thread-members/{{ thread.value().id }}">
+    <div class="menu-button" routerLink="/thread-members/{{ threadVal.id }}">
         <div class="img">
             <i class="fas fa-ellipsis"></i>
         </div>
