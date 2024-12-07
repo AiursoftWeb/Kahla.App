@@ -4835,7 +4835,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.24.0":
+"esbuild@npm:0.24.0, esbuild@npm:^0.24.0":
   version: 0.24.0
   resolution: "esbuild@npm:0.24.0"
   dependencies:
@@ -6587,6 +6587,7 @@ __metadata:
     angular-eslint: "npm:19.0.1"
     autolinker: "npm:^4.0.0"
     blueimp-load-image: "npm:^5.16.0"
+    esbuild: "npm:^0.24.0"
     eslint: "npm:^9.16.0"
     prettier: "npm:^3.4.2"
     rxjs: "npm:^7.8.1"

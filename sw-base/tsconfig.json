@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../src/tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist/",
     "noEmit": false,
@@ -7,7 +7,7 @@
     "target": "ES2022",
     "module": "es2022",
     "rootDir": "src",
-    "sourceMap": false
+    "sourceMap": false,
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
 }

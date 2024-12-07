@@ -49,7 +49,7 @@ sw.addEventListener('push', event =>
                         preferredUrl: `/talking/${data.message.threadId}`,
                     },
                 });
-            } else if (data === 19) {
+            } else if (data.type === 19) {
                 // hard invited
                 const ownerNickname = data.thread.topTenMembers.find(t => t.isOwner)?.nickName;
                 const title = `You are invited to ${ownerNickname}'s thread`;

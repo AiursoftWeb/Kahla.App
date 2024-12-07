@@ -14,11 +14,11 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "esModuleInterop": true,
-    "rootDir": "src"
+    "rootDir": "."
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
     "strictInjectionParameters": true
   },
-  "include": ["src/**/*"]
+  "include": ["**/*", "../sw-base/tsconfig.json"]
 }
