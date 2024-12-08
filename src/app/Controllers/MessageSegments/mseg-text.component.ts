@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, input, viewChild } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { MessageSegmentText, MessageTextWithAnnotate } from '../../Models/Messages/MessageSegments';
 import { checkSingleEmoji } from '../../Utils/StringUtils';
 import { MessageTextAnnotatedMention } from '../../Models/Messages/MessageTextAnnotated';
@@ -25,8 +25,6 @@ export class MessageSegmentTextComponent {
             this.textSegments().length === 1 &&
             checkSingleEmoji(this.asPureText(this.textSegments()[0]))
     );
-
-    textContainer = viewChild<ElementRef<HTMLElement>>('textContainer');
 
     asPureText(para: MessageTextWithAnnotate): string {
         return typeof para === 'string' ? para : para.content;
