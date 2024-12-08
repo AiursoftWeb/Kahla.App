@@ -1,8 +1,7 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { ThreadInfo } from '../Models/Threads/ThreadInfo';
 import { Router } from '@angular/router';
 import { CacheService } from '../Services/CacheService';
-import { Values } from '../values';
 import { MyThreadsRepositoryFiltered } from '../Repositories/ThreadsRepository';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { MyThreadsOrderedRepository } from '../Repositories/MyThreadsOrderedRepository';
@@ -15,8 +14,7 @@ import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
     styleUrls: ['../Styles/search-part.scss'],
     standalone: false,
 })
-export class ConversationsComponent implements OnInit {
-    public loadingImgURL = Values.loadingImgURL;
+export class ConversationsComponent {
     public threadsRepo?: RepositoryBase<ThreadInfo>;
     searchText = signal('');
 
@@ -37,10 +35,6 @@ export class ConversationsComponent implements OnInit {
                 this.threadsRepo = this.myThreadsOrderedRepository;
             }
         });
-    }
-
-    public ngOnInit(): void {
-        this.myThreadsOrderedRepository.updateAll().catch(showCommonErrorDialog);
     }
 
     public detail(info: ThreadInfo): void {

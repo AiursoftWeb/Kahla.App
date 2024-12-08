@@ -19,15 +19,14 @@
                     [class.graydot]="!onlineStatusOf(infJoined)"
                 ></div>
             }
-
-            <div
-                *ngIf="infJoined.messageContext.unReadAmount > 0"
-                class="dot"
-                [ngClass]="infJoined.muted ? 'bluedot' : 'reddot'"
-            >
-                {{ infJoined.messageContext.unReadAmount | truncatedNum }}
-            </div>
-            <div *ngIf="infJoined.someoneAtMe" class="dot at-dot">&#64;</div>
+            @if (infJoined.messageContext.unReadAmount > 0) {
+                <div class="dot" [ngClass]="infJoined.muted ? 'bluedot' : 'reddot'">
+                    {{ infJoined.messageContext.unReadAmount | truncatedNum }}
+                </div>
+            }
+            @if (infJoined.someoneAtMe) {
+                <div class="dot at-dot">&#64;</div>
+            }
         }
         <div class="sender">{{ inf | threadName }}</div>
         @if (externalView()) {

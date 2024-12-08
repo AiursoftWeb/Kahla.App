@@ -1,4 +1,4 @@
-import { filter, lastValueFrom } from 'rxjs';
+import { filter, lastValueFrom, Subscription } from 'rxjs';
 import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { RepositoryBase } from './RepositoryBase';
@@ -20,6 +20,7 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
         persist: true,
     };
     private _canLoadMore = true;
+    private sub?: Subscription;
 
     constructor(
         private threadsApiService: ThreadsApiService,
@@ -27,31 +28,6 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
         private threadInfoCacheDictionary: ThreadInfoCacheDictionary
     ) {
         super();
-        eventService.onMessage.pipe(filter(t => isThreadAddedEvent(t))).subscribe(t => {
-            this.data = [t.thread, ...this.data];
-        });
-
-        eventService.onMessage.pipe(filter(t => isThreadRemovedEvent(t))).subscribe(t => {
-            this.data = this.data.filter(d => d.id !== t.threadId);
-        });
-
-        eventService.onMessage
-            .pipe(filter(t => t.type === KahlaEventType.NewMessage))
-            .subscribe(async t => {
-                const ev = t as NewMessageEvent;
-                const threadId = ev.message.threadId;
-                let thread: ThreadInfoJoined;
-                if (this.data.some(t => t.id === threadId)) {
-                    // Move the thread to the top
-                    thread = this.data.find(t => t.id === threadId)!;
-                    this.data = this.data.filter(t => t.id !== threadId);
-                } else {
-                    thread = await this.threadInfoCacheDictionary.get(threadId);
-                }
-                thread.messageContext.latestMessage = ev.message;
-                this.data = [thread, ...this.data];
-                this.threadInfoCacheDictionary.set(threadId, thread);
-            });
     }
 
     private updateCache(threads: ThreadInfoJoined[]) {
@@ -59,9 +35,57 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
     }
 
     protected async updateAllInternal(): Promise<void> {
+        // Unsubscribe from previous events
+        this.sub?.unsubscribe();
+
+        // Load the first 20 threads
         this.data = (await lastValueFrom(this.threadsApiService.Mine(20))).knownThreads;
         this.updateCache(this.data);
         this._canLoadMore = this.data.length >= 20;
+
+        // Start subscribing to message events
+        this.sub = this.eventService.onMessage
+            .pipe(filter(t => isThreadAddedEvent(t)))
+            .subscribe(t => {
+                this.data = [t.thread, ...this.data];
+            });
+
+        this.sub.add(
+            this.eventService.onMessage.pipe(filter(t => isThreadRemovedEvent(t))).subscribe(t => {
+                this.data = this.data.filter(d => d.id !== t.threadId);
+            })
+        );
+
+        this.sub.add(
+            this.eventService.onMessage
+                .pipe(filter(t => t.type === KahlaEventType.NewMessage))
+                .subscribe(async t => {
+                    const ev = t as NewMessageEvent;
+                    const threadId = ev.message.threadId;
+                    let thread = this.data.find(t => t.id === threadId);
+                    if (thread) {
+                        // We will move the thread to the top
+                        this.data = this.data.filter(t => t.id !== threadId);
+                    } else {
+                        thread = await this.threadInfoCacheDictionary.get(threadId);
+                    }
+                    thread.messageContext.latestMessage = ev.message;
+                    this.data = [thread, ...this.data];
+                    this.threadInfoCacheDictionary.set(threadId, thread);
+                })
+        );
+
+        this.sub.add(
+            this.eventService.onErrorOrClose.subscribe(() => {
+                this.status = 'offline';
+            })
+        );
+
+        this.sub.add(
+            this.eventService.onReconnect.subscribe(() => {
+                void this.updateAll();
+            })
+        );
     }
 
     public get canLoadMore() {

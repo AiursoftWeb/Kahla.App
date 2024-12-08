@@ -7,11 +7,12 @@
             [class.current]="homeService.currentPage === 0"
         >
             <div class="icon">
-                <i class="fas fa-comment" *ngIf="homeService.currentPage === 0"></i>
-                <i class="far fa-comment" *ngIf="homeService.currentPage !== 0"></i>
-                <div *ngIf="cacheService.totalUnread > 0" class="dot reddot">
-                    {{ cacheService.totalUnread | truncatedNum }}
-                </div>
+                <i class="{{ homeService.currentPage === 0 ? 'fas' : 'far' }} fa-comment"></i>
+                @if (cacheService.totalUnread > 0) {
+                    <div class="dot reddot">
+                        {{ cacheService.totalUnread | truncatedNum }}
+                    </div>
+                }
             </div>
             <div class="words">Kahla</div>
         </div>
@@ -21,8 +22,7 @@
             [class.current]="homeService.currentPage === 1"
         >
             <div class="icon">
-                <i class="fas fa-address-book" *ngIf="homeService.currentPage === 1"></i>
-                <i class="far fa-address-book" *ngIf="homeService.currentPage !== 1"></i>
+                <i class="{{ homeService.currentPage === 1 ? 'fas' : 'far' }} fa-address-book"></i>
             </div>
             <div class="words">Contacts</div>
         </div>
@@ -32,8 +32,7 @@
             [class.current]="homeService.currentPage === 2"
         >
             <div class="icon">
-                <i class="fas fa-user" *ngIf="homeService.currentPage === 2"></i>
-                <i class="far fa-user" *ngIf="homeService.currentPage !== 2"></i>
+                <i class="{{ homeService.currentPage === 2 ? 'fas' : 'far' }} fa-user"></i>
             </div>
             <div class="words">Me</div>
         </div>
