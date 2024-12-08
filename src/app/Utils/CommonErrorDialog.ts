@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { AiurCollection } from '../Models/AiurCollection';
+import { logger } from '../Services/Logger';
 
 export function showCommonErrorDialog(err: unknown): undefined {
-    console.error(err);
+    logger.error(err);
     if (err instanceof HttpErrorResponse) {
         if (err.status) {
             const error = err.error as AiurCollection<string>;

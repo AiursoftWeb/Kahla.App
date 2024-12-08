@@ -87,6 +87,7 @@ import { DropFileDirective } from './Directives/DropFileDirective';
 import { AutoEncodeLinkPipe } from './Pipes/auto-encode-links.pipe';
 import { MessageTextInputDirective } from './Directives/MessageTextInputDirective';
 import { MatchHeightForDirective } from './Directives/MatchHeightForDirective';
+import { Logger } from './Services/Logger';
 
 @NgModule({
     imports: [
@@ -180,6 +181,7 @@ import { MatchHeightForDirective } from './Directives/MatchHeightForDirective';
         ThreadInfoCacheDictionary,
         MyThreadsOrderedRepository,
         ThreadInfoPublicCacheDictionary,
+        Logger
     ],
     bootstrap: [AppComponent],
 })

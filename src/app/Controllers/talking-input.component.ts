@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 import { KahlaUser } from '../Models/KahlaUser';
+import { Logger } from '../Services/Logger';
 
 @Component({
     selector: 'app-talking-input',
@@ -31,7 +32,8 @@ export class TalkingInputComponent {
 
     constructor(
         public cacheService: CacheService,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        private logger: Logger,
     ) {}
 
     public async emoji() {
@@ -99,6 +101,7 @@ export class TalkingInputComponent {
 
     public send() {
         if (this.textContent()) {
+            this.logger.debug('Constructing text message...', this.textContent());
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {
@@ -107,7 +110,6 @@ export class TalkingInputComponent {
                         {
                             type: 'text',
                             content: this.textContent(),
-                            ats: [],
                         } satisfies MessageSegmentText,
                     ],
                 },

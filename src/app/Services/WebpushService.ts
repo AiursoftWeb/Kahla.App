@@ -8,6 +8,7 @@ import { mapDeviceName } from '../Utils/UaMapper';
 import { SwalToast } from '../Utils/Toast';
 import { ServiceWorkerIpcMessage } from '../Models/ServiceWorker/ServiceWorkerIpc';
 import { Router } from '@angular/router';
+import { Logger } from './Logger';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +17,8 @@ export class WebpushService {
     constructor(
         private devicesApiService: DevicesApiService,
         private cacheService: CacheService,
-        private router: Router
+        private router: Router,
+        private logger: Logger
     ) {}
 
     public get serviceWorkerAvailable(): boolean {
@@ -57,7 +59,7 @@ export class WebpushService {
         if (!settings.enabled) return;
         if (settings.deviceId) {
             if (!subscriptionChanged) return;
-            console.log('[ ** ] Update push subscription for device...');
+            this.logger.info('Update push subscription for device...');
             await lastValueFrom(
                 this.devicesApiService.UpdateDevice(
                     settings.deviceId,
@@ -67,9 +69,9 @@ export class WebpushService {
                     pushSubscription.toJSON().keys!.auth
                 )
             );
-            console.log('[ OK ] Device updated.');
+            this.logger.ok('Device updated.');
         } else {
-            console.log('[ ** ] Bind device for push subscription...');
+            this.logger.info('Bind device for push subscription...');
             const resp = await lastValueFrom(
                 this.devicesApiService.AddDevice(
                     navigator.userAgent,
@@ -82,20 +84,20 @@ export class WebpushService {
                 enabled: true,
                 deviceId: resp.value,
             });
-            console.log('[ OK ] Device binded.');
+            this.logger.ok('Device binded.');
         }
     }
 
     public async unbindDevice() {
         if (this.pushSettings.enabled) return;
         if (this.pushSettings.deviceId) {
-            console.log('[ ** ] Unbind device for push subscription...');
+            this.logger.info('Unbind device for push subscription...');
             await lastValueFrom(this.devicesApiService.DropDevice(this.pushSettings.deviceId));
             this.updatePushSettings({
                 enabled: false,
                 deviceId: 0,
             });
-            console.log('[ OK ] Device unbinded.');
+            this.logger.ok('Device unbinded.');
         }
     }
 
@@ -114,7 +116,7 @@ export class WebpushService {
                 ...this.pushSettings,
                 deviceId: 0,
             });
-            console.log('[ ** ] Device id invalid, rotating.');
+            this.logger.info('Device id invalid, rotating.');
             void this.subscribeUser(); // Re subscribe to rebind the device; Fire and forget
         }
         return resp.items;
@@ -157,15 +159,15 @@ export class WebpushService {
         const registration = await navigator.serviceWorker.ready;
         let sub = await registration.pushManager.getSubscription();
         if (sub && forceUpdate) {
-            console.log('[ ** ] Unsubscribing existing push subscription...');
+            this.logger.info('Unsubscribing existing push subscription...');
             await sub.unsubscribe();
             sub = null;
-            console.log('[ OK ] Push subscription unsubscribed.');
+            this.logger.ok('Push subscription unsubscribed.');
         }
         if (!sub) {
-            console.log('[ ** ] Push subscription not exists, creating new one.');
+            this.logger.info('Push subscription not exists, creating new one.');
             sub = await registration.pushManager.subscribe(this.pushServerMetadata);
-            console.log('[ OK ] Push subscription created.');
+            this.logger.ok('Push subscription created.');
         }
         await this.bindDevice(sub);
     }
@@ -182,11 +184,11 @@ export class WebpushService {
     public initSubscriptionUpdater() {
         if (!this.notificationAvail) return;
         navigator.serviceWorker.addEventListener('pushsubscriptionchange', async () => {
-            console.log('[ ** ] Push subscription changed');
+            this.logger.info('Push subscription changed');
             const registration = await navigator.serviceWorker.ready;
             const sub = await registration.pushManager.subscribe(this.pushServerMetadata);
             await this.bindDevice(sub, true);
-            console.log('[ OK ] Push subscription updated');
+            this.logger.ok('Push subscription updated');
         });
     }
 
@@ -194,9 +196,9 @@ export class WebpushService {
         if (!this.requireUserApproval) return;
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-            console.log('[ OK ] Notification permission granted.');
+            this.logger.ok('Notification permission granted.');
         } else {
-            console.error('[ERR!] Notification permission denied.');
+            this.logger.error('Notification permission denied.');
         }
     }
 
@@ -204,15 +206,15 @@ export class WebpushService {
 
     //#region Service Worker Registration
     public async registerServiceWorker() {
-        console.info('[ ** ] Registering service worker...');
+        this.logger.info('Registering service worker...');
         if (!this.serviceWorkerAvailable) {
-            console.error('[INFO] ServiceWorker not available in this environment, skipping.');
+            this.logger.info('ServiceWorker not available in this environment, skipping.');
             return;
         }
         try {
             const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log(
-                '[ OK ] ServiceWorker registration successful with scope: ',
+            this.logger.ok(
+                'ServiceWorker registration successful with scope: ',
                 registration.scope
             );
             // https://stackoverflow.com/questions/37573482/to-check-if-serviceworker-is-in-waiting-state
@@ -234,7 +236,7 @@ export class WebpushService {
                             // Otherwise, this newly installed SW will soon become the
                             // active SW. Rather than explicitly wait for that to happen,
                             // just show the initial "content is cached" message.
-                            console.log('[ OK ]Content is cached for the first time!');
+                            this.logger.ok('Content is cached for the first time!');
                         }
                     });
                 });
@@ -247,7 +249,7 @@ export class WebpushService {
                 }
             });
         } catch (err) {
-            console.error('[ERR!] ServiceWorker registration failed: ', err);
+            this.logger.error('ServiceWorker registration failed: ', err);
             return;
         }
 
@@ -255,7 +257,7 @@ export class WebpushService {
     }
 
     private alertUpdate() {
-        console.log('[WARN] ServiceWorker update detected.');
+        this.logger.info('ServiceWorker update detected.');
         setTimeout(() => {
             void SwalToast.fire({
                 icon: 'info',

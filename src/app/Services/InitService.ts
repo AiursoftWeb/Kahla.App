@@ -11,6 +11,7 @@ import { MyContactsRepository } from '../Repositories/MyContactsRepository';
 import { WebpushService } from './WebpushService';
 import { MyThreadsOrderedRepository } from '../Repositories/MyThreadsOrderedRepository';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Logger } from './Logger';
 
 @Injectable({
     providedIn: 'root',
@@ -25,15 +26,16 @@ export class InitService {
         private eventService: EventService,
         private globalNotifyService: GlobalNotifyService,
         private myContactsRepository: MyContactsRepository,
-        private myThreadsOrderedRepository: MyThreadsOrderedRepository
+        private myThreadsOrderedRepository: MyThreadsOrderedRepository,
+        private logger: Logger,
     ) {}
 
     public async init(): Promise<void> {
-        console.log('Welcome to Kahla.App!');
+        this.logger.info('Welcome to Kahla.App!');
 
         this.myContactsRepository.initCache();
         this.myThreadsOrderedRepository.initCache();
-        console.log('[ OK ] Local cache initialized.');
+        this.logger.ok('Local cache initialized.');
 
         // load server config
         this.cacheService.serverConfig = await lastValueFrom(this.apiService.ServerInfo());
@@ -42,18 +44,17 @@ export class InitService {
             try {
                 await this.cacheService.mineCache.update();
             } catch (error) {
-                console.log(error);
                 if (error instanceof HttpErrorResponse && error.status === 401) {
                     // Unauthorized, user not sign in
-                    console.warn('[WARN] User not signed in. Redirecting to signin page.');
+                    this.logger.warn('User not signed in. Redirecting to signin page.', error);
                     void this.router.navigate(['/signin'], { replaceUrl: true });
                     return;
                 } else {
-                    console.warn('[WARN] Network not avail. Cannot update my info.');
+                    this.logger.warn('Network not avail. Cannot update my info.', error);
                 }
             }
 
-            console.log('[ OK ] User signed in.');
+            this.logger.ok('User signed in.');
             if (this.router.isActive('/signin', false)) {
                 void this.router.navigate(['/home'], { replaceUrl: true });
             }
