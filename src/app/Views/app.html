@@ -1,39 +1,29 @@
-﻿<div
-    id="homeWrapper"
-    class="floating-home-wrapper"
-    [class.in-widescreen]="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
-    *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin', false)"
->
-    <app-home></app-home>
-</div>
+﻿@let inWideScreen = homeService.wideScreenEnabled && !route.isActive('/signin', false);
+@let wideScreenIdle = route.isActive('/home', false) && inWideScreen;
+
+@if (inWideScreen) {
+    <div id="homeWrapper" class="floating-home-wrapper">
+        <app-home></app-home>
+    </div>
+}
 <div class="window-wrapper">
-    <div
-        class="home-holder"
-        *ngIf="homeService.wideScreenEnabled && !route.isActive('/signin', false)"
-    ></div>
-    <div
-        id="contentWrapper"
-        class="content-wrapper"
-        *ngIf="!(route.isActive('/home', false) && homeService.wideScreenEnabled)"
-        [class.in-widescreen]="homeService.wideScreenEnabled"
-    >
-        <router-outlet></router-outlet>
-    </div>
-    <!-- Show an empty component when no reasonable component to show. -->
-    <div
-        class="content-empty"
-        *ngIf="
-            route.isActive('/home', false) &&
-            homeService.wideScreenEnabled &&
-            cacheService.mine()?.me
-        "
-    >
-        <h2>Welcome back, {{ cacheService.mine()?.me?.nickName }}.</h2>
-        <img
-            style="width: 100px"
-            src="{{ cacheService.mine()?.me?.iconFilePath | storageUrl }}?w=256&square=true"
-            (click)="homeService.currentPage = 2"
-        />
-        <h3>Start talking now!</h3>
-    </div>
+    @if (inWideScreen) {
+        <div class="home-holder"></div>
+    }
+    @if (!wideScreenIdle) {
+        <div id="contentWrapper" class="content-wrapper" [class.in-widescreen]="inWideScreen">
+            <router-outlet></router-outlet>
+        </div>
+    } @else {
+        <!-- Show an empty component when no reasonable component to show. -->
+        <div class="content-empty">
+            <h2>Welcome back, {{ cacheService.mine()?.me?.nickName }}.</h2>
+            <img
+                style="width: 100px"
+                src="{{ cacheService.mine()?.me?.iconFilePath | storageUrl }}?w=256&square=true"
+                (click)="homeService.currentPage = 2"
+            />
+            <h3>Start talking now!</h3>
+        </div>
+    }
 </div>
