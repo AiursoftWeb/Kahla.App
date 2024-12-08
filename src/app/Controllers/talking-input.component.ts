@@ -100,7 +100,7 @@ export class TalkingInputComponent {
     }
 
     public send() {
-        if (this.textContent()) {
+        if (this.textContent()?.length) {
             this.logger.debug('Constructing text message...', this.textContent());
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing

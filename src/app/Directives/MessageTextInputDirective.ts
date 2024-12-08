@@ -56,11 +56,12 @@ export class MessageTextInputDirective {
 
     backward() {
         let child = this.elementRef.nativeElement.firstChild;
-        const results: MessageTextWithAnnotate[] = [];
+        let results: MessageTextWithAnnotate[] = [];
         while (child) {
             this.backwardNodes(child, results);
             child = child.nextSibling;
         }
+        results = results.filter(t => typeof t === 'string' && t.trim());
         this.textContent.set(results);
     }
 
