@@ -1,4 +1,4 @@
-import { AiurProtocol } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocol';
 import { AppOptions } from '../AppOptions';
 import { KahlaUser } from '../KahlaUser';
 

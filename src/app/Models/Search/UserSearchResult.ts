@@ -1,4 +1,4 @@
-import { AiurProtocol } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocol';
 import { ContactInfo } from '../Contacts/ContactInfo';
 
 export interface UserSearchResult extends AiurProtocol {

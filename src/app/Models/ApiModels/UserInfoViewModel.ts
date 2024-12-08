@@ -1,4 +1,4 @@
-import { AiurProtocol } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocol';
 import { KahlaUser } from '../KahlaUser';
 
 export interface UserInfoViewModel extends AiurProtocol {

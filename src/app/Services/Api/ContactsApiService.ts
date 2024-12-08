@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/';
-import { AiurProtocol } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocol';
 import { UserDetailViewModel } from '../../Models/ApiModels/UserDetailViewModel';
 import { ApiService } from './ApiService';
 import { ContactsListApiResponse } from '../../Models/Contacts/ContactsListApiResponse';

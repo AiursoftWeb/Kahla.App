@@ -59,14 +59,14 @@ export class DevicesComponent implements OnInit {
         if (value) {
             void WorkingDialog.fire({
                 title: 'Subscribing you to webpush notification...',
-                text: 'Please don\'t close the page.',
+                text: "Please don't close the page.",
             });
         }
         await this.webpushService.updateEnabled(value);
         if (value) {
             Swal.close();
         }
-        void SwalToast.fire("Updated!");
+        void SwalToast.fire('Updated!');
         this.currentSettings = this.webpushService.pushSettings;
         void this.updateDeviceList();
     }

@@ -5,7 +5,7 @@ import { ThreadsListApiResponse } from '../../Models/Threads/ThreadsListApiRespo
 import { AiurValueNamed } from '../../Models/AiurValue';
 import { ThreadOptions } from '../../Models/Threads/ThreadOptions';
 import { ThreadInfo, ThreadInfoJoined } from '../../Models/Threads/ThreadInfo';
-import { AiurProtocol } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocol';
 import { ThreadMembersApiResponse } from '../../Models/Threads/ThreadMembersApiResponse';
 
 @Injectable()

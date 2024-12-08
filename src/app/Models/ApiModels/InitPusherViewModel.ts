@@ -1,4 +1,4 @@
-﻿import { AiurProtocol } from '../AiurProtocal';
+﻿import { AiurProtocol } from '../AiurProtocol';
 
 export interface InitWebsocketViewModel extends AiurProtocol {
     // otp: string;

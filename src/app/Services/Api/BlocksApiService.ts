@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
 import { BlocksListApiResponse } from '../../Models/Blocks/BlocksListApiResponse';
 import { Observable } from 'rxjs';
-import { AiurProtocol } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocol';
 
 @Injectable()
 export class BlocksApiService {

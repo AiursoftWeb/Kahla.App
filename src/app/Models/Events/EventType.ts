@@ -12,5 +12,5 @@
     YouDirectJoined = 17,
     YourHardInviteFinished = 18,
     YouWasHardInvited = 19,
-    YouCompletedSoftInvited = 20
+    YouCompletedSoftInvited = 20,
 }

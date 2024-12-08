@@ -35,10 +35,7 @@ export class HeaderComponent {
     public goBack(): void {
         this.returnButtonClicked.emit();
         if (this.returnButtonPreventDefault()) return;
-        if (
-            history.length === 1 ||
-            (this.homeService.wideScreenEnabled && this.closeDirectly())
-        ) {
+        if (history.length === 1 || (this.homeService.wideScreenEnabled && this.closeDirectly())) {
             void this.router.navigate(['/home']);
         } else {
             history.back();

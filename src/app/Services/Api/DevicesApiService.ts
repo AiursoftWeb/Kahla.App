@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './ApiService';
 import { AiurCollection } from '../../Models/AiurCollection';
-import { AiurProtocol } from '../../Models/AiurProtocal';
+import { AiurProtocol } from '../../Models/AiurProtocol';
 import { AiurValue } from '../../Models/AiurValue';
 import { Device } from '../../Models/Device';
 import { Observable } from 'rxjs/';

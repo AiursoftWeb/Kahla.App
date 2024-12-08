@@ -1,4 +1,4 @@
-import { AiurProtocol } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocol';
 import { ThreadInfo } from '../Threads/ThreadInfo';
 
 export interface ThreadSearchResult extends AiurProtocol {

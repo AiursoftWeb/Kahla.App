@@ -1,4 +1,4 @@
-import { AiurProtocol } from '../AiurProtocal';
+import { AiurProtocol } from '../AiurProtocol';
 import { ContactInfo } from '../Contacts/ContactInfo';
 import { ThreadInfoJoined } from '../Threads/ThreadInfo';
 

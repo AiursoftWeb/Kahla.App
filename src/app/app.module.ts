@@ -107,7 +107,7 @@ import { MatchHeightForDirective } from './Directives/MatchHeightForDirective';
         DropFileDirective,
         AutoEncodeLinkPipe,
         MessageTextInputDirective,
-        MatchHeightForDirective
+        MatchHeightForDirective,
     ],
     declarations: [
         AboutComponent,
