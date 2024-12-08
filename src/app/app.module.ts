@@ -86,6 +86,7 @@ import { CdkMenuModule } from '@angular/cdk/menu';
 import { DropFileDirective } from './Directives/DropFileDirective';
 import { AutoEncodeLinkPipe } from './Pipes/auto-encode-links.pipe';
 import { MessageTextInputDirective } from './Directives/MessageTextInputDirective';
+import { MatchHeightForDirective } from './Directives/MatchHeightForDirective';
 
 @NgModule({
     imports: [
@@ -106,6 +107,7 @@ import { MessageTextInputDirective } from './Directives/MessageTextInputDirectiv
         DropFileDirective,
         AutoEncodeLinkPipe,
         MessageTextInputDirective,
+        MatchHeightForDirective
     ],
     declarations: [
         AboutComponent,

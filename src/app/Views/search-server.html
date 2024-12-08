@@ -3,7 +3,7 @@
     [closeDirectly]="true"
     [processing]="contactsRepo?.status === 'loading' || threadsRepo?.status === 'loading'"
 ></app-header>
-<div class="search-part">
+<div class="search-part" #searchPart>
     <app-search-area [(searchText)]="searchTerm" [aggressive]="false" />
     <app-search-type
         [items]="[
@@ -23,7 +23,7 @@
         [(currentIndex)]="selectedTab"
     />
 </div>
-<div class="search-holder"></div>
+<div class="search-holder" [appMatchHeightFor]="searchPart"></div>
 @switch (selectedTab()) {
     @case (0) {
         <app-contact-list

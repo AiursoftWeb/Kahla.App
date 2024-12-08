@@ -3,10 +3,10 @@
     [processing]="threadsRepo?.status === 'loading'"
     [returnButton]="false"
 ></app-header>
-<div class="search-part">
+<div class="search-part" #searchPart>
     <app-search-area [(searchText)]="searchText" />
 </div>
-<div class="search-holder-s"></div>
+<div class="search-holder" [appMatchHeightFor]="searchPart"></div>
 
 <app-threads-list
     *ngIf="threadsRepo"

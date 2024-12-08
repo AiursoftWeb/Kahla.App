@@ -16,7 +16,7 @@
             <div class="text">{{ user.nickName }}</div>
         </li>
     </ul> -->
-<div class="chatbox-placeholder" [class.active-list]="showPanel()"></div>
+<div class="chatbox-placeholder" [appMatchHeightFor]="chatBox"></div>
 <div class="chatbox-wrapper" appDropFile (droppedFiles)="fileDropped($event)">
     <div class="chat-box" #chatBox>
         <div
