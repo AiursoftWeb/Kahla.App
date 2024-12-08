@@ -1,4 +1,4 @@
-import { filter, lastValueFrom, Subscription } from 'rxjs';
+import { auditTime, filter, lastValueFrom, Subject, Subscription } from 'rxjs';
 import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { RepositoryBase } from './RepositoryBase';
@@ -21,6 +21,7 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
     };
     private _canLoadMore = true;
     private sub?: Subscription;
+    private saveCacheTrigger$ = new Subject<void>();
 
     constructor(
         private threadsApiService: ThreadsApiService,
@@ -28,6 +29,9 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
         private threadInfoCacheDictionary: ThreadInfoCacheDictionary
     ) {
         super();
+        this.saveCacheTrigger$.pipe(auditTime(2000)).subscribe(() => {
+            this.saveCache();
+        });
     }
 
     private updateCache(threads: ThreadInfoJoined[]) {
@@ -48,11 +52,14 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
             .pipe(filter(t => isThreadAddedEvent(t)))
             .subscribe(t => {
                 this.data = [t.thread, ...this.data];
+                this.threadInfoCacheDictionary.set(t.thread.id, t.thread);
+                this.saveCacheTrigger$.next();
             });
 
         this.sub.add(
             this.eventService.onMessage.pipe(filter(t => isThreadRemovedEvent(t))).subscribe(t => {
                 this.data = this.data.filter(d => d.id !== t.threadId);
+                this.saveCacheTrigger$.next();
             })
         );
 
@@ -72,6 +79,7 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
                     thread.messageContext.latestMessage = ev.message;
                     this.data = [thread, ...this.data];
                     this.threadInfoCacheDictionary.set(threadId, thread);
+                    this.saveCacheTrigger$.next();
                 })
         );
 
