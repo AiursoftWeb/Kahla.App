@@ -6,6 +6,8 @@ import { urlBase64ToUint8Array } from '../Utils/StringUtils';
 import { lastValueFrom } from 'rxjs';
 import { mapDeviceName } from '../Utils/UaMapper';
 import { SwalToast } from '../Utils/Toast';
+import { ServiceWorkerIpcMessage } from '../Models/ServiceWorker/ServiceWorkerIpc';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +15,8 @@ import { SwalToast } from '../Utils/Toast';
 export class WebpushService {
     constructor(
         private devicesApiService: DevicesApiService,
-        private cacheService: CacheService
+        private cacheService: CacheService,
+        private router: Router
     ) {}
 
     public get serviceWorkerAvailable(): boolean {
@@ -149,37 +152,6 @@ export class WebpushService {
         };
     }
 
-    public async registerServiceWorker() {
-        console.info('[ ** ] Registering service worker...');
-        if (!this.serviceWorkerAvailable) {
-            console.error('[INFO] ServiceWorker not available in this environment, skipping.');
-            return;
-        }
-        try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log(
-                '[ OK ] ServiceWorker registration successful with scope: ',
-                registration.scope
-            );
-            if (registration.waiting && registration.active) {
-                console.log('[WARN] ServiceWorker update detected.');
-                setTimeout(() => {
-                    void SwalToast.fire({
-                        icon: 'info',
-                        position: 'bottom-right',
-                        title: 'A new version of the Kahla is ready.',
-                        text: 'Please close and reopen all the page of the app to update.\nJust reloading the page cannot update the app.',
-                    });
-                }, 1000); // Delay fire to ensure the page is fully loaded and not to disturb the user
-            }
-        } catch (err) {
-            console.error('[ERR!] ServiceWorker registration failed: ', err);
-            return;
-        }
-
-        await this.requestUserApproval();
-    }
-
     public async subscribeUser(forceUpdate = false) {
         if (!this.notificationAvail) return;
         const registration = await navigator.serviceWorker.ready;
@@ -228,5 +200,70 @@ export class WebpushService {
         }
     }
 
+    //#endregion
+
+    //#region Service Worker Registration
+    public async registerServiceWorker() {
+        console.info('[ ** ] Registering service worker...');
+        if (!this.serviceWorkerAvailable) {
+            console.error('[INFO] ServiceWorker not available in this environment, skipping.');
+            return;
+        }
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log(
+                '[ OK ] ServiceWorker registration successful with scope: ',
+                registration.scope
+            );
+            // https://stackoverflow.com/questions/37573482/to-check-if-serviceworker-is-in-waiting-state
+            // The page has been loaded when there's already a waiting and active SW.
+            // This would happen if skipWaiting() isn't being called, and there are
+            // still old tabs open.
+            if (registration.waiting && registration.active) {
+                this.alertUpdate();
+            } else {
+                // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
+                registration.addEventListener('updatefound', () => {
+                    registration.installing?.addEventListener('statechange', () => {
+                        if (registration.active && registration.waiting) {
+                            // If there's already an active SW, and skipWaiting() is not
+                            // called in the SW, then the user needs to close all their
+                            // tabs before they'll get updates.
+                            this.alertUpdate();
+                        } else {
+                            // Otherwise, this newly installed SW will soon become the
+                            // active SW. Rather than explicitly wait for that to happen,
+                            // just show the initial "content is cached" message.
+                            console.log('[ OK ]Content is cached for the first time!');
+                        }
+                    });
+                });
+            }
+
+            navigator.serviceWorker.addEventListener('message', ev => {
+                const data = ev.data as ServiceWorkerIpcMessage;
+                if (data.type === 'navigate') {
+                    void this.router.navigateByUrl(data.url);
+                }
+            });
+        } catch (err) {
+            console.error('[ERR!] ServiceWorker registration failed: ', err);
+            return;
+        }
+
+        await this.requestUserApproval();
+    }
+
+    private alertUpdate() {
+        console.log('[WARN] ServiceWorker update detected.');
+        setTimeout(() => {
+            void SwalToast.fire({
+                icon: 'info',
+                position: 'bottom-right',
+                title: 'A new version of the Kahla is ready.',
+                text: 'Please close and reopen all the page of the app to update.\nJust reloading the page cannot update the app.',
+            });
+        }, 1000); // Delay fire to ensure the page is fully loaded and not to disturb the user
+    }
     //#endregion
 }

@@ -3,6 +3,7 @@ import {
     eventNotificationDescription,
     eventNotificationUrl,
 } from '../app/Models/Events/EventUtils';
+import type { ServiceWorkerIpcMessage } from '../app/Models/ServiceWorker/ServiceWorkerIpc';
 import { KahlaEventType } from '../app/Models/Events/EventType';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
@@ -27,8 +28,8 @@ sw.addEventListener('notificationclick', event =>
             if (clients.length) {
                 clients[0].postMessage({
                     type: 'navigate',
-                    threadId: data.preferredUrl,
-                });
+                    url: data.preferredUrl,
+                } satisfies ServiceWorkerIpcMessage);
                 await clients[0].focus();
             } else {
                 await sw.clients.openWindow(data.preferredUrl);
