@@ -20,7 +20,7 @@
 
 .window-wrapper {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - env(safe-area-inset-top, 0));
 }
 
 .home-holder {
