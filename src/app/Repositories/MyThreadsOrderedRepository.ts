@@ -9,6 +9,7 @@ import { isThreadRemovedEvent } from '../Models/Events/ThreadRemovedEvent';
 import { KahlaEventType } from '../Models/Events/EventType';
 import { NewMessageEvent } from '../Models/Events/NewMessageEvent';
 import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +27,8 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
     constructor(
         private threadsApiService: ThreadsApiService,
         private eventService: EventService,
-        private threadInfoCacheDictionary: ThreadInfoCacheDictionary
+        private threadInfoCacheDictionary: ThreadInfoCacheDictionary,
+        private router: Router
     ) {
         super();
         this.saveCacheTrigger$.pipe(auditTime(2000)).subscribe(() => {
@@ -77,6 +79,16 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
                         thread = await this.threadInfoCacheDictionary.get(threadId);
                     }
                     thread.messageContext.latestMessage = ev.message;
+                    if (
+                        !this.router.isActive(`/talking/${threadId}`, {
+                            paths: 'exact',
+                            queryParams: 'ignored',
+                            fragment: 'ignored',
+                            matrixParams: 'ignored',
+                        })
+                    ) {
+                        ++thread.messageContext.unReadAmount;
+                    }
                     this.data = [thread, ...this.data];
                     this.threadInfoCacheDictionary.set(threadId, thread);
                     this.saveCacheTrigger$.next();
@@ -110,5 +122,14 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
             ...this.data.slice(0, this.data.findLastIndex(t => t.id === lastId) + 1),
             ...newData.knownThreads,
         ];
+    }
+
+    public clearUnreadFor(threadId: number) {
+        const thread = this.data.find(t => t.id === threadId);
+        if (thread) {
+            thread.messageContext.unReadAmount = 0;
+            this.threadInfoCacheDictionary.set(threadId, thread);
+            this.saveCacheTrigger$.next();
+        }
     }
 }

@@ -18,6 +18,7 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { KahlaMessagesRepo } from '@aiursoft/kahla-sdk.js';
 import { ThreadInfoCacheDictionary } from '../Caching/ThreadInfoCacheDictionary';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
+import { MyThreadsOrderedRepository } from '../Repositories/MyThreadsOrderedRepository';
 
 @Component({
     templateUrl: '../Views/talking.html',
@@ -29,6 +30,8 @@ export class TalkingComponent {
     public parsedMessages = signal<ParsedMessage[]>([]);
     public showPanel = signal(false);
     public hasNewMessages = signal(false);
+
+    private firstPull?: number;
 
     // route input
     public id = input.required<number>();
@@ -50,7 +53,8 @@ export class TalkingComponent {
         public cacheService: CacheService,
         messageApiService: MessagesApiService,
         public threadApiService: ThreadsApiService,
-        public threadInfoCacheDictionary: ThreadInfoCacheDictionary
+        public threadInfoCacheDictionary: ThreadInfoCacheDictionary,
+        myThreadsOrderedRepository: MyThreadsOrderedRepository
     ) {
         effect(async cleanup => {
             if (!this.id()) return;
@@ -85,6 +89,7 @@ export class TalkingComponent {
                     }
                 });
                 this.repo.connect();
+                this.firstPull = Date.now();
                 cleanup(() => {
                     sub.unsubscribe();
                     this.repo?.disconnect();
@@ -94,8 +99,17 @@ export class TalkingComponent {
             }
         });
 
+        effect(() => {
+            if (!this.threadInfo.value()) return;
+            myThreadsOrderedRepository.clearUnreadFor(this.threadInfo.value()!.id);
+        });
+
         afterRenderEffect(() => {
             this.parsedMessages();
+            if (this.firstPull && Date.now() - this.firstPull < 5000) {
+                this.firstPull = undefined;
+                scrollBottom(true);
+            }
             if (!scrollBottom(true, 500)) {
                 // User ignored new messages
                 this.hasNewMessages.set(true);
