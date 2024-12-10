@@ -1,4 +1,4 @@
-import { Directive, ElementRef, model } from '@angular/core';
+import { Directive, ElementRef, model, OnInit } from '@angular/core';
 import { MessageTextWithAnnotate } from '../Models/Messages/MessageSegments';
 import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnotated';
 import { checkIfChildOf } from '../Utils/DomUtils';
@@ -13,8 +13,12 @@ import { KahlaUser } from '../Models/KahlaUser';
     },
     exportAs: 'appMessageTextInput',
 })
-export class MessageTextInputDirective {
+export class MessageTextInputDirective implements OnInit {
     constructor(private elementRef: ElementRef<HTMLElement>) {}
+
+    ngOnInit(): void {
+        this.forwardInternal();
+    }
 
     /**
      * The textContent will not be render to the DOM directly,
@@ -42,10 +46,6 @@ export class MessageTextInputDirective {
                         item.content
                     )
                 );
-            } else {
-                const textSpan = document.createElement('span');
-                textSpan.textContent = this.asPureText(item);
-                container.appendChild(textSpan);
             }
         }
     }
@@ -63,6 +63,13 @@ export class MessageTextInputDirective {
         }
         results = results.filter(t => typeof t !== 'string' || t.trim());
         this.textContent.set(results);
+        // Ensure a newline at the end, I don't know why but it's necessary to make inserting line break works correctly.
+        if (
+            this.elementRef.nativeElement.lastChild?.nodeType !== Node.TEXT_NODE ||
+            this.elementRef.nativeElement.lastChild?.nodeValue !== '\n'
+        ) {
+            this.elementRef.nativeElement.appendChild(document.createTextNode('\n'));
+        }
     }
 
     private backwardNodes(node: ChildNode, results: MessageTextWithAnnotate[]) {
@@ -139,6 +146,8 @@ export class MessageTextInputDirective {
         caret.collapse(false);
 
         this.backward();
+
+        return caret;
     }
 
     private createMentionNode(id: string, content: string) {

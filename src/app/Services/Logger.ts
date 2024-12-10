@@ -13,11 +13,11 @@ const DEBUG_STYLE = 'background-color: #34495e;' + LOG_STYLE_BASE;
 export class Logger {
 
     // This is the only way to keep the console.log context
-    public ok = console.log.bind(console, '%c  OK  ', OK_STYLE) as typeof console.log;
-    public info = console.log.bind(console, '%c INFO ', INFO_STYLE) as typeof console.log;
+    public debug = console.log.bind(console, '%c DBUG ', DEBUG_STYLE) as typeof console.log;
+    public ok = console.info.bind(console, '%c  OK  ', OK_STYLE) as typeof console.info;
+    public info = console.info.bind(console, '%c INFO ', INFO_STYLE) as typeof console.info;
     public warn = console.warn.bind(console, '%c WARN ', WARN_STYLE) as typeof console.warn;
     public error = console.error.bind(console, '%c ERR! ', ERROR_STYLE) as typeof console.error;
-    public debug = console.log.bind(console, '%c DBUG ', DEBUG_STYLE) as typeof console.log;
 }
 
 export const logger = new Logger();
