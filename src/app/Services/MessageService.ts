@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import { truncateUTF8Bytes } from '../Utils/StringUtils';
+import { MessageSegmentText, textSegment2PureText } from '../Models/Messages/MessageSegments';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +16,7 @@ export class MessageService {
             .map(t => {
                 switch (t.type) {
                     case 'text':
-                        return t.content;
+                        return textSegment2PureText(t as MessageSegmentText);
                     default:
                         return `[${t.type}]`;
                 }

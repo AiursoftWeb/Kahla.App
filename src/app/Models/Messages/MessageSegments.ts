@@ -1,4 +1,4 @@
-import { MessageTextAnnotated } from './MessageTextAnnotated';
+import { deAnnotationText, MessageTextAnnotated } from './MessageTextAnnotated';
 
 export type MessageSegmentTypes = (
     | MessageSegmentText
@@ -67,4 +67,12 @@ export interface MessageSegmentThreadJoinRequest extends MessageSegmentBase {
     id: string;
     token: string;
     validTo: Date;
+}
+
+export function textSegment2PureText(text: MessageSegmentText): string {
+    if (typeof text.content === 'string') {
+        return text.content;
+    }
+
+    return text.content.map(t => deAnnotationText(t)).join('');
 }

@@ -61,7 +61,7 @@ export class MessageTextInputDirective {
             this.backwardNodes(child, results);
             child = child.nextSibling;
         }
-        results = results.filter(t => typeof t === 'string' && t.trim());
+        results = results.filter(t => typeof t !== 'string' || t.trim());
         this.textContent.set(results);
     }
 
