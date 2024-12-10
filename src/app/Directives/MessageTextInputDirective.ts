@@ -3,6 +3,7 @@ import { MessageTextWithAnnotate } from '../Models/Messages/MessageSegments';
 import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnotated';
 import { checkIfChildOf } from '../Utils/DomUtils';
 import { KahlaUser } from '../Models/KahlaUser';
+import { Subject } from 'rxjs';
 
 @Directive({
     selector: '[appMessageTextInput]',
@@ -28,6 +29,11 @@ export class MessageTextInputDirective implements OnInit {
      */
     textContent = model<MessageTextWithAnnotate[]>([]);
 
+    lastInputWordChanged = new Subject<{
+        word?: string;
+        caretEndPos: [number, number];
+    }>();
+
     private caretInfo?: Range = undefined;
 
     public forward() {
@@ -48,10 +54,6 @@ export class MessageTextInputDirective implements OnInit {
                 );
             }
         }
-    }
-
-    private asPureText(para: MessageTextWithAnnotate): string {
-        return typeof para === 'string' ? para : para.content;
     }
 
     backward() {
@@ -162,8 +164,20 @@ export class MessageTextInputDirective implements OnInit {
 
     selectionChanged() {
         const caret = this.getCurrentCaret();
-        if (caret) {
-            this.caretInfo = caret.cloneRange();
-        }
+        // logger.debug('caret changed', caret);
+        if (!caret) return;
+        this.caretInfo = caret.cloneRange();
+
+        // Check the nearest inputting word
+        if (caret.endContainer.nodeType !== Node.TEXT_NODE) return;
+        const lastWord = caret.endContainer.textContent
+            ?.slice(0, caret.endOffset)
+            .split(' ')
+            .at(-1);
+        const rect = caret.getBoundingClientRect();
+        this.lastInputWordChanged.next({
+            word: lastWord,
+            caretEndPos: [rect.x, rect.y],
+        });
     }
 }

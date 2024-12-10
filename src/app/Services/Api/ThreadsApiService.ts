@@ -59,8 +59,14 @@ export class ThreadsApiService {
         });
     }
 
-    public Members(id: number, take: number, skip: number): Observable<ThreadMembersApiResponse> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, { take, skip });
+    public Members(
+        id: number,
+        take: number,
+        skip: number,
+        searchInput?: string,
+        excluding?: string
+    ): Observable<ThreadMembersApiResponse> {
+        return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, { take, skip, searchInput, excluding });
     }
 
     public Leave(id: number): Observable<AiurProtocol> {

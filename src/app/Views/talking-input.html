@@ -72,3 +72,24 @@
         }
     </div>
 </div>
+@if (atRecommendsShowPos(); as pos) {
+    <div [style.--menu-y.px]="pos[1] - 10" [style.--menu-x.px]="pos[0]" class="at-list">
+        <div class="popup-menu" cdkMenu>
+            @for (item of atRecommends() ?? []; track item) {
+                <button cdkMenuItem (click)="mention(item.user)">
+                    <i class="fas fa-ellipsis"></i>
+                    <div class="text">{{ item.user.nickName }}</div>
+                </button>
+            } @empty {
+                <button disabled>
+                    <i class="fas fa-ellipsis"></i>
+                    <div class="text">No user found</div>
+                </button>
+            }
+            <button cdkMenuItem [routerLink]="['/thread-members/', this.threadInfo()?.id]">
+                <i class="fas fa-ellipsis"></i>
+                <div>More...</div>
+            </button>
+        </div>
+    </div>
+}

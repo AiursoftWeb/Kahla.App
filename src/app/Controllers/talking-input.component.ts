@@ -1,4 +1,13 @@
-import { Component, ElementRef, model, output, signal, viewChild } from '@angular/core';
+import {
+    Component,
+    effect,
+    ElementRef,
+    input,
+    model,
+    output,
+    signal,
+    viewChild,
+} from '@angular/core';
 import { CacheService } from '../Services/CacheService';
 import { MessageContent } from '../Models/Messages/MessageContent';
 import type { EmojiButton } from '@joeattardi/emoji-button';
@@ -10,11 +19,15 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Logger } from '../Services/Logger';
+import { debounceTime, distinctUntilKeyChanged, filter, lastValueFrom } from 'rxjs';
+import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
+import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
+import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 
 @Component({
     selector: 'app-talking-input',
     templateUrl: '../Views/talking-input.html',
-    styleUrls: ['../Styles/talking-input.scss', '../Styles/button.scss'],
+    styleUrls: ['../Styles/talking-input.scss', '../Styles/button.scss', '../Styles/popups.scss'],
     standalone: false,
 })
 export class TalkingInputComponent {
@@ -28,13 +41,50 @@ export class TalkingInputComponent {
     private chatBox = viewChild.required<ElementRef<HTMLElement>>('chatBox');
     private chatInput = viewChild.required<MessageTextInputDirective>('chatInput');
 
+    atRecommends = signal<ThreadMemberInfo[] | null>(null);
+    atRecommendsShowPos = signal<[number, number] | null>(null);
+    readonly threadInfo = input<ThreadInfoJoined>();
+
     recorder = new VoiceRecorder(180);
 
     constructor(
         public cacheService: CacheService,
         private themeService: ThemeService,
-        private logger: Logger,
-    ) {}
+        private threadApiService: ThreadsApiService,
+        private logger: Logger
+    ) {
+        effect(cleanup => {
+            if (this.threadInfo()?.allowMembersEnlistAllMembers || this.threadInfo()?.imAdmin) {
+                const sub = this.chatInput()
+                    .lastInputWordChanged.pipe(
+                        distinctUntilKeyChanged('word'),
+                        filter(t => t?.word?.startsWith('@') ?? false),
+                        debounceTime(500)
+                    )
+                    .subscribe(async t => {
+                        const searchName = t.word!.slice(1).toLowerCase();
+                        logger.debug("Update member info by word: ", searchName);
+                        this.atRecommends.set(
+                            (
+                                await lastValueFrom(
+                                    this.threadApiService.Members(
+                                        this.threadInfo()!.id,
+                                        10,
+                                        0,
+                                        searchName || undefined
+                                    )
+                                )
+                            ).members
+                        );
+                    });
+
+                    sub.add(this.chatInput().lastInputWordChanged.subscribe(t => {
+                        this.atRecommendsShowPos.set(t.word?.startsWith('@') ? t.caretEndPos : null);
+                    }))
+                cleanup(() => sub.unsubscribe());
+            }
+        });
+    }
 
     public async emoji() {
         if (!this.picker) {
@@ -149,32 +199,4 @@ export class TalkingInputComponent {
     public mention(targetUser: KahlaUser) {
         this.chatInput().insertMentionToCaret(targetUser);
     }
-
-    // inputKeyup(e: KeyboardEvent) {
-    //     if (e.key === 'Enter') {
-    //         e.preventDefault();
-    //         if (this.showUserList) {
-    //             // accept default suggestion
-    //             this.complete(this.matchedUsers[0].nickName);
-    //         } else if (this.oldContent === this.content) {
-    //             this.send();
-    //             this.showUserList = false;
-    //         }
-    //     } else if (this.content && e.key !== 'Backspace') {
-    //         this.showUserList = false;
-    //         const input = document.getElementById('chatInput') as HTMLTextAreaElement;
-    //         const typingWords = this.content.slice(0, input.selectionStart).split(/\s|\n/);
-    //         const typingWord = typingWords[typingWords.length - 1];
-    //         if (typingWord.charAt(0) === '@') {
-    //             const searchName = typingWord.slice(1).toLowerCase();
-    //             const searchResults = this.messageService.searchUser(searchName, false);
-    //             if (searchResults.length > 0) {
-    //                 this.matchedUsers = searchResults;
-    //                 this.showUserList = true;
-    //             }
-    //         }
-    //     } else {
-    //         this.showUserList = false;
-    //     }
-    // }
 }
