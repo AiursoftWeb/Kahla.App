@@ -3,6 +3,8 @@ import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ContactsApiService } from '../Services/Api/ContactsApiService';
+import { SwalToast } from '../Utils/Toast';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-thread-info-public',
@@ -41,8 +43,19 @@ export class ThreadInfoPublicComponent {
         },
     });
 
+    async joinThread() {
+        try {
+            await lastValueFrom(this.threadsApiService.DirectJoin(this.id()));
+            void SwalToast.fire();
+            void this.router.navigate(['/talking', this.id()]);
+        } catch (err) {
+            showCommonErrorDialog(err);
+        }
+    }
+
     constructor(
         private threadsApiService: ThreadsApiService,
-        private contactsApiService: ContactsApiService
+        private contactsApiService: ContactsApiService,
+        private router: Router
     ) {}
 }

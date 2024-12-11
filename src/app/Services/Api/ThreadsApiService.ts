@@ -120,4 +120,8 @@ export class ThreadsApiService {
             token,
         });
     }
+
+    public DirectJoin(threadId: number): Observable<AiurProtocol> {
+        return this.apiService.Post(ThreadsApiService.serverPath + `/direct-join/${threadId}`, {});
+    }
 }

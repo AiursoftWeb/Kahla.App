@@ -4,6 +4,8 @@ import { SearchApiService } from '../Services/Api/SearchApiService';
 import { ServerContactsRepository } from '../Repositories/ServerContactsRepository';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
 import { ServerThreadsRepository } from '../Repositories/ServerThreadsRepository';
+import { ThreadInfo } from '../Models/Threads/ThreadInfo';
+import { Router } from '@angular/router';
 
 @Component({
     templateUrl: '../Views/search-server.html',
@@ -19,7 +21,10 @@ export class SearchServerComponent {
     public contactsRepo?: ServerContactsRepository = undefined;
     public threadsRepo?: ServerThreadsRepository = undefined;
 
-    constructor(private searchApiService: SearchApiService) {
+    constructor(
+        private searchApiService: SearchApiService,
+        private router: Router
+    ) {
         effect(() => {
             if (this.searchTerm().length > 0) {
                 void this.search(this.searchTerm());
@@ -35,5 +40,9 @@ export class SearchServerComponent {
         } catch (err) {
             showCommonErrorDialog(err);
         }
+    }
+
+    threadClicked({ thread }: { thread: ThreadInfo }) {
+        void this.router.navigate(['/thread-public', thread.id]);
     }
 }

@@ -38,6 +38,7 @@
             [threadRepo]="threadsRepo"
             emptyMessage="No results. Check your spelling or try different keywords."
             [externalView]="true"
+            (threadClicked)="threadClicked($event)"
         ></app-threads-list>
     }
 }
