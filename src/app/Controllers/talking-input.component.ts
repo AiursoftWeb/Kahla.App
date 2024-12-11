@@ -63,7 +63,7 @@ export class TalkingInputComponent {
                     )
                     .subscribe(async t => {
                         const searchName = t.word!.slice(1).toLowerCase();
-                        logger.debug("Update member info by word: ", searchName);
+                        logger.debug('Update member info by word: ', searchName);
                         this.atRecommends.set(
                             (
                                 await lastValueFrom(
@@ -78,9 +78,13 @@ export class TalkingInputComponent {
                         );
                     });
 
-                    sub.add(this.chatInput().lastInputWordChanged.subscribe(t => {
-                        this.atRecommendsShowPos.set(t.word?.startsWith('@') ? t.caretEndPos : null);
-                    }))
+                sub.add(
+                    this.chatInput().lastInputWordChanged.subscribe(t => {
+                        this.atRecommendsShowPos.set(
+                            t.word?.startsWith('@') ? t.caretEndPos : null
+                        );
+                    })
+                );
                 cleanup(() => sub.unsubscribe());
             }
         });
@@ -198,5 +202,15 @@ export class TalkingInputComponent {
 
     public mention(targetUser: KahlaUser) {
         this.chatInput().insertMentionToCaret(targetUser);
+
+        // Focus the input after selecting a user
+        this.chatInput().elementRef.nativeElement.focus();
+    }
+
+    public completeMentionMenu(targetUser: KahlaUser) {
+        // remove the typing partial mention text
+        this.chatInput().removeTextFromCursorTill('@');
+        this.atRecommendsShowPos.set(null);
+        this.mention(targetUser);
     }
 }

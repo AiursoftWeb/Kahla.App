@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
     exportAs: 'appMessageTextInput',
 })
 export class MessageTextInputDirective implements OnInit {
-    constructor(private elementRef: ElementRef<HTMLElement>) {}
+    constructor(public elementRef: ElementRef<HTMLElement>) {}
 
     ngOnInit(): void {
         this.forwardInternal();
@@ -192,5 +192,17 @@ export class MessageTextInputDirective implements OnInit {
             word: lastWord,
             caretEndPos: [rect.left, rect.top],
         });
+    }
+
+    removeTextFromCursorTill(delim: string) {
+        const caret = this.getCurrentCaret() ?? this.caretInfo;
+        if (!caret) return;
+        const text = caret.startContainer.textContent!;
+        const start = text.lastIndexOf(delim, caret.startOffset - 1);
+        if (start === -1) return;
+        caret.setStart(caret.startContainer, start);
+        caret.deleteContents();
+
+        this.backward();
     }
 }

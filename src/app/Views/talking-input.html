@@ -76,7 +76,7 @@
     <div [style.--menu-y.px]="pos[1] - 10" [style.--menu-x.px]="pos[0]" class="at-list">
         <div class="popup-menu" cdkMenu>
             @for (item of atRecommends() ?? []; track item) {
-                <button cdkMenuItem (click)="mention(item.user)">
+                <button cdkMenuItem (click)="completeMentionMenu(item.user)">
                     <i class="fas fa-ellipsis"></i>
                     <div class="text">{{ item.user.nickName }}</div>
                 </button>
