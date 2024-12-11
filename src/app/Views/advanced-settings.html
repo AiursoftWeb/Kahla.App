@@ -32,9 +32,9 @@
         iconClasses="fas fa-stream"
     />
     <app-toggle-menu-item
-        title="Private Account"
-        [value]="!this.options.allowHardInvitation"
-        (valueChange)="this.options.allowHardInvitation = !$event; updateSettings()"
+        title="Allow others creating new conversation with me"
+        [value]="this.options.allowHardInvitation"
+        (valueChange)="this.options.allowHardInvitation = $event; updateSettings()"
         iconClasses="fas fa-lock"
     />
     <div class="menu-header">Notification</div>
