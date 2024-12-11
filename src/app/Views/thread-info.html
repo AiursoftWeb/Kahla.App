@@ -23,10 +23,10 @@
         <div class="text">File History</div>
     </div>
     <app-toggle-menu-item
-        [value]="threadVal.muted"
-        (valueChange)="setMute($event)"
-        title="Mute Nitification"
-        iconClasses="fas fa-bell-slash"
+        [value]="!threadVal.muted"
+        (valueChange)="setMute(!$event)"
+        title="Notification"
+        iconClasses="fas {{ threadVal.muted ? 'fa-bell-slash' : 'fa-bell' }}"
     ></app-toggle-menu-item>
     <div
         class="menu-button"

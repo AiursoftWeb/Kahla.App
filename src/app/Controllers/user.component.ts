@@ -123,6 +123,10 @@ export class UserComponent {
         void this.router.navigate([`/talking/${this.info.value()!.defaultThread!}`]);
     }
 
+    public messageId(id: number) {
+        void this.router.navigate([`/talking/${id}`]);
+    }
+
     public async newThread() {
         // hard invite
         const resp = await lastValueFrom(
