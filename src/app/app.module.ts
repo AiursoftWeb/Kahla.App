@@ -88,6 +88,7 @@ import { AutoEncodeLinkPipe } from './Pipes/auto-encode-links.pipe';
 import { MessageTextInputDirective } from './Directives/MessageTextInputDirective';
 import { MatchHeightForDirective } from './Directives/MatchHeightForDirective';
 import { Logger } from './Services/Logger';
+import { PlatformModule } from '@angular/cdk/platform';
 
 @NgModule({
     imports: [
@@ -181,7 +182,8 @@ import { Logger } from './Services/Logger';
         ThreadInfoCacheDictionary,
         MyThreadsOrderedRepository,
         ThreadInfoPublicCacheDictionary,
-        Logger
+        Logger,
+        PlatformModule
     ],
     bootstrap: [AppComponent],
 })

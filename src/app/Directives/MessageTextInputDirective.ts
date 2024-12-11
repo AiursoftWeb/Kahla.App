@@ -4,6 +4,7 @@ import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnot
 import { checkIfChildOf } from '../Utils/DomUtils';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Subject } from 'rxjs';
+import { Platform } from '@angular/cdk/platform';
 
 @Directive({
     selector: '[appMessageTextInput]',
@@ -16,7 +17,10 @@ import { Subject } from 'rxjs';
     exportAs: 'appMessageTextInput',
 })
 export class MessageTextInputDirective implements OnInit {
-    constructor(public elementRef: ElementRef<HTMLElement>) {}
+    constructor(
+        public elementRef: ElementRef<HTMLElement>,
+        private platform: Platform
+    ) {}
 
     ngOnInit(): void {
         this.forwardInternal();
@@ -30,7 +34,7 @@ export class MessageTextInputDirective implements OnInit {
      */
     textContent = model<MessageTextWithAnnotate[]>([]);
 
-    // This subject will be emitted VERY FREQUENTLY, and it might emit multi times for a single input on some browser, 
+    // This subject will be emitted VERY FREQUENTLY, and it might emit multi times for a single input on some browser,
     // so make sure to piping into some distinct and throttle operators before subscribing.
     lastInputWordChanged = new Subject<{
         word?: string;
@@ -187,10 +191,17 @@ export class MessageTextInputDirective implements OnInit {
             ?.slice(0, caret.endOffset)
             .split(' ')
             .at(-1);
-        const rect = caret.getBoundingClientRect();
+        let { left, top } = caret.getBoundingClientRect();
+
+        // In iOS, the bounding client rect's coordinate is relative to the visual viewport, not the entire window.
+        // However, in Chromium, it relative to the entire window. WTF!
+        if (this.platform.IOS && window.visualViewport) {
+            left += window.visualViewport.offsetLeft;
+            top += window.visualViewport.offsetTop;
+        }
         this.lastInputWordChanged.next({
             word: lastWord,
-            caretEndPos: [rect.left, rect.top],
+            caretEndPos: [left, top],
         });
     }
 
