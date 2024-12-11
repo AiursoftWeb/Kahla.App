@@ -126,6 +126,8 @@ export class WebpushService {
         if (!this.notificationAvail || !this.pushSettings.enabled) return;
         await this.subscribeUser();
         this.initSubscriptionUpdater();
+
+        await this.getDeviceList(); // Get the device list to make sure current device haven't been removed
     }
 
     public async updateEnabled(enabled: boolean) {
