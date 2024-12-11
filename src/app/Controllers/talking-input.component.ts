@@ -19,7 +19,13 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Logger } from '../Services/Logger';
-import { debounceTime, distinctUntilKeyChanged, filter, lastValueFrom } from 'rxjs';
+import {
+    debounceTime,
+    distinctUntilChanged,
+    filter,
+    lastValueFrom,
+    map,
+} from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
 import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
@@ -57,12 +63,13 @@ export class TalkingInputComponent {
             if (this.threadInfo()?.allowMembersEnlistAllMembers || this.threadInfo()?.imAdmin) {
                 const sub = this.chatInput()
                     .lastInputWordChanged.pipe(
-                        distinctUntilKeyChanged('word'),
                         filter(t => t?.word?.startsWith('@') ?? false),
+                        map(t => t.word!),
+                        distinctUntilChanged(),
                         debounceTime(500)
                     )
                     .subscribe(async t => {
-                        const searchName = t.word!.slice(1).toLowerCase();
+                        const searchName = t.slice(1).toLowerCase();
                         logger.debug('Update member info by word: ', searchName);
                         this.atRecommends.set(
                             (
@@ -79,11 +86,13 @@ export class TalkingInputComponent {
                     });
 
                 sub.add(
-                    this.chatInput().lastInputWordChanged.subscribe(t => {
-                        this.atRecommendsShowPos.set(
-                            t.word?.startsWith('@') ? t.caretEndPos : null
-                        );
-                    })
+                    this.chatInput()
+                        .lastInputWordChanged.pipe(distinctUntilChanged())
+                        .subscribe(t => {
+                            this.atRecommendsShowPos.set(
+                                t.word?.startsWith('@') ? t.caretEndPos : null
+                            );
+                        })
                 );
                 cleanup(() => sub.unsubscribe());
             }
