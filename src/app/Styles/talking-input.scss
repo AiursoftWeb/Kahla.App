@@ -163,9 +163,10 @@ i {
 
 .at-list {
   position: fixed;
-  transform: translateY(-100%);
+  // transform: translateY(-100%);
   z-index: 999;
-
-  top: var(--menu-y);
+  // We decide to position the menu by bottom coord since serval reasons
+  // 1. In Android device, the window height will change when toggling the keyboard, and the input box is always at the bottom of the screen.
+  bottom: calc(100vh - var(--menu-y));
   left: min(100vw - 200px, var(--menu-x));
 }

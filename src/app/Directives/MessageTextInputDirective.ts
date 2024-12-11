@@ -8,8 +8,9 @@ import { Subject } from 'rxjs';
 @Directive({
     selector: '[appMessageTextInput]',
     host: {
+        // Currently, only nightly version of firefox supports plaintext-only.
         contenteditable: 'plaintext-only',
-        '(input)': 'backward()',
+        '(input)': 'oninput()',
         '(document:selectionchange)': 'selectionChanged()',
     },
     exportAs: 'appMessageTextInput',
@@ -29,6 +30,8 @@ export class MessageTextInputDirective implements OnInit {
      */
     textContent = model<MessageTextWithAnnotate[]>([]);
 
+    // This subject will be emitted VERY FREQUENTLY, and it might emit multi times for a single input on some browser, 
+    // so make sure to piping into some distinct and throttle operators before subscribing.
     lastInputWordChanged = new Subject<{
         word?: string;
         caretEndPos: [number, number];
@@ -65,13 +68,6 @@ export class MessageTextInputDirective implements OnInit {
         }
         results = results.filter(t => typeof t !== 'string' || t.trim());
         this.textContent.set(results);
-        // Ensure a newline at the end, I don't know why but it's necessary to make inserting line break works correctly.
-        if (
-            this.elementRef.nativeElement.lastChild?.nodeType !== Node.TEXT_NODE ||
-            this.elementRef.nativeElement.lastChild?.nodeValue !== '\n'
-        ) {
-            this.elementRef.nativeElement.appendChild(document.createTextNode('\n'));
-        }
     }
 
     private backwardNodes(node: ChildNode, results: MessageTextWithAnnotate[]) {
@@ -162,6 +158,23 @@ export class MessageTextInputDirective implements OnInit {
         return mentionSpan;
     }
 
+    oninput() {
+        // backward on every input might have performance impact, try optimizing if necessary.
+        this.backward();
+
+        // In chrome, backspace won't fire selectionchange event, but typing will, WTF!
+        this.selectionChanged();
+
+        // Ensure a newline at the end, I don't know why but it's necessary to make inserting line break works correctly.
+        // This will make the result text having a trailing newline, but anyway, it doesn't matter.
+        if (
+            this.elementRef.nativeElement.lastChild?.nodeType !== Node.TEXT_NODE ||
+            this.elementRef.nativeElement.lastChild?.nodeValue !== '\n'
+        ) {
+            this.elementRef.nativeElement.appendChild(document.createTextNode('\n'));
+        }
+    }
+
     selectionChanged() {
         const caret = this.getCurrentCaret();
         // logger.debug('caret changed', caret);
@@ -177,7 +190,7 @@ export class MessageTextInputDirective implements OnInit {
         const rect = caret.getBoundingClientRect();
         this.lastInputWordChanged.next({
             word: lastWord,
-            caretEndPos: [rect.x, rect.y],
+            caretEndPos: [rect.left, rect.top],
         });
     }
 }
