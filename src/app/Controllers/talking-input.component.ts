@@ -164,6 +164,7 @@ export class TalkingInputComponent {
             const ats = this.textContent()
                 .filter(t => typeof t !== 'string' && t.annotated === 'mention')
                 .map(t => (t as MessageTextAnnotatedMention).targetId);
+            this.logger.debug("At users:", ats);
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {

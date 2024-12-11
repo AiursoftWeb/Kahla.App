@@ -6,4 +6,5 @@ export interface MessagePreview {
     sender: KahlaUser;
     sendTime: string;
     preview: string;
+    ats: string[];
 }

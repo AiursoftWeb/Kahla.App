@@ -88,6 +88,9 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
                         })
                     ) {
                         ++thread.messageContext.unReadAmount;
+                        if (ev.mentioned) {
+                            thread.unreadAtMe = true;
+                        }
                     }
                     this.data = [thread, ...this.data];
                     this.threadInfoCacheDictionary.set(threadId, thread);
@@ -128,6 +131,7 @@ export class MyThreadsOrderedRepository extends RepositoryBase<ThreadInfoJoined>
         const thread = this.data.find(t => t.id === threadId);
         if (thread) {
             thread.messageContext.unReadAmount = 0;
+            thread.unreadAtMe = false;
             this.threadInfoCacheDictionary.set(threadId, thread);
             this.saveCacheTrigger$.next();
         }
