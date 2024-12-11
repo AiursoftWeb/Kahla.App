@@ -7,10 +7,11 @@ import { isThreadRemovedEvent } from './ThreadRemovedEvent';
 export function eventNotificationDescription(event: KahlaEvent): [string, string] {
     if (event.type === KahlaEventType.NewMessage) {
         const newMessageEvent = event as NewMessageEvent;
+        const threadName = newMessageEvent.threadName.includes('{THE OTHER USER}')
+            ? null
+            : ` in ${newMessageEvent.threadName}`;
         return [
-            newMessageEvent.mentioned
-                ? '[Mentioned you] '
-                : '' + newMessageEvent.message.sender.nickName,
+            `${newMessageEvent.mentioned ? '[Mentioned you]' : ''} ${newMessageEvent.message.sender.nickName}${threadName ?? ''}`,
             newMessageEvent.message.preview,
         ];
     } else if (isThreadAddedEvent(event)) {

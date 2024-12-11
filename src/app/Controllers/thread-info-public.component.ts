@@ -46,7 +46,7 @@ export class ThreadInfoPublicComponent {
     async joinThread() {
         try {
             await lastValueFrom(this.threadsApiService.DirectJoin(this.id()));
-            void SwalToast.fire();
+            void SwalToast.fire("Joined!");
             void this.router.navigate(['/talking', this.id()]);
         } catch (err) {
             showCommonErrorDialog(err);
