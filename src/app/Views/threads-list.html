@@ -24,7 +24,7 @@
                     {{ infJoined.messageContext.unReadAmount | truncatedNum }}
                 </div>
             }
-            @if (infJoined.someoneAtMe) {
+            @if (infJoined.unreadAtMe) {
                 <div class="dot at-dot">&#64;</div>
             }
         }

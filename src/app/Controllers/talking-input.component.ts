@@ -19,16 +19,11 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Logger } from '../Services/Logger';
-import {
-    debounceTime,
-    distinctUntilChanged,
-    filter,
-    lastValueFrom,
-    map,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, lastValueFrom, map } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
 import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
 import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
+import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnotated';
 
 @Component({
     selector: 'app-talking-input',
@@ -41,6 +36,7 @@ export class TalkingInputComponent {
     showPanel = model(false);
     sendMessage = output<{
         content: MessageContent;
+        ats?: string[];
     }>();
 
     private picker: EmojiButton;
@@ -165,6 +161,9 @@ export class TalkingInputComponent {
     public send() {
         if (this.textContent()?.length) {
             this.logger.debug('Constructing text message...', this.textContent());
+            const ats = this.textContent()
+                .filter(t => typeof t !== 'string' && t.annotated === 'mention')
+                .map(t => (t as MessageTextAnnotatedMention).targetId);
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {
@@ -176,6 +175,7 @@ export class TalkingInputComponent {
                         } satisfies MessageSegmentText,
                     ],
                 },
+                ats: ats.length ? ats : undefined,
             });
             this.textContent.set([]);
             this.chatInput().forward();

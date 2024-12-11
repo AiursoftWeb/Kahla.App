@@ -1,6 +1,6 @@
 @for (item of textSegments(); track $index) {
     @if (asMentionAnnotation(item); as itemMention) {
-        <a class="content" routerLink="/user/{{ itemMention.targetId }}">
+        <a class="content chat-inline-link" routerLink="/user/{{ itemMention.targetId }}">
             {{ itemMention.content }}
         </a>
     } @else {

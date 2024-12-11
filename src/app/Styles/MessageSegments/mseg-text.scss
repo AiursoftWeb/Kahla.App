@@ -13,10 +13,10 @@
   }
 }
 
-:host-context(.left) .content ::ng-deep .chat-inline-link {
+:host-context(.left) ::ng-deep .chat-inline-link {
   color: var(--left-a-color);
 }
 
-:host-context(.right) .content ::ng-deep .chat-inline-link {
+:host-context(.right) ::ng-deep .chat-inline-link {
   color: white;
 }

@@ -5,12 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@aiursoft/kahla-sdk.js@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@aiursoft/kahla-sdk.js@npm:0.2.3"
+"@aiursoft/kahla-sdk.js@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@aiursoft/kahla-sdk.js@npm:0.2.4"
   dependencies:
     rxjs: "npm:^7.8.1"
-  checksum: 10c0/d9175a48f62471e6c7314fd7d7a0135b54c5c1efcc8332636009b1fd00e2176b17e3daeafedbf3e817f0bf7c16fe1fdb04a855f080178a25c57a19bd7d958834
+  checksum: 10c0/129e46040d00a78cdf66ec45d192e81dffc272b1d25cf50713cbf00b6ce28e1752e6d23871ae07898bba1d8378303e3fd2f6ec95460033aaa96fbb72b7131691
   languageName: node
   linkType: hard
 
@@ -5813,6 +5813,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idb@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "idb@npm:8.0.0"
+  checksum: 10c0/d27547e03939d3d269cea38c3d4528569621ec134c717ebfc1ff816dce18e4f77372dba1d930384a9949ac56dc600e3790f98f1812a4164004e71fec302ee491
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.1.13":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -6564,7 +6571,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kahla@workspace:."
   dependencies:
-    "@aiursoft/kahla-sdk.js": "npm:^0.2.3"
+    "@aiursoft/kahla-sdk.js": "npm:^0.2.4"
     "@angular-devkit/core": "npm:^19.0.4"
     "@angular/animations": "npm:19.0.3"
     "@angular/build": "npm:^19.0.4"
@@ -6589,6 +6596,7 @@ __metadata:
     blueimp-load-image: "npm:^5.16.0"
     esbuild: "npm:^0.24.0"
     eslint: "npm:^9.16.0"
+    idb: "npm:^8.0.0"
     prettier: "npm:^3.4.2"
     rxjs: "npm:^7.8.1"
     sweetalert2: "npm:^11.14.5"

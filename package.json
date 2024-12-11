@@ -22,7 +22,7 @@
     "create-component": "python ./scripts/create-component.py"
   },
   "dependencies": {
-    "@aiursoft/kahla-sdk.js": "^0.2.3",
+    "@aiursoft/kahla-sdk.js": "^0.2.4",
     "@angular/animations": "19.0.3",
     "@angular/cdk": "^19.0.2",
     "@angular/common": "19.0.3",
@@ -37,6 +37,7 @@
     "aiur-version-control": "^0.2.3",
     "autolinker": "^4.0.0",
     "blueimp-load-image": "^5.16.0",
+    "idb": "^8.0.0",
     "rxjs": "^7.8.1",
     "sweetalert2": "^11.14.5",
     "video.js": "^8.21.1",

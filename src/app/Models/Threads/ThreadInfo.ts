@@ -20,11 +20,11 @@ export interface ThreadInfoJoined extends ThreadInfo {
     };
     totalMessages: number;
     muted: boolean;
-    someoneAtMe: boolean;
     topTenMembers: ThreadMemberInfo[];
     lastMessageTime: Date;
     imAdmin: boolean;
     imOwner: boolean;
+    unreadAtMe: boolean;
 
     // options
     allowSearchByName: boolean;
