@@ -27,7 +27,7 @@ export class InitService {
         private globalNotifyService: GlobalNotifyService,
         private myContactsRepository: MyContactsRepository,
         private myThreadsOrderedRepository: MyThreadsOrderedRepository,
-        private logger: Logger,
+        private logger: Logger
     ) {}
 
     public async init(): Promise<void> {

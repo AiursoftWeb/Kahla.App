@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 const LOG_STYLE_BASE = 'color: white; font-weight: 500; border-radius: 4px; font-size: 1em;';
 const OK_STYLE = 'background-color: #16a085;' + LOG_STYLE_BASE;
@@ -8,10 +8,9 @@ const ERROR_STYLE = 'background-color: #c0392b;' + LOG_STYLE_BASE;
 const DEBUG_STYLE = 'background-color: #34495e;' + LOG_STYLE_BASE;
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class Logger {
-
     // This is the only way to keep the console.log context
     public debug = console.log.bind(console, '%c DBUG ', DEBUG_STYLE) as typeof console.log;
     public ok = console.info.bind(console, '%c  OK  ', OK_STYLE) as typeof console.info;

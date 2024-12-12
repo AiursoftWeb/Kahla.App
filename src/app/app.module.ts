@@ -183,7 +183,7 @@ import { PlatformModule } from '@angular/cdk/platform';
         MyThreadsOrderedRepository,
         ThreadInfoPublicCacheDictionary,
         Logger,
-        PlatformModule
+        PlatformModule,
     ],
     bootstrap: [AppComponent],
 })

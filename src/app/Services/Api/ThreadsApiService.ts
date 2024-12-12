@@ -66,7 +66,12 @@ export class ThreadsApiService {
         searchInput?: string,
         excluding?: string
     ): Observable<ThreadMembersApiResponse> {
-        return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, { take, skip, searchInput, excluding });
+        return this.apiService.Get(ThreadsApiService.serverPath + `/members/${id}`, {
+            take,
+            skip,
+            searchInput,
+            excluding,
+        });
     }
 
     public Leave(id: number): Observable<AiurProtocol> {

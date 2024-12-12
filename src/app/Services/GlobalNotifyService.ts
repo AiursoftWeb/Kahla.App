@@ -20,5 +20,4 @@ export class GlobalNotifyService {
     public init() {
         this.eventService.onMessage.subscribe(t => this.OnMessage(t));
     }
-
 }

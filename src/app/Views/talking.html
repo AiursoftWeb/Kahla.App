@@ -20,4 +20,9 @@
     [emphasis]="hasNewMessages()"
     [ngClass]="{ 'active-button': showPanel() }"
 />
-<app-talking-input #talkingInput [(showPanel)]="showPanel" [threadInfo]="this.threadInfo.value()" (sendMessage)="send($event)" />
+<app-talking-input
+    #talkingInput
+    [(showPanel)]="showPanel"
+    [threadInfo]="this.threadInfo.value()"
+    (sendMessage)="send($event)"
+/>

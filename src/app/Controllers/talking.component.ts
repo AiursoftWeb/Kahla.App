@@ -136,13 +136,13 @@ export class TalkingComponent {
         }, 0);
     }
 
-    public send({ content, ats }: { content: MessageContent, ats?: string[] }) {
+    public send({ content, ats }: { content: MessageContent; ats?: string[] }) {
         if (!this.repo || !this.cacheService.mine()) return;
         this.repo?.send({
             content: JSON.stringify(content),
             senderId: this.cacheService.mine()!.me.id,
             preview: this.messageService.buildPreview(content),
-            ats: ats
+            ats: ats,
         });
     }
 }

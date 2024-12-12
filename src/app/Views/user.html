@@ -57,7 +57,10 @@
         </div>
     </div>
     @if (isCommonThreadsShown() && commonThreadsRepo()) {
-        <app-threads-list [threadRepo]="commonThreadsRepo()!" (threadClicked)="messageId($event.thread.id)" />
+        <app-threads-list
+            [threadRepo]="commonThreadsRepo()!"
+            (threadClicked)="messageId($event.thread.id)"
+        />
     }
 
     <div class="menu-gap"></div>

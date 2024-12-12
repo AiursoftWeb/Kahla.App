@@ -1,8 +1,4 @@
 {
-  "cSpell.words": [
-    "graydot",
-    "greendot",
-    "reddot"
-  ],
+  "cSpell.words": ["graydot", "greendot", "reddot"],
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -14,7 +14,11 @@ import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
 @Component({
     selector: 'app-thread-members',
     templateUrl: '../Views/thread-members.html',
-    styleUrls: ['../Styles/thread-members.scss', '../Styles/popups.scss', '../Styles/search-part.scss'],
+    styleUrls: [
+        '../Styles/thread-members.scss',
+        '../Styles/popups.scss',
+        '../Styles/search-part.scss',
+    ],
     standalone: false,
 })
 export class ThreadMembersComponent {
@@ -23,7 +27,11 @@ export class ThreadMembersComponent {
     repo = resource({
         request: () => [this.id(), this.searchText()] as const,
         loader: async ({ request: [id, searchText] }) => {
-            const repo = new ThreadMembersRepository(this.threadsApiService, id, searchText || undefined);
+            const repo = new ThreadMembersRepository(
+                this.threadsApiService,
+                id,
+                searchText || undefined
+            );
             await repo.updateAll().catch(showCommonErrorDialog);
             return repo;
         },
