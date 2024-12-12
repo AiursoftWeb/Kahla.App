@@ -24,7 +24,7 @@
   "dependencies": {
     "@aiursoft/kahla-sdk.js": "^0.2.4",
     "@angular/animations": "19.0.3",
-    "@angular/cdk": "^19.0.2",
+    "@angular/cdk": "^19.0.3",
     "@angular/common": "19.0.3",
     "@angular/core": "19.0.3",
     "@angular/forms": "19.0.3",
@@ -40,7 +40,7 @@
     "idb": "^8.0.0",
     "rxjs": "^7.8.1",
     "sweetalert2": "^11.14.5",
-    "video.js": "^8.21.1",
+    "video.js": "8.21.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -50,13 +50,13 @@
     "@angular/compiler": "^19.0.3",
     "@angular/compiler-cli": "^19.0.3",
     "@angular/language-service": "19.0.3",
-    "@types/node": "^22.10.1",
-    "angular-eslint": "19.0.1",
+    "@types/node": "^22.10.2",
+    "angular-eslint": "19.0.2",
     "esbuild": "^0.24.0",
     "eslint": "^9.16.0",
     "prettier": "^3.4.2",
     "typescript": "~5.6.3",
-    "typescript-eslint": "8.17.0",
+    "typescript-eslint": "8.18.0",
     "workbox-cli": "^7.3.0"
   },
   "main": "index.js",
@@ -69,5 +69,5 @@
     "url": "https://gitlab.aiursoft.cn/aiursoft/kahla.app/-/issues"
   },
   "homepage": "https://kahla.aiursoft.cn",
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.5.3"
 }

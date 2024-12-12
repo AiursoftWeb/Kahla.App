@@ -77,7 +77,8 @@
         <div class="popup-menu" cdkMenu>
             @for (item of atRecommends() ?? []; track item.user.id) {
                 <button cdkMenuItem (click)="completeMentionMenu(item.user)">
-                    <i class="fas fa-ellipsis"></i>
+                    <!-- <i class="fas fa-ellipsis"></i> -->
+                    <img src="{{item.user.iconFilePath | storageUrl}}" class="image">
                     <div class="text">{{ item.user.nickName }}</div>
                 </button>
             } @empty {
