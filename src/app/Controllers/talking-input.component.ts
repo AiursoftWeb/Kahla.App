@@ -19,11 +19,11 @@ import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 import { MessageTextInputDirective } from '../Directives/MessageTextInputDirective';
 import { KahlaUser } from '../Models/KahlaUser';
 import { Logger } from '../Services/Logger';
-import { debounceTime, distinctUntilChanged, filter, lastValueFrom, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ThreadsApiService } from '../Services/Api/ThreadsApiService';
-import { ThreadMemberInfo } from '../Models/Threads/ThreadMemberInfo';
 import { ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { MessageTextAnnotatedMention } from '../Models/Messages/MessageTextAnnotated';
+import { ThreadMembersRepository } from '../Repositories/ThreadMembersRepository';
 
 @Component({
     selector: 'app-talking-input',
@@ -43,7 +43,7 @@ export class TalkingInputComponent {
     private chatBox = viewChild.required<ElementRef<HTMLElement>>('chatBox');
     private chatInput = viewChild.required<MessageTextInputDirective>('chatInput');
 
-    atRecommends = signal<ThreadMemberInfo[] | null>(null);
+    atRecommends = signal<ThreadMembersRepository | null>(null);
     atRecommendsShowPos = signal<[number, number] | null>(null);
     readonly threadInfo = input<ThreadInfoJoined>();
 
@@ -64,21 +64,16 @@ export class TalkingInputComponent {
                         distinctUntilChanged(),
                         debounceTime(500)
                     )
-                    .subscribe(async t => {
+                    .subscribe(t => {
                         const searchName = t.slice(1).toLowerCase();
                         logger.debug('Update member info by word: ', searchName);
-                        this.atRecommends.set(
-                            (
-                                await lastValueFrom(
-                                    this.threadApiService.Members(
-                                        this.threadInfo()!.id,
-                                        10,
-                                        0,
-                                        searchName || undefined
-                                    )
-                                )
-                            ).members
+                        const repo = new ThreadMembersRepository(
+                            this.threadApiService,
+                            this.threadInfo()!.id,
+                            searchName || undefined
                         );
+                        void repo.updateAll();
+                        this.atRecommends.set(repo);
                     });
 
                 sub.add(
@@ -164,7 +159,7 @@ export class TalkingInputComponent {
             const ats = this.textContent()
                 .filter(t => typeof t !== 'string' && t.annotated === 'mention')
                 .map(t => (t as MessageTextAnnotatedMention).targetId);
-            this.logger.debug("At users:", ats);
+            this.logger.debug('At users:', ats);
             this.sendMessage.emit({
                 // TODO: consider use a factory to build this thing
                 content: {

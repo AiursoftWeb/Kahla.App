@@ -2,6 +2,10 @@
     title="{{ repo.value()?.total ?? '' }} Members"
     [processing]="!repo.value() || repo.value()!.status === 'loading'"
 ></app-header>
+<div class="search-part" #searchPart>
+    <app-search-area [(searchText)]="searchText" placeHolder="Search for members in thread..." />
+</div>
+<div class="search-holder" [appMatchHeightFor]="searchPart"></div>
 @if (mappedRepo()) {
     <app-contact-list
         [contacts]="mappedRepo()"

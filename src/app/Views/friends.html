@@ -4,8 +4,8 @@
     [processing]="contactsRepo?.status === 'loading'"
 ></app-header>
 
-<div class="search-part">
-    <div class="friends-header" id="main">
+<div class="search-part" #searchPart>
+    <div class="friends-header">
         <a class="friends-button" routerLink="/search-server">
             <div class="icon">
                 <i class="fas fa-user-plus"></i>
@@ -44,7 +44,7 @@
         ]"
     />
 </div>
-<div class="header-space"></div>
+<div class="header-space" [appMatchHeightFor]="searchPart"></div>
 <app-contact-list
     *ngIf="showUsers && contactsRepo"
     [contacts]="contactsRepo"

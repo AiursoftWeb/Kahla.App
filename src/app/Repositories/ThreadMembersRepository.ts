@@ -10,7 +10,9 @@ export class ThreadMembersRepository extends RepositoryListBase<ThreadMemberInfo
 
     constructor(
         private threadsApiService: ThreadsApiService,
-        private threadId: number
+        private threadId: number,
+        private searchInput?: string,
+        private searchExclude?: string
     ) {
         super();
     }
@@ -19,7 +21,15 @@ export class ThreadMembersRepository extends RepositoryListBase<ThreadMemberInfo
         take: number,
         skip: number
     ): Promise<[ThreadMemberInfo[], number]> {
-        const resp = await lastValueFrom(this.threadsApiService.Members(this.threadId, take, skip));
+        const resp = await lastValueFrom(
+            this.threadsApiService.Members(
+                this.threadId,
+                take,
+                skip,
+                this.searchInput,
+                this.searchExclude
+            )
+        );
         return [resp.members, resp.totalCount];
     }
 }

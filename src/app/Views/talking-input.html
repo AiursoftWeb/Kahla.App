@@ -1,28 +1,11 @@
-<!-- <ul
-        *ngIf="showUserList"
-        class="userList"
-        [ngClass]="{ oneResult: matchedUsers.length === 1 }"
-        [style.max-height.px]="getAtListMaxHeight()"
-    >
-        <li
-            *ngFor="let user of matchedUsers"
-            (click)="complete(user.nickName)"
-            class="menu-button-transparent"
-        >
-            <img
-                class="img"
-                src="{{ probeService.encodeProbeFileUrl(user.iconFilePath) }}?w=128&square=true"
-            />
-            <div class="text">{{ user.nickName }}</div>
-        </li>
-    </ul> -->
 <div class="chatbox-placeholder" [appMatchHeightFor]="chatBox"></div>
 <div class="chatbox-wrapper" appDropFile (droppedFiles)="fileDropped($event)">
     <div class="chat-box" #chatBox>
+        @let enterToSend = cacheService.mine()?.privateSettings?.enableEnterToSendMessage;
         <div
             class="chat-part"
             [class.empty]="textContent().length === 0"
-            [class.no-send-button]="cacheService.mine()?.privateSettings?.enableEnterToSendMessage"
+            [class.no-send-button]="enterToSend"
         >
             <i
                 class="far fa-smile-wink"
@@ -39,13 +22,9 @@
                 (focus)="startInput()"
                 (keydown)="inputKeydown($event)"
             ></div>
-            <button
-                class="button primary"
-                (click)="send()"
-                *ngIf="!cacheService.mine()?.privateSettings?.enableEnterToSendMessage"
-            >
-                Send
-            </button>
+            @if (!enterToSend) {
+                <button class="button primary" (click)="send()">Send</button>
+            }
             <i
                 class="fas fa-microphone auto-hide"
                 aria-hidden="true"
@@ -75,17 +54,23 @@
 @if (atRecommendsShowPos(); as pos) {
     <div [style.--menu-y.px]="pos[1] - 10" [style.--menu-x.px]="pos[0]" class="at-list">
         <div class="popup-menu" cdkMenu>
-            @for (item of atRecommends() ?? []; track item.user.id) {
+            @for (item of atRecommends()?.data ?? []; track item.user.id) {
                 <button cdkMenuItem (click)="completeMentionMenu(item.user)">
-                    <!-- <i class="fas fa-ellipsis"></i> -->
-                    <img src="{{item.user.iconFilePath | storageUrl}}" class="image">
+                    <img src="{{ item.user.iconFilePath | storageUrl }}" class="image" />
                     <div class="text">{{ item.user.nickName }}</div>
                 </button>
             } @empty {
-                <button disabled>
-                    <i class="fas fa-ellipsis"></i>
-                    <div class="text">No user found</div>
-                </button>
+                @if (atRecommends()?.status === 'loading') {
+                    <button disabled>
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <div class="text">Loading...</div>
+                    </button>
+                } @else {
+                    <button disabled>
+                        <i class="fas fa-ellipsis"></i>
+                        <div class="text">No user found</div>
+                    </button>
+                }
             }
             <button cdkMenuItem [routerLink]="['/thread-members/', this.threadInfo()?.id]">
                 <i class="fas fa-ellipsis"></i>
