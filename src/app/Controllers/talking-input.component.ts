@@ -208,7 +208,7 @@ export class TalkingInputComponent {
         this.chatInput().insertMentionToCaret(targetUser);
 
         // Focus the input after selecting a user
-        this.chatInput().elementRef.nativeElement.focus();
+        this.chatInput().focus();
     }
 
     public completeMentionMenu(targetUser: KahlaUser) {
