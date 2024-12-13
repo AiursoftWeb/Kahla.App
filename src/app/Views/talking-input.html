@@ -60,7 +60,7 @@
                     <div class="text">{{ item.user.nickName }}</div>
                 </button>
             } @empty {
-                @if (atRecommends()?.status === 'loading') {
+                @if (!atRecommends() || atRecommends()!.status === 'loading') {
                     <button disabled>
                         <i class="fas fa-spinner fa-spin"></i>
                         <div class="text">Loading...</div>

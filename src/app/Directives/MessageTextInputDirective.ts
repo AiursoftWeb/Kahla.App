@@ -219,9 +219,7 @@ export class MessageTextInputDirective implements OnInit {
 
     focus() {
         // Focus & set selection to last if not present
-        const overrideCaret = !this.getCurrentCaret();
-
-        if (overrideCaret) {
+        if (!this.getCurrentCaret()) {
             const range = document.createRange();
             range.selectNodeContents(this.elementRef.nativeElement);
             range.collapse(false);
