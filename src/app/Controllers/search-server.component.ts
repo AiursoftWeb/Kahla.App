@@ -1,5 +1,4 @@
 import { Component, effect, signal } from '@angular/core';
-import { Values } from '../values';
 import { SearchApiService } from '../Services/Api/SearchApiService';
 import { ServerContactsRepository } from '../Repositories/ServerContactsRepository';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
@@ -13,8 +12,6 @@ import { Router } from '@angular/router';
     standalone: false,
 })
 export class SearchServerComponent {
-    public loadingImgURL = Values.loadingImgURL;
-
     searchTerm = signal('');
     selectedTab = signal(0);
 

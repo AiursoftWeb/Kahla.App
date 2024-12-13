@@ -60,17 +60,16 @@ export class TalkingInputComponent {
                 const sub = this.chatInput()
                     .lastInputWordChanged.pipe(
                         filter(t => t?.word?.startsWith('@') ?? false),
-                        map(t => t.word!),
+                        map(t => t.word!.slice(1).toLowerCase()),
                         distinctUntilChanged(),
                         debounceTime(500)
                     )
                     .subscribe(t => {
-                        const searchName = t.slice(1).toLowerCase();
-                        logger.debug('Update member info by word: ', searchName);
+                        logger.debug('Update member info by word: ', t);
                         const repo = new ThreadMembersRepository(
                             this.threadApiService,
                             this.threadInfo()!.id,
-                            searchName || undefined
+                            t || undefined
                         );
                         void repo.updateAll();
                         this.atRecommends.set(repo);

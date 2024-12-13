@@ -30,6 +30,7 @@
         placeHolder="Search for your contacts and groups..."
     ></app-search-area>
     <app-search-type
+        [(currentIndex)]="searchType"
         [items]="[
             {
                 title: 'Contacts',
@@ -45,9 +46,12 @@
     />
 </div>
 <div class="header-space" [appMatchHeightFor]="searchPart"></div>
-<app-contact-list
-    *ngIf="showUsers && contactsRepo"
-    [contacts]="contactsRepo"
-    (contactClicked)="userClick($event.item, $event.secondary)"
-    emptyMessage="No contacts. Try adding someone first. 🍵"
-/>
+@switch (searchType()) {
+    @case (0) {
+        <app-contact-list
+            [contacts]="contactsRepo"
+            (contactClicked)="userClick($event.item, $event.secondary)"
+            emptyMessage="No contacts. Try adding someone first. 🍵"
+        />
+    }
+}

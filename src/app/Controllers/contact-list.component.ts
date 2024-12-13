@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import { RepositoryLike } from '../Repositories/RepositoryBase';
-import { Values } from '../values';
 
 export interface ContactListItem extends ContactInfo {
     tags?: {
@@ -31,8 +30,6 @@ export interface ContactListItem extends ContactInfo {
     standalone: false,
 })
 export class ContactListComponent {
-    public loadingImgURL = Values.loadingImgURL;
-
     @Input() public contacts?: RepositoryLike<ContactListItem>;
 
     @Input() public emptyMessage = 'No results.';

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { Router } from '@angular/router';
-import { Values } from '../values';
 import { InitService } from '../Services/InitService';
 import Swal from 'sweetalert2';
 import { CacheService } from '../Services/CacheService';
@@ -18,7 +17,6 @@ import { YesNoDialog } from '../Utils/Toast';
     standalone: false,
 })
 export class SettingsComponent {
-    public loadingImgURL = Values.loadingImgURL;
     constructor(
         private authApiService: AuthApiService,
         private webpushService: WebpushService,

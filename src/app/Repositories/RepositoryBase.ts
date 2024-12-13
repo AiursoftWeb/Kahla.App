@@ -1,3 +1,5 @@
+import { logger } from "../Services/Logger";
+
 interface RepositoryCache<T> {
     data: T[];
     version: number;
@@ -71,6 +73,7 @@ export abstract class RepositoryBase<T> implements RepositoryLike<T> {
                     this.saveCache();
                 } catch (err) {
                     this.status = 'error';
+                    logger.error('Repository update error', err);
                     throw err;
                 } finally {
                     this.updatePromise = undefined;

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthApiService } from '../Services/Api/AuthApiService';
 import { UploadService } from '../Services/UploadService';
 import { KahlaUser } from '../Models/KahlaUser';
-import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
 import { lastValueFrom } from 'rxjs';
 import { showCommonErrorDialog } from '../Utils/CommonErrorDialog';
@@ -16,7 +15,6 @@ import { selectFiles } from '../Utils/SystemDialog';
 })
 export class UserDetailComponent implements OnInit {
     public user?: KahlaUser;
-    public loadingImgURL = Values.loadingImgURL;
     saving = false;
 
     constructor(

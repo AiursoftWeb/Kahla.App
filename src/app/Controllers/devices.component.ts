@@ -62,13 +62,17 @@ export class DevicesComponent implements OnInit {
                 text: "Please don't close the page.",
             });
         }
-        await this.webpushService.updateEnabled(value);
-        if (value) {
-            Swal.close();
+        try {
+            await this.webpushService.updateEnabled(value);
+            if (value) {
+                Swal.close();
+            }
+            void SwalToast.fire('Updated!');
+            this.currentSettings = this.webpushService.pushSettings;
+            void this.updateDeviceList();
+        } catch (err) {
+            showCommonErrorDialog(err);
         }
-        void SwalToast.fire('Updated!');
-        this.currentSettings = this.webpushService.pushSettings;
-        void this.updateDeviceList();
     }
 
     public getElectronNotify(): boolean {

@@ -1,6 +1,5 @@
 ﻿import { Component, effect, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Values } from '../values';
 import { CacheService } from '../Services/CacheService';
 import { ContactInfo } from '../Models/Contacts/ContactInfo';
 import {
@@ -24,9 +23,8 @@ import { ContactsApiService } from '../Services/Api/ContactsApiService';
     standalone: false,
 })
 export class FriendsComponent implements OnInit {
-    public loadingImgURL = Values.loadingImgURL;
-    public showUsers = true;
     public searchTxt = signal('');
+    public searchType = signal(0);
 
     private detailLoading = false;
     public contactsRepo?: RepositoryListBase<ContactInfo>;
@@ -54,10 +52,6 @@ export class FriendsComponent implements OnInit {
         if (this.cacheService.mine() && this.myContactsRepository.health) {
             void this.myContactsRepository.updateAll();
         }
-    }
-
-    public showUsersResults(selectUsers: boolean): void {
-        this.showUsers = selectUsers;
     }
 
     public goSingleSearch(): void {

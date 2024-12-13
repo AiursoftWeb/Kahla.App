@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { RepositoryBase } from '../Repositories/RepositoryBase';
 import { ThreadInfo, ThreadInfoJoined } from '../Models/Threads/ThreadInfo';
 import { CacheService } from '../Services/CacheService';
-import { Values } from '../values';
 
 @Component({
     selector: 'app-threads-list',
@@ -23,8 +22,6 @@ export class ThreadsListComponent {
         thread: ThreadInfo;
         secondary: boolean;
     }>();
-
-    public loadingImgURL = Values.loadingImgURL;
 
     constructor(public cacheService: CacheService) {}
 
