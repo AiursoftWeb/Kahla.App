@@ -59,7 +59,7 @@ export class TalkingInputComponent {
             if (this.threadInfo()?.allowMembersEnlistAllMembers || this.threadInfo()?.imAdmin) {
                 const sub = this.chatInput()
                     .lastInputWordChanged.pipe(
-                        filter(t => t?.word?.startsWith('@') ?? false),
+                        filter(t => (t?.word?.startsWith('@') && t.word.length <= 41) ?? false),
                         map(t => t.word!.slice(1).toLowerCase()),
                         distinctUntilChanged(),
                         debounceTime(500)
