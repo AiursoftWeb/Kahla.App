@@ -6956,9 +6956,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kahla@workspace:.":
+"kahla.app@workspace:.":
   version: 0.0.0-use.local
-  resolution: "kahla@workspace:."
+  resolution: "kahla.app@workspace:."
   dependencies:
     "@aiursoft/kahla-sdk.js": "npm:^0.2.4"
     "@angular-devkit/core": "npm:^19.0.6"
