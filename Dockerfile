@@ -7,7 +7,6 @@ COPY ./package.json ./yarn.lock ./.yarnrc.yml ./
 
 RUN corepack enable && corepack yarn install --immutable
 COPY . .
-WORKDIR /app/kahla.app
 RUN corepack yarn run build
 
 FROM hub.aiursoft.cn/aiursoft/static

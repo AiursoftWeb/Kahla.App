@@ -1,5 +1,25 @@
 stages: # List of stages for jobs, and their order of execution
+    - check
     - build
+    - publish
+
+check:
+    stage: check
+    cache:
+        policy: pull-push
+        unprotect: false
+        untracked: false
+        when: on_success
+        paths:
+            - .yarn
+    variables:
+        YARN_CACHE_FOLDER: .yarn/cache
+    script:
+        - corepack yarn install --immutable
+        - corepack yarn build
+        - corepack yarn test
+        # - corepack yarn lint
+        - echo "All checks passed"
 
 build-job: # This job runs in the build stage, which runs first.
     stage: build
@@ -10,3 +30,23 @@ build-job: # This job runs in the build stage, which runs first.
     script:
         - docker build . -t hub.aiursoft.cn/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
         - docker push hub.aiursoft.cn/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+
+publish:
+    stage: publish
+    rules:
+        - if: '$CI_COMMIT_TAG'
+    cache:
+        policy: pull-push
+        unprotect: false
+        untracked: false
+        when: on_success
+        paths:
+            - .yarn
+    variables:
+        YARN_CACHE_FOLDER: .yarn/cache
+    script:
+        - export YARN_NPM_AUTH_TOKEN=$NPM_TOKEN
+        - corepack yarn install --immutable
+        - corepack yarn build
+        - corepack yarn workspace @aiursoft/kahla.sdk npm publish --access public
+        - echo "Successfully published to npm"
