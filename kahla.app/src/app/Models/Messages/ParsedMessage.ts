@@ -1,6 +1,6 @@
 import { MessageContent } from './MessageContent';
 import { MessageSegmentText } from './MessageSegments';
-import { ChatMessage, KahlaCommit } from '@aiursoft/kahla-sdk.js';
+import { ChatMessage, KahlaCommit } from '@aiursoft/kahla.sdk';
 
 export class ParsedMessage {
     constructor(
