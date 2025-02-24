@@ -2,7 +2,8 @@
   "name": "kahla",
   "version": "4.5.0",
   "workspaces": [
-    "kahla.app"
+    "kahla.app/",
+    "kahla.sdk/"
   ],
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <service@aiursoft.com> (https://www.aiursoft.cn/)",

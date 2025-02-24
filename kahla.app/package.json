@@ -1,5 +1,5 @@
 {
-  "name": "kahla.app",
+  "name": "@aiursoft/kahla.app",
   "version": "4.5.0",
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "create-component": "python ./scripts/create-component.py"
   },
   "dependencies": {
-    "@aiursoft/kahla-sdk.js": "^0.2.4",
+    "@aiursoft/kahla.sdk": "workspace:^",
     "@angular/animations": "19.0.5",
     "@angular/cdk": "^19.0.4",
     "@angular/common": "19.0.5",
@@ -24,7 +24,6 @@
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@joeattardi/emoji-button": "^4.6.4",
     "@videojs/themes": "^1.0.1",
-    "aiur-version-control": "^0.2.3",
     "autolinker": "^4.1.0",
     "blueimp-load-image": "^5.16.0",
     "idb": "^8.0.1",
@@ -46,7 +45,7 @@
     "eslint": "^9.17.0",
     "prettier": "^3.4.2",
     "typescript": "~5.6.3",
-    "typescript-eslint": "8.19.1",
+    "typescript-eslint": "^8.19.1",
     "workbox-cli": "^7.3.0"
   },
   "packageManager": "yarn@4.5.3"
