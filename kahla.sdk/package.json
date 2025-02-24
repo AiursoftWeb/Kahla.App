@@ -11,7 +11,6 @@
     "test": "tsc -b tsconfig.spec.json && mocha",
     "clean": "tsc --build --clean tsconfig*.json",
     "lint": "eslint",
-    "format": "prettier -cw .",
     "prepublish": "yarn build"
   },
   "dependencies": {
@@ -25,7 +24,6 @@
     "eslint": "^9.14.0",
     "globals": "^15.12.0",
     "mocha": "^10.8.2",
-    "prettier": "^3.3.3",
     "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.13.0"

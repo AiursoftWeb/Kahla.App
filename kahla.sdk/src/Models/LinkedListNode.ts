@@ -1,4 +1,4 @@
-import type { IMessageContainerNode } from "../Abstracts/IMessageList.js";
+import type { IMessageContainerNode } from '../Abstracts/IMessageList.js';
 
 export class LinkedListNode<T> implements IMessageContainerNode<T> {
     public value: T;

@@ -8,7 +8,6 @@
     "build": "yarn run build:sw-base && ng build --base-href / && workbox generateSW workbox-config.cjs",
     "clean": "rm -rf dist",
     "lint": "tsc -p src && tsc -p src/service-worker && ng lint",
-    "format": "prettier -cw .",
     "create-component": "python ./scripts/create-component.py"
   },
   "dependencies": {
@@ -43,7 +42,6 @@
     "angular-eslint": "19.0.2",
     "esbuild": "^0.24.2",
     "eslint": "^9.17.0",
-    "prettier": "^3.4.2",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.19.1",
     "workbox-cli": "^7.3.0"

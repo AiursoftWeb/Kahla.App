@@ -12,7 +12,7 @@
 /src/app/**/*.js.map
 /bin
 /bld
-/dist
+**/dist
 
 
 # dependencies
@@ -52,3 +52,5 @@ Thumbs.db
 
 .angular/
 .yarn/
+
+*.tsbuildinfo

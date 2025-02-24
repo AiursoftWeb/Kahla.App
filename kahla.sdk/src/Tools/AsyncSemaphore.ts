@@ -17,9 +17,9 @@ export class AsyncSemaphore {
 
     public release(): void {
         if (this._currentCount <= 0) {
-            throw new Error("No tasks to release.");
+            throw new Error('No tasks to release.');
         }
-    
+
         if (this._pendingTasksQueue.length > 0) {
             const resolve = this._pendingTasksQueue.shift();
             resolve!();

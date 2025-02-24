@@ -22,7 +22,7 @@ export class KahlaMessagesMemoryStore {
             item: message,
             commitTime: new Date(),
         };
-        
+
         await this.commitCommit(commit);
     }
 

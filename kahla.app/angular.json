@@ -29,9 +29,7 @@
               { "glob": "**/*", "input": "./public", "output": "./" },
               { "glob": "sw_notifications.js", "input": "./dist/sw-base/", "output": "./" }
             ],
-            "styles": [
-              "src/app/Styles/index.scss"
-            ],
+            "styles": ["src/app/Styles/index.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["../node_modules"]

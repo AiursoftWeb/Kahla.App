@@ -1,4 +1,4 @@
-import { logger } from "../Services/Logger";
+import { logger } from '../Services/Logger';
 
 interface RepositoryCache<T> {
     data: T[];

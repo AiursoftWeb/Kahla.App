@@ -34,7 +34,6 @@ __metadata:
     esbuild: "npm:^0.24.2"
     eslint: "npm:^9.17.0"
     idb: "npm:^8.0.1"
-    prettier: "npm:^3.4.2"
     rxjs: "npm:^7.8.1"
     sweetalert2: "npm:^11.15.10"
     typescript: "npm:~5.6.3"
@@ -56,7 +55,6 @@ __metadata:
     eslint: "npm:^9.14.0"
     globals: "npm:^15.12.0"
     mocha: "npm:^10.8.2"
-    prettier: "npm:^3.3.3"
     rxjs: "npm:^7.8.1"
     tsx: "npm:^4.19.2"
     typescript: "npm:~5.6.2"
@@ -6917,6 +6915,8 @@ __metadata:
 "kahla@workspace:.":
   version: 0.0.0-use.local
   resolution: "kahla@workspace:."
+  dependencies:
+    prettier: "npm:^3.4.2"
   languageName: unknown
   linkType: soft
 
@@ -8215,7 +8215,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.3.3, prettier@npm:^3.4.2":
+"prettier@npm:^3.4.2":
   version: 3.4.2
   resolution: "prettier@npm:3.4.2"
   bin:

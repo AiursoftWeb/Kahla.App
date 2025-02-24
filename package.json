@@ -5,6 +5,12 @@
     "kahla.app/",
     "kahla.sdk/"
   ],
+  "scripts": {
+    "format": "prettier -cw ."
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  },
   "description": "Kahla is a cross-platform business messaging app.",
   "author": "Aiursoft <service@aiursoft.com> (https://www.aiursoft.cn/)",
   "contributors": [
